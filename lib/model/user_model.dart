@@ -1,0 +1,98 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dodact_v1/model/interest_model.dart';
+import 'package:flutter/cupertino.dart';
+
+class UserObject {
+  String uid;
+  String nameSurname;
+  String email;
+  String username;
+  DateTime userRegistrationDate;
+  String telephoneNumber;
+  String profilePictureURL;
+  int experiencePoint;
+  List<Interest> interests;
+  List<String> groupIDs;
+  List<String> postIDs;
+  List<String> eventIDs;
+  String location;
+
+  UserObject(
+      {@required this.uid,
+      @required this.email,
+      this.username,
+      this.nameSurname,
+      this.userRegistrationDate,
+      this.telephoneNumber,
+      this.profilePictureURL,
+      this.experiencePoint,
+      this.groupIDs,
+      this.interests,
+      this.postIDs,
+      this.eventIDs,
+      this.location});
+
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> userData = new Map<String, dynamic>();
+    userData['uid'] = this.uid;
+    userData['email'] = this.email;
+    userData['username'] = this.username;
+    userData['nameSurname'] = this.nameSurname ?? 'Dodact Sanatçısı';
+    userData['userRegistrationDate'] = FieldValue.serverTimestamp();
+    userData['telephoneNumber'] = this.telephoneNumber ?? '';
+    userData['profilePictureURL'] = this.profilePictureURL;
+    userData['experiencePoint'] = this.experiencePoint ?? 0;
+    userData['groupIDs'] = this.groupIDs;
+    if (this.interests != null) {
+      userData['interests'] = this.interests.map((v) => v.toMap()).toList();
+    }
+    userData['postIDs'] = this.postIDs;
+    userData['eventIDs'] = this.eventIDs;
+    userData['location'] = this.location;
+    return userData;
+  }
+
+  UserObject.fromMap(Map<String, dynamic> map)
+      : uid = map['uid'],
+        email = map['email'],
+        username = map['username'],
+        nameSurname = map['nameSurname'],
+        userRegistrationDate =
+            (map['userRegistrationDate'] as Timestamp).toDate(),
+        telephoneNumber = map['telephoneNumber'],
+        profilePictureURL = map['profilePictureURL'],
+        experiencePoint = map['experiencePoint'],
+        groupIDs = map['groupIDs'],
+        interests = map['interests'],
+        postIDs = map['postIDs'],
+        eventIDs = map['eventIDs'],
+        location = map['location'];
+
+  UserObject.fromDoc(DocumentSnapshot doc) {
+    uid = doc.data()['uid'];
+    email = doc.data()['email'];
+    username = doc.data()['username'];
+    nameSurname = doc.data()['nameSurname'];
+    userRegistrationDate =
+        (doc.data()['userRegistrationDate'] as Timestamp).toDate();
+    telephoneNumber = doc.data()['telephoneNumber'];
+    profilePictureURL = doc.data()['profilePictureURL'];
+    experiencePoint = doc.data()['experiencePoint'];
+    groupIDs = doc.data()['groupIDs'];
+    interests = doc.data()['interests'];
+    postIDs = doc.data()['postIDs']?.cast<String>();
+    eventIDs = doc.data()['eventIDs']?.cast<String>();
+    location = doc.data()['location'];
+  }
+  @override
+  String toString() {
+    return 'UserObject{uid: $uid, nameSurname: $nameSurname, email: $email, username: $username, userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, interests: $interests, groupIDs: $groupIDs, postIDs: $postIDs}';
+  }
+
+  String randomNumber() {
+    int randomNum = Random().nextInt(99999);
+    return randomNum.toString();
+  }
+}

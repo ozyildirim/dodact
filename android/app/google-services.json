@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1030067077144",
+    "firebase_url": "https://dodact-7ccd3.firebaseio.com",
+    "project_id": "dodact-7ccd3",
+    "storage_bucket": "dodact-7ccd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030067077144:android:b5f93c5ffa325127b1c36d",
+        "android_client_info": {
+          "package_name": "com.dodact.dodact_v1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030067077144-ij0oot0sq9hd5le7i3rh8sag7qm6am56.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dodact.dodact_v1",
+            "certificate_hash": "93a2919157492b3bb6c1d24e042af977a2b32704"
+          }
+        },
+        {
+          "client_id": "1030067077144-glo8b84id09i3530dumelq46f8a1t93q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCur_xaGI8hBvETnR5QHQUIy_VZtoISBg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030067077144-glo8b84id09i3530dumelq46f8a1t93q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
