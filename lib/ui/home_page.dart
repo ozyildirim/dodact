@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/feed/feed_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
     GroupsPage(),
     ProfilePage(),
     SearchPage(),
+    CreationPage(),
   ];
 
   @override
@@ -76,11 +78,14 @@ class _HomePageState extends State<HomePage> {
           icon: MaterialCommunityIcons.calendar,
           label: 'Takvimim',
           onTap: () {
-            CoolAlert.show(
-              context: context,
-              type: CoolAlertType.loading,
-              text: "Bu özelliğimiz henüz aktif değil.",
-            );
+            setState(() {
+              _page =6;
+            });
+            //CoolAlert.show(
+            //  context: context,
+            //  type: CoolAlertType.loading,
+            //  text: "Bu özelliğimiz henüz aktif değil.",
+            //);
           },
         ),
         MoreButtonModel(
