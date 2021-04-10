@@ -138,28 +138,10 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    "7.4",
+                                                    "Takip Et",
                                                     style: TextStyle(
-                                                        fontSize: 15,
                                                         color: Colors.white),
                                                   ),
-                                                  VerticalDivider(
-                                                    color: Colors.white,
-                                                    thickness: 1,
-                                                  ),
-                                                  Icon(
-                                                    Icons
-                                                        .wb_incandescent_outlined,
-                                                    color: Colors.white,
-                                                  ),
-                                                  VerticalDivider(
-                                                      color: Colors.white,
-                                                      thickness: 1),
-                                                  Icon(
-                                                    Icons
-                                                        .person_add_alt_1_outlined,
-                                                    color: Colors.white,
-                                                  )
                                                 ],
                                               ),
                                             )

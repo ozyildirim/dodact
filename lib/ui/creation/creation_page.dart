@@ -6,29 +6,31 @@ class CreationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       body: ListView(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              "Bir şeyler oluştur!",
-              style: TextStyle(fontSize: 22.5),
-            ),
-          ),
           Stack(
             children: [
               CurvedListItem(
                 textPos: 180,
                 boxSize: 240,
-                spaceValue: 275,
-                title: 'Grup Olustur',
+                spaceValue: 440,
+                title: 'Topluluk Olustur',
+                conImage:
+                    AssetImage('assets/images/creation/icerik_olustur.jpeg'),
+              ),
+              CurvedListItem(
+                textPos: 180,
+                boxSize: 240,
+                spaceValue: 285,
+                title: 'Ekip Olustur',
                 conImage:
                     AssetImage('assets/images/creation/grup_olustur.jpeg'),
               ),
               CurvedListItem(
                 textPos: 150,
                 boxSize: 246,
-                spaceValue: 100,
+                spaceValue: 110,
                 title: 'Etkinlik Oluştur',
                 conImage:
                     AssetImage('assets/images/creation/etkinlik_olustur.jpeg'),
