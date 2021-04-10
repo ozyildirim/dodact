@@ -34,8 +34,6 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -64,7 +62,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.03,
+                  height: dynamicHeight(0.03),
                 ),
                 RoundedInputField(
                   keyboardType: TextInputType.emailAddress,
