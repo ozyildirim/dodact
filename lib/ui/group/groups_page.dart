@@ -2,7 +2,11 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:horizontal_card_pager/card_item.dart';
+import 'package:horizontal_card_pager/horizontal_card_pager.dart';
 import 'package:provider/provider.dart';
 
 class GroupsPage extends StatefulWidget {
@@ -14,6 +18,9 @@ class _GroupsPageState extends BaseState<GroupsPage> {
   GroupProvider _groupProvider;
   int tappedIndex;
 
+  String selectedCategory = "Müzik";
+  String selectedCity = "Eskişehir";
+
   final List<Widget> _pageBody = [filteredGroups(), randomGroups()];
 
   @override
@@ -23,6 +30,23 @@ class _GroupsPageState extends BaseState<GroupsPage> {
     _groupProvider = getProvider<GroupProvider>();
     _groupProvider.getGroupList(isNotify: false);
   }
+
+  List<CardItem> items = [
+    IconTitleCardItem(
+      text: "Müzik",
+      iconData: Icons.music_note,
+    ),
+    IconTitleCardItem(
+      text: "Tiyatro",
+      iconData: Icons.theater_comedy,
+    ),
+    IconTitleCardItem(
+      text: "Dans",
+      iconData: FontAwesome5Solid.star_of_david,
+    ),
+  ];
+
+  List<String> itemValues = ["Müzik", "Tiyatro", "Dans"];
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +78,7 @@ class _GroupsPageState extends BaseState<GroupsPage> {
               return Center(child: spinkit);
             }
           },
-        )
-
-            // Column(
-            //   children:
-            //
-            //    [customAppBar(), _pageBody[tappedIndex]],
-            // ),
-            ),
+        )),
       ),
     );
   }
@@ -103,20 +120,73 @@ class _GroupsPageState extends BaseState<GroupsPage> {
           ),
         ));
   }
-}
 
-Container filterBar() {
-  return Container(
-    height: 50,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(width: 20),
-        filterCardContainer('Eskişehir'),
-        filterCardContainer('Müzik'),
-      ],
-    ),
-  );
+  Container filterBar() {
+    return Container(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(width: 20),
+          GestureDetector(
+            child: filterCardContainer(selectedCity),
+            onTap: () {
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (_) => Container(
+                        width: 300,
+                        height: 250,
+                        child: CupertinoPicker(
+                          backgroundColor: Colors.white,
+                          itemExtent: 30,
+                          scrollController:
+                              FixedExtentScrollController(initialItem: 0),
+                          children: [
+                            Text('Ankara'),
+                            Text('Eskişehir'),
+                            Text('Istanbul'),
+                          ],
+                          onSelectedItemChanged: (value) {
+                            setState(() {
+                              selectedCity = value.toString();
+                            });
+                          },
+                        ),
+                      ));
+            },
+          ),
+          GestureDetector(
+            child: filterCardContainer(selectedCategory),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (_) => Container(
+                  height: 120,
+                  child: Center(
+                      child: HorizontalCardPager(
+                    initialPage: 0,
+                    onPageChanged: (page) {
+                      setState(() {
+                        selectedCategory = itemValues[page.toInt()];
+                        print(selectedCategory);
+                      });
+                    },
+                    onSelectedItem: (page) {
+                      setState(() {
+                        selectedCategory = itemValues[page];
+                        print(selectedCategory);
+                      });
+                    },
+                    items: items,
+                  )),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 Container filterCardContainer(String interest) {
@@ -144,89 +214,95 @@ Consumer<GroupProvider> filteredGroups() {
         if (provider.groupList.isNotEmpty) {
           List<GroupModel> groups = provider.groupList;
           print(provider.groupList.length);
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  scrollDirection: Axis.vertical,
-                  itemCount: provider.groupList.length,
-                  itemBuilder: (context, index) {
-                    var groupItem = provider.groupList[index];
-                    return Container(
-                      height: 140,
-                      width: 70,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(25),
-                                child: Container(
-                                  height: 160,
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              groupItem.groupProfilePicture),
-                                          fit: BoxFit.cover)),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  groupItem.groupName,
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      scrollDirection: Axis.vertical,
+                      itemCount: provider.groupList.length,
+                      itemBuilder: (context, index) {
+                        var groupItem = provider.groupList[index];
+                        return Container(
+                          height: 140,
+                          width: 70,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(25),
+                                    child: Container(
+                                      height: 160,
+                                      width: 200,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(groupItem
+                                                  .groupProfilePicture),
+                                              fit: BoxFit.cover)),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  groupItem.groupDescription.substring(0, 10),
-                                  style: TextStyle(
-                                      color: kDetailTextColor, fontSize: 18),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "Bağlar",
-                                  style: TextStyle(color: kDetailTextColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                              radius: 10,
-                              child: Icon(
-                                Icons.navigate_next,
-                                size: 20,
-                                color: Colors.white,
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  }),
-            ),
+                              SizedBox(
+                                width: 30,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      groupItem.groupName,
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      groupItem.groupDescription
+                                          .substring(0, 10),
+                                      style: TextStyle(
+                                          color: kDetailTextColor,
+                                          fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "Bağlar",
+                                      style: TextStyle(color: kDetailTextColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.black,
+                                  radius: 10,
+                                  child: Icon(
+                                    Icons.navigate_next,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+              ),
+            ],
           );
         } else {
           return Center(

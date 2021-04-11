@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
           label: 'Takvimim',
           onTap: () {
             setState(() {
-              _page =6;
+              _page = 6;
             });
             //CoolAlert.show(
             //  context: context,
