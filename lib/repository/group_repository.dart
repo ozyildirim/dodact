@@ -100,4 +100,12 @@ class GroupRepository implements BaseService {
       return await _firebaseGroupService.addGroupMember(userID, groupID);
     }
   }
+
+  Future<List<GroupModel>> getGroupsByCategory(String category) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      return await _firebaseGroupService.getGroupsByCategory(category);
+    }
+  }
 }

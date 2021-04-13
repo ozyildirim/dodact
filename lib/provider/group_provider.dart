@@ -97,6 +97,21 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
+  Future<List<GroupModel>> getGroupsByCategory(String category,
+      {bool isNotify}) async {
+    try {
+      changeState(true, isNotify: isNotify);
+      var fetchedGroup = await _groupRepository.getGroupsByCategory(category);
+      groupList = fetchedGroup;
+      return groupList;
+    } catch (e) {
+      print("GroupProvider getGroupsByCategory error: " + e.toString());
+      return null;
+    } finally {
+      changeState(false);
+    }
+  }
+
   Future<List<PostModel>> getGroupPosts(GroupModel group,
       {bool isNotify}) async {
     try {

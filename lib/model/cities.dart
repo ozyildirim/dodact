@@ -1,4 +1,3 @@
-List<String> cities = [
+List<String> cities = ["Ankara", "Adana"];
 
-];
 // TODO: Şehirleri ekle.

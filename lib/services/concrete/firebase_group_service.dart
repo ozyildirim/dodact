@@ -103,4 +103,16 @@ class FirebaseGroupService extends BaseService<GroupModel> {
 
     return true;
   }
+
+  Future<List<GroupModel>> getGroupsByCategory(String category) async {
+    List<GroupModel> categorizedGroups = [];
+
+    QuerySnapshot querySnapshot =
+        await groupsRef.where("groupCategory", isEqualTo: category).get();
+    for (DocumentSnapshot group in querySnapshot.docs) {
+      GroupModel _group = GroupModel.fromJson(group.data());
+      categorizedGroups.add(_group);
+    }
+    return categorizedGroups;
+  }
 }
