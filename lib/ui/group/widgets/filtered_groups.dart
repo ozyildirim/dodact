@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -11,7 +12,7 @@ class FilteredGroups extends StatefulWidget {
   _FilteredGroupsState createState() => _FilteredGroupsState();
 }
 
-class _FilteredGroupsState extends State<FilteredGroups> {
+class _FilteredGroupsState extends BaseState<FilteredGroups> {
   @override
   void initState() {
     // TODO: implement initState
@@ -86,7 +87,9 @@ class _FilteredGroupsState extends State<FilteredGroups> {
                                 ),
                               ),
                               Divider(
-                                thickness: 1,
+                                thickness: 0.6,
+                                indent: 40,
+                                endIndent: 40,
                               )
                             ],
                           );
@@ -96,9 +99,7 @@ class _FilteredGroupsState extends State<FilteredGroups> {
               ],
             );
           } else {
-            return Center(
-              child: spinkit,
-            );
+            return Center(child: spinkit);
           }
         } else {
           return Center(

@@ -25,8 +25,6 @@ class _GroupsPageState extends BaseState<GroupsPage> {
   String selectedCategory = "Tümü";
   String selectedCity = "Eskişehir";
 
-  final List<Widget> _pageBody = [FilteredGroups(), RandomGroups()];
-
   @override
   void initState() {
     super.initState();
@@ -50,9 +48,11 @@ class _GroupsPageState extends BaseState<GroupsPage> {
                   color: Color(0xFFF1F0F2),
                   child: Column(
                     children: [
-                      customAppBar(),
-                      filterBar(),
-                      _pageBody[tappedIndex]
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: filterBar(),
+                      ),
+                      FilteredGroups()
                     ],
                   ),
                 );
@@ -68,44 +68,6 @@ class _GroupsPageState extends BaseState<GroupsPage> {
         )),
       ),
     );
-  }
-
-  Container customAppBar() {
-    return Container(
-      decoration: BoxDecoration(
-          color: kCustomAppBarColor,
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(50),
-          )),
-      height: 75,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          menuButtons('ARA', 0),
-          menuButtons('KEŞFET', 1),
-          menuButtons('YAKINDA', 2),
-        ],
-      ),
-    );
-  }
-
-  RaisedButton menuButtons(String menuName, int menuIndex) {
-    // ignore: deprecated_member_use
-    return RaisedButton(
-        color: tappedIndex == menuIndex ? Colors.white : Colors.black,
-        shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(40.0)),
-        onPressed: () {
-          setState(() {
-            tappedIndex = menuIndex;
-          });
-        },
-        child: Text(
-          menuName,
-          style: TextStyle(
-            color: tappedIndex == menuIndex ? Colors.black : Colors.grey,
-          ),
-        ));
   }
 
   Container filterBar() {
@@ -134,6 +96,7 @@ class _GroupsPageState extends BaseState<GroupsPage> {
                 confirmText: "TAMAM",
                 cancelText: "VAZGEÇ",
                 headerColor: Colors.brown,
+
                 onCancelled: () => print("Scroll Picker cancelled"),
                 onConfirmed: () => print("Scroll Picker confirmed"),
               );
@@ -176,20 +139,23 @@ class _GroupsPageState extends BaseState<GroupsPage> {
 
   Container filterCardContainer(String interest) {
     return Container(
-        width: 120,
-        height: 40,
-        child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(Icons.location_on),
-                Text(interest),
-              ],
-            ))));
+      width: 140,
+      height: 60,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Icon(Icons.location_on),
+              Text(interest),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   List<CardItem> items = [
