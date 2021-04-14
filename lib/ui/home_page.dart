@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/feed/feed_page.dart';
@@ -37,6 +38,9 @@ class _HomePageState extends State<HomePage> {
       elevation: 0,
       navBarColor: Colors.white,
       navBarIconColor: Colors.black,
+      floatingButtonNavigation: () {
+        NavigationService.instance.navigate('/creation');
+      },
       moreButtons: [
         MoreButtonModel(
           icon: MaterialCommunityIcons.earth,
@@ -78,14 +82,11 @@ class _HomePageState extends State<HomePage> {
           icon: MaterialCommunityIcons.calendar,
           label: 'Takvimim',
           onTap: () {
-            setState(() {
-              _page = 6;
-            });
-            //CoolAlert.show(
-            //  context: context,
-            //  type: CoolAlertType.loading,
-            //  text: "Bu özelliğimiz henüz aktif değil.",
-            //);
+            CoolAlert.show(
+             context: context,
+             type: CoolAlertType.loading,
+             text: "Bu özelliğimiz henüz aktif değil.",
+            );
           },
         ),
         MoreButtonModel(
@@ -113,46 +114,8 @@ class _HomePageState extends State<HomePage> {
       // currentBottomBarCenterPercent: (currentBottomBarParallexPercent) {},
       // currentBottomBarMorePercent: (currentBottomBarMorePercent) {},
       // currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {},
-      parallexCardPageTransformer: PageTransformer(
-        pageViewBuilder: (context, visibilityResolver) {
-          return PageView.builder(
-            controller: PageController(viewportFraction: 0.85),
-            itemCount: parallaxCardItemsList.length,
-            itemBuilder: (context, index) {
-              final item = parallaxCardItemsList[index];
-              final pageVisibility =
-                  visibilityResolver.resolvePageVisibility(index);
-              return ParallaxCardsWidget(
-                item: item,
-                pageVisibility: pageVisibility,
-              );
-            },
-          );
-        },
-      ),
     );
   }
-
-  final parallaxCardItemsList = <ParallaxCardItem>[
-    ParallaxCardItem(
-        title: 'Some Random Route 1',
-        body: 'Place 1',
-        background: Container(
-          color: Colors.orange,
-        )),
-    ParallaxCardItem(
-        title: 'Some Random Route 2',
-        body: 'Place 2',
-        background: Container(
-          color: Colors.redAccent,
-        )),
-    ParallaxCardItem(
-        title: 'Some Random Route 3',
-        body: 'Place 1',
-        background: Container(
-          color: Colors.blue,
-        )),
-  ];
 }
 
 /*
