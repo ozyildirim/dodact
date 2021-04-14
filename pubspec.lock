@@ -230,13 +230,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_colorpicker:
-    dependency: transitive
-    description:
-      name: flutter_colorpicker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
   flutter_facebook_login:
     dependency: "direct main"
     description:
@@ -256,22 +249,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_material_pickers:
-    dependency: "direct main"
-    description:
-      name: flutter_material_pickers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
-  flutter_picker:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "4d4143149dd1b04952d6eb9380164441171394cd"
-      url: "git://github.com/yangyxd/flutter_picker.git"
-    source: git
-    version: "2.0.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -517,7 +494,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19"
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:

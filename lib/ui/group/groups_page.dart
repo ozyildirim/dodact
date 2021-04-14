@@ -4,10 +4,8 @@ import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/filtered_groups.dart';
-import 'package:dodact_v1/ui/group/widgets/random_groups.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_material_pickers/helpers/show_scroll_picker.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:horizontal_card_pager/card_item.dart';
 import 'package:horizontal_card_pager/horizontal_card_pager.dart';
@@ -19,6 +17,7 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends BaseState<GroupsPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GroupProvider _groupProvider;
   int tappedIndex;
 
@@ -79,28 +78,7 @@ class _GroupsPageState extends BaseState<GroupsPage> {
           SizedBox(width: 20),
           GestureDetector(
             child: filterCardContainer(selectedCity),
-            onTap: () {
-              showMaterialScrollPicker(
-                context: context,
-                title: "Şehir Seçin",
-                showDivider: false,
-                items: cities,
-                values: cities,
-                selectedValue: cities[0],
-                onChanged: (value) {
-                  setState(() {
-                    selectedCity = value;
-                    print(selectedCity);
-                  });
-                },
-                confirmText: "TAMAM",
-                cancelText: "VAZGEÇ",
-                headerColor: Colors.brown,
-
-                onCancelled: () => print("Scroll Picker cancelled"),
-                onConfirmed: () => print("Scroll Picker confirmed"),
-              );
-            },
+            onTap: () {},
           ),
           GestureDetector(
             child: filterCardContainer(selectedCategory),

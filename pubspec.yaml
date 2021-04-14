@@ -34,10 +34,8 @@ dependencies:
   extended_navbar_scaffold: any
   flutter_vector_icons: ^1.0.0
   cool_alert: ^1.0.3
-  flutter_picker:
-    git: git://github.com/yangyxd/flutter_picker.git
   horizontal_card_pager: ^1.1.1
-  flutter_material_pickers: ^2.1.1
+
 
 
 dev_dependencies:
