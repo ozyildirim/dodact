@@ -13,10 +13,12 @@ const kPrimaryColor = Colors.black;
 const kPrimaryLightColor = Colors.white;
 const kBackgroundColor = Color(0xFFF1F0F2);
 const kBackgroundColorDarker = Color(0xFF929292);
+const kDetailTextColor = Color(0xFF998FA2);
+const kCustomAppBarColor = Color(0xFF1C1B22);
 
 const kButtonFontSize = 20;
 
-const kFontFamily = "Rubik";
+const kFontFamily = "Roboto";
 
 const guzel = Color(0xFF162A49);
 

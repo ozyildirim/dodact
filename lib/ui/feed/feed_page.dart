@@ -23,6 +23,8 @@ class _FeedPageState extends BaseState<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(dynamicHeight(1));
+    print(dynamicWidth(1));
     return Container(
       decoration: BoxDecoration(color: kBackgroundColor),
       child: postsPart(),

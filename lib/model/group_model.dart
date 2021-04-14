@@ -13,6 +13,7 @@ class GroupModel {
   List<String> groupMemberList;
   DateTime creationDate;
   List<String> eventIDs;
+  String groupLocation;
 
   GroupModel(
       {this.groupId,
@@ -26,7 +27,8 @@ class GroupModel {
       this.groupPostIDs,
       this.groupMemberList,
       this.creationDate,
-      this.eventIDs});
+      this.eventIDs,
+      this.groupLocation});
 
   GroupModel.fromJson(Map<String, dynamic> json) {
     groupId = json['groupId'];
@@ -41,6 +43,7 @@ class GroupModel {
     groupMemberList = json['groupMemberList']?.cast<String>();
     creationDate = (json['creationDate'] as Timestamp).toDate();
     eventIDs = json['eventIDs'];
+    groupLocation = json['groupLocation'];
   }
 
   Map<String, dynamic> toJson() {
@@ -57,6 +60,7 @@ class GroupModel {
     data['groupMemberList'] = this.groupMemberList;
     data['creationDate'] = FieldValue.serverTimestamp();
     data['eventIDs'] = this.eventIDs;
+    data['groupLocation'] = this.groupLocation;
     return data;
   }
 
