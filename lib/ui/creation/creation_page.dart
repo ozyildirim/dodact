@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class CreationPage extends StatelessWidget {
+class CreationPage extends StatefulWidget {
+  @override
+  _CreationPageState createState() => _CreationPageState();
+}
+
+class _CreationPageState extends State<CreationPage> {
   int space = 100;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        backwardsCompatibility: true,
+        backwardsCompatibility: false,
         iconTheme: IconThemeData(color: Colors.black),
       ),
       extendBodyBehindAppBar: false,

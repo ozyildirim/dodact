@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
     GroupsPage(),
     ProfilePage(),
     SearchPage(),
-    CreationPage(),
   ];
 
   @override
@@ -83,9 +82,9 @@ class _HomePageState extends State<HomePage> {
           label: 'Takvimim',
           onTap: () {
             CoolAlert.show(
-             context: context,
-             type: CoolAlertType.loading,
-             text: "Bu özelliğimiz henüz aktif değil.",
+              context: context,
+              type: CoolAlertType.loading,
+              text: "Bu özelliğimiz henüz aktif değil.",
             );
           },
         ),

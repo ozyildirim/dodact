@@ -36,23 +36,25 @@ class _GroupsPageState extends BaseState<GroupsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(child: Consumer<GroupProvider>(
+        body: Consumer<GroupProvider>(
           builder: (_, provider, child) {
             if (provider.groupList != null) {
               if (provider.groupList.isNotEmpty) {
                 List<GroupModel> groups = provider.groupList;
                 print(provider.groupList.length);
-                return Container(
-                  height: dynamicHeight(1),
-                  color: Color(0xFFF1F0F2),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: filterBar(),
-                      ),
-                      FilteredGroups()
-                    ],
+                return SingleChildScrollView(
+                  child: Container(
+                    height: dynamicHeight(1),
+                    color: Color(0xFFF1F0F2),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: filterBar(),
+                        ),
+                        FilteredGroups()
+                      ],
+                    ),
                   ),
                 );
               } else {
@@ -64,7 +66,7 @@ class _GroupsPageState extends BaseState<GroupsPage> {
               return Center(child: spinkit);
             }
           },
-        )),
+        ),
       ),
     );
   }
