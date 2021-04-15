@@ -37,10 +37,10 @@ class _ProfilePageState extends BaseState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Consumer<UserProvider>(
+      child: Consumer<AuthProvider>(
         builder: (_, provider, child) {
           if (provider.isLoading == false) {
-            if (provider.user != null) {
+            if (provider.currentUser != null) {
               return Scaffold(
                 extendBodyBehindAppBar: true,
                 endDrawer: ProfileDrawer(),
@@ -96,8 +96,8 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                           child: CircleAvatar(
                                             radius: 60,
                                             backgroundImage: NetworkImage(
-                                                provider
-                                                    .user.profilePictureURL),
+                                                provider.currentUser
+                                                    .profilePictureURL),
                                           ),
                                         ),
                                         Column(
@@ -107,13 +107,13 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                               MainAxisAlignment.start,
                                           children: [
                                             Text(
-                                              provider.user.nameSurname,
+                                              provider.currentUser.nameSurname,
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                              "@${provider.user.username}",
+                                              "@${provider.currentUser.username}",
                                               style: TextStyle(fontSize: 12),
                                             ),
                                             SizedBox(
