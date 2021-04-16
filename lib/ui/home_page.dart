@@ -1,6 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/feed/feed_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
@@ -109,10 +108,6 @@ class _HomePageState extends State<HomePage> {
         height: 50,
         color: Colors.redAccent,
       ),
-      // onTap: (button) {},
-      // currentBottomBarCenterPercent: (currentBottomBarParallexPercent) {},
-      // currentBottomBarMorePercent: (currentBottomBarMorePercent) {},
-      // currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {},
     );
   }
 }

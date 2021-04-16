@@ -13,12 +13,11 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends BaseState<LandingPage> {
-  AuthProvider _authProvider;
+
 
   @override
   void initState() {
-    _authProvider = Provider.of<AuthProvider>(context, listen: false);
-    // _authProvider.getUser();
+
     super.initState();
   }
 

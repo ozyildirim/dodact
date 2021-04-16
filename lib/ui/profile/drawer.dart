@@ -136,8 +136,8 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
     );
   }
 
-  Future<bool> signOut(BuildContext context) async {
-    bool result = await authProvider.signOut();
-    return result;
+  void signOut(BuildContext context) async {
+    await authProvider.signOut();
+    await _userProvider.removeUser();
   }
 }
