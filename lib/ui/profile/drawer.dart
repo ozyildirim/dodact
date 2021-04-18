@@ -5,25 +5,21 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ProfileDrawer extends StatefulWidget {
-  final UserObject sentUser;
-
-  ProfileDrawer({this.sentUser});
-
   @override
   _ProfileDrawerState createState() => _ProfileDrawerState();
 }
 
 class _ProfileDrawerState extends BaseState<ProfileDrawer> {
   UserObject user;
-  AuthProvider _authProvider;
+  UserProvider _userProvider;
 
   @override
   void initState() {
-    user = widget.sentUser;
-    _authProvider = Provider.of<AuthProvider>(context, listen: false);
+    _userProvider = getProvider<UserProvider>();
+    user = _userProvider.user;
+
     super.initState();
   }
 
@@ -45,12 +41,10 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                       CircleAvatar(
                         radius: 30,
                         backgroundColor: Colors.transparent,
-                        backgroundImage:
-                            authProvider.currentUser.profilePictureURL == null
-                                ? NetworkImage(
-                                    "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png")
-                                : NetworkImage(
-                                    authProvider.currentUser.profilePictureURL),
+                        backgroundImage: user.profilePictureURL == null
+                            ? NetworkImage(
+                                "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png")
+                            : NetworkImage(user.profilePictureURL),
                       ),
                       SizedBox(
                         height: 10,
@@ -142,8 +136,8 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
     );
   }
 
-  Future<bool> signOut(BuildContext context) async {
-    bool result = await _authProvider.signOut();
-    return result;
+  void signOut(BuildContext context) async {
+    await authProvider.signOut();
+    await _userProvider.removeUser();
   }
 }

@@ -51,7 +51,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-
   Future<UserObject> getUserByID(String userId) async {
     try {
       changeState(true);
@@ -80,7 +79,6 @@ class AuthProvider extends ChangeNotifier {
       changeState(true);
     }
   }
-
 
   Future<bool> signOut() async {
     try {

@@ -7,6 +7,7 @@ import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/community/communities_page.dart';
 import 'package:dodact_v1/ui/community/community_detail.dart';
+import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
@@ -44,6 +45,8 @@ class NavigationRouteManager {
         return _navigateToDefault(InterestsPage(), settings);
       case k_ROUTE_HOME:
         return _navigateToDefault(HomePage(), settings);
+      case k_ROUTE_CREATION:
+        return _navigateToDefault(CreationPage(), settings);
       case k_ROUTE_FORGOT_PASSWORD:
         return _navigateToDefault(ForgotPasswordPage(), settings);
       case k_ROUTE_FEED:

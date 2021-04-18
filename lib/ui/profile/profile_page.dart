@@ -1,7 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/drawer.dart';
@@ -18,11 +16,14 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends BaseState<ProfilePage> {
   PostProvider _postProvider;
+  UserProvider _userProvider;
   @override
   void initState() {
-    super.initState();
     _postProvider = getProvider<PostProvider>();
-    _postProvider.getUserPosts(authProvider.currentUser, isNotify: false);
+    _userProvider = getProvider<UserProvider>();
+    _userProvider.getCurrentUser();
+    _postProvider.getUserPosts(_userProvider.user, isNotify: false);
+    super.initState();
   }
   // Consumer<PostProvider> postsPart() {
   //   return Consumer<PostProvider>(
@@ -33,15 +34,13 @@ class _ProfilePageState extends BaseState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Consumer<AuthProvider>(
+      child: Consumer<UserProvider>(
         builder: (_, provider, child) {
           if (provider.isLoading == false) {
-            if (provider.currentUser != null) {
+            if (provider.user != null) {
               return Scaffold(
                 extendBodyBehindAppBar: true,
-                endDrawer: ProfileDrawer(
-                  sentUser: authProvider.currentUser,
-                ),
+                endDrawer: ProfileDrawer(),
                 appBar: AppBar(
                   iconTheme: IconThemeData(color: Colors.white),
                   elevation: 0,
@@ -94,8 +93,8 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                           child: CircleAvatar(
                                             radius: 60,
                                             backgroundImage: NetworkImage(
-                                                provider.currentUser
-                                                    .profilePictureURL),
+                                                provider
+                                                    .user.profilePictureURL),
                                           ),
                                         ),
                                         Column(
@@ -105,13 +104,13 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                               MainAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Kutay YILDIRIM",
+                                              provider.user.nameSurname,
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                              "@yildirimkutay",
+                                              "@${provider.user.username}",
                                               style: TextStyle(fontSize: 12),
                                             ),
                                             SizedBox(

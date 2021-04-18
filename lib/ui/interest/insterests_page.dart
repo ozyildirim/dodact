@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -7,7 +8,7 @@ class InterestsPage extends StatefulWidget {
   _InterestsPageState createState() => _InterestsPageState();
 }
 
-class _InterestsPageState extends State<InterestsPage> {
+class _InterestsPageState extends BaseState<InterestsPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,6 +35,7 @@ class _InterestsPageState extends State<InterestsPage> {
 
   void _navigateToLanding() {
     Future.delayed(Duration(milliseconds: 300), () {
+      authProvider.getCurrentUser();
       NavigationService.instance.navigateToReset('/home');
     });
   }
