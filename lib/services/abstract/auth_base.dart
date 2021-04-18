@@ -9,7 +9,7 @@ abstract class AuthBase {
   Future<UserObject> signInWithEmail(String email, String password);
   Future<UserObject> createAccountWithEmailAndPassword(
       String email, String password);
-  Future<bool> forgotPassword(String email);
+  Future<void> forgotPassword(String email);
   Future<UserObject> getUserByID(String userId);
   Future<void> changeEmail(String newEmail);
   Future<void> updatePassword(String pass);

@@ -13,11 +13,8 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends BaseState<LandingPage> {
-
-
   @override
   void initState() {
-
     super.initState();
   }
 
