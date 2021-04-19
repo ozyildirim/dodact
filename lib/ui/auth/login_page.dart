@@ -8,8 +8,6 @@ import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
 import 'package:dodact_v1/ui/common_widgets/custom_button.dart';
 import 'package:dodact_v1/ui/common_widgets/rounded_button.dart';
-import 'package:dodact_v1/ui/common_widgets/rounded_input_field.dart';
-import 'package:dodact_v1/ui/common_widgets/rounded_password_field.dart';
 import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +22,6 @@ class LogInPage extends StatefulWidget {
 class _LogInPageState extends BaseState<LogInPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  String _email, _password;
   bool _autoValidate = false;
 
   FocusNode _emailFocus = FocusNode();
@@ -128,6 +125,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                     keyboardType: TextInputType.visiblePassword,
                     name: "password",
                     obscureText: true,
+                    focusNode: _passwordFocus,
                     cursorColor: kPrimaryColor,
                     decoration: InputDecoration(
                       hintText: "Parola",

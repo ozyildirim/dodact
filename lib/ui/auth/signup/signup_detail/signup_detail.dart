@@ -2,8 +2,9 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:dodact_v1/model/cities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class SignUpDetail extends StatefulWidget {
   @override
@@ -11,36 +12,39 @@ class SignUpDetail extends StatefulWidget {
 }
 
 class _SignUpDetailState extends BaseState<SignUpDetail> {
-  List<String> details;
-
-  String _username, _nameSurname, _city;
+  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool validation = false;
-  final formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
+  FocusNode _nameFocus = FocusNode();
+  FocusNode _usernameFocus = FocusNode();
+  FocusNode _dropdownFocus = FocusNode();
 
-  List<CityListItem> _dropdownItems = [
-    CityListItem(1, "Lütfen bir şehir belirt"),
-    CityListItem(2, "Adana"),
-    CityListItem(3, "Adıyaman"),
-    CityListItem(4, "Afyon"),
-    CityListItem(5, "Ağrı"),
-  ];
+  CityListItem selectedCity;
+  List<CityListItem> _dropdownItems = [];
 
-  //TODO: Şehirler başka bir listede tutulup, oradan çekilecek
-  //TODO: Formlar form builder ile yapılacak..
+  List<CityListItem> _buildDropdownItems(List<String> cities) {
+    List<CityListItem> _items = [];
+    for (int i = 0; i < cities.length; i++) {
+      _items.add(new CityListItem(i, cities[i]));
+    }
+    return _items;
+  }
+
   List<DropdownMenuItem<CityListItem>> _dropdownMenuItems;
-  CityListItem _selectedItem;
 
   void initState() {
     super.initState();
+    _dropdownItems = _buildDropdownItems(cities);
     _dropdownMenuItems = buildDropdownMenuItems(_dropdownItems);
-    _selectedItem = _dropdownMenuItems[0].value;
-    _city = _selectedItem.name;
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -57,195 +61,226 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         body: Container(
           width: dynamicWidth(1),
           child: Column(
-            children: [buildUpperPart(), buildFormPart(), buildButtonPart()],
+            children: [
+              //page header title
+              Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Biraz kendinden bahseder misin?",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  )),
+              Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: FormBuilder(
+                      key: _formKey,
+                      child: ListView(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            width: size.width * 0.8,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: const Offset(
+                                    1.0,
+                                    1.0,
+                                  ),
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.5,
+                                ),
+                              ],
+                              color: kPrimaryLightColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: FormBuilderTextField(
+                                textInputAction: TextInputAction.next,
+                                focusNode: _usernameFocus,
+                                name: "username",
+                                autofocus: false,
+                                keyboardType: TextInputType.text,
+                                cursorColor: kPrimaryColor,
+                                decoration: InputDecoration(
+                                  icon: Icon(
+                                    Icons.people_alt_sharp,
+                                    color: kPrimaryColor,
+                                  ),
+                                  hintText: "Kullanıcı Adın",
+                                  hintStyle: TextStyle(fontFamily: kFontFamily),
+                                  border: InputBorder.none,
+                                ),
+                                validator: FormBuilderValidators.compose(
+                                    [FormBuilderValidators.required(context)])),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            width: size.width * 0.8,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: const Offset(
+                                    1.0,
+                                    1.0,
+                                  ),
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.5,
+                                ),
+                              ],
+                              color: kPrimaryLightColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: FormBuilderTextField(
+                              textInputAction: TextInputAction.next,
+                              focusNode: _nameFocus,
+                              name: "nameSurname",
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              cursorColor: kPrimaryColor,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.people_alt_sharp,
+                                  color: kPrimaryColor,
+                                ),
+                                hintText: "Adın Soyadın",
+                                hintStyle: TextStyle(fontFamily: kFontFamily),
+                                border: InputBorder.none,
+                              ),
+                              validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)]),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            width: size.width * 0.8,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: const Offset(
+                                    1.0,
+                                    1.0,
+                                  ),
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.5,
+                                ),
+                              ],
+                              color: kPrimaryLightColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: FormBuilderDropdown(
+                              focusNode: _dropdownFocus,
+                              name: "city",
+                              hint: Text("Bir şehir belirtiniz."),
+                              decoration:
+                                  InputDecoration(border: InputBorder.none),
+                              allowClear: true,
+                              validator: FormBuilderValidators.required(context,
+                                  errorText: "Lütfen bir şehir seçiniz."),
+                              items: _dropdownMenuItems,
+                              onChanged: (value) {
+                                selectedCity = value;
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      _formSubmit();
+                    },
+                    child: Container(
+                      alignment: Alignment.bottomRight,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 25,
+                        child: Icon(
+                          Icons.navigate_next,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),
     );
   }
 
-  Expanded buildButtonPart() => Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GestureDetector(
-          onTap: () {
-            _formSubmit();
-          },
-          child: Container(
-            alignment: Alignment.bottomRight,
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 25,
-              child: Icon(
-                Icons.navigate_next,
-                size: 30,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ));
-
-  Expanded buildFormPart() {
-    Size size = MediaQuery.of(context).size;
-    return Expanded(
-        flex: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey,
-            autovalidate: validation,
-            child: ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: const Offset(
-                          1.0,
-                          1.0,
-                        ),
-                        blurRadius: 5.0,
-                        spreadRadius: 0.5,
-                      ),
-                    ],
-                    color: kPrimaryLightColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.text,
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.people_alt_sharp,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "Kullanıcı Adın",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      _username = value;
-                    },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Bir kullanıcı adı giriniz.";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: const Offset(
-                          1.0,
-                          1.0,
-                        ),
-                        blurRadius: 5.0,
-                        spreadRadius: 0.5,
-                      ),
-                    ],
-                    color: kPrimaryLightColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.text,
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.people_alt_sharp,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "Adın Soyadın",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      _nameSurname = value;
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: const Offset(
-                          1.0,
-                          1.0,
-                        ),
-                        blurRadius: 5.0,
-                        spreadRadius: 0.5,
-                      ),
-                    ],
-                    color: kPrimaryLightColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<CityListItem>(
-                      value: _selectedItem,
-                      items: _dropdownMenuItems,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedItem = value;
-                          _city = value.name;
-                        });
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ));
-  }
-
   void _formSubmit() async {
-    formKey.currentState.save();
-    await updateDetails();
-    NavigationService.instance.navigate('/signup_detail_2');
+    _formKey.currentState.saveAndValidate();
+    var formUsername =
+        _formKey.currentState.value['username'].toString().trim();
+    var formNameSurname =
+        _formKey.currentState.value['nameSurname'].toString().trim();
+
+    // var usernameControlResult = await _usernameControl(username);
+
+    try {
+      await updateDetails(username: formUsername, nameSurname: formNameSurname);
+      NavigationService.instance.navigate('/signup_detail_2');
+    } catch (e) {
+      showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
+    }
+
+    print(_formKey.currentState.value['nameSurname'].toString());
+    print(_formKey.currentState.value['username'].toString());
+    print(selectedCity.name);
   }
 
-  Future<void> updateDetails() async {
-    debugPrint(_selectedItem.name);
-    return usersRef
-        .doc(authProvider.currentUser.uid)
-        .update({
-          'username': _username,
-          'nameSurname': _nameSurname,
-          'location': _city
-        })
-        .then((value) => print("User Updated"))
-        .catchError((error) => print("Failed to update user: $error"));
+  void showErrorSnackBar(String errorMessage) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 2),
+      content: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          // new CircularProgressIndicator(),
+          Expanded(
+            child: new Text(
+              errorMessage,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+              maxLines: 1,
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    ));
   }
 
-  Expanded buildUpperPart() {
-    return Expanded(
-        flex: 1,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            "Biraz kendinden bahseder misin?",
-            textAlign: TextAlign.start,
-            style: TextStyle(fontSize: 25),
-          ),
-        ));
+  Future<bool> updateDetails({String username, String nameSurname}) async {
+    var result = await usersRef.doc(authProvider.currentUser.uid).update({
+      'username': username,
+      'nameSurname': nameSurname,
+      'location': selectedCity.name,
+    }).then((value) {
+      return true;
+    }).catchError((error) {
+      return false;
+    });
   }
 
   List<DropdownMenuItem<CityListItem>> buildDropdownMenuItems(
@@ -264,22 +299,26 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     await authProvider.signOut();
   }
 
-  Future<String> _usernameControl(String username) async {
-    var result = await usersRef.where('username', isEqualTo: username);
+  Future<bool> _usernameControl(String username) async {
+    var result = await usersRef.where('username', isEqualTo: username).get();
+    if (result != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  String _nameControl(String nameSurname) {
+  bool _nameControl(String nameSurname) {
     RegExp regex = RegExp("^[a-zA-Z]+\$");
-    if (!regex.hasMatch(nameSurname))
-      return 'İsim numara içermemeli!';
-    else
-      return null;
+    if (!regex.hasMatch(nameSurname)) //isim hatalıysa
+      return false;
+    else //isim doğruysa
+      return true;
   }
 }
 
 class CityListItem {
   int value;
   String name;
-
   CityListItem(this.value, this.name);
 }
