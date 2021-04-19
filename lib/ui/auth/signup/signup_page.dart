@@ -10,9 +10,12 @@ import 'package:dodact_v1/ui/common_widgets/custom_dialog_box.dart';
 import 'package:dodact_v1/ui/common_widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common_widgets/rounded_input_field.dart';
 import 'package:dodact_v1/ui/common_widgets/rounded_password_field.dart';
+import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
+import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -21,13 +24,17 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends BaseState<SignUpPage> {
-  final _formKey = GlobalKey<FormState>();
-  String _email, _password, _secondPassword;
-  AuthProvider _authProvider;
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool _autoValidate = false;
+
+  FocusNode _emailFocus = FocusNode();
+  FocusNode _passwordFocus = FocusNode();
 
   @override
   void initState() {
-    _authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider = getProvider<AuthProvider>();
     super.initState();
   }
 
@@ -35,6 +42,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -46,7 +54,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         body: Container(
           height: dynamicHeight(1),
           color: oxfordBlue,
-          child: Form(
+          child: FormBuilder(
             key: _formKey,
             child: Column(
               children: <Widget>[
@@ -61,32 +69,72 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     image: AssetImage('assets/images/logo.png'),
                   ),
                 ),
-                // Text(
-                //   "Aramıza Katıl!",
-                //   textAlign: TextAlign.start,
-                //   style: TextStyle(
-                //       color: Colors.white,
-                //       fontFamily: kFontFamily,
-                //       fontWeight: FontWeight.bold,
-                //       fontSize: 30),
-                // ),
                 SizedBox(height: dynamicHeight(0.03)),
-                RoundedInputField(
-                  keyboardType: TextInputType.emailAddress,
-                  hintText: "E-posta adresi",
-                  onChanged: (value) {
-                    _email = value;
-                  },
+                TextFieldContainer(
+                  child: FormBuilderTextField(
+                    name: "email",
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.mail,
+                        color: kPrimaryColor,
+                      ),
+                      hintText: "E-posta adresi",
+                      hintStyle: TextStyle(fontFamily: kFontFamily),
+                      border: InputBorder.none,
+                    ),
+                    focusNode: _emailFocus,
+                    textInputAction: TextInputAction.next,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context,
+                          errorText: "Lütfen e-posta adresi giriniz."),
+                      FormBuilderValidators.email(context,
+                          errorText:
+                              "Lütfen geçerli bir e-posta adresi giriniz."),
+                    ]),
+                  ),
                 ),
-                RoundedPasswordField(
-                  onChanged: (value) {
-                    _password = value;
-                  },
+                TextFieldContainer(
+                  child: FormBuilderTextField(
+                    keyboardType: TextInputType.visiblePassword,
+                    name: "password",
+                    obscureText: true,
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      hintText: "Parola",
+                      hintStyle: TextStyle(fontFamily: kFontFamily),
+                      icon: Icon(
+                        Icons.lock,
+                        color: kPrimaryColor,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context,
+                          errorText: "Lütfen parolanızı giriniz.")
+                    ]),
+                  ),
                 ),
-                RoundedPasswordField(
-                  onChanged: (value) {
-                    _secondPassword = value;
-                  },
+                TextFieldContainer(
+                  child: FormBuilderTextField(
+                    keyboardType: TextInputType.visiblePassword,
+                    name: "password",
+                    obscureText: true,
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      hintText: "Parola",
+                      hintStyle: TextStyle(fontFamily: kFontFamily),
+                      icon: Icon(
+                        Icons.lock,
+                        color: kPrimaryColor,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context,
+                          errorText: "Lütfen parolanızı giriniz.")
+                    ]),
+                  ),
                 ),
                 RoundedButton(
                   textSize: 15,
@@ -147,23 +195,71 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void _signInWithGoogle() async {
-    UserObject _user = await _authProvider.signInWithGoogle();
+    var status = await authProvider.signInWithGoogle();
+    if (status != AuthResultStatus.successful) {
+      if (status != AuthResultStatus.abortedByUser) {
+        final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: new Duration(seconds: 2),
+          content: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // new CircularProgressIndicator(),
+              Expanded(
+                child: new Text(
+                  errorMsg,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            ],
+          ),
+        ));
+      }
+    }
   }
 
   void _signInWithFacebook() async {
-    UserObject _user = await _authProvider.signInWithFacebook();
+    UserObject _user = await authProvider.signInWithFacebook();
   }
 
   void _signUp() async {
-    _formKey.currentState.save();
-    try {
-      UserObject _registeredUser = await _authProvider
-          .createAccountWithEmailAndPassword(_email, _password);
-      Future.delayed(Duration(milliseconds: 300), () {
+    if (_formKey.currentState.saveAndValidate()) {
+      var registrationResult =
+          await authProvider.createAccountWithEmailAndPassword(
+        _formKey.currentState.value['email'].toString().trim(),
+        _formKey.currentState.value['password'].toString().trim(),
+      );
+      if (registrationResult != AuthResultStatus.successful) {
+        final errorMsg =
+            AuthExceptionHandler.generateExceptionMessage(registrationResult);
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: new Duration(seconds: 2),
+          content: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // new CircularProgressIndicator(),
+              Expanded(
+                child: new Text(
+                  errorMsg,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            ],
+          ),
+        ));
+      } else {
         NavigationService.instance.popUntil('/landing');
+      }
+    } else {
+      setState(() {
+        _autoValidate = true;
       });
-    } catch (e) {
-      print("Hata: " + e.toString());
     }
   }
 

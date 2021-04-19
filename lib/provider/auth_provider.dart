@@ -69,14 +69,14 @@ class AuthProvider extends ChangeNotifier {
       var user = await _authRepository.signInAnonymously();
       if (user != null) {
         currentUser = user;
+        changeState(false);
         return currentUser;
       }
     } catch (e) {
       debugPrint(
           "AuthProvider signInAnonymously function error: " + e.toString());
+      changeState(false);
       return null;
-    } finally {
-      changeState(true);
     }
   }
 
@@ -92,52 +92,75 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<UserObject> signInWithGoogle() async {
+  Future<AuthResultStatus> signInWithGoogle() async {
     try {
+      authStatus = null;
       changeState(true);
       var user = await _authRepository.signInWithGoogle();
       if (user != null) {
+        print("AuthProvider user logged with google");
+        authStatus = AuthResultStatus.successful;
         currentUser = user;
-        return currentUser;
+        changeState(false);
+      } else {
+        print("AuthProvider google user null");
+        authStatus = AuthResultStatus.abortedByUser;
+        changeState(false);
       }
     } catch (e) {
       debugPrint("AuthProvider signInWithGoogle error: " + e.toString());
-      return null;
-    } finally {
+      authStatus = AuthResultStatus.abortedByUser;
       changeState(false);
     }
+    return authStatus;
   }
 
-  Future<UserObject> createAccountWithEmailAndPassword(
+  Future<AuthResultStatus> createAccountWithEmailAndPassword(
       String email, String password) async {
     try {
+      authStatus = null;
       changeState(true);
       var user = await _authRepository.createAccountWithEmailAndPassword(
           email, password);
       if (user != null) {
         debugPrint("AuthProvider user signed up: " + user.uid + user.email);
+        authStatus = AuthResultStatus.successful;
         currentUser = user;
-        return currentUser;
+        changeState(false);
+      } else {
+        print('AuthStore signUp user null');
+        changeState(false);
       }
     } on FirebaseAuthException catch (e) {
       print("AuthProvider login create account error: $e");
-    } finally {
+      authStatus = AuthExceptionHandler.handleException(e);
       changeState(false);
     }
+    changeState(false);
+    return authStatus;
   }
 
-  Future<UserObject> signInWithEmail(String email, String password) async {
+  Future<AuthResultStatus> signInWithEmail(
+      String email, String password) async {
+    changeState(true);
+    authStatus = null;
     try {
-      changeState(true);
       var user = await _authRepository.signInWithEmail(email, password);
-      currentUser = user;
-      return currentUser;
-    } catch (e) {
+      if (user != null) {
+        print("User ${user.email} logged in.");
+        authStatus = AuthResultStatus.successful;
+        currentUser = user;
+        changeState(false);
+      } else {
+        print("Auth Login failed.");
+        changeState(false);
+      }
+    } on FirebaseAuthException catch (e) {
       debugPrint("AuthProvider signInWithEmail error: " + e.toString());
-      return null;
-    } finally {
+      authStatus = AuthExceptionHandler.handleException(e);
       changeState(false);
     }
+    return authStatus;
   }
 
   Future<UserObject> signInWithFacebook() async {
@@ -146,6 +169,7 @@ class AuthProvider extends ChangeNotifier {
       var user = await _authRepository.signInWithFacebook();
       if (user != null) {
         currentUser = user;
+        changeState(false);
         return currentUser;
       }
     } catch (e) {
@@ -153,11 +177,10 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> forgotPassword(String email) async {
+  Future<void> forgotPassword(String email) async {
     try {
       changeState(true);
-      var result = await _authRepository.forgotPassword(email);
-      return result;
+      await _authRepository.forgotPassword(email);
     } catch (e) {
       debugPrint("AuthProvider ViewModel error." + e.toString());
     } finally {

@@ -74,11 +74,8 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
   Future _passwordReset(String email) async {
     try {
       _formKey.currentState.save();
-
-      var result = await authProvider.forgotPassword(email);
-      if (result != null) {
-        print("User sent forgot password mail:");
-      }
+      await authProvider.forgotPassword(email);
+      print("User sent forgot password mail:");
     } catch (e) {
       print(e);
     }

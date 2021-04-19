@@ -1,6 +1,7 @@
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/abstract/auth_base.dart';
+import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -40,18 +41,12 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<bool> signOut() async {
-    try {
-      //user must sign out from all these providers(google,facebook etc.)
-      await _firebaseAuth.signOut();
-
-      GoogleSignIn _googleSignIn = GoogleSignIn();
-      await _googleSignIn.signOut();
-      print("User signed out.");
-      return true;
-    } catch (e) {
-      print("FirebaseAuthService signOut error:" + e.toString());
-      return false;
-    }
+    //user must sign out from all these providers(google,facebook etc.)
+    await _firebaseAuth.signOut();
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+    await _googleSignIn.signOut();
+    print("User signed out.");
+    return true;
   }
 
   @override
@@ -109,28 +104,28 @@ class FirebaseAuthService implements AuthBase {
       String email, String password) async {
     UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
-    return _userFromFirebase(result.user);
-  }
-
-  @override
-  Future<UserObject> signInWithEmail(String email, String password) async {
-    try {
-      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return _userFromFirebase(result.user);
-    } catch (e) {
-      print("FirebaseAuthService signInWithEmail error:" + e.toString());
+    UserObject user = _userFromFirebase(result.user);
+    if (user != null) {
+      return user;
+    } else {
       return null;
     }
   }
 
-  Future<bool> forgotPassword(String email) async {
-    try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
-      return true;
-    } catch (e) {
-      print("FirebaseAuthService forgotPassword error:" + e.toString());
+  @override
+  Future<UserObject> signInWithEmail(String email, String password) async {
+    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+    UserObject user = _userFromFirebase(result.user);
+    if (user != null) {
+      return user;
+    } else {
+      return null;
     }
+  }
+
+  Future<void> forgotPassword(String email) async {
+    return await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<UserObject> getUserByID(String userId) async {
@@ -139,8 +134,12 @@ class FirebaseAuthService implements AuthBase {
   }
 
   Future<void> changeEmail(String newEmail) async {
-    if (_firebaseAuth.currentUser != null) {
-      await _firebaseAuth.currentUser.updateEmail(newEmail);
+    try {
+      if (_firebaseAuth.currentUser != null) {
+        await _firebaseAuth.currentUser.updateEmail(newEmail);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

@@ -100,12 +100,11 @@ class AuthRepository {
     }
   }
 
-  Future<bool> forgotPassword(String email) async {
+  Future<void> forgotPassword(String email) async {
     if (appMode == AppMode.DEBUG) {
       return true;
     } else {
-      var result = await _firebaseAuthService.forgotPassword(email);
-      return result;
+      await _firebaseAuthService.forgotPassword(email);
     }
   }
 
