@@ -205,8 +205,10 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
   void _updateProfilePhoto(BuildContext context) async {
     if (_profilePicture != null) {
       showLoaderDialog(context);
-      var url = await UploadService().uploadFile(authProvider.currentUser.uid,
-          'profile_picture', File(_profilePicture.path));
+      var url = await UploadService().uploadUserPhoto(
+          authProvider.currentUser.uid,
+          'profile_picture',
+          File(_profilePicture.path));
       await usersRef
           .doc(authProvider.currentUser.uid)
           .update({'profilePictureURL': url}).then((value) {

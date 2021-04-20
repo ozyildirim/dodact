@@ -29,7 +29,7 @@ class _ProfilePageState extends BaseState<ProfilePage> {
   //   return Consumer<PostProvider>(
   //       builder: (_, provider, child) {
   //     if (provider.usersPosts != null) {
-  //       if (provider.usersPosts.isNotEmpty) {
+  //       if (provider.usersPosts.isNotEmpty)
 
   @override
   Widget build(BuildContext context) {
