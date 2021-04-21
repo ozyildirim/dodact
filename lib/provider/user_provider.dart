@@ -5,7 +5,6 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/user_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
-import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 
 import 'package:flutter/material.dart';
 
