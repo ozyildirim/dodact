@@ -52,8 +52,11 @@ class _SignUpPageState extends BaseState<SignUpPage> {
           backgroundColor: Colors.transparent,
         ),
         body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/loginBG.jpg'),
+                  fit: BoxFit.cover)),
           height: dynamicHeight(1),
-          color: oxfordBlue,
           child: FormBuilder(
             key: _formKey,
             child: Column(
@@ -66,7 +69,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   child: Image(
                     height: 150,
                     width: 150,
-                    image: AssetImage('assets/images/logo.png'),
+                    image: AssetImage('assets/images/logoNegatif.png'),
                   ),
                 ),
                 SizedBox(height: dynamicHeight(0.03)),

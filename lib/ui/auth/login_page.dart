@@ -79,7 +79,10 @@ class _LogInPageState extends BaseState<LogInPage> {
         ),
         body: Container(
           height: dynamicHeight(1),
-          decoration: BoxDecoration(color: oxfordBlue),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/loginBG.jpg'),
+                  fit: BoxFit.cover)),
           child: FormBuilder(
             key: _formKey,
             child: Column(
@@ -88,8 +91,8 @@ class _LogInPageState extends BaseState<LogInPage> {
                 Hero(
                   tag: "logo",
                   child: Image(
-                    height: 200,
-                    width: 200,
+                    height: 180,
+                    width: 180,
                     image: AssetImage('assets/images/logo.png'),
                   ),
                 ),
