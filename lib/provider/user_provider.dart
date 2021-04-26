@@ -67,6 +67,20 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<List<UserObject>> getAllUsers({bool isNotify}) async {
+    try {
+      changeState(true, isNotify: isNotify);
+      List<UserObject> list = await userRepository.getAllUsers();
+      userList = list;
+      return userList;
+    } catch (e) {
+      print("UserProvider getAllUsers error: $e");
+      return null;
+    } finally {
+      changeState(false);
+    }
+  }
+
   bool _emailPasswordCheck(String email, String password) {
     var result = true;
 

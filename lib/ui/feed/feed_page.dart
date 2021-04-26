@@ -1,13 +1,10 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/feed/component/post_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -20,12 +17,16 @@ class _FeedPageState extends BaseState<FeedPage> {
   PostProvider _postProvider;
   UserProvider _userProvider;
 
+  Future<List<UserObject>> allUsers;
+
   @override
   void initState() {
     super.initState();
     _postProvider = getProvider<PostProvider>();
-    _userProvider = getProvider<UserProvider>();
     _postProvider.getList(isNotify: false);
+    _userProvider = getProvider<UserProvider>();
+
+    allUsers = _userProvider.getAllUsers(isNotify: false);
   }
 
   @override
@@ -62,10 +63,6 @@ class _FeedPageState extends BaseState<FeedPage> {
                       itemCount: provider.postList.length,
                       itemBuilder: (context, index) {
                         var postItem = provider.postList[index];
-                        var postCreator =
-                            _userProvider.getUserByID(postItem.ownerId);
-                        var thumbnailURL =
-                            createThumbnailURL(postItem.postContentURL);
                         return Container(
                           height: 350,
                           child: Padding(
@@ -77,7 +74,7 @@ class _FeedPageState extends BaseState<FeedPage> {
                         );
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
             );
@@ -160,20 +157,37 @@ class _FeedPageState extends BaseState<FeedPage> {
     return Container(
       margin: new EdgeInsets.only(left: 10),
       height: 100,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Row(
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                ),
-                SizedBox(
-                  width: 7.5,
-                )
-              ],
-            );
-          }),
+      child: FutureBuilder<List<UserObject>>(
+        future: allUsers,
+        builder: (context, AsyncSnapshot<List<UserObject>> list) {
+          if (list.hasData) {
+            if (list.data == null || list.data.length == 0) {
+              return Center(child: Text("Veri bulunamadı.."));
+            } else {
+              return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: list.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var userItem = list.data[index];
+                    return Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundImage:
+                              NetworkImage(userItem.profilePictureURL),
+                        ),
+                        SizedBox(
+                          width: 7.5,
+                        )
+                      ],
+                    );
+                  });
+            }
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 }
@@ -182,33 +196,4 @@ String createThumbnailURL(String youtubeVideoID) {
   String videoID = YoutubePlayer.convertUrlToId(youtubeVideoID);
   String thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
   return thumbnailURL;
-}
-
-String convertMonth(int month) {
-  switch (month) {
-    case 1:
-      return "Ocak";
-    case 2:
-      return "Şubat";
-    case 3:
-      return "Mart";
-    case 4:
-      return "Nisan";
-    case 5:
-      return "Mayıs";
-    case 6:
-      return "Haziran";
-    case 7:
-      return "Temmuz";
-    case 8:
-      return "Ağustos";
-    case 9:
-      return "Eylül";
-    case 10:
-      return "Ekim";
-    case 11:
-      return "Kasım";
-    case 12:
-      return "Aralık";
-  }
 }

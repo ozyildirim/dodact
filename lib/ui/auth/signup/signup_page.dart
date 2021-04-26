@@ -69,7 +69,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   child: Image(
                     height: 150,
                     width: 150,
-                    image: AssetImage('assets/images/logoNegatif.png'),
+                    image: AssetImage('assets/images/logo.png'),
                   ),
                 ),
                 SizedBox(height: dynamicHeight(0.03)),

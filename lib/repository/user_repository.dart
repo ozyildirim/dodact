@@ -131,4 +131,13 @@ class UserRepository {
       return result;
     }
   }
+
+  Future<List<UserObject>> getAllUsers() async {
+    if (appMode == AppMode.DEBUG) {
+      return null;
+    } else {
+      var list = await _firestoreUserService.getList();
+      return list;
+    }
+  }
 }

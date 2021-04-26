@@ -4,6 +4,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PostCard extends StatefulWidget {
@@ -17,7 +18,7 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends BaseState<PostCard> {
   PostModel post;
-  Future<UserObject> creatorUser;
+  UserObject creatorUser;
 
   PostProvider postProvider;
   UserProvider userProvider;
@@ -28,17 +29,21 @@ class _PostCardState extends BaseState<PostCard> {
     post = widget.post;
     postProvider = getProvider<PostProvider>();
     userProvider = getProvider<UserProvider>();
-
-    creatorUser = getCreatorUser();
+    getCreatorUser();
   }
 
-  Future<UserObject> getCreatorUser() async {
-    return await userProvider.getUserByID(post.ownerId);
+  Future getCreatorUser() async {
+    await userProvider
+        .getUserByID(post.ownerId)
+        .then((value) => creatorUser = value);
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
       child: Stack(
         children: [
           Padding(
@@ -64,22 +69,35 @@ class _PostCardState extends BaseState<PostCard> {
       children: [
         Row(
           children: [
-            CircleAvatar(),
+            CircleAvatar(
+              backgroundImage: creatorUser.profilePictureURL != null
+                  ? NetworkImage(creatorUser.profilePictureURL)
+                  : NetworkImage(
+                      "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png"),
+            ),
             SizedBox(
               width: 10,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("İbrahim Çırak"),
+                Text(
+                  creatorUser.nameSurname,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
                 Text("${date.difference(post.postDate).inDays} gün önce"),
               ],
             ),
           ],
         ),
+
+        //TODO: Şikayet etme özelliğini de buraya eklemeliyiz.
         Align(
             alignment: Alignment.bottomRight,
-            child: Icon(Icons.bookmark_border)),
+            child: IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {},
+            )),
       ],
     );
   }
@@ -88,39 +106,46 @@ class _PostCardState extends BaseState<PostCard> {
     return Stack(
       children: [
         postView(post),
-        reactionColumn(post),
+        reactionRow(post),
       ],
     );
   }
 
-  Column reactionColumn(PostModel post) {
-    return Column(
-      children: [
-        Container(
-          height: 150,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.thumb_up,
-              color: Colors.white,
+  Container reactionRow(PostModel post) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            height: 190,
+          ),
+          Container(
+            width: 130,
+            decoration: BoxDecoration(
+                color: Colors.grey, borderRadius: BorderRadius.circular(25)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.thumb_up,
+                  color: Colors.white,
+                ),
+                SizedBox(width: 20),
+                post.isVideo == true
+                    ? Icon(
+                        Icons.play_circle_outline_outlined,
+                        color: Colors.white,
+                      )
+                    : Container(),
+                SizedBox(width: 20),
+                Icon(
+                  Icons.remove_red_eye_outlined,
+                  color: Colors.white,
+                ),
+              ],
             ),
-            SizedBox(width: 20),
-            post.isVideo == true
-                ? Icon(
-                    Icons.play_circle_outline_outlined,
-                    color: Colors.white,
-                  )
-                : Container(),
-            SizedBox(width: 20),
-            Icon(
-              Icons.remove_red_eye_outlined,
-              color: Colors.white,
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -151,6 +176,10 @@ class _PostCardState extends BaseState<PostCard> {
               post.postTitle,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(post.postDescription)
           ],
         ),
         CircleAvatar(),
@@ -162,34 +191,5 @@ class _PostCardState extends BaseState<PostCard> {
     String videoID = YoutubePlayer.convertUrlToId(youtubeVideoID);
     String thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
     return thumbnailURL;
-  }
-
-  String convertMonth(int month) {
-    switch (month) {
-      case 1:
-        return "Ocak";
-      case 2:
-        return "Şubat";
-      case 3:
-        return "Mart";
-      case 4:
-        return "Nisan";
-      case 5:
-        return "Mayıs";
-      case 6:
-        return "Haziran";
-      case 7:
-        return "Temmuz";
-      case 8:
-        return "Ağustos";
-      case 9:
-        return "Eylül";
-      case 10:
-        return "Ekim";
-      case 11:
-        return "Kasım";
-      case 12:
-        return "Aralık";
-    }
   }
 }
