@@ -52,8 +52,11 @@ class _SignUpPageState extends BaseState<SignUpPage> {
           backgroundColor: Colors.transparent,
         ),
         body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/loginBG.jpg'),
+                  fit: BoxFit.cover)),
           height: dynamicHeight(1),
-          color: oxfordBlue,
           child: FormBuilder(
             key: _formKey,
             child: Column(

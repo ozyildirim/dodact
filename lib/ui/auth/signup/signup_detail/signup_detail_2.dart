@@ -64,7 +64,6 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    //TODO : Image Picker hatası düzenlenmeli. Fotoğraf seçilemiyor.
                                     showModalBottomSheet(
                                         context: context,
                                         builder: (context) {

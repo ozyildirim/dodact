@@ -5,7 +5,6 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/user_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
-import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 
 import 'package:flutter/material.dart';
 
@@ -65,6 +64,20 @@ class UserProvider with ChangeNotifier {
     } catch (e) {
       print("UserProvider getCurrentUser error: $e");
       return null;
+    }
+  }
+
+  Future<List<UserObject>> getAllUsers({bool isNotify}) async {
+    try {
+      changeState(true, isNotify: isNotify);
+      List<UserObject> list = await userRepository.getAllUsers();
+      userList = list;
+      return userList;
+    } catch (e) {
+      print("UserProvider getAllUsers error: $e");
+      return null;
+    } finally {
+      changeState(false);
     }
   }
 
