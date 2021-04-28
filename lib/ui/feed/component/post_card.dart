@@ -5,6 +5,7 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PostCard extends StatefulWidget {
@@ -62,43 +63,53 @@ class _PostCardState extends BaseState<PostCard> {
     );
   }
 
-  Row sharingInfo(PostModel post) {
+  Consumer<UserProvider> sharingInfo(PostModel post) {
     var date = DateTime.now();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: creatorUser.profilePictureURL != null
-                  ? NetworkImage(creatorUser.profilePictureURL)
-                  : NetworkImage(
-                      "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png"),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  creatorUser.nameSurname,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                Text("${date.difference(post.postDate).inDays} gün önce"),
-              ],
-            ),
-          ],
-        ),
+    return Consumer<UserProvider>(
+      builder: (context, provider, child) {
+        return provider.isLoading
+            ? Container(
+                child: CircularProgressIndicator(),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: creatorUser.profilePictureURL != null
+                            ? NetworkImage(creatorUser.profilePictureURL)
+                            : NetworkImage(
+                                "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png"),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            creatorUser.nameSurname,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                              "${date.difference(post.postDate).inDays} gün önce"),
+                        ],
+                      ),
+                    ],
+                  ),
 
-        //TODO: Şikayet etme özelliğini de buraya eklemeliyiz.
-        Align(
-            alignment: Alignment.bottomRight,
-            child: IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {},
-            )),
-      ],
+                  //TODO: Şikayet etme özelliğini de buraya eklemeliyiz.
+                  Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        icon: Icon(Icons.more_vert),
+                        onPressed: () {},
+                      )),
+                ],
+              );
+      },
     );
   }
 
