@@ -13,6 +13,7 @@ class PostProvider extends ChangeNotifier {
 
   PostModel post;
   List<PostModel> postList;
+  List<PostModel> topPostList;
   List<PostModel> usersPosts;
   bool isLoading = false;
 
@@ -87,6 +88,20 @@ class PostProvider extends ChangeNotifier {
       var fetchedList = await postRepository.getList();
       postList = fetchedList;
       return postList;
+    } catch (e) {
+      print("PostProvider getList error: " + e.toString());
+      return null;
+    } finally {
+      changeState(false);
+    }
+  }
+
+  Future<List<PostModel>> getTopPosts({bool isNotify}) async {
+    try {
+      changeState(true, isNotify: isNotify);
+      var fetchedList = await postRepository.getTopPosts();
+      topPostList = fetchedList;
+      return topPostList;
     } catch (e) {
       print("PostProvider getList error: " + e.toString());
       return null;

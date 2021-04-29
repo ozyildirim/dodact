@@ -1,8 +1,12 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:provider/provider.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class GeneralPage extends StatefulWidget {
   @override
@@ -11,12 +15,13 @@ class GeneralPage extends StatefulWidget {
 
 class _GeneralPageState extends BaseState<GeneralPage> {
   PostProvider _postProvider;
+  List<PostModel> topPosts;
 
   @override
   void initState() {
     super.initState();
     _postProvider = getProvider<PostProvider>();
-    _postProvider.getList(isNotify: false);
+    _postProvider.getTopPosts(isNotify: false);
   }
 
   @override
@@ -91,64 +96,57 @@ class _GeneralPageState extends BaseState<GeneralPage> {
     );
   }
 
-  GFItemsCarousel TopPostsSlider() {
-    return GFItemsCarousel(
-      rowCount: 2,
-      children: [CustomCard(), CustomCard(), CustomCard(), CustomCard()],
-    );
+  Consumer<PostProvider> TopPostsSlider() {
+    return Consumer<PostProvider>(builder: (_, provider, child) {
+      if (provider.topPostList != null) {
+        if (provider.topPostList.isNotEmpty) {
+          return GFItemsCarousel(
+            rowCount: 2,
+            children: provider.topPostList.map((e) {
+              return CustomPostCard(e);
+            }).toList(),
+          );
+        } else {
+          return Center(
+            child: spinkit,
+          );
+        }
+      } else {
+        return Center(
+          child: spinkit,
+        );
+      }
+    });
+  }
+
+  List<Widget> createTopPostCards(List<PostModel> list) {
+    return list.map((e) => CustomCard()).toList();
   }
 
   GFItemsCarousel PodcastSlider() {
     return GFItemsCarousel(
+      itemHeight: 208,
       rowCount: 2,
       children: [
         GFCard(
           padding: EdgeInsets.all(0),
           boxFit: BoxFit.cover,
-          image: Image.asset('assets/images/drawerBg.jpg'),
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Dodact Podcast 1",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
+          image: Image.asset('assets/images/podcast.jpg'),
         ),
         GFCard(
           padding: EdgeInsets.all(0),
           boxFit: BoxFit.cover,
-          image: Image.asset('assets/images/drawerBg.jpg'),
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Dodact Podcast 2",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
+          image: Image.asset('assets/images/podcast.jpg'),
         ),
         GFCard(
           padding: EdgeInsets.all(0),
           boxFit: BoxFit.cover,
-          image: Image.asset('assets/images/drawerBg.jpg'),
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Dodact Podcast 3",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
+          image: Image.asset('assets/images/podcast.jpg'),
         ),
         GFCard(
           padding: EdgeInsets.all(0),
           boxFit: BoxFit.cover,
-          image: Image.asset('assets/images/drawerBg.jpg'),
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Dodact Podcast 4",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
+          image: Image.asset('assets/images/podcast.jpg'),
         )
       ],
     );
@@ -254,4 +252,52 @@ Widget CustomCard() {
       ),
     ),
   );
+}
+
+Widget CustomPostCard(PostModel post) {
+  String coverPhotoURL;
+  if (post.isVideo == true) {
+    coverPhotoURL = createThumbnailURL(post.postContentURL);
+  } else {
+    coverPhotoURL = post.postContentURL;
+  }
+
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        height: 240,
+        width: 200,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+                child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(coverPhotoURL), fit: BoxFit.cover)),
+            )),
+            Text(
+              post.postTitle,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Text(
+              post.postDescription,
+              style: TextStyle(fontSize: 15),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+String createThumbnailURL(String youtubeVideoID) {
+  String videoID = YoutubePlayer.convertUrlToId(youtubeVideoID);
+  String thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
+  return thumbnailURL;
 }

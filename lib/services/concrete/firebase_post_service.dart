@@ -18,7 +18,6 @@ class FirebasePostService extends BaseService<PostModel> {
     return postModel;
   }
 
-
   // Get all posts
   @override
   Future<List<PostModel>> getList() async {
@@ -39,8 +38,7 @@ class FirebasePostService extends BaseService<PostModel> {
 
     print("Post IDs from object:" + postIDs.toString());
     await Future.forEach(postIDs, (post) async {
-      DocumentSnapshot documentSnapshot =
-          await postsRef.doc(post).get();
+      DocumentSnapshot documentSnapshot = await postsRef.doc(post).get();
       PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
       allUserPosts.add(singlePost);
     });
@@ -99,5 +97,18 @@ class FirebasePostService extends BaseService<PostModel> {
       allFilteredPosts.add(_convertedPost);
     }
     return allFilteredPosts;
+  }
+
+  Future<List<PostModel>> getTopPosts() async {
+    List<PostModel> topPosts = [];
+
+    QuerySnapshot querySnapshot =
+        await postsRef.orderBy('claps', descending: true).limit(10).get();
+    for (DocumentSnapshot post in querySnapshot.docs) {
+      PostModel _convertedPost = PostModel.fromJson(post.data());
+      topPosts.add(_convertedPost);
+    }
+
+    return topPosts;
   }
 }

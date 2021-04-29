@@ -88,4 +88,13 @@ class PostRepository implements BaseService {
       return allCategorizedPosts;
     }
   }
+
+  @override
+  Future<List<PostModel>> getTopPosts() async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(List<PostModel>.empty());
+    } else {
+      return await _firebasePostService.getTopPosts();
+    }
+  }
 }
