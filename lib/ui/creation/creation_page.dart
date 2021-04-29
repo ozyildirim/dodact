@@ -29,15 +29,14 @@ class _CreationPageState extends State<CreationPage> {
                 spaceValue: 440,
                 title: 'Topluluk Olustur',
                 conImage:
-                    AssetImage('assets/images/creation/icerik_olustur.jpeg'),
+                    AssetImage('assets/images/creation/icerik_olustur.jpg'),
               ),
               CurvedListItem(
                 textPos: 180,
                 boxSize: 240,
                 spaceValue: 285,
                 title: 'Ekip Olustur',
-                conImage:
-                    AssetImage('assets/images/creation/grup_olustur.jpeg'),
+                conImage: AssetImage('assets/images/creation/grup_olustur.jpg'),
               ),
               CurvedListItem(
                 textPos: 150,
@@ -45,7 +44,7 @@ class _CreationPageState extends State<CreationPage> {
                 spaceValue: 110,
                 title: 'Etkinlik Oluştur',
                 conImage:
-                    AssetImage('assets/images/creation/etkinlik_olustur.jpeg'),
+                    AssetImage('assets/images/creation/etkinlik_olustur.jpg'),
               ),
               CurvedListItem(
                 textPos: 120,
@@ -53,7 +52,7 @@ class _CreationPageState extends State<CreationPage> {
                 spaceValue: 0,
                 title: 'İçerik Oluştur',
                 conImage:
-                    AssetImage('assets/images/creation/icerik_olustur.jpeg'),
+                    AssetImage('assets/images/creation/icerik_olustur.jpg'),
               ),
             ],
           ),
