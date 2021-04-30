@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _page = 1;
+  int _page = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
   final List<Widget> _children = [
     GeneralPage(),
