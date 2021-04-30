@@ -1,4 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
@@ -76,11 +77,17 @@ class _PostCardState extends BaseState<PostCard> {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        backgroundImage: creatorUser.profilePictureURL != null
-                            ? NetworkImage(creatorUser.profilePictureURL)
-                            : NetworkImage(
-                                "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png"),
+                      GestureDetector(
+                        onTap: () {
+                          NavigationService.instance
+                              .navigate('/others_profile', args: post.ownerId);
+                        },
+                        child: CircleAvatar(
+                          backgroundImage: creatorUser.profilePictureURL != null
+                              ? NetworkImage(creatorUser.profilePictureURL)
+                              : NetworkImage(
+                                  "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png"),
+                        ),
                       ),
                       SizedBox(
                         width: 10,

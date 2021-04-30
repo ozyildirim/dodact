@@ -19,6 +19,7 @@ import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 import 'package:dodact_v1/ui/profile/drawer_pages/user_options_page.dart';
+import 'package:dodact_v1/ui/profile/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,12 @@ class NavigationRouteManager {
         return _navigateToDefault(ProfilePage(), settings);
       case k_ROUTE_USER_OPTIONS:
         return _navigateToDefault(UserOptionsPage(), settings);
+      case k_ROUTE_OTHERS_PROFILE_PAGE:
+        return _navigateToDefault(
+            OthersProfilePage(
+              otherUserID: args,
+            ),
+            settings);
     }
   }
 

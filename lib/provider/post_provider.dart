@@ -15,6 +15,7 @@ class PostProvider extends ChangeNotifier {
   List<PostModel> postList;
   List<PostModel> topPostList;
   List<PostModel> usersPosts;
+  List<PostModel> otherUsersPosts;
   bool isLoading = false;
 
   changeState(bool _isLoading, {bool isNotify}) {
@@ -123,11 +124,16 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<PostModel>> getUserPosts(UserObject user, {bool isNotify}) async {
+  Future<List<PostModel>> getUserPosts(UserObject user, bool currentUser,
+      {bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
-      usersPosts = await postRepository.getUserPosts(user);
-      return usersPosts;
+      if (currentUser == true) {
+        usersPosts = await postRepository.getUserPosts(user);
+        return usersPosts;
+      } else {
+        return await postRepository.getUserPosts(user);
+      }
     } catch (e) {
       print("PostProvider getUserPosts error: " + e.toString());
       return null;

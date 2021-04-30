@@ -18,6 +18,7 @@ class UserObject {
   List<String> postIDs;
   List<String> eventIDs;
   String location;
+  List<dynamic> rosettes;
 
   UserObject(
       {@required this.uid,
@@ -32,7 +33,8 @@ class UserObject {
       this.interests,
       this.postIDs,
       this.eventIDs,
-      this.location});
+      this.location,
+      this.rosettes});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -51,6 +53,8 @@ class UserObject {
     userData['postIDs'] = this.postIDs;
     userData['eventIDs'] = this.eventIDs;
     userData['location'] = this.location;
+    userData['rosettes'] = this.rosettes;
+
     return userData;
   }
 
@@ -68,7 +72,8 @@ class UserObject {
         interests = map['interests'],
         postIDs = map['postIDs'],
         eventIDs = map['eventIDs'],
-        location = map['location'];
+        location = map['location'],
+        rosettes = map['rosettes'];
 
   UserObject.fromDoc(DocumentSnapshot doc) {
     uid = doc.data()['uid'];
@@ -85,10 +90,12 @@ class UserObject {
     postIDs = doc.data()['postIDs']?.cast<String>();
     eventIDs = doc.data()['eventIDs']?.cast<String>();
     location = doc.data()['location'];
+    rosettes = doc.data()['rosettes'];
   }
+
   @override
   String toString() {
-    return 'UserObject{uid: $uid, nameSurname: $nameSurname, email: $email, username: $username, userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, interests: $interests, groupIDs: $groupIDs, postIDs: $postIDs}';
+    return 'UserObject{uid: $uid, nameSurname: $nameSurname, email: $email, username: $username, userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, interests: $interests, groupIDs: $groupIDs, postIDs: $postIDs, eventIDs: $eventIDs, location: $location, rosettes: $rosettes}';
   }
 
   String randomNumber() {
