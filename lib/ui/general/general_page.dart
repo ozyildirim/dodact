@@ -29,38 +29,40 @@ class _GeneralPageState extends BaseState<GeneralPage> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ImageSlider(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "Haftanın Öne Çıkan Paylaşımları",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 22),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ImageSlider(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Haftanın Öne Çıkan Paylaşımları",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
-              ),
-              TopPostsSlider(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "Podcast Önerileri",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 22),
+                TopPostsSlider(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Podcast Önerileri",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
-              ),
-              PodcastSlider(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "Bu Etkinlikleri Kaçırma!",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 22),
+                PodcastSlider(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Bu Etkinlikleri Kaçırma!",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
-              ),
-              EventSlider()
-            ],
+                EventSlider()
+              ],
+            ),
           ),
         ),
       ),

@@ -88,7 +88,6 @@ class PostProvider extends ChangeNotifier {
       changeState(true, isNotify: isNotify);
       var fetchedList = await postRepository.getList();
       postList = fetchedList;
-      return postList;
     } catch (e) {
       print("PostProvider getList error: " + e.toString());
       return null;
@@ -102,7 +101,6 @@ class PostProvider extends ChangeNotifier {
       changeState(true, isNotify: isNotify);
       var fetchedList = await postRepository.getTopPosts();
       topPostList = fetchedList;
-      return topPostList;
     } catch (e) {
       print("PostProvider getList error: " + e.toString());
       return null;
@@ -130,9 +128,8 @@ class PostProvider extends ChangeNotifier {
       changeState(true, isNotify: isNotify);
       if (currentUser == true) {
         usersPosts = await postRepository.getUserPosts(user);
-        return usersPosts;
       } else {
-        return await postRepository.getUserPosts(user);
+        otherUsersPosts = await postRepository.getUserPosts(user);
       }
     } catch (e) {
       print("PostProvider getUserPosts error: " + e.toString());
