@@ -8,6 +8,7 @@ import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/community/communities_page.dart';
 import 'package:dodact_v1/ui/community/community_detail.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
@@ -85,6 +86,8 @@ class NavigationRouteManager {
               otherUserID: args,
             ),
             settings);
+      case k_ROUTE_CREATE_POST_PAGE:
+        return _navigateToDefault(PostCreationPage(), settings);
     }
   }
 
