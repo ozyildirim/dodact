@@ -14,8 +14,9 @@ class EventProvider extends ChangeNotifier {
 
   EventModel event;
   List<EventModel> eventList;
-  List<EventModel> groupEvents;
+  List<EventModel> otherUserEventList;
 
+  List<EventModel> groupEvents;
   clear() {
     event = null;
     eventList.clear();
@@ -92,15 +93,30 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<EventModel>> getUserEvents(UserObject user,
+  Future<List<EventModel>> getUserEvents(UserObject user, bool currentUser,
       {bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
       var fetchedList = await eventRepository.getUserEvents(user);
       eventList = fetchedList;
-      return eventList;
     } catch (e) {
       print("EventProvider getUserEvents error: " + e.toString());
+      return null;
+    } finally {
+      changeState(false);
+    }
+  }
+
+  Future<List<EventModel>> getOtherUserEvents(UserObject user,
+      {bool isNotify}) async {
+    try {
+      changeState(true, isNotify: isNotify);
+      var fetchedList = await eventRepository.getUserEvents(user);
+      otherUserEventList = fetchedList;
+      notifyListeners();
+      return otherUserEventList;
+    } catch (e) {
+      print("EventProvider getOtherUserEvents error: " + e.toString());
       return null;
     } finally {
       changeState(false);

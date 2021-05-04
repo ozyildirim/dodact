@@ -22,7 +22,7 @@ class _ProfilePageState extends BaseState<ProfilePage> {
     _postProvider = getProvider<PostProvider>();
     _userProvider = getProvider<UserProvider>();
     _userProvider.getCurrentUser();
-    _postProvider.getUserPosts(_userProvider.user, true, isNotify: false);
+    _postProvider.getUserPosts(_userProvider.user, isNotify: false);
     super.initState();
   }
   // Consumer<PostProvider> postsPart() {

@@ -11,6 +11,8 @@ class UserProvider with ChangeNotifier {
   UserRepository userRepository = locator<UserRepository>();
   FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
   UserObject user;
+  UserObject otherUser;
+
   List<UserObject> userList;
   bool isLoading = false;
 
@@ -40,6 +42,22 @@ class UserProvider with ChangeNotifier {
     } catch (e) {
       debugPrint("UserProvider getUserByID function error: " + e.toString());
       return null;
+    }
+  }
+
+  @override
+  Future<UserObject> getOtherUser(String userId, {bool isNotify}) async {
+    try {
+      changeState(true, isNotify: isNotify);
+      otherUser = await userRepository.getUserByID(userId);
+      notifyListeners();
+      return otherUser;
+    } catch (e) {
+      debugPrint("UserProvider getOtherUser function error: " + e.toString());
+      notifyListeners();
+      return null;
+    } finally {
+      changeState(false);
     }
   }
 
