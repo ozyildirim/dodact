@@ -1,4 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
@@ -31,13 +32,8 @@ class _PostCardState extends BaseState<PostCard> {
     post = widget.post;
     postProvider = getProvider<PostProvider>();
     userProvider = getProvider<UserProvider>();
-    getCreatorUser();
-  }
 
-  Future getCreatorUser() async {
-    await userProvider
-        .getUserByID(post.ownerId)
-        .then((value) => creatorUser = value);
+    userProvider.getOtherUser(post.ownerId, isNotify: false);
   }
 
   @override
@@ -68,54 +64,59 @@ class _PostCardState extends BaseState<PostCard> {
     var date = DateTime.now();
     return Consumer<UserProvider>(
       builder: (context, provider, child) {
-        return provider.isLoading
-            ? Container(
-                child: CircularProgressIndicator(),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          NavigationService.instance
-                              .navigate('/others_profile', args: post.ownerId);
-                        },
-                        child: CircleAvatar(
-                          backgroundImage: creatorUser.profilePictureURL != null
-                              ? NetworkImage(creatorUser.profilePictureURL)
-                              : NetworkImage(
-                                  "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png"),
+        if (provider.isLoading == false) {
+          if (provider.otherUser != null) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        NavigationService.instance
+                            .navigate('/others_profile', args: post.ownerId);
+                      },
+                      child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              provider.otherUser.profilePictureURL)),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          provider.otherUser.nameSurname,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            creatorUser.nameSurname,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                              "${date.difference(post.postDate).inDays} gün önce"),
-                        ],
-                      ),
-                    ],
-                  ),
+                        Text(
+                            "${date.difference(post.postDate).inDays} gün önce"),
+                      ],
+                    ),
+                  ],
+                ),
 
-                  //TODO: Şikayet etme özelliğini de buraya eklemeliyiz.
-                  Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.more_vert),
-                        onPressed: () {},
-                      )),
-                ],
-              );
+                //TODO: Şikayet etme özelliğini de buraya eklemeliyiz.
+                Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {},
+                    )),
+              ],
+            );
+          } else {
+            return Center(
+              child: Text("Kullanıcı bulunamadı"),
+            );
+          }
+        } else {
+          return Center(
+            child: spinkit,
+          );
+        }
       },
     );
   }
