@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -25,13 +26,15 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   FocusNode contentTypeFocusNode = FocusNode();
   FocusNode sourceFocusNode = FocusNode();
 
-  Content content;
   Category category;
+  Content content;
   Source source;
 
   bool isSelected = false;
   bool isLoading = false;
   bool isUploaded = false;
+
+  File postFile;
 
   @override
   void initState() {
@@ -166,12 +169,25 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                                 ]),
                           )
                         : Container(),
+
+                    //Kullanıcı dosyası seçtikten sonra içeriği görüntüleyeceğimiz container.
+
                     isSelected == true
                         ? Container(
-                            height: 200,
-                            width: 200,
+                            height: 300,
+                            width: 300,
                             decoration: BoxDecoration(color: Colors.pinkAccent),
-                            child: Center(child: Text("asd")),
+                            child: content == Content.Fotograf
+                                ? Container(
+                                    height: 300,
+                                    width: 300,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image:
+                                                FileImage(File(postFile.path)),
+                                            fit: BoxFit.cover)),
+                                  )
+                                : Container(),
                           )
                         : Container(),
                     content == Content.Fotograf
@@ -213,11 +229,20 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                               child: spinkit,
                             ),
                           )
+                        : Container(),
+                    isSelected == true
+                        ? GFButton(text: "Yükle", onPressed: () {})
                         : Container()
                   ],
                 ),
               ),
             )));
+  }
+
+  Future<bool> uploadPost() async {
+    //TODO: Bu kısmı fonksiyon ile birlitke düzelt.
+    // await UploadService().uploadPostMedia(postID: postID, fileNameAndExtension: fileNameAndExtension, fileToUpload: fileToUpload)
+    //
   }
 
   void pickFile() async {
@@ -259,6 +284,10 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
     if (result != null) {
       File file = File(result.files.single.path);
+      setState(() {
+        isSelected = true;
+        postFile = file;
+      });
     } else {
       // User canceled the picker
     }
