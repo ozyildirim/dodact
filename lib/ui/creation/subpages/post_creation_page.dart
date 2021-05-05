@@ -63,177 +63,180 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
               elevation: 0,
               iconTheme: IconThemeData(color: Colors.black),
             ),
-            body: FormBuilder(
-              key: _formKey,
-              child: Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FormBuilderChoiceChip(
-                          onChanged: (value) {
-                            setState(() {
-                              category = value;
-                              content = null;
-                              source = null;
-                            });
-                          },
-                          focusNode: categoryFocusNode,
-                          name: 'category_chip',
-                          spacing: 5,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              labelText:
-                                  "Hangi alanda içerik oluşturmak istiyorsunuz?",
-                              labelStyle: TextStyle(fontSize: 25)),
-                          options: [
-                            FormBuilderFieldOption(
-                              value: Category.Muzik,
-                              child: Text("Müzik"),
-                            ),
-                            FormBuilderFieldOption(
-                              value: Category.Tiyatro,
-                              child: Text("Tiyatro"),
-                            ),
-                            FormBuilderFieldOption(
-                              value: Category.Dans,
-                              child: Text("Dans"),
-                            ),
-                            FormBuilderFieldOption(
-                              value: Category.Resim,
-                              child: Text("Resim"),
-                            ),
-                          ]),
-                    ),
-                    category != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: FormBuilderChoiceChip(
-                                onChanged: (value) {
-                                  setState(() {
-                                    content = value;
-                                    source =
-                                        null; //butonların kaybolması için yapıldı
-                                  });
-                                },
-                                focusNode: categoryFocusNode,
-                                name: 'content_type_chip',
-                                spacing: 5,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    labelText:
-                                        "Ne tür içerik oluşturacaksınız?",
-                                    labelStyle: TextStyle(fontSize: 25)),
-                                options: [
-                                  FormBuilderFieldOption(
-                                    value: Content.Video,
-                                    child: Text("Video"),
-                                  ),
-                                  FormBuilderFieldOption(
-                                    value: Content.Fotograf,
-                                    child: Text("Fotoğraf"),
-                                  ),
-                                  FormBuilderFieldOption(
-                                    value: Content.Ses,
-                                    child: Text("Ses"),
-                                  ),
-                                ]),
-                          )
-                        : Container(),
-                    content == Content.Video
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: FormBuilderChoiceChip(
-                                onChanged: (value) {
-                                  setState(() {
-                                    source = value;
-                                  });
-                                },
-                                focusNode: sourceFocusNode,
-                                name: 'source_chip',
-                                spacing: 5,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    labelText:
-                                        "Hangi kaynaktan video yükleyeceksiniz?",
-                                    labelStyle: TextStyle(fontSize: 25)),
-                                options: [
-                                  FormBuilderFieldOption(
-                                    value: Source.Telefon,
-                                    child: Text("Telefonumdan"),
-                                  ),
-                                  FormBuilderFieldOption(
-                                    value: Source.Youtube,
-                                    child: Text("Youtube"),
-                                  ),
-                                ]),
-                          )
-                        : Container(),
+            body: SingleChildScrollView(
+              child: FormBuilder(
+                key: _formKey,
+                child: Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FormBuilderChoiceChip(
+                            onChanged: (value) {
+                              setState(() {
+                                category = value;
+                                content = null;
+                                source = null;
+                              });
+                            },
+                            focusNode: categoryFocusNode,
+                            name: 'category_chip',
+                            spacing: 5,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                labelText:
+                                    "Hangi alanda içerik oluşturmak istiyorsunuz?",
+                                labelStyle: TextStyle(fontSize: 25)),
+                            options: [
+                              FormBuilderFieldOption(
+                                value: Category.Muzik,
+                                child: Text("Müzik"),
+                              ),
+                              FormBuilderFieldOption(
+                                value: Category.Tiyatro,
+                                child: Text("Tiyatro"),
+                              ),
+                              FormBuilderFieldOption(
+                                value: Category.Dans,
+                                child: Text("Dans"),
+                              ),
+                              FormBuilderFieldOption(
+                                value: Category.Resim,
+                                child: Text("Resim"),
+                              ),
+                            ]),
+                      ),
+                      category != null
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: FormBuilderChoiceChip(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      content = value;
+                                      source =
+                                          null; //butonların kaybolması için yapıldı
+                                    });
+                                  },
+                                  focusNode: categoryFocusNode,
+                                  name: 'content_type_chip',
+                                  spacing: 5,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      labelText:
+                                          "Ne tür içerik oluşturacaksınız?",
+                                      labelStyle: TextStyle(fontSize: 25)),
+                                  options: [
+                                    FormBuilderFieldOption(
+                                      value: Content.Video,
+                                      child: Text("Video"),
+                                    ),
+                                    FormBuilderFieldOption(
+                                      value: Content.Fotograf,
+                                      child: Text("Fotoğraf"),
+                                    ),
+                                    FormBuilderFieldOption(
+                                      value: Content.Ses,
+                                      child: Text("Ses"),
+                                    ),
+                                  ]),
+                            )
+                          : Container(),
+                      content == Content.Video
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: FormBuilderChoiceChip(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      source = value;
+                                    });
+                                  },
+                                  focusNode: sourceFocusNode,
+                                  name: 'source_chip',
+                                  spacing: 5,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      labelText:
+                                          "Hangi kaynaktan video yükleyeceksiniz?",
+                                      labelStyle: TextStyle(fontSize: 25)),
+                                  options: [
+                                    FormBuilderFieldOption(
+                                      value: Source.Telefon,
+                                      child: Text("Telefonumdan"),
+                                    ),
+                                    FormBuilderFieldOption(
+                                      value: Source.Youtube,
+                                      child: Text("Youtube"),
+                                    ),
+                                  ]),
+                            )
+                          : Container(),
 
-                    //Kullanıcı dosyası seçtikten sonra içeriği görüntüleyeceğimiz container.
+                      //Kullanıcı dosyası seçtikten sonra içeriği görüntüleyeceğimiz container.
 
-                    isSelected == true
-                        ? Container(
-                            height: 300,
-                            width: 300,
-                            decoration: BoxDecoration(color: Colors.pinkAccent),
-                            child: content == Content.Fotograf
-                                ? Container(
-                                    height: 300,
-                                    width: 300,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image:
-                                                FileImage(File(postFile.path)),
-                                            fit: BoxFit.cover)),
-                                  )
-                                : Container(),
-                          )
-                        : Container(),
-                    content == Content.Fotograf
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GFButton(
-                              onPressed: () async {
-                                _selectPhoto();
-                              },
-                              child: Text("Fotoğraf Seç"),
-                            ),
-                          )
-                        : Container(),
-                    content == Content.Ses
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GFButton(
-                              onPressed: () async {
-                                _selectAudio();
-                              },
-                              child: Text("Ses Dosyası Seç"),
-                            ),
-                          )
-                        : Container(),
-                    source == Source.Telefon
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GFButton(
-                              onPressed: () async {
-                                _selectVideo();
-                              },
-                              child: Text("Video Seç"),
-                            ),
-                          )
-                        : Container(),
-                    isLoading == true
-                        ? Container(
-                            child: Center(
-                              child: spinkit,
-                            ),
-                          )
-                        : Container(),
-                    isSelected == true
-                        ? GFButton(text: "Yükle", onPressed: () {})
-                        : Container()
-                  ],
+                      isSelected == true
+                          ? Container(
+                              height: 300,
+                              width: 300,
+                              decoration:
+                                  BoxDecoration(color: Colors.pinkAccent),
+                              child: content == Content.Fotograf
+                                  ? Container(
+                                      height: 300,
+                                      width: 300,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: FileImage(
+                                                  File(postFile.path)),
+                                              fit: BoxFit.cover)),
+                                    )
+                                  : Container(),
+                            )
+                          : Container(),
+                      content == Content.Fotograf
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GFButton(
+                                onPressed: () async {
+                                  _selectPhoto();
+                                },
+                                child: Text("Fotoğraf Seç"),
+                              ),
+                            )
+                          : Container(),
+                      content == Content.Ses
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GFButton(
+                                onPressed: () async {
+                                  _selectAudio();
+                                },
+                                child: Text("Ses Dosyası Seç"),
+                              ),
+                            )
+                          : Container(),
+                      source == Source.Telefon
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GFButton(
+                                onPressed: () async {
+                                  _selectVideo();
+                                },
+                                child: Text("Video Seç"),
+                              ),
+                            )
+                          : Container(),
+                      isLoading == true
+                          ? Container(
+                              child: Center(
+                                child: spinkit,
+                              ),
+                            )
+                          : Container(),
+                      isSelected == true
+                          ? GFButton(text: "Yükle", onPressed: () {})
+                          : Container()
+                    ],
+                  ),
                 ),
               ),
             )));
