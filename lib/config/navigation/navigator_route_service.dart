@@ -12,6 +12,7 @@ import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
+import 'package:dodact_v1/ui/feed/component/story_components/story_page_view.dart';
 import 'package:dodact_v1/ui/feed/feed_page.dart';
 import 'package:dodact_v1/ui/group/group_detail.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
@@ -88,6 +89,9 @@ class NavigationRouteManager {
             settings);
       case k_ROUTE_CREATE_POST_PAGE:
         return _navigateToDefault(PostCreationPage(), settings);
+
+      case k_ROUTE_STORY_VIEW:
+        return _navigateToDefault(StoryPageView(topic: args), settings);
     }
   }
 

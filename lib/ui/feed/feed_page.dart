@@ -4,6 +4,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/feed/component/post_card.dart';
+import 'package:dodact_v1/ui/feed/component/story_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -33,9 +34,11 @@ class _FeedPageState extends BaseState<FeedPage> {
   Widget build(BuildContext context) {
     print(dynamicHeight(1));
     print(dynamicWidth(1));
-    return Container(
-      decoration: BoxDecoration(color: kBackgroundColor),
-      child: postsPart(),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(color: Colors.amber),
+        child: postsPart(),
+      ),
     );
   }
 
@@ -48,12 +51,12 @@ class _FeedPageState extends BaseState<FeedPage> {
             return SafeArea(
               child: Column(
                 children: [
-                  storiesContainer(),
-                  Divider(
-                    indent: 20,
-                    endIndent: 20,
-                    thickness: 1.5,
-                  ),
+                  StoryContainer(),
+                  // Divider(
+                  //   indent: 20,
+                  //   endIndent: 20,
+                  //   thickness: 1.5,
+                  // ),
                   Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.zero,

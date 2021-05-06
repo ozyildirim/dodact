@@ -26,3 +26,5 @@ const k_ROUTE_SEARCH = '/search';
 
 const k_ROUTE_CREATE_POST_PAGE = '/add_post';
 const k_ROUTE_CREATE_EVENT_PAGE = '/add_event';
+
+const k_ROUTE_STORY_VIEW = "/story_view";
