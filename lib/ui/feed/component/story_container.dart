@@ -1,7 +1,10 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/model/story_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/services/concrete/firebase_story_service.dart';
+import 'package:dodact_v1/ui/feed/component/story_components/story_page_view.dart';
 import 'package:flutter/material.dart';
 
 class StoryContainer extends StatefulWidget {
@@ -13,17 +16,21 @@ class _StoryContainerState extends BaseState<StoryContainer> {
   UserProvider userProvider;
   Topic storyTopic;
 
-  Future<List<UserObject>> allUsers;
+  List<StoryModel> stories = [];
 
   @override
   void initState() {
     super.initState();
     userProvider = getProvider<UserProvider>();
 
-    allUsers = userProvider.getAllUsers(isNotify: false);
+    getStories().then((value) => stories = value);
   }
 
-  List<StoryContainerItem> storyItems = [
+  Future getStories() async {
+    return await FirebaseStoryService().getStoryList();
+  }
+
+  List<StoryContainerItem> storyAvatars = [
     StoryContainerItem(
         "Müzik",
         "https://digitalage.com.tr/wp-content/uploads/2020/06/Pandemi-doneminde-degisen-muzik-dinleme-egilimleri.jpg",
@@ -44,78 +51,57 @@ class _StoryContainerState extends BaseState<StoryContainer> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseStoryService().getStoryList();
     return Container(
         alignment: Alignment.center,
         margin: new EdgeInsets.only(left: 10),
         height: 120,
         child: Center(
-          child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: storyItems.length,
-              itemBuilder: (BuildContext context, int index) {
-                var storyItem = storyItems[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () => NavigationService.instance
-                            .navigate('/story_view', args: storyItem.topic),
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundImage: NetworkImage(storyItem.coverPhoto),
+          child: FutureBuilder(
+            future: getStories(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.none &&
+                  snapshot.hasData == null) {
+                return Center(child: spinkit);
+              } else {
+                return ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: storyAvatars.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var storyItem = storyAvatars[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => StoryPageView(
+                                          topic: storyTopic,
+                                          stories: stories))),
+                              child: CircleAvatar(
+                                radius: 40,
+                                backgroundImage:
+                                    NetworkImage(storyItem.coverPhoto),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(storyItem.name)
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(storyItem.name)
-                    ],
-                  ),
-                );
-              }),
+                      );
+                    });
+              }
+            },
+          ),
         ));
   }
 }
 
-/*
-
-FutureBuilder<List<UserObject>>(
-        future: allUsers,
-        builder: (context, AsyncSnapshot<List<UserObject>> list) {
-          if (list.hasData) {
-            if (list.data == null || list.data.length == 0) {
-              return Center(child: Text("Veri bulunamadı.."));
-            } else {
-              return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: list.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var userItem = list.data[index];
-                    return Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage:
-                              NetworkImage(userItem.profilePictureURL),
-                        ),
-                        SizedBox(
-                          width: 7.5,
-                        )
-                      ],
-                    );
-                  });
-            }
-          } else {
-            return Container();
-          }
-        },
-      )
-
-
-
- */
 enum Topic { Resim, Tiyatro, Dans, Muzik }
 
 class StoryContainerItem {

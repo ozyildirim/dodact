@@ -36,7 +36,7 @@ class _FeedPageState extends BaseState<FeedPage> {
     print(dynamicWidth(1));
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(color: Colors.amber),
+        decoration: BoxDecoration(color: kBackgroundColor),
         child: postsPart(),
       ),
     );

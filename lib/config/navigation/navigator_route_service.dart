@@ -91,7 +91,9 @@ class NavigationRouteManager {
         return _navigateToDefault(PostCreationPage(), settings);
 
       case k_ROUTE_STORY_VIEW:
-        return _navigateToDefault(StoryPageView(topic: args), settings);
+        List<dynamic> args = settings.arguments;
+        return _navigateToDefault(
+            StoryPageView(topic: args[0], stories: args[1]), settings);
     }
   }
 

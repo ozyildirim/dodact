@@ -163,19 +163,19 @@ class AuthProvider extends ChangeNotifier {
     return authStatus;
   }
 
-  Future<UserObject> signInWithFacebook() async {
-    try {
-      changeState(true);
-      var user = await _authRepository.signInWithFacebook();
-      if (user != null) {
-        currentUser = user;
-        changeState(false);
-        return currentUser;
-      }
-    } catch (e) {
-      debugPrint("AuthProvider facebook login error: $e");
-    }
-  }
+  // Future<UserObject> signInWithFacebook() async {
+  //   try {
+  //     changeState(true);
+  //     var user = await _authRepository.signInWithFacebook();
+  //     if (user != null) {
+  //       currentUser = user;
+  //       changeState(false);
+  //       return currentUser;
+  //     }
+  //   } catch (e) {
+  //     debugPrint("AuthProvider facebook login error: $e");
+  //   }
+  // }
 
   Future<void> forgotPassword(String email) async {
     try {

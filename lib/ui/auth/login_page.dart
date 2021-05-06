@@ -27,9 +27,9 @@ class _LogInPageState extends BaseState<LogInPage> {
   FocusNode _emailFocus = FocusNode();
   FocusNode _passwordFocus = FocusNode();
 
-  void _signInWithFacebook() async {
-    UserObject _user = await authProvider.signInWithFacebook();
-  }
+  // void _signInWithFacebook() async {
+  //   UserObject _user = await authProvider.signInWithFacebook();
+  // }
 
   void _signInWithGoogle() async {
     var status = await authProvider.signInWithGoogle();
@@ -187,7 +187,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SocialIcon(
-                      press: () => _signInWithFacebook(),
+                      press: () {},
                       iconSrc: "assets/images/facebook_circular.png",
                     ),
                     SocialIcon(
