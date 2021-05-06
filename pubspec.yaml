@@ -37,6 +37,7 @@ dependencies:
   horizontal_card_pager: ^1.1.1
   flutter_form_builder: "^6.0.0-nullsafety.1"
   getwidget: ^1.2.4
+  url_launcher: ^6.0.3
 
 
 

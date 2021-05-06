@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -153,16 +154,19 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                       children: [
                                         IconButton(
                                             icon: Icon(
-                                                FontAwesome5Brands.twitter),
-                                            onPressed: () {}),
+                                                FontAwesome5Brands.twitter)),
                                         IconButton(
                                             icon: Icon(
                                                 FontAwesome5Brands.youtube),
-                                            onPressed: () {}),
+                                            onPressed: () async {
+                                              await _launchInBrowser(2);
+                                            }),
                                         IconButton(
                                             icon: Icon(
                                                 FontAwesome5Brands.instagram),
-                                            onPressed: () {})
+                                            onPressed: () async {
+                                              await _launchInBrowser(3);
+                                            })
                                       ],
                                     )
                                   ],
@@ -577,32 +581,29 @@ class _ProfilePageState extends BaseState<ProfilePage> {
     return thumbnailURL;
   }
 
-  String convertMonth(int month) {
-    switch (month) {
-      case 1:
-        return "Ocak";
-      case 2:
-        return "Şubat";
-      case 3:
-        return "Mart";
-      case 4:
-        return "Nisan";
-      case 5:
-        return "Mayıs";
-      case 6:
-        return "Haziran";
-      case 7:
-        return "Temmuz";
-      case 8:
-        return "Ağustos";
-      case 9:
-        return "Eylül";
-      case 10:
-        return "Ekim";
-      case 11:
-        return "Kasım";
-      case 12:
-        return "Aralık";
+  _launchInBrowser(int type) async {
+    // String url;
+
+    // switch (type) {
+    //   case 1:
+    //     url = "https://twitter.com/${_userProvider.user.twitterUsername}";
+    //     break;
+    //   case 2:
+    //     url = _userProvider.user.youtubeLink;
+    //     break;
+    //   case 3:
+    //     url = "https://instagram.com/${_userProvider.user.instagramUsername}";
+    //     break;
+    // }
+
+    const url = "www.google.com";
+
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+      );
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }

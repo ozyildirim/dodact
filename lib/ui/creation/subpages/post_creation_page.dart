@@ -72,6 +72,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FormBuilderChoiceChip(
+                            selectedColor: Colors.amber,
                             onChanged: (value) {
                               setState(() {
                                 category = value;
@@ -90,7 +91,10 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                             options: [
                               FormBuilderFieldOption(
                                 value: Category.Muzik,
-                                child: Text("Müzik"),
+                                child: ListTile(
+                                  leading: Icon(Icons.music_note),
+                                  title: Text("Müzik"),
+                                ),
                               ),
                               FormBuilderFieldOption(
                                 value: Category.Tiyatro,

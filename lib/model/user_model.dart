@@ -19,6 +19,9 @@ class UserObject {
   List<String> eventIDs;
   String location;
   List<dynamic> rosettes;
+  String twitterUsername;
+  String instagramUsername;
+  String youtubeLink;
 
   UserObject(
       {@required this.uid,
@@ -34,7 +37,10 @@ class UserObject {
       this.postIDs,
       this.eventIDs,
       this.location,
-      this.rosettes});
+      this.rosettes,
+      this.twitterUsername,
+      this.instagramUsername,
+      this.youtubeLink});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -54,6 +60,9 @@ class UserObject {
     userData['eventIDs'] = this.eventIDs;
     userData['location'] = this.location;
     userData['rosettes'] = this.rosettes;
+    userData['twitterUsername'] = this.twitterUsername;
+    userData['instagramUsername'] = this.instagramUsername;
+    userData['youtubeLink'] = this.youtubeLink;
 
     return userData;
   }
@@ -73,7 +82,10 @@ class UserObject {
         postIDs = map['postIDs'],
         eventIDs = map['eventIDs'],
         location = map['location'],
-        rosettes = map['rosettes'];
+        rosettes = map['rosettes'],
+        twitterUsername = map['twitterUsername'],
+        instagramUsername = map['instagramUsername'],
+        youtubeLink = map['youtubeLink'];
 
   UserObject.fromDoc(DocumentSnapshot doc) {
     uid = doc.data()['uid'];
@@ -91,15 +103,8 @@ class UserObject {
     eventIDs = doc.data()['eventIDs']?.cast<String>();
     location = doc.data()['location'];
     rosettes = doc.data()['rosettes'];
-  }
-
-  @override
-  String toString() {
-    return 'UserObject{uid: $uid, nameSurname: $nameSurname, email: $email, username: $username, userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, interests: $interests, groupIDs: $groupIDs, postIDs: $postIDs, eventIDs: $eventIDs, location: $location, rosettes: $rosettes}';
-  }
-
-  String randomNumber() {
-    int randomNum = Random().nextInt(99999);
-    return randomNum.toString();
+    twitterUsername = doc.data()['twitterUsername'];
+    instagramUsername = doc.data()['instagramUsername'];
+    youtubeLink = doc.data()['youtubeLink'];
   }
 }
