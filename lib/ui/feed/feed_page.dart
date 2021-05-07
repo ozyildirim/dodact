@@ -65,6 +65,7 @@ class _FeedPageState extends BaseState<FeedPage> {
                       shrinkWrap: true,
                       itemCount: provider.postList.length,
                       itemBuilder: (context, index) {
+                        provider.postList.shuffle();
                         var postItem = provider.postList[index];
                         return Container(
                           height: 350,

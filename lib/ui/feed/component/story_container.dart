@@ -75,12 +75,14 @@ class _StoryContainerState extends BaseState<StoryContainer> {
                         child: Column(
                           children: [
                             InkWell(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => StoryPageView(
-                                          topic: storyTopic,
-                                          stories: stories))),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => StoryPageView(
+                                            topic: storyItem.topic,
+                                            stories: stories)));
+                              },
                               child: CircleAvatar(
                                 radius: 40,
                                 backgroundImage:
