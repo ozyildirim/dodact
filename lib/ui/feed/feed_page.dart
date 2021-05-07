@@ -18,16 +18,12 @@ class _FeedPageState extends BaseState<FeedPage> {
   PostProvider _postProvider;
   UserProvider _userProvider;
 
-  Future<List<UserObject>> allUsers;
-
   @override
   void initState() {
     super.initState();
     _postProvider = getProvider<PostProvider>();
     _postProvider.getList(isNotify: false);
     _userProvider = getProvider<UserProvider>();
-
-    allUsers = _userProvider.getAllUsers(isNotify: false);
   }
 
   @override
@@ -52,11 +48,6 @@ class _FeedPageState extends BaseState<FeedPage> {
               child: Column(
                 children: [
                   StoryContainer(),
-                  // Divider(
-                  //   indent: 20,
-                  //   endIndent: 20,
-                  //   thickness: 1.5,
-                  // ),
                   Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.zero,
@@ -157,43 +148,6 @@ class _FeedPageState extends BaseState<FeedPage> {
   //   );
   // }
 
-  Container storiesContainer() {
-    return Container(
-      margin: new EdgeInsets.only(left: 10),
-      height: 100,
-      child: FutureBuilder<List<UserObject>>(
-        future: allUsers,
-        builder: (context, AsyncSnapshot<List<UserObject>> list) {
-          if (list.hasData) {
-            if (list.data == null || list.data.length == 0) {
-              return Center(child: Text("Veri bulunamadı.."));
-            } else {
-              return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: list.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var userItem = list.data[index];
-                    return Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage:
-                              NetworkImage(userItem.profilePictureURL),
-                        ),
-                        SizedBox(
-                          width: 7.5,
-                        )
-                      ],
-                    );
-                  });
-            }
-          } else {
-            return Container();
-          }
-        },
-      ),
-    );
-  }
 }
 
 String createThumbnailURL(String youtubeVideoID) {

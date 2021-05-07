@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -26,6 +27,8 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   FocusNode _emailFocus = FocusNode();
   FocusNode _passwordFocus = FocusNode();
+
+  bool showCircular = false;
 
   // void _signInWithFacebook() async {
   //   UserObject _user = await authProvider.signInWithFacebook();
@@ -206,10 +209,12 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   void _formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
+      showLoadingProgressContainer();
       var status = await authProvider.signInWithEmail(
           _formKey.currentState.value['email'].toString().trim(),
           _formKey.currentState.value['password'].toString().trim());
       if (status != AuthResultStatus.successful) {
+        NavigationService.instance.pop();
         final errorMessage =
             AuthExceptionHandler.generateExceptionMessage(status);
         _scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -232,6 +237,7 @@ class _LogInPageState extends BaseState<LogInPage> {
         ));
         debugPrint(errorMessage);
       } else {
+        NavigationService.instance.pop();
         NavigationService.instance.popUntil('/landing');
       }
     } else {
@@ -244,5 +250,13 @@ class _LogInPageState extends BaseState<LogInPage> {
   void _navigateToForgotPassword(BuildContext context) {
     Navigator.of(context)
         .push(CupertinoPageRoute(builder: (context) => ForgotPasswordPage()));
+  }
+
+  showLoadingProgressContainer() {
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.loading,
+      text: "Giriş yapılıyor.",
+    );
   }
 }

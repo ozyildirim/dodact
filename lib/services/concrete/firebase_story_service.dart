@@ -7,9 +7,6 @@ class FirebaseStoryService {
     List<StoryModel> stories = await storiesRef.orderBy('rank').get().then(
         (value) =>
             value.docs.map((e) => StoryModel.fromJson(e.data())).toList());
-    for (int i = 0; i < stories.length; i++) {
-      print(stories[i].photoURL);
-    }
     return stories;
   }
 }

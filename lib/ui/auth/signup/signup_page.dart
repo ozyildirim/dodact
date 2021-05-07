@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -51,143 +52,148 @@ class _SignUpPageState extends BaseState<SignUpPage> {
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.transparent,
         ),
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/loginBG.jpg'),
-                  fit: BoxFit.cover)),
-          height: dynamicHeight(1),
-          child: FormBuilder(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: dynamicHeight(0.08),
-                ),
-                Hero(
-                  tag: "logo",
-                  child: Image(
-                    height: 150,
-                    width: 150,
-                    image: AssetImage('assets/images/logo.png'),
+        body: SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/loginBG.jpg'),
+                    fit: BoxFit.cover)),
+            height: dynamicHeight(1),
+            child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: dynamicHeight(0.08),
                   ),
-                ),
-                SizedBox(height: dynamicHeight(0.03)),
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    name: "email",
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.mail,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "E-posta adresi",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      border: InputBorder.none,
+                  Hero(
+                    tag: "logo",
+                    child: Image(
+                      height: 150,
+                      width: 150,
+                      image: AssetImage('assets/images/logo.png'),
                     ),
-                    focusNode: _emailFocus,
-                    textInputAction: TextInputAction.next,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Lütfen e-posta adresi giriniz."),
-                      FormBuilderValidators.email(context,
-                          errorText:
-                              "Lütfen geçerli bir e-posta adresi giriniz."),
-                    ]),
                   ),
-                ),
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    name: "password",
-                    obscureText: true,
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      hintText: "Parola",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      icon: Icon(
-                        Icons.lock,
-                        color: kPrimaryColor,
+                  SizedBox(height: dynamicHeight(0.03)),
+                  TextFieldContainer(
+                    child: FormBuilderTextField(
+                      name: "email",
+                      cursorColor: kPrimaryColor,
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.mail,
+                          color: kPrimaryColor,
+                        ),
+                        errorStyle: TextStyle(fontSize: 14),
+                        hintText: "E-posta adresi",
+                        hintStyle: TextStyle(fontFamily: kFontFamily),
+                        border: InputBorder.none,
                       ),
-                      border: InputBorder.none,
+                      focusNode: _emailFocus,
+                      textInputAction: TextInputAction.next,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,
+                            errorText: "Lütfen e-posta adresi giriniz."),
+                        FormBuilderValidators.email(context,
+                            errorText:
+                                "Lütfen geçerli bir e-posta adresi giriniz."),
+                      ]),
                     ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Lütfen parolanızı giriniz.")
-                    ]),
                   ),
-                ),
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    name: "password",
-                    obscureText: true,
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      hintText: "Parola",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      icon: Icon(
-                        Icons.lock,
-                        color: kPrimaryColor,
+                  TextFieldContainer(
+                    child: FormBuilderTextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      name: "password",
+                      obscureText: true,
+                      cursorColor: kPrimaryColor,
+                      decoration: InputDecoration(
+                        hintText: "Parola",
+                        hintStyle: TextStyle(fontFamily: kFontFamily),
+                        errorStyle: TextStyle(fontSize: 14),
+                        icon: Icon(
+                          Icons.lock,
+                          color: kPrimaryColor,
+                        ),
+                        border: InputBorder.none,
                       ),
-                      border: InputBorder.none,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,
+                            errorText: "Lütfen parolanızı giriniz.")
+                      ]),
                     ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Lütfen parolanızı giriniz.")
-                    ]),
                   ),
-                ),
-                RoundedButton(
-                  textSize: 15,
-                  text: "Kayıt Ol",
-                  textColor: Colors.white,
-                  press: () {
-                    _signUp();
-                  },
-                ),
-                OrDivider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SocialIcon(
-                      iconSrc: "assets/images/facebook_circular.png",
-                      press: () {},
-                    ),
-                    SocialIcon(
-                      iconSrc: "assets/images/google_logo.png",
-                      press: () {
-                        _signInWithGoogle();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Hesabın var mı?",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        navigateToLoginPage(context);
-                      },
-                      child: Text(
-                        " Giriş Yap",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
+                  TextFieldContainer(
+                    child: FormBuilderTextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      name: "password",
+                      obscureText: true,
+                      cursorColor: kPrimaryColor,
+                      decoration: InputDecoration(
+                        hintText: "Parola",
+                        hintStyle: TextStyle(fontFamily: kFontFamily),
+                        errorStyle: TextStyle(fontSize: 14),
+                        icon: Icon(
+                          Icons.lock,
+                          color: kPrimaryColor,
+                        ),
+                        border: InputBorder.none,
                       ),
-                    )
-                  ],
-                )
-              ],
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,
+                            errorText: "Lütfen parolanızı giriniz.")
+                      ]),
+                    ),
+                  ),
+                  RoundedButton(
+                    textSize: 15,
+                    text: "Kayıt Ol",
+                    textColor: Colors.white,
+                    press: () {
+                      _signUp();
+                    },
+                  ),
+                  OrDivider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SocialIcon(
+                        iconSrc: "assets/images/facebook_circular.png",
+                        press: () {},
+                      ),
+                      SocialIcon(
+                        iconSrc: "assets/images/google_logo.png",
+                        press: () {
+                          _signInWithGoogle();
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Hesabın var mı?",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigateToLoginPage(context);
+                        },
+                        child: Text(
+                          " Giriş Yap",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -228,6 +234,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
 
   void _signUp() async {
     if (_formKey.currentState.saveAndValidate()) {
+      showLoadingProgressContainer();
       var registrationResult =
           await authProvider.createAccountWithEmailAndPassword(
         _formKey.currentState.value['email'].toString().trim(),
@@ -255,6 +262,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
           ),
         ));
       } else {
+        NavigationService.instance.pop();
         NavigationService.instance.popUntil('/landing');
       }
     } else {
@@ -262,6 +270,14 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         _autoValidate = true;
       });
     }
+  }
+
+  showLoadingProgressContainer() {
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.loading,
+      text: "Lütfen Bekleyin.",
+    );
   }
 
   void navigateToLoginPage(BuildContext context) {

@@ -134,6 +134,7 @@ class FirebaseAuthService implements AuthBase {
     try {
       if (_firebaseAuth.currentUser != null) {
         await _firebaseAuth.currentUser.updateEmail(newEmail);
+
       }
     } catch (e) {
       print(e);
