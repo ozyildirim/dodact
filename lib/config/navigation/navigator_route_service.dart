@@ -8,9 +8,11 @@ import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/community/communities_page.dart';
 import 'package:dodact_v1/ui/community/community_detail.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
+import 'package:dodact_v1/ui/feed/component/story_components/story_page_view.dart';
 import 'package:dodact_v1/ui/feed/feed_page.dart';
 import 'package:dodact_v1/ui/group/group_detail.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
@@ -85,6 +87,13 @@ class NavigationRouteManager {
               otherUserID: args,
             ),
             settings);
+      case k_ROUTE_CREATE_POST_PAGE:
+        return _navigateToDefault(PostCreationPage(), settings);
+
+      case k_ROUTE_STORY_VIEW:
+        List<dynamic> args = settings.arguments;
+        return _navigateToDefault(
+            StoryPageView(topic: args[0], stories: args[1]), settings);
     }
   }
 

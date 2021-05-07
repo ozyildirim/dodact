@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -28,6 +29,8 @@ class _CreationPageState extends State<CreationPage> {
                 boxSize: 240,
                 spaceValue: 440,
                 title: 'Topluluk Olustur',
+                onTap: () =>
+                    NavigationService.instance.navigate('/add_community'),
                 conImage:
                     AssetImage('assets/images/creation/icerik_olustur.jpg'),
               ),
@@ -36,6 +39,7 @@ class _CreationPageState extends State<CreationPage> {
                 boxSize: 240,
                 spaceValue: 285,
                 title: 'Ekip Olustur',
+                onTap: () => NavigationService.instance.navigate('/add_group'),
                 conImage: AssetImage('assets/images/creation/grup_olustur.jpg'),
               ),
               CurvedListItem(
@@ -43,6 +47,7 @@ class _CreationPageState extends State<CreationPage> {
                 boxSize: 246,
                 spaceValue: 110,
                 title: 'Etkinlik Oluştur',
+                onTap: () => NavigationService.instance.navigate('/add_event'),
                 conImage:
                     AssetImage('assets/images/creation/etkinlik_olustur.jpg'),
               ),
@@ -51,6 +56,7 @@ class _CreationPageState extends State<CreationPage> {
                 boxSize: 180,
                 spaceValue: 0,
                 title: 'İçerik Oluştur',
+                onTap: () => NavigationService.instance.navigate('/add_post'),
                 conImage:
                     AssetImage('assets/images/creation/icerik_olustur.jpg'),
               ),
@@ -63,19 +69,20 @@ class _CreationPageState extends State<CreationPage> {
 }
 
 class CurvedListItem extends StatelessWidget {
-  const CurvedListItem({
-    this.title,
-    this.conImage,
-    this.spaceValue,
-    this.boxSize,
-    this.textPos,
-  });
+  const CurvedListItem(
+      {this.title,
+      this.conImage,
+      this.spaceValue,
+      this.boxSize,
+      this.textPos,
+      this.onTap});
 
   final String title;
   final AssetImage conImage;
   final int spaceValue;
   final int boxSize;
   final double textPos;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +97,7 @@ class CurvedListItem extends StatelessWidget {
               Stack(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      debugPrint(title);
-                    },
+                    onTap: onTap,
                     child: Container(
                       height: boxSize.toDouble(),
                       width: 500,

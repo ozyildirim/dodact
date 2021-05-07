@@ -1,11 +1,8 @@
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/abstract/auth_base.dart';
-import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService implements AuthBase {
@@ -70,34 +67,34 @@ class FirebaseAuthService implements AuthBase {
     }
   }
 
-  @override
-  Future<UserObject> signInWithFacebook() async {
-    final _facebookLogin = FacebookLogin();
-
-    FacebookLoginResult _facebookResult =
-        await _facebookLogin.logIn(["public_profile", "email"]);
-
-    switch (_facebookResult.status) {
-      case FacebookLoginStatus.loggedIn:
-        if (_facebookResult.accessToken != null) {
-          UserCredential _firebaseResult = await _firebaseAuth
-              .signInWithCredential(FacebookAuthProvider.credential(
-                  _facebookResult.accessToken.token));
-
-          User _user = _firebaseResult.user;
-          return _userFromFirebase(_user);
-        }
-
-        break;
-
-      case FacebookLoginStatus.cancelledByUser:
-        print("User cancelled login by Facebook.");
-        break;
-      case FacebookLoginStatus.error:
-        print("Error: " + _facebookResult.errorMessage);
-        break;
-    }
-  }
+  // @override
+  // Future<UserObject> signInWithFacebook() async {
+  //   final _facebookLogin = FacebookLogin();
+  //
+  //   FacebookLoginResult _facebookResult =
+  //       await _facebookLogin.logIn(["public_profile", "email"]);
+  //
+  //   switch (_facebookResult.status) {
+  //     case FacebookLoginStatus.loggedIn:
+  //       if (_facebookResult.accessToken != null) {
+  //         UserCredential _firebaseResult = await _firebaseAuth
+  //             .signInWithCredential(FacebookAuthProvider.credential(
+  //                 _facebookResult.accessToken.token));
+  //
+  //         User _user = _firebaseResult.user;
+  //         return _userFromFirebase(_user);
+  //       }
+  //
+  //       break;
+  //
+  //     case FacebookLoginStatus.cancelledByUser:
+  //       print("User cancelled login by Facebook.");
+  //       break;
+  //     case FacebookLoginStatus.error:
+  //       print("Error: " + _facebookResult.errorMessage);
+  //       break;
+  //   }
+  // }
 
   @override
   Future<UserObject> createAccountWithEmailAndPassword(

@@ -153,9 +153,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   children: <Widget>[
                     SocialIcon(
                       iconSrc: "assets/images/facebook_circular.png",
-                      press: () {
-                        _signInWithFacebook();
-                      },
+                      press: () {},
                     ),
                     SocialIcon(
                       iconSrc: "assets/images/google_logo.png",
@@ -224,9 +222,9 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     }
   }
 
-  void _signInWithFacebook() async {
-    UserObject _user = await authProvider.signInWithFacebook();
-  }
+  // void _signInWithFacebook() async {
+  //   UserObject _user = await authProvider.signInWithFacebook();
+  // }
 
   void _signUp() async {
     if (_formKey.currentState.saveAndValidate()) {

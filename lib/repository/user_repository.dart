@@ -59,20 +59,20 @@ class UserRepository {
     }
   }
 
-  @override
-  Future<UserObject> signInWithFacebook() async {
-    if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInWithFacebook();
-    } else {
-      UserObject _user = await _firebaseAuthService.signInWithFacebook();
-      bool _result = await _firestoreUserService.save(_user);
-      if (_result) {
-        return await _firestoreUserService.readUser(_user.uid);
-      } else {
-        return null;
-      }
-    }
-  }
+  // @override
+  // Future<UserObject> signInWithFacebook() async {
+  //   if (appMode == AppMode.DEBUG) {
+  //     return await _fakeAuthService.signInWithFacebook();
+  //   } else {
+  //     UserObject _user = await _firebaseAuthService.signInWithFacebook();
+  //     bool _result = await _firestoreUserService.save(_user);
+  //     if (_result) {
+  //       return await _firestoreUserService.readUser(_user.uid);
+  //     } else {
+  //       return null;
+  //     }
+  //   }
+  // }
 
   @override
   Future<UserObject> createAccountWithEmailAndPassword(
