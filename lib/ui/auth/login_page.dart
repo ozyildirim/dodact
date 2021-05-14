@@ -213,6 +213,7 @@ class _LogInPageState extends BaseState<LogInPage> {
       var status = await authProvider.signInWithEmail(
           _formKey.currentState.value['email'].toString().trim(),
           _formKey.currentState.value['password'].toString().trim());
+
       if (status != AuthResultStatus.successful) {
         NavigationService.instance.pop();
         final errorMessage =

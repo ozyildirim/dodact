@@ -1,5 +1,7 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/drawer.dart';
@@ -118,9 +120,9 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                               height: 5,
                                             ),
                                             Text(
-                                              "Gitarist",
+                                              "Gitar Tutkunu",
                                               style: TextStyle(
-                                                  fontSize: 20,
+                                                  fontSize: 16,
                                                   color: Colors.grey),
                                             ),
                                             SizedBox(
@@ -158,15 +160,11 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                         IconButton(
                                             icon: Icon(
                                                 FontAwesome5Brands.youtube),
-                                            onPressed: () async {
-                                              await _launchInBrowser(2);
-                                            }),
+                                            onPressed: () {}),
                                         IconButton(
                                             icon: Icon(
                                                 FontAwesome5Brands.instagram),
-                                            onPressed: () async {
-                                              await _launchInBrowser(3);
-                                            })
+                                            onPressed: () {})
                                       ],
                                     )
                                   ],
@@ -202,7 +200,7 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
@@ -210,7 +208,7 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar2.jpg?alt=media&token=68b5edcd-30e5-436e-84a3-990156fcfae5"),
                               ),
@@ -218,7 +216,7 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
@@ -226,7 +224,7 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
@@ -234,16 +232,13 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 15,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -266,73 +261,7 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                         padding: const EdgeInsets.all(12.0),
                         child: Container(
                           height: 250.0,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Container(
-                                    width: 160.0,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2F3.jpg?alt=media&token=c8f8ba1e-c1f2-4425-8780-12f58b744d1f"))),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Container(
-                                    width: 160.0,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2F5.jpg?alt=media&token=709a8d4b-217a-43a8-be23-e10c84e989fb"))),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Container(
-                                    width: 160.0,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2F2.jpg?alt=media&token=55c4beb4-0006-4f06-8057-cd1ae46af404"))),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Container(
-                                    width: 160.0,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2F4.jpg?alt=media&token=984f987e-8840-48a0-9aca-6edebf874a12"))),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircleAvatar(
-                                  radius: 80,
-                                  backgroundImage: NetworkImage(
-                                      "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: ListUserPosts(),
                         ),
                       ),
                       SizedBox(
@@ -581,29 +510,55 @@ class _ProfilePageState extends BaseState<ProfilePage> {
     return thumbnailURL;
   }
 
-  _launchInBrowser(int type) async {
-    // String url;
+  Consumer<PostProvider> ListUserPosts() {
+    return Consumer<PostProvider>(builder: (context, provider, child) {
+      if (provider.isLoading == false) {
+        if (provider.usersPosts != null) {
+          return ListView(
+            scrollDirection: Axis.horizontal,
+            children: provider.usersPosts.map((e) {
+              return CreateUserPostCard(e);
+            }).toList(),
+          );
+        } else {
+          return Center(child: spinkit);
+        }
+      } else {
+        return Center(child: spinkit);
+      }
+    });
+  }
 
-    // switch (type) {
-    //   case 1:
-    //     url = "https://twitter.com/${_userProvider.user.twitterUsername}";
-    //     break;
-    //   case 2:
-    //     url = _userProvider.user.youtubeLink;
-    //     break;
-    //   case 3:
-    //     url = "https://instagram.com/${_userProvider.user.instagramUsername}";
-    //     break;
-    // }
-
-    const url = "www.google.com";
-
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-      );
+  Widget CreateUserPostCard(PostModel post) {
+    String coverPhotoURL;
+    if (post.isVideo == true) {
+      coverPhotoURL = createThumbnailURL(post.postContentURL);
     } else {
-      throw 'Could not launch $url';
+      coverPhotoURL = post.postContentURL;
     }
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          NavigationService.instance.navigate('/post', args: post);
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(25),
+          child: Container(
+            child: Center(
+              child: Icon(
+                Icons.play_circle_fill,
+                size: 50,
+                color: Colors.white,
+              ),
+            ),
+            width: 160.0,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(coverPhotoURL), fit: BoxFit.cover)),
+          ),
+        ),
+      ),
+    );
   }
 }

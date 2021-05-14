@@ -7,6 +7,7 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -125,7 +126,7 @@ class _PostCardState extends BaseState<PostCard> {
     return Stack(
       children: [
         postView(post),
-        reactionRow(post),
+        // reactionRow(post),
       ],
     );
   }
@@ -140,12 +141,13 @@ class _PostCardState extends BaseState<PostCard> {
           Container(
             width: 130,
             decoration: BoxDecoration(
-                color: Colors.grey, borderRadius: BorderRadius.circular(25)),
+                color: Colors.indigoAccent,
+                borderRadius: BorderRadius.circular(25)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.thumb_up,
+                  FontAwesome.handshake_o,
                   color: Colors.white,
                 ),
                 SizedBox(width: 20),
@@ -173,9 +175,6 @@ class _PostCardState extends BaseState<PostCard> {
     return Container(
         padding: EdgeInsets.only(bottom: 10),
         height: 200,
-        child: Stack(
-          children: [],
-        ),
         foregroundDecoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
@@ -191,6 +190,23 @@ class _PostCardState extends BaseState<PostCard> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(FontAwesome.heart_o),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(FontAwesome.comment_o),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             Text(
               post.postTitle,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -198,10 +214,12 @@ class _PostCardState extends BaseState<PostCard> {
             SizedBox(
               height: 10,
             ),
-            Text(post.postDescription)
+            Text(
+              post.postDescription,
+              overflow: TextOverflow.fade,
+            )
           ],
         ),
-        CircleAvatar(),
       ],
     );
   }

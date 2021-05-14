@@ -153,7 +153,7 @@ class _GroupsPageState extends BaseState<GroupsPage> {
     ),
     IconTitleCardItem(
       text: "Dans",
-      iconData: FontAwesome5Solid.star_of_david,
+      iconData: FontAwesome5Solid.star,
     ),
   ];
 

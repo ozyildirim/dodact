@@ -1,6 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
@@ -127,7 +126,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
@@ -135,7 +134,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar2.jpg?alt=media&token=68b5edcd-30e5-436e-84a3-990156fcfae5"),
                               ),
@@ -143,7 +142,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
@@ -151,7 +150,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
@@ -159,7 +158,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                radius: 80,
+                                radius: 40,
                                 backgroundImage: NetworkImage(
                                     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                               ),
@@ -168,7 +167,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                         ),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 5,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -246,6 +245,13 @@ Widget CreateUserPostCard(PostModel post) {
     child: ClipRRect(
       borderRadius: BorderRadius.circular(25),
       child: Container(
+        child: Center(
+          child: Icon(
+            Icons.play_circle_fill,
+            size: 50,
+            color: Colors.white,
+          ),
+        ),
         width: 160.0,
         decoration: BoxDecoration(
             image: DecorationImage(

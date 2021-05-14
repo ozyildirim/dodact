@@ -1,5 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,7 +85,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
               margin: EdgeInsets.all(8.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                child: Image.network(url, fit: BoxFit.cover, width: 1000.0),
+                child: Image.asset(url, fit: BoxFit.cover, width: 1000.0),
               ),
             );
           },
@@ -211,11 +212,9 @@ class _GeneralPageState extends BaseState<GeneralPage> {
   }
 
   final List<String> imageList = [
-    "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2017/12/13/00/23/christmas-3015776_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/19/10/55/christmas-market-4705877_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/20/00/03/road-4707345_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2016/11/22/07/09/spruce-1848543__340.jpg"
+    "assets/images/soylesi3.png",
+    "assets/images/soylesi3.png",
+    "assets/images/soylesi3.png",
   ];
 }
 
@@ -268,30 +267,35 @@ Widget CustomPostCard(PostModel post) {
     padding: const EdgeInsets.all(8.0),
     child: ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Container(
-        height: 240,
-        width: 200,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-                child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(coverPhotoURL), fit: BoxFit.cover)),
-            )),
-            Text(
-              post.postTitle,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              post.postDescription,
-              style: TextStyle(fontSize: 15),
-            )
-          ],
+      child: InkWell(
+        onTap: () {
+          NavigationService.instance.navigate('/post', args: post);
+        },
+        child: Container(
+          height: 240,
+          width: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                  child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(coverPhotoURL), fit: BoxFit.cover)),
+              )),
+              Text(
+                post.postTitle,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                post.postDescription,
+                style: TextStyle(fontSize: 15),
+              )
+            ],
+          ),
         ),
       ),
     ),

@@ -126,6 +126,7 @@ class PostProvider extends ChangeNotifier {
     try {
       changeState(true, isNotify: isNotify);
       usersPosts = await postRepository.getUserPosts(user);
+      notifyListeners();
       return usersPosts;
     } catch (e) {
       print("PostProvider getUserPosts error: " + e.toString());
