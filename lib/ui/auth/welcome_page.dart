@@ -28,7 +28,9 @@ class _WelcomePageState extends BaseState<WelcomePage> {
                     child: Container(
                       child: Column(
                         children: [
-                          SizedBox(height: 50,),
+                          SizedBox(
+                            height: 50,
+                          ),
                           Row(
                             children: [
                               Text(

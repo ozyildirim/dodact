@@ -82,7 +82,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                             },
                             focusNode: categoryFocusNode,
                             name: 'category_chip',
-                            spacing: 5,
+                            spacing: 3,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 labelText:

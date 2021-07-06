@@ -69,30 +69,26 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<PostModel> getDetail(String postId, {bool isNotify}) async {
+  Future<PostModel> getDetail(String postId) async {
     try {
-      changeState(true, isNotify: isNotify);
       var fetchedPost = await postRepository.getDetail(postId);
       post = fetchedPost;
       return post;
     } catch (e) {
       print("PostProvider getDetail error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
   Future<List<PostModel>> getList({bool isNotify}) async {
     try {
-      changeState(true, isNotify: isNotify);
       var fetchedList = await postRepository.getList();
       postList = fetchedList;
+      notifyListeners();
+      return postList;
     } catch (e) {
       print("PostProvider getList error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 

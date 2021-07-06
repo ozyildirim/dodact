@@ -63,23 +63,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<UserObject> signInAnonymously() async {
-    try {
-      changeState(true);
-      var user = await _authRepository.signInAnonymously();
-      if (user != null) {
-        currentUser = user;
-        changeState(false);
-        return currentUser;
-      }
-    } catch (e) {
-      debugPrint(
-          "AuthProvider signInAnonymously function error: " + e.toString());
-      changeState(false);
-      return null;
-    }
-  }
-
   Future<bool> signOut() async {
     try {
       currentUser = null;
@@ -162,20 +145,6 @@ class AuthProvider extends ChangeNotifier {
     }
     return authStatus;
   }
-
-  // Future<UserObject> signInWithFacebook() async {
-  //   try {
-  //     changeState(true);
-  //     var user = await _authRepository.signInWithFacebook();
-  //     if (user != null) {
-  //       currentUser = user;
-  //       changeState(false);
-  //       return currentUser;
-  //     }
-  //   } catch (e) {
-  //     debugPrint("AuthProvider facebook login error: $e");
-  //   }
-  // }
 
   Future<void> forgotPassword(String email) async {
     try {

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/config/navigation/navigator_route_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,7 +37,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ImageSlider(),
+                AnnouncementSlider(),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
@@ -72,7 +75,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
 
   //TODO: Haftanın kullanıcıları, En hit paylaşımlar, yeni gruplar
 
-  Padding ImageSlider() {
+  Padding AnnouncementSlider() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: GFCarousel(
@@ -91,9 +94,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
           },
         ).toList(),
         onPageChanged: (index) {
-          setState(() {
-            index;
-          });
+          setState(() {});
         },
       ),
     );
@@ -105,8 +106,8 @@ class _GeneralPageState extends BaseState<GeneralPage> {
         if (provider.topPostList.isNotEmpty) {
           return GFItemsCarousel(
             rowCount: 2,
-            children: provider.topPostList.map((e) {
-              return CustomPostCard(e);
+            children: provider.topPostList.map((topPost) {
+              return CustomPostCard(topPost);
             }).toList(),
           );
         } else {
@@ -269,7 +270,8 @@ Widget CustomPostCard(PostModel post) {
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         onTap: () {
-          NavigationService.instance.navigate('/post', args: post);
+          NavigationService.instance
+              .navigate(k_ROUTE_POST_DETAIL, args: post.postId);
         },
         child: Container(
           height: 240,

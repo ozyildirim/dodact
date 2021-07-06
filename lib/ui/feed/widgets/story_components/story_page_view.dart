@@ -1,6 +1,7 @@
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/story_model.dart';
-import 'package:dodact_v1/ui/feed/component/story_container.dart';
+import 'package:dodact_v1/ui/feed/widgets/story_container.dart';
+
 import 'package:flutter/material.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/story_view.dart';

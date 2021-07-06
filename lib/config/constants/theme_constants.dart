@@ -31,3 +31,11 @@ final spinkit = SpinKitChasingDots(
     );
   },
 );
+
+//  ThemeData(primaryColor: kPrimaryColor, fontFamily: kFontFamily)
+
+ThemeData appTheme = new ThemeData(
+    primarySwatch: Colors.purple,
+    accentColor: Colors.deepOrange,
+    backgroundColor: Colors.black,
+    fontFamily: "Raleway");

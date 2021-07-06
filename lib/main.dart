@@ -44,8 +44,8 @@ class MyApp extends StatelessWidget {
         onUnknownRoute: NavigationRouteManager.onUnknownRoute,
         navigatorKey: NavigationService.instance.navigatorKey,
         initialRoute: k_ROUTE_LANDING,
-        theme: ThemeData(primaryColor: kPrimaryColor, fontFamily: kFontFamily),
         title: "Dodact",
+        theme: appTheme,
         debugShowCheckedModeBanner: false,
       ),
     );

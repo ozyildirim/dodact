@@ -57,7 +57,7 @@ class NavigationRouteManager {
       case k_ROUTE_POST_DETAIL:
         return _navigateToDefault(
             PostDetail(
-              post: args,
+              postId: args,
             ),
             settings);
       case k_ROUTE_EVENTS_PAGE:

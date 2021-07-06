@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -28,11 +27,12 @@ class _ProfilePageState extends BaseState<ProfilePage> {
     _postProvider.getUserPosts(_userProvider.user, isNotify: false);
     super.initState();
   }
-  // Consumer<PostProvider> postsPart() {
-  //   return Consumer<PostProvider>(
-  //       builder: (_, provider, child) {
-  //     if (provider.usersPosts != null) {
-  //       if (provider.usersPosts.isNotEmpty)
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,6 @@ class _ProfilePageState extends BaseState<ProfilePage> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(30),
                                     boxShadow: [
-                                      //TODO: BoxShadow u değiştir.
                                       BoxShadow(
                                         color: Colors.grey,
                                         offset: const Offset(

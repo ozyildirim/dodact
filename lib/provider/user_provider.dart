@@ -45,19 +45,13 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  @override
   Future<UserObject> getOtherUser(String userId, {bool isNotify}) async {
     try {
-      changeState(true, isNotify: isNotify);
       otherUser = await userRepository.getUserByID(userId);
-      notifyListeners();
       return otherUser;
     } catch (e) {
       debugPrint("UserProvider getOtherUser function error: " + e.toString());
-      notifyListeners();
       return null;
-    } finally {
-      changeState(false);
     }
   }
 

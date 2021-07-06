@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dodact_v1/model/comment_model.dart';
 
 class PostModel {
   String postId;
@@ -11,6 +12,8 @@ class PostModel {
   DateTime postDate;
   int claps;
   bool isVideo;
+  List<CommentModel> comments;
+  List<dynamic> supportersId;
 
   PostModel(
       {this.postId,
@@ -22,7 +25,9 @@ class PostModel {
       this.postDescription,
       this.postContentURL,
       this.isVideo,
-      this.claps});
+      this.claps,
+      this.comments,
+      this.supportersId});
 
   PostModel.fromJson(Map<String, dynamic> json)
       : postId = json['postId'],
@@ -34,7 +39,9 @@ class PostModel {
         postDescription = json['postDescription'],
         postContentURL = json['postContentURL'],
         isVideo = json['isVideo'],
-        claps = json['claps'];
+        claps = json['claps'],
+        comments = json['comments'],
+        supportersId = json['supportersId'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -48,6 +55,8 @@ class PostModel {
     data['postContentURL'] = this.postContentURL;
     data['isVideo'] = this.isVideo;
     data['claps'] = this.claps;
+    data['comments'] = this.comments;
+    data['supportersId'] = this.supportersId;
     return data;
   }
 

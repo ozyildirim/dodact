@@ -26,7 +26,7 @@ class _LandingPageState extends BaseState<LandingPage> {
           if (model.currentUser == null) {
             return WelcomePage();
           } else {
-            if (checkIfNewUser(model)) {
+            if (isNewUser(model)) {
               return SignUpDetail();
             } else {
               return HomePage();
@@ -44,7 +44,7 @@ class _LandingPageState extends BaseState<LandingPage> {
     );
   }
 
-  bool checkIfNewUser(AuthProvider model) {
+  bool isNewUser(AuthProvider model) {
     if (model.currentUser.username == null ||
         model.currentUser.profilePictureURL == null) {
       return true;
