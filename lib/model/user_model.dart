@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/model/interest_model.dart';
 import 'package:flutter/cupertino.dart';

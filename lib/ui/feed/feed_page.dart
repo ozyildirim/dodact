@@ -1,44 +1,16 @@
-import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/theme_constants.dart';
-
-import 'package:dodact_v1/provider/post_provider.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
-
 import 'package:dodact_v1/ui/feed/widgets/posts_part.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class FeedPage extends StatefulWidget {
-  @override
-  _FeedPageState createState() => _FeedPageState();
-}
-
-class _FeedPageState extends BaseState<FeedPage> {
-  @override
-  void initState() {
-    Provider.of<PostProvider>(context, listen: false).getList();
-    super.initState();
-  }
-
+class FeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(color: kBackgroundColor),
-        child: PostsPart(),
+      child: Scaffold(
+        body: PostsPart(),
       ),
     );
   }
 }
-
-String createThumbnailURL(String youtubeVideoID) {
-  String videoID = YoutubePlayer.convertUrlToId(youtubeVideoID);
-  String thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
-  return thumbnailURL;
-}
-
-
   // GestureDetector yedek() {
   //   return GestureDetector(
   //     onTap: () {

@@ -14,8 +14,10 @@ class PostsPart extends StatelessWidget {
     return SafeArea(
       child: FutureBuilder(
         future: postProvider.getList(),
+        // ignore: missing_return
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
+            case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
               return Center(

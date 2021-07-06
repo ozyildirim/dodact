@@ -33,8 +33,12 @@ class _PostCardState extends BaseState<PostCard> {
     post = widget.post;
     postProvider = getProvider<PostProvider>();
     userProvider = getProvider<UserProvider>();
+  }
 
+  @override
+  void didChangeDependencies() {
     userProvider.getOtherUser(post.ownerId, isNotify: false);
+    super.didChangeDependencies();
   }
 
   @override

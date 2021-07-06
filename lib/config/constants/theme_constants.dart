@@ -38,4 +38,8 @@ ThemeData appTheme = new ThemeData(
     primarySwatch: Colors.purple,
     accentColor: Colors.deepOrange,
     backgroundColor: Colors.black,
+    scaffoldBackgroundColor: Colors.black,
+    textTheme: TextTheme(
+      title: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.w700),
+    ),
     fontFamily: "Raleway");
