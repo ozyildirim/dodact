@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 
@@ -54,5 +53,14 @@ class FirebaseUserService {
     UserObject _fetchedUserObject = UserObject.fromDoc(_fetchedUser);
     print(_fetchedUserObject.toString());
     return _fetchedUserObject;
+  }
+
+  Future<void> reportUser(String reporterId, String reportedUserId) async {
+    DocumentReference reference = await reportsRef.add({
+      'isUser': true,
+      'reporterId': reporterId,
+      'reportedUserId': reportedUserId,
+      'reportedTime': new DateTime.now()
+    });
   }
 }

@@ -1,9 +1,9 @@
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfileDrawer extends StatefulWidget {
   @override
@@ -12,128 +12,133 @@ class ProfileDrawer extends StatefulWidget {
 
 class _ProfileDrawerState extends BaseState<ProfileDrawer> {
   UserObject user;
-  UserProvider _userProvider;
+  UserProvider userProvider;
 
   @override
   void initState() {
-    _userProvider = getProvider<UserProvider>();
-    user = _userProvider.user;
-
     super.initState();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    user = authProvider.currentUser;
   }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Container(
-        color: kBackgroundColor,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              color: kBackgroundColor,
-              child: DrawerHeader(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: user.profilePictureURL == null
-                            ? NetworkImage(
-                                "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png")
-                            : NetworkImage(user.profilePictureURL),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        user.username,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        user.email,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+      child: ListView(
+        padding: const EdgeInsets.all(0),
+        children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/drawerBg.jpg"),
+              ),
+            ),
+            child: Container(
+              alignment: Alignment.center,
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(user.profilePictureURL),
+                  radius: 30,
                 ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/drawerBg.jpg')),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(80),
-                      topRight: Radius.circular(80)),
+                title: Text(
+                  user.nameSurname,
+                  style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
+                subtitle: Text(user.email,
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Seçenekler', style: TextStyle(fontSize: 18)),
-                onTap: () {
-                  Navigator.pushNamed(context, "/profile_options");
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListTile(
-                leading: Icon(Icons.calendar_today_outlined),
-                title: Text('Katıldığım Etkinlikler',
-                    style: TextStyle(fontSize: 18)),
-                onTap: () {
-                  Navigator.pushNamed(context, "/");
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListTile(
-                leading: Icon(Icons.group),
-                title: Text('Topluluklar', style: TextStyle(fontSize: 18)),
-                onTap: () {
-                  Navigator.pushNamed(context, "/hizmetler");
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListTile(
-                leading: Icon(Icons.info),
-                title: Text('Dodact Hakkında', style: TextStyle(fontSize: 18)),
-                onTap: () {
-                  Navigator.pushNamed(context, "/galeri");
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text('Çıkış Yap', style: TextStyle(fontSize: 18)),
-                onTap: () {
-                  signOut(context);
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+          ListTile(
+            leading: Icon(Icons.calendar_today),
+            title: Text("Takvimim", style: TextStyle(fontSize: 18)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.star),
+            title: Text("Favorilerim", style: TextStyle(fontSize: 18)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text("Ayarlarım", style: TextStyle(fontSize: 18)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.report),
+            title:
+                Text("Şikayet/Bildiri/Öneri", style: TextStyle(fontSize: 18)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text("Çıkış Yap", style: TextStyle(fontSize: 18)),
+            onTap: () => signOut(context),
+          ),
+        ],
       ),
     );
   }
 
   void signOut(BuildContext context) async {
     await authProvider.signOut();
-    await _userProvider.removeUser();
+    await userProvider.removeUser();
   }
 }
+
+/**
+   * 
+   * Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text('Seçenekler', style: TextStyle(fontSize: 18)),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/profile_options");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.calendar_today_outlined),
+                  title: Text('Katıldığım Etkinlikler',
+                      style: TextStyle(fontSize: 18)),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.group),
+                  title: Text('Topluluklar', style: TextStyle(fontSize: 18)),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/hizmetler");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.info),
+                  title:
+                      Text('Dodact Hakkında', style: TextStyle(fontSize: 18)),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/galeri");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.exit_to_app),
+                  title: Text('Çıkış Yap', style: TextStyle(fontSize: 18)),
+                  onTap: () {
+                    signOut(context);
+                  },
+                ),
+              ],
+            ),
+          )
+ * 
+ * 
+ * */

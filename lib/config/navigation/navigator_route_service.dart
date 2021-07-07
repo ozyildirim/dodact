@@ -1,10 +1,10 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/ui/auth/forgot_password.dart';
 import 'package:dodact_v1/ui/auth/login_page.dart';
-import 'package:dodact_v1/ui/auth/signup/about_dodact_page.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail_2.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
+import 'package:dodact_v1/ui/common_widgets/about_dodact_page.dart';
 import 'package:dodact_v1/ui/community/communities_page.dart';
 import 'package:dodact_v1/ui/community/community_detail.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';

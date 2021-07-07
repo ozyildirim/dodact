@@ -5,6 +5,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,14 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
     super.initState();
   }
 
+  void reportUser() {
+    FirebaseUserService()
+        .reportUser(authProvider.currentUser.uid, otherUserID)
+        .then((value) {
+      return AlertDialog();
+    }).catchError((error) => {print(error.toString())});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -55,6 +64,20 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                   iconTheme: IconThemeData(color: Colors.white),
                   elevation: 0,
                   backgroundColor: Colors.transparent,
+                  actions: [
+                    PopupMenuButton(
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: Icon(Icons.report),
+                                  title: Text("Bildir"),
+                                  onTap: () {
+                                    reportUser();
+                                  },
+                                ),
+                              )
+                            ])
+                  ],
                 ),
                 body: SingleChildScrollView(
                   child: Column(

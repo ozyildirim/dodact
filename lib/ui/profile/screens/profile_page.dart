@@ -1,9 +1,7 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
-import 'package:dodact_v1/repository/event_repository.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
-import 'package:dodact_v1/ui/profile/widgets/profile_event_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/profile_info_part.dart'
     as ProfileInfo;
 import 'package:dodact_v1/ui/profile/widgets/profile_posts_part.dart';
@@ -27,14 +25,14 @@ class _ProfilePageState extends BaseState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    EventRepository()
-        .getUserEvents(authProvider.currentUser)
-        .then((value) => print(value));
+    // EventRepository()
+    //     .getUserEvents(authProvider.currentUser)
+    //     .then((value) => print(value));
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
-        endDrawer: ProfileDrawer(),
+        drawer: ProfileDrawer(),
         appBar: AppBar(
           centerTitle: true,
           title: Text("Profil"),
