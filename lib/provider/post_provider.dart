@@ -116,15 +116,12 @@ class PostProvider extends ChangeNotifier {
 
   Future<List<PostModel>> getUserPosts(UserObject user, {bool isNotify}) async {
     try {
-      changeState(true, isNotify: isNotify);
       usersPosts = await postRepository.getUserPosts(user);
       notifyListeners();
       return usersPosts;
     } catch (e) {
       print("PostProvider getUserPosts error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
