@@ -4,7 +4,7 @@ import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/feed/feed_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
-import 'package:dodact_v1/ui/profile/profile_page.dart';
+import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
 import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:flutter/material.dart';

@@ -91,7 +91,11 @@ class _StoryContainerState extends BaseState<StoryContainer> {
                             SizedBox(
                               height: 5,
                             ),
-                            Text(storyItem.name)
+                            Text(
+                              storyItem.name,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            )
                           ],
                         ),
                       );

@@ -20,9 +20,10 @@ import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
-import 'package:dodact_v1/ui/profile/drawer_pages/user_options_page.dart';
-import 'package:dodact_v1/ui/profile/others_profile_page.dart';
-import 'package:dodact_v1/ui/profile/profile_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
+
+import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
+import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
