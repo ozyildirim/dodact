@@ -1,4 +1,3 @@
-import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -7,18 +6,7 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FilteredGroups extends StatefulWidget {
-  @override
-  _FilteredGroupsState createState() => _FilteredGroupsState();
-}
-
-class _FilteredGroupsState extends BaseState<FilteredGroups> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
+class FilteredGroups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GroupProvider>(

@@ -1,7 +1,8 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
-import 'package:dodact_v1/ui/feed/feed_page.dart';
+
 import 'package:dodact_v1/ui/general/general_page.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   GlobalKey _bottomNavigationKey = GlobalKey();
   final List<Widget> _children = [
     GeneralPage(),
-    FeedPage(),
+    DiscoverPage(),
     EventsPage(),
     GroupsPage(),
     ProfilePage(),

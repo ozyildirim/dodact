@@ -10,6 +10,12 @@ class GeneralPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 5,
+          title: Text("Anasayfa", style: TextStyle(color: Colors.black)),
+        ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: SingleChildScrollView(
           child: Container(

@@ -33,7 +33,11 @@ class _ProfilePostsPartState extends BaseState<ProfilePostsPart> {
               scrollDirection: Axis.horizontal,
               children: _userPosts != null
                   ? _userPosts.map((e) => _buildUserPostCard(e)).toList()
-                  : [Center(child: Text("Paylaşım Yok :("))],
+                  : [
+                      Center(
+                        child: Text("Paylaşım Yok :("),
+                      )
+                    ],
             );
         }
       },
@@ -70,7 +74,7 @@ Widget _buildUserPostCard(PostModel post) {
     padding: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
-        NavigationService.instance.navigate('/post', args: post);
+        NavigationService.instance.navigate('/post', args: post.postId);
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),

@@ -51,7 +51,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                       Text(
                         user.username,
                         style: TextStyle(
-                            fontFamily: kFontFamily,
                             color: Colors.white,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold),
@@ -62,9 +61,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                       Text(
                         user.email,
                         style: TextStyle(
-                            fontFamily: kFontFamily,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),

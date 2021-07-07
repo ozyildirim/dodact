@@ -1,5 +1,5 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class ProfileInfoPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<UserProvider>(context);
+    final provider = Provider.of<AuthProvider>(context);
 
     final mediaQuery = MediaQuery.of(context);
     final size = mediaQuery.size;
@@ -41,7 +41,7 @@ class ProfileInfoPart extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 60,
                     backgroundImage:
-                        NetworkImage(provider.user.profilePictureURL),
+                        NetworkImage(provider.currentUser.profilePictureURL),
                   ),
                 ),
                 Column(
@@ -49,12 +49,12 @@ class ProfileInfoPart extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      provider.user.nameSurname,
+                      provider.currentUser.nameSurname,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "@${provider.user.username}",
+                      "@${provider.currentUser.username}",
                       style: TextStyle(fontSize: 12),
                     ),
                     SizedBox(

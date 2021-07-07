@@ -3,7 +3,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/story_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_story_service.dart';
-import 'package:dodact_v1/ui/feed/widgets/story_components/story_page_view.dart';
+import 'package:dodact_v1/ui/discover/widgets/story_components/story_page_view.dart';
 import 'package:flutter/material.dart';
 
 class StoryContainer extends StatefulWidget {

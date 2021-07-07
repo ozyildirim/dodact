@@ -1,8 +1,7 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
-import 'package:dodact_v1/ui/feed/widgets/post_card.dart';
-import 'package:dodact_v1/ui/feed/widgets/story_container.dart';
+import 'package:dodact_v1/ui/discover/widgets/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +29,7 @@ class PostsPart extends StatelessWidget {
               List<PostModel> posts = snapshot.data;
               return Column(
                 children: [
-                  StoryContainer(),
+                  // StoryContainer(),
                   Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.zero,

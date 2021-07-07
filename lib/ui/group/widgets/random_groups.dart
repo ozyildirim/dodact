@@ -4,12 +4,7 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RandomGroups extends StatefulWidget {
-  @override
-  _RandomGroupsState createState() => _RandomGroupsState();
-}
-
-class _RandomGroupsState extends State<RandomGroups> {
+class RandomGroups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GroupProvider>(

@@ -10,10 +10,10 @@ import 'package:dodact_v1/ui/community/community_detail.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
+import 'package:dodact_v1/ui/discover/discover_page.dart';
+import 'package:dodact_v1/ui/discover/widgets/story_components/story_page_view.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
-import 'package:dodact_v1/ui/feed/feed_page.dart';
-import 'package:dodact_v1/ui/feed/widgets/story_components/story_page_view.dart';
 import 'package:dodact_v1/ui/group/group_detail.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
@@ -21,7 +21,6 @@ import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
-
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,8 +52,8 @@ class NavigationRouteManager {
         return _navigateToDefault(CreationPage(), settings);
       case k_ROUTE_FORGOT_PASSWORD:
         return _navigateToDefault(ForgotPasswordPage(), settings);
-      case k_ROUTE_FEED:
-        return _navigateToDefault(FeedPage(), settings);
+      case k_ROUTE_DISCOVER:
+        return _navigateToDefault(DiscoverPage(), settings);
       case k_ROUTE_POST_DETAIL:
         return _navigateToDefault(
             PostDetail(
