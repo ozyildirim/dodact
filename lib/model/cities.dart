@@ -1,4 +1,5 @@
 List<String> cities = [
+  'Tüm Şehirler',
   'Adana',
   'Adıyaman',
   'Afyon',

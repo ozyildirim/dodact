@@ -14,14 +14,16 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              iconTheme: IconThemeData(color: Colors.black),
-            ),
-            body: Container(
-              child: Center(child: Text(widget.groupModel.groupName)),
-            )));
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+        body: Container(
+          child: Center(child: Text(widget.groupModel.groupName)),
+        ),
+      ),
+    );
   }
 }

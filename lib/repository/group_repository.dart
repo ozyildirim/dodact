@@ -108,4 +108,20 @@ class GroupRepository implements BaseService {
       return await _firebaseGroupService.getGroupsByCategory(category);
     }
   }
+
+  Future<List<GroupModel>> getFilteredGroupList(
+      {String category = "Müzik",
+      String city = "İstanbul",
+      bool showAllCategories,
+      bool wholeCountry}) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      return await _firebaseGroupService.getFilteredGroupList(
+          category: category,
+          city: city,
+          showAllCategories: showAllCategories,
+          wholeCountry: wholeCountry);
+    }
+  }
 }

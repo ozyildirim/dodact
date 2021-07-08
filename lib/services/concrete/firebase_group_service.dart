@@ -115,4 +115,34 @@ class FirebaseGroupService extends BaseService<GroupModel> {
     }
     return categorizedGroups;
   }
+
+  Future<List<GroupModel>> getFilteredGroupList(
+      {String category = "Müzik",
+      String city = "İstanbul",
+      bool showAllCategories,
+      bool wholeCountry}) async {
+    List<GroupModel> filteredGroups = [];
+    QuerySnapshot querySnapshot;
+
+    if (showAllCategories && wholeCountry) {
+      querySnapshot = await groupsRef.get();
+    } else if (showAllCategories && wholeCountry == false) {
+      querySnapshot =
+          await groupsRef.where("groupLocation", isEqualTo: city).get();
+    } else if (showAllCategories == false && wholeCountry) {
+      querySnapshot =
+          await groupsRef.where("groupCategory", isEqualTo: category).get();
+    } else {
+      querySnapshot = await groupsRef
+          .where("groupCategory", isEqualTo: category)
+          .where("groupLocation", isEqualTo: city)
+          .get();
+    }
+
+    for (DocumentSnapshot group in querySnapshot.docs) {
+      GroupModel _group = GroupModel.fromJson(group.data());
+      filteredGroups.add(_group);
+    }
+    return filteredGroups;
+  }
 }

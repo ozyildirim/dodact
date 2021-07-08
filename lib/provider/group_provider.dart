@@ -83,6 +83,41 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
+  Future<List<GroupModel>> getGroupListByCategory(String category,
+      {bool isNotify}) async {
+    try {
+      var fetchedGroup = await _groupRepository.getGroupsByCategory(category);
+      groupList = fetchedGroup;
+      notifyListeners();
+      return groupList;
+    } catch (e) {
+      print("GroupProvider getGroupsByCategory error: " + e.toString());
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<List<GroupModel>> getFilteredGroupList(
+      {String category = "Müzik",
+      String city = "İstanbul",
+      bool showAllCategories,
+      bool wholeCountry}) async {
+    try {
+      var fetchedGroup = await _groupRepository.getFilteredGroupList(
+          category: category,
+          city: city,
+          showAllCategories: showAllCategories,
+          wholeCountry: wholeCountry);
+      groupList = fetchedGroup;
+      notifyListeners();
+      return groupList;
+    } catch (e) {
+      print("GroupProvider getGroupsByCategory error: " + e.toString());
+      notifyListeners();
+      return null;
+    }
+  }
+
   Future<GroupModel> getGroupDetail(String groupId, {bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
@@ -91,21 +126,6 @@ class GroupProvider extends ChangeNotifier {
       return group;
     } catch (e) {
       print("GroupProvider getDetail error: " + e.toString());
-      return null;
-    } finally {
-      changeState(false);
-    }
-  }
-
-  Future<List<GroupModel>> getGroupsByCategory(String category,
-      {bool isNotify}) async {
-    try {
-      changeState(true, isNotify: isNotify);
-      var fetchedGroup = await _groupRepository.getGroupsByCategory(category);
-      groupList = fetchedGroup;
-      return groupList;
-    } catch (e) {
-      print("GroupProvider getGroupsByCategory error: " + e.toString());
       return null;
     } finally {
       changeState(false);
