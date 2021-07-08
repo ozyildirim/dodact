@@ -11,14 +11,15 @@ import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'config/constants/theme_constants.dart';
 
-// int initScreen;
+int initScreen;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // SharedPreferences _prefs = await SharedPreferences.getInstance();
-  // initScreen = _prefs.getInt("initScreen");
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  initScreen = _prefs.getInt("initScreen");
   // await _prefs.setInt('initScreen', 1);
   // print('initScreen $initScreen');
   await Firebase.initializeApp();
@@ -43,7 +44,8 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,
         onUnknownRoute: NavigationRouteManager.onUnknownRoute,
         navigatorKey: NavigationService.instance.navigatorKey,
-        initialRoute: k_ROUTE_LANDING,
+        // initialRoute: initScreen == null ? k_ROUTE_ONBOARDING : k_ROUTE_LANDING,
+        initialRoute: k_ROUTE_ONBOARDING,
         title: "Dodact",
         theme: appTheme,
         debugShowCheckedModeBanner: false,

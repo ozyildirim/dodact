@@ -1,22 +1,26 @@
-import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class OnBoardingPage extends StatefulWidget {
-  @override
-  _OnBoardingPageState createState() => _OnBoardingPageState();
-}
-
-class _OnBoardingPageState extends BaseState<OnBoardingPage> {
+class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
+    );
     return IntroductionScreen(
+      globalBackgroundColor: Colors.white,
       pages: listPages,
-      onDone: () {
+      onDone: () async {
+        SharedPreferences _prefs = await SharedPreferences.getInstance();
+        _prefs.setInt("initScreen", 1);
         NavigationService.instance.navigate('/landing');
       },
-      onSkip: () {
+      onSkip: () async {
+        SharedPreferences _prefs = await SharedPreferences.getInstance();
+        _prefs.setInt("initScreen", 1);
         NavigationService.instance.navigate('/landing');
       },
       showSkipButton: true,
@@ -41,7 +45,7 @@ class _OnBoardingPageState extends BaseState<OnBoardingPage> {
     );
   }
 
-  var listPages = [
+  final listPages = [
     PageViewModel(
       titleWidget: Column(
         children: [
