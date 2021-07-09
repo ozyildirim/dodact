@@ -1,4 +1,3 @@
-import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/filtered_group_view.dart';
@@ -19,6 +18,7 @@ class _GroupsPageState extends State<GroupsPage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<GroupProvider>(context, listen: false).getFilteredGroupList();
   }
 
   String selectedCategory = "Müzik";
@@ -27,6 +27,7 @@ class _GroupsPageState extends State<GroupsPage> {
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     final groupProvider = Provider.of<GroupProvider>(context);
+
     final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
@@ -56,13 +57,13 @@ class _GroupsPageState extends State<GroupsPage> {
         children: [
           SizedBox(width: 20),
           GestureDetector(
-            child: filterCardContainer(selectedCity),
+            child: filterCardContainer(selectedCity, Icon(Icons.location_on)),
             onTap: () {
               _showCityPicker();
             },
           ),
           GestureDetector(
-            child: filterCardContainer(selectedCategory),
+            child: filterCardContainer(selectedCategory, Icon(Icons.category)),
             onTap: () {
               _showCategoryPicker();
             },
@@ -99,7 +100,7 @@ class _GroupsPageState extends State<GroupsPage> {
     );
   }
 
-  Container filterCardContainer(String interest) {
+  Container filterCardContainer(String interest, Icon icon) {
     return Container(
       width: 140,
       height: 60,
@@ -111,7 +112,7 @@ class _GroupsPageState extends State<GroupsPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Icon(Icons.location_on),
+              icon,
               Text(interest),
             ],
           ),

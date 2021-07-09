@@ -112,8 +112,8 @@ class GroupRepository implements BaseService {
   Future<List<GroupModel>> getFilteredGroupList(
       {String category = "Müzik",
       String city = "İstanbul",
-      bool showAllCategories,
-      bool wholeCountry}) async {
+      bool showAllCategories = false,
+      bool wholeCountry = false}) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {

@@ -119,8 +119,8 @@ class FirebaseGroupService extends BaseService<GroupModel> {
   Future<List<GroupModel>> getFilteredGroupList(
       {String category = "Müzik",
       String city = "İstanbul",
-      bool showAllCategories,
-      bool wholeCountry}) async {
+      bool showAllCategories = false,
+      bool wholeCountry = false}) async {
     List<GroupModel> filteredGroups = [];
     QuerySnapshot querySnapshot;
 
