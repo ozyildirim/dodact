@@ -8,11 +8,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePostsPart extends StatefulWidget {
+  String type;
+
+  ProfilePostsPart({this.type});
+
   @override
   _ProfilePostsPartState createState() => _ProfilePostsPartState();
 }
 
-class _ProfilePostsPartState extends BaseState<ProfilePostsPart> {
+class _ProfilePostsPartState extends BaseState<ProfilePostsPart>
+    with SingleTickerProviderStateMixin {
+  TabController _controller;
+
+  @override
+  void initState() {
+    _controller = new TabController(length: 3, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<PostProvider>(context, listen: false);
@@ -29,21 +42,63 @@ class _ProfilePostsPartState extends BaseState<ProfilePostsPart> {
               return Text("Error: ${snapshot.error}");
             }
             List<PostModel> _userPosts = snapshot.data;
-            return ListView(
-              scrollDirection: Axis.horizontal,
-              children: _userPosts != null
-                  ? _userPosts.map((e) => _buildUserPostCard(e)).toList()
-                  : [
-                      Center(
-                        child: Text("Paylaşım Yok :("),
-                      )
+            int i = 1;
+            _userPosts.forEach((element) {
+              print("$i ${element.isVideo}");
+              i++;
+            });
+
+            return Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: TabBar(
+                    labelColor: Colors.black,
+                    controller: _controller,
+                    tabs: const [
+                      const Tab(text: "Müzik"),
+                      const Tab(text: "Resim"),
+                      const Tab(text: "Tiyatro"),
                     ],
+                  ),
+                ),
+                Container(
+                  height: 250,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TabBarView(controller: _controller, children: [
+                      _buildListView(_userPosts, "Müzik"),
+                      _buildListView(_userPosts, "Resim"),
+                      _buildListView(_userPosts, "Tiyatro"),
+                    ]),
+                  ),
+                ),
+              ],
             );
         }
       },
       future: provider.getUserPosts(authProvider.currentUser),
     );
   }
+}
+
+Widget _buildListView(List<PostModel> _userPosts, String category) {
+  List<PostModel> _filteredPosts = _userPosts.map((e) {
+    if (e.postCategory == category) {
+      print(e.postTitle);
+      // return e;
+    }
+  }).toList();
+
+  return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: _filteredPosts.length,
+      itemBuilder: (context, index) {
+        if (_filteredPosts[index] != null) {
+          return _buildUserPostCard(_filteredPosts[index]);
+        }
+      });
 }
 
 // Consumer<PostProvider>(builder: (context, provider, child) {
@@ -86,10 +141,11 @@ Widget _buildUserPostCard(PostModel post) {
               color: Colors.white,
             ),
           ),
-          width: 160.0,
+          width: 250.0,
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(coverPhotoURL), fit: BoxFit.cover)),
+            image: DecorationImage(
+                image: NetworkImage(coverPhotoURL), fit: BoxFit.cover),
+          ),
         ),
       ),
     ),

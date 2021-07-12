@@ -1,4 +1,5 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
@@ -55,22 +56,28 @@ class FilteredGroupView extends StatelessWidget {
             );
           } else {
             return Center(
-                child: Text("Bu il ve kategoride grup bulunmamakta :("));
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  height: 200,
+                  color: Colors.purple,
+                  child: Center(
+                    child: Text(
+                      "Henüz bir grup yok :(",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ),
+                ),
+              ),
+            );
           }
         } else {
-          return Center(
-              child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              height: 200,
-              color: Colors.purple,
-              child: Center(
-                  child: Text(
-                "Henüz bir grup yok :(",
-                style: TextStyle(fontSize: 25),
-              )),
+          return Container(
+            height: MediaQuery.of(context).size.height - 200,
+            child: Center(
+              child: spinkit,
             ),
-          ));
+          );
         }
       },
     );

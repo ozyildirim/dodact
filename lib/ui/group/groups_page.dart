@@ -15,14 +15,18 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
+  String selectedCategory;
+  String selectedCity;
+
   @override
   void initState() {
     super.initState();
     Provider.of<GroupProvider>(context, listen: false).getFilteredGroupList();
+
+    selectedCategory = "Tümü";
+    selectedCity = "İstanbul";
   }
 
-  String selectedCategory = "Tümü";
-  String selectedCity = "Tüm Şehirler";
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -185,5 +189,10 @@ class _GroupsPageState extends State<GroupsPage> {
         updateGroupsByFilter(selectedCategory, selectedCity);
       },
     );
+  }
+
+  Future<void> _refreshGroups() async {
+    await Provider.of<GroupProvider>(context, listen: false)
+        .getFilteredGroupList(category: selectedCategory, city: selectedCity);
   }
 }

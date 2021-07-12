@@ -13,6 +13,7 @@ class AuthProvider extends ChangeNotifier {
 
   AuthProvider() {
     getUser();
+    notifyListeners();
   }
 
   AuthResultStatus authStatus;
@@ -48,6 +49,7 @@ class AuthProvider extends ChangeNotifier {
   getCurrentUser() async {
     if (currentUser == null) {
       setUser(await FirebaseAuthService().currentUser());
+      notifyListeners();
     }
   }
 

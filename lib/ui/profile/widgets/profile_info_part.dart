@@ -1,7 +1,8 @@
-import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/components/image/gf_image_overlay.dart';
 import 'package:provider/provider.dart';
 
 class ProfileInfoPart extends StatelessWidget {
@@ -11,98 +12,127 @@ class ProfileInfoPart extends StatelessWidget {
 
     final mediaQuery = MediaQuery.of(context);
     final size = mediaQuery.size;
-    return Positioned(
-      top: 80,
-      left: (size.width - 330) / 2,
-      child: Container(
-        width: 330,
-        height: 220,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey,
-                offset: const Offset(
-                  1.0,
-                  1.0,
-                ),
-                blurRadius: 10.0,
-                spreadRadius: 2.0,
-              ), //BoxShadow
-              //BoxShadow
-            ]),
-        child: Column(
-          children: [
-            Row(
+    return Container(
+      height: 220,
+      color: Colors.amberAccent,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage:
-                        NetworkImage(provider.currentUser.profilePictureURL),
-                  ),
+                GFImageOverlay(
+                  height: 150,
+                  width: 150,
+                  image: NetworkImage(provider.currentUser.profilePictureURL),
+                  boxFit: BoxFit.cover,
+                  shape: BoxShape.circle,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      provider.currentUser.nameSurname,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "@${provider.currentUser.username}",
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Gitar Tutkunu",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 40,
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: oxfordBlue,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Takip Et",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
+                SizedBox(
+                  height: 20,
+                ),
+                Text(provider.currentUser.nameSurname,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text("@${provider.currentUser.username}")
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: Icon(FontAwesome5Brands.twitter),
-                  onPressed: () {},
-                ),
-                IconButton(
-                    icon: Icon(FontAwesome5Brands.youtube), onPressed: () {}),
-                IconButton(
-                    icon: Icon(FontAwesome5Brands.instagram), onPressed: () {})
-              ],
-            )
+          ),
+          Expanded(
+            flex: 3,
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: ProfileInfoPV(),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileInfoPV extends StatefulWidget {
+  @override
+  _ProfileInfoPVState createState() => _ProfileInfoPVState();
+}
+
+class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
+  PageController _controller = PageController(
+    initialPage: 0,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(
+      scrollDirection: Axis.horizontal,
+      controller: _controller,
+      children: [
+        Center(
+          child: _personalInfoPage(),
+        ),
+        Center(
+          child: Text("asdads"),
+        ),
+        Center(
+          child: _socialInfoPage(),
+        ),
+      ],
+    );
+  }
+
+  Widget _socialInfoPage() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: Icon(
+            FontAwesome5Brands.linkedin,
+            size: 30,
+          ),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(
+            FontAwesome5Brands.dribbble,
+            size: 30,
+          ),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(FontAwesome5Solid.envelope, size: 30),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
+
+  Widget _personalInfoPage() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      // crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(FontAwesome5Solid.map_marker_alt),
+            Text(authProvider.currentUser.location)
           ],
         ),
-      ),
+      ],
     );
   }
 }
