@@ -30,7 +30,8 @@ dependencies:
   multi_image_picker: ^4.8.0
   introduction_screen: ^2.1.0
   youtube_player_flutter: ^8.0.0
-  extended_navbar_scaffold: any
+  #TODO: buradan diğer navbarı sil
+
   flutter_vector_icons: ^1.0.0
   cool_alert: ^1.0.3
   horizontal_card_pager: ^1.1.1
@@ -43,6 +44,10 @@ dependencies:
   flutter_native_splash: ^1.2.0
   shared_preferences: ^2.0.6
   flutter_material_pickers: ^3.1.0
+  ff_navigation_bar:
+    git:
+      url: https://github.com/ozyildirim/Flutter-FFNavigationBar
+  
 
 
 dev_dependencies:

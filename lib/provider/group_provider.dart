@@ -98,10 +98,10 @@ class GroupProvider extends ChangeNotifier {
   }
 
   Future<List<GroupModel>> getFilteredGroupList(
-      {String category = "Müzik",
-      String city = "İstanbul",
-      bool showAllCategories = false,
-      bool wholeCountry = false}) async {
+      {String category = "Tümü",
+      String city = "Tüm Şehirler",
+      bool showAllCategories = true,
+      bool wholeCountry = true}) async {
     try {
       var fetchedGroup = await _groupRepository.getFilteredGroupList(
           category: category,

@@ -21,8 +21,8 @@ class _GroupsPageState extends State<GroupsPage> {
     Provider.of<GroupProvider>(context, listen: false).getFilteredGroupList();
   }
 
-  String selectedCategory = "Müzik";
-  String selectedCity = "İstanbul";
+  String selectedCategory = "Tümü";
+  String selectedCity = "Tüm Şehirler";
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -80,7 +80,7 @@ class _GroupsPageState extends State<GroupsPage> {
         height: 120,
         child: Center(
             child: HorizontalCardPager(
-          initialPage: 1,
+          initialPage: 0,
           onPageChanged: (page) {
             setState(() {
               selectedCategory = categoryItemValues[page.toInt()];

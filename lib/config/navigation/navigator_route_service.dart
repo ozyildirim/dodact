@@ -5,8 +5,7 @@ import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail_2.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/common_widgets/about_dodact_page.dart';
-import 'package:dodact_v1/ui/community/communities_page.dart';
-import 'package:dodact_v1/ui/community/community_detail.dart';
+
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
@@ -68,11 +67,7 @@ class NavigationRouteManager {
               event: args,
             ),
             settings);
-      case k_ROUTE_COMMUNITIES_PAGE:
-        return _navigateToDefault(CommunitiesPage(), settings);
-      case k_ROUTE_COMMUNITY_DETAIL:
-        return _navigateToDefault(
-            CommunityDetailPage(communityModel: args), settings);
+
       case k_ROUTE_GROUPS_PAGE:
         return _navigateToDefault(GroupsPage(), settings);
       case k_ROUTE_GROUP_DETAIL:

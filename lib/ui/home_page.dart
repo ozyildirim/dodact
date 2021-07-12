@@ -1,13 +1,8 @@
-import 'package:cool_alert/cool_alert.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
-import 'package:dodact_v1/ui/event/events_page.dart';
-
 import 'package:dodact_v1/ui/general/general_page.dart';
-import 'package:dodact_v1/ui/group/groups_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
-import 'package:dodact_v1/ui/search/search_page.dart';
-import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
+import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
@@ -19,127 +14,51 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _page = 0;
-  GlobalKey _bottomNavigationKey = GlobalKey();
+  int selectedIndex = 0;
+
   final List<Widget> _children = [
     GeneralPage(),
     DiscoverPage(),
-    EventsPage(),
-    GroupsPage(),
+    CreationPage(),
     ProfilePage(),
-    SearchPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return ExtendedNavigationBarScaffold(
-      body: _children[_page],
-      elevation: 0,
-      navBarColor: Colors.white,
-      navBarIconColor: Colors.black,
-      floatingButtonNavigation: () {
-        NavigationService.instance.navigate('/creation');
-      },
-      moreButtons: [
-        MoreButtonModel(
-          icon: MaterialCommunityIcons.earth,
-          label: 'Anasayfa',
-          onTap: () {
-            setState(() {
-              _page = 0;
-            });
-          },
+    return Scaffold(
+      body: _children[selectedIndex],
+      bottomNavigationBar: FFNavigationBar(
+        theme: FFNavigationBarTheme(
+          barBackgroundColor: Colors.white,
+          selectedItemBackgroundColor: Colors.grey,
+          selectedItemIconColor: Colors.white,
+          selectedItemLabelColor: Colors.black,
         ),
-        MoreButtonModel(
-          icon: MaterialCommunityIcons.instagram,
-          label: 'Akış',
-          onTap: () {
-            setState(() {
-              _page = 1;
-            });
-          },
-        ),
-        MoreButtonModel(
-          icon: MaterialCommunityIcons.air_horn,
-          label: 'Etkinlikler',
-          onTap: () {
-            setState(() {
-              _page = 2;
-            });
-          },
-        ),
-        MoreButtonModel(
-          icon: FontAwesome.group,
-          label: 'Gruplar',
-          onTap: () {
-            setState(() {
-              _page = 3;
-            });
-          },
-        ),
-        MoreButtonModel(
-          icon: MaterialCommunityIcons.calendar,
-          label: 'Takvimim',
-          onTap: () {
-            CoolAlert.show(
-              context: context,
-              type: CoolAlertType.loading,
-              text: "Bu özelliğimiz henüz aktif değil.",
-            );
-          },
-        ),
-        MoreButtonModel(
-          icon: FontAwesome5Regular.user_circle,
-          label: 'Profilim',
-          onTap: () {
-            setState(() {
-              _page = 4;
-            });
-          },
-        ),
-        null,
-        MoreButtonModel(
-          icon: Icons.settings,
-          label: 'Ayarlar',
-          onTap: () {},
-        ),
-        null,
-      ],
-      searchWidget: Container(
-        height: 50,
-        color: Colors.redAccent,
+        selectedIndex: selectedIndex,
+        onSelectTab: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        items: [
+          FFNavigationBarItem(
+            iconData: FontAwesome5Solid.home,
+            label: 'Anasayfa',
+          ),
+          FFNavigationBarItem(
+            iconData: FontAwesome5Solid.globe_europe,
+            label: 'Keşfet',
+          ),
+          FFNavigationBarItem(
+            iconData: Icons.add,
+            label: 'Ekle',
+          ),
+          FFNavigationBarItem(
+            iconData: Icons.person,
+            label: 'Profil',
+          ),
+        ],
       ),
     );
   }
 }
-
-/*
-
-Scaffold(
-        bottomNavigationBar: CurvedNavigationBar(
-          key: _bottomNavigationKey,
-          index: 0,
-          height: 50.0,
-          items: <Widget>[
-            Icon(Icons.home, size: 50),
-            Icon(Icons.search, size: 30),
-            Icon(Icons.headset, size: 30),
-            Icon(Icons.group_work, size: 30),
-            Icon(Icons.person, size: 30),
-          ],
-          color: Colors.white,
-          buttonBackgroundColor: Colors.white,
-          backgroundColor: Colors.black,
-          animationCurve: Curves.easeInOut,
-          animationDuration: Duration(milliseconds: 600),
-          onTap: (index) {
-            setState(() {
-              _page = index;
-            });
-          },
-          letIndexChange: (index) => true,
-        ),
-        body: _children[_page]);
-
-
- */
