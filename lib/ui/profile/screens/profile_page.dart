@@ -76,7 +76,35 @@ class _ProfilePageState extends BaseState<ProfilePage>
               //     width: dynamicWidth(0.90),
               //   ),
               // ),
-              ProfilePostsPart(),
+              Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 50,
+                    child: TabBar(
+                      labelColor: Colors.black,
+                      controller: _controller,
+                      tabs: const [
+                        const Tab(text: "Müzik"),
+                        const Tab(text: "Resim"),
+                        const Tab(text: "Tiyatro"),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 250,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TabBarView(controller: _controller, children: [
+                        ProfilePostsPart(),
+                        ProfilePostsPart(),
+                        ProfilePostsPart(),
+                      ]),
+                    ),
+                  ),
+                ],
+              ),
+
               SizedBox(
                 height: 15,
               ),

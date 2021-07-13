@@ -13,6 +13,7 @@ class EventModel {
   List<String> eventImages;
   bool isOnline;
   bool isDone;
+  String ownerType;
 
   EventModel(
       {@required this.eventId,
@@ -25,7 +26,8 @@ class EventModel {
       this.eventCategory,
       this.eventImages,
       this.isOnline,
-      this.isDone});
+      this.isDone,
+      this.ownerType});
 
   EventModel.fromJson(Map<String, dynamic> json) {
     eventId = json['eventId'];
@@ -39,6 +41,7 @@ class EventModel {
     eventImages = json['eventImages'].cast<String>();
     isOnline = json['isOnline'];
     isDone = json['isDone'];
+    ownerType = json['ownerType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -54,11 +57,12 @@ class EventModel {
     data['eventImages'] = this.eventImages;
     data['isOnline'] = this.isOnline;
     data['isDone'] = this.isDone;
+    data['ownerType'] = this.ownerType;
     return data;
   }
 
   @override
   String toString() {
-    return 'EventModel{eventId: $eventId, ownerId: $ownerId, eventTitle: $eventTitle, eventDescription: $eventDescription, location: $location, eventURL: $eventURL, eventDate: $eventDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline}';
+    return 'EventModel{eventId: $eventId, ownerId: $ownerId, eventTitle: $eventTitle, eventDescription: $eventDescription, location: $location, eventURL: $eventURL, eventDate: $eventDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType}';
   }
 }

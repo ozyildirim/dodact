@@ -83,8 +83,9 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<GroupModel>> getGroupListByCategory(String category,
-      {bool isNotify}) async {
+  Future<List<GroupModel>> getGroupListByCategory(
+    String category,
+  ) async {
     try {
       var fetchedGroup = await _groupRepository.getGroupsByCategory(category);
       groupList = fetchedGroup;
@@ -120,15 +121,14 @@ class GroupProvider extends ChangeNotifier {
 
   Future<GroupModel> getGroupDetail(String groupId, {bool isNotify}) async {
     try {
-      changeState(true, isNotify: isNotify);
       var fetchedGroup = await _groupRepository.getDetail(groupId);
       group = fetchedGroup;
+      notifyListeners();
       return group;
     } catch (e) {
       print("GroupProvider getDetail error: " + e.toString());
+      notifyListeners();
       return null;
-    } finally {
-      changeState(false);
     }
   }
 

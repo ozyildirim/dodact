@@ -80,17 +80,16 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<EventModel>> getList({bool isNotify}) async {
+  Future<List<EventModel>> getAllEventsList() async {
     try {
-      changeState(true, isNotify: isNotify);
       var fetchedList = await eventRepository.getList();
       eventList = fetchedList;
+      notifyListeners();
       return eventList;
     } catch (e) {
       print("EventProvider getList error: " + e.toString());
+      notifyListeners();
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
