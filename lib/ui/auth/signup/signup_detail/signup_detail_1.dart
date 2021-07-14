@@ -3,19 +3,22 @@ import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-class SignUpDetail extends StatefulWidget {
+class SignUpDetail1 extends StatefulWidget {
   @override
-  _SignUpDetailState createState() => _SignUpDetailState();
+  _SignUpDetail1State createState() => _SignUpDetail1State();
 }
 
-class _SignUpDetailState extends BaseState<SignUpDetail> {
+class _SignUpDetail1State extends BaseState<SignUpDetail1> {
+  AuthProvider authProvider;
+
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool validation = false;
-  bool _autoValidate = false;
+
   FocusNode _nameFocus = FocusNode();
   FocusNode _usernameFocus = FocusNode();
   FocusNode _dropdownFocus = FocusNode();
@@ -23,18 +26,10 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   CityListItem selectedCity;
   List<CityListItem> _dropdownItems = [];
 
-  List<CityListItem> _buildDropdownItems(List<String> cities) {
-    List<CityListItem> _items = [];
-    for (int i = 0; i < cities.length; i++) {
-      _items.add(new CityListItem(i, cities[i]));
-    }
-    return _items;
-  }
-
-  List<DropdownMenuItem<CityListItem>> _dropdownMenuItems;
-
   void initState() {
     super.initState();
+    authProvider = getProvider<AuthProvider>();
+
     _dropdownItems = _buildDropdownItems(cities);
     _dropdownMenuItems = buildDropdownMenuItems(_dropdownItems);
   }
@@ -228,6 +223,16 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       ),
     );
   }
+
+  List<CityListItem> _buildDropdownItems(List<String> cities) {
+    List<CityListItem> _items = [];
+    for (int i = 0; i < cities.length; i++) {
+      _items.add(new CityListItem(i, cities[i]));
+    }
+    return _items;
+  }
+
+  List<DropdownMenuItem<CityListItem>> _dropdownMenuItems;
 
   void _formSubmit() async {
     _formKey.currentState.saveAndValidate();

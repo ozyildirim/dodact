@@ -1,7 +1,7 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class InterestsPage extends StatefulWidget {
   @override
@@ -35,8 +35,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
 
   void _navigateToLanding() {
     Future.delayed(Duration(milliseconds: 300), () {
-      authProvider.getCurrentUser();
-      NavigationService.instance.navigateToReset('/home');
+      authProvider.getUser();
+      NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     });
   }
 }

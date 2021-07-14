@@ -1,23 +1,17 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
-import 'package:dodact_v1/ui/common_widgets/custom_dialog_box.dart';
 import 'package:dodact_v1/ui/common_widgets/rounded_button.dart';
-import 'package:dodact_v1/ui/common_widgets/rounded_input_field.dart';
-import 'package:dodact_v1/ui/common_widgets/rounded_password_field.dart';
 import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -263,7 +257,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         ));
       } else {
         NavigationService.instance.pop();
-        NavigationService.instance.popUntil('/landing');
+        NavigationService.instance.popUntil(k_ROUTE_LANDING);
       }
     } else {
       setState(() {
@@ -281,6 +275,6 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void navigateToLoginPage(BuildContext context) {
-    NavigationService.instance.navigate('/login');
+    NavigationService.instance.navigate(k_ROUTE_LOGIN);
   }
 }

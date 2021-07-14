@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/services/concrete/upload_service.dart';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,7 +15,7 @@ class SignUpDetail_2 extends StatefulWidget {
 class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
   PickedFile _profilePicture;
   String error;
-  bool uploaded = false;
+  bool _isUploaded = false;
   bool inProgress = false;
 
   @override
@@ -160,7 +158,7 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
   //fotoğraf upload edildiyse ileri butonu gelsin, yoksa boş container gözüksün.
   Expanded bottomPart() => Expanded(
       flex: 1,
-      child: uploaded
+      child: _isUploaded
           ? Padding(
               padding: const EdgeInsets.all(16.0),
               child: GestureDetector(
@@ -204,28 +202,23 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
   void _updateProfilePhoto(BuildContext context) async {
     if (_profilePicture != null) {
       showLoaderDialog(context);
-      var url = await UploadService().uploadUserProfilePhoto(
-          userID: authProvider.currentUser.uid,
-          fileType: 'profile_picture',
-          fileToUpload: File(_profilePicture.path));
-      await usersRef
-          .doc(authProvider.currentUser.uid)
-          .update({'profilePictureURL': url}).then((value) {
+      await authProvider
+          .updateCurrentUserProfilePicture(File(_profilePicture.path))
+          .then((value) {
         NavigationService.instance.pop();
+        setState(() {
+          _isUploaded = true;
+        });
       }).catchError((error) {
         showErrorDialog(context);
       });
-      if (url != null) {
-        setState(() {
-          uploaded = true;
-        });
-      }
+
       debugPrint("Picture uploaded.");
     }
   }
 
   void _moveToInterests() async {
-    NavigationService.instance.navigateReplacement('/interest_choice');
+    NavigationService.instance.navigateReplacement(k_ROUTE_INTERESTS_CHOICE);
   }
 
   void _uploadDefaultPicture() async {

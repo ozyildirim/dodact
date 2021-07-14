@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
+import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +40,13 @@ class AuthProvider extends ChangeNotifier {
 
   Future<UserObject> getUser() async {
     try {
-      changeState(true);
       currentUser = await _authRepository.currentUser();
+      notifyListeners();
       return currentUser;
     } catch (e) {
       debugPrint("AuthProvider getUser function error: " + e.toString());
+      notifyListeners();
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
@@ -156,6 +160,26 @@ class AuthProvider extends ChangeNotifier {
       debugPrint("AuthProvider ViewModel error." + e.toString());
     } finally {
       changeState(false);
+    }
+  }
+
+  Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
+    await usersRef.doc(currentUser.uid).update(newData);
+  }
+
+  Future<void> updateCurrentUserProfilePicture(File image) async {
+    //First: upload users photo to firestorage
+    try {
+      var url = await UploadService().uploadUserProfilePhoto(
+          userID: currentUser.uid,
+          fileType: 'profile_picture',
+          fileToUpload: image);
+      await updateCurrentUser({'profilePictureURL': url});
+      notifyListeners();
+    } catch (e) {
+      debugPrint("AuthProvider updateCurrentUserProfilePicture error. " +
+          e.toString());
+      notifyListeners();
     }
   }
 }
