@@ -7,9 +7,11 @@ import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/ui/common_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EventDetailPage extends StatefulWidget {
@@ -217,13 +219,21 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
                     SizedBox(
                       width: 10,
                     ),
-                    Text(_event.eventDate.toLocal().toString()),
+                    Text(
+                      DateFormat('dd/MM/yyyy hh:mm').format(_event.eventDate),
+                    ),
                   ],
                 ),
               ),
-              Row(
-                children: [],
-              )
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GFButton(
+                  onPressed: () {},
+                  color: Colors.cyan,
+                  text: "Takvime Ekle",
+                  shape: GFButtonShape.pills,
+                ),
+              ),
             ],
           ),
         ),
