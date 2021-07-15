@@ -1,6 +1,5 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
@@ -21,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _children = [
     GeneralPage(),
     DiscoverPage(),
-    // CreationPage(),
     ProfilePage(),
   ];
 

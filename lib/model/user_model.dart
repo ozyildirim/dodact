@@ -20,6 +20,9 @@ class UserObject {
   String twitterUsername;
   String instagramUsername;
   String youtubeLink;
+  String dribbleLink;
+  String linkedInLink;
+  String soundcloudLink;
 
   UserObject(
       {@required this.uid,
@@ -38,7 +41,10 @@ class UserObject {
       this.rosettes,
       this.twitterUsername,
       this.instagramUsername,
-      this.youtubeLink});
+      this.youtubeLink,
+      this.dribbleLink,
+      this.linkedInLink,
+      this.soundcloudLink});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -61,6 +67,9 @@ class UserObject {
     userData['twitterUsername'] = this.twitterUsername;
     userData['instagramUsername'] = this.instagramUsername;
     userData['youtubeLink'] = this.youtubeLink;
+    userData['dribbleLink'] = this.dribbleLink;
+    userData['linkedInLink'] = this.linkedInLink;
+    userData['soundcloudLink'] = this.soundcloudLink;
 
     return userData;
   }
@@ -83,7 +92,10 @@ class UserObject {
         rosettes = map['rosettes'],
         twitterUsername = map['twitterUsername'],
         instagramUsername = map['instagramUsername'],
-        youtubeLink = map['youtubeLink'];
+        youtubeLink = map['youtubeLink'],
+        dribbleLink = map['dribbleLink'],
+        linkedInLink = map['linkedInLink'],
+        soundcloudLink = map['soundcloudLink'];
 
   UserObject.fromDoc(DocumentSnapshot doc) {
     uid = doc.data()['uid'];
@@ -104,5 +116,12 @@ class UserObject {
     twitterUsername = doc.data()['twitterUsername'];
     instagramUsername = doc.data()['instagramUsername'];
     youtubeLink = doc.data()['youtubeLink'];
+    dribbleLink = doc.data()['dribbleLink'];
+    linkedInLink = doc.data()['linkedInLink'];
+    soundcloudLink = doc.data()['soundcloudLink'];
+  }
+
+  String toString() {
+    return 'UserObject{uid: $uid, email: $email, username: $username, nameSurname: $nameSurname,location:$location,linkedinLink: $linkedInLink,dribbleLink: $dribbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
   }
 }

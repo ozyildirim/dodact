@@ -1,4 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,14 +13,9 @@ class ProfileDrawer extends StatefulWidget {
 }
 
 class _ProfileDrawerState extends BaseState<ProfileDrawer> {
-  UserObject user;
-  UserProvider userProvider;
-
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    user = authProvider.currentUser;
   }
 
   @override
@@ -39,14 +36,15 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               alignment: Alignment.center,
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(user.profilePictureURL),
+                  backgroundImage:
+                      NetworkImage(authProvider.currentUser.profilePictureURL),
                   radius: 30,
                 ),
                 title: Text(
-                  user.nameSurname,
+                  authProvider.currentUser.nameSurname,
                   style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
-                subtitle: Text(user.email,
+                subtitle: Text(authProvider.currentUser.email,
                     style: TextStyle(color: Colors.white, fontSize: 16)),
               ),
             ),
@@ -69,7 +67,9 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           ListTile(
             leading: Icon(Icons.settings),
             title: Text("Ayarlarım", style: TextStyle(fontSize: 18)),
-            onTap: () {},
+            onTap: () {
+              NavigationService.instance.navigate(k_ROUTE_USER_OPTIONS);
+            },
           ),
           ListTile(
             leading: Icon(Icons.report),
@@ -89,56 +89,10 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
 
   void signOut(BuildContext context) async {
     await authProvider.signOut();
-    await userProvider.removeUser();
+    print(
+        "AFTER DRAWER SIGNOUT, USER INFO\n: ${authProvider.currentUser.toString()}");
+    Provider.of<UserProvider>(context, listen: false).removeUser();
+    NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
+    //TODO: Problem var, burayı düzelt.
   }
 }
-
-/**
-   * 
-   * Expanded(
-            flex: 3,
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('Seçenekler', style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    Navigator.pushNamed(context, "/profile_options");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.calendar_today_outlined),
-                  title: Text('Katıldığım Etkinlikler',
-                      style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    Navigator.pushNamed(context, "/");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.group),
-                  title: Text('Topluluklar', style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    Navigator.pushNamed(context, "/hizmetler");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.info),
-                  title:
-                      Text('Dodact Hakkında', style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    Navigator.pushNamed(context, "/galeri");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.exit_to_app),
-                  title: Text('Çıkış Yap', style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    signOut(context);
-                  },
-                ),
-              ],
-            ),
-          )
- * 
- * 
- * */

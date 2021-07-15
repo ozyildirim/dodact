@@ -2,7 +2,6 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/auth/forgot_password.dart';
 import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
@@ -41,24 +40,26 @@ class _LogInPageState extends BaseState<LogInPage> {
     if (status != AuthResultStatus.successful) {
       if (status != AuthResultStatus.abortedByUser) {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  errorMsg,
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
+        _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(
+            duration: new Duration(seconds: 2),
+            content: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // new CircularProgressIndicator(),
+                Expanded(
+                  child: new Text(
+                    errorMsg,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
+              ],
+            ),
           ),
-        ));
+        );
       }
     }
   }

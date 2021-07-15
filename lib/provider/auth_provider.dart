@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
@@ -164,10 +163,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
-    await usersRef.doc(currentUser.uid).update(newData);
+    try {
+      await _authRepository.updateCurrentUser(newData, currentUser.uid);
+    } catch (e) {
+      print("authProvider updateCurrentUser error: $e");
+    }
   }
 
-  Future<void> updateCurrentUserProfilePicture(File image) async {
+  Future<String> updateCurrentUserProfilePicture(File image) async {
     //First: upload users photo to firestorage
     try {
       var url = await UploadService().uploadUserProfilePhoto(
@@ -176,6 +179,7 @@ class AuthProvider extends ChangeNotifier {
           fileToUpload: image);
       await updateCurrentUser({'profilePictureURL': url});
       notifyListeners();
+      return url;
     } catch (e) {
       debugPrint("AuthProvider updateCurrentUserProfilePicture error. " +
           e.toString());

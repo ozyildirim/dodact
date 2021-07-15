@@ -33,10 +33,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
     );
   }
 
-  void _navigateToLanding() {
-    Future.delayed(Duration(milliseconds: 300), () {
-      authProvider.getUser();
-      NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-    });
+  void _navigateToLanding() async {
+    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
   }
 }

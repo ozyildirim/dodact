@@ -21,6 +21,13 @@ const k_ROUTE_GROUPS_PAGE = '/groups';
 const k_ROUTE_GROUP_DETAIL = '/group';
 const k_ROUTE_USER_PROFILE = '/profile';
 const k_ROUTE_USER_OPTIONS = '/profile_options';
+
+//User Settings Routes
+const k_ROUTE_USER_NOTIFICATON_SETTINGS = '/user_notification_settings';
+const k_ROUTE_USER_PRIVACY_SETTINGS = '/user_privacy_settings';
+const k_ROUTE_USER_PROFILE_SETTINGS = '/user_profile_settings';
+const k_ROUTE_USER_SECURITY_SETTINGS = '/user_security_settings';
+
 const k_ROUTE_OTHERS_PROFILE_PAGE = '/others_profile';
 const k_ROUTE_SEARCH = '/search';
 

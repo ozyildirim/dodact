@@ -1,6 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
 import 'package:dodact_v1/ui/profile/widgets/profile_info_part.dart'
     as ProfileInfo;
@@ -16,16 +15,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends BaseState<ProfilePage>
     with SingleTickerProviderStateMixin {
-  UserProvider _userProvider;
-
   TabController _controller;
 
   @override
   void initState() {
     _controller = new TabController(length: 3, vsync: this);
-
-    _userProvider = getProvider<UserProvider>();
-    _userProvider.getCurrentUser();
 
     super.initState();
   }

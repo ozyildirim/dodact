@@ -1,5 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
@@ -245,7 +246,9 @@ class _SignUpDetail1State extends BaseState<SignUpDetail1> {
 
     try {
       await updateDetails(username: formUsername, nameSurname: formNameSurname);
-      NavigationService.instance.navigate('/signup_detail_2');
+      print(
+          "AFTER SIGNUP DETAIL 1, USER INFO\n: ${authProvider.currentUser.toString()}");
+      NavigationService.instance.navigate(k_ROUTE_REGISTER_DETAIL_2);
     } catch (e) {
       showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
     }
@@ -277,11 +280,25 @@ class _SignUpDetail1State extends BaseState<SignUpDetail1> {
   }
 
   Future<bool> updateDetails({String username, String nameSurname}) async {
-    var result = await usersRef.doc(authProvider.currentUser.uid).update({
+    // var result = await usersRef.doc(authProvider.currentUser.uid).update({
+    //   'username': username,
+    //   'nameSurname': nameSurname,
+    //   'location': selectedCity.name,
+    // }).then((value) {
+    //   return true;
+    // }).catchError((error) {
+    //   return false;
+    // });
+
+    var result = await authProvider.updateCurrentUser({
       'username': username,
       'nameSurname': nameSurname,
       'location': selectedCity.name,
     }).then((value) {
+      authProvider.currentUser.username = username;
+      authProvider.currentUser.nameSurname = nameSurname;
+      authProvider.currentUser.location = selectedCity.name;
+
       return true;
     }).catchError((error) {
       return false;

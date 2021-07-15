@@ -136,4 +136,9 @@ class AuthRepository {
       return result;
     }
   }
+
+  Future<void> updateCurrentUser(
+      Map<String, dynamic> newData, String uid) async {
+    await _firebaseAuthService.updateCurrentUser(newData, uid);
+  }
 }

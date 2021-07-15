@@ -19,6 +19,10 @@ import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/notifications_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
@@ -82,6 +86,23 @@ class NavigationRouteManager {
               otherUserID: args,
             ),
             settings);
+
+      //USER SETTINGS
+
+      case k_ROUTE_USER_NOTIFICATON_SETTINGS:
+        return _navigateToDefault(NotificationsSettingsPage(), settings);
+
+      case k_ROUTE_USER_PRIVACY_SETTINGS:
+        return _navigateToDefault(PrivacySettingsPage(), settings);
+
+      case k_ROUTE_USER_SECURITY_SETTINGS:
+        return _navigateToDefault(SecuritySettingsPage(), settings);
+
+      case k_ROUTE_USER_PROFILE_SETTINGS:
+        return _navigateToDefault(ProfileSettingsPage(), settings);
+
+      ///////
+
       case k_ROUTE_CREATE_POST_PAGE:
         return _navigateToDefault(PostCreationPage(), settings);
 

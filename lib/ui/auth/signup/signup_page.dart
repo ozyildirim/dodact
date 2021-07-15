@@ -237,27 +237,31 @@ class _SignUpPageState extends BaseState<SignUpPage> {
       if (registrationResult != AuthResultStatus.successful) {
         final errorMsg =
             AuthExceptionHandler.generateExceptionMessage(registrationResult);
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  errorMsg,
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
+        _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(
+            duration: new Duration(seconds: 2),
+            content: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // new CircularProgressIndicator(),
+                Expanded(
+                  child: new Text(
+                    errorMsg,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
+              ],
+            ),
           ),
-        ));
+        );
       } else {
         NavigationService.instance.pop();
         NavigationService.instance.popUntil(k_ROUTE_LANDING);
+        print(
+            "AFTER REGISTERING, USER INFO\n: ${authProvider.currentUser.toString()}");
       }
     } else {
       setState(() {

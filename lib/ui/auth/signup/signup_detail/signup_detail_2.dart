@@ -186,7 +186,7 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
       _profilePicture = newImage;
-      Navigator.of(context).pop(context);
+      NavigationService.instance.pop();
     });
   }
 
@@ -195,7 +195,7 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     setState(() {
       _profilePicture = newImage;
-      Navigator.of(context).pop(context);
+      NavigationService.instance.pop();
     });
   }
 
@@ -204,13 +204,14 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
       showLoaderDialog(context);
       await authProvider
           .updateCurrentUserProfilePicture(File(_profilePicture.path))
-          .then((value) {
+          .then((url) {
         NavigationService.instance.pop();
         setState(() {
           _isUploaded = true;
         });
+        authProvider.currentUser.profilePictureURL = url;
       }).catchError((error) {
-        showErrorDialog(context);
+        showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
       });
 
       debugPrint("Picture uploaded.");
@@ -222,12 +223,18 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
   }
 
   void _uploadDefaultPicture() async {
-    await usersRef.doc(authProvider.currentUser.uid).update({
-      'profilePictureURL':
-          'https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png'
-    });
-    debugPrint("userPicture default olarak ayarlandı.");
-    _moveToInterests();
+    try {
+      await usersRef.doc(authProvider.currentUser.uid).update({
+        'profilePictureURL':
+            'https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png'
+      });
+      authProvider.currentUser.profilePictureURL =
+          "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png";
+      debugPrint("userPicture default olarak ayarlandı.");
+      _moveToInterests();
+    } catch (e) {
+      showErrorDialog(context, "Teknik bir problem oluştu.");
+    }
   }
 
   void showLoaderDialog(BuildContext context) {
@@ -239,12 +246,12 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
     );
   }
 
-  void showErrorDialog(BuildContext context) {
+  void showErrorDialog(BuildContext context, String message) {
     CoolAlert.show(
       barrierDismissible: true,
       context: context,
       type: CoolAlertType.error,
-      text: "Fotoğraf yüklenirken hata oluştu.",
+      text: message,
     );
   }
 }

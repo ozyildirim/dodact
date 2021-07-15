@@ -134,7 +134,6 @@ class FirebaseAuthService implements AuthBase {
     try {
       if (_firebaseAuth.currentUser != null) {
         await _firebaseAuth.currentUser.updateEmail(newEmail);
-
       }
     } catch (e) {
       print(e);
@@ -145,5 +144,10 @@ class FirebaseAuthService implements AuthBase {
     if (_firebaseAuth.currentUser != null) {
       await _firebaseAuth.currentUser.updatePassword(pass);
     }
+  }
+
+  Future<void> updateCurrentUser(
+      Map<String, dynamic> newData, String uid) async {
+    await usersRef.doc(uid).update(newData);
   }
 }
