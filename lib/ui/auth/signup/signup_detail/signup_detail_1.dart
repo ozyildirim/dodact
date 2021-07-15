@@ -98,23 +98,25 @@ class _SignUpDetail1State extends BaseState<SignUpDetail1> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: FormBuilderTextField(
-                                textInputAction: TextInputAction.next,
-                                focusNode: _usernameFocus,
-                                name: "username",
-                                autofocus: false,
-                                keyboardType: TextInputType.text,
-                                cursorColor: kPrimaryColor,
-                                decoration: InputDecoration(
-                                  icon: Icon(
-                                    Icons.people_alt_sharp,
-                                    color: kPrimaryColor,
-                                  ),
-                                  hintText: "Kullanıcı Adın",
-                                  hintStyle: TextStyle(fontFamily: kFontFamily),
-                                  border: InputBorder.none,
+                              textInputAction: TextInputAction.next,
+                              focusNode: _usernameFocus,
+                              name: "username",
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              cursorColor: kPrimaryColor,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.people_alt_sharp,
+                                  color: kPrimaryColor,
                                 ),
-                                validator: FormBuilderValidators.compose(
-                                    [FormBuilderValidators.required(context)])),
+                                hintText: "Kullanıcı Adın",
+                                hintStyle: TextStyle(fontFamily: kFontFamily),
+                                border: InputBorder.none,
+                              ),
+                              validator: FormBuilderValidators.compose(
+                                [FormBuilderValidators.required(context)],
+                              ),
+                            ),
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 10),

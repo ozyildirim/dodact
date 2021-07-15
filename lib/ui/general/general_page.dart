@@ -8,50 +8,55 @@ import 'package:flutter/material.dart';
 class GeneralPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 5,
-        title: Text(
-          "Anasayfa",
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 5,
+          title: Text(
+            "Anasayfa",
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(22.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AnnouncementPart(),
-                Text(
-                  "Haftanın Öne Çıkan Paylaşımları",
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context)
-                      .textTheme
-                      .title
-                      .copyWith(color: Colors.white),
-                ),
-                PostPart(),
-                Text(
-                  "Podcast Önerileri",
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context)
-                      .textTheme
-                      .title
-                      .copyWith(color: Colors.white),
-                ),
-                PodcastPart(),
-                Text(
-                  "Kaçırılmaması Gereken Etkinlikler",
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context)
-                      .textTheme
-                      .title
-                      .copyWith(color: Colors.white),
-                ),
-                EventPart()
-              ],
+        body: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(22.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AnnouncementPart(),
+                  Divider(),
+                  Text(
+                    "Haftanın Öne Çıkan Paylaşımları",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.black),
+                  ),
+                  PostPart(),
+                  Divider(),
+                  Text(
+                    "Podcast Önerileri",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.black),
+                  ),
+                  PodcastPart(),
+                  Divider(),
+                  Text(
+                    "Kaçırılmaması Gereken Etkinlikler",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.black),
+                  ),
+                  EventPart()
+                ],
+              ),
             ),
           ),
         ),

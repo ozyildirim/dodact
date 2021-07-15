@@ -44,7 +44,7 @@ ThemeData appTheme = new ThemeData(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true),
-    primarySwatch: Colors.purple,
+    primarySwatch: Colors.amber,
     accentColor: Colors.deepOrange,
     // backgroundColor: Color(0xFF1c2227),
 

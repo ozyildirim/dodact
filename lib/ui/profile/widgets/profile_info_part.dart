@@ -11,10 +11,9 @@ class ProfileInfoPart extends StatelessWidget {
     final provider = Provider.of<AuthProvider>(context);
 
     final mediaQuery = MediaQuery.of(context);
-    final size = mediaQuery.size;
+
     return Container(
       height: 240,
-      color: Colors.amberAccent,
       child: Row(
         children: [
           Expanded(
@@ -33,6 +32,7 @@ class ProfileInfoPart extends StatelessWidget {
                   height: 20,
                 ),
                 Text(provider.currentUser.nameSurname,
+                    textAlign: TextAlign.center,
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 Text("@${provider.currentUser.username}")

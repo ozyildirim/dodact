@@ -6,6 +6,7 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class FilteredGroupView extends StatelessWidget {
   String category;
   String city;

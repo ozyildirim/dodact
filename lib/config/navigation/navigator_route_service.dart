@@ -26,6 +26,7 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_setti
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
+import 'package:dodact_v1/ui/suffle/shuffle_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +54,10 @@ class NavigationRouteManager {
         return _navigateToDefault(HomePage(), settings);
       case k_ROUTE_CREATION:
         return _navigateToDefault(CreationPage(), settings);
+
+      case k_ROUTE_SHUFFLE:
+        return _navigateToDefault(ShufflePage(), settings);
+
       case k_ROUTE_FORGOT_PASSWORD:
         return _navigateToDefault(ForgotPasswordPage(), settings);
       case k_ROUTE_DISCOVER:

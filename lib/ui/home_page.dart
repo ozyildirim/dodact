@@ -1,8 +1,10 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
+import 'package:dodact_v1/ui/suffle/shuffle_page.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -20,6 +22,8 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _children = [
     GeneralPage(),
     DiscoverPage(),
+    ShufflePage(),
+    CreationPage(),
     ProfilePage(),
   ];
 
@@ -27,12 +31,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[selectedIndex],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          NavigationService.instance.navigate(k_ROUTE_CREATION);
-        },
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     NavigationService.instance.navigate(k_ROUTE_CREATION);
+      //   },
+      //   child: Icon(Icons.add),
+      // ),
       bottomNavigationBar: FFNavigationBar(
         theme: FFNavigationBarTheme(
           barBackgroundColor: Colors.white,
@@ -55,10 +59,14 @@ class _HomePageState extends State<HomePage> {
             iconData: FontAwesome5Solid.globe_europe,
             label: 'Keşfet',
           ),
-          // FFNavigationBarItem(
-          //   iconData: Icons.add,
-          //   label: 'Ekle',
-          // ),
+          FFNavigationBarItem(
+            iconData: Icons.shuffle,
+            label: 'Karışık',
+          ),
+          FFNavigationBarItem(
+            iconData: Icons.add,
+            label: 'Oluştur',
+          ),
           FFNavigationBarItem(
             iconData: Icons.person,
             label: 'Profil',

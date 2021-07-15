@@ -35,21 +35,22 @@ class _GroupsPageState extends State<GroupsPage> {
     final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
-          body: SingleChildScrollView(
-        child: Container(
-          height: mediaQuery.size.height - 56,
-          color: Color(0xFFF1F0F2),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _buildFilterBar(),
-              ),
-              FilteredGroupView()
-            ],
+        body: SingleChildScrollView(
+          child: Container(
+            height: mediaQuery.size.height - 56,
+            color: Color(0xFFF1F0F2),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _buildFilterBar(),
+                ),
+                FilteredGroupView()
+              ],
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 
@@ -181,7 +182,7 @@ class _GroupsPageState extends State<GroupsPage> {
   Future<String> _showCityPicker() {
     return showMaterialScrollPicker<String>(
       context: context,
-      title: 'Pick Your State',
+      title: 'Lokasyon Seçiniz',
       items: cities,
       selectedItem: selectedCity,
       onChanged: (value) {
