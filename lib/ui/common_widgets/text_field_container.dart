@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
-  const TextFieldContainer({Key key, this.child}) : super(key: key);
+  final double width;
+  const TextFieldContainer({Key key, this.child, this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class TextFieldContainer extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      width: size.width * 0.8,
+      width: width != null ? width : size.width * 0.8,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(

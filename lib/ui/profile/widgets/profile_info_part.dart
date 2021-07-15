@@ -13,7 +13,7 @@ class ProfileInfoPart extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final size = mediaQuery.size;
     return Container(
-      height: 220,
+      height: 240,
       color: Colors.amberAccent,
       child: Row(
         children: [

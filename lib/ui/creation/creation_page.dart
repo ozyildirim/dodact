@@ -17,6 +17,7 @@ class _CreationPageState extends State<CreationPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         backwardsCompatibility: false,
+        title: Text("Oluştur"),
         iconTheme: IconThemeData(color: Colors.black),
       ),
       extendBodyBehindAppBar: false,

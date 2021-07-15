@@ -20,8 +20,8 @@ class _ProfilePageState extends BaseState<ProfilePage>
   @override
   void initState() {
     _controller = new TabController(length: 3, vsync: this);
-
     super.initState();
+    authProvider.getUser();
   }
 
   @override
@@ -30,102 +30,101 @@ class _ProfilePageState extends BaseState<ProfilePage>
     // EventRepository()
     //     .getUserEvents(authProvider.currentUser)
     //     .then((value) => print(value));
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        drawer: ProfileDrawer(),
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text(
-            "Profil",
-            style: TextStyle(color: Colors.black),
-          ),
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
+    return Scaffold(
+      drawer: ProfileDrawer(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Profil",
+          style: Theme.of(context).appBarTheme.textTheme.title,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ProfileInfo.ProfileInfoPart(),
-              SizedBox(
-                height: 20,
-              ),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ProfileInfo.ProfileInfoPart(),
+            SizedBox(
+              height: 20,
+            ),
 
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "Paylaşımlar",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.start,
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                "Haftanın Öne Çıkan Paylaşımları",
+                textAlign: TextAlign.start,
+                style: Theme.of(context)
+                    .textTheme
+                    .title
+                    .copyWith(color: Colors.black),
+              ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 15),
+            //   child: Container(
+            //     height: 1,
+            //     color: Colors.grey.shade300,
+            //     width: dynamicWidth(0.90),
+            //   ),
+            // ),
+            Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: TabBar(
+                    labelColor: Colors.black,
+                    labelStyle: TextStyle(fontSize: 16),
+                    controller: _controller,
+                    tabs: const [
+                      const Tab(text: "Müzik"),
+                      const Tab(text: "Resim"),
+                      const Tab(text: "Tiyatro"),
+                    ],
+                  ),
                 ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    child: TabBar(
-                      labelColor: Colors.black,
-                      controller: _controller,
-                      tabs: const [
-                        const Tab(text: "Müzik"),
-                        const Tab(text: "Resim"),
-                        const Tab(text: "Tiyatro"),
-                      ],
-                    ),
+                Container(
+                  height: 250,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TabBarView(controller: _controller, children: [
+                      ProfilePostsPart(),
+                      ProfilePostsPart(),
+                      ProfilePostsPart(),
+                    ]),
                   ),
-                  Container(
-                    height: 250,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TabBarView(controller: _controller, children: [
-                        ProfilePostsPart(),
-                        ProfilePostsPart(),
-                        ProfilePostsPart(),
-                      ]),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
 
-              SizedBox(
-                height: 15,
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(12.0),
-              //   child: Text(
-              //     "Katıldığı Etkinlikler",
-              //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              //     textAlign: TextAlign.start,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: Container(
-              //     height: 250,
-              //     child: ProfileEventsPart(),
-              //   ),
-              // ),
-            ],
-          ),
+            SizedBox(
+              height: 15,
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(12.0),
+            //   child: Text(
+            //     "Katıldığı Etkinlikler",
+            //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            //     textAlign: TextAlign.start,
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 15),
+            //   child: Container(
+            //     height: 1,
+            //     color: Colors.grey.shade300,
+            //     width: dynamicWidth(0.90),
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(15.0),
+            //   child: Container(
+            //     height: 250,
+            //     child: ProfileEventsPart(),
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

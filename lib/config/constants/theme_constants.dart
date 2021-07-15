@@ -35,13 +35,25 @@ final spinkit = SpinKitChasingDots(
 //  ThemeData(primaryColor: kPrimaryColor, fontFamily: kFontFamily)
 
 ThemeData appTheme = new ThemeData(
+    appBarTheme: AppBarTheme(
+        elevation: 8,
+        textTheme: TextTheme(
+          title: TextStyle(
+              color: Colors.black, fontSize: 20, fontFamily: "Raleway"),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        centerTitle: true),
     primarySwatch: Colors.purple,
     accentColor: Colors.deepOrange,
     // backgroundColor: Color(0xFF1c2227),
-    backgroundColor: Colors.white,
+
     // scaffoldBackgroundColor: Color(0xFF20262D),
-    scaffoldBackgroundColor: Colors.white,
+    // scaffoldBackgroundColor: Colors.black,
     textTheme: TextTheme(
-      title: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.w700),
+      title: TextStyle(
+          color: Colors.black,
+          fontFamily: 'Raleway',
+          fontWeight: FontWeight.w700),
     ),
     fontFamily: "Raleway");
