@@ -6,26 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
-class PostsPart extends StatefulWidget {
-  @override
-  _PostsPartState createState() => _PostsPartState();
-}
-
-class _PostsPartState extends State<PostsPart> {
-  Future _postsFuture;
-
-  Future _refreshPostsFuture() {
-    return Provider.of<PostProvider>(context, listen: false).getList();
-  }
-
-  Future<void> _refreshPosts() async {
+class PostsPart extends StatelessWidget {
+  Future<void> _refreshPosts(BuildContext context) async {
     await Provider.of<PostProvider>(context, listen: false).getList();
-  }
-
-  @override
-  void initState() {
-    _postsFuture = _refreshPostsFuture();
-    super.initState();
   }
 
   @override
@@ -34,9 +17,9 @@ class _PostsPartState extends State<PostsPart> {
 
     return SafeArea(
       child: RefreshIndicator(
-        onRefresh: () => _refreshPosts(),
+        onRefresh: () => _refreshPosts(context),
         child: FutureBuilder(
-          future: _postsFuture,
+          future: postProvider.getList(),
           // ignore: missing_return
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
