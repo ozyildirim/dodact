@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
@@ -329,33 +330,16 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
   }
 
   void _updateProfilePhoto() async {
-    showLoaderDialog("Fotoğrafınız değiştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "Fotoğrafınız değiştiriliyor.");
     await authProvider
         .updateCurrentUserProfilePicture(File(_picture.path))
         .then((url) {
       NavigationService.instance.pop();
       debugPrint("Picture uploaded.");
     }).catchError((error) {
-      showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
+      CommonMethods()
+          .showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
     });
-  }
-
-  void showLoaderDialog(String message) {
-    CoolAlert.show(
-      barrierDismissible: false,
-      context: context,
-      type: CoolAlertType.loading,
-      text: message,
-    );
-  }
-
-  void showErrorDialog(BuildContext context, String message) {
-    CoolAlert.show(
-      barrierDismissible: true,
-      context: context,
-      type: CoolAlertType.error,
-      text: message,
-    );
   }
 
   Future<String> _showLocationPicker() {
@@ -376,7 +360,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
 
   Future<void> updateUser() async {
     try {
-      showLoaderDialog("Değişiklikler kaydediliyor.");
+      CommonMethods().showLoaderDialog(context, "Değişiklikler kaydediliyor.");
       await authProvider.updateCurrentUser({
         'location': _locationController.text,
         'username': _usernameController.text,
@@ -391,7 +375,8 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
         _isChanged = false;
       });
     } catch (e) {
-      showErrorDialog(context, "Değişiklikler kaydedilirken bir hata oluştu");
+      CommonMethods().showErrorDialog(
+          context, "Değişiklikler kaydedilirken bir hata oluştu");
     }
   }
 }

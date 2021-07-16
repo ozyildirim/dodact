@@ -40,12 +40,13 @@ class PostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                    child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(coverPhotoURL),
-                          fit: BoxFit.cover)),
-                )),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(coverPhotoURL),
+                            fit: BoxFit.cover)),
+                  ),
+                ),
                 Text(
                   post.postTitle,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

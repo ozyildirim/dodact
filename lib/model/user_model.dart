@@ -24,6 +24,11 @@ class UserObject {
   String linkedInLink;
   String soundcloudLink;
 
+  //PrivacySettings
+  bool hiddenMail;
+  bool hiddenLocation;
+  bool hiddenNameSurname;
+
   UserObject(
       {@required this.uid,
       @required this.email,
@@ -44,7 +49,10 @@ class UserObject {
       this.youtubeLink,
       this.dribbbleLink,
       this.linkedInLink,
-      this.soundcloudLink});
+      this.soundcloudLink,
+      this.hiddenMail,
+      this.hiddenLocation,
+      this.hiddenNameSurname});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -70,6 +78,9 @@ class UserObject {
     userData['dribbbleLink'] = this.dribbbleLink;
     userData['linkedInLink'] = this.linkedInLink;
     userData['soundcloudLink'] = this.soundcloudLink;
+    userData['hiddenMail'] = this.hiddenMail;
+    userData['hiddenLocation'] = this.hiddenLocation;
+    userData['hiddenNameSurname'] = this.hiddenNameSurname;
 
     return userData;
   }
@@ -95,7 +106,10 @@ class UserObject {
         youtubeLink = map['youtubeLink'],
         dribbbleLink = map['dribbbleLink'],
         linkedInLink = map['linkedInLink'],
-        soundcloudLink = map['soundcloudLink'];
+        soundcloudLink = map['soundcloudLink'],
+        hiddenMail = map['hiddenMail'],
+        hiddenLocation = map['hiddenLocation'],
+        hiddenNameSurname = map['hiddenNameSurname'];
 
   UserObject.fromDoc(DocumentSnapshot doc) {
     uid = doc.data()['uid'];
@@ -119,9 +133,12 @@ class UserObject {
     dribbbleLink = doc.data()['dribbbleLink'];
     linkedInLink = doc.data()['linkedInLink'];
     soundcloudLink = doc.data()['soundcloudLink'];
+    hiddenMail = doc.data()['hiddenMail'];
+    hiddenLocation = doc.data()['hiddenLocation'];
+    hiddenNameSurname = doc.data()['hiddenNameSurname'];
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email, username: $username, nameSurname: $nameSurname,location:$location,linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
+    return 'UserObject{uid: $uid, email: $email, username: $username, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
   }
 }
