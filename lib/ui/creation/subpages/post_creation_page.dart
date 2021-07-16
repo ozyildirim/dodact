@@ -1,10 +1,7 @@
 import 'dart:io';
 
-//TODO: Upload fonksiyonları yazılacak
-
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -42,7 +39,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     contentTypeFocusNode = FocusNode();
     sourceFocusNode = FocusNode();
 
-    // TODO: implement initState
     super.initState();
   }
 

@@ -35,7 +35,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  @override
   Future<UserObject> getUserByID(String userId) async {
     try {
       return await userRepository.getUserByID(userId);

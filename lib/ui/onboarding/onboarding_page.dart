@@ -36,13 +36,15 @@ class OnBoardingPage extends StatelessWidget {
       done: const Text("Başla",
           style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
       dotsDecorator: DotsDecorator(
-          size: const Size.square(10.0),
-          activeSize: const Size(20.0, 10.0),
-          activeColor: Colors.black,
-          color: Colors.black26,
-          spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-          activeShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0))),
+        size: const Size.square(10.0),
+        activeSize: const Size(20.0, 10.0),
+        activeColor: Colors.black,
+        color: Colors.black26,
+        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+      ),
     );
   }
 

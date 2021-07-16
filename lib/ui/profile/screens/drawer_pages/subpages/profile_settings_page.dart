@@ -23,6 +23,10 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
   TextEditingController _nameSurnameController;
   TextEditingController _usernameController;
   TextEditingController _locationController;
+  TextEditingController _linkedInController;
+  TextEditingController _youtubeController;
+  TextEditingController _dribbbleController;
+  TextEditingController _soundCloudController;
 
   PickedFile _picture;
   String nameSurname;
@@ -32,6 +36,10 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
 
   FocusNode _nameSurnameFocus = new FocusNode();
   FocusNode _usernameFocus = new FocusNode();
+  FocusNode _youtubeFocus = new FocusNode();
+  FocusNode _linkedInFocus = new FocusNode();
+  FocusNode _dribbbleFocus = new FocusNode();
+  FocusNode _soundCloudFocus = new FocusNode();
 
   @override
   void initState() {
@@ -50,6 +58,15 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
     _usernameController =
         TextEditingController(text: authProvider.currentUser.username);
     _locationController = TextEditingController(text: location);
+
+    _linkedInController =
+        TextEditingController(text: authProvider.currentUser.linkedInLink);
+    _youtubeController =
+        TextEditingController(text: authProvider.currentUser.youtubeLink);
+    _dribbbleController =
+        TextEditingController(text: authProvider.currentUser.dribbbleLink);
+    _soundCloudController =
+        TextEditingController(text: authProvider.currentUser.soundcloudLink);
   }
 
   @override
@@ -84,9 +101,11 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _profilePicturePart(),
+              Text("Kişisel Bilgiler", style: TextStyle(fontSize: 30)),
+              Divider(),
               Text("E-posta Adresi"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.6,
+                width: mediaQuery.size.width * 0.8,
                 child: TextField(
                   controller: _emailController,
                   readOnly: true,
@@ -98,7 +117,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               ),
               Text("Ad - Soyad"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.6,
+                width: mediaQuery.size.width * 0.8,
                 child: TextField(
                   focusNode: _nameSurnameFocus,
                   controller: _nameSurnameController,
@@ -115,7 +134,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               ),
               Text("Kullanıcı Adı"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.6,
+                width: mediaQuery.size.width * 0.8,
                 child: TextField(
                   focusNode: _usernameFocus,
                   controller: _usernameController,
@@ -134,7 +153,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               InkWell(
                 onTap: () => _showLocationPicker(),
                 child: TextFieldContainer(
-                  width: mediaQuery.size.width * 0.6,
+                  width: mediaQuery.size.width * 0.8,
                   child: TextField(
                     enabled: false,
                     readOnly: true,
@@ -144,6 +163,77 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
                       prefixIcon: Icon(Icons.location_city),
                     ),
                   ),
+                ),
+              ),
+              Divider(),
+              Text("Sosyal Medya Hesapları", style: TextStyle(fontSize: 30)),
+              Divider(),
+              Text("Youtube"),
+              TextFieldContainer(
+                width: mediaQuery.size.width * 0.8,
+                child: TextField(
+                  focusNode: _youtubeFocus,
+                  controller: _youtubeController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(FontAwesome5Brands.youtube),
+                  ),
+                  onChanged: (_) {
+                    setState(() {
+                      _isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              Text("LinkedIn"),
+              TextFieldContainer(
+                width: mediaQuery.size.width * 0.8,
+                child: TextField(
+                  focusNode: _linkedInFocus,
+                  controller: _linkedInController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(FontAwesome5Brands.linkedin),
+                  ),
+                  onChanged: (_) {
+                    setState(() {
+                      _isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              Text("Dribbble"),
+              TextFieldContainer(
+                width: mediaQuery.size.width * 0.8,
+                child: TextField(
+                  focusNode: _dribbbleFocus,
+                  controller: _dribbbleController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(FontAwesome5Brands.dribbble),
+                  ),
+                  onChanged: (_) {
+                    setState(() {
+                      _isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              Text("SoundCloud"),
+              TextFieldContainer(
+                width: mediaQuery.size.width * 0.8,
+                child: TextField(
+                  focusNode: _soundCloudFocus,
+                  controller: _soundCloudController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(FontAwesome5Brands.soundcloud),
+                  ),
+                  onChanged: (_) {
+                    setState(() {
+                      _isChanged = true;
+                    });
+                  },
                 ),
               ),
             ],
@@ -189,8 +279,6 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
       ),
     );
   }
-
-  //TODO: Sosyal medya girişlerini ekle
 
   Future<void> _showPickerOptions() {
     return showModalBottomSheet(
@@ -293,6 +381,10 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
         'location': _locationController.text,
         'username': _usernameController.text,
         'nameSurname': _nameSurnameController.text,
+        'youtubeLink': _youtubeController.text,
+        'dribbbleLink': _dribbbleController.text,
+        'linkedInLink': _linkedInController.text,
+        'soundcloudLink': _soundCloudController.text,
       });
       NavigationService.instance.pop();
       setState(() {

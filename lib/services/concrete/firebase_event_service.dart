@@ -64,7 +64,6 @@ class FirebaseEventService extends BaseService<EventModel> {
   //fetch events by query
   @override
   Query getListQuery() {
-    // TODO: implement getListQuery
     throw UnimplementedError();
   }
 

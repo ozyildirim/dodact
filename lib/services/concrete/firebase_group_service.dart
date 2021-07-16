@@ -35,7 +35,6 @@ class FirebaseGroupService extends BaseService<GroupModel> {
 
   @override
   Query getListQuery() {
-    // TODO: implement getListQuery
     throw UnimplementedError();
   }
 

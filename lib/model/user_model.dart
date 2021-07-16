@@ -20,7 +20,7 @@ class UserObject {
   String twitterUsername;
   String instagramUsername;
   String youtubeLink;
-  String dribbleLink;
+  String dribbbleLink;
   String linkedInLink;
   String soundcloudLink;
 
@@ -42,7 +42,7 @@ class UserObject {
       this.twitterUsername,
       this.instagramUsername,
       this.youtubeLink,
-      this.dribbleLink,
+      this.dribbbleLink,
       this.linkedInLink,
       this.soundcloudLink});
 
@@ -67,7 +67,7 @@ class UserObject {
     userData['twitterUsername'] = this.twitterUsername;
     userData['instagramUsername'] = this.instagramUsername;
     userData['youtubeLink'] = this.youtubeLink;
-    userData['dribbleLink'] = this.dribbleLink;
+    userData['dribbbleLink'] = this.dribbbleLink;
     userData['linkedInLink'] = this.linkedInLink;
     userData['soundcloudLink'] = this.soundcloudLink;
 
@@ -93,7 +93,7 @@ class UserObject {
         twitterUsername = map['twitterUsername'],
         instagramUsername = map['instagramUsername'],
         youtubeLink = map['youtubeLink'],
-        dribbleLink = map['dribbleLink'],
+        dribbbleLink = map['dribbbleLink'],
         linkedInLink = map['linkedInLink'],
         soundcloudLink = map['soundcloudLink'];
 
@@ -116,12 +116,12 @@ class UserObject {
     twitterUsername = doc.data()['twitterUsername'];
     instagramUsername = doc.data()['instagramUsername'];
     youtubeLink = doc.data()['youtubeLink'];
-    dribbleLink = doc.data()['dribbleLink'];
+    dribbbleLink = doc.data()['dribbbleLink'];
     linkedInLink = doc.data()['linkedInLink'];
     soundcloudLink = doc.data()['soundcloudLink'];
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email, username: $username, nameSurname: $nameSurname,location:$location,linkedinLink: $linkedInLink,dribbleLink: $dribbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
+    return 'UserObject{uid: $uid, email: $email, username: $username, nameSurname: $nameSurname,location:$location,linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
   }
 }

@@ -47,7 +47,6 @@ class GroupRepository implements BaseService {
 
   @override
   Query getListQuery() {
-    // TODO: implement getListQuery
     throw UnimplementedError();
   }
 

@@ -38,25 +38,21 @@ class AnnouncementRepository implements BaseService<AnnouncementModel> {
 
   @override
   Future<void> delete(String id) {
-    // TODO: implement delete
     throw UnimplementedError();
   }
 
   @override
   Query getListQuery() {
-    // TODO: implement getListQuery
     throw UnimplementedError();
   }
 
   @override
   Future<void> save(AnnouncementModel model) {
-    // TODO: implement save
     throw UnimplementedError();
   }
 
   @override
   Future<void> update(String id, Map<String, dynamic> changes) {
-    // TODO: implement update
     throw UnimplementedError();
   }
 }

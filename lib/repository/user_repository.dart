@@ -1,6 +1,5 @@
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/services/abstract/auth_base.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
@@ -26,7 +25,6 @@ class UserRepository {
     }
   }
 
-  @override
   Future<UserObject> signInAnonymously() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInAnonymously();
@@ -35,7 +33,6 @@ class UserRepository {
     }
   }
 
-  @override
   Future<bool> signOut() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signOut();
@@ -44,7 +41,6 @@ class UserRepository {
     }
   }
 
-  @override
   Future<UserObject> signInWithGoogle() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInWithGoogle();

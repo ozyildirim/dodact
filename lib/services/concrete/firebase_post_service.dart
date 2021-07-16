@@ -69,7 +69,6 @@ class FirebasePostService extends BaseService<PostModel> {
   //fetch events by query
   @override
   Query getListQuery() {
-    // TODO: implement getListQuery
     throw UnimplementedError();
   }
 

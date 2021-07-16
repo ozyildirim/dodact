@@ -5,7 +5,6 @@ import 'package:dodact_v1/model/user_model.dart';
 class FirebaseUserService {
   @override
   Future<void> delete(String id) {
-    // TODO: implement delete
     throw UnimplementedError();
   }
 
@@ -27,7 +26,6 @@ class FirebaseUserService {
 
   @override
   Query getListQuery() {
-    // TODO: implement getListQuery
     throw UnimplementedError();
   }
 
