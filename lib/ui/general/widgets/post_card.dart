@@ -1,3 +1,4 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
@@ -19,7 +20,7 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (post.isVideo == true) {
-      coverPhotoURL = createThumbnailURL(post.postContentURL);
+      coverPhotoURL = CommonMethods.createThumbnailURL(post.postContentURL);
     } else {
       coverPhotoURL = post.postContentURL;
     }

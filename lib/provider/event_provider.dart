@@ -41,12 +41,12 @@ class EventProvider extends ChangeNotifier {
       bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
-      if (image != null) {
-        String imageURL = await UploadService.uploadImage(
-            category: "event_picture", file: image, name: name);
-        model.eventImages.add(imageURL);
-      }
-      return await FirebaseEventService().save(model);
+      // if (image != null) {
+      //   String imageURL = await UploadService.uploadImage(
+      //       category: "event_picture", file: image, name: name);
+      //   model.eventImages.add(imageURL);
+
+      // return await FirebaseEventService().save(model);
     } catch (e) {
       print("EventProvider save error: " + e.toString());
     } finally {

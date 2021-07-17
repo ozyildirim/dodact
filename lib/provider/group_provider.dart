@@ -175,12 +175,12 @@ class GroupProvider extends ChangeNotifier {
       {PlatformFile file, GroupModel group, bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
-      var pictureDownloadURL = await UploadService.uploadImage(
-          category: 'profile_picture',
-          file: file,
-          name: '${group.groupName}_profilePicture');
-      await _groupRepository
-          .update(group.groupId, {'groupProfilePicture': pictureDownloadURL});
+      // var pictureDownloadURL = await UploadService.uploadImage(
+      //     category: 'profile_picture',
+      //     file: file,
+      //     name: '${group.groupName}_profilePicture');
+      // await _groupRepository
+      //     .update(group.groupId, {'groupProfilePicture': pictureDownloadURL});
     } catch (e) {
       print("GroupProvider setGroupProfilePicture error: " + e.toString());
     } finally {

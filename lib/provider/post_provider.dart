@@ -1,11 +1,11 @@
+import 'dart:io';
+
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/post_repository.dart';
-
 import 'package:dodact_v1/services/concrete/firebase_post_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 
 class PostProvider extends ChangeNotifier {
@@ -35,10 +35,8 @@ class PostProvider extends ChangeNotifier {
 
   // If the content is not video, provider will upload it to firestorage,
   // Otherwise youtube link will be added to firestore.
-  Future save(
-      {PostModel model, PlatformFile image, String name, bool isNotify}) async {
+  Future addPost({PostModel model, File image}) async {
     try {
-      changeState(true, isNotify: isNotify);
       if (model.isVideo != true) {
         if (image != null) {
           String imageURL = await UploadService.uploadImage(

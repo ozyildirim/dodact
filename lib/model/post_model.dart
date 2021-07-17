@@ -12,6 +12,7 @@ class PostModel {
   DateTime postDate;
   int claps;
   bool isVideo;
+  bool isLocatedInYoutube;
   List<CommentModel> comments;
   List<dynamic> supportersId;
 

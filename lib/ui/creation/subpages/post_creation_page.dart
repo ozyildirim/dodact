@@ -1,13 +1,10 @@
 import 'dart:io';
-
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:getwidget/components/button/gf_button.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-enum Content { Fotograf, Video, Ses }
+enum Content { Goruntu, Video, Ses }
 enum Category { Tiyatro, Resim, Muzik, Dans }
 enum Source { Telefon, Youtube }
 
@@ -17,11 +14,7 @@ class PostCreationPage extends StatefulWidget {
 }
 
 class _PostCreationPageState extends BaseState<PostCreationPage> {
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-
-  FocusNode categoryFocusNode = FocusNode();
-  FocusNode contentTypeFocusNode = FocusNode();
-  FocusNode sourceFocusNode = FocusNode();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Category category;
   Content content;
@@ -32,220 +25,277 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   bool isUploaded = false;
 
   File postFile;
+  String youtubeLink;
+
+  List<Widget> _samplePages;
+
+  final _controller = new PageController();
+  static const _kDuration = const Duration(milliseconds: 300);
+  static const _kCurve = Curves.ease;
+
+  List<Map<String, dynamic>> categoryMap = [
+    {
+      'category': Category.Tiyatro,
+      'text': "Tiyatro",
+      'icon': Icon(FontAwesome5Solid.theater_masks)
+    },
+    {
+      'category': Category.Resim,
+      'text': "Resim",
+      'icon': Icon(FontAwesome5Solid.image)
+    },
+    {
+      'category': Category.Muzik,
+      'text': "Müzik",
+      'icon': Icon(FontAwesome5Solid.music)
+    },
+    {
+      'category': Category.Dans,
+      'text': "Dans",
+      'icon': Icon(FontAwesome5Solid.skating)
+    }
+  ];
+
+  List<Map<String, dynamic>> contentMap = [
+    {
+      'content': Content.Goruntu,
+      'text': "Görüntü",
+      'icon': Icon(FontAwesome5Solid.camera)
+    },
+    {
+      'content': Content.Video,
+      'text': "Video",
+      'icon': Icon(FontAwesome5Solid.file_video)
+    },
+    {
+      'content': Content.Ses,
+      'text': "Ses",
+      'icon': Icon(FontAwesome5Solid.file_audio)
+    },
+  ];
+
+  List<Map<String, dynamic>> sourceMap = [
+    {
+      'source': Source.Telefon,
+      'text': "Telefon Hafızası",
+      'icon': Icon(Icons.storage)
+    },
+    {
+      'source': Source.Youtube,
+      'text': "Youtube",
+      'icon': Icon(FontAwesome5Brands.youtube)
+    },
+  ];
 
   @override
   void initState() {
-    categoryFocusNode = FocusNode();
-    contentTypeFocusNode = FocusNode();
-    sourceFocusNode = FocusNode();
-
     super.initState();
-  }
 
-  @override
-  void dispose() {
-    categoryFocusNode.dispose();
-    contentTypeFocusNode.dispose();
-    sourceFocusNode.dispose();
-    super.dispose();
+    _samplePages = [
+      postCategoryPage(),
+      postContentPage(),
+      postSourcePage(),
+      postUploadPage()
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              iconTheme: IconThemeData(color: Colors.black),
-            ),
-            body: SingleChildScrollView(
-              child: FormBuilder(
-                key: _formKey,
-                child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormBuilderChoiceChip(
-                            selectedColor: Colors.amber,
-                            onChanged: (value) {
-                              setState(() {
-                                category = value;
-                                content = null;
-                                source = null;
-                              });
-                            },
-                            focusNode: categoryFocusNode,
-                            name: 'category_chip',
-                            spacing: 3,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                labelText:
-                                    "Hangi alanda içerik oluşturmak istiyorsunuz?",
-                                labelStyle: TextStyle(fontSize: 25)),
-                            options: [
-                              FormBuilderFieldOption(
-                                value: Category.Muzik,
-                                child: ListTile(
-                                  leading: Icon(Icons.music_note),
-                                  title: Text("Müzik"),
-                                ),
-                              ),
-                              FormBuilderFieldOption(
-                                value: Category.Tiyatro,
-                                child: Text("Tiyatro"),
-                              ),
-                              FormBuilderFieldOption(
-                                value: Category.Dans,
-                                child: Text("Dans"),
-                              ),
-                              FormBuilderFieldOption(
-                                value: Category.Resim,
-                                child: Text("Resim"),
-                              ),
-                            ]),
-                      ),
-                      category != null
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FormBuilderChoiceChip(
-                                  onChanged: (value) {
-                                    setState(() {
-                                      content = value;
-                                      source =
-                                          null; //butonların kaybolması için yapıldı
-                                    });
-                                  },
-                                  focusNode: categoryFocusNode,
-                                  name: 'content_type_chip',
-                                  spacing: 5,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      labelText:
-                                          "Ne tür içerik oluşturacaksınız?",
-                                      labelStyle: TextStyle(fontSize: 25)),
-                                  options: [
-                                    FormBuilderFieldOption(
-                                      value: Content.Video,
-                                      child: Text("Video"),
-                                    ),
-                                    FormBuilderFieldOption(
-                                      value: Content.Fotograf,
-                                      child: Text("Fotoğraf"),
-                                    ),
-                                    FormBuilderFieldOption(
-                                      value: Content.Ses,
-                                      child: Text("Ses"),
-                                    ),
-                                  ]),
-                            )
-                          : Container(),
-                      content == Content.Video
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FormBuilderChoiceChip(
-                                  onChanged: (value) {
-                                    setState(() {
-                                      source = value;
-                                    });
-                                  },
-                                  focusNode: sourceFocusNode,
-                                  name: 'source_chip',
-                                  spacing: 5,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      labelText:
-                                          "Hangi kaynaktan video yükleyeceksiniz?",
-                                      labelStyle: TextStyle(fontSize: 25)),
-                                  options: [
-                                    FormBuilderFieldOption(
-                                      value: Source.Telefon,
-                                      child: Text("Telefonumdan"),
-                                    ),
-                                    FormBuilderFieldOption(
-                                      value: Source.Youtube,
-                                      child: Text("Youtube"),
-                                    ),
-                                  ]),
-                            )
-                          : Container(),
-
-                      //Kullanıcı dosyası seçtikten sonra içeriği görüntüleyeceğimiz container.
-
-                      isSelected == true
-                          ? Container(
-                              height: 300,
-                              width: 300,
-                              decoration:
-                                  BoxDecoration(color: Colors.pinkAccent),
-                              child: content == Content.Fotograf
-                                  ? Container(
-                                      height: 300,
-                                      width: 300,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: FileImage(
-                                                  File(postFile.path)),
-                                              fit: BoxFit.cover)),
-                                    )
-                                  : Container(),
-                            )
-                          : Container(),
-                      content == Content.Fotograf
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GFButton(
-                                onPressed: () async {
-                                  _selectPhoto();
-                                },
-                                child: Text("Fotoğraf Seç"),
-                              ),
-                            )
-                          : Container(),
-                      content == Content.Ses
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GFButton(
-                                onPressed: () async {
-                                  _selectAudio();
-                                },
-                                child: Text("Ses Dosyası Seç"),
-                              ),
-                            )
-                          : Container(),
-                      source == Source.Telefon
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GFButton(
-                                onPressed: () async {
-                                  _selectVideo();
-                                },
-                                child: Text("Video Seç"),
-                              ),
-                            )
-                          : Container(),
-                      isLoading == true
-                          ? Container(
-                              child: Center(
-                                child: spinkit,
-                              ),
-                            )
-                          : Container(),
-                      isSelected == true
-                          ? GFButton(text: "Yükle", onPressed: () {})
-                          : Container()
-                    ],
-                  ),
-                ),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+        body: Column(
+          children: <Widget>[
+            Flexible(
+              child: PageView.builder(
+                physics: new NeverScrollableScrollPhysics(),
+                controller: _controller,
+                itemCount: _samplePages.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _samplePages[index % _samplePages.length];
+                },
               ),
-            )));
+            ),
+            Container(
+              color: Colors.lightBlueAccent,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text('Prev'),
+                    onPressed: () {
+                      _controller.previousPage(
+                          duration: _kDuration, curve: _kCurve);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Next'),
+                    onPressed: () {
+                      if (category != null) {
+                        _controller.nextPage(
+                            duration: _kDuration, curve: _kCurve);
+                      } else {
+                        //TODO:Snackbar düzeltilecek.
+                        _scaffoldKey.currentState.showSnackBar(
+                          new SnackBar(
+                            duration: new Duration(seconds: 1),
+                            content: new Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                // new CircularProgressIndicator(),
+                                Expanded(
+                                  child: new Text(
+                                    "Bir kategori seçmelisiniz.",
+                                    overflow: TextOverflow.fade,
+                                    softWrap: false,
+                                    maxLines: 1,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
-  Future<bool> uploadPost() async {
-    //TODO: Bu kısmı fonksiyon ile birlitke düzelt.
-    // await UploadService().uploadPostMedia(postID: postID, fileNameAndExtension: fileNameAndExtension, fileToUpload: fileToUpload)
-    //
+// //TODO: Thumbnail package ekle
+//   Future<bool> uploadPost() async {
+//     //TODO: Bu kısmı fonksiyon ile birlitke düzelt.
+//     // await UploadService().uploadPostMedia(postID: postID, fileNameAndExtension: fileNameAndExtension, fileToUpload: fileToUpload)
+//     //
+//   }
+
+  Widget postCategoryPage() {
+    return GridView.builder(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20),
+        itemCount: Category.values.length,
+        itemBuilder: (context, index) {
+          Map<String, dynamic> categoryItem = categoryMap[index];
+          return InkWell(
+            onTap: () {
+              setState(() {
+                category = categoryItem['category'];
+              });
+              _controller.nextPage(duration: _kDuration, curve: _kCurve);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  categoryItem['icon'],
+                  Text(categoryItem['text']),
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget postContentPage() {
+    return GridView.builder(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20),
+        itemCount: Content.values.length,
+        itemBuilder: (context, index) {
+          Map<String, dynamic> contentItem = contentMap[index];
+          return InkWell(
+            onTap: () {
+              setState(() {
+                content = contentItem['content'];
+              });
+              _controller.nextPage(duration: _kDuration, curve: _kCurve);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  contentItem['icon'],
+                  Text(contentItem['text']),
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget postSourcePage() {
+    return GridView.builder(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20),
+        itemCount: Source.values.length,
+        itemBuilder: (context, index) {
+          Map<String, dynamic> sourceItem = sourceMap[index];
+          return InkWell(
+            onTap: () {
+              setState(() {
+                source = sourceItem['source'];
+              });
+              _controller.nextPage(duration: _kDuration, curve: _kCurve);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  sourceItem['icon'],
+                  Text(sourceItem['text']),
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget postUploadPage() {
+    return Column(
+      children: [
+        Text("Önizleme"),
+        Container(
+          height: 250,
+          width: 250,
+          color: Colors.amberAccent,
+        )
+      ],
+    );
   }
 
   void pickFile() async {
@@ -269,10 +319,10 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     }
   }
 
-  void _selectPhoto() async {
+  void _selectPhoto(FileType selectedType) async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
-        type: FileType.image,
+        type: selectedType,
         onFileLoading: (FilePickerStatus status) {
           if (status == FilePickerStatus.picking) {
             setState(() {
@@ -291,52 +341,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         isSelected = true;
         postFile = file;
       });
-    } else {
-      // User canceled the picker
-    }
-  }
-
-  void _selectVideo() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.video,
-        onFileLoading: (FilePickerStatus status) {
-          if (status == FilePickerStatus.picking) {
-            setState(() {
-              isLoading = true;
-            });
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-          }
-        });
-
-    if (result != null) {
-      File file = File(result.files.single.path);
-    } else {
-      // User canceled the picker
-    }
-  }
-
-  void _selectAudio() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.audio,
-        onFileLoading: (FilePickerStatus status) {
-          if (status == FilePickerStatus.picking) {
-            setState(() {
-              isLoading = true;
-            });
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-          }
-        });
-
-    if (result != null) {
-      File file = File(result.files.single.path);
     } else {
       // User canceled the picker
     }
