@@ -28,7 +28,8 @@ class PostModel {
       this.isVideo,
       this.claps,
       this.comments,
-      this.supportersId});
+      this.supportersId,
+      this.isLocatedInYoutube});
 
   PostModel.fromJson(Map<String, dynamic> json)
       : postId = json['postId'],
@@ -42,6 +43,7 @@ class PostModel {
         isVideo = json['isVideo'],
         claps = json['claps'],
         comments = json['comments'],
+        isLocatedInYoutube = json['isLocatedInYoutube'],
         supportersId = json['supportersId'];
 
   Map<String, dynamic> toJson() {
@@ -58,11 +60,12 @@ class PostModel {
     data['claps'] = this.claps;
     data['comments'] = this.comments;
     data['supportersId'] = this.supportersId;
+    data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     return data;
   }
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, userOrGroup: $userOrGroup, ownerId: $ownerId, postCategory: $postCategory, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
+    return 'PostModel{postId: $postId, userOrGroup: $userOrGroup, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
   }
 }

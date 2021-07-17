@@ -37,16 +37,16 @@ class PostProvider extends ChangeNotifier {
   // Otherwise youtube link will be added to firestore.
   Future addPost({PostModel model, File image}) async {
     try {
-      if (model.isVideo != true) {
-        if (image != null) {
-          String imageURL = await UploadService.uploadImage(
-              category: "post_images", file: image, name: name);
-          model.postContentURL = imageURL;
-        }
-        return await FirebasePostService().save(model);
-      } else {
-        return await FirebasePostService().save(model);
-      }
+      // if (model.isVideo != true) {
+      //   if (image != null) {
+      //     String imageURL = await UploadService.uploadImage(
+      //         category: "post_images", file: image, name: name);
+      //     model.postContentURL = imageURL;
+      //   }
+      //   return await FirebasePostService().save(model);
+      // } else {
+      //   return await FirebasePostService().save(model);
+      // }
     } catch (e) {
       print("PostProvider save error: " + e.toString());
     } finally {

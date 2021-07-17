@@ -84,7 +84,8 @@ class _ProfilePostsPartState extends BaseState<ProfilePostsPart> {
 Widget _buildUserPostCard(PostModel post) {
   String coverPhotoURL;
   if (post.isVideo == true) {
-    coverPhotoURL = CommonMethods.createThumbnailURL(post.postContentURL);
+    coverPhotoURL = CommonMethods.createThumbnailURL(
+        post.isLocatedInYoutube, post.postContentURL);
   } else {
     coverPhotoURL = post.postContentURL;
   }

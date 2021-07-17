@@ -72,6 +72,8 @@ class FirebasePostService extends BaseService<PostModel> {
     throw UnimplementedError();
   }
 
+  Future<void> addPost() async {}
+
   @override
   Future<void> save(PostModel model) async {
     if (model.postId == null || model.postId.isEmpty) {

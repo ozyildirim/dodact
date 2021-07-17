@@ -3,7 +3,6 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PostCard extends StatelessWidget {
   final PostModel post;
@@ -11,16 +10,11 @@ class PostCard extends StatelessWidget {
   PostCard(this.post);
   String coverPhotoURL;
 
-  String createThumbnailURL(String youtubeVideoID) {
-    String videoID = YoutubePlayer.convertUrlToId(youtubeVideoID);
-    String thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
-    return thumbnailURL;
-  }
-
   @override
   Widget build(BuildContext context) {
     if (post.isVideo == true) {
-      coverPhotoURL = CommonMethods.createThumbnailURL(post.postContentURL);
+      coverPhotoURL = CommonMethods.createThumbnailURL(
+          post.isLocatedInYoutube, post.postContentURL);
     } else {
       coverPhotoURL = post.postContentURL;
     }

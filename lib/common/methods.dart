@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CommonMethods {
-  static String createThumbnailURL(String youtubeVideoID) {
-    String videoID = YoutubePlayer.convertUrlToId(youtubeVideoID);
-    String thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
+  static String createThumbnailURL(bool isLocatedInYoutube, String videoURL) {
+    String thumbnailURL;
+    if (isLocatedInYoutube) {
+      String videoID = YoutubePlayer.convertUrlToId(videoURL);
+      thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
+    } else {
+      thumbnailURL = videoURL;
+      //TODO: Videolar için thumbnail fonksiyonu yazılmalı
+    }
+
     return thumbnailURL;
   }
 

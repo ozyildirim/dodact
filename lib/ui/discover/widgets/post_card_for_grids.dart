@@ -16,7 +16,8 @@ class PostCardForGrid extends StatelessWidget {
   }
 
   Widget postView(PostModel post) {
-    var thumbnailURL = CommonMethods.createThumbnailURL(post.postContentURL);
+    var thumbnailURL = CommonMethods.createThumbnailURL(
+        post.isLocatedInYoutube, post.postContentURL);
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
