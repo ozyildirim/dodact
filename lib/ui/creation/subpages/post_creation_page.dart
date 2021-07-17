@@ -1,8 +1,14 @@
 import 'dart:io';
+
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/model/post_model.dart';
+import 'package:dodact_v1/provider/post_provider.dart';
+import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/components/button/gf_button.dart';
+import 'package:provider/provider.dart';
 
 enum Content { Goruntu, Video, Ses }
 enum Category { Tiyatro, Resim, Muzik, Dans }
@@ -23,9 +29,20 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   bool isSelected = false;
   bool isLoading = false;
   bool isUploaded = false;
+  bool _isChanged = false;
+
+  TextEditingController _postTitleController;
+  TextEditingController _postDescriptionController;
+  TextEditingController _postContentUrlController;
+
+  FocusNode _postTitleFocus = new FocusNode();
+  FocusNode _postDescriptionFocus = new FocusNode();
+  FocusNode _postContentUrlFocus = new FocusNode();
 
   File postFile;
   String youtubeLink;
+
+  PostModel newPost;
 
   List<Widget> _samplePages;
 
@@ -91,12 +108,26 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   void initState() {
     super.initState();
 
+    newPost = new PostModel();
+
+    _postTitleController = new TextEditingController();
+    _postDescriptionController = new TextEditingController();
+    _postContentUrlController = new TextEditingController();
+
     _samplePages = [
       postCategoryPage(),
       postContentPage(),
       postSourcePage(),
       postUploadPage()
     ];
+  }
+
+  @override
+  void dispose() {
+    _postTitleFocus.dispose();
+    _postDescriptionFocus.dispose();
+    _postContentUrlFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -173,12 +204,34 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     );
   }
 
-// //TODO: Thumbnail package ekle
-//   Future<bool> uploadPost() async {
-//     //TODO: Bu kısmı fonksiyon ile birlitke düzelt.
-//     // await UploadService().uploadPostMedia(postID: postID, fileNameAndExtension: fileNameAndExtension, fileToUpload: fileToUpload)
-//     //
-//   }
+//TODO: Thumbnail package ekle
+  Future<bool> uploadPost() async {
+    String categoryString = "";
+    for (var categoryItem in categoryMap) {
+      if (categoryItem["category"] == category) {
+        categoryString = categoryItem["text"];
+        break;
+      }
+    }
+
+    try {
+      newPost.postId = "";
+      newPost.userOrGroup = true;
+      newPost.ownerId = authProvider.currentUser.uid;
+      newPost.postCategory = categoryString;
+      newPost.postTitle = _postTitleController.text;
+      newPost.postDescription = _postDescriptionController.text;
+      newPost.postContentURL = _postContentUrlController.text != null
+          ? _postContentUrlController.text
+          : null;
+      newPost.claps = 0;
+      newPost.isVideo = content == Content.Video ? true : false;
+      newPost.isLocatedInYoutube = source == Source.Youtube ? true : false;
+
+      await Provider.of<PostProvider>(context, listen: false)
+          .addPost(post: newPost, postFile: postFile);
+    } catch (e) {} //
+  }
 
   Widget postCategoryPage() {
     return GridView.builder(
@@ -194,6 +247,9 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             onTap: () {
               setState(() {
                 category = categoryItem['category'];
+                print(category);
+                print(source);
+                print(content);
               });
               _controller.nextPage(duration: _kDuration, curve: _kCurve);
             },
@@ -229,6 +285,9 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             onTap: () {
               setState(() {
                 content = contentItem['content'];
+                print(category);
+                print(source);
+                print(content);
               });
               _controller.nextPage(duration: _kDuration, curve: _kCurve);
             },
@@ -264,6 +323,9 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             onTap: () {
               setState(() {
                 source = sourceItem['source'];
+                print(category);
+                print(source);
+                print(content);
               });
               _controller.nextPage(duration: _kDuration, curve: _kCurve);
             },
@@ -292,34 +354,89 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         Container(
           height: 250,
           width: 250,
-          color: Colors.amberAccent,
-        )
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: postFile != null
+                  ? FileImage(File(postFile.path))
+                  : NetworkImage(
+                      "https://images.unsplash.com/photo-1626327524481-23f89149df7b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"),
+            ),
+          ),
+        ),
+        Text("İçerik Başlığı"),
+        TextFieldContainer(
+          width: 300,
+          child: TextField(
+            focusNode: _postTitleFocus,
+            controller: _postTitleController,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              prefixIcon: Icon(FontAwesome5Brands.soundcloud),
+            ),
+            onChanged: (_) {
+              setState(() {
+                _isChanged = true;
+              });
+            },
+          ),
+        ),
+        Text("İçerik Açıklaması"),
+        TextFieldContainer(
+          width: 300,
+          child: TextField(
+            maxLines: 3,
+            focusNode: _postDescriptionFocus,
+            controller: _postDescriptionController,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              prefixIcon: Icon(FontAwesome5Brands.soundcloud),
+            ),
+            onChanged: (_) {
+              setState(() {
+                _isChanged = true;
+              });
+            },
+          ),
+        ),
+        source == Source.Youtube
+            ? Row(
+                children: [
+                  Text("İçerik Youtube Linki"),
+                  TextFieldContainer(
+                    width: 300,
+                    child: TextField(
+                      focusNode: _postTitleFocus,
+                      controller: _postTitleController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(FontAwesome5Brands.soundcloud),
+                      ),
+                      onChanged: (_) {
+                        setState(() {
+                          _isChanged = true;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : GFButton(
+                text: "İçerik Seç",
+                onPressed: () {
+                  FileType type = (content == Content.Goruntu)
+                      ? FileType.image
+                      : (content == Content.Ses)
+                          ? FileType.audio
+                          : (content == Content.Video)
+                              ? FileType.video
+                              : null;
+                  _selectFile(type);
+                }),
       ],
     );
   }
 
-  void pickFile() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-        onFileLoading: (FilePickerStatus status) {
-      if (status == FilePickerStatus.picking) {
-        setState(() {
-          isLoading == true;
-        });
-      } else {
-        setState(() {
-          isLoading == false;
-        });
-      }
-    });
-
-    if (result != null) {
-      File file = File(result.files.single.path);
-    } else {
-      // User canceled the picker
-    }
-  }
-
-  void _selectPhoto(FileType selectedType) async {
+  void _selectFile(FileType selectedType) async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: selectedType,
@@ -341,8 +458,9 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         isSelected = true;
         postFile = file;
       });
+      print("Content picked");
     } else {
-      // User canceled the picker
+      print("User closed the picker");
     }
   }
 }

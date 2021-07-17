@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
