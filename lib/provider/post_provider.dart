@@ -10,6 +10,7 @@ class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
 
   PostModel post;
+  PostModel newPost = new PostModel();
   List<PostModel> postList;
   List<PostModel> usersPosts;
   List<PostModel> otherUsersPosts;

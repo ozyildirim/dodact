@@ -15,6 +15,7 @@ class PostModel {
   bool isLocatedInYoutube;
   List<CommentModel> comments;
   List<dynamic> supportersId;
+  String postContentType;
 
   PostModel(
       {this.postId,
@@ -29,7 +30,8 @@ class PostModel {
       this.claps,
       this.comments,
       this.supportersId,
-      this.isLocatedInYoutube});
+      this.isLocatedInYoutube,
+      this.postContentType});
 
   PostModel.fromJson(Map<String, dynamic> json)
       : postId = json['postId'],
@@ -44,7 +46,8 @@ class PostModel {
         claps = json['claps'],
         comments = json['comments'],
         isLocatedInYoutube = json['isLocatedInYoutube'],
-        supportersId = json['supportersId'];
+        supportersId = json['supportersId'],
+        postContentType = json['postContentType'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -61,11 +64,12 @@ class PostModel {
     data['comments'] = this.comments;
     data['supportersId'] = this.supportersId;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
+    data['postContentType'] = this.postContentType;
     return data;
   }
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, userOrGroup: $userOrGroup, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
+    return 'PostModel{postId: $postId, userOrGroup: $userOrGroup, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
   }
 }
