@@ -109,7 +109,11 @@ class NavigationRouteManager {
       ///////
 
       case k_ROUTE_CREATE_POST_PAGE:
-        return _navigateToDefault(PostCreationPage(), settings);
+        return _navigateToDefault(
+            PostCreationPage(
+              contentType: args,
+            ),
+            settings);
 
       case k_ROUTE_STORY_VIEW:
         List<dynamic> args = settings.arguments;

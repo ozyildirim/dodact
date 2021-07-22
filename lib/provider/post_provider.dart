@@ -147,4 +147,8 @@ class PostProvider extends ChangeNotifier {
       changeState(false);
     }
   }
+
+  void clearNewPost() {
+    newPost = new PostModel();
+  }
 }

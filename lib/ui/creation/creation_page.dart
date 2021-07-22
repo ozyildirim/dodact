@@ -1,4 +1,6 @@
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -12,6 +14,39 @@ class _CreationPageState extends State<CreationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final SimpleDialog dialog = SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text('İçerik Türü'),
+      children: [
+        SimpleDialogItem(
+          icon: Icons.image,
+          color: Colors.orange,
+          text: 'Görüntü',
+          onPressed: () {
+            Navigator.pop(context, "Görüntü");
+          },
+        ),
+        SimpleDialogItem(
+          icon: Icons.video_call,
+          color: Colors.green,
+          text: 'Video',
+          onPressed: () {
+            Navigator.pop(context, "Video");
+          },
+        ),
+        SimpleDialogItem(
+          icon: Icons.audiotrack,
+          color: Colors.grey,
+          text: 'Ses',
+          onPressed: () {
+            Navigator.pop(context, "Ses");
+          },
+        ),
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -57,11 +92,51 @@ class _CreationPageState extends State<CreationPage> {
                 boxSize: 180,
                 spaceValue: 0,
                 title: 'İçerik Oluştur',
-                onTap: () => NavigationService.instance.navigate('/add_post'),
+                onTap: () async {
+                  var data = await showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) => dialog);
+                  if (data != null) {
+                    NavigationService.instance
+                        .navigate(k_ROUTE_CREATE_POST_PAGE, args: data);
+                  }
+                },
                 conImage:
                     AssetImage('assets/images/creation/icerik_olustur.jpg'),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _buildDialog() async {}
+}
+
+class SimpleDialogItem extends StatelessWidget {
+  const SimpleDialogItem(
+      {Key key, this.icon, this.color, this.text, this.onPressed})
+      : super(key: key);
+
+  final IconData icon;
+  final Color color;
+  final String text;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialogOption(
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, size: 36.0, color: color),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 16.0),
+            child: Text(text),
           ),
         ],
       ),

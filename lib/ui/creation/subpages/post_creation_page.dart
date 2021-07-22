@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -13,69 +16,65 @@ enum Category { Tiyatro, Resim, Muzik, Dans }
 enum Source { Telefon, Youtube }
 
 class PostCreationPage extends StatefulWidget {
+  String contentType;
+
+  PostCreationPage({this.contentType});
+
   @override
   _PostCreationPageState createState() => _PostCreationPageState();
 }
 
 class _PostCreationPageState extends BaseState<PostCreationPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  PostProvider _postProvider;
 
   bool isSelected = false;
   bool isLoading = false;
   bool isUploaded = false;
 
-  List<Step> get steps => [
-        new Step(
-          title: const Text('Sanat Dalı'),
-          //subtitle: const Text('Enter your name'),
-          isActive: true,
-          //state: StepState.error,
-          state: StepState.indexed,
-          content: PostCategoryPart(),
-        ),
-        new Step(
-          title: const Text('İçerik Türü'),
-          //subtitle: const Text('Subtitle'),
-          isActive: true,
-          //state: StepState.editing,
-          state: StepState.indexed,
-          content: PostContentPart(),
-        ),
-        new Step(
-          title: const Text('Kaynak'),
-          // subtitle: const Text('Subtitle'),
-          isActive: true,
-          state: StepState.indexed,
-          // state: StepState.disabled,
-          content: PostSourcePart(),
-        ),
-      ];
-  int currStep = 0;
+  TextEditingController _postTitleController;
+  TextEditingController _postDescriptionController;
+  TextEditingController _postContentUrlController;
 
-  static var _focusNode = new FocusNode();
+  FocusNode _postTitleFocus = new FocusNode();
+  FocusNode _postDescriptionFocus = new FocusNode();
+  FocusNode _postContentUrlFocus = new FocusNode();
 
   File postFile;
   String youtubeLink;
 
   @override
   void initState() {
+    print(widget.contentType);
     super.initState();
+    _postProvider = Provider.of<PostProvider>(context, listen: false);
+    _postProvider.clearNewPost();
 
-    _focusNode.addListener(() {
-      setState(() {});
-      print('Has focus: $_focusNode.hasFocus');
-    });
+    //Implement new post features into variable.
+    _postProvider.newPost.postContentType = widget.contentType;
+
+    if (widget.contentType == "Video") {
+      _postProvider.newPost.isVideo = true;
+      _postProvider.newPost.isLocatedInYoutube = true;
+    }
+
+    _postTitleController = new TextEditingController();
+    _postDescriptionController = new TextEditingController();
+    _postContentUrlController = new TextEditingController();
   }
 
   @override
   void dispose() {
+    _postTitleFocus.dispose();
+    _postDescriptionFocus.dispose();
+    _postContentUrlFocus.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PostProvider>(context);
+    final provider = Provider.of<PostProvider>(context, listen: false);
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -84,72 +83,259 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         title: Text("İçerik"),
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: new Container(
-        child: new Form(
-          key: _formKey,
-          child: new ListView(children: <Widget>[
-            new Stepper(
-              steps: steps,
-              type: StepperType.vertical,
-              currentStep: this.currStep,
-              onStepContinue: () {
-                setState(() {
-                  if (currStep < steps.length - 1) {
-                    currStep = currStep + 1;
-                  } else {
-                    currStep = 0;
-                  }
-                });
-              },
-              onStepCancel: () {
-                setState(() {
-                  if (currStep > 0) {
-                    currStep = currStep - 1;
-                  } else {
-                    currStep = 0;
-                  }
-                });
-              },
-              onStepTapped: (step) {
-                setState(() {
-                  currStep = step;
-                });
-              },
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Stack(children: [
+              Container(
+                  color: Colors.blueAccent,
+                  height: 200,
+                  width: double.infinity),
+              _buildPrevivewPart(),
+            ]),
+            Expanded(
+              flex: 3,
+              child: FormBuilder(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      width: size.width * 0.8,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: const Offset(
+                              1.0,
+                              1.0,
+                            ),
+                            blurRadius: 5.0,
+                            spreadRadius: 0.5,
+                          ),
+                        ],
+                        color: kPrimaryLightColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: FormBuilderTextField(
+                        textInputAction: TextInputAction.next,
+                        focusNode: _postTitleFocus,
+                        name: "postTitle",
+                        autofocus: false,
+                        keyboardType: TextInputType.text,
+                        cursorColor: kPrimaryColor,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.people_alt_sharp,
+                            color: kPrimaryColor,
+                          ),
+                          hintText: "İçerik Başlığı",
+                          hintStyle: TextStyle(fontFamily: kFontFamily),
+                          border: InputBorder.none,
+                        ),
+                        validator: FormBuilderValidators.compose(
+                          [FormBuilderValidators.required(context)],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      width: size.width * 0.8,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: const Offset(
+                              1.0,
+                              1.0,
+                            ),
+                            blurRadius: 5.0,
+                            spreadRadius: 0.5,
+                          ),
+                        ],
+                        color: kPrimaryLightColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: FormBuilderTextField(
+                        textInputAction: TextInputAction.next,
+                        focusNode: _postDescriptionFocus,
+                        name: "postDescription",
+                        maxLines: 3,
+                        autofocus: false,
+                        keyboardType: TextInputType.text,
+                        cursorColor: kPrimaryColor,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.people_alt_sharp,
+                            color: kPrimaryColor,
+                          ),
+                          hintText: "İçerik Açıklaması",
+                          hintStyle: TextStyle(fontFamily: kFontFamily),
+                          border: InputBorder.none,
+                        ),
+                        validator: FormBuilderValidators.compose(
+                            [FormBuilderValidators.required(context)]),
+                      ),
+                    ),
+                    provider.newPost.postContentType == "Video"
+                        ? Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            width: size.width * 0.8,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: const Offset(
+                                    1.0,
+                                    1.0,
+                                  ),
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.5,
+                                ),
+                              ],
+                              color: kPrimaryLightColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: FormBuilderTextField(
+                              textInputAction: TextInputAction.next,
+                              focusNode: _postContentUrlFocus,
+                              name: "youtubeLink",
+                              maxLines: 1,
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              cursorColor: kPrimaryColor,
+                              controller: _postContentUrlController,
+                              onEditingComplete: () {
+                                setState(() {
+                                  youtubeLink = _postContentUrlController.text;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  FontAwesome5Brands.youtube,
+                                  color: kPrimaryColor,
+                                ),
+                                hintText: "Youtube Linki",
+                                hintStyle: TextStyle(fontFamily: kFontFamily),
+                                border: InputBorder.none,
+                              ),
+                              validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)]),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
             ),
-          ]),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GestureDetector(
+                  onTap: () {
+                    _formSubmit();
+                  },
+                  child: Container(
+                    alignment: Alignment.bottomRight,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 25,
+                      child: Icon(
+                        Icons.navigate_next,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
-// //TODO: Thumbnail package ekle
-//   Future<bool> uploadPost() async {
-//     String categoryString = "";
-//     for (var categoryItem in categoryMap) {
-//       if (categoryItem["category"] == category) {
-//         categoryString = categoryItem["text"];
-//         break;
-//       }
-//     }
+  Widget _buildPrevivewPart() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        alignment: Alignment.center,
+        height: 250,
+        width: 250,
+        decoration: youtubeLink != null
+            ? BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    CommonMethods.createThumbnailURL(true, youtubeLink),
+                  ),
+                ),
+              )
+            : null,
+        child: youtubeLink != null
+            ? Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    FontAwesome5Brands.youtube,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(FontAwesome5Solid.upload),
+                    ),
+                    Text("İçerik Seç")
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
 
-//     try {
-//       newPost.postId = "";
-//       newPost.userOrGroup = true;
-//       newPost.ownerId = authProvider.currentUser.uid;
-//       newPost.postCategory = categoryString;
-//       newPost.postTitle = _postTitleController.text;
-//       newPost.postDescription = _postDescriptionController.text;
-//       newPost.postContentURL = _postContentUrlController.text != null
-//           ? _postContentUrlController.text
-//           : null;
-//       newPost.claps = 0;
-//       newPost.isVideo = content == Content.Video ? true : false;
-//       newPost.isLocatedInYoutube = source == Source.Youtube ? true : false;
+  // //TODO: Thumbnail package ekle
+  //   Future<bool> uploadPost() async {
+  //     String categoryString = "";
+  //     for (var categoryItem in categoryMap) {
+  //       if (categoryItem["category"] == category) {
+  //         categoryString = categoryItem["text"];
+  //         break;
+  //       }
+  //     }
 
-//       await Provider.of<PostProvider>(context, listen: false)
-//           .addPost(post: newPost, postFile: postFile);
-//     } catch (e) {} //
-//   }
+  //     try {
+  //       newPost.postId = "";
+  //       newPost.userOrGroup = true;
+  //       newPost.ownerId = authProvider.currentUser.uid;
+  //       newPost.postCategory = categoryString;
+  //       newPost.postTitle = _postTitleController.text;
+  //       newPost.postDescription = _postDescriptionController.text;
+  //       newPost.postContentURL = _postContentUrlController.text != null
+  //           ? _postContentUrlController.text
+  //           : null;
+  //       newPost.claps = 0;
+  //       newPost.isVideo = content == Content.Video ? true : false;
+  //       newPost.isLocatedInYoutube = source == Source.Youtube ? true : false;
+
+  //       await Provider.of<PostProvider>(context, listen: false)
+  //           .addPost(post: newPost, postFile: postFile);
+  //     } catch (e) {} //
+  //   }
 
   void _selectFile(FileType selectedType) async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
@@ -178,6 +364,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       print("User closed the picker");
     }
   }
+
+  void _formSubmit() {}
 }
 
 class PostCategoryPart extends StatefulWidget {
@@ -240,76 +428,6 @@ class _PostCategoryPartState extends State<PostCategoryPart> {
                 },
                 avatar: categoryMap[index]['icon'],
                 label: Text(categoryMap[index]["text"]),
-                selected: _choiceIndex == index,
-                selectedColor: Theme.of(context).accentColor),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class PostContentPart extends StatefulWidget {
-  @override
-  _PostContentPartState createState() => _PostContentPartState();
-}
-
-class _PostContentPartState extends State<PostContentPart> {
-  Content content;
-  List<Map<String, dynamic>> contentMap;
-
-  int _choiceIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    contentMap = [
-      {
-        'content': Content.Goruntu,
-        'text': "Görüntü",
-        'icon': Icon(FontAwesome5Solid.camera)
-      },
-      {
-        'content': Content.Video,
-        'text': "Video",
-        'icon': Icon(FontAwesome5Solid.file_video)
-      },
-      {
-        'content': Content.Ses,
-        'text': "Ses",
-        'icon': Icon(FontAwesome5Solid.file_audio)
-      },
-    ];
-
-    _choiceIndex = 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<PostProvider>(context, listen: false);
-    print("Content built.");
-    print(provider.newPost.toString());
-    return Container(
-      height: 60,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: contentMap.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ChoiceChip(
-                onSelected: (value) {
-                  provider.newPost.postContentType = contentMap[index]['text'];
-                  provider.newPost.isVideo =
-                      contentMap[index]['content'] == Content.Video
-                          ? true
-                          : false;
-                  setState(() {
-                    _choiceIndex = value ? index : 0;
-                  });
-                },
-                avatar: contentMap[index]['icon'],
-                label: Text(contentMap[index]["text"]),
                 selected: _choiceIndex == index,
                 selectedColor: Theme.of(context).accentColor),
           );
