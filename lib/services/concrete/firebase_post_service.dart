@@ -75,12 +75,22 @@ class FirebasePostService extends BaseService<PostModel> {
   Future<void> addPost() async {}
 
   @override
-  Future<void> save(PostModel model) async {
+  Future<String> save(PostModel model) async {
     if (model.postId == null || model.postId.isEmpty) {
-      return await postsRef.add(model.toJson()).then((value) async =>
-          await postsRef.doc(value.id).update({'postID': value.id}));
+      String documentID;
+      return await postsRef.add(model.toJson()).then((postReference) async {
+        return await postsRef
+            .doc(postReference.id)
+            .update({'postId': postReference.id}).then((_) {
+          documentID = postReference.id;
+          return documentID;
+          //save fonksiyonu eklenen dökümanın ID sini geri döndürür.
+        });
+      });
+    } else {
+      //POST EDIT
+      await postsRef.doc(model.postId).set(model.toJson());
     }
-    return await postsRef.doc(model.postId).set(model.toJson());
   }
 
   @override

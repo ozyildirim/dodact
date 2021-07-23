@@ -14,7 +14,7 @@ class _CreationPageState extends State<CreationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final SimpleDialog dialog = SimpleDialog(
+    final SimpleDialog typeDialog = SimpleDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
@@ -42,6 +42,47 @@ class _CreationPageState extends State<CreationPage> {
           text: 'Ses',
           onPressed: () {
             Navigator.pop(context, "Ses");
+          },
+        ),
+      ],
+    );
+
+    final SimpleDialog categoryDialog = SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text('Kategori'),
+      children: [
+        SimpleDialogItem(
+          icon: Icons.image,
+          color: Colors.orange,
+          text: 'Tiyatro',
+          onPressed: () {
+            Navigator.pop(context, "Tiyatro");
+          },
+        ),
+        SimpleDialogItem(
+          icon: Icons.video_call,
+          color: Colors.green,
+          text: 'Resim',
+          onPressed: () {
+            Navigator.pop(context, "Resim");
+          },
+        ),
+        SimpleDialogItem(
+          icon: Icons.audiotrack,
+          color: Colors.grey,
+          text: 'Müzik',
+          onPressed: () {
+            Navigator.pop(context, "Müzik");
+          },
+        ),
+        SimpleDialogItem(
+          icon: Icons.audiotrack,
+          color: Colors.grey,
+          text: 'Dans',
+          onPressed: () {
+            Navigator.pop(context, "Dans");
           },
         ),
       ],
@@ -93,13 +134,21 @@ class _CreationPageState extends State<CreationPage> {
                 spaceValue: 0,
                 title: 'İçerik Oluştur',
                 onTap: () async {
-                  var data = await showDialog(
+                  var categoryData = await showDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) => dialog);
-                  if (data != null) {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_CREATE_POST_PAGE, args: data);
+                      builder: (context) => categoryDialog);
+
+                  if (categoryData != null) {
+                    var typeData = await showDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) => typeDialog);
+                    if (typeData != null) {
+                      NavigationService.instance.navigate(
+                          k_ROUTE_CREATE_POST_PAGE,
+                          args: [typeData, categoryData]);
+                    }
                   }
                 },
                 conImage:

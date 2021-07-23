@@ -144,4 +144,19 @@ class FirebaseGroupService extends BaseService<GroupModel> {
     }
     return filteredGroups;
   }
+
+  Future editGroupPostList(
+      String postId, String groupId, bool addOrRemove) async {
+    List<String> idList = [postId];
+    // ADD: true, REMOVE: false
+    if (addOrRemove) {
+      await groupsRef.doc(groupId).update({
+        "groupPosts": FieldValue.arrayUnion(idList),
+      });
+    } else {
+      await groupsRef.doc(groupId).update({
+        "groupPosts": FieldValue.arrayRemove(idList),
+      });
+    }
+  }
 }

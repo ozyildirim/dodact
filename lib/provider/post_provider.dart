@@ -3,11 +3,16 @@ import 'dart:io';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/repository/post_repository.dart';
+import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
+  AuthProvider authProvider = AuthProvider();
+  GroupProvider groupProvider = GroupProvider();
 
   PostModel post;
   PostModel newPost = new PostModel();
@@ -34,18 +39,51 @@ class PostProvider extends ChangeNotifier {
 
   // If the content is not video, provider will upload it to firestorage,
   // Otherwise youtube link will be added to firestore.
-  Future addPost({PostModel post, File postFile}) async {
+  Future addPost({File postFile}) async {
     try {
-      // if (model.isVideo != true) {
-      //   if (image != null) {
-      //     String imageURL = await UploadService.uploadImage(
-      //         category: "post_images", file: image, name: name);
-      //     model.postContentURL = imageURL;
-      //   }
-      //   return await FirebasePostService().save(model);
-      // } else {
-      //   return await FirebasePostService().save(model);
-      // }
+      //İÇERİK VİDEO İÇERİYOR İSE
+      if (newPost.isVideo) {
+        //Post modeli firestore ye ekleniyor ve Post ID geri döndürülüyor(İçerik URL olmadan).
+        await postRepository.save(newPost).then((id) {
+          newPost.postId = id;
+        });
+
+        //ve post sahibinin post listesine ekleniyor.
+
+        if (newPost.ownerType == "User") {
+          await authProvider.editUserPostDetail(
+              newPost.postId, newPost.ownerId, true);
+        } else if (newPost.ownerType == "Group") {
+          await groupProvider.editGroupPostList(
+              newPost.postId, newPost.ownerId, true);
+        } else {
+          print("User type sıkıntısı");
+        }
+        //İÇERİK VİDEO İÇERMİYOR İSE
+      } else {
+        //Post modeli firestore ye ekleniyor ve Post ID geri döndürülüyor(İçerik URL olmadan).
+        var postId = await postRepository.save(newPost);
+        newPost.postId = postId;
+
+        //Post upload ediliyor.
+        var uploadedContent = await UploadService().uploadPostMedia(
+            postId: postId,
+            fileNameAndExtension: postFile.path.split('/').last,
+            fileToUpload: postFile);
+
+        newPost.postContentURL = uploadedContent;
+
+        //Post URL, post modele ekleniyor.
+        await postRepository.save(newPost);
+
+        //ve post sahibinin post listesine ekleniyor.
+        if (newPost.ownerType == "User") {
+          await authProvider.editUserPostDetail(postId, newPost.ownerId, true);
+        } else if (newPost.ownerType == "Group") {
+          await groupProvider.editGroupPostList(postId, newPost.ownerId, true);
+        }
+        //FIXME: 2 kere post ekleniyor, sebebini bul.
+      }
     } catch (e) {
       print("PostProvider add error: " + e.toString());
     }
@@ -54,6 +92,7 @@ class PostProvider extends ChangeNotifier {
   Future<bool> deletePost(String postId, {bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
+      //TODO: Storage için de silme fonk. eklemek lazım
       return await postRepository.delete(postId).then((value) => true);
     } catch (e) {
       print("PostProvider delete error:  " + e.toString());

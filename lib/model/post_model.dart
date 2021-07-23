@@ -3,7 +3,7 @@ import 'package:dodact_v1/model/comment_model.dart';
 
 class PostModel {
   String postId;
-  bool userOrGroup;
+  String ownerType;
   String ownerId;
   String postCategory;
   String postTitle;
@@ -19,7 +19,7 @@ class PostModel {
 
   PostModel(
       {this.postId,
-      this.userOrGroup,
+      this.ownerType,
       this.ownerId,
       this.postCategory,
       this.postDate,
@@ -35,7 +35,7 @@ class PostModel {
 
   PostModel.fromJson(Map<String, dynamic> json)
       : postId = json['postId'],
-        userOrGroup = json['userOrGroup'],
+        ownerType = json['ownerType'],
         ownerId = json['ownerId'],
         postCategory = json['postCategory'],
         postDate = (json['postDate'] as Timestamp).toDate(),
@@ -52,7 +52,7 @@ class PostModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['postId'] = this.postId;
-    data['userOrGroup'] = this.userOrGroup;
+    data['ownerType'] = this.ownerType;
     data['ownerId'] = this.ownerId;
     data['postCategory'] = this.postCategory;
     data['postDate'] = this.postDate ?? FieldValue.serverTimestamp();
@@ -70,6 +70,6 @@ class PostModel {
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, userOrGroup: $userOrGroup, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
+    return 'PostModel{postId: $postId, ownerType: $ownerType, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
   }
 }

@@ -4,7 +4,6 @@ import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/group_repository.dart';
-import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -66,6 +65,15 @@ class GroupProvider extends ChangeNotifier {
       return false;
     } finally {
       changeState(false);
+    }
+  }
+
+  Future editGroupPostList(
+      String postId, String groupId, bool addOrRemove) async {
+    try {
+      await _groupRepository.editGroupPostList(postId, groupId, addOrRemove);
+    } catch (e) {
+      print("GroupProvider editGroupPostDetail error: " + e.toString());
     }
   }
 

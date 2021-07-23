@@ -3,8 +3,6 @@ import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/event_repository.dart';
-import 'package:dodact_v1/services/concrete/firebase_event_service.dart';
-import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -150,4 +148,6 @@ class EventProvider extends ChangeNotifier {
       changeState(false);
     }
   }
+
+ 
 }

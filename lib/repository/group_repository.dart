@@ -123,4 +123,14 @@ class GroupRepository implements BaseService {
           wholeCountry: wholeCountry);
     }
   }
+
+  Future editGroupPostList(
+      String postId, String groupId, bool addOrRemove) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await _firebaseGroupService.editGroupPostList(
+          postId, groupId, addOrRemove);
+    }
+  }
 }

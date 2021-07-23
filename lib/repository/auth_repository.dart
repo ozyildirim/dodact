@@ -141,4 +141,9 @@ class AuthRepository {
       Map<String, dynamic> newData, String uid) async {
     await _firebaseAuthService.updateCurrentUser(newData, uid);
   }
+
+  Future<void> editUserPostDetail(
+      String postId, String userId, bool addOrRemove) async {
+    await _firebaseAuthService.editUserPostDetail(postId, userId, addOrRemove);
+  }
 }

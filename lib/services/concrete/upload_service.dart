@@ -92,13 +92,13 @@ class UploadService {
 
   //TODO: Klasörlemeyi düzenle.
   Future<String> uploadPostMedia(
-      {@required String postID,
+      {@required String postId,
       @required fileNameAndExtension,
       @required File fileToUpload}) async {
     _storageReference = _firebaseStorage
         .ref()
         .child('posts')
-        .child(postID)
+        .child(postId)
         .child(fileNameAndExtension);
 
     var uploadTask = _storageReference.putFile(fileToUpload);

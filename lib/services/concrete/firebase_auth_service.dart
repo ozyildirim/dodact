@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/abstract/auth_base.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService implements AuthBase {
@@ -149,5 +151,23 @@ class FirebaseAuthService implements AuthBase {
   Future<void> updateCurrentUser(
       Map<String, dynamic> newData, String uid) async {
     await usersRef.doc(uid).update(newData);
+  }
+
+  Future<void> editUserPostDetail(
+      //FIXME: Eklenen post, user bilgilerine eklenmiyor.
+      String postId,
+      String userId,
+      bool addOrRemove) async {
+    //ADD: true, REMOVE: false
+    if (addOrRemove == true) {
+      print(postId);
+      await usersRef.doc(userId).update({
+        'postIDs': FieldValue.arrayUnion([postId])
+      });
+    } else {
+      await usersRef.doc(userId).update({
+        "postIDs": FieldValue.arrayRemove([postId])
+      });
+    }
   }
 }

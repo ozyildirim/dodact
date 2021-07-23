@@ -52,7 +52,7 @@ class PostRepository implements BaseService {
   }
 
   @override
-  Future<void> save(model) async {
+  Future<String> save(model) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
