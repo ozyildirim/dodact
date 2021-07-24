@@ -34,4 +34,14 @@ class CommonMethods {
       text: message,
     );
   }
+
+  void showInfoDialog(BuildContext context, String message, String title) {
+    CoolAlert.show(
+      barrierDismissible: true,
+      context: context,
+      type: CoolAlertType.info,
+      text: message,
+      title: title,
+    );
+  }
 }

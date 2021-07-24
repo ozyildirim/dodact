@@ -19,6 +19,7 @@ import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/requests_status.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/notifications_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
@@ -83,14 +84,23 @@ class NavigationRouteManager {
         return _navigateToDefault(GroupDetailPage(groupModel: args), settings);
       case k_ROUTE_USER_PROFILE:
         return _navigateToDefault(ProfilePage(), settings);
-      case k_ROUTE_USER_OPTIONS:
-        return _navigateToDefault(UserOptionsPage(), settings);
+
       case k_ROUTE_OTHERS_PROFILE_PAGE:
         return _navigateToDefault(
             OthersProfilePage(
               otherUserID: args,
             ),
             settings);
+
+      //USER DRAWER PAGES
+
+      case k_ROUTE_USER_OPTIONS:
+        return _navigateToDefault(UserOptionsPage(), settings);
+
+      case k_ROUTE_USER_REQUESTS:
+        return _navigateToDefault(UserRequestsStatusPage(), settings);
+
+      //
 
       //USER SETTINGS
 

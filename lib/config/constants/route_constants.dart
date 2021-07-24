@@ -21,7 +21,10 @@ const k_ROUTE_COMMUNITY_DETAIL = '/community';
 const k_ROUTE_GROUPS_PAGE = '/groups';
 const k_ROUTE_GROUP_DETAIL = '/group';
 const k_ROUTE_USER_PROFILE = '/profile';
+
+//User Drawer Routes
 const k_ROUTE_USER_OPTIONS = '/profile_options';
+const k_ROUTE_USER_REQUESTS = '/user_requests';
 
 //User Settings Routes
 const k_ROUTE_USER_NOTIFICATON_SETTINGS = '/user_notification_settings';
