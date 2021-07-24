@@ -23,7 +23,8 @@ class FirebasePostService extends BaseService<PostModel> {
   Future<List<PostModel>> getList() async {
     List<PostModel> allposts = [];
 
-    QuerySnapshot querySnapshot = await postsRef.get();
+    QuerySnapshot querySnapshot =
+        await postsRef.where('approved', isEqualTo: true).get();
     for (DocumentSnapshot post in querySnapshot.docs) {
       PostModel _convertedPost = PostModel.fromJson(post.data());
       allposts.add(_convertedPost);
@@ -113,8 +114,12 @@ class FirebasePostService extends BaseService<PostModel> {
   Future<List<PostModel>> getTopPosts() async {
     List<PostModel> topPosts = [];
 
-    QuerySnapshot querySnapshot =
-        await postsRef.orderBy('claps', descending: true).limit(10).get();
+    QuerySnapshot querySnapshot = await postsRef
+        .where('approved', isEqualTo: true)
+        //TODO: Sıralama özelliği eklenmeli
+        // .orderBy('claps', descending: true)
+        .limit(10)
+        .get();
     for (DocumentSnapshot post in querySnapshot.docs) {
       PostModel _convertedPost = PostModel.fromJson(post.data());
       topPosts.add(_convertedPost);
