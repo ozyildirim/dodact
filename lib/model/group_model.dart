@@ -16,21 +16,21 @@ class GroupModel {
   String groupLocation;
   List<String> groupPosts;
 
-  GroupModel(
-      {this.groupId,
-      this.groupName,
-      this.groupCategory,
-      this.founderId,
-      this.numOfMembers,
-      this.groupDescription,
-      this.groupProfilePicture,
-      this.groupPhotos,
-      this.groupPostIDs,
-      this.groupMemberList,
-      this.creationDate,
-      this.eventIDs,
-      this.groupLocation,
-      this.groupPosts});
+  GroupModel({
+    this.groupId,
+    this.groupName,
+    this.groupCategory,
+    this.founderId,
+    this.numOfMembers,
+    this.groupDescription,
+    this.groupProfilePicture,
+    this.groupPhotos,
+    this.groupPostIDs,
+    this.groupMemberList,
+    this.creationDate,
+    this.eventIDs,
+    this.groupLocation,
+  });
 
   GroupModel.fromJson(Map<String, dynamic> json) {
     groupId = json['groupId'];
@@ -46,7 +46,6 @@ class GroupModel {
     creationDate = (json['creationDate'] as Timestamp).toDate();
     eventIDs = json['eventIDs'];
     groupLocation = json['groupLocation'];
-    groupPosts = json['groupPosts'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,12 +63,12 @@ class GroupModel {
     data['creationDate'] = FieldValue.serverTimestamp();
     data['eventIDs'] = this.eventIDs;
     data['groupLocation'] = this.groupLocation;
-    data['groupPosts'] = this.groupPosts;
+
     return data;
   }
 
   @override
   String toString() {
-    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, groupPosts: $groupPosts, founderId: $founderId, numOfMembers: $numOfMembers, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupPostIDs: $groupPostIDs, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
+    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, numOfMembers: $numOfMembers, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupPostIDs: $groupPostIDs, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
   }
 }

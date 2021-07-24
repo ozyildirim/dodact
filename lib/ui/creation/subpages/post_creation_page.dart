@@ -335,17 +335,17 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     //Implement new post features into variable.
     try {
       //TODO: GRUPLAR İÇİN DE EKLEME YAPISI OLUŞTUR.
-      _postProvider.newPost..postId = "";
-      _postProvider.newPost..ownerType = "User";
-      _postProvider.newPost..ownerId = authProvider.currentUser.uid;
-      _postProvider.newPost..postCategory = widget.postCategory;
-      _postProvider.newPost..postTitle = _postTitleController.text;
+      _postProvider.newPost.postId = "";
+      _postProvider.newPost.ownerType = "User";
+      _postProvider.newPost.ownerId = authProvider.currentUser.uid;
+      _postProvider.newPost.postCategory = widget.postCategory;
+      _postProvider.newPost.postTitle = _postTitleController.text;
       _postProvider.newPost.postDate = DateTime.now();
-      _postProvider.newPost..postDescription = _postDescriptionController.text;
-      _postProvider.newPost
-        ..postContentURL = _postContentUrlController.text != null
-            ? _postContentUrlController.text
-            : null;
+      _postProvider.newPost.postDescription = _postDescriptionController.text;
+      _postProvider.newPost.postContentURL =
+          _postContentUrlController.text != null
+              ? _postContentUrlController.text
+              : null;
       _postProvider.newPost..claps = 0;
       _postProvider.newPost.supportersId = [];
 
@@ -357,6 +357,9 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         _postProvider.newPost.isLocatedInYoutube = false;
       }
       _postProvider.newPost.postContentType = widget.contentType;
+      _postProvider.newPost.approved = false;
+      _postProvider.newPost.isExamined = false;
+      _postProvider.newPost.rejectionMessage = "";
 
       if (widget.contentType == "Video") {
         await Provider.of<PostProvider>(context, listen: false)

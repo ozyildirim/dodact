@@ -17,7 +17,7 @@ class PostProvider extends ChangeNotifier {
   PostModel post;
   PostModel newPost = new PostModel();
   List<PostModel> postList;
-  List<PostModel> usersPosts;
+  List<PostModel> userPosts;
   List<PostModel> otherUsersPosts;
   bool isLoading = false;
 
@@ -150,9 +150,9 @@ class PostProvider extends ChangeNotifier {
 
   Future<List<PostModel>> getUserPosts(UserObject user, {bool isNotify}) async {
     try {
-      usersPosts = await postRepository.getUserPosts(user);
+      userPosts = await postRepository.getUserPosts(user);
       notifyListeners();
-      return usersPosts;
+      return userPosts;
     } catch (e) {
       print("PostProvider getUserPosts error: " + e.toString());
       return null;

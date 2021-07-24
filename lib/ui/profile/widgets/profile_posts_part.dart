@@ -12,44 +12,135 @@ class ProfilePostsPart extends StatefulWidget {
   _ProfilePostsPartState createState() => _ProfilePostsPartState();
 }
 
-class _ProfilePostsPartState extends BaseState<ProfilePostsPart> {
+class _ProfilePostsPartState extends BaseState<ProfilePostsPart>
+    with SingleTickerProviderStateMixin {
+  TabController _controller;
+
   @override
   void initState() {
+    _controller = new TabController(length: 4, vsync: this);
     super.initState();
+    Provider.of<PostProvider>(context, listen: false)
+        .getUserPosts(authProvider.currentUser);
   }
 
   //TODO: Postlar için filtreli görünüm eklenecek.
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PostProvider>(context, listen: false);
-    return FutureBuilder(
-      // ignore: missing_return
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return Center(child: spinkit);
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
-            }
-            List<PostModel> _userPosts = snapshot.data;
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 50,
+          child: TabBar(
+            labelColor: Colors.black,
+            labelStyle: TextStyle(fontSize: 16),
+            controller: _controller,
+            tabs: const [
+              const Tab(text: "Müzik"),
+              const Tab(text: "Resim"),
+              const Tab(text: "Tiyatro"),
+              const Tab(text: "Dans"),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TabBarView(controller: _controller, children: [
+              Container(
+                child: _buildPostListView("Müzik"),
+              ),
+              Container(
+                child: _buildPostListView("Resim"),
+              ),
+              Container(
+                child: _buildPostListView("Tiyatro"),
+              ),
+              Container(
+                child: _buildPostListView("Dans"),
+              ),
+            ]),
+          ),
+        ),
+      ],
+    );
 
-            return ListView(
-              scrollDirection: Axis.horizontal,
-              children: _userPosts != null
-                  ? _userPosts.map((e) => _buildUserPostCard(e)).toList()
-                  : [
-                      Center(
-                        child: Text("Paylaşım Yok :("),
-                      )
-                    ],
+    // return FutureBuilder(
+    //   // ignore: missing_return
+    //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+    //     switch (snapshot.connectionState) {
+    //       case ConnectionState.none:
+    //       case ConnectionState.active:
+    //       case ConnectionState.waiting:
+    //         return Center(child: spinkit);
+    //       case ConnectionState.done:
+    //         if (snapshot.hasError) {
+    //           return Text("Error: ${snapshot.error}");
+    //         }
+    //         List<PostModel> _userPosts =
+    //             (snapshot.data as List<PostModel>).map((post) {
+    //           if (post.approved == true) {
+    //             return post;
+    //           }
+    //         }).toList();
+
+    //         if (_userPosts.isEmpty) {
+    //           return Center(
+    //             child: Container(
+    //                 color: Colors.pink, child: Text("Paylaşım Yok :(")),
+    //           );
+    //         } else {
+    //           return ListView(
+    //             scrollDirection: Axis.horizontal,
+    //             children: _userPosts.map((post) {
+    //               _buildUserPostCard(post);
+    //             }).toList(),
+    //           );
+    //         }
+    //     }
+    //   },
+    //   future: provider.getUserPosts(authProvider.currentUser),
+    // );
+  }
+
+  Widget _buildPostListView(String category) {
+    return Consumer<PostProvider>(
+      builder: (context, provider, child) {
+        if (provider.userPosts == null) {
+          return Center(child: spinkit);
+        } else {
+          List<PostModel> posts = provider.userPosts;
+          if (provider.userPosts.isNotEmpty) {
+            posts = posts
+                .where((post) =>
+                    (post.postCategory == category) && (post.approved == true))
+                .toList();
+            print(posts.length);
+          } else {
+            return Center(
+              child: Text("Paylaşım Bulunmamakta"),
             );
+          }
+
+          if (posts.isEmpty) {
+            return Center(
+              child: Text("Paylaşım Bulunmamakta"),
+            );
+          } else {
+            return Container(
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  return _buildUserPostCard(posts[index]);
+                },
+              ),
+            );
+          }
         }
       },
-      future: provider.getUserPosts(authProvider.currentUser),
     );
   }
 }
