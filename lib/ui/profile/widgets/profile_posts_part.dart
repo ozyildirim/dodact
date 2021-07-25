@@ -24,8 +24,6 @@ class _ProfilePostsPartState extends BaseState<ProfilePostsPart>
         .getUserPosts(authProvider.currentUser);
   }
 
-  //TODO: Postlar için filtreli görünüm eklenecek.
-
   @override
   Widget build(BuildContext context) {
     return Column(

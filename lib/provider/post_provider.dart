@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/post_model.dart';
+import 'package:dodact_v1/model/request_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/repository/post_repository.dart';
+import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,6 +15,7 @@ class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
   AuthProvider authProvider = AuthProvider();
   GroupProvider groupProvider = GroupProvider();
+  FirebaseRequestService requestService = FirebaseRequestService();
 
   PostModel post;
   PostModel newPost = new PostModel();
@@ -59,6 +62,8 @@ class PostProvider extends ChangeNotifier {
         } else {
           print("User type sıkıntısı");
         }
+
+        await createPostRequest(newPost);
         //İÇERİK VİDEO İÇERMİYOR İSE
       } else {
         //Post modeli firestore ye ekleniyor ve Post ID geri döndürülüyor(İçerik URL olmadan).
@@ -76,16 +81,35 @@ class PostProvider extends ChangeNotifier {
         //Post URL, post modele ekleniyor.
         await postRepository.save(newPost);
 
+        //Post isteği oluşturuluyor.
+        await createPostRequest(post);
+
         //ve post sahibinin post listesine ekleniyor.
         if (newPost.ownerType == "User") {
           await authProvider.editUserPostDetail(postId, newPost.ownerId, true);
         } else if (newPost.ownerType == "Group") {
           await groupProvider.editGroupPostList(postId, newPost.ownerId, true);
         }
-        //FIXME: 2 kere post ekleniyor, sebebini bul.
       }
     } catch (e) {
-      print("PostProvider add error: " + e.toString());
+      print("PostProvider add post error: " + e.toString());
+    }
+  }
+
+  Future<void> createPostRequest(PostModel post) async {
+    try {
+      var requestModel = new RequestModel();
+      requestModel.requestOwnerId = post.ownerId;
+      requestModel.requestDate = DateTime.now();
+      requestModel.subjectId = post.postId;
+      requestModel.requestFor = "Post";
+      requestModel.isExamined = false;
+      requestModel.isApproved = false;
+      requestModel.rejectionMessage = "";
+
+      await requestService.addRequest(requestModel);
+    } catch (e) {
+      print("PostProvider createPostRequestModel error: $e ");
     }
   }
 

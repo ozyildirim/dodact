@@ -8,6 +8,7 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
+import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => RequestProvider()),
       ],
       child: MaterialApp(
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,

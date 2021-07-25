@@ -16,28 +16,26 @@ class PostModel {
   List<CommentModel> comments;
   List<dynamic> supportersId;
   String postContentType;
-  bool isExamined;
-  bool approved;
-  String rejectionMessage;
 
-  PostModel(
-      {this.postId,
-      this.ownerType,
-      this.ownerId,
-      this.postCategory,
-      this.postDate,
-      this.postTitle,
-      this.postDescription,
-      this.postContentURL,
-      this.isVideo,
-      this.claps,
-      this.comments,
-      this.supportersId,
-      this.isLocatedInYoutube,
-      this.postContentType,
-      this.isExamined,
-      this.approved,
-      this.rejectionMessage});
+  bool approved;
+
+  PostModel({
+    this.postId,
+    this.ownerType,
+    this.ownerId,
+    this.postCategory,
+    this.postDate,
+    this.postTitle,
+    this.postDescription,
+    this.postContentURL,
+    this.isVideo,
+    this.claps,
+    this.comments,
+    this.supportersId,
+    this.isLocatedInYoutube,
+    this.postContentType,
+    this.approved,
+  });
 
   PostModel.fromJson(Map<String, dynamic> json)
       : postId = json['postId'],
@@ -54,8 +52,6 @@ class PostModel {
         isLocatedInYoutube = json['isLocatedInYoutube'],
         supportersId = json['supportersId'],
         postContentType = json['postContentType'],
-        isExamined = json['isExamined'],
-        rejectionMessage = json['rejectionMessage'],
         approved = json['approved'];
 
   Map<String, dynamic> toJson() {
@@ -74,14 +70,13 @@ class PostModel {
     data['supportersId'] = this.supportersId;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;
-    data['isExamined'] = this.isExamined;
-    data['rejectionMessage'] = this.rejectionMessage;
+
     data['approved'] = this.approved;
     return data;
   }
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, ownerType: $ownerType,isExamined: $isExamined,rejectionMessage: $rejectionMessage, approved: $approved , ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
+    return 'PostModel{postId: $postId, ownerType: $ownerType,approved: $approved , ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
   }
 }

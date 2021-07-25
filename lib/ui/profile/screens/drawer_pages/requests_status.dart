@@ -1,7 +1,9 @@
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/model/post_model.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/model/request_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
+import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -15,12 +17,13 @@ class UserRequestsStatusPage extends StatefulWidget {
 }
 
 class _UserRequestsStatusPageState extends BaseState<UserRequestsStatusPage> {
-  PostProvider provider;
+  RequestProvider requestProvider;
+  PostProvider postProvider;
 
   @override
   void initState() {
     super.initState();
-    provider = Provider.of<PostProvider>(context, listen: false);
+    postProvider = Provider.of<PostProvider>(context, listen: false);
   }
 
   @override
@@ -33,95 +36,211 @@ class _UserRequestsStatusPageState extends BaseState<UserRequestsStatusPage> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("İçerik İsteklerim", style: TextStyle(fontSize: 24)),
-            Divider(),
-            Container(
-              height: 400,
-              child: _userPostRequestsPart(),
-            ),
-          ],
-        ),
-      ),
+          padding: const EdgeInsets.all(8.0),
+          child: RequestStatusPageBodyPart()),
     );
   }
+}
 
-  Widget _userPostRequestsPart() {
-    List<PostModel> userPosts = provider.userPosts;
-    PostStatus postStatus;
+class RequestStatusPageBodyPart extends StatefulWidget {
+  @override
+  _RequestStatusPageBodyPartState createState() =>
+      _RequestStatusPageBodyPartState();
+}
 
-    // ignore: missing_return
-    return ListView.builder(
-        itemCount: userPosts.length,
-        // ignore: missing_return
-        itemBuilder: (context, index) {
-          PostModel post = userPosts[index];
+class _RequestStatusPageBodyPartState
+    extends BaseState<RequestStatusPageBodyPart> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<RequestProvider>(context, listen: false)
+        .getUserRequests(authProvider.currentUser.uid);
+  }
 
-          if (post.isExamined == false) {
-            postStatus = PostStatus.waiting;
-          } else if (post.isExamined == true && post.approved == true) {
-            postStatus = PostStatus.approved;
-          } else if (post.isExamined == true && post.approved == false) {
-            postStatus = PostStatus.rejected;
-          }
+  @override
+  Widget build(BuildContext context) {
+    final requestProvider = Provider.of<RequestProvider>(context);
+    Provider.of<RequestProvider>(context);
+    if (requestProvider.requests == null) {
+      return Center(child: spinkit);
+    } else if (requestProvider.requests.isEmpty) {
+      return Center(child: Text("Herhangi bir istekte bulunmadınız."));
+    } else {
+      List<RequestModel> postRequests = requestProvider.requests
+          .where((element) => element.requestFor == "Post")
+          .toList();
+      List<RequestModel> groupRequests = requestProvider.requests
+          .where((element) => element.requestFor == "Group")
+          .toList();
 
-          switch (postStatus) {
-            case PostStatus.waiting:
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    FontAwesome5Solid.hourglass_start,
-                    color: Colors.grey,
-                  ),
-                ),
-                title: Text(post.postTitle),
-                subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
-                    .format(post.postDate)
-                    .toString()),
-              );
+      PostStatus postStatus;
+      return SingleChildScrollView(
+        child: RefreshIndicator(
+          onRefresh: refreshRequests,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("İçerik İsteklerim", style: TextStyle(fontSize: 24)),
+              Divider(),
+              Container(
+                height: 350,
+                child: ListView.builder(
+                    itemCount: postRequests.length,
+                    // ignore: missing_return
+                    itemBuilder: (context, index) {
+                      RequestModel request = postRequests[index];
 
-            case PostStatus.approved:
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    FontAwesome5Solid.check,
-                    color: Colors.green,
-                  ),
-                ),
-                title: Text(post.postTitle),
-                subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
-                    .format(post.postDate)
-                    .toString()),
-              );
+                      if (request.isExamined == false) {
+                        postStatus = PostStatus.waiting;
+                      } else if (request.isExamined == true &&
+                          request.isApproved == true) {
+                        postStatus = PostStatus.approved;
+                      } else if (request.isExamined == true &&
+                          request.isApproved == false) {
+                        postStatus = PostStatus.rejected;
+                      }
 
-            case PostStatus.rejected:
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    FontAwesome5Solid.times,
-                    color: Colors.red,
-                  ),
-                ),
-                title: Text(post.postTitle),
-                subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
-                    .format(post.postDate)
-                    .toString()),
-                trailing: IconButton(
-                    icon: Icon(Icons.info),
-                    onPressed: () {
-                      CommonMethods().showInfoDialog(
-                          context,
-                          "İçeriğiniz reddedilmiştir.\nSebebi: ${post.rejectionMessage}",
-                          "Bilgilendirme");
+                      switch (postStatus) {
+                        case PostStatus.waiting:
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                FontAwesome5Solid.hourglass_start,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            title: Text(request.requestId),
+                            subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
+                                .format(request.requestDate)
+                                .toString()),
+                          );
+
+                        case PostStatus.approved:
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                FontAwesome5Solid.check,
+                                color: Colors.green,
+                              ),
+                            ),
+                            title: Text(request.requestId),
+                            subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
+                                .format(request.requestDate)
+                                .toString()),
+                          );
+
+                        case PostStatus.rejected:
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                FontAwesome5Solid.times,
+                                color: Colors.red,
+                              ),
+                            ),
+                            title: Text(request.requestId),
+                            subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
+                                .format(request.requestDate)
+                                .toString()),
+                            trailing: IconButton(
+                                icon: Icon(Icons.info),
+                                onPressed: () {
+                                  CommonMethods().showInfoDialog(
+                                      context,
+                                      "İçeriğiniz reddedilmiştir.\nSebebi: ${request.rejectionMessage}",
+                                      "Bilgilendirme");
+                                }),
+                          );
+                      }
                     }),
-              );
-          }
-        });
+              ),
+              Text("Grup Oluşturma İsteklerim", style: TextStyle(fontSize: 24)),
+              Divider(),
+              Container(
+                height: 350,
+                child: ListView.builder(
+                    itemCount: groupRequests.length,
+                    // ignore: missing_return
+                    itemBuilder: (context, index) {
+                      RequestModel request = groupRequests[index];
+
+                      if (request.isExamined == false) {
+                        postStatus = PostStatus.waiting;
+                      } else if (request.isExamined == true &&
+                          request.isApproved == true) {
+                        postStatus = PostStatus.approved;
+                      } else if (request.isExamined == true &&
+                          request.isApproved == false) {
+                        postStatus = PostStatus.rejected;
+                      }
+
+                      switch (postStatus) {
+                        case PostStatus.waiting:
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                FontAwesome5Solid.hourglass_start,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            title: Text(request.subjectId),
+                            subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
+                                .format(request.requestDate)
+                                .toString()),
+                          );
+
+                        case PostStatus.approved:
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                FontAwesome5Solid.check,
+                                color: Colors.green,
+                              ),
+                            ),
+                            title: Text(request.subjectId),
+                            subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
+                                .format(request.requestDate)
+                                .toString()),
+                          );
+
+                        case PostStatus.rejected:
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                FontAwesome5Solid.times,
+                                color: Colors.red,
+                              ),
+                            ),
+                            title: Text(request.subjectId),
+                            subtitle: Text(DateFormat("dd-MM-yyyy hh-mm")
+                                .format(request.requestDate)
+                                .toString()),
+                            trailing: IconButton(
+                                icon: Icon(Icons.info),
+                                onPressed: () {
+                                  CommonMethods().showInfoDialog(
+                                      context,
+                                      "İçeriğiniz reddedilmiştir.\nSebebi: ${request.rejectionMessage}",
+                                      "Bilgilendirme");
+                                }),
+                          );
+                      }
+                    }),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> refreshRequests() async {
+    await Provider.of<RequestProvider>(context, listen: false)
+        .getUserRequests(authProvider.currentUser.uid);
   }
 }

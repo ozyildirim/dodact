@@ -358,8 +358,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       }
       _postProvider.newPost.postContentType = widget.contentType;
       _postProvider.newPost.approved = false;
-      _postProvider.newPost.isExamined = false;
-      _postProvider.newPost.rejectionMessage = "";
 
       if (widget.contentType == "Video") {
         await Provider.of<PostProvider>(context, listen: false)

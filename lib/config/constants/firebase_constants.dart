@@ -12,3 +12,4 @@ final CollectionReference announcementsRef =
 final CollectionReference groupsRef = firestore.collection('groups');
 final CollectionReference storiesRef = firestore.collection('stories');
 final CollectionReference reportsRef = firestore.collection('reports');
+final CollectionReference requestsRef = firestore.collection('requests');
