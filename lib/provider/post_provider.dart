@@ -89,11 +89,11 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deletePost(String postId, {bool isNotify}) async {
+  Future<void> deletePost(String postId, {bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
       //TODO: Storage için de silme fonk. eklemek lazım
-      return await postRepository.delete(postId).then((value) => true);
+      return await postRepository.delete(postId);
     } catch (e) {
       print("PostProvider delete error:  " + e.toString());
       return null;
