@@ -25,7 +25,9 @@ class GeneralPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AnnouncementPart(),
-                  Divider(),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     "Haftanın Öne Çıkan Paylaşımları",
                     textAlign: TextAlign.start,
@@ -34,8 +36,13 @@ class GeneralPage extends StatelessWidget {
                         .title
                         .copyWith(color: Colors.black),
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   PostPart(),
-                  Divider(),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     "Podcast Önerileri",
                     textAlign: TextAlign.start,
@@ -44,8 +51,13 @@ class GeneralPage extends StatelessWidget {
                         .title
                         .copyWith(color: Colors.black),
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   PodcastPart(),
-                  Divider(),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     "Kaçırılmaması Gereken Etkinlikler",
                     textAlign: TextAlign.start,
@@ -53,6 +65,9 @@ class GeneralPage extends StatelessWidget {
                         .textTheme
                         .title
                         .copyWith(color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 15,
                   ),
                   EventPart()
                 ],

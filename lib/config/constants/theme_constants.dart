@@ -35,25 +35,32 @@ final spinkit = SpinKitChasingDots(
 //  ThemeData(primaryColor: kPrimaryColor, fontFamily: kFontFamily)
 
 ThemeData appTheme = new ThemeData(
-    appBarTheme: AppBarTheme(
-        elevation: 8,
-        textTheme: TextTheme(
-          title: TextStyle(
-              color: Colors.black, fontSize: 20, fontFamily: "Raleway"),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        centerTitle: true),
-    primarySwatch: Colors.amber,
-    accentColor: Colors.deepOrange,
-    // backgroundColor: Color(0xFF1c2227),
+  appBarTheme: const AppBarTheme(
+      elevation: 8,
+      textTheme: TextTheme(
+        title:
+            TextStyle(color: Colors.black, fontSize: 20, fontFamily: "Raleway"),
+      ),
+      backgroundColor: Colors.white,
+      iconTheme: const IconThemeData(color: Colors.black),
+      centerTitle: true),
+  inputDecorationTheme: const InputDecorationTheme(
+    errorStyle: TextStyle(fontSize: 14),
+  ),
 
-    // scaffoldBackgroundColor: Color(0xFF20262D),
-    // scaffoldBackgroundColor: Colors.black,
-    textTheme: TextTheme(
-      title: TextStyle(
-          color: Colors.black,
-          fontFamily: 'Raleway',
-          fontWeight: FontWeight.w700),
-    ),
-    fontFamily: "Raleway");
+  primarySwatch: Colors.amber,
+  accentColor: Colors.deepOrange,
+  // backgroundColor: Color(0xFF1c2227),
+
+  // scaffoldBackgroundColor: Color(0xFF20262D),
+  // scaffoldBackgroundColor: Colors.black,
+
+  textTheme: TextTheme(
+    title: TextStyle(
+        color: Colors.black,
+        fontFamily: 'Raleway',
+        fontWeight: FontWeight.w700),
+  ),
+
+  fontFamily: "Raleway",
+);

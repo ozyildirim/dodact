@@ -70,7 +70,6 @@ class PostModel {
     data['supportersId'] = this.supportersId;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;
-
     data['approved'] = this.approved;
     return data;
   }

@@ -7,7 +7,6 @@ import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
-import 'package:dodact_v1/ui/common_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
@@ -57,7 +56,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
 
   Widget _buildEventImageCarousel() {
     return Container(
-      color: Colors.amberAccent,
       height: 250,
       width: double.infinity,
       child: GFCarousel(
