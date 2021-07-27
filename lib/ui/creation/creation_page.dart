@@ -159,8 +159,6 @@ class _CreationPageState extends State<CreationPage> {
       ),
     );
   }
-
-  void _buildDialog() async {}
 }
 
 class SimpleDialogItem extends StatelessWidget {

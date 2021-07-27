@@ -110,6 +110,7 @@ class _ProfilePostsPartState extends BaseState<ProfilePostsPart>
           return Center(child: spinkit);
         } else {
           List<PostModel> posts = provider.userPosts;
+          print("Toplam içerik sayısı: ${posts.length}");
           if (provider.userPosts.isNotEmpty) {
             posts = posts
                 .where((post) =>
@@ -187,13 +188,15 @@ Widget _buildUserPostCard(PostModel post) {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: Container(
-          child: Center(
-            child: Icon(
-              Icons.play_circle_fill,
-              size: 50,
-              color: Colors.white,
-            ),
-          ),
+          child: post.isVideo
+              ? Center(
+                  child: Icon(
+                    Icons.play_circle_fill,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
           width: 250.0,
           decoration: BoxDecoration(
             image: DecorationImage(

@@ -82,7 +82,7 @@ class PostProvider extends ChangeNotifier {
         await postRepository.save(newPost);
 
         //Post isteği oluşturuluyor.
-        await createPostRequest(post);
+        await createPostRequest(newPost);
 
         //ve post sahibinin post listesine ekleniyor.
         if (newPost.ownerType == "User") {

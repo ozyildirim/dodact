@@ -315,7 +315,11 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
       _picture = newImage;
       NavigationService.instance.pop();
     });
-    _updateProfilePhoto();
+    if (_picture != null) {
+      _updateProfilePhoto();
+    } else {
+      print("Kullanıcı fotoğraf seçmekten vazgeçti.");
+    }
   }
 
   void _takePhotoFromCamera() async {
@@ -325,7 +329,11 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
       _picture = newImage;
       NavigationService.instance.pop();
     });
-    _updateProfilePhoto();
+    if (_picture != null) {
+      _updateProfilePhoto();
+    } else {
+      print("Kullanıcı fotoğraf seçmekten vazgeçti.");
+    }
   }
 
   void _updateProfilePhoto() async {

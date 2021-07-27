@@ -26,13 +26,14 @@ class PostCardForGrid extends StatelessWidget {
               .navigate(k_ROUTE_POST_DETAIL, args: post.postId);
         },
         child: Container(
-            padding: EdgeInsets.only(bottom: 10),
-            foregroundDecoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(thumbnailURL),
-              ),
-            )),
+          padding: EdgeInsets.only(bottom: 10),
+          foregroundDecoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(thumbnailURL),
+            ),
+          ),
+        ),
       ),
     );
   }
