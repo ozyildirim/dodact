@@ -30,6 +30,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
     // EventRepository()
     //     .getUserEvents(authProvider.currentUser)
     //     .then((value) => print(value));
+
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(

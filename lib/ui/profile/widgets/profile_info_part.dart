@@ -31,10 +31,13 @@ class ProfileInfoPart extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                Text(provider.currentUser.nameSurname,
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Container(
+                  child: Text(provider.currentUser.nameSurname,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
                 Text("@${provider.currentUser.username}")
               ],
             ),
