@@ -30,75 +30,73 @@ class _ProfilePageState extends BaseState<ProfilePage>
     // EventRepository()
     //     .getUserEvents(authProvider.currentUser)
     //     .then((value) => print(value));
-    return SafeArea(
-      child: Scaffold(
-        drawer: ProfileDrawer(),
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            "Profil",
-            style: Theme.of(context).appBarTheme.textTheme.title,
-          ),
-          elevation: 0,
+    return Scaffold(
+      drawer: ProfileDrawer(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Profil",
+          style: Theme.of(context).appBarTheme.textTheme.title,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ProfileInfo.ProfileInfoPart(),
-              Divider(),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ProfileInfo.ProfileInfoPart(),
+            Divider(),
 
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "Paylaşımların",
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context)
-                      .textTheme
-                      .title
-                      .copyWith(color: Colors.black),
-                ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                "Paylaşımların",
+                textAlign: TextAlign.start,
+                style: Theme.of(context)
+                    .textTheme
+                    .title
+                    .copyWith(color: Colors.black),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              Container(
-                height: 300,
-                child: ProfilePostsPart(),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(12.0),
-              //   child: Text(
-              //     "Katıldığı Etkinlikler",
-              //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              //     textAlign: TextAlign.start,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: Container(
-              //     height: 250,
-              //     child: ProfileEventsPart(),
-              //   ),
-              // ),
-            ],
-          ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 15),
+            //   child: Container(
+            //     height: 1,
+            //     color: Colors.grey.shade300,
+            //     width: dynamicWidth(0.90),
+            //   ),
+            // ),
+            Container(
+              height: 300,
+              child: ProfilePostsPart(),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(12.0),
+            //   child: Text(
+            //     "Katıldığı Etkinlikler",
+            //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            //     textAlign: TextAlign.start,
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 15),
+            //   child: Container(
+            //     height: 1,
+            //     color: Colors.grey.shade300,
+            //     width: dynamicWidth(0.90),
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(15.0),
+            //   child: Container(
+            //     height: 250,
+            //     child: ProfileEventsPart(),
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

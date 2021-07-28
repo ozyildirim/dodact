@@ -28,4 +28,12 @@ class RequestProvider extends ChangeNotifier {
       print("RequestProvider getUserRequests error: " + e.toString());
     }
   }
+
+  Future<void> deleteRequest(String postId) async {
+    try {
+      await firebaseRequestService.deleteRequest(postId);
+    } catch (e) {
+      print("RequestProvider deleteRequest error: " + e.toString());
+    }
+  }
 }

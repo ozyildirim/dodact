@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -105,6 +107,23 @@ class UploadService {
 
     var url = await (await uploadTask).ref.getDownloadURL();
     return url;
+  }
+
+  Future<void> deletePostMedia(String postId) async {
+    var postRef = storageRef.child('posts').child(postId);
+
+    postRef
+        .listAll()
+        .then(
+          (files) => {
+            files.items.forEach((file) {
+              file.delete();
+            }),
+          },
+        )
+        .catchError((error) {
+      print(error);
+    });
   }
 
 // FirebaseFirestore.instance.collection('users').doc(user.id).update({

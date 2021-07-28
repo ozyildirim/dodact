@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/request_model.dart';
@@ -113,16 +114,20 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deletePost(String postId, {bool isNotify}) async {
+  Future<void> deletePost(String postId, bool isInStorage) async {
     try {
-      changeState(true, isNotify: isNotify);
-      //TODO: Storage için de silme fonk. eklemek lazım
-      return await postRepository.delete(postId);
+      await postRepository.delete(postId).then((_) async {
+        if (isInStorage) {
+          await UploadService().deletePostMedia(postId);
+        }
+      });
+      PostModel selectedPost =
+          postList.firstWhere((element) => element.postId == postId);
+      postList.remove(selectedPost);
+      notifyListeners();
     } catch (e) {
       print("PostProvider delete error:  " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 

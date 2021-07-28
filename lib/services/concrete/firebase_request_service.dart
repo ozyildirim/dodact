@@ -24,4 +24,12 @@ class FirebaseRequestService {
     }
     return userRequests;
   }
+
+  Future<void> deleteRequest(String postId) async {
+    var querySnapshot =
+        await requestsRef.where('subjectId', isEqualTo: postId).get();
+    for (var doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+  }
 }

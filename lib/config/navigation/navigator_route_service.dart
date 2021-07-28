@@ -81,7 +81,7 @@ class NavigationRouteManager {
       case k_ROUTE_GROUPS_PAGE:
         return _navigateToDefault(GroupsPage(), settings);
       case k_ROUTE_GROUP_DETAIL:
-        return _navigateToDefault(GroupDetailPage(groupModel: args), settings);
+        return _navigateToDefault(GroupDetailPage(groupId: args), settings);
       case k_ROUTE_USER_PROFILE:
         return _navigateToDefault(ProfilePage(), settings);
 
