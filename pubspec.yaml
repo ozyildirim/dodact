@@ -31,7 +31,10 @@ dependencies:
   multi_image_picker: ^4.8.0
   introduction_screen: ^2.1.0
   youtube_player_flutter: ^8.0.0
+  faker: ^2.0.0
   #TODO: buradan diğer navbarı sil
+
+  comment_box: ^0.0.16
 
   flutter_vector_icons: ^1.0.0
   cool_alert: ^1.0.3

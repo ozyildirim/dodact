@@ -5,6 +5,7 @@ import 'package:dodact_v1/config/navigation/navigator_route_service.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/provider/announcement_provider.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/comment_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => RequestProvider()),
+        ChangeNotifierProvider(create: (_) => CommentProvider()),
       ],
       child: MaterialApp(
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,

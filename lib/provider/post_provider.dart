@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/request_model.dart';

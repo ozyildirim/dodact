@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/model/comment_model.dart';
 
 class PostModel {
   String postId;
@@ -13,7 +12,7 @@ class PostModel {
   int claps;
   bool isVideo;
   bool isLocatedInYoutube;
-  List<CommentModel> comments;
+
   List<dynamic> supportersId;
   String postContentType;
 
@@ -30,7 +29,6 @@ class PostModel {
     this.postContentURL,
     this.isVideo,
     this.claps,
-    this.comments,
     this.supportersId,
     this.isLocatedInYoutube,
     this.postContentType,
@@ -48,7 +46,6 @@ class PostModel {
         postContentURL = json['postContentURL'],
         isVideo = json['isVideo'],
         claps = json['claps'],
-        comments = json['comments'],
         isLocatedInYoutube = json['isLocatedInYoutube'],
         supportersId = json['supportersId'],
         postContentType = json['postContentType'],
@@ -66,7 +63,7 @@ class PostModel {
     data['postContentURL'] = this.postContentURL;
     data['isVideo'] = this.isVideo;
     data['claps'] = this.claps;
-    data['comments'] = this.comments;
+
     data['supportersId'] = this.supportersId;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;
