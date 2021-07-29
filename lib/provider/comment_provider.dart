@@ -23,6 +23,7 @@ class CommentProvider extends ChangeNotifier {
   Future<void> saveComment(CommentModel comment, String postId) async {
     try {
       await firebaseCommentService.saveComment(comment, postId).then((value) {
+        comment.commentId = value;
         comments.add(comment);
         notifyListeners();
       });

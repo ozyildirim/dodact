@@ -93,11 +93,11 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
                         ))
                     : null,
                 key: Key(comment.toString()),
-                onDismissed: (DismissDirection direction) {
+                onDismissed: (DismissDirection direction) async {
                   if (direction == DismissDirection.startToEnd) {
-                    reportComment(comment.commentId);
+                    await reportComment(comment.commentId);
                   } else {
-                    deleteComment(comment.commentId);
+                    await deleteComment(comment.commentId);
                   }
                 },
 
@@ -111,6 +111,9 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
                 },
 
                 child: ListTile(
+                  onLongPress: () {
+                    print(comment.commentId);
+                  },
                   leading: CircleAvatar(),
                   title: Text(comment.comment),
                   subtitle: Text(comment.authorId),

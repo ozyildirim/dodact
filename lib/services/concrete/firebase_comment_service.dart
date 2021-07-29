@@ -16,19 +16,16 @@ class FirebaseCommentService {
     return comments;
   }
 
-  Future<void> saveComment(CommentModel comment, String postId) async {
-    await postsRef
+  Future<String> saveComment(CommentModel comment, String postId) async {
+    return await postsRef
         .doc(postId)
         .collection("comments")
         .add(comment.toJson())
         .then((value) async {
-      return await postsRef
-          .doc(postId)
-          .collection("comments")
-          .doc(value.id)
-          .update({
+      await postsRef.doc(postId).collection("comments").doc(value.id).update({
         "commentId": value.id,
       });
+      return value.id;
     });
   }
 

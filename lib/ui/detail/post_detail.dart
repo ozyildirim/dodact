@@ -230,21 +230,16 @@ class _PostDetailState extends BaseState<PostDetail> {
             children: [
               TextFieldContainer(
                 child: FormBuilderTextField(
-                  textInputAction: TextInputAction.next,
                   focusNode: focusNode,
                   controller: commentController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  name: "postDescription",
-                  onSubmitted: (_) {
-                    commentController.text = "";
-                  },
+                  name: "comment",
                   maxLines: 3,
                   autofocus: false,
                   keyboardType: TextInputType.text,
                   cursorColor: kPrimaryColor,
                   decoration: InputDecoration(
                       icon: Icon(
-                        Icons.people_alt_sharp,
+                        FontAwesome5Regular.comment_dots,
                         color: kPrimaryColor,
                       ),
                       hintText: "Harika bir içerik!",
@@ -314,6 +309,8 @@ class _PostDetailState extends BaseState<PostDetail> {
     newComment.commentDate = DateTime.now();
 
     await commentProvider.saveComment(newComment, widget.postId);
+
+    commentController.text = "";
   }
 
   Future<void> _showDeletePostDialog() async {
