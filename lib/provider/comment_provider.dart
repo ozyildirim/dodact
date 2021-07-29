@@ -30,4 +30,16 @@ class CommentProvider extends ChangeNotifier {
       print("CommentProvider saveComment error: $e");
     }
   }
+
+  Future<void> deleteComment(String commentId, String postId) async {
+    try {
+      await firebaseCommentService.deleteComment(commentId, postId);
+      var comment =
+          comments.firstWhere((element) => element.commentId == commentId);
+      comments.remove(comment);
+      notifyListeners();
+    } catch (e) {
+      print("CommentProvider deleteComment error: $e");
+    }
+  }
 }

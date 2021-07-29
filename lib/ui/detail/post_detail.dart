@@ -14,10 +14,11 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/detail/widgets/post_detail_comments_part.dart';
+import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -44,7 +45,11 @@ class _PostDetailState extends BaseState<PostDetail> {
   FocusNode focusNode = new FocusNode();
 
   bool isCurrentUserPostOwner() {
-    return authProvider.currentUser.postIDs.contains(widget.postId);
+    if (authProvider.currentUser.postIDs != null &&
+        authProvider.currentUser.postIDs.contains(widget.postId)) {
+      return true;
+    }
+    return false;
   }
 
   Future _obtainPostFuture(BuildContext context) {
@@ -58,11 +63,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> _getCreatorData(BuildContext context, String creatorId) async {
-    await Provider.of<UserProvider>(context)
-        .getUserByID(creatorId)
-        .then((userInfo) {
-      _creator = userInfo;
-    });
+    await Provider.of<UserProvider>(context).getOtherUser(creatorId);
   }
 
   @override
@@ -137,21 +138,37 @@ class _PostDetailState extends BaseState<PostDetail> {
                   case "Video":
                     return SingleChildScrollView(
                       child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [buildVideoDetail(), buildCommentBox()],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          buildHeaderVideo(),
+                          buildPostBodyPart(),
+                          buildCommentBox()
+                        ],
                       ),
                     );
                     break;
                   case "Görüntü":
-                    return Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [buildImageDetail(), buildCommentBox()],
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          buildHeaderImage(),
+                          buildPostBodyPart(),
+                          buildCommentBox()
+                        ],
+                      ),
                     );
                     break;
                   case "Ses":
-                    return Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [buildRecordDetail(), buildCommentBox()],
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          buildHeaderAudio(),
+                          buildPostBodyPart(),
+                          buildCommentBox()
+                        ],
+                      ),
                     );
                     break;
                 }
@@ -163,97 +180,42 @@ class _PostDetailState extends BaseState<PostDetail> {
     );
   }
 
-  Widget buildVideoDetail() {
-    return Container(
-      child: Column(children: [
-        YoutubePlayer(
-          controller: YoutubePlayerController(
-            initialVideoId: YoutubePlayer.convertUrlToId(
-                post.postContentURL), //Add videoID.
-            flags: YoutubePlayerFlags(
-              hideControls: false,
-              controlsVisibleAtStart: true,
-              autoPlay: false,
-              mute: false,
-            ),
-          ),
-          showVideoProgressIndicator: true,
-          progressIndicatorColor: Colors.blueAccent,
-        ),
-        buildPostBodyPart()
-      ]),
-    );
-  }
-
-  Widget buildImageDetail() {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            height: 250,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: NetworkImage(post.postContentURL),
-            )),
-          ),
-          buildPostBodyPart(),
-        ],
-      ),
-    );
-  }
-
-  Widget buildRecordDetail() {}
-
   Widget buildPostBodyPart() {
     return Column(
       children: [
-        ListTile(
-            leading: InkWell(
-              onTap: () {
-                navigateToOwnerProfile();
-              },
-              child: CircleAvatar(
-                backgroundImage: _creator != null
-                    ? NetworkImage(_creator.profilePictureURL)
-                    : null,
+        PostDetailInfoPart(),
+        buildPostDescriptionCard(),
+        PostCommentsPart(post.postId, post.ownerId),
+      ],
+    );
+  }
+
+  Widget buildPostDescriptionCard() {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: Colors.amberAccent,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 100,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("İçerik Açıklaması",
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 20, color: Colors.grey)),
+              SizedBox(
+                height: 8,
               ),
-            ),
-            title: Center(child: Text(post.postTitle)),
-            subtitle: _creator != null
-                ? Center(child: Text(_creator.nameSurname))
-                : null,
-            trailing: post.supportersId.length != null
-                ? Text("${post.supportersId.length} Dod")
-                : null),
-        Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          color: Colors.amberAccent,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: 100,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("İçerik Açıklaması",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 20, color: Colors.grey)),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    post.postDescription,
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
+              Text(
+                post.postDescription,
+                style: TextStyle(fontSize: 14),
               ),
-            ),
+            ],
           ),
         ),
-        CommentsPart(post.postId),
-      ],
+      ),
     );
   }
 
@@ -308,6 +270,42 @@ class _PostDetailState extends BaseState<PostDetail> {
         ));
   }
 
+  Widget buildHeaderVideo() {
+    return Container(
+      child: YoutubePlayer(
+        controller: YoutubePlayerController(
+          initialVideoId:
+              YoutubePlayer.convertUrlToId(post.postContentURL), //Add videoID.
+          flags: YoutubePlayerFlags(
+            hideControls: false,
+            controlsVisibleAtStart: true,
+            autoPlay: false,
+            mute: false,
+          ),
+        ),
+        showVideoProgressIndicator: true,
+        progressIndicatorColor: Colors.blueAccent,
+      ),
+    );
+  }
+
+  Widget buildHeaderImage() {
+    return Container(
+      height: 250,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: NetworkImage(post.postContentURL),
+      )),
+    );
+  }
+
+  Widget buildHeaderAudio() {
+    //TODO: Ses player eklenecek.
+  }
+
+  //Fonksiyonlar
+
   void submitComment(BuildContext context) async {
     var commentProvider = Provider.of<CommentProvider>(context, listen: false);
     CommentModel newComment = new CommentModel();
@@ -316,20 +314,6 @@ class _PostDetailState extends BaseState<PostDetail> {
     newComment.commentDate = DateTime.now();
 
     await commentProvider.saveComment(newComment, widget.postId);
-  }
-
-  void navigateToOwnerProfile() {
-    if (post.ownerType == "User") {
-      if (post.ownerId == authProvider.currentUser.uid) {
-        return null;
-      } else {
-        NavigationService.instance
-            .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: post.ownerId);
-      }
-    } else {
-      NavigationService.instance
-          .navigate(k_ROUTE_GROUP_DETAIL, args: post.ownerId);
-    }
   }
 
   Future<void> _showDeletePostDialog() async {
@@ -388,63 +372,5 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //
-  }
-}
-
-class CommentsPart extends StatefulWidget {
-  String postId;
-  CommentsPart(this.postId);
-  @override
-  _CommentsPartState createState() => _CommentsPartState();
-}
-
-class _CommentsPartState extends BaseState<CommentsPart> {
-  @override
-  void initState() {
-    Provider.of<CommentProvider>(context, listen: false)
-        .getPostComments(widget.postId)
-        .then((value) {
-      print(value);
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final commentProvider = Provider.of<CommentProvider>(context);
-
-    if (commentProvider.comments.isEmpty) {
-      return Center(child: spinkit);
-    } else {
-      return Container(
-        height: 220,
-        child: ListView.builder(
-            itemCount: commentProvider.comments.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: CircleAvatar(),
-                title: Text(commentProvider.comments[index].comment),
-                subtitle: Text(commentProvider.comments[index].authorId),
-                trailing: Column(
-                  children: [
-                    Text(DateFormat("dd:MM hh:MM")
-                        .format(commentProvider.comments[index].commentDate)),
-                    // if (commentProvider.comments[index].authorId ==
-                    //     authProvider.currentUser.uid)
-                    //   PopupMenuButton(iconSize: ,
-                    //       itemBuilder: (context) => [
-                    //             PopupMenuItem(
-                    //                 child: IconButton(
-                    //                     icon: Icon(
-                    //                       FontAwesome5Regular.trash_alt,
-                    //                     ),
-                    //                     onPressed: () {}))
-                    //           ])
-                  ],
-                ),
-              );
-            }),
-      );
-    }
   }
 }

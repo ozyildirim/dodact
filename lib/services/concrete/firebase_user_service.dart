@@ -52,13 +52,4 @@ class FirebaseUserService {
     print(_fetchedUserObject.toString());
     return _fetchedUserObject;
   }
-
-  Future<void> reportUser(String reporterId, String reportedUserId) async {
-    DocumentReference reference = await reportsRef.add({
-      'isUser': true,
-      'reporterId': reporterId,
-      'reportedUserId': reportedUserId,
-      'reportedTime': new DateTime.now()
-    });
-  }
 }

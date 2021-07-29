@@ -32,11 +32,11 @@ class FirebaseCommentService {
     });
   }
 
-  Future<void> deleteComment() async {}
+  Future<void> deleteComment(String commentId, String postId) async {
+    await postsRef.doc(postId).collection("comments").doc(commentId).delete();
+  }
 
   Future<void> likeComment() async {}
 
   Future<void> unlikeComment() async {}
-
-  Future<void> reportComment() async {}
 }

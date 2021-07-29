@@ -43,13 +43,13 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
     super.initState();
   }
 
-  void reportUser() {
-    FirebaseUserService()
-        .reportUser(authProvider.currentUser.uid, otherUserID)
-        .then((value) {
-      return AlertDialog();
-    }).catchError((error) => {print(error.toString())});
-  }
+  // void reportUser() {
+  //   FirebaseUserService()
+  //       .reportUser(authProvider.currentUser.uid, otherUserID)
+  //       .then((value) {
+  //     return AlertDialog();
+  //   }).catchError((error) => {print(error.toString())});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
                                   leading: Icon(Icons.report),
                                   title: Text("Bildir"),
                                   onTap: () {
-                                    reportUser();
+                                    // reportUser();
                                   },
                                 ),
                               )
