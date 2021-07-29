@@ -148,6 +148,4 @@ class EventProvider extends ChangeNotifier {
       changeState(false);
     }
   }
-
- 
 }

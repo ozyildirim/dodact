@@ -19,9 +19,15 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/app/app-background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
           children: [
             RefreshIndicator(
               onRefresh: () => _refreshEvents(),

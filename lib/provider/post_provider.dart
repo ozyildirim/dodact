@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/request_model.dart';
@@ -13,8 +14,8 @@ import 'package:flutter/cupertino.dart';
 
 class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
-  AuthProvider authProvider = AuthProvider();
-  GroupProvider groupProvider = GroupProvider();
+  AuthProvider _authProvider = AuthProvider();
+  GroupProvider _groupProvider = GroupProvider();
   FirebaseRequestService requestService = FirebaseRequestService();
 
   PostModel post;
@@ -54,10 +55,10 @@ class PostProvider extends ChangeNotifier {
         //ve post sahibinin post listesine ekleniyor.
 
         if (newPost.ownerType == "User") {
-          await authProvider.editUserPostDetail(
+          await _authProvider.editUserPostDetail(
               newPost.postId, newPost.ownerId, true);
         } else if (newPost.ownerType == "Group") {
-          await groupProvider.editGroupPostList(
+          await _groupProvider.editGroupPostList(
               newPost.postId, newPost.ownerId, true);
         } else {
           print("User type sıkıntısı");
@@ -86,9 +87,9 @@ class PostProvider extends ChangeNotifier {
 
         //ve post sahibinin post listesine ekleniyor.
         if (newPost.ownerType == "User") {
-          await authProvider.editUserPostDetail(postId, newPost.ownerId, true);
+          await _authProvider.editUserPostDetail(postId, newPost.ownerId, true);
         } else if (newPost.ownerType == "Group") {
-          await groupProvider.editGroupPostList(postId, newPost.ownerId, true);
+          await _groupProvider.editGroupPostList(postId, newPost.ownerId, true);
         }
       }
     } catch (e) {
@@ -166,13 +167,36 @@ class PostProvider extends ChangeNotifier {
   Future<bool> update(String postId, Map<String, dynamic> changes,
       {bool isNotify}) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await postRepository.update(postId, changes).then((value) => true);
+      return await postRepository.update(postId, changes).then((value) async {
+        await getDetail(postId);
+        return true;
+      });
     } catch (e) {
       print("PostProvider update error: " + e.toString());
       return false;
-    } finally {
-      changeState(false);
+    }
+  }
+
+  Future<void> changePostDoddedStatus(
+      String postId, String userId, bool dodOrUndod) async {
+    try {
+      if (dodOrUndod) {
+        await postRepository.update(postId, {
+          'supportersId': FieldValue.arrayUnion([userId])
+        }).then((_) {
+          post.supportersId.add(userId);
+          notifyListeners();
+        });
+      } else {
+        await postRepository.update(postId, {
+          'supportersId': FieldValue.arrayRemove([userId])
+        }).then((_) {
+          post.supportersId.remove(userId);
+          notifyListeners();
+        });
+      }
+    } catch (e) {
+      print("PostProvider changePostDoddedStatus error: " + e.toString());
     }
   }
 

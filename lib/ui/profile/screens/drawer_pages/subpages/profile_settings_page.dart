@@ -105,7 +105,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               Divider(),
               Text("E-posta Adresi"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * 0.9,
                 child: TextField(
                   controller: _emailController,
                   readOnly: true,
@@ -117,7 +117,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               ),
               Text("Ad - Soyad"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * 0.9,
                 child: TextField(
                   focusNode: _nameSurnameFocus,
                   controller: _nameSurnameController,
@@ -134,7 +134,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               ),
               Text("Kullanıcı Adı"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * 0.9,
                 child: TextField(
                   focusNode: _usernameFocus,
                   controller: _usernameController,
@@ -153,7 +153,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               InkWell(
                 onTap: () => _showLocationPicker(),
                 child: TextFieldContainer(
-                  width: mediaQuery.size.width * 0.8,
+                  width: mediaQuery.size.width * 0.9,
                   child: TextField(
                     enabled: false,
                     readOnly: true,
@@ -170,7 +170,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               Divider(),
               Text("Youtube"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * 0.9,
                 child: TextField(
                   focusNode: _youtubeFocus,
                   controller: _youtubeController,
@@ -187,7 +187,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               ),
               Text("LinkedIn"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * 0.9,
                 child: TextField(
                   focusNode: _linkedInFocus,
                   controller: _linkedInController,
@@ -204,7 +204,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               ),
               Text("Dribbble"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * 0.9,
                 child: TextField(
                   focusNode: _dribbbleFocus,
                   controller: _dribbbleController,
@@ -221,7 +221,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               ),
               Text("SoundCloud"),
               TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * 0.9,
                 child: TextField(
                   focusNode: _soundCloudFocus,
                   controller: _soundCloudController,

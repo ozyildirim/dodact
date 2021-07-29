@@ -20,123 +20,119 @@ class _SignUpDetail_2State extends BaseState<SignUpDetail_2> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          backwardsCompatibility: true,
-          iconTheme: IconThemeData(color: Colors.black),
-          actions: [
-            FlatButton(
-                onPressed: () {
-                  _uploadDefaultPicture();
-                },
-                child: Text("Atla"))
-          ],
-        ),
-        body: Container(
-          width: dynamicWidth(1),
-          child: Column(
-            children: [
-              upperPart(),
-              Expanded(
-                  flex: 3,
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: _profilePicture == null
-                                ? NetworkImage(
-                                    "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png")
-                                : FileImage(File(_profilePicture.path)),
-                            radius: 80,
-                            backgroundColor: Colors.transparent,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        builder: (context) {
-                                          return Container(
-                                            height: 120,
-                                            child: Column(
-                                              children: [
-                                                ListTile(
-                                                  leading: Icon(Icons.image),
-                                                  title: Text("Galeriden Seç"),
-                                                  onTap: () {
-                                                    _takePhotoFromGallery(
-                                                        context);
-                                                  },
-                                                ),
-                                                ListTile(
-                                                  leading: Icon(Icons.camera),
-                                                  title: Text("Kameradan Çek"),
-                                                  onTap: () {
-                                                    _takePhotoFromCamera(
-                                                        context);
-                                                  },
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.bottomRight,
-                                    child: Text("Fotoğraf Seç"),
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
-                                    padding: EdgeInsets.all(16),
-                                  ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        backwardsCompatibility: true,
+        iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          FlatButton(
+              onPressed: () {
+                _uploadDefaultPicture();
+              },
+              child: Text("Atla"))
+        ],
+      ),
+      body: Container(
+        width: dynamicWidth(1),
+        child: Column(
+          children: [
+            upperPart(),
+            Expanded(
+                flex: 3,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: _profilePicture == null
+                              ? NetworkImage(
+                                  "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png")
+                              : FileImage(File(_profilePicture.path)),
+                          radius: 80,
+                          backgroundColor: Colors.transparent,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return Container(
+                                          height: 120,
+                                          child: Column(
+                                            children: [
+                                              ListTile(
+                                                leading: Icon(Icons.image),
+                                                title: Text("Galeriden Seç"),
+                                                onTap: () {
+                                                  _takePhotoFromGallery(
+                                                      context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.camera),
+                                                title: Text("Kameradan Çek"),
+                                                onTap: () {
+                                                  _takePhotoFromCamera(context);
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      });
+                                },
+                                child: Container(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text("Fotoğraf Seç"),
+                                  decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(30)),
+                                  padding: EdgeInsets.all(16),
                                 ),
                               ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _profilePicture != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Container(
-                                        alignment: Alignment.bottomRight,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            _updateProfilePhoto(context);
-                                          },
-                                          child: CircleAvatar(
-                                            backgroundColor: Colors.black,
-                                            radius: 30,
-                                            child: Text(
-                                              "Yükle",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _profilePicture != null
+                                ? Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Container(
+                                      alignment: Alignment.bottomRight,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _updateProfilePhoto(context);
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.black,
+                                          radius: 30,
+                                          child: Text(
+                                            "Yükle",
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ),
-                                    )
-                                  : Container()
-                            ],
-                          ),
-                        ],
-                      ),
+                                    ),
+                                  )
+                                : Container()
+                          ],
+                        ),
+                      ],
                     ),
-                  )),
-              bottomPart()
-            ],
-          ),
+                  ),
+                )),
+            bottomPart()
+          ],
         ),
       ),
     );

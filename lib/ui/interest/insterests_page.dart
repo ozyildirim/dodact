@@ -11,25 +11,23 @@ class InterestsPage extends StatefulWidget {
 class _InterestsPageState extends BaseState<InterestsPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          actionsIconTheme: IconThemeData(color: Colors.black),
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
-          backwardsCompatibility: false,
-          actions: [
-            IconButton(icon: Icon(Icons.info_outline), onPressed: () {}),
-            IconButton(
-                icon: Icon(Icons.home),
-                onPressed: () {
-                  _navigateToLanding();
-                })
-          ],
-        ),
-        body: Container(),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        actionsIconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
+        backwardsCompatibility: false,
+        actions: [
+          IconButton(icon: Icon(Icons.info_outline), onPressed: () {}),
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                _navigateToLanding();
+              })
+        ],
       ),
+      body: Container(),
     );
   }
 

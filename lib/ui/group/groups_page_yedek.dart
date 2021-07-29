@@ -32,39 +32,37 @@ class _GroupsPageState extends BaseState<GroupsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Consumer<GroupProvider>(
-          builder: (_, provider, child) {
-            if (provider.groupList != null) {
-              if (provider.groupList.isNotEmpty) {
-                List<GroupModel> groups = provider.groupList;
-                print(provider.groupList.length);
-                return SingleChildScrollView(
-                  child: Container(
-                    height: dynamicHeight(1),
-                    color: Color(0xFFF1F0F2),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: filterBar(),
-                        ),
-                        FilteredGroupView()
-                      ],
-                    ),
+    return Scaffold(
+      body: Consumer<GroupProvider>(
+        builder: (_, provider, child) {
+          if (provider.groupList != null) {
+            if (provider.groupList.isNotEmpty) {
+              List<GroupModel> groups = provider.groupList;
+              print(provider.groupList.length);
+              return SingleChildScrollView(
+                child: Container(
+                  height: dynamicHeight(1),
+                  color: Color(0xFFF1F0F2),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: filterBar(),
+                      ),
+                      FilteredGroupView()
+                    ],
                   ),
-                );
-              } else {
-                return Center(
-                  child: spinkit,
-                );
-              }
+                ),
+              );
             } else {
-              return Center(child: spinkit);
+              return Center(
+                child: spinkit,
+              );
             }
-          },
-        ),
+          } else {
+            return Center(child: spinkit);
+          }
+        },
       ),
     );
   }

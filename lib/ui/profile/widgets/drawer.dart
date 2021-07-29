@@ -28,6 +28,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
+                fit: BoxFit.cover,
                 image: AssetImage("assets/images/drawerBg.jpg"),
               ),
             ),
@@ -66,11 +67,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
-            onTap: () {},
-          ),
-          ListTile(
             leading: Icon(Icons.settings),
             title: Text("Ayarlarım", style: TextStyle(fontSize: 18)),
             onTap: () {
@@ -81,6 +77,11 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             leading: Icon(Icons.report),
             title:
                 Text("Şikayet/Bildiri/Öneri", style: TextStyle(fontSize: 18)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
             onTap: () {},
           ),
           ListTile(

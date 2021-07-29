@@ -6,7 +6,6 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/comment_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
-import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/comment_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
@@ -37,7 +36,6 @@ class _PostDetailState extends BaseState<PostDetail> {
   String videoId;
   PostModel post;
   Future _postFuture;
-  UserObject _creator;
 
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController commentController = TextEditingController();

@@ -7,6 +7,7 @@ import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/common_widgets/about_dodact_page.dart';
 
 import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/event_creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
@@ -126,6 +127,9 @@ class NavigationRouteManager {
               postCategory: args[1],
             ),
             settings);
+
+      case k_ROUTE_CREATE_EVENT_PAGE:
+        return _navigateToDefault(EventCreationPage(), settings);
 
       case k_ROUTE_STORY_VIEW:
         List<dynamic> args = settings.arguments;

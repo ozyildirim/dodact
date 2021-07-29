@@ -33,21 +33,24 @@ class _GroupsPageState extends State<GroupsPage> {
     final groupProvider = Provider.of<GroupProvider>(context);
 
     final mediaQuery = MediaQuery.of(context);
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            height: mediaQuery.size.height - 56,
-            color: Color(0xFFF1F0F2),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _buildFilterBar(),
-                ),
-                FilteredGroupView()
-              ],
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/app/app-background.png"),
+              fit: BoxFit.cover,
             ),
+          ),
+          height: mediaQuery.size.height - 56,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _buildFilterBar(),
+              ),
+              FilteredGroupView()
+            ],
           ),
         ),
       ),

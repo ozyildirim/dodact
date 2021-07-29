@@ -1,6 +1,7 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 // ignore: must_be_immutable
 class CreationPage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _CreationPageState extends State<CreationPage> {
       title: Text('İçerik Türü'),
       children: [
         SimpleDialogItem(
-          icon: Icons.image,
+          icon: FontAwesome5Solid.image,
           color: Colors.orange,
           text: 'Görüntü',
           onPressed: () {
@@ -28,7 +29,7 @@ class _CreationPageState extends State<CreationPage> {
           },
         ),
         SimpleDialogItem(
-          icon: Icons.video_call,
+          icon: FontAwesome5Solid.video,
           color: Colors.green,
           text: 'Video',
           onPressed: () {
@@ -53,7 +54,7 @@ class _CreationPageState extends State<CreationPage> {
       title: Text('Kategori'),
       children: [
         SimpleDialogItem(
-          icon: Icons.image,
+          icon: FontAwesome5Solid.theater_masks,
           color: Colors.orange,
           text: 'Tiyatro',
           onPressed: () {
@@ -61,7 +62,7 @@ class _CreationPageState extends State<CreationPage> {
           },
         ),
         SimpleDialogItem(
-          icon: Icons.video_call,
+          icon: FontAwesome5Solid.palette,
           color: Colors.green,
           text: 'Resim',
           onPressed: () {
@@ -69,7 +70,7 @@ class _CreationPageState extends State<CreationPage> {
           },
         ),
         SimpleDialogItem(
-          icon: Icons.audiotrack,
+          icon: FontAwesome5Solid.music,
           color: Colors.grey,
           text: 'Müzik',
           onPressed: () {
@@ -77,7 +78,7 @@ class _CreationPageState extends State<CreationPage> {
           },
         ),
         SimpleDialogItem(
-          icon: Icons.audiotrack,
+          icon: FontAwesome5Solid.user_ninja,
           color: Colors.grey,
           text: 'Dans',
           onPressed: () {

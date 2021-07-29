@@ -155,7 +155,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             children: [
               Text("İçerik Başlığı",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              SizedBox(height: 2),
+              SizedBox(height: 4),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -201,9 +201,10 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                   ),
                 ),
               ),
+              SizedBox(height: 6),
               Text("İçerik Açıklaması",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              SizedBox(height: 2),
+              SizedBox(height: 4),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),

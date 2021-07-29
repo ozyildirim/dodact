@@ -53,205 +53,203 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Consumer<UserProvider>(
-        builder: (_, provider, child) {
-          if (provider.isLoading == false) {
-            if (provider.otherUser != null) {
-              return Scaffold(
-                extendBodyBehindAppBar: true,
-                appBar: AppBar(
-                  iconTheme: IconThemeData(color: Colors.white),
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                  actions: [
-                    PopupMenuButton(
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                child: ListTile(
-                                  leading: Icon(Icons.report),
-                                  title: Text("Bildir"),
-                                  onTap: () {
-                                    // reportUser();
-                                  },
-                                ),
-                              )
-                            ])
-                  ],
-                ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                          overflow: Overflow.visible,
-                          fit: StackFit.passthrough,
-                          children: [
-                            Container(
-                              height: 206,
-                              decoration: BoxDecoration(
-                                  color: oxfordBlue,
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(50),
-                                      bottomRight: Radius.circular(50))),
-                            ),
-                            Positioned(
-                              top: 80,
-                              left: (dynamicWidth(1) - 330) / 2,
-                              child: Container(
-                                width: 330,
-                                height: 220,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(30),
-                                    boxShadow: [
-                                      //TODO: BoxShadow u değiştir.
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: const Offset(
-                                          1.0,
-                                          1.0,
-                                        ),
-                                        blurRadius: 10.0,
-                                        spreadRadius: 2.0,
-                                      ), //BoxShadow
-                                      //BoxShadow
-                                    ]),
-                                child: ProfileInfoPart(provider.otherUser),
+    return Consumer<UserProvider>(
+      builder: (_, provider, child) {
+        if (provider.isLoading == false) {
+          if (provider.otherUser != null) {
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              appBar: AppBar(
+                iconTheme: IconThemeData(color: Colors.white),
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                actions: [
+                  PopupMenuButton(
+                      itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: Icon(Icons.report),
+                                title: Text("Bildir"),
+                                onTap: () {
+                                  // reportUser();
+                                },
                               ),
                             )
-                          ]),
-                      SizedBox(
-                        height: 130,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "Kazandığı Rozetler",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Container(
-                          height: 1,
-                          color: Colors.grey.shade300,
-                          width: dynamicWidth(0.90),
-                        ),
-                      ),
-                      Container(
-                        height: 150.0,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
-                              ),
+                          ])
+                ],
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                        overflow: Overflow.visible,
+                        fit: StackFit.passthrough,
+                        children: [
+                          Container(
+                            height: 206,
+                            decoration: BoxDecoration(
+                                color: oxfordBlue,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(50),
+                                    bottomRight: Radius.circular(50))),
+                          ),
+                          Positioned(
+                            top: 80,
+                            left: (dynamicWidth(1) - 330) / 2,
+                            child: Container(
+                              width: 330,
+                              height: 220,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
+                                  boxShadow: [
+                                    //TODO: BoxShadow u değiştir.
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: const Offset(
+                                        1.0,
+                                        1.0,
+                                      ),
+                                      blurRadius: 10.0,
+                                      spreadRadius: 2.0,
+                                    ), //BoxShadow
+                                    //BoxShadow
+                                  ]),
+                              child: ProfileInfoPart(provider.otherUser),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar2.jpg?alt=media&token=68b5edcd-30e5-436e-84a3-990156fcfae5"),
-                              ),
+                          )
+                        ]),
+                    SizedBox(
+                      height: 130,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        "Kazandığı Rozetler",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Container(
+                        height: 1,
+                        color: Colors.grey.shade300,
+                        width: dynamicWidth(0.90),
+                      ),
+                    ),
+                    Container(
+                      height: 150.0,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                  "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                  "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar2.jpg?alt=media&token=68b5edcd-30e5-436e-84a3-990156fcfae5"),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                  "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                  "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
                             ),
-                          ],
-                        ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                  "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/rozetler%2Fguitar.jpeg?alt=media&token=a9eef8bb-42f2-408b-835c-3534cf757d15"),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 5,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        "Popüler Paylaşımlar",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "Popüler Paylaşımlar",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start,
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Container(
+                        height: 1,
+                        color: Colors.grey.shade300,
+                        width: dynamicWidth(0.90),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Container(
-                          height: 1,
-                          color: Colors.grey.shade300,
-                          width: dynamicWidth(0.90),
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Container(
+                        height: 250.0,
+                        child: ListUserPosts(),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Container(
-                          height: 250.0,
-                          child: ListUserPosts(),
-                        ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        "Katıldığı Etkinlikler",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
                       ),
-                      SizedBox(
-                        height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Container(
+                        height: 1,
+                        color: Colors.grey.shade300,
+                        width: dynamicWidth(0.90),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          "Katıldığı Etkinlikler",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Container(
-                          height: 1,
-                          color: Colors.grey.shade300,
-                          width: dynamicWidth(0.90),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: ListUserEvents(),
-                      )
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ListUserEvents(),
+                    )
+                  ],
                 ),
-              );
-            } else {
-              return Center(child: spinkit);
-            }
+              ),
+            );
           } else {
             return Center(child: spinkit);
           }
-        },
-      ),
+        } else {
+          return Center(child: spinkit);
+        }
+      },
     );
   }
 }

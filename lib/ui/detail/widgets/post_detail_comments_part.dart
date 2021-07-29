@@ -65,7 +65,7 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
                             ],
                           ),
                         ))
-                    : null,
+                    : Container(),
                 // Container(
                 //     color: Colors.white,
                 //     child: Padding(
@@ -103,10 +103,13 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
 
                 // ignore: missing_return
                 confirmDismiss: (DismissDirection direction) {
-                  if (direction == DismissDirection.startToEnd) {
+                  if (direction == DismissDirection.startToEnd &&
+                      (comment.authorId != authProvider.currentUser.uid ||
+                          widget.ownerId == authProvider.currentUser.uid)) {
                     _showReportCommentDialog(comment.commentId);
                   } else {
-                    _showDeleteCommentDialog(comment.commentId);
+                    if (authProvider.currentUser.uid == comment.authorId)
+                      _showDeleteCommentDialog(comment.commentId);
                   }
                 },
 

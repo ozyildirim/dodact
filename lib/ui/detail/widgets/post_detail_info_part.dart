@@ -8,6 +8,7 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
 class PostDetailInfoPart extends StatefulWidget {
@@ -18,6 +19,7 @@ class PostDetailInfoPart extends StatefulWidget {
 class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
   AuthProvider authProvider;
   UserObject creator;
+  bool isDodded;
 
   @override
   void initState() {
@@ -29,6 +31,10 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     var post = Provider.of<PostProvider>(context, listen: false).post;
     await Provider.of<UserProvider>(context, listen: false)
         .getOtherUser(post.ownerId);
+  }
+
+  bool checkIfDodded() {
+    return true;
   }
 
   @override
@@ -56,7 +62,27 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
               ? Center(child: Text(userProvider.otherUser.nameSurname))
               : null,
           trailing: post.supportersId.length != null
-              ? Text("${post.supportersId.length} Dod")
+              ? Column(
+                  children: [
+                    Consumer<PostProvider>(
+                      builder: (context, provider, child) {
+                        bool liked = provider.post.supportersId
+                            .contains(authProvider.currentUser.uid);
+
+                        return IconButton(
+                            onPressed: () async {
+                              await provider.changePostDoddedStatus(post.postId,
+                                  authProvider.currentUser.uid, !liked);
+                            },
+                            icon: liked
+                                ? Icon(FontAwesome5Regular.handshake,
+                                    color: Colors.red)
+                                : Icon(FontAwesome5Regular.handshake,
+                                    color: Colors.grey));
+                      },
+                    )
+                  ],
+                )
               : null);
     }
   }

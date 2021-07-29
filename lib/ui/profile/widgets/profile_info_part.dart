@@ -21,12 +21,10 @@ class ProfileInfoPart extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GFImageOverlay(
-                  height: 150,
-                  width: 150,
-                  image: NetworkImage(provider.currentUser.profilePictureURL),
-                  boxFit: BoxFit.cover,
-                  shape: BoxShape.circle,
+                CircleAvatar(
+                  maxRadius: 80,
+                  backgroundImage:
+                      NetworkImage(provider.currentUser.profilePictureURL),
                 ),
                 SizedBox(
                   height: 20,
