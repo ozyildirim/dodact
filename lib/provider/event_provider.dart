@@ -51,9 +51,9 @@ class EventProvider extends ChangeNotifier {
       newEvent.eventId = eventId;
 
       //Event resimleri upload ediliyor.
-      List<String> uploadedContents;
+      List<String> uploadedContents = [];
       await Future.wait(eventImages.map((file) async {
-        var contentURL = await UploadService()
+        await UploadService()
             .uploadEventMedia(
                 eventID: eventId,
                 fileNameAndExtension: file.path.split('/').last,

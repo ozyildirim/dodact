@@ -363,12 +363,12 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                                   errorStyle: Theme.of(context)
                                       .inputDecorationTheme
                                       .errorStyle),
-                              validator: FormBuilderValidators.compose(
-                                [
-                                  FormBuilderValidators.required(context,
-                                      errorText: "Bu alan boş bırakılamaz.")
-                                ],
-                              ),
+                              // validator: FormBuilderValidators.compose(
+                              //   [
+                              //     FormBuilderValidators.required(context,
+                              //         errorText: "Bu alan boş bırakılamaz.")
+                              //   ],
+                              // ),
                             ),
                           ),
                         ),

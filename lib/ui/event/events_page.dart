@@ -49,12 +49,14 @@ class _EventsPageState extends State<EventsPage> {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
-                              leading: CircleAvatar(
-                                radius: 50,
-                                backgroundImage: NetworkImage(
-                                  eventItem.eventImages[0],
-                                ),
-                              ),
+                              leading: eventItem != null
+                                  ? CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: NetworkImage(
+                                        eventItem.eventImages[0],
+                                      ),
+                                    )
+                                  : null,
                               title: Text(eventItem.eventTitle),
                               subtitle: Text(eventItem.eventDescription),
                               onTap: () => NavigationService.instance.navigate(

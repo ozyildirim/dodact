@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 class EventModel {
   bool approved;
@@ -45,7 +44,7 @@ class EventModel {
     eventURL = json['eventURL'];
     eventDate = (json['eventDate'] as Timestamp).toDate();
     eventCategory = json['eventCategory'];
-    eventImages = json['eventImages'].cast<String>();
+    eventImages = json['eventImages']?.cast<String>() ?? [];
     isOnline = json['isOnline'];
     eventLocationCoordinates = json['eventLocationCoordinates'];
     eventType = json['eventType'];
