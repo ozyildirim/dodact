@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -113,6 +112,23 @@ class UploadService {
     var postRef = storageRef.child('posts').child(postId);
 
     postRef
+        .listAll()
+        .then(
+          (files) => {
+            files.items.forEach((file) {
+              file.delete();
+            }),
+          },
+        )
+        .catchError((error) {
+      print(error);
+    });
+  }
+
+  Future<void> deleteEventMedia(String eventId) async {
+    var eventRef = storageRef.child('events').child(eventId);
+
+    eventRef
         .listAll()
         .then(
           (files) => {

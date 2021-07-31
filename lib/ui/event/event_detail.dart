@@ -1,3 +1,5 @@
+import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -5,7 +7,10 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
+import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -25,6 +30,22 @@ class EventDetailPage extends StatefulWidget {
 class _EventDetailPageState extends BaseState<EventDetailPage> {
   EventModel _event;
 
+  bool canUserControlEvent() {
+    if (_event.ownerType == 'Group') {
+      if (authProvider.currentUser.ownedGroupIDs.contains(_event.ownerId)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (_event.ownerType == "User") {
+      if (authProvider.currentUser.uid == _event.ownerId) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   @override
   void initState() {
     _event = widget.event;
@@ -36,6 +57,30 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: canUserControlEvent()
+            ? [
+                PopupMenuButton(
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: ListTile(
+                                leading: Icon(FontAwesome5Regular.trash_alt),
+                                title: Text("Sil"),
+                                onTap: () async {
+                                  await _showDeleteEventDialog();
+                                }),
+                          ),
+                          PopupMenuItem(
+                            child: ListTile(
+                              leading: Icon(FontAwesome5Solid.cogs),
+                              title: Text("Düzenle"),
+                              onTap: () async {
+                                await _showEditEventDialog();
+                              },
+                            ),
+                          ),
+                        ])
+              ]
+            : null,
         backgroundColor: Colors.transparent,
         elevation: 0,
         backwardsCompatibility: true,
@@ -87,7 +132,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
   }
 
   Widget _buildCreatorInfo() {
-    if (_event.ownerType == "Bireysel") {
+    if (_event.ownerType == "User") {
       final provider = Provider.of<UserProvider>(context, listen: false);
       return FutureBuilder(
         future: provider.getOtherUser(_event.ownerId),
@@ -133,7 +178,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
           }
         },
       );
-    } else if (_event.ownerType == "Grup") {
+    } else if (_event.ownerType == "Group") {
       final provider = Provider.of<GroupProvider>(context, listen: false);
       return FutureBuilder(
         future: provider.getGroupDetail(_event.ownerId),
@@ -236,4 +281,50 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
       ),
     );
   }
+
+  Future<void> _showDeleteEventDialog() async {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu içeriği silmek istediğinizden emin misiniz?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await _deleteEvent();
+        });
+  }
+
+  Future<void> _deleteEvent() async {
+    //TODO: Bunlardan herhangi birisi patlarsa ne yapacağız?
+
+    bool isLocatedInStorage = _event.eventImages != [] ? true : false;
+
+    //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
+    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+
+    await Provider.of<EventProvider>(context, listen: false)
+        .deleteEvent(_event.eventId, isLocatedInStorage);
+
+    //KULLANICININ / GRUBUN POSTIDS den SİL
+    if (_event.ownerType == "User") {
+      await Provider.of<AuthProvider>(context, listen: false)
+          .editUserEventIDs(_event.eventId, _event.ownerId, false);
+    } else if (_event.ownerType == "Group") {
+      await Provider.of<GroupProvider>(context, listen: false)
+          .editGroupPostList(_event.eventId, _event.ownerId, false);
+    }
+
+    //REQUESTİNİ SİL
+    await Provider.of<RequestProvider>(context, listen: false)
+        .deleteRequest(_event.eventId);
+
+    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+    //}
+  }
+
+  _showEditEventDialog() {}
 }

@@ -99,7 +99,7 @@ class UserObject {
         profilePictureURL = map['profilePictureURL'],
         experiencePoint = map['experiencePoint'],
         groupIDs = map['groupIDs'],
-        ownedGroupIDs = map['ownedGroupIDs'],
+        ownedGroupIDs = map['ownedGroupIDs'] ?? [],
         interests = map['interests'],
         postIDs = map['postIDs'] ?? [],
         eventIDs = map['eventIDs'] ?? [],
@@ -126,7 +126,7 @@ class UserObject {
     profilePictureURL = doc.data()['profilePictureURL'];
     experiencePoint = doc.data()['experiencePoint'];
     groupIDs = doc.data()['groupIDs'] ?? [];
-    ownedGroupIDs = doc.data()['ownedGroupIDs'];
+    ownedGroupIDs = doc.data()['ownedGroupIDs'] ?? [];
     interests = doc.data()['interests'];
     postIDs = doc.data()['postIDs']?.cast<String>() ?? [];
     eventIDs = doc.data()['eventIDs']?.cast<String>() ?? [];

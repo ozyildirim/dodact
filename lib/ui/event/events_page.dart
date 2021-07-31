@@ -1,6 +1,7 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,10 +43,21 @@ class _EventsPageState extends State<EventsPage> {
                       if (provider.eventList.isEmpty) {
                         return Center(child: Text("Etkinlik Bulunmamakta"));
                       }
+
+                      List<EventModel> filteredEvents = provider.eventList;
+
+                      filteredEvents = filteredEvents
+                          .where((event) => event.approved == true)
+                          .toList();
+
+                      if (filteredEvents.isEmpty) {
+                        return Center(child: Text("Etkinlik Bulunmamakta"));
+                      }
+
                       return ListView.builder(
-                        itemCount: provider.eventList.length,
+                        itemCount: filteredEvents.length,
                         itemBuilder: (context, index) {
-                          var eventItem = provider.eventList[index];
+                          var eventItem = filteredEvents[index];
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(

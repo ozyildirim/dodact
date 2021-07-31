@@ -140,33 +140,6 @@ class _ProfilePostsPartState extends BaseState<ProfilePostsPart>
   }
 }
 
-// return ListView.builder(
-//     scrollDirection: Axis.horizontal,
-//     itemCount: _filteredPosts.length,
-//     itemBuilder: (context, index) {
-//       if (_filteredPosts[index] != null) {
-//         // return _buildUserPostCard(_filteredPosts[index]);
-//         return Container(height: 50, width: 50, color: Colors.green);
-//       }
-//     });
-
-// Consumer<PostProvider>(builder: (context, provider, child) {
-//       if (provider.isLoading == false) {
-//         if (provider.usersPosts != null) {
-//           return ListView(
-//             scrollDirection: Axis.horizontal,
-//             children: provider.usersPosts.map((e) {
-//               return _buildUserPostCard(e);
-//             }).toList(),
-//           );
-//         } else {
-//           return Center(child: spinkit);
-//         }
-//       } else {
-//         return Center(child: spinkit);
-//       }
-//     });
-
 Widget _buildUserPostCard(PostModel post) {
   String coverPhotoURL;
   if (post.isVideo == true) {

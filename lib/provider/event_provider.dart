@@ -100,15 +100,20 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteEvent(String eventId, {bool isNotify}) async {
+  Future<void> deleteEvent(String eventId, bool isLocatedInStorage) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await eventRepository.delete(eventId).then((value) => true);
+      await eventRepository.delete(eventId).then((value) async {
+        if (isLocatedInStorage) {
+          await UploadService().deleteEventMedia(eventId);
+        }
+      });
+      EventModel event =
+          eventList.firstWhere((element) => element.eventId == eventId);
+      eventList.remove(event);
+      notifyListeners();
     } catch (e) {
       print("EventProvider delete error:  " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
