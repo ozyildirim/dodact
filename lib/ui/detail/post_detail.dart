@@ -355,7 +355,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     //KULLANICININ / GRUBUN POSTIDS den SİL
     if (post.ownerType == "User") {
       await Provider.of<AuthProvider>(context, listen: false)
-          .editUserPostDetail(post.postId, post.ownerId, false);
+          .editUserPostIDs(post.postId, post.ownerId, false);
     } else if (post.ownerType == "Group") {
       await Provider.of<GroupProvider>(context, listen: false)
           .editGroupPostList(post.postId, post.ownerId, false);

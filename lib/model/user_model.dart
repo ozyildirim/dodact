@@ -13,6 +13,7 @@ class UserObject {
   int experiencePoint;
   List<Interest> interests;
   List<String> groupIDs;
+  List<String> ownedGroupIDs;
   List<String> postIDs;
   List<String> eventIDs;
   String location;
@@ -39,6 +40,7 @@ class UserObject {
       this.profilePictureURL,
       this.experiencePoint,
       this.groupIDs,
+      this.ownedGroupIDs,
       this.interests,
       this.postIDs,
       this.eventIDs,
@@ -65,6 +67,7 @@ class UserObject {
     userData['profilePictureURL'] = this.profilePictureURL;
     userData['experiencePoint'] = this.experiencePoint ?? 0;
     userData['groupIDs'] = this.groupIDs;
+    userData['ownedGroupIDs'] = this.ownedGroupIDs;
     if (this.interests != null) {
       userData['interests'] = this.interests.map((v) => v.toMap()).toList();
     }
@@ -96,9 +99,10 @@ class UserObject {
         profilePictureURL = map['profilePictureURL'],
         experiencePoint = map['experiencePoint'],
         groupIDs = map['groupIDs'],
+        ownedGroupIDs = map['ownedGroupIDs'],
         interests = map['interests'],
-        postIDs = map['postIDs'],
-        eventIDs = map['eventIDs'],
+        postIDs = map['postIDs'] ?? [],
+        eventIDs = map['eventIDs'] ?? [],
         location = map['location'],
         rosettes = map['rosettes'],
         twitterUsername = map['twitterUsername'],
@@ -121,10 +125,11 @@ class UserObject {
     telephoneNumber = doc.data()['telephoneNumber'];
     profilePictureURL = doc.data()['profilePictureURL'];
     experiencePoint = doc.data()['experiencePoint'];
-    groupIDs = doc.data()['groupIDs'];
+    groupIDs = doc.data()['groupIDs'] ?? [];
+    ownedGroupIDs = doc.data()['ownedGroupIDs'];
     interests = doc.data()['interests'];
-    postIDs = doc.data()['postIDs']?.cast<String>();
-    eventIDs = doc.data()['eventIDs']?.cast<String>();
+    postIDs = doc.data()['postIDs']?.cast<String>() ?? [];
+    eventIDs = doc.data()['eventIDs']?.cast<String>() ?? [];
     location = doc.data()['location'];
     rosettes = doc.data()['rosettes'];
     twitterUsername = doc.data()['twitterUsername'];

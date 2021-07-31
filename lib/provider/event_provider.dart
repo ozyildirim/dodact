@@ -1,16 +1,28 @@
+import 'dart:io';
+
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
+import 'package:dodact_v1/model/request_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/repository/event_repository.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
+import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:flutter/material.dart';
 
 class EventProvider extends ChangeNotifier {
   EventRepository eventRepository = locator<EventRepository>();
+  FirebaseRequestService requestService = FirebaseRequestService();
+
+  AuthProvider authProvider = AuthProvider();
+  GroupProvider groupProvider = GroupProvider();
+
   bool isLoading = false;
 
   EventModel event;
+  EventModel newEvent = new EventModel();
   List<EventModel> eventList;
   List<EventModel> userEventList;
   List<EventModel> otherUserEventList;
@@ -32,23 +44,59 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future save(
-      {EventModel model,
-      PlatformFile image,
-      String name,
-      bool isNotify}) async {
+  Future addEvent(List<File> eventImages) async {
     try {
-      changeState(true, isNotify: isNotify);
-      // if (image != null) {
-      //   String imageURL = await UploadService.uploadImage(
-      //       category: "event_picture", file: image, name: name);
-      //   model.eventImages.add(imageURL);
+      //EVENT MODELİ FİRESTOREYE EKLENİYOR ve EVENT ID GERİ DÖNDÜRÜLÜYOR(içerik url olmadan)
+      var eventId = await eventRepository.save(newEvent);
+      newEvent.eventId = eventId;
 
-      // return await FirebaseEventService().save(model);
+      //Event resimleri upload ediliyor.
+      List<String> uploadedContents;
+      await Future.wait(eventImages.map((file) async {
+        var contentURL = await UploadService()
+            .uploadEventMedia(
+                eventID: eventId,
+                fileNameAndExtension: file.path.split('/').last,
+                fileToUpload: file)
+            .then((url) {
+          uploadedContents.add(url);
+        });
+      }));
+
+      newEvent.eventImages = uploadedContents;
+
+      //Event linkleri event modeline dahil ediliyor.
+      await eventRepository.save(newEvent);
+
+      //Post isteği oluşturuluyor.
+      await createEventRequest(newEvent);
+
+      if (newEvent.ownerType == 'User') {
+        await authProvider.editUserEventIDs(
+            newEvent.eventId, newEvent.ownerId, true);
+      } else if (newEvent.ownerType == 'Group') {
+        await groupProvider.editGroupEventList(
+            newEvent.eventId, newEvent.ownerId, true);
+      }
     } catch (e) {
-      print("EventProvider save error: " + e.toString());
-    } finally {
-      changeState(false);
+      print("EventProvider addEvent error: $e");
+    }
+  }
+
+  Future<void> createEventRequest(EventModel event) async {
+    try {
+      var requestModel = new RequestModel();
+      requestModel.requestOwnerId = event.ownerId;
+      requestModel.requestDate = DateTime.now();
+      requestModel.subjectId = event.eventId;
+      requestModel.requestFor = "Event";
+      requestModel.isExamined = false;
+      requestModel.isApproved = false;
+      requestModel.rejectionMessage = "";
+
+      await requestService.addRequest(requestModel);
+    } catch (e) {
+      print("PostProvider createPostRequestModel error: $e ");
     }
   }
 
@@ -147,5 +195,9 @@ class EventProvider extends ChangeNotifier {
     } finally {
       changeState(false);
     }
+  }
+
+  void clearNewEvent() {
+    newEvent = new EventModel();
   }
 }

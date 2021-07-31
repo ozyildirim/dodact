@@ -170,10 +170,20 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> editUserPostDetail(
+  Future<void> editUserPostIDs(
       String postId, String userId, bool addOrRemove) async {
     try {
-      await _authRepository.editUserPostDetail(postId, userId, addOrRemove);
+      await _authRepository.editUserPostIDs(postId, userId, addOrRemove);
+      getUser();
+    } catch (e) {
+      print("authProvider editUserPostDetail error: $e");
+    }
+  }
+
+  Future<void> editUserEventIDs(
+      String eventId, String userId, bool addOrRemove) async {
+    try {
+      await _authRepository.editUserEventIDs(eventId, userId, addOrRemove);
       getUser();
     } catch (e) {
       print("authProvider editUserPostDetail error: $e");

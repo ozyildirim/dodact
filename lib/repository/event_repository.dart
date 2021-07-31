@@ -60,12 +60,11 @@ class EventRepository implements BaseService {
 
   @override
   Query getListQuery() {
-
     throw UnimplementedError();
   }
 
   @override
-  Future<void> save(model) async {
+  Future<String> save(model) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {

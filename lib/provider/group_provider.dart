@@ -213,4 +213,11 @@ class GroupProvider extends ChangeNotifier {
       changeState(false);
     }
   }
+
+  Future<void> editGroupEventList(
+      String eventId, String groupId, bool addOrRemove) async {
+    try {
+      await _groupRepository.editGroupEventList(eventId, groupId, addOrRemove);
+    } catch (e) {}
+  }
 }

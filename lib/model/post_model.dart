@@ -63,7 +63,6 @@ class PostModel {
     data['postContentURL'] = this.postContentURL;
     data['isVideo'] = this.isVideo;
     data['claps'] = this.claps;
-
     data['supportersId'] = this.supportersId;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;

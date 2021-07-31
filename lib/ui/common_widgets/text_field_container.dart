@@ -5,15 +5,20 @@ class TextFieldContainer extends StatelessWidget {
   final Widget child;
   final double width;
   final double height;
-  const TextFieldContainer({Key key, this.child, this.width, this.height})
+  final EdgeInsets padding;
+  const TextFieldContainer(
+      {Key key, this.child, this.width, this.height, this.padding})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
+      height: height != null ? height : null,
       margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: padding != null
+          ? padding
+          : EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       width: width != null ? width : size.width * 0.8,
       decoration: BoxDecoration(
         boxShadow: [

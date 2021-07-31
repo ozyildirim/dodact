@@ -68,12 +68,20 @@ class FirebaseEventService extends BaseService<EventModel> {
   }
 
   @override
-  Future<void> save(EventModel model) async {
+  Future<String> save(EventModel model) async {
     if (model.eventId == null || model.eventId.isEmpty) {
-      return await eventsRef.add(model.toJson()).then((value) async =>
-          await eventsRef.doc(value.id).update({'eventId': value.id}));
+      String documentID;
+      return await eventsRef.add(model.toJson()).then((eventReference) async {
+        return await eventsRef
+            .doc(eventReference.id)
+            .update({'eventId': eventReference.id}).then((_) {
+          documentID = eventReference.id;
+          return documentID;
+        });
+      });
+    } else {
+      await eventsRef.doc(model.eventId).set(model.toJson());
     }
-    return await eventsRef.doc(model.eventId).set(model.toJson());
   }
 
   @override

@@ -151,11 +151,8 @@ class FirebaseAuthService implements AuthBase {
     await usersRef.doc(uid).update(newData);
   }
 
-  Future<void> editUserPostDetail(
-      //FIXME: Eklenen post, user bilgilerine eklenmiyor.
-      String postId,
-      String userId,
-      bool addOrRemove) async {
+  Future<void> editUserPostIDs(
+      String postId, String userId, bool addOrRemove) async {
     //ADD: true, REMOVE: false
     if (addOrRemove == true) {
       print(postId);
@@ -165,6 +162,21 @@ class FirebaseAuthService implements AuthBase {
     } else {
       await usersRef.doc(userId).update({
         "postIDs": FieldValue.arrayRemove([postId])
+      });
+    }
+  }
+
+  Future<void> editUserEventIDs(
+      String eventId, String userId, bool addOrRemove) async {
+    //ADD: true, REMOVE: false
+    if (addOrRemove == true) {
+      print(eventId);
+      await usersRef.doc(userId).update({
+        'eventIDs': FieldValue.arrayUnion([eventId])
+      });
+    } else {
+      await usersRef.doc(userId).update({
+        "eventIDs": FieldValue.arrayRemove([eventId])
       });
     }
   }

@@ -104,14 +104,22 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         title: Text("İçerik Oluştur"),
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            _buildPrevivewPart(),
-            _buildFormPart(size, context, provider),
-            _buildSubmissionPart()
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/app/app-background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              _buildPrevivewPart(),
+              _buildFormPart(size, context, provider),
+              _buildSubmissionPart()
+            ],
+          ),
         ),
       ),
     );

@@ -142,8 +142,13 @@ class AuthRepository {
     await _firebaseAuthService.updateCurrentUser(newData, uid);
   }
 
-  Future<void> editUserPostDetail(
+  Future<void> editUserPostIDs(
       String postId, String userId, bool addOrRemove) async {
-    await _firebaseAuthService.editUserPostDetail(postId, userId, addOrRemove);
+    await _firebaseAuthService.editUserPostIDs(postId, userId, addOrRemove);
+  }
+
+  Future<void> editUserEventIDs(
+      String eventId, String userId, bool addOrRemove) async {
+    await _firebaseAuthService.editUserEventIDs(eventId, userId, addOrRemove);
   }
 }

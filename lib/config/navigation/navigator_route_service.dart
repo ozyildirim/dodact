@@ -129,7 +129,14 @@ class NavigationRouteManager {
             settings);
 
       case k_ROUTE_CREATE_EVENT_PAGE:
-        return _navigateToDefault(EventCreationPage(), settings);
+        List<dynamic> args = settings.arguments;
+        return _navigateToDefault(
+            EventCreationPage(
+              eventCategory: args[0],
+              eventType: args[1],
+              eventPlatform: args[2],
+            ),
+            settings);
 
       case k_ROUTE_STORY_VIEW:
         List<dynamic> args = settings.arguments;

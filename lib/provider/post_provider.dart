@@ -55,7 +55,7 @@ class PostProvider extends ChangeNotifier {
         //ve post sahibinin post listesine ekleniyor.
 
         if (newPost.ownerType == "User") {
-          await _authProvider.editUserPostDetail(
+          await _authProvider.editUserPostIDs(
               newPost.postId, newPost.ownerId, true);
         } else if (newPost.ownerType == "Group") {
           await _groupProvider.editGroupPostList(
@@ -87,7 +87,7 @@ class PostProvider extends ChangeNotifier {
 
         //ve post sahibinin post listesine ekleniyor.
         if (newPost.ownerType == "User") {
-          await _authProvider.editUserPostDetail(postId, newPost.ownerId, true);
+          await _authProvider.editUserPostIDs(postId, newPost.ownerId, true);
         } else if (newPost.ownerType == "Group") {
           await _groupProvider.editGroupPostList(postId, newPost.ownerId, true);
         }

@@ -159,4 +159,18 @@ class FirebaseGroupService extends BaseService<GroupModel> {
       });
     }
   }
+
+  Future editGroupEventList(
+      String eventId, String groupId, bool addOrRemove) async {
+    if (addOrRemove == true) {
+      print(eventId);
+      await groupsRef.doc(groupId).update({
+        'events': FieldValue.arrayUnion([eventId])
+      });
+    } else {
+      await groupsRef.doc(groupId).update({
+        "events": FieldValue.arrayRemove([eventId])
+      });
+    }
+  }
 }

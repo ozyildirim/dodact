@@ -14,7 +14,7 @@ class _CreationPageState extends State<CreationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final SimpleDialog typeDialog = SimpleDialog(
+    final SimpleDialog postTypeDialog = SimpleDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
@@ -88,14 +88,71 @@ class _CreationPageState extends State<CreationPage> {
       ],
     );
 
+    final SimpleDialog eventTypeDialog = SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text('Etkinlik Türü'),
+      children: [
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.theater_masks,
+          color: Colors.orange,
+          text: 'Açık Hava Etkinliği',
+          onPressed: () {
+            Navigator.pop(context, "Açık Hava Etkinliği");
+          },
+        ),
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.home,
+          color: Colors.green,
+          text: 'Kapalı Mekan Etkinliği',
+          onPressed: () {
+            Navigator.pop(context, "Kapalı Mekan Etkinliği");
+          },
+        ),
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.shapes,
+          color: Colors.grey,
+          text: 'Workshop',
+          onPressed: () {
+            Navigator.pop(context, "Workshop");
+          },
+        ),
+      ],
+    );
+
+    final SimpleDialog eventPlatformDialog = SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text('Platform'),
+      children: [
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.city,
+          color: Colors.orange,
+          text: 'Fiziksel Etkinlik',
+          onPressed: () {
+            Navigator.pop(context, "Fiziksel Etkinlik");
+          },
+        ),
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.globe,
+          color: Colors.green,
+          text: 'Online Etkinlik',
+          onPressed: () {
+            Navigator.pop(context, "Online Etkinlik");
+          },
+        ),
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        backwardsCompatibility: false,
-        title: Text("Oluştur"),
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          backwardsCompatibility: false,
+          title:
+              Text("Oluştur", style: TextStyle(fontWeight: FontWeight.normal))),
       extendBodyBehindAppBar: false,
       body: ListView(
         children: <Widget>[
@@ -124,7 +181,33 @@ class _CreationPageState extends State<CreationPage> {
                 boxSize: 246,
                 spaceValue: 110,
                 title: 'Etkinlik Oluştur',
-                onTap: () => NavigationService.instance.navigate('/add_event'),
+                onTap: () async {
+                  var eventCategoryData = await showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) => categoryDialog);
+
+                  if (eventCategoryData != null) {
+                    var eventTypeData = await showDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) => eventTypeDialog);
+                    if (eventTypeData != null) {
+                      var eventPlatformData = await showDialog(
+                          barrierDismissible: true,
+                          context: context,
+                          builder: (context) => eventPlatformDialog);
+                      if (eventPlatformData != null) {
+                        NavigationService.instance
+                            .navigate(k_ROUTE_CREATE_EVENT_PAGE, args: [
+                          eventCategoryData,
+                          eventTypeData,
+                          eventPlatformData
+                        ]);
+                      }
+                    }
+                  }
+                },
                 conImage:
                     AssetImage('assets/images/creation/etkinlik_olustur.jpg'),
               ),
@@ -134,20 +217,20 @@ class _CreationPageState extends State<CreationPage> {
                 spaceValue: 0,
                 title: 'İçerik Oluştur',
                 onTap: () async {
-                  var categoryData = await showDialog(
+                  var postCategoryData = await showDialog(
                       barrierDismissible: true,
                       context: context,
                       builder: (context) => categoryDialog);
 
-                  if (categoryData != null) {
-                    var typeData = await showDialog(
+                  if (postCategoryData != null) {
+                    var postTypeData = await showDialog(
                         barrierDismissible: true,
                         context: context,
-                        builder: (context) => typeDialog);
-                    if (typeData != null) {
+                        builder: (context) => postTypeDialog);
+                    if (postTypeData != null) {
                       NavigationService.instance.navigate(
                           k_ROUTE_CREATE_POST_PAGE,
-                          args: [typeData, categoryData]);
+                          args: [postTypeData, postCategoryData]);
                     }
                   }
                 },

@@ -133,4 +133,14 @@ class GroupRepository implements BaseService {
           postId, groupId, addOrRemove);
     }
   }
+
+  Future<void> editGroupEventList(
+      String eventId, String groupId, bool addOrRemove) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await _firebaseGroupService.editGroupEventList(
+          eventId, groupId, addOrRemove);
+    }
+  }
 }

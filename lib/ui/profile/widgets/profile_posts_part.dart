@@ -117,15 +117,11 @@ class _ProfilePostsPartState extends BaseState<ProfilePostsPart>
                     (post.postCategory == category) && (post.approved == true))
                 .toList();
             print(posts.length);
-          } else {
-            return Center(
-              child: Text("Paylaşım Bulunmamakta"),
-            );
           }
 
           if (posts.isEmpty) {
             return Center(
-              child: Text("Paylaşım Bulunmamakta"),
+              child: Text("Bu kategoride paylaşım bulunmamakta"),
             );
           } else {
             return Container(
