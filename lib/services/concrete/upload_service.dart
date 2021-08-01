@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class UploadService {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
@@ -31,13 +31,15 @@ class UploadService {
       {@required String userID,
       @required String fileType,
       @required File fileToUpload}) async {
+    var compressedImage = await compressImage(fileToUpload);
+
     _storageReference = _firebaseStorage
         .ref()
         .child('users')
         .child(userID)
         .child('$fileType.png');
 
-    var uploadTask = _storageReference.putFile(fileToUpload);
+    var uploadTask = _storageReference.putFile(compressedImage);
 
     var url = await (await uploadTask).ref.getDownloadURL();
     return url;
@@ -79,13 +81,15 @@ class UploadService {
     @required String fileNameAndExtension,
     @required File fileToUpload,
   }) async {
+    var compressedImage = await compressImage(fileToUpload);
+
     _storageReference = _firebaseStorage
         .ref()
         .child('events')
         .child(eventID)
         .child(fileNameAndExtension);
 
-    var uploadTask = _storageReference.putFile(fileToUpload);
+    var uploadTask = _storageReference.putFile(compressedImage);
 
     var url = await (await uploadTask).ref.getDownloadURL();
     return url;
@@ -96,15 +100,24 @@ class UploadService {
       {@required String postId,
       @required fileNameAndExtension,
       @required File fileToUpload}) async {
+    // Directory appDocDir = await getApplicationDocumentsDirectory();
+    // var filePath = appDocDir.path + '/' + postId + '/' + fileNameAndExtension;
+
+    var compressedImage = await compressImage(fileToUpload);
+
     _storageReference = _firebaseStorage
         .ref()
         .child('posts')
         .child(postId)
         .child(fileNameAndExtension);
 
-    var uploadTask = _storageReference.putFile(fileToUpload);
+    var uploadTask = _storageReference.putFile(compressedImage);
 
     var url = await (await uploadTask).ref.getDownloadURL();
+
+    // final dir = Directory(filePath);
+    // dir.deleteSync(recursive: true);
+
     return url;
   }
 
@@ -140,6 +153,24 @@ class UploadService {
         .catchError((error) {
       print(error);
     });
+  }
+
+  Future<File> compressImage(File file) async {
+    // Get file path
+    // eg:- "Volume/VM/abcd.jpeg"
+    final filePath = file.absolute.path;
+
+    // Create output file path
+    // eg:- "Volume/VM/abcd_out.jpeg"
+    final lastIndex = filePath.lastIndexOf(new RegExp(r'.jp'));
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+
+    final compressedImage = await FlutterImageCompress.compressAndGetFile(
+        filePath, outPath,
+        minWidth: 1000, minHeight: 1000, quality: 70);
+
+    return compressedImage;
   }
 
 // FirebaseFirestore.instance.collection('users').doc(user.id).update({

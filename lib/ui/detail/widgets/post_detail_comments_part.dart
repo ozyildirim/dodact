@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -146,8 +147,18 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
   }
 
   Future<void> reportComment(String commentId) async {
+    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
     await FirebaseReportService()
-        .reportComment(authProvider.currentUser.uid, commentId);
+        .reportComment(authProvider.currentUser.uid, commentId)
+        .then((value) {
+      CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
+      NavigationService.instance.pop();
+      NavigationService.instance.pop();
+    }).catchError((value) {
+      CommonMethods()
+          .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+      NavigationService.instance.pop();
+    });
   }
 
   Future<void> deleteComment(String commentId) async {

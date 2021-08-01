@@ -50,20 +50,22 @@ class EventProvider extends ChangeNotifier {
       var eventId = await eventRepository.save(newEvent);
       newEvent.eventId = eventId;
 
-      //Event resimleri upload ediliyor.
       List<String> uploadedContents = [];
-      await Future.wait(eventImages.map((file) async {
-        await UploadService()
-            .uploadEventMedia(
-                eventID: eventId,
-                fileNameAndExtension: file.path.split('/').last,
-                fileToUpload: file)
-            .then((url) {
-          uploadedContents.add(url);
-        });
-      }));
-
-      newEvent.eventImages = uploadedContents;
+      //Event resimleri upload ediliyor.
+      if (eventImages != null) {
+        await Future.wait(eventImages.map((file) async {
+          await UploadService()
+              .uploadEventMedia(
+                  eventID: eventId,
+                  fileNameAndExtension: file.path.split('/').last,
+                  fileToUpload: file)
+              .then((url) {
+            uploadedContents.add(url);
+          });
+        }));
+      } else {
+        newEvent.eventImages = uploadedContents;
+      }
 
       //Event linkleri event modeline dahil ediliyor.
       await eventRepository.save(newEvent);
