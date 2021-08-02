@@ -200,7 +200,7 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<PostModel>> getUserPosts(UserObject user, {bool isNotify}) async {
+  Future<List<PostModel>> getUserPosts(UserObject user) async {
     try {
       userPosts = await postRepository.getUserPosts(user);
       notifyListeners();
@@ -211,18 +211,14 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<PostModel>> getOtherUserPosts(UserObject user,
-      {bool isNotify}) async {
+  Future<List<PostModel>> getOtherUserPosts(UserObject user) async {
     try {
-      changeState(true, isNotify: isNotify);
       otherUsersPosts = await postRepository.getUserPosts(user);
       notifyListeners();
       return otherUsersPosts;
     } catch (e) {
-      print("PostProvider getUserPosts error: " + e.toString());
+      print("PostProvider getOtherUserPosts error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 

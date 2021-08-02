@@ -142,10 +142,10 @@ class NavigationRouteManager {
             ),
             settings);
 
-      case k_ROUTE_STORY_VIEW:
-        List<dynamic> args = settings.arguments;
-        return _navigateToDefault(
-            StoryPageView(topic: args[0], stories: args[1]), settings);
+      // case k_ROUTE_STORY_VIEW:
+      //   List<dynamic> args = settings.arguments;
+      //   return _navigateToDefault(
+      //       StoryPageView(topic: args[0], stories: args[1]), settings);
     }
   }
 

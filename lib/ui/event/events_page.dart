@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -54,6 +55,22 @@ class _EventsPageState extends State<EventsPage> {
                         return Center(child: Text("Etkinlik Bulunmamakta"));
                       }
 
+                      /*
+CachedNetworkImage(
+                                      placeholder: (context, url) =>
+                                          CircularProgressIndicator(),
+                                      imageUrl: eventItem.eventImages[0],
+                                      imageBuilder: (context, imageProvider) {
+                                        return CircleAvatar(
+                                          radius: 50,
+                                          backgroundImage: NetworkImage(
+                                              imageProvider.toString()),
+                                        );
+                                      })
+  
+
+  */
+
                       return ListView.builder(
                         itemCount: filteredEvents.length,
                         itemBuilder: (context, index) {
@@ -64,8 +81,16 @@ class _EventsPageState extends State<EventsPage> {
                               leading: eventItem != null
                                   ? CircleAvatar(
                                       radius: 50,
-                                      backgroundImage: NetworkImage(
-                                        eventItem.eventImages[0],
+                                      child: CachedNetworkImage(
+                                        placeholder: (context, url) =>
+                                            Center(child: spinkit),
+                                        imageUrl: eventItem.eventImages[0],
+                                        imageBuilder: (context, imageProvider) {
+                                          return CircleAvatar(
+                                            radius: 50,
+                                            backgroundImage: imageProvider,
+                                          );
+                                        },
                                       ),
                                     )
                                   : null,

@@ -35,13 +35,13 @@ class FirebasePostService extends BaseService<PostModel> {
   Future<List<PostModel>> getUserPosts(UserObject user) async {
     //Get post IDs from user object
     List<String> postIDs = user.postIDs;
-    List<PostModel> allUserPosts = [];
+    List<PostModel> userPosts = [];
 
     print("Post IDs from object:" + postIDs.toString());
     await Future.forEach(postIDs, (post) async {
       DocumentSnapshot documentSnapshot = await postsRef.doc(post).get();
       PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
-      allUserPosts.add(singlePost);
+      userPosts.add(singlePost);
     });
     // for (String post in postIDs) {
     //   DocumentSnapshot documentSnapshot =
@@ -49,7 +49,7 @@ class FirebasePostService extends BaseService<PostModel> {
     //   PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
     //   allUserPosts.add(singlePost);
     // }
-    return allUserPosts;
+    return userPosts;
   }
 
   Future<List<PostModel>> getGroupPosts(GroupModel group) async {

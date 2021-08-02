@@ -1,8 +1,10 @@
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final PostModel post;
@@ -36,9 +38,12 @@ class PostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                    child: Image.network(
-                  coverPhotoURL,
+                    child: CachedNetworkImage(
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    child: Center(child: spinkit),
+                  ),
+                  imageUrl: coverPhotoURL,
                 )),
                 Text(
                   post.postTitle,

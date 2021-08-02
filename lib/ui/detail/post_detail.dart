@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
@@ -335,7 +336,19 @@ class _PostDetailState extends BaseState<PostDetail> {
       height: 250,
       width: double.infinity,
       child: PinchZoom(
-        child: Image.network(post.postContentURL),
+        child: CachedNetworkImage(
+          imageUrl: post.postContentURL,
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
         resetDuration: const Duration(milliseconds: 100),
         maxScale: 2.5,
         onZoomStart: () {
@@ -346,6 +359,30 @@ class _PostDetailState extends BaseState<PostDetail> {
         },
       ),
     );
+
+    /*
+
+return CachedNetworkImage(
+      imageUrl: thumbnailURL,
+      imageBuilder: (context, imageProvider) => ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: () => NavigationService.instance
+              .navigate(k_ROUTE_POST_DETAIL, args: post.postId),
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+      ),
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    );
+    */
   }
 
   /*

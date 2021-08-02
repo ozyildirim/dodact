@@ -1,14 +1,16 @@
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
-class ProfileInfoPart extends StatelessWidget {
+class OthersProfileInfoPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AuthProvider>(context);
+    final provider = Provider.of<UserProvider>(context);
+    var user = provider.otherUser;
 
     final mediaQuery = MediaQuery.of(context);
 
@@ -23,24 +25,23 @@ class ProfileInfoPart extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () => showProfilePictureContainer(
-                      context, provider.currentUser.profilePictureURL),
+                      context, user.profilePictureURL),
                   child: CircleAvatar(
                     maxRadius: 80,
-                    backgroundImage:
-                        NetworkImage(provider.currentUser.profilePictureURL),
+                    backgroundImage: NetworkImage(user.profilePictureURL),
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Container(
-                  child: Text(provider.currentUser.nameSurname,
+                  child: Text(user.nameSurname,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
-                Text("@${provider.currentUser.username}")
+                Text("@${user.username}")
               ],
             ),
           ),
@@ -51,16 +52,13 @@ class ProfileInfoPart extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              child: ProfileInfoPV(),
+              child: OthersProfileInfoPV(fetchedUser: user),
             ),
           )
         ],
       ),
     );
   }
-  // AlertDialog(
-  //       content: ,
-  //     ),
 
   showProfilePictureContainer(BuildContext context, String url) {
     showDialog(
@@ -78,20 +76,31 @@ class ProfileInfoPart extends StatelessWidget {
   }
 }
 
-class ProfileInfoPV extends StatefulWidget {
+class OthersProfileInfoPV extends StatefulWidget {
+  UserObject fetchedUser;
+
+  OthersProfileInfoPV({this.fetchedUser});
+
   @override
-  _ProfileInfoPVState createState() => _ProfileInfoPVState();
+  _OthersProfileInfoPVState createState() => _OthersProfileInfoPVState();
 }
 
-class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
+class _OthersProfileInfoPVState extends State<OthersProfileInfoPV> {
   PageController _controller = PageController(
     initialPage: 0,
   );
+  UserObject user;
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    user = widget.fetchedUser;
   }
 
   @override
@@ -117,38 +126,45 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton(
-          icon: Icon(
-            FontAwesome5Brands.linkedin,
-            size: 30,
-          ),
-          onPressed: () {
-            CommonMethods.launchURL(authProvider.currentUser.linkedInLink);
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            FontAwesome5Brands.dribbble,
-            size: 30,
-          ),
-          onPressed: () {
-            CommonMethods.launchURL(authProvider.currentUser.dribbbleLink);
-          },
-        ),
-        IconButton(
-          icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
-          onPressed: () {
-            CommonMethods.launchURL(authProvider.currentUser.soundcloudLink);
-          },
-        ),
-        IconButton(
-          icon: Icon(FontAwesome5Solid.envelope, size: 30),
-          // ignore: todo
-          //TODO: Mail atma özelliği ekle
-          // onPressed: () {
-          //   CommonMethods.launchEmail(authProvider, subject, message)
-          // },
-        ),
+        user.linkedInLink != null
+            ? IconButton(
+                icon: Icon(
+                  FontAwesome5Brands.linkedin,
+                  size: 30,
+                ),
+                onPressed: () {
+                  CommonMethods.launchURL(user.linkedInLink);
+                },
+              )
+            : null,
+        user.dribbbleLink != null
+            ? IconButton(
+                icon: Icon(
+                  FontAwesome5Brands.dribbble,
+                  size: 30,
+                ),
+                onPressed: () {
+                  CommonMethods.launchURL(user.dribbbleLink);
+                },
+              )
+            : null,
+        user.soundcloudLink != null
+            ? IconButton(
+                icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
+                onPressed: () {
+                  CommonMethods.launchURL(user.soundcloudLink);
+                },
+              )
+            : null,
+        user.hiddenMail == false
+            ? IconButton(
+                icon: Icon(FontAwesome5Solid.envelope, size: 30),
+                //TODO: Mail atma özelliği ekle
+                // onPressed: () {
+                //   CommonMethods.launchEmail(authProvider, subject, message)
+                // },
+              )
+            : null,
       ],
     );
   }
@@ -168,7 +184,7 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(FontAwesome5Solid.map_marker_alt),
-                    Text(authProvider.currentUser.location)
+                    Text(user.location)
                   ],
                 ),
               ),
@@ -178,8 +194,7 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(FontAwesome5Solid.map_marker_alt),
-                    Text(authProvider.currentUser.userRegistrationDate
-                        .toString())
+                    Text(user.userRegistrationDate.toString())
                   ],
                 ),
               )

@@ -11,7 +11,6 @@ class CommonMethods {
       thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
     } else {
       thumbnailURL = videoURL;
-      //TODO: Videolar için thumbnail fonksiyonu yazılmalı
     }
 
     return thumbnailURL;

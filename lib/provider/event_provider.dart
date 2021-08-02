@@ -164,10 +164,8 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<EventModel>> getOtherUserEvents(UserObject user,
-      {bool isNotify}) async {
+  Future<List<EventModel>> getOtherUserEvents(UserObject user) async {
     try {
-      changeState(true, isNotify: isNotify);
       var fetchedList = await eventRepository.getUserEvents(user);
       otherUserEventList = fetchedList;
       notifyListeners();
@@ -175,8 +173,6 @@ class EventProvider extends ChangeNotifier {
     } catch (e) {
       print("EventProvider getOtherUserEvents error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 

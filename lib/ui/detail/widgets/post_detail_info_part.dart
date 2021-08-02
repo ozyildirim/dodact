@@ -54,8 +54,9 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                 navigateToOwnerProfile(post);
               },
               child: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(userProvider.otherUser.profilePictureURL)),
+                backgroundImage:
+                    NetworkImage(userProvider.otherUser.profilePictureURL),
+              ),
             ),
             title: Center(child: Text(post.postTitle)),
             subtitle: Center(child: Text(userProvider.otherUser.nameSurname)),
