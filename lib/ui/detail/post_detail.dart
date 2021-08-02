@@ -19,6 +19,7 @@ import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -333,12 +334,27 @@ class _PostDetailState extends BaseState<PostDetail> {
     return Container(
       height: 250,
       width: double.infinity,
-      decoration: BoxDecoration(
+      child: PinchZoom(
+        child: Image.network(post.postContentURL),
+        resetDuration: const Duration(milliseconds: 100),
+        maxScale: 2.5,
+        onZoomStart: () {
+          print('Start zooming');
+        },
+        onZoomEnd: () {
+          print('Stop zooming');
+        },
+      ),
+    );
+  }
+
+  /*
+BoxDecoration(
           image: DecorationImage(
         image: NetworkImage(post.postContentURL),
       )),
-    );
-  }
+
+  */
 
   Widget buildHeaderAudio() {
     //TODO: Ses player eklenecek.

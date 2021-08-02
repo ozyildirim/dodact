@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CommonMethods {
@@ -43,5 +44,21 @@ class CommonMethods {
       text: message,
       title: title,
     );
+  }
+
+  static void launchURL(String requestedUrl) async {
+    if (requestedUrl != null) {
+      if (await canLaunch(requestedUrl)) {
+        await launch(requestedUrl);
+      } else {
+        throw new Exception("Cannot open URL: " + requestedUrl);
+      }
+    } else {
+      print("URL mevcut değil");
+    }
+  }
+
+  static void launchEmail(String email, String subject, String message) async {
+    launch("mailto:$email?subject=$subject&body=$message%20plugin");
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,14 @@ class ProfileInfoPart extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  maxRadius: 80,
-                  backgroundImage:
-                      NetworkImage(provider.currentUser.profilePictureURL),
+                InkWell(
+                  onTap: () => showProfilePictureContainer(
+                      context, provider.currentUser.profilePictureURL),
+                  child: CircleAvatar(
+                    maxRadius: 80,
+                    backgroundImage:
+                        NetworkImage(provider.currentUser.profilePictureURL),
+                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -50,6 +55,24 @@ class ProfileInfoPart extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+  // AlertDialog(
+  //       content: ,
+  //     ),
+
+  showProfilePictureContainer(BuildContext context, String url) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(url),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -99,22 +122,31 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
             FontAwesome5Brands.linkedin,
             size: 30,
           ),
-          onPressed: () {},
+          onPressed: () {
+            CommonMethods.launchURL(authProvider.currentUser.linkedInLink);
+          },
         ),
         IconButton(
           icon: Icon(
             FontAwesome5Brands.dribbble,
             size: 30,
           ),
-          onPressed: () {},
+          onPressed: () {
+            CommonMethods.launchURL(authProvider.currentUser.dribbbleLink);
+          },
         ),
         IconButton(
           icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
-          onPressed: () {},
+          onPressed: () {
+            CommonMethods.launchURL(authProvider.currentUser.soundcloudLink);
+          },
         ),
         IconButton(
           icon: Icon(FontAwesome5Solid.envelope, size: 30),
-          onPressed: () {},
+          //TODO: Mail atma özelliği ekle
+          // onPressed: () {
+          //   CommonMethods.launchEmail(authProvider, subject, message)
+          // },
         ),
       ],
     );
@@ -127,19 +159,28 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(FontAwesome5Solid.map_marker_alt),
-                  Text(authProvider.currentUser.location)
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(FontAwesome5Solid.map_marker_alt),
+                    Text(authProvider.currentUser.location)
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  Icon(FontAwesome5Solid.map_marker_alt),
-                  Text(authProvider.currentUser.location)
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(FontAwesome5Solid.map_marker_alt),
+                    Text(authProvider.currentUser.userRegistrationDate
+                        .toString())
+                  ],
+                ),
               )
             ],
           ),
