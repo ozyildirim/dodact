@@ -107,7 +107,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/app/app-background.png"),
+            image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),

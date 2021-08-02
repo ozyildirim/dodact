@@ -89,6 +89,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
         title: Text(_event.eventTitle, style: TextStyle(color: Colors.black)),
       ),
       body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage(kBackgroundImage),
+        )),
         width: dynamicWidth(1),
         child: Column(
           children: [_buildEventImageCarousel(), _buildEventHeaderPart()],

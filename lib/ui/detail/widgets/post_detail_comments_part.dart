@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class PostCommentsPart extends StatefulWidget {
   final String postId;
@@ -51,69 +52,7 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
             itemCount: commentProvider.comments.length,
             itemBuilder: (context, index) {
               var comment = commentProvider.comments[index];
-              return Dismissible(
-                background: comment.authorId != authProvider.currentUser.uid ||
-                        widget.ownerId == authProvider.currentUser.uid
-                    ? Container(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(FontAwesome5Regular.flag,
-                                  color: Colors.black),
-                            ],
-                          ),
-                        ))
-                    : Container(),
-                // Container(
-                //     color: Colors.white,
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(8.0),
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.end,
-                //         children: [
-                //           Icon(FontAwesome5Solid.trash, color: Colors.red)
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                secondaryBackground: authProvider.currentUser.uid ==
-                        comment.authorId
-                    ? Container(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(FontAwesome5Solid.trash, color: Colors.red),
-                            ],
-                          ),
-                        ))
-                    : null,
-                key: Key(comment.toString()),
-                onDismissed: (DismissDirection direction) async {
-                  if (direction == DismissDirection.startToEnd) {
-                    await reportComment(comment.commentId);
-                  } else {
-                    await deleteComment(comment.commentId);
-                  }
-                },
-
-                // ignore: missing_return
-                confirmDismiss: (DismissDirection direction) {
-                  if (direction == DismissDirection.startToEnd &&
-                      (comment.authorId != authProvider.currentUser.uid ||
-                          widget.ownerId == authProvider.currentUser.uid)) {
-                    _showReportCommentDialog(comment.commentId);
-                  } else {
-                    if (authProvider.currentUser.uid == comment.authorId)
-                      _showDeleteCommentDialog(comment.commentId);
-                  }
-                },
-
+              return Slidable(
                 child: ListTile(
                   onLongPress: () {
                     print(comment.commentId);
@@ -140,6 +79,33 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
                     ],
                   ),
                 ),
+                actionPane: SlidableDrawerActionPane(),
+                actionExtentRatio: 0.25,
+                actions: comment.authorId != authProvider.currentUser.uid ||
+                        widget.ownerId == authProvider.currentUser.uid
+                    ? [
+                        IconSlideAction(
+                          caption: 'Bildir',
+                          color: Colors.blue,
+                          icon: FontAwesome5Solid.flag,
+                          onTap: () =>
+                              _showReportCommentDialog(comment.commentId),
+                        ),
+                      ]
+                    : null,
+                secondaryActions:
+                    authProvider.currentUser.uid == comment.authorId ||
+                            authProvider.currentUser.uid == widget.ownerId
+                        ? [
+                            IconSlideAction(
+                              caption: 'Sil',
+                              color: Colors.red,
+                              icon: FontAwesome5Solid.trash,
+                              onTap: () =>
+                                  _showDeleteCommentDialog(comment.commentId),
+                            )
+                          ]
+                        : null,
               );
             }),
       );
@@ -187,7 +153,7 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği bildirmek istediğinizden emin misiniz?",
+        text: "Bu yorumu bildirmek istediğinizden emin misiniz?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/model/interest_model.dart';
-import 'package:flutter/cupertino.dart';
 
 class UserObject {
   String uid;
@@ -25,14 +24,16 @@ class UserObject {
   String linkedInLink;
   String soundcloudLink;
 
+  List<String> favoritedPosts;
+
   //PrivacySettings
   bool hiddenMail;
   bool hiddenLocation;
   bool hiddenNameSurname;
 
   UserObject(
-      {@required this.uid,
-      @required this.email,
+      {this.uid,
+      this.email,
       this.username,
       this.nameSurname,
       this.userRegistrationDate,

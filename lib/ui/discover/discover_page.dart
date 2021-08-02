@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/discover/widgets/posts_part.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
@@ -69,7 +70,7 @@ class _DiscoverPageState extends State<DiscoverPage>
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/app/app-background.png"),
+            image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),

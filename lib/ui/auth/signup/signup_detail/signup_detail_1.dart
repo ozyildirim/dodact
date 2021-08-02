@@ -294,6 +294,9 @@ class _SignUpDetail1State extends BaseState<SignUpDetail1> {
       'username': username,
       'nameSurname': nameSurname,
       'location': selectedCity.name,
+      'hiddenLocation': false,
+      'hiddenNameSurname': false,
+      'hiddenMail': false,
     }).then((value) {
       authProvider.currentUser.username = username;
       authProvider.currentUser.nameSurname = nameSurname;

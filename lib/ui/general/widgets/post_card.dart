@@ -29,30 +29,22 @@ class PostCard extends StatelessWidget {
                 .navigate(k_ROUTE_POST_DETAIL, args: post.postId);
           },
           child: Container(
+            // color: Colors.amberAccent,
             height: 240,
             width: 200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(coverPhotoURL),
-                            fit: BoxFit.cover)),
-                  ),
-                ),
+                    child: Image.network(
+                  coverPhotoURL,
+                  fit: BoxFit.cover,
+                )),
                 Text(
                   post.postTitle,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  post.postDescription,
-                  style: TextStyle(fontSize: 15),
-                )
               ],
             ),
           ),

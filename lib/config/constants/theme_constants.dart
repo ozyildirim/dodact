@@ -16,6 +16,8 @@ const kBackgroundColorDarker = Color(0xFF929292);
 const kDetailTextColor = Color(0xFF998FA2);
 const kCustomAppBarColor = Color(0xFF1C1B22);
 
+const kBackgroundImage = "assets/images/appBG.jpg";
+
 const kButtonFontSize = 20;
 
 const kFontFamily = "Roboto";

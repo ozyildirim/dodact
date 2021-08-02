@@ -76,7 +76,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/app/app-background.png"),
+            image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),

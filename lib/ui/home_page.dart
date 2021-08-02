@@ -1,5 +1,3 @@
-import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';

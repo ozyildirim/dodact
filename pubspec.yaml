@@ -55,6 +55,7 @@ dependencies:
   flutter_image_compress: ^1.0.0-nullsafety
   path_provider: ^2.0.2
   flutter_linkify: ^5.0.2
+  flutter_slidable: ^0.6.0
  
   
   

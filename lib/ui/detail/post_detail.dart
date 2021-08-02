@@ -12,6 +12,7 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
 import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/detail/widgets/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
@@ -36,6 +37,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   String videoId;
   PostModel post;
   Future _postFuture;
+  bool isFavorite;
 
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController commentController = TextEditingController();
@@ -45,6 +47,13 @@ class _PostDetailState extends BaseState<PostDetail> {
   bool isCurrentUserPostOwner() {
     if (authProvider.currentUser.postIDs != null &&
         authProvider.currentUser.postIDs.contains(widget.postId)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isPostFavorited() {
+    if (authProvider.currentUser.favoritedPosts.contains(post.postId)) {
       return true;
     }
     return false;
@@ -105,74 +114,112 @@ class _PostDetailState extends BaseState<PostDetail> {
                           ),
                         ])
               ]
-            : null,
+            : [
+                PopupMenuButton(
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: ListTile(
+                                leading: Icon(FontAwesome5Regular.flag),
+                                title: Text("Bildir"),
+                                onTap: () async {
+                                  await _showReportPostDialog();
+                                }),
+                          ),
+                          isPostFavorited()
+                              ? PopupMenuItem(
+                                  child: ListTile(
+                                      leading: Icon(
+                                        FontAwesome5Solid.star,
+                                        color: Colors.yellow,
+                                      ),
+                                      title: Text("Favorilerden Çıkar"),
+                                      onTap: () async {
+                                        await removeFavorite();
+                                      }),
+                                )
+                              : PopupMenuItem(
+                                  child: ListTile(
+                                      leading: Icon(FontAwesome5Regular.star),
+                                      title: Text("Favorilere Ekle"),
+                                      onTap: () async {
+                                        await addFavorite();
+                                      }),
+                                ),
+                        ])
+              ],
         centerTitle: true,
         title: Text(
           "İçerik Detay",
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 8,
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: RefreshIndicator(
         onRefresh: () => _refreshPost(context),
-        child: FutureBuilder(
-          future: _postFuture,
-          // ignore: missing_return
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: spinkit);
-            } else {
-              if (snapshot.error != null) {
-                return Center(
-                  child: Text("Hata oluştu."),
-                );
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(kBackgroundImage),
+            ),
+          ),
+          child: FutureBuilder(
+            future: _postFuture,
+            // ignore: missing_return
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: spinkit);
               } else {
-                post = snapshot.data;
-                _getCreatorData(context, post.ownerId);
+                if (snapshot.error != null) {
+                  return Center(
+                    child: Text("Hata oluştu."),
+                  );
+                } else {
+                  post = snapshot.data;
+                  _getCreatorData(context, post.ownerId);
 
-                switch (post.postContentType) {
-                  case "Video":
-                    return SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildHeaderVideo(),
-                          buildPostBodyPart(),
-                          buildCommentBox()
-                        ],
-                      ),
-                    );
-                    break;
-                  case "Görüntü":
-                    return SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildHeaderImage(),
-                          buildPostBodyPart(),
-                          buildCommentBox()
-                        ],
-                      ),
-                    );
-                    break;
-                  case "Ses":
-                    return SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildHeaderAudio(),
-                          buildPostBodyPart(),
-                          buildCommentBox()
-                        ],
-                      ),
-                    );
-                    break;
+                  switch (post.postContentType) {
+                    case "Video":
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            buildHeaderVideo(),
+                            buildPostBodyPart(),
+                            buildCommentBox()
+                          ],
+                        ),
+                      );
+                      break;
+                    case "Görüntü":
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            buildHeaderImage(),
+                            buildPostBodyPart(),
+                            buildCommentBox()
+                          ],
+                        ),
+                      );
+                      break;
+                    case "Ses":
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            buildHeaderAudio(),
+                            buildPostBodyPart(),
+                            buildCommentBox()
+                          ],
+                        ),
+                      );
+                      break;
+                  }
                 }
               }
-            }
-          },
+            },
+          ),
         ),
       ),
     );
@@ -341,6 +388,38 @@ class _PostDetailState extends BaseState<PostDetail> {
     );
   }
 
+  Future<void> _showReportPostDialog() async {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu içeriği bildirmek istediğinizden emin misiniz?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await reportPost(post.postId);
+          NavigationService.instance.pop();
+        });
+  }
+
+  Future<void> reportPost(String postId) async {
+    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+    await FirebaseReportService()
+        .reportPost(authProvider.currentUser.uid, postId)
+        .then((value) {
+      CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
+      NavigationService.instance.pop();
+      NavigationService.instance.pop();
+    }).catchError((value) {
+      CommonMethods()
+          .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+      NavigationService.instance.pop();
+    });
+  }
+
   Future<void> _deletePost() async {
 //TODO: Bunlardan herhangi birisi patlarsa ne yapacağız?
 
@@ -367,5 +446,13 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //
+  }
+
+  Future<void> addFavorite() async {
+    await authProvider.addFavoritePost(post.postId);
+  }
+
+  Future<void> removeFavorite() async {
+    await authProvider.removeFavoritePost(post.postId);
   }
 }

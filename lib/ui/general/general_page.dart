@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/general/widgets/announcement_part.dart';
 import 'package:dodact_v1/ui/general/widgets/event_part.dart';
 import 'package:dodact_v1/ui/general/widgets/podcast_part.dart';
@@ -19,7 +20,7 @@ class GeneralPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/app/app-background.png"),
+            image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),

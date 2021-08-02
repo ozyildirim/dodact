@@ -20,7 +20,6 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
   @override
   void initState() {
     super.initState();
-
     _hiddenMail = authProvider.currentUser.hiddenMail;
     _hiddenLocation = authProvider.currentUser.hiddenLocation;
     _hiddenNameSurname = authProvider.currentUser.hiddenNameSurname;
@@ -70,6 +69,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
               onChanged: (value) {
                 setState(() {
                   _hiddenLocation = !_hiddenLocation;
+                  _isChanged = true;
                 });
               },
             ),
@@ -81,6 +81,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
               onChanged: (value) {
                 setState(() {
                   _hiddenNameSurname = !_hiddenNameSurname;
+                  _isChanged = true;
                 });
               },
             ),
@@ -107,6 +108,10 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
         'hiddenLocation': _hiddenLocation,
         'hiddenNameSurname': _hiddenNameSurname,
       });
+      authProvider.currentUser.hiddenMail = _hiddenMail;
+      authProvider.currentUser.hiddenLocation = _hiddenLocation;
+      authProvider.currentUser.hiddenNameSurname = _hiddenNameSurname;
+
       NavigationService.instance.pop();
       setState(() {
         _isChanged = false;

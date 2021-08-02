@@ -1,4 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
 import 'package:dodact_v1/ui/profile/widgets/profile_info_part.dart'
@@ -44,7 +45,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/app/app-background.png"),
+            image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),

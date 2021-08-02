@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/config/navigation/navigator_route_service.dart';
 import 'package:dodact_v1/locator.dart';
+import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/announcement_provider.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/comment_provider.dart';

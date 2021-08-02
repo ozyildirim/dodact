@@ -57,7 +57,9 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           ListTile(
             leading: Icon(Icons.star),
             title: Text("Favorilerim", style: TextStyle(fontSize: 18)),
-            onTap: () {},
+            onTap: () {
+              NavigationService.instance.navigate(k_ROUTE_USER_FAVORITES);
+            },
           ),
           ListTile(
             leading: Icon(Icons.request_page),

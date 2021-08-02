@@ -2,7 +2,6 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:getwidget/components/image/gf_image_overlay.dart';
 import 'package:provider/provider.dart';
 
 class ProfileInfoPart extends StatelessWidget {
@@ -123,15 +122,27 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
 
   Widget _personalInfoPage() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(FontAwesome5Solid.map_marker_alt),
-            Text(authProvider.currentUser.location)
-          ],
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(FontAwesome5Solid.map_marker_alt),
+                  Text(authProvider.currentUser.location)
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(FontAwesome5Solid.map_marker_alt),
+                  Text(authProvider.currentUser.location)
+                ],
+              )
+            ],
+          ),
         ),
       ],
     );

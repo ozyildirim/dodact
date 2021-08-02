@@ -4,6 +4,7 @@ import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
+import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,7 +40,9 @@ class AuthProvider extends ChangeNotifier {
   Future<UserObject> getUser() async {
     try {
       currentUser = await _authRepository.currentUser();
+      getUserFavoritePosts();
       notifyListeners();
+
       return currentUser;
     } catch (e) {
       debugPrint("AuthProvider getUser function error: " + e.toString());
@@ -174,7 +177,12 @@ class AuthProvider extends ChangeNotifier {
       String postId, String userId, bool addOrRemove) async {
     try {
       await _authRepository.editUserPostIDs(postId, userId, addOrRemove);
-      getUser();
+      if (addOrRemove) {
+        currentUser.postIDs.add(postId);
+      } else {
+        currentUser.postIDs.remove(postId);
+      }
+      notifyListeners();
     } catch (e) {
       print("authProvider editUserPostDetail error: $e");
     }
@@ -184,7 +192,12 @@ class AuthProvider extends ChangeNotifier {
       String eventId, String userId, bool addOrRemove) async {
     try {
       await _authRepository.editUserEventIDs(eventId, userId, addOrRemove);
-      getUser();
+      if (addOrRemove) {
+        currentUser.eventIDs.add(eventId);
+      } else {
+        currentUser.eventIDs.remove(eventId);
+      }
+      notifyListeners();
     } catch (e) {
       print("authProvider editUserPostDetail error: $e");
     }
@@ -203,6 +216,38 @@ class AuthProvider extends ChangeNotifier {
       debugPrint("AuthProvider updateCurrentUserProfilePicture error. " +
           e.toString());
       notifyListeners();
+    }
+  }
+
+  Future<void> getUserFavoritePosts() async {
+    try {
+      currentUser.favoritedPosts = await FirebaseUserFavoritesService()
+          .getUserFavoritePosts(currentUser.uid);
+      notifyListeners();
+    } catch (e) {
+      debugPrint("AuthProvider getUserFavoritePosts error: " + e.toString());
+    }
+  }
+
+  Future<void> addFavoritePost(String postId) async {
+    try {
+      await FirebaseUserFavoritesService()
+          .addFavoritePost(currentUser.uid, postId);
+      currentUser.favoritedPosts.add(postId);
+      notifyListeners();
+    } catch (e) {
+      debugPrint("AuthProvider addFavoritePost error: " + e.toString());
+    }
+  }
+
+  Future<void> removeFavoritePost(String postId) async {
+    try {
+      await FirebaseUserFavoritesService()
+          .removeFavoritePost(currentUser.uid, postId);
+      currentUser.favoritedPosts.remove(postId);
+      notifyListeners();
+    } catch (e) {
+      debugPrint("AuthProvider removeFavoritePost error: " + e.toString());
     }
   }
 }
