@@ -1,10 +1,15 @@
+import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile_info_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile_posts_part.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfilePage extends StatefulWidget {
@@ -35,6 +40,19 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
     var provider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          PopupMenuButton(
+              itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: ListTile(
+                          leading: Icon(FontAwesome5Regular.trash_alt),
+                          title: Text("Bildir"),
+                          onTap: () async {
+                            await _showReportUserDialog();
+                          }),
+                    ),
+                  ])
+        ],
         title: Text("Profil"),
       ),
       body: provider.otherUser == null
@@ -76,5 +94,37 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
               ),
             ),
     );
+  }
+
+  void _showReportUserDialog() async {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu kullanıcıyı bildirmek istediğinizden emin misiniz?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await reportUser(otherUserID);
+          NavigationService.instance.pop();
+        });
+  }
+
+  Future<void> reportUser(String userId) async {
+    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+    await FirebaseReportService()
+        .reportUser(authProvider.currentUser.uid, otherUserID)
+        .then((value) {
+      CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
+      NavigationService.instance.pop();
+      NavigationService.instance.pop();
+    }).catchError((value) {
+      CommonMethods()
+          .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+      NavigationService.instance.pop();
+    });
   }
 }

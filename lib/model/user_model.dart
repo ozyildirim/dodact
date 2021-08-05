@@ -117,15 +117,15 @@ class UserObject {
         hiddenNameSurname = map['hiddenNameSurname'];
 
   UserObject.fromDoc(DocumentSnapshot doc) {
-    uid = doc.data()['uid'];
-    email = doc.data()['email'];
-    username = doc.data()['username'];
-    nameSurname = doc.data()['nameSurname'];
+    uid = doc.data()['uid'] ?? '';
+    email = doc.data()['email'] ?? '';
+    username = doc.data()['username'] ?? '';
+    nameSurname = doc.data()['nameSurname'] ?? '';
     userRegistrationDate =
-        (doc.data()['userRegistrationDate'] as Timestamp).toDate();
-    telephoneNumber = doc.data()['telephoneNumber'];
-    profilePictureURL = doc.data()['profilePictureURL'];
-    experiencePoint = doc.data()['experiencePoint'];
+        (doc.data()['userRegistrationDate'] as Timestamp).toDate() ?? '';
+    telephoneNumber = doc.data()['telephoneNumber'] ?? '';
+    profilePictureURL = doc.data()['profilePictureURL'] ?? '';
+    experiencePoint = doc.data()['experiencePoint'] ?? '';
     groupIDs = doc.data()['groupIDs'] ?? [];
     ownedGroupIDs = doc.data()['ownedGroupIDs'] ?? [];
     interests = doc.data()['interests'];
