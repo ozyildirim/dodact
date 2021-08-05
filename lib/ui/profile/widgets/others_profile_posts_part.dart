@@ -3,16 +3,12 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
-import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfilePostsPart extends StatefulWidget {
-  final UserObject user;
-
-  OthersProfilePostsPart({@required this.user});
-
   @override
   _OthersProfilePostsPartState createState() => _OthersProfilePostsPartState();
 }
@@ -20,13 +16,14 @@ class OthersProfilePostsPart extends StatefulWidget {
 class _OthersProfilePostsPartState extends State<OthersProfilePostsPart>
     with SingleTickerProviderStateMixin {
   TabController tabController;
-  var user;
+  UserProvider userProvider;
 
   @override
   void initState() {
-    user = widget.user;
     tabController = new TabController(length: 4, vsync: this);
-    Provider.of<PostProvider>(context, listen: false).getOtherUserPosts(user);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    Provider.of<PostProvider>(context, listen: false)
+        .getOtherUserPosts(userProvider.otherUser);
     super.initState();
   }
 

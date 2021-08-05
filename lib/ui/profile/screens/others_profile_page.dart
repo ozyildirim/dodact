@@ -32,7 +32,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<UserProvider>(context);
+    var provider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Profil"),
@@ -66,9 +66,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
                     ),
                     Container(
                       height: 300,
-                      child: OthersProfilePostsPart(
-                        user: otherUser,
-                      ),
+                      child: OthersProfilePostsPart(),
                     ),
                     SizedBox(
                       height: 15,
