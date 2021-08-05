@@ -1,5 +1,7 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
 import 'package:dodact_v1/ui/profile/widgets/profile_info_part.dart'
@@ -7,6 +9,8 @@ import 'package:dodact_v1/ui/profile/widgets/profile_info_part.dart'
 import 'package:dodact_v1/ui/profile/widgets/profile_posts_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -35,6 +39,19 @@ class _ProfilePageState extends BaseState<ProfilePage>
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
+        actions: [
+          GFIconBadge(
+            child: IconButton(
+              onPressed: () {
+                NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
+              },
+              icon: Icon(
+                FontAwesome5Solid.bell,
+                color: Colors.cyan,
+              ),
+            ),
+          )
+        ],
         centerTitle: true,
         title: Text(
           "Profil",

@@ -29,6 +29,7 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_setti
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
+import 'package:dodact_v1/ui/profile/screens/user_notifications_page.dart';
 import 'package:dodact_v1/ui/suffle/shuffle_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,9 @@ class NavigationRouteManager {
         return _navigateToDefault(FavoritesPage(), settings);
 
       //
+
+      case k_ROUTE_USER_NOTIFICATIONS:
+        return _navigateToDefault(UserNotificationsPage(), settings);
 
       //USER SETTINGS
 

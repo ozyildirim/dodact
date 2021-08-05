@@ -20,7 +20,9 @@ const k_ROUTE_COMMUNITIES_PAGE = '/communities';
 const k_ROUTE_COMMUNITY_DETAIL = '/community';
 const k_ROUTE_GROUPS_PAGE = '/groups';
 const k_ROUTE_GROUP_DETAIL = '/group';
+
 const k_ROUTE_USER_PROFILE = '/profile';
+const k_ROUTE_USER_NOTIFICATIONS = '/user_notifications';
 
 //User Drawer Routes
 const k_ROUTE_USER_OPTIONS = '/profile_options';
