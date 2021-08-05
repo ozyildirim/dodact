@@ -48,43 +48,46 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
       var post = postProvider.post;
 
       if (userProvider.otherUser != null) {
-        return ListTile(
-            leading: InkWell(
-              onTap: () {
-                navigateToOwnerProfile(post);
-              },
-              child: CircleAvatar(
-                backgroundImage:
-                    NetworkImage(userProvider.otherUser.profilePictureURL),
+        return Container(
+          color: Colors.white60,
+          child: ListTile(
+              leading: InkWell(
+                onTap: () {
+                  navigateToOwnerProfile(post);
+                },
+                child: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(userProvider.otherUser.profilePictureURL),
+                ),
               ),
-            ),
-            title: Center(child: Text(post.postTitle)),
-            subtitle: Center(child: Text(userProvider.otherUser.nameSurname)),
-            trailing: post.supportersId.length != null
-                ? Column(
-                    children: [
-                      Consumer<PostProvider>(
-                        builder: (context, provider, child) {
-                          bool liked = provider.post.supportersId
-                              .contains(authProvider.currentUser.uid);
+              title: Center(child: Text(post.postTitle)),
+              subtitle: Center(child: Text(userProvider.otherUser.nameSurname)),
+              trailing: post.supportersId.length != null
+                  ? Column(
+                      children: [
+                        Consumer<PostProvider>(
+                          builder: (context, provider, child) {
+                            bool liked = provider.post.supportersId
+                                .contains(authProvider.currentUser.uid);
 
-                          return IconButton(
-                              onPressed: () async {
-                                await provider.changePostDoddedStatus(
-                                    post.postId,
-                                    authProvider.currentUser.uid,
-                                    !liked);
-                              },
-                              icon: liked
-                                  ? Icon(FontAwesome5Regular.handshake,
-                                      color: Colors.red)
-                                  : Icon(FontAwesome5Regular.handshake,
-                                      color: Colors.grey));
-                        },
-                      )
-                    ],
-                  )
-                : null);
+                            return IconButton(
+                                onPressed: () async {
+                                  await provider.changePostDoddedStatus(
+                                      post.postId,
+                                      authProvider.currentUser.uid,
+                                      !liked);
+                                },
+                                icon: liked
+                                    ? Icon(FontAwesome5Regular.handshake,
+                                        color: Colors.red)
+                                    : Icon(FontAwesome5Regular.handshake,
+                                        color: Colors.grey));
+                          },
+                        )
+                      ],
+                    )
+                  : null),
+        );
       } else {
         return Center(child: spinkit);
       }

@@ -2,7 +2,7 @@
     package="com.dodact.dodact_v1">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
-        android:label="dodact_v1"
+        android:label="Dodact"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

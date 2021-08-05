@@ -4,9 +4,10 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
-import 'package:dodact_v1/ui/profile/widgets/profile_info_part.dart'
+import 'package:dodact_v1/ui/profile/widgets/user_profile_body.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile_info_part.dart'
     as ProfileInfo;
-import 'package:dodact_v1/ui/profile/widgets/profile_posts_part.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile_posts_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -66,65 +67,37 @@ class _ProfilePageState extends BaseState<ProfilePage>
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ProfileInfo.ProfileInfoPart(),
-              Divider(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ProfileInfo.UserProfileInfoPart(),
+            Divider(),
+            UserProfileBody(),
 
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "Paylaşımların",
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context)
-                      .textTheme
-                      .title
-                      .copyWith(color: Colors.black),
-                ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              Container(
-                height: 300,
-                child: ProfilePostsPart(),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-
-              // Padding(
-              //   padding: const EdgeInsets.all(12.0),
-              //   child: Text(
-              //     "Katıldığı Etkinlikler",
-              //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              //     textAlign: TextAlign.start,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: Container(
-              //     height: 250,
-              //     child: ProfileEventsPart(),
-              //   ),
-              // ),
-            ],
-          ),
+            // Padding(
+            //   padding: const EdgeInsets.all(12.0),
+            //   child: Text(
+            //     "Katıldığı Etkinlikler",
+            //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            //     textAlign: TextAlign.start,
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 15),
+            //   child: Container(
+            //     height: 1,
+            //     color: Colors.grey.shade300,
+            //     width: dynamicWidth(0.90),
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(15.0),
+            //   child: Container(
+            //     height: 250,
+            //     child: ProfileEventsPart(),
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

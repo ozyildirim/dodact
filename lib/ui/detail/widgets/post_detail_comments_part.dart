@@ -88,8 +88,8 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
                           caption: 'Bildir',
                           color: Colors.blue,
                           icon: FontAwesome5Solid.flag,
-                          onTap: () =>
-                              _showReportCommentDialog(comment.commentId),
+                          onTap: () => _showReportCommentDialog(
+                              comment.commentId, widget.postId),
                         ),
                       ]
                     : null,
@@ -112,10 +112,10 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
     }
   }
 
-  Future<void> reportComment(String commentId) async {
+  Future<void> reportComment(String commentId, String postId) async {
     CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
     await FirebaseReportService()
-        .reportComment(authProvider.currentUser.uid, commentId)
+        .reportComment(authProvider.currentUser.uid, commentId, postId)
         .then((value) {
       CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
       NavigationService.instance.pop();
@@ -149,7 +149,7 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
         });
   }
 
-  Future<void> _showReportCommentDialog(String commentId) async {
+  Future<void> _showReportCommentDialog(String commentId, String postId) async {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
@@ -161,7 +161,7 @@ class _PostCommentsPartState extends BaseState<PostCommentsPart> {
           NavigationService.instance.pop();
         },
         onConfirmBtnTap: () async {
-          await reportComment(commentId);
+          await reportComment(commentId, postId);
           NavigationService.instance.pop();
         });
   }

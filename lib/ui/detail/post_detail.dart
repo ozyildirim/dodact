@@ -162,8 +162,7 @@ class _PostDetailState extends BaseState<PostDetail> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(kBackgroundImage),
-            ),
+                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
           ),
           child: FutureBuilder(
             future: _postFuture,
@@ -182,39 +181,36 @@ class _PostDetailState extends BaseState<PostDetail> {
 
                   switch (post.postContentType) {
                     case "Video":
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buildHeaderVideo(),
-                            buildPostBodyPart(),
-                            buildCommentBox()
-                          ],
-                        ),
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          buildHeaderVideo(),
+                          buildPostBodyPart(),
+                          buildCommentBox()
+                        ],
                       );
                       break;
                     case "Görüntü":
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buildHeaderImage(),
-                            buildPostBodyPart(),
-                            buildCommentBox()
-                          ],
-                        ),
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              buildHeaderImage(),
+                              buildPostBodyPart(),
+                            ],
+                          ),
+                          buildCommentBox()
+                        ],
                       );
                       break;
                     case "Ses":
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buildHeaderAudio(),
-                            buildPostBodyPart(),
-                            buildCommentBox()
-                          ],
-                        ),
+                      return Column(
+                        children: [
+                          buildHeaderAudio(),
+                          buildPostBodyPart(),
+                          buildCommentBox()
+                        ],
                       );
                       break;
                   }
@@ -243,7 +239,7 @@ class _PostDetailState extends BaseState<PostDetail> {
       color: Colors.amberAccent,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
-        height: 100,
+        height: 80,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -342,7 +338,7 @@ class _PostDetailState extends BaseState<PostDetail> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: imageProvider,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -400,6 +396,7 @@ BoxDecoration(
   //Fonksiyonlar
 
   void submitComment(BuildContext context) async {
+    formKey.currentState.saveAndValidate();
     var commentProvider = Provider.of<CommentProvider>(context, listen: false);
     CommentModel newComment = new CommentModel();
     newComment.comment = commentController.text;
