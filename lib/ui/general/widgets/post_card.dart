@@ -38,17 +38,34 @@ class PostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                    child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    child: Center(child: spinkit),
+                  child: CachedNetworkImage(
+                    height: 200,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      child: Center(child: spinkit),
+                    ),
+                    imageUrl: coverPhotoURL,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      );
+                    },
                   ),
-                  imageUrl: coverPhotoURL,
-                )),
-                Text(
-                  post.postTitle,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 20,
+                    child: Text(
+                      post.postTitle,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
               ],
             ),

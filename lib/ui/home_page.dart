@@ -3,8 +3,7 @@ import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
-import 'package:dodact_v1/ui/suffle/shuffle_page.dart';
-import 'package:ff_navigation_bar/ff_navigation_bar.dart';
+import 'package:dodact_v1/ui/search/search_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -23,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     GeneralPage(),
     DiscoverPage(),
     CreationPage(),
-    ShufflePage(),
+    SearchPage(),
     ProfilePage(),
   ];
 

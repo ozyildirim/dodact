@@ -8,7 +8,7 @@ const k_ROUTE_REGISTER_DETAIL_2 = '/signup_detail_2';
 const k_ROUTE_INTERESTS_CHOICE = '/interest_choice';
 const k_ROUTE_HOME = "/home";
 const k_ROUTE_CREATION = "/creation";
-const k_ROUTE_SHUFFLE = '/shuffle';
+const k_ROUTE_SEARCH = '/search';
 
 const k_ROUTE_FORGOT_PASSWORD = '/forgot_password';
 const k_ROUTE_RESET_PASSWORD = '/reset_password';

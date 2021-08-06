@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/filtered_group_view.dart';
@@ -38,7 +39,7 @@ class _GroupsPageState extends State<GroupsPage> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/app/app-background.png"),
+              image: AssetImage(kBackgroundImage),
               fit: BoxFit.cover,
             ),
           ),

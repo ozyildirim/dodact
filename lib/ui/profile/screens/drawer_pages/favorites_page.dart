@@ -4,11 +4,12 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
-import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
+
 import 'package:provider/provider.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -59,6 +60,12 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
         elevation: 8,
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: posts == null
             ? Center(child: Text("Favorileriniz bulunamadı"))
             : (posts.isEmpty
@@ -75,27 +82,24 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                       return Column(
                         children: [
                           Slidable(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                onTap: () {
-                                  NavigationService.instance.navigate(
-                                      k_ROUTE_POST_DETAIL,
-                                      args: element.postId);
-                                },
-                                leading: CircleAvatar(
-                                  radius: 60,
-                                  backgroundImage: NetworkImage(postPhoto),
-                                ),
-                                subtitle: Text(element.postCategory),
-                                title: Text(element.postTitle),
+                            child: GFListTile(
+                              onTap: () {
+                                NavigationService.instance.navigate(
+                                    k_ROUTE_POST_DETAIL,
+                                    args: element.postId);
+                              },
+                              avatar: GFAvatar(
+                                backgroundImage: NetworkImage(postPhoto),
+                                radius: 50,
                               ),
+                              titleText: element.postTitle,
+                              subtitleText: element.postCategory,
                             ),
                             actionPane: SlidableDrawerActionPane(),
                             actionExtentRatio: 0.25,
                             actions: [
                               IconSlideAction(
-                                caption: 'Favorilerimden Çıkar',
+                                caption: 'Kaldır',
                                 color: Colors.red,
                                 icon: FontAwesome5Solid.trash,
                                 onTap: () async =>

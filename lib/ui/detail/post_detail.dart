@@ -181,36 +181,51 @@ class _PostDetailState extends BaseState<PostDetail> {
 
                   switch (post.postContentType) {
                     case "Video":
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildHeaderVideo(),
-                          buildPostBodyPart(),
-                          buildCommentBox()
-                        ],
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                buildHeaderVideo(),
+                                buildPostBodyPart(),
+                              ],
+                            ),
+                            buildCommentBox()
+                          ],
+                        ),
                       );
                       break;
                     case "Görüntü":
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              buildHeaderImage(),
-                              buildPostBodyPart(),
-                            ],
-                          ),
-                          buildCommentBox()
-                        ],
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                buildHeaderImage(),
+                                buildPostBodyPart(),
+                              ],
+                            ),
+                            buildCommentBox()
+                          ],
+                        ),
                       );
                       break;
                     case "Ses":
-                      return Column(
-                        children: [
-                          buildHeaderAudio(),
-                          buildPostBodyPart(),
-                          buildCommentBox()
-                        ],
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                buildHeaderAudio(),
+                                buildPostBodyPart(),
+                              ],
+                            ),
+                            buildCommentBox()
+                          ],
+                        ),
                       );
                       break;
                   }
@@ -342,7 +357,8 @@ class _PostDetailState extends BaseState<PostDetail> {
               ),
             ),
           ),
-          placeholder: (context, url) => CircularProgressIndicator(),
+          placeholder: (context, url) =>
+              Container(child: Center(child: CircularProgressIndicator())),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         resetDuration: const Duration(milliseconds: 100),

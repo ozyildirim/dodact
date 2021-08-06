@@ -5,13 +5,11 @@ import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail_2.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/common_widgets/about_dodact_page.dart';
-
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/event_creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
-import 'package:dodact_v1/ui/discover/widgets/story_components/story_page_view.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/group/group_detail.dart';
@@ -24,13 +22,13 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/favorites_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/requests_status.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/notifications_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_settings_page.dart';
-import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/user_notifications_page.dart';
-import 'package:dodact_v1/ui/suffle/shuffle_page.dart';
+import 'package:dodact_v1/ui/search/search_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -59,8 +57,8 @@ class NavigationRouteManager {
       case k_ROUTE_CREATION:
         return _navigateToDefault(CreationPage(), settings);
 
-      case k_ROUTE_SHUFFLE:
-        return _navigateToDefault(ShufflePage(), settings);
+      case k_ROUTE_SEARCH:
+        return _navigateToDefault(SearchPage(), settings);
 
       case k_ROUTE_FORGOT_PASSWORD:
         return _navigateToDefault(ForgotPasswordPage(), settings);

@@ -5,6 +5,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class EventsPage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _EventsPageState extends State<EventsPage> {
               onRefresh: () => _refreshEvents(),
               child: Container(
                 width: double.infinity,
-                height: 500,
+                height: 600,
                 child: Consumer<EventProvider>(
                   builder: (context, provider, child) {
                     if (provider.eventList == null) {
@@ -77,7 +78,44 @@ CachedNetworkImage(
                           var eventItem = filteredEvents[index];
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
+                            child: GFListTile(
+                              onTap: () {
+                                NavigationService.instance.navigate(
+                                    k_ROUTE_EVENT_DETAIL,
+                                    args: eventItem);
+                              },
+                              avatar: CachedNetworkImage(
+                                placeholder: (context, url) => Container(
+                                  child: Center(child: spinkit),
+                                ),
+                                imageUrl: eventItem.eventImages[0],
+                                imageBuilder: (context, imageProvider) {
+                                  return GFAvatar(
+                                    radius: 60,
+                                    backgroundImage: imageProvider,
+                                  );
+                                },
+                              ),
+                              titleText: eventItem.eventTitle,
+                              subtitleText:
+                                  'Lorem ipsum dolor sit amet, consectetur adipiscing',
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+child: ListTile(
                               leading: eventItem != null
                                   ? CircleAvatar(
                                       radius: 50,
@@ -100,19 +138,8 @@ CachedNetworkImage(
                                   k_ROUTE_EVENT_DETAIL,
                                   args: eventItem),
                             ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+
+*/
 
   Future<void> _refreshEvents() async {
     await Provider.of<EventProvider>(context, listen: false).getAllEventsList();
