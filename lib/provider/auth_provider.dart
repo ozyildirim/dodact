@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/user_favorites_provider.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
@@ -14,6 +15,7 @@ enum VerifyState { WAITING_FOR_VERIFY, VERIFIED }
 
 class AuthProvider extends ChangeNotifier {
   AuthRepository _authRepository = locator<AuthRepository>();
+  UserFavoritesProvider _userFavoritesProvider = UserFavoritesProvider();
 
   AuthProvider() {
     getUser();

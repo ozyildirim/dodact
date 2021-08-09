@@ -14,6 +14,7 @@ import 'package:dodact_v1/services/concrete/firebase_podcast_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_post_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_story_service.dart';
+import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 import 'package:get_it/get_it.dart';
 
@@ -45,4 +46,6 @@ void setupLocator() {
 
   locator.registerLazySingleton(() => FirebasePodcastService());
   locator.registerLazySingleton(() => PodcastRepository());
+
+  locator.registerLazySingleton(() => FirebaseUserFavoritesService());
 }

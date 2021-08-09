@@ -39,7 +39,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   String videoId;
   PostModel post;
   Future _postFuture;
-  bool isFavorite;
+  bool isFavorite = false;
 
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController commentController = TextEditingController();
@@ -79,6 +79,9 @@ class _PostDetailState extends BaseState<PostDetail> {
   void initState() {
     _postFuture = _obtainPostFuture(context);
     super.initState();
+
+    isFavorite =
+        authProvider.currentUser.favoritedPosts.contains(widget.postId);
   }
 
   @override
@@ -127,7 +130,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                                   await _showReportPostDialog();
                                 }),
                           ),
-                          isPostFavorited()
+                          isFavorite
                               ? PopupMenuItem(
                                   child: ListTile(
                                       leading: Icon(
@@ -515,10 +518,20 @@ BoxDecoration(
   }
 
   Future<void> addFavorite() async {
-    await authProvider.addFavoritePost(post.postId);
+    await authProvider.addFavoritePost(post.postId).then((value) {
+      setState(() {
+        isFavorite = true;
+      });
+      NavigationService.instance.pop();
+    });
   }
 
   Future<void> removeFavorite() async {
-    await authProvider.removeFavoritePost(post.postId);
+    await authProvider.removeFavoritePost(post.postId).then((value) {
+      setState(() {
+        isFavorite = false;
+      });
+      NavigationService.instance.pop();
+    });
   }
 }
