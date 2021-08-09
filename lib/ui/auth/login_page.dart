@@ -1,9 +1,9 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/ui/auth/forgot_password.dart';
 import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
 import 'package:dodact_v1/ui/common_widgets/custom_button.dart';
@@ -85,9 +85,9 @@ class _LogInPageState extends BaseState<LogInPage> {
       body: Container(
         height: dynamicHeight(1),
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/loginBG.jpg'),
-                fit: BoxFit.cover)),
+          image: DecorationImage(
+              image: AssetImage(kAuthBackgroundImage), fit: BoxFit.cover),
+        ),
         child: FormBuilder(
           key: _formKey,
           child: Column(
@@ -229,7 +229,7 @@ class _LogInPageState extends BaseState<LogInPage> {
         debugPrint(errorMessage);
       } else {
         NavigationService.instance.pop();
-        NavigationService.instance.popUntil('/landing');
+        NavigationService.instance.popUntil(k_ROUTE_LANDING);
       }
     } else {
       setState(() {
@@ -239,8 +239,7 @@ class _LogInPageState extends BaseState<LogInPage> {
   }
 
   void _navigateToForgotPassword(BuildContext context) {
-    Navigator.of(context)
-        .push(CupertinoPageRoute(builder: (context) => ForgotPasswordPage()));
+    NavigationService.instance.navigate(k_ROUTE_FORGOT_PASSWORD);
   }
 
   showLoadingProgressContainer() {
