@@ -163,22 +163,11 @@ class _LogInPageState extends BaseState<LogInPage> {
                 children: [
                   CustomButton(
                     icon: Icon(
-                      Icons.info,
-                      color: Colors.white,
-                    ),
-                    titleText: Text(
-                      "Dodact Nedir?",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {},
-                  ),
-                  CustomButton(
-                    icon: Icon(
                       Icons.lock,
                       color: Colors.white,
                     ),
                     titleText: Text(
-                      "Şifremi Unuttum?",
+                      "Şifremi Unuttum",
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {

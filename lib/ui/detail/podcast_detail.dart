@@ -1,3 +1,4 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/podcast_model.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,11 @@ class PodcastDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(podcast.podcastTitle),
+        title: Text("Podcast Detay"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -21,48 +24,58 @@ class PodcastDetail extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Row(
-                children: [
-                  Container(
-                    height: 200,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2),
-                      image: DecorationImage(
-                          image: NetworkImage(podcast.podcastImageUrl),
-                          fit: BoxFit.cover),
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 300,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: mediaQuery.size.height * 0.3,
+                      width: mediaQuery.size.width * 0.7,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 2),
+                          image: DecorationImage(
+                              image: NetworkImage(podcast.podcastImageUrl),
+                              fit: BoxFit.cover),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(1, 1),
+                            )
+                          ]),
                     ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        podcast.podcastTitle,
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                    Positioned(
+                      left: (mediaQuery.size.width * 0.7) - 200,
+                      bottom: -10,
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(podcast.podcastOwnerPhotoUrl),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            Divider(
-              thickness: 1,
-            ),
-            Container(
-              color: Colors.white54,
-              child: ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(podcast.podcastOwnerPhotoUrl),
-                    ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Container(
+                color: Colors.white54,
+                child: ListTile(
+                  title: Text(
+                    podcast.podcastOwner,
+                    style: TextStyle(fontSize: 24),
                   ),
-                ),
-                title: Text(
-                  podcast.podcastOwner,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  trailing: IconButton(
+                    onPressed: () {
+                      CommonMethods.launchURL(podcast.podcastLink);
+                    },
+                    icon: Icon(Icons.link),
+                  ),
                 ),
               ),
             ),
@@ -87,3 +100,18 @@ class PodcastDetail extends StatelessWidget {
     );
   }
 }
+
+/*
+
+  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        podcast.podcastTitle,
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+
+*/

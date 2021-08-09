@@ -6,6 +6,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
+import 'package:dodact_v1/ui/common_widgets/custom_button.dart';
 import 'package:dodact_v1/ui/common_widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
@@ -115,28 +116,6 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     ]),
                   ),
                 ),
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    name: "password",
-                    obscureText: true,
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      hintText: "Parola",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      errorStyle: TextStyle(fontSize: 14),
-                      icon: Icon(
-                        Icons.lock,
-                        color: kPrimaryColor,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Lütfen parolanızı giriniz.")
-                    ]),
-                  ),
-                ),
                 RoundedButton(
                   textSize: 15,
                   text: "Kayıt Ol",
@@ -165,7 +144,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Hesabın var mı?",
+                      "Zaten hesabın var mı?",
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     SizedBox(
@@ -176,15 +155,38 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                         navigateToLoginPage(context);
                       },
                       child: Text(
-                        " Giriş Yap",
+                        "Giriş Yap",
                         style: TextStyle(
+                            decoration: TextDecoration.underline,
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
                     )
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      icon: Icon(
+                        Icons.info,
+                        color: Colors.white,
+                      ),
+                      titleText: Text(
+                        "Dodact Nedir?",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        NavigationService.instance
+                            .navigate(k_ROUTE_ABOUT_DODACT);
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

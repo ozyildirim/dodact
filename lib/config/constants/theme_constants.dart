@@ -41,7 +41,7 @@ ThemeData appTheme = new ThemeData(
       elevation: 8,
       textTheme: TextTheme(
         title:
-            TextStyle(color: Colors.black, fontSize: 20, fontFamily: "Raleway"),
+            TextStyle(color: Colors.black, fontSize: 20, fontFamily: "Roboto"),
       ),
       backgroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.black),

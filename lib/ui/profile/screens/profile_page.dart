@@ -7,7 +7,6 @@ import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile_body.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile_info_part.dart'
     as ProfileInfo;
-import 'package:dodact_v1/ui/profile/widgets/user_profile_posts_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';

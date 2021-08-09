@@ -68,6 +68,7 @@ dependencies:
     git:
       url: https://github.com/ozyildirim/flutter_fortune_wheel
   logger: ^1.0.0
+  google_fonts: ^2.1.0
 
  
   

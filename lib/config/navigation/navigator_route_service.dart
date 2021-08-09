@@ -44,7 +44,7 @@ class NavigationRouteManager {
         return _navigateToDefault(LandingPage(), settings);
       case k_ROUTE_WELCOME:
         return _navigateToDefault(WelcomePage(), settings);
-      case k_ROUTE_ABOUT:
+      case k_ROUTE_ABOUT_DODACT:
         return _navigateToDefault(AboutDodactPage(), settings);
       case k_ROUTE_LOGIN:
         return _navigateToDefault(LogInPage(), settings);
