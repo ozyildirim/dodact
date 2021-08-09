@@ -117,7 +117,7 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
           child: _personalInfoPage(),
         ),
         Center(
-          child: Text("asdads"),
+          child: Text("Örnek"),
         ),
         Center(
           child: _socialInfoPage(),
@@ -185,17 +185,6 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(FontAwesome5Solid.map_marker_alt),
-                    Text(authProvider.currentUser.userRegistrationDate
-                        .toString())
-                  ],
-                ),
-              )
             ],
           ),
         ),

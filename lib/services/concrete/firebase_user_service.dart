@@ -18,9 +18,8 @@ class FirebaseUserService {
 
   @override
   Future<List<UserObject>> getList() async {
-    List<UserObject> models = await usersRef
-        .get()
-        .then((value) => value.docs.map((e) => UserObject.fromDoc(e)).toList());
+    List<UserObject> models = await usersRef.get().then((value) =>
+        value.docs.map((e) => UserObject.fromDoc(e.data())).toList());
     return models;
   }
 

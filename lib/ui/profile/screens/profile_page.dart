@@ -42,6 +42,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
       appBar: AppBar(
         actions: [
           GFIconBadge(
+            counterChild: Text("1"),
             child: IconButton(
               onPressed: () {
                 NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);

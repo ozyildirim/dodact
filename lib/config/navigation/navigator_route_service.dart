@@ -8,6 +8,7 @@ import 'package:dodact_v1/ui/common_widgets/about_dodact_page.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/event_creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
+import 'package:dodact_v1/ui/detail/podcast_detail.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
@@ -29,6 +30,7 @@ import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/user_notifications_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
+import 'package:dodact_v1/ui/spinner/spinner_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -70,6 +72,14 @@ class NavigationRouteManager {
               postId: args,
             ),
             settings);
+
+      case k_ROUTE_PODCAST_DETAIL:
+        return _navigateToDefault(
+            PodcastDetail(
+              podcast: args,
+            ),
+            settings);
+
       case k_ROUTE_EVENTS_PAGE:
         return _navigateToDefault(EventsPage(), settings);
       case k_ROUTE_EVENT_DETAIL:
@@ -83,6 +93,10 @@ class NavigationRouteManager {
         return _navigateToDefault(GroupsPage(), settings);
       case k_ROUTE_GROUP_DETAIL:
         return _navigateToDefault(GroupDetailPage(groupId: args), settings);
+
+      case k_ROUTE_SPINNER_PAGE:
+        return _navigateToDefault(SpinnerPage(), settings);
+
       case k_ROUTE_USER_PROFILE:
         return _navigateToDefault(ProfilePage(), settings);
 

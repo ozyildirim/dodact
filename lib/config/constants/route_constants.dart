@@ -14,12 +14,15 @@ const k_ROUTE_FORGOT_PASSWORD = '/forgot_password';
 const k_ROUTE_RESET_PASSWORD = '/reset_password';
 const k_ROUTE_DISCOVER = '/discover';
 const k_ROUTE_POST_DETAIL = '/post';
+const k_ROUTE_PODCAST_DETAIL = '/podcast';
 const k_ROUTE_EVENTS_PAGE = '/events';
 const k_ROUTE_EVENT_DETAIL = '/event';
 const k_ROUTE_COMMUNITIES_PAGE = '/communities';
 const k_ROUTE_COMMUNITY_DETAIL = '/community';
 const k_ROUTE_GROUPS_PAGE = '/groups';
 const k_ROUTE_GROUP_DETAIL = '/group';
+
+const k_ROUTE_SPINNER_PAGE = '/spinner';
 
 const k_ROUTE_USER_PROFILE = '/profile';
 const k_ROUTE_USER_NOTIFICATIONS = '/user_notifications';

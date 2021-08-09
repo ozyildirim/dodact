@@ -3,6 +3,7 @@ import 'package:dodact_v1/ui/general/widgets/announcement_part.dart';
 import 'package:dodact_v1/ui/general/widgets/event_part.dart';
 import 'package:dodact_v1/ui/general/widgets/podcast_part.dart';
 import 'package:dodact_v1/ui/general/widgets/post_part.dart';
+import 'package:dodact_v1/ui/general/widgets/spinner_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +51,19 @@ class GeneralPage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
+                  Text(
+                    "Benim İçin Ne Var?",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  SpinnerPart(),
+                  SizedBox(height: 20),
                   Text(
                     "Podcast Önerileri",
                     textAlign: TextAlign.start,

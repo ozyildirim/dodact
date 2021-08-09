@@ -412,7 +412,7 @@ BoxDecoration(
   //Fonksiyonlar
 
   void submitComment(BuildContext context) async {
-    formKey.currentState.saveAndValidate();
+    // formKey.currentState.saveAndValidate();
     var commentProvider = Provider.of<CommentProvider>(context, listen: false);
     CommentModel newComment = new CommentModel();
     newComment.comment = commentController.text;

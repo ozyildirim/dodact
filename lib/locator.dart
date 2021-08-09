@@ -2,6 +2,7 @@ import 'package:dodact_v1/repository/announcement_repository.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/repository/event_repository.dart';
 import 'package:dodact_v1/repository/group_repository.dart';
+import 'package:dodact_v1/repository/podcast_repository.dart';
 import 'package:dodact_v1/repository/post_repository.dart';
 import 'package:dodact_v1/repository/user_repository.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
@@ -9,6 +10,7 @@ import 'package:dodact_v1/services/concrete/firebase_announcement_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_event_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_group_service.dart';
+import 'package:dodact_v1/services/concrete/firebase_podcast_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_post_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_story_service.dart';
@@ -40,4 +42,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => FirebaseStoryService());
 
   locator.registerLazySingleton(() => FirebaseRequestService());
+
+  locator.registerLazySingleton(() => FirebasePodcastService());
+  locator.registerLazySingleton(() => PodcastRepository());
 }

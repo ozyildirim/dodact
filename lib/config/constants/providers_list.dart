@@ -3,6 +3,7 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/comment_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
+import 'package:dodact_v1/provider/podcast_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
@@ -19,4 +20,5 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => AuthProvider()),
   ChangeNotifierProvider(create: (_) => RequestProvider()),
   ChangeNotifierProvider(create: (_) => CommentProvider()),
+  ChangeNotifierProvider(create: (_) => PodcastProvider())
 ];

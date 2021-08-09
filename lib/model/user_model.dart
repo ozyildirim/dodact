@@ -116,7 +116,7 @@ class UserObject {
         hiddenLocation = map['hiddenLocation'],
         hiddenNameSurname = map['hiddenNameSurname'];
 
-  UserObject.fromDoc(DocumentSnapshot doc) {
+  UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
     email = doc.data()['email'] ?? '';
     username = doc.data()['username'] ?? '';

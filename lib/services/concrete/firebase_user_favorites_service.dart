@@ -7,7 +7,7 @@ class FirebaseUserFavoritesService {
 
     DocumentSnapshot documentSnapshot = await userFavsRef.doc(userId).get();
     if (documentSnapshot.exists) {
-      var data = documentSnapshot.data();
+      var data = documentSnapshot;
       favorites = List.castFrom(data['favoritePosts'] as List ?? []);
       print("favoriler: " + favorites.toString());
     } else {

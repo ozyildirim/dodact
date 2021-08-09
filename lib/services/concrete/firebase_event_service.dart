@@ -27,7 +27,7 @@ class FirebaseEventService extends BaseService<EventModel> {
       EventModel _convertedEvent = EventModel.fromJson(event.data());
       allEvents.add(_convertedEvent);
     }
-    print(allEvents.toString());
+
     return allEvents;
   }
 

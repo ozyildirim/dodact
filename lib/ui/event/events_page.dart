@@ -97,7 +97,7 @@ CachedNetworkImage(
                                 },
                               ),
                               titleText: eventItem.eventTitle,
-                              subtitleText:
+                              subTitleText:
                                   'Lorem ipsum dolor sit amet, consectetur adipiscing',
                             ),
                           );
