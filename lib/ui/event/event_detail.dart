@@ -102,22 +102,26 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
   }
 
   Widget _buildEventImageCarousel() {
-    return Container(
-      height: 250,
-      width: double.infinity,
-      child: GFCarousel(
-        autoPlay: true,
-        items: _event.eventImages.map((image) {
-          return Container(
-            margin: EdgeInsets.all(8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
-            ),
-          );
-        }).toList(),
-      ),
-    );
+    if (_event.eventImages.isNotEmpty) {
+      return Container(
+        height: 250,
+        width: double.infinity,
+        child: GFCarousel(
+          autoPlay: true,
+          items: _event.eventImages.map((image) {
+            return Container(
+              margin: EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildEventHeaderPart() {
@@ -265,7 +269,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
                       width: 10,
                     ),
                     Text(
-                      DateFormat('dd/MM/yyyy hh:mm').format(_event.eventDate),
+                      DateFormat('dd/MM/yyyy hh:mm')
+                          .format(_event.eventStartDate),
                     ),
                   ],
                 ),

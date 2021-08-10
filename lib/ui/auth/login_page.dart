@@ -244,9 +244,9 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   showLoadingProgressContainer() {
     CoolAlert.show(
-      context: context,
-      type: CoolAlertType.loading,
-      text: "Giriş yapılıyor.",
-    );
+        context: context,
+        type: CoolAlertType.loading,
+        text: "Giriş Yapılıyor.",
+        barrierDismissible: false);
   }
 }

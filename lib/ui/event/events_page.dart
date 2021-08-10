@@ -84,18 +84,22 @@ CachedNetworkImage(
                                     k_ROUTE_EVENT_DETAIL,
                                     args: eventItem);
                               },
-                              avatar: CachedNetworkImage(
-                                placeholder: (context, url) => Container(
-                                  child: Center(child: spinkit),
-                                ),
-                                imageUrl: eventItem.eventImages[0],
-                                imageBuilder: (context, imageProvider) {
-                                  return GFAvatar(
-                                    radius: 60,
-                                    backgroundImage: imageProvider,
-                                  );
-                                },
-                              ),
+                              avatar: eventItem.eventImages.isNotEmpty
+                                  ? CachedNetworkImage(
+                                      placeholder: (context, url) => Container(
+                                        child: Center(child: spinkit),
+                                      ),
+                                      imageUrl: eventItem.eventImages[0],
+                                      imageBuilder: (context, imageProvider) {
+                                        return GFAvatar(
+                                          radius: 60,
+                                          backgroundImage: imageProvider,
+                                        );
+                                      },
+                                    )
+                                  : GFAvatar(
+                                      radius: 60,
+                                    ),
                               titleText: eventItem.eventTitle,
                               subTitleText:
                                   'Lorem ipsum dolor sit amet, consectetur adipiscing',

@@ -95,7 +95,7 @@ class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
                     ),
                     subtitle: Text(
                       DateFormat("dd/mm/yyyy")
-                          .format(event.eventDate)
+                          .format(event.eventStartDate)
                           .toString(),
                     ),
                   ),

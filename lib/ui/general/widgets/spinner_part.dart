@@ -14,7 +14,13 @@ class SpinnerPart extends StatelessWidget {
         child: Container(
           color: Colors.amberAccent,
           height: 100,
-          child: Row(children: []),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Image(image: AssetImage("assets/images/app/spinner_image.png")),
+            // Text(
+            //   "Dodact Çark",
+            //   style: TextStyle(fontSize: 18),
+            // )
+          ]),
         ),
       ),
     );

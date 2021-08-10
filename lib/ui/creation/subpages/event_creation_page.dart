@@ -46,7 +46,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   FocusNode _eventDescriptionFocus = new FocusNode();
   FocusNode _eventURLFocus = new FocusNode();
 
-  DateTime _eventDate = new DateTime.now();
+  DateTime _eventStartDate = new DateTime.now();
+  DateTime _eventEndDate = new DateTime.now().add(Duration(days: 1));
   bool isOnline;
   String postOwnerType = "User";
   String ownerGroupId;
@@ -69,6 +70,12 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _formSubmit();
+        },
+        child: Icon(Icons.add),
+      ),
       appBar: AppBar(
         centerTitle: true,
         title: Text('Etkinlik Oluştur'),
@@ -86,7 +93,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
             children: [
               _buildEventImagePart(),
               _buildEventFormPart(),
-              _buildSubmissionPart(),
             ],
           ),
         ),
@@ -147,7 +153,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   Widget _buildEventFormPart() {
     var size = MediaQuery.of(context).size;
     return Expanded(
-        flex: 3,
+        flex: 4,
         child: SingleChildScrollView(
           child: FormBuilder(
             key: _formKey,
@@ -248,64 +254,74 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                       ),
                     ),
                   ),
-                  Text("Etkinlik Tarihi",
+                  Text("Etkinlik Başlangıç Tarihi",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
-                  Row(
-                    children: [
-                      TextFieldContainer(
-                        key: Key(DateFormat("dd/mm/yyyy").format(_eventDate)),
-                        width: size.width * 0.4,
-                        child: FormBuilderTextField(
-                          name: "eventDate",
-                          initialValue:
-                              DateFormat("dd/MM/yyyy").format(_eventDate),
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              FontAwesome5Solid.calendar,
-                              color: Colors.black,
-                            ),
-                            border: InputBorder.none,
-                          ),
+                  TextFieldContainer(
+                    key: Key(DateFormat("dd/mm/yyyy").format(_eventStartDate)),
+                    width: size.width * 0.6,
+                    child: FormBuilderDateTimePicker(
+                      initialValue: _eventStartDate,
+                      format: DateFormat("dd/MM/yyyy hh:mm"),
+                      onChanged: (date) {
+                        setState(() {
+                          _eventStartDate = date;
+                        });
+                      },
+                      initialDate: _eventStartDate,
+                      alwaysUse24HourFormat: true,
+                      name: "eventStartDate",
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          FontAwesome5Solid.calendar,
+                          color: Colors.black,
                         ),
+                        border: InputBorder.none,
                       ),
-                      SizedBox(height: 4),
-                      TextFieldContainer(
-                        key: Key(TimeOfDay.fromDateTime(_eventDate).toString()),
-                        width: size.width * 0.4,
-                        child: FormBuilderTextField(
-                          name: "eventDate",
-                          initialValue: TimeOfDay.fromDateTime(_eventDate)
-                              .format(context)
-                              .toString(),
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              FontAwesome5Solid.calendar,
-                              color: Colors.black,
-                            ),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      CircleAvatar(
-                        radius: 22,
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                            icon: Icon(FontAwesome5Regular.calendar),
-                            color: Colors.black,
-                            onPressed: () async {
-                              _selectDateTime(context);
-                            }),
-                      )
-                    ],
+                      confirmText: "Tamam",
+                      cancelText: "İptal",
+                      fieldLabelText: "Etkinlik Başlangıç Tarihi",
+                      helpText: "Etkinlik tarihini seçiniz",
+                      fieldHintText: "Gün/Ay/Yıl",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,
+                            errorText: "Bu alan boş bırakılamaz."),
+                      ]),
+                      firstDate: DateTime.now(),
+                    ),
                   ),
+                  Text("Etkinlik Bitiş Tarihi",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
+                  TextFieldContainer(
+                    key: Key(DateFormat("dd/mm/yyyy").format(_eventEndDate)),
+                    width: size.width * 0.6,
+                    child: FormBuilderDateTimePicker(
+                      initialValue: _eventEndDate,
+                      format: DateFormat("dd/MM/yyyy hh:mm"),
+                      onChanged: (date) {
+                        setState(() {
+                          _eventEndDate = date;
+                        });
+                      },
+                      initialDate: _eventStartDate,
+                      alwaysUse24HourFormat: true,
+                      name: "eventEndDate",
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          FontAwesome5Solid.calendar,
+                          color: Colors.black,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,
+                            errorText: "Bu alan boş bırakılamaz."),
+                      ]),
+                    ),
+                  ),
                   Text(isOnline ? "Etkinlik Adresi" : "Etkinlik Lokasyonu",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
@@ -379,32 +395,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
         ));
   }
 
-  Widget _buildSubmissionPart() {
-    return Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GestureDetector(
-          onTap: () {
-            _formSubmit();
-          },
-          child: Container(
-            alignment: Alignment.bottomRight,
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 25,
-              child: Icon(
-                Icons.navigate_next,
-                size: 30,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Future<void> _selectFiles() async {
     FilePickerResult result = await FilePicker.platform
         .pickFiles(allowMultiple: true, type: FileType.image);
@@ -422,28 +412,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     } else {
       print("Fotoğraflar seçilmedi");
     }
-  }
-
-  Future<void> _selectDateTime(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        helpText: "Etkinlik tarihini seçiniz",
-        cancelText: "Vazgeç",
-        confirmText: "Tamam",
-        context: context,
-        initialDate: _eventDate, // Refer step 1
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2024),
-        fieldLabelText: "Etkinlik Tarihi",
-        fieldHintText: "Gün/Ay/Yıl");
-    if (picked != null && picked != _eventDate)
-      setState(() {
-        _eventDate = picked;
-      });
-
-    Future<TimeOfDay> selectedTime = showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context,
-    );
   }
 
   _showLocationPicker() {}
@@ -483,7 +451,9 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     _eventProvider.newEvent.eventDescription =
         _formKey.currentState.value['eventDescription'].toString().trim();
 
-    _eventProvider.newEvent.eventDate = _eventDate;
+    //TODO: Start Date ve End Date farkını ayarla
+
+    _eventProvider.newEvent.eventStartDate = _eventStartDate;
     _eventProvider.newEvent.isDone = false;
     _eventProvider.newEvent.isOnline = isOnline;
     _eventProvider.newEvent.eventURL = isOnline

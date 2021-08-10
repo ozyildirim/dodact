@@ -27,6 +27,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
   }
 
   Future<void> getPosts() async {
+    //TODO: Favorilerdeki postlardan herhangi birisi silindiğinde bunun favorilerden de silinmesi lazım.
     List<PostModel> fetchedPosts = [];
     if (authProvider.currentUser.favoritedPosts.length > 0) {
       var favoritedPostIDs = authProvider.currentUser.favoritedPosts;

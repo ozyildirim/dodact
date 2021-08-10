@@ -8,7 +8,8 @@ class EventModel {
   String eventDescription;
   String city;
   String eventURL;
-  DateTime eventDate;
+  DateTime eventStartDate;
+  DateTime eventEndDate;
   String eventCategory;
   List<String> eventImages;
   String eventLocationCoordinates;
@@ -25,7 +26,8 @@ class EventModel {
       this.eventDescription,
       this.city,
       this.eventURL,
-      this.eventDate,
+      this.eventStartDate,
+      this.eventEndDate,
       this.eventCategory,
       this.eventImages,
       this.isOnline,
@@ -42,7 +44,8 @@ class EventModel {
     eventDescription = json['eventDescription'];
     city = json['city'];
     eventURL = json['eventURL'];
-    eventDate = (json['eventDate'] as Timestamp).toDate();
+    eventStartDate = (json['eventStartDate'] as Timestamp).toDate();
+    eventEndDate = (json['eventEndDate'] as Timestamp).toDate();
     eventCategory = json['eventCategory'];
     eventImages = json['eventImages']?.cast<String>() ?? [];
     isOnline = json['isOnline'];
@@ -61,7 +64,9 @@ class EventModel {
     data['eventDescription'] = this.eventDescription;
     data['city'] = this.city;
     data['eventURL'] = this.eventURL;
-    data['eventDate'] = this.eventDate ?? FieldValue.serverTimestamp();
+    data['eventStartDate'] =
+        this.eventStartDate ?? FieldValue.serverTimestamp();
+    data['eventEndDate'] = this.eventEndDate ?? FieldValue.serverTimestamp();
     data['eventCategory'] = this.eventCategory;
     data['eventLocationCoordinates'] = this.eventLocationCoordinates;
     data['eventImages'] = this.eventImages;
@@ -74,6 +79,6 @@ class EventModel {
 
   @override
   String toString() {
-    return 'EventModel{eventId: $eventId,eventType: $eventType,approved: $approved, eventLocationCoordinates: $eventLocationCoordinates, ownerId: $ownerId, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL, eventDate: $eventDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType}';
+    return 'EventModel{eventId: $eventId,eventType: $eventType,approved: $approved, eventLocationCoordinates: $eventLocationCoordinates, ownerId: $ownerId, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType}';
   }
 }

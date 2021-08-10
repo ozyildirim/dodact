@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/provider/user_favorites_provider.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
@@ -159,9 +158,17 @@ class AuthProvider extends ChangeNotifier {
       changeState(true);
       await _authRepository.forgotPassword(email);
     } catch (e) {
-      debugPrint("AuthProvider ViewModel error." + e.toString());
+      debugPrint("AuthProvider forgotPassword error." + e.toString());
     } finally {
       changeState(false);
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    try {
+      await _authRepository.updatePassword(password);
+    } catch (e) {
+      debugPrint("AuthProvider updatePassword error." + e.toString());
     }
   }
 
