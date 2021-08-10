@@ -23,6 +23,7 @@ class UserObject {
   String dribbbleLink;
   String linkedInLink;
   String soundcloudLink;
+  bool newUser;
 
   List<String> favoritedPosts;
 
@@ -55,7 +56,8 @@ class UserObject {
       this.soundcloudLink,
       this.hiddenMail,
       this.hiddenLocation,
-      this.hiddenNameSurname});
+      this.hiddenNameSurname,
+      this.newUser});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -85,6 +87,7 @@ class UserObject {
     userData['hiddenMail'] = this.hiddenMail;
     userData['hiddenLocation'] = this.hiddenLocation;
     userData['hiddenNameSurname'] = this.hiddenNameSurname;
+    userData['newUser'] = this.newUser ?? true;
 
     return userData;
   }
@@ -114,7 +117,8 @@ class UserObject {
         soundcloudLink = map['soundcloudLink'],
         hiddenMail = map['hiddenMail'],
         hiddenLocation = map['hiddenLocation'],
-        hiddenNameSurname = map['hiddenNameSurname'];
+        hiddenNameSurname = map['hiddenNameSurname'],
+        newUser = map['newUser'] ?? true;
 
   UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
@@ -142,9 +146,10 @@ class UserObject {
     hiddenMail = doc.data()['hiddenMail'];
     hiddenLocation = doc.data()['hiddenLocation'];
     hiddenNameSurname = doc.data()['hiddenNameSurname'];
+    newUser = doc.data()['newUser'] ?? true;
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email, username: $username, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
+    return 'UserObject{uid: $uid, email: $email,newUser: $newUser, username: $username, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
   }
 }

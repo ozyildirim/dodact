@@ -11,11 +11,10 @@ import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-enum VerifyState { WAITING_FOR_VERIFY, VERIFIED }
+enum VerifyState { WAITING_TO_VERIFY, VERIFIED }
 
 class AuthProvider extends ChangeNotifier {
   AuthRepository _authRepository = locator<AuthRepository>();
-  UserFavoritesProvider _userFavoritesProvider = UserFavoritesProvider();
 
   AuthProvider() {
     getUser();
@@ -24,7 +23,7 @@ class AuthProvider extends ChangeNotifier {
 
   AuthResultStatus authStatus;
   AuthResultStatus accountAuthStatus;
-  VerifyState verifyState = VerifyState.WAITING_FOR_VERIFY;
+  VerifyState verifyState = VerifyState.WAITING_TO_VERIFY;
 
   UserObject currentUser;
   bool isLoading = false;

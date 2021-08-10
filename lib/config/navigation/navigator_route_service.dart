@@ -1,7 +1,6 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/ui/auth/forgot_password.dart';
 import 'package:dodact_v1/ui/auth/login_page.dart';
-import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail_2.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/common_widgets/about_dodact_page.dart';
@@ -50,8 +49,7 @@ class NavigationRouteManager {
         return _navigateToDefault(LogInPage(), settings);
       case k_ROUTE_REGISTER:
         return _navigateToDefault(SignUpPage(), settings);
-      case k_ROUTE_REGISTER_DETAIL_2:
-        return _navigateToDefault(SignUpDetail_2(), settings);
+
       case k_ROUTE_INTERESTS_CHOICE:
         return _navigateToDefault(InterestsPage(), settings);
       case k_ROUTE_HOME:

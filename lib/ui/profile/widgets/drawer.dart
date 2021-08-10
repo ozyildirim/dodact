@@ -5,7 +5,6 @@ import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ProfileDrawer extends StatefulWidget {
   @override
@@ -37,8 +36,10 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               alignment: Alignment.center,
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(authProvider.currentUser.profilePictureURL),
+                  backgroundImage: authProvider.currentUser.profilePictureURL !=
+                          null
+                      ? NetworkImage(authProvider.currentUser.profilePictureURL)
+                      : null,
                   radius: 30,
                 ),
                 title: Text(

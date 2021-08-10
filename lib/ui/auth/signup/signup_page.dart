@@ -235,6 +235,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         _formKey.currentState.value['password'].toString().trim(),
       );
       if (registrationResult != AuthResultStatus.successful) {
+        NavigationService.instance.pop();
         final errorMsg =
             AuthExceptionHandler.generateExceptionMessage(registrationResult);
         _scaffoldKey.currentState.showSnackBar(
