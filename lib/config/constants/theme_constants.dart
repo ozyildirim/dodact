@@ -18,6 +18,7 @@ const kCustomAppBarColor = Color(0xFF1C1B22);
 
 const kAuthBackgroundImage = "assets/images/loginBG.jpg";
 const kBackgroundImage = "assets/images/appBG.jpg";
+const kDodactLogo = "assets/images/logo.png";
 
 const kButtonFontSize = 20;
 

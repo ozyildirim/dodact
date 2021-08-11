@@ -98,7 +98,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                 child: Image(
                   height: 180,
                   width: 180,
-                  image: AssetImage('assets/images/logo.png'),
+                  image: AssetImage(kDodactLogo),
                 ),
               ),
               SizedBox(
@@ -118,6 +118,11 @@ class _LogInPageState extends BaseState<LogInPage> {
                     border: InputBorder.none,
                   ),
                   focusNode: _emailFocus,
+                  onEditingComplete: () {
+                    setState(() {
+                      FocusScope.of(context).unfocus();
+                    });
+                  },
                   textInputAction: TextInputAction.next,
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(context,
@@ -144,6 +149,11 @@ class _LogInPageState extends BaseState<LogInPage> {
                     ),
                     border: InputBorder.none,
                   ),
+                  onEditingComplete: () {
+                    setState(() {
+                      FocusScope.of(context).unfocus();
+                    });
+                  },
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(context,
                         errorText: "Lütfen parolanızı giriniz.")

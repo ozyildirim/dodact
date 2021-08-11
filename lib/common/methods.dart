@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -26,6 +27,15 @@ class CommonMethods {
     );
   }
 
+  Future<void> showSuccessDialog(BuildContext context, String message) async {
+    CoolAlert.show(
+      context: context,
+      barrierDismissible: true,
+      type: CoolAlertType.success,
+      text: message,
+    );
+  }
+
   void showErrorDialog(BuildContext context, String message) {
     CoolAlert.show(
       barrierDismissible: true,
@@ -43,6 +53,10 @@ class CommonMethods {
       text: message,
       title: title,
     );
+  }
+
+  void hideDialog() {
+    NavigationService.instance.pop();
   }
 
   static void launchURL(String requestedUrl) async {
