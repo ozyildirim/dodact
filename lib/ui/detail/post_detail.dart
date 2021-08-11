@@ -5,17 +5,13 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/model/comment_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/comment_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
-import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
-import 'package:dodact_v1/ui/detail/widgets/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -163,6 +159,7 @@ class _PostDetailState extends BaseState<PostDetail> {
       body: RefreshIndicator(
         onRefresh: () => _refreshPost(context),
         child: Container(
+          height: dynamicHeight(1),
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
@@ -184,51 +181,45 @@ class _PostDetailState extends BaseState<PostDetail> {
 
                   switch (post.postContentType) {
                     case "Video":
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                buildHeaderVideo(),
-                                buildPostBodyPart(),
-                              ],
-                            ),
-                            buildCommentBox()
-                          ],
-                        ),
+                      return Column(
+                        children: [
+                          Column(
+                            children: [
+                              buildHeaderVideo(),
+                              PostDetailInfoPart(),
+                              buildPostDescriptionCard(),
+                              buildPostCommentsNavigator(),
+                            ],
+                          ),
+                        ],
                       );
                       break;
                     case "Görüntü":
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                buildHeaderImage(),
-                                buildPostBodyPart(),
-                              ],
-                            ),
-                            buildCommentBox()
-                          ],
-                        ),
+                      return Column(
+                        children: [
+                          Column(
+                            children: [
+                              buildHeaderImage(),
+                              PostDetailInfoPart(),
+                              buildPostDescriptionCard(),
+                              buildPostCommentsNavigator(),
+                            ],
+                          ),
+                        ],
                       );
                       break;
                     case "Ses":
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                buildHeaderAudio(),
-                                buildPostBodyPart(),
-                              ],
-                            ),
-                            buildCommentBox()
-                          ],
-                        ),
+                      return Column(
+                        children: [
+                          Column(
+                            children: [
+                              buildHeaderAudio(),
+                              PostDetailInfoPart(),
+                              buildPostDescriptionCard(),
+                              buildPostCommentsNavigator(),
+                            ],
+                          ),
+                        ],
                       );
                       break;
                   }
@@ -238,16 +229,6 @@ class _PostDetailState extends BaseState<PostDetail> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildPostBodyPart() {
-    return Column(
-      children: [
-        PostDetailInfoPart(),
-        buildPostDescriptionCard(),
-        PostCommentsPart(post.postId, post.ownerId),
-      ],
     );
   }
 
@@ -278,52 +259,6 @@ class _PostDetailState extends BaseState<PostDetail> {
         ),
       ),
     );
-  }
-
-  Widget buildCommentBox() {
-    return Container(
-        alignment: Alignment(0.0, -1.0),
-        height: 70,
-        child: Form(
-          key: formKey,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextFieldContainer(
-                child: FormBuilderTextField(
-                  focusNode: focusNode,
-                  controller: commentController,
-                  name: "comment",
-                  maxLines: 3,
-                  autofocus: false,
-                  keyboardType: TextInputType.text,
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesome5Regular.comment_dots,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "Harika bir içerik!",
-                      border: InputBorder.none,
-                      errorStyle:
-                          Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(context,
-                          errorText: "Bu alan boş bırakılamaz.")
-                    ],
-                  ),
-                ),
-              ),
-              CircleAvatar(
-                  child: IconButton(
-                      icon: Icon(FontAwesome5Regular.paper_plane),
-                      onPressed: () async {
-                        await submitComment(context);
-                      }))
-            ],
-          ),
-        ));
   }
 
   Widget buildHeaderVideo() {
@@ -374,58 +309,13 @@ class _PostDetailState extends BaseState<PostDetail> {
         },
       ),
     );
-
-    /*
-
-return CachedNetworkImage(
-      imageUrl: thumbnailURL,
-      imageBuilder: (context, imageProvider) => ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: () => NavigationService.instance
-              .navigate(k_ROUTE_POST_DETAIL, args: post.postId),
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-      ),
-      placeholder: (context, url) => CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-    );
-    */
   }
-
-  /*
-BoxDecoration(
-          image: DecorationImage(
-        image: NetworkImage(post.postContentURL),
-      )),
-
-  */
 
   Widget buildHeaderAudio() {
     //TODO: Ses player eklenecek.
   }
 
   //Fonksiyonlar
-
-  void submitComment(BuildContext context) async {
-    // formKey.currentState.saveAndValidate();
-    var commentProvider = Provider.of<CommentProvider>(context, listen: false);
-    CommentModel newComment = new CommentModel();
-    newComment.comment = commentController.text;
-    newComment.authorId = authProvider.currentUser.uid;
-    newComment.commentDate = DateTime.now();
-
-    await commentProvider.saveComment(newComment, widget.postId);
-
-    commentController.text = "";
-  }
 
   Future<void> _showDeletePostDialog() async {
     CoolAlert.show(
@@ -533,5 +423,16 @@ BoxDecoration(
       });
       NavigationService.instance.pop();
     });
+  }
+
+  buildPostCommentsNavigator() {
+    return ListTile(
+      title: Text("Yorumları Görüntüle", style: TextStyle(fontSize: 18)),
+      trailing: Icon(Icons.forward),
+      onTap: () {
+        NavigationService.instance
+            .navigate(k_ROUTE_POST_COMMENTS, args: [post.postId, post.ownerId]);
+      },
+    );
   }
 }

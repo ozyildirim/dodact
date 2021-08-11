@@ -12,6 +12,7 @@ enum AuthResultStatus {
   abortedByUser,
   accountAlreadyExist,
   credentialAlreadyInUse,
+  requiresRecentLogin,
 }
 
 class AuthExceptionHandler {
@@ -74,6 +75,9 @@ class AuthExceptionHandler {
       case "account-exısts-wıth-dıfferent-credentıal":
         status = AuthResultStatus.accountAlreadyExist;
         break;
+      case "ERROR_REQUIRES_RECENT_LOGIN":
+        status = AuthResultStatus.requiresRecentLogin;
+        break;
       default:
         status = AuthResultStatus.undefined;
     }
@@ -124,6 +128,10 @@ class AuthExceptionHandler {
       case AuthResultStatus.abortedByUser:
         errorMessage = "Giriş kullanıcı tarafından iptal edildi.";
         break;
+      case AuthResultStatus.requiresRecentLogin:
+        errorMessage = "Yeniden giriş yapman gerekiyor.";
+        break;
+
       default:
         errorMessage = "Tanımsız bir hata oluştu.";
     }

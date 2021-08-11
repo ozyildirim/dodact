@@ -5,6 +5,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -88,73 +89,77 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
         ),
         child: FormBuilder(
           key: _formKey,
-          child: Column(
-            children: [
-              TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
-                child: FormBuilderTextField(
-                  obscureText: true,
-                  textInputAction: TextInputAction.next,
-                  focusNode: _passwordFocus,
-                  controller: passwordController,
-                  name: "password",
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                    hintText: "Yeni parola",
-                    border: InputBorder.none,
-                    icon: Icon(Icons.lock),
-                  ),
-                  onEditingComplete: () {
-                    setState(() {
-                      isChanged = true;
-                    });
-                  },
-                  onSubmitted: (value) {
-                    FocusScope.of(context).requestFocus(_secondPasswordFocus);
-                  },
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(context,
-                          errorText: "Yeni parolanızı giriniz"),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              TextFieldContainer(
-                width: mediaQuery.size.width * 0.8,
-                child: FormBuilderTextField(
-                  obscureText: true,
-                  textInputAction: TextInputAction.done,
-                  focusNode: _secondPasswordFocus,
-                  controller: secondPasswordController,
-                  name: "secondPassword",
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                    hintText: "Tekrar yeni parola",
-                    border: InputBorder.none,
-                    icon: Icon(Icons.lock),
-                  ),
-                  onEditingComplete: () {
-                    setState(() {
-                      FocusScope.of(context).unfocus();
-                      isChanged = true;
-                    });
-                  },
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(context,
-                          errorText: "Yeni parolanızı giriniz"),
-                      FormBuilderValidators.equal(
-                          context, passwordController.text,
-                          errorText: "Parolalar eşleşmiyor"),
-                    ],
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFieldContainer(
+                  width: mediaQuery.size.width * 0.8,
+                  child: FormBuilderTextField(
+                    obscureText: true,
+                    textInputAction: TextInputAction.next,
+                    focusNode: _passwordFocus,
+                    controller: passwordController,
+                    name: "password",
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      hintText: "Yeni parola",
+                      border: InputBorder.none,
+                      icon: Icon(Icons.lock),
+                    ),
+                    onEditingComplete: () {
+                      setState(() {
+                        isChanged = true;
+                      });
+                    },
+                    onSubmitted: (value) {
+                      FocusScope.of(context).requestFocus(_secondPasswordFocus);
+                    },
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(context,
+                            errorText: "Yeni parolanızı giriniz"),
+                      ],
+                    ),
                   ),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 4,
+                ),
+                TextFieldContainer(
+                  width: mediaQuery.size.width * 0.8,
+                  child: FormBuilderTextField(
+                    obscureText: true,
+                    textInputAction: TextInputAction.done,
+                    focusNode: _secondPasswordFocus,
+                    controller: secondPasswordController,
+                    name: "secondPassword",
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      hintText: "Tekrar yeni parola",
+                      border: InputBorder.none,
+                      icon: Icon(Icons.lock),
+                    ),
+                    onEditingComplete: () {
+                      setState(() {
+                        FocusScope.of(context).unfocus();
+                        isChanged = true;
+                      });
+                    },
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(context,
+                            errorText: "Yeni parolanızı giriniz"),
+                        FormBuilderValidators.equal(
+                            context, passwordController.text,
+                            errorText: "Parolalar eşleşmiyor"),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -171,31 +176,32 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
 
   Future changePassword() async {
     try {
-      var password = _formKey.currentState.value['password'];
+      //TODO:
+      //Her halükarda şifreniz başarıyla değiştirildi diyor.
 
+      var password = _formKey.currentState.value['password'];
       CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor");
-      await authProvider.updatePassword(password).then((value) async {
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  "Şifreniz başarıyla değiştirildi.",
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
-          ),
-        ));
-        CommonMethods().hideDialog();
-      });
-    } catch (e) {
+      await authProvider.updatePassword(password);
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        duration: new Duration(seconds: 2),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                "Şifreniz başarıyla değiştirildi.",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ));
+      CommonMethods().hideDialog();
+    } on FirebaseAuthException catch (e) {
       final errorMessage = AuthExceptionHandler.generateExceptionMessage(e);
       _scaffoldKey.currentState.showSnackBar(new SnackBar(
         duration: new Duration(seconds: 2),
