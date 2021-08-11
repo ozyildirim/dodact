@@ -72,31 +72,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
           children: [
             ProfileInfo.UserProfileInfoPart(),
             Divider(),
-            UserProfileBody(),
-
-            // Padding(
-            //   padding: const EdgeInsets.all(12.0),
-            //   child: Text(
-            //     "Katıldığı Etkinlikler",
-            //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            //     textAlign: TextAlign.start,
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 15),
-            //   child: Container(
-            //     height: 1,
-            //     color: Colors.grey.shade300,
-            //     width: dynamicWidth(0.90),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.all(15.0),
-            //   child: Container(
-            //     height: 250,
-            //     child: ProfileEventsPart(),
-            //   ),
-            // ),
+            Expanded(child: UserProfileBody()),
           ],
         ),
       ),

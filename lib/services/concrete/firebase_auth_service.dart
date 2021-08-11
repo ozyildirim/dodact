@@ -67,35 +67,6 @@ class FirebaseAuthService implements AuthBase {
     }
   }
 
-  // @override
-  // Future<UserObject> signInWithFacebook() async {
-  //   final _facebookLogin = FacebookLogin();
-  //
-  //   FacebookLoginResult _facebookResult =
-  //       await _facebookLogin.logIn(["public_profile", "email"]);
-  //
-  //   switch (_facebookResult.status) {
-  //     case FacebookLoginStatus.loggedIn:
-  //       if (_facebookResult.accessToken != null) {
-  //         UserCredential _firebaseResult = await _firebaseAuth
-  //             .signInWithCredential(FacebookAuthProvider.credential(
-  //                 _facebookResult.accessToken.token));
-  //
-  //         User _user = _firebaseResult.user;
-  //         return _userFromFirebase(_user);
-  //       }
-  //
-  //       break;
-  //
-  //     case FacebookLoginStatus.cancelledByUser:
-  //       print("User cancelled login by Facebook.");
-  //       break;
-  //     case FacebookLoginStatus.error:
-  //       print("Error: " + _facebookResult.errorMessage);
-  //       break;
-  //   }
-  // }
-
   @override
   Future<UserObject> createAccountWithEmailAndPassword(
       String email, String password) async {
@@ -130,7 +101,7 @@ class FirebaseAuthService implements AuthBase {
     return UserObject.fromDoc(userObjectDoc);
   }
 
-  Future<void> changeEmail(String newEmail) async {
+  Future<void> updateEmail(String newEmail) async {
     try {
       if (_firebaseAuth.currentUser != null) {
         await _firebaseAuth.currentUser.updateEmail(newEmail);

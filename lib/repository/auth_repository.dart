@@ -117,12 +117,11 @@ class AuthRepository {
     }
   }
 
-  @override
-  Future<void> changeEmail(String newEmail) async {
+  Future<void> updateEmail(String newEmail) async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.currentUser();
     } else {
-      var result = await _firebaseAuthService.changeEmail(newEmail);
+      var result = await _firebaseAuthService.updateEmail(newEmail);
       return result;
     }
   }

@@ -172,6 +172,14 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateEmail(String email) async {
+    try {
+      await _authRepository.updateEmail(email);
+    } catch (e) {
+      debugPrint("AuthProvider updateEmail error." + e.toString());
+    }
+  }
+
   Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
     try {
       await _authRepository.updateCurrentUser(newData, currentUser.uid);

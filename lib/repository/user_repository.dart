@@ -113,7 +113,7 @@ class UserRepository {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.currentUser();
     } else {
-      var result = await _firebaseAuthService.changeEmail(newEmail);
+      var result = await _firebaseAuthService.updateEmail(newEmail);
       return result;
     }
   }

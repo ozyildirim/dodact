@@ -148,11 +148,14 @@ class _CreationPageState extends State<CreationPage> {
 
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          backwardsCompatibility: false,
-          title:
-              Text("Oluştur", style: TextStyle(fontWeight: FontWeight.normal))),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        backwardsCompatibility: false,
+        title: Text(
+          "Oluştur",
+          style: TextStyle(fontWeight: FontWeight.normal),
+        ),
+      ),
       extendBodyBehindAppBar: false,
       body: ListView(
         children: <Widget>[
@@ -162,7 +165,7 @@ class _CreationPageState extends State<CreationPage> {
                 textPos: 180,
                 boxSize: 240,
                 spaceValue: 440,
-                title: 'Topluluk Olustur',
+                title: 'Topluluk',
                 onTap: () =>
                     NavigationService.instance.navigate('/add_community'),
                 conImage:
@@ -172,7 +175,7 @@ class _CreationPageState extends State<CreationPage> {
                 textPos: 180,
                 boxSize: 240,
                 spaceValue: 285,
-                title: 'Ekip Olustur',
+                title: 'Ekip',
                 onTap: () => NavigationService.instance.navigate('/add_group'),
                 conImage: AssetImage('assets/images/creation/grup_olustur.jpg'),
               ),
@@ -180,7 +183,7 @@ class _CreationPageState extends State<CreationPage> {
                 textPos: 150,
                 boxSize: 246,
                 spaceValue: 110,
-                title: 'Etkinlik Oluştur',
+                title: 'Etkinlik',
                 onTap: () async {
                   var eventCategoryData = await showDialog(
                       barrierDismissible: true,
@@ -215,7 +218,7 @@ class _CreationPageState extends State<CreationPage> {
                 textPos: 120,
                 boxSize: 180,
                 spaceValue: 0,
-                title: 'İçerik Oluştur',
+                title: 'İçerik',
                 onTap: () async {
                   var postCategoryData = await showDialog(
                       barrierDismissible: true,
@@ -324,12 +327,15 @@ class CurvedListItem extends StatelessWidget {
                   Positioned(
                     left: 40,
                     bottom: textPos * 0.25.toDouble(),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                    child: Container(
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],

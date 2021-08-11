@@ -39,24 +39,26 @@ class _UserProfileBodyState extends State<UserProfileBody>
             ],
           ),
         ),
-        Container(
-          height: 320,
-          child: TabBarView(
-            controller: _controller,
-            children: [
-              Container(
-                child: UserProfilePostsPart(),
-              ),
-              Container(
-                child: UserCollectionsPart(),
-              ),
-              Container(
-                child: UserProfileEventsPart(),
-              ),
-              Container(
-                child: UserProfilePostsPart(),
-              )
-            ],
+        Expanded(
+          child: Container(
+            height: 320,
+            child: TabBarView(
+              controller: _controller,
+              children: [
+                Container(
+                  child: UserProfilePostsPart(),
+                ),
+                Container(
+                  child: UserCollectionsPart(),
+                ),
+                Container(
+                  child: UserProfileEventsPart(),
+                ),
+                Container(
+                  child: UserProfilePostsPart(),
+                )
+              ],
+            ),
           ),
         )
       ],
