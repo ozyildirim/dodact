@@ -8,6 +8,7 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -56,12 +57,15 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                   navigateToOwnerProfile(post);
                 },
                 child: CircleAvatar(
+                  maxRadius: 40,
                   backgroundImage:
                       NetworkImage(userProvider.otherUser.profilePictureURL),
                 ),
               ),
               title: Center(child: Text(post.postTitle)),
-              subtitle: Center(child: Text(userProvider.otherUser.nameSurname)),
+              subtitle: Center(
+                child: Text(userProvider.otherUser.nameSurname),
+              ),
               trailing: post.supportersId.length != null
                   ? Column(
                       children: [
@@ -70,18 +74,25 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                             bool liked = provider.post.supportersId
                                 .contains(authProvider.currentUser.uid);
 
-                            return IconButton(
-                                onPressed: () async {
-                                  await provider.changePostDoddedStatus(
-                                      post.postId,
-                                      authProvider.currentUser.uid,
-                                      !liked);
-                                },
-                                icon: liked
-                                    ? Icon(FontAwesome5Regular.handshake,
-                                        color: Colors.red)
-                                    : Icon(FontAwesome5Regular.handshake,
-                                        color: Colors.grey));
+                            return Bounce(
+                              duration: Duration(milliseconds: 220),
+                              onPressed: () async {
+                                await provider.changePostDoddedStatus(
+                                    post.postId,
+                                    authProvider.currentUser.uid,
+                                    !liked);
+                              },
+                              child: liked
+                                  ? Icon(
+                                      Icons.flutter_dash_outlined,
+                                      color: Colors.red,
+                                      size: 50,
+                                    )
+                                  : Icon(
+                                      Icons.flutter_dash_outlined,
+                                      size: 50,
+                                    ),
+                            );
                           },
                         )
                       ],

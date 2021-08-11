@@ -76,7 +76,11 @@ class _DiscoverPageState extends State<DiscoverPage>
         ),
         child: GFTabBarView(
           controller: tabController,
-          children: <Widget>[PostsPart(), EventsPage(), GroupsPage()],
+          children: <Widget>[
+            PostsPart(),
+            EventsPage(),
+            GroupsPage(),
+          ],
         ),
       ),
     );

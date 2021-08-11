@@ -36,13 +36,16 @@ class GeneralPage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Haftanın Öne Çıkan Paylaşımları",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context)
-                        .textTheme
-                        .title
-                        .copyWith(color: Colors.black),
+                  Container(
+                    color: Colors.white60,
+                    child: Text(
+                      "Haftanın Öne Çıkan Paylaşımları",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context)
+                          .textTheme
+                          .title
+                          .copyWith(color: Colors.black, fontSize: 22),
+                    ),
                   ),
                   SizedBox(
                     height: 15,
@@ -51,26 +54,32 @@ class GeneralPage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Benim İçin Ne Var?",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context)
-                        .textTheme
-                        .title
-                        .copyWith(color: Colors.black),
+                  Container(
+                    color: Colors.white60,
+                    child: Text(
+                      "Benim İçin Ne Var?",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context)
+                          .textTheme
+                          .title
+                          .copyWith(color: Colors.black, fontSize: 22),
+                    ),
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   SpinnerPart(),
                   SizedBox(height: 20),
-                  Text(
-                    "Podcast Önerileri",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context)
-                        .textTheme
-                        .title
-                        .copyWith(color: Colors.black),
+                  Container(
+                    color: Colors.white60,
+                    child: Text(
+                      "Podcast Önerileri",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context)
+                          .textTheme
+                          .title
+                          .copyWith(color: Colors.black, fontSize: 22),
+                    ),
                   ),
                   SizedBox(
                     height: 15,
@@ -79,13 +88,16 @@ class GeneralPage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Kaçırılmaması Gereken Etkinlikler",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context)
-                        .textTheme
-                        .title
-                        .copyWith(color: Colors.black),
+                  Container(
+                    color: Colors.white60,
+                    child: Text(
+                      "Kaçırılmaması Gereken Etkinlikler",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context)
+                          .textTheme
+                          .title
+                          .copyWith(color: Colors.black, fontSize: 22),
+                    ),
                   ),
                   SizedBox(
                     height: 15,

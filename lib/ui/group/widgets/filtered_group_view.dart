@@ -34,20 +34,29 @@ class FilteredGroupView extends StatelessWidget {
                           var groupItem = provider.groupList[index];
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                child: Image.network(
-                                    groupItem.groupProfilePicture),
-                                backgroundColor: Colors.transparent,
-                                maxRadius: 80,
+                            child: Container(
+                              color: Colors.white70,
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  child: Image.network(
+                                      groupItem.groupProfilePicture),
+                                  backgroundColor: Colors.transparent,
+                                  maxRadius: 80,
+                                ),
+                                title: Text(
+                                  groupItem.groupName,
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                                subtitle: Text(
+                                  groupItem.groupDescription,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                onTap: () {
+                                  NavigationService.instance.navigate(
+                                      k_ROUTE_GROUP_DETAIL,
+                                      args: groupItem);
+                                },
                               ),
-                              title: Text(groupItem.groupName),
-                              subtitle: Text(groupItem.groupDescription),
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_GROUP_DETAIL,
-                                    args: groupItem);
-                              },
                             ),
                           );
                         }),

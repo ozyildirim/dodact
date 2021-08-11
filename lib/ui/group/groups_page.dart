@@ -162,14 +162,14 @@ class _GroupsPageState extends State<GroupsPage> {
   }
 
   void updateGroupsByFilter(String category, String city) async {
-    if (category == "Tümü" && city == "Tüm Şehirler") {
+    if (category == "Tümü" && city == "Belirtilmemiş") {
       await Provider.of<GroupProvider>(context, listen: false)
           .getFilteredGroupList(showAllCategories: true, wholeCountry: true);
-    } else if (category == "Tümü" && city != "Tüm Şehirler") {
+    } else if (category == "Tümü" && city != "Belirtilmemiş") {
       await Provider.of<GroupProvider>(context, listen: false)
           .getFilteredGroupList(
               city: selectedCity, showAllCategories: true, wholeCountry: false);
-    } else if (category != "Tümü" && city == "Tüm Şehirler") {
+    } else if (category != "Tümü" && city == "Belirtilmemiş") {
       await Provider.of<GroupProvider>(context, listen: false)
           .getFilteredGroupList(
               category: category, wholeCountry: true, showAllCategories: false);
