@@ -5,18 +5,20 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/components/carousel/gf_items_carousel.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EventCreationPage extends StatefulWidget {
   final String eventCategory;
@@ -32,17 +34,12 @@ class EventCreationPage extends StatefulWidget {
 class _EventCreationPageState extends BaseState<EventCreationPage> {
   List<File> _eventImages;
   String eventCoordinates;
+  String eventCity;
 
   EventProvider _eventProvider;
 
   GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
-  TextEditingController _eventTitleController = new TextEditingController();
-  TextEditingController _eventDescriptionController =
-      new TextEditingController();
-  TextEditingController _eventContentUrlController =
-      new TextEditingController();
-  TextEditingController _eventDateController = new TextEditingController();
-  TextEditingController _eventURLController = new TextEditingController();
+
   TextEditingController _eventLocationController = new TextEditingController();
 
   FocusNode _eventTitleFocus = new FocusNode();
@@ -56,6 +53,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   String ownerGroupId;
 
   PickResult selectedPlace;
+
+  var logger = Logger();
 
   @override
   void dispose() {
@@ -325,74 +324,128 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     ]),
                   ),
                 ),
-                Text(isOnline ? "Etkinlik Adresi" : "Etkinlik Lokasyonu",
-                    style:
-                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                 isOnline
-                    ? TextFieldContainer(
-                        width: size.width * 0.6,
-                        child: FormBuilderTextField(
-                          textInputAction: TextInputAction.next,
-                          focusNode: _eventURLFocus,
-                          name: "eventURL",
-                          autofocus: false,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          keyboardType: TextInputType.text,
-                          cursorColor: kPrimaryColor,
-                          decoration: InputDecoration(
-                              icon: Icon(
-                                Icons.play_lesson_outlined,
-                                color: kPrimaryColor,
-                              ),
-                              hintText: "Etkinlik İnternet Adresi",
-                              border: InputBorder.none,
-                              errorStyle: Theme.of(context)
-                                  .inputDecorationTheme
-                                  .errorStyle),
-                          validator: FormBuilderValidators.compose(
-                            [
-                              FormBuilderValidators.required(context,
-                                  errorText: "Bu alan boş bırakılamaz."),
-                              FormBuilderValidators.url(context)
-                            ],
-                          ),
-                        ),
-                      )
-                    : Row(
+                    ? Column(
                         children: [
+                          Text("Etkinlik Adresi",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
                           TextFieldContainer(
                             width: size.width * 0.6,
                             child: FormBuilderTextField(
-                              controller: _eventLocationController,
-                              readOnly: true,
-                              name: "eventLocation",
+                              textInputAction: TextInputAction.next,
+                              focusNode: _eventURLFocus,
+                              name: "eventURL",
                               autofocus: false,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               keyboardType: TextInputType.text,
                               cursorColor: kPrimaryColor,
-
                               decoration: InputDecoration(
                                   icon: Icon(
-                                    FontAwesome5Regular.map,
+                                    Icons.play_lesson_outlined,
                                     color: kPrimaryColor,
                                   ),
-                                  hintText: "Etkinlik Lokasyonu",
+                                  hintText: "Etkinlik İnternet Adresi",
                                   border: InputBorder.none,
                                   errorStyle: Theme.of(context)
                                       .inputDecorationTheme
                                       .errorStyle),
-                              // validator: FormBuilderValidators.compose(
-                              //   [
-                              //     FormBuilderValidators.required(context,
-                              //         errorText: "Bu alan boş bırakılamaz.")
-                              //   ],
-                              // ),
+                              validator: FormBuilderValidators.compose(
+                                [
+                                  FormBuilderValidators.required(context,
+                                      errorText: "Bu alan boş bırakılamaz."),
+                                  FormBuilderValidators.url(context)
+                                ],
+                              ),
                             ),
                           ),
-                          IconButton(
-                              onPressed: () async {
-                                await _showLocationPicker();
-                              },
-                              icon: Icon(Icons.location_on)),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Etkinlik Yapılacak Şehir",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 4),
+                          InkWell(
+                            onTap: () => _showCityPicker(),
+                            child: TextFieldContainer(
+                              width: size.width * 0.6,
+                              child: FormBuilderTextField(
+                                key: Key(eventCity != null ? eventCity : null),
+                                readOnly: true,
+                                name: "eventCity",
+                                autofocus: false,
+                                keyboardType: TextInputType.text,
+                                cursorColor: kPrimaryColor,
+                                initialValue:
+                                    eventCity != null ? eventCity : "",
+                                decoration: InputDecoration(
+                                    icon: Icon(
+                                      FontAwesome5Solid.city,
+                                      color: kPrimaryColor,
+                                    ),
+                                    hintText: "Etkinlik Şehir",
+                                    border: InputBorder.none,
+                                    errorStyle: Theme.of(context)
+                                        .inputDecorationTheme
+                                        .errorStyle),
+                                validator: FormBuilderValidators.compose(
+                                  [
+                                    FormBuilderValidators.required(context,
+                                        errorText: "Bu alan boş bırakılamaz.")
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Text("Etkinlik Lokasyonu",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 4),
+                          Row(
+                            children: [
+                              TextFieldContainer(
+                                width: size.width * 0.6,
+                                child: FormBuilderTextField(
+                                  key: selectedPlace != null
+                                      ? Key(selectedPlace.formattedAddress)
+                                      : null,
+                                  readOnly: true,
+                                  name: "eventLocation",
+                                  autofocus: false,
+                                  keyboardType: TextInputType.text,
+                                  cursorColor: kPrimaryColor,
+                                  initialValue: selectedPlace != null
+                                      ? selectedPlace.formattedAddress
+                                      : "",
+                                  decoration: InputDecoration(
+                                      icon: Icon(
+                                        FontAwesome5Regular.map,
+                                        color: kPrimaryColor,
+                                      ),
+                                      hintText: "Etkinlik Lokasyonu",
+                                      border: InputBorder.none,
+                                      errorStyle: Theme.of(context)
+                                          .inputDecorationTheme
+                                          .errorStyle),
+                                  validator: FormBuilderValidators.compose(
+                                    [
+                                      FormBuilderValidators.required(context,
+                                          errorText: "Bu alan boş bırakılamaz.")
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    await _showMapPicker();
+                                  },
+                                  icon: Icon(Icons.location_on)),
+                            ],
+                          ),
                         ],
                       ),
               ],
@@ -422,7 +475,21 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     }
   }
 
-  Future _showLocationPicker() async {
+  Future<String> _showCityPicker() {
+    return showMaterialScrollPicker<String>(
+      context: context,
+      title: 'Şehir Seç',
+      items: cities,
+      selectedItem: eventCity,
+      onChanged: (value) {
+        setState(() {
+          eventCity = value;
+        });
+      },
+    );
+  }
+
+  Future _showMapPicker() async {
     final kInitialPosition = LatLng(-33.8567844, 151.213108);
     // print("asdasd");
     PickResult result = await Navigator.push(
@@ -484,8 +551,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
         selectedPlace = result;
         _eventLocationController.text = selectedPlace.formattedAddress;
       });
+      logger.i("PickerResult değeri alındı:  " +
+          selectedPlace.geometry.location.toString());
     } else {
-      Logger().e("PlacePicker result is null");
+      logger.e("PlacePicker result is null");
     }
   }
 
@@ -534,7 +603,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
         : "";
 
     _eventProvider.newEvent.eventLocationCoordinates =
-        isOnline ? "" : eventCoordinates;
+        isOnline ? "" : selectedPlace.geometry.location.toString();
 
     if (postOwnerType == "User") {
       _eventProvider.newEvent.ownerId = authProvider.currentUser.uid;
@@ -545,7 +614,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     }
 
     //TODO: Bu lokasyondan elde edilecek.
-    _eventProvider.newEvent.city = "";
+    _eventProvider.newEvent.city = eventCity;
     _eventProvider.newEvent.eventCategory = widget.eventCategory;
     _eventProvider.newEvent.eventType = widget.eventType;
   }
