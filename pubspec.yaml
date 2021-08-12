@@ -70,8 +70,9 @@ dependencies:
   logger: ^1.0.0
   google_fonts: ^2.1.0
   flutter_bounce: ^1.1.0
+  google_maps_place_picker: ^2.0.0-nullsafety.3
 
- 
+
   
   
 
