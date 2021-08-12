@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
@@ -15,6 +17,7 @@ import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +32,7 @@ class EventDetailPage extends StatefulWidget {
 
 class _EventDetailPageState extends BaseState<EventDetailPage> {
   EventModel _event;
+  Completer<GoogleMapController> _controller = Completer();
 
   bool canUserControlEvent() {
     if (_event.ownerType == 'Group') {
@@ -94,8 +98,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
           image: AssetImage(kBackgroundImage),
         )),
         width: dynamicWidth(1),
-        child: Column(
-          children: [_buildEventImageCarousel(), _buildEventHeaderPart()],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildEventImageCarousel(),
+              _buildEventHeaderPart(),
+              _buildMap()
+            ],
+          ),
         ),
       ),
     );
@@ -336,4 +346,27 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
   }
 
   _showEditEventDialog() {}
+
+  _buildMap() {
+    if (_event.eventLocationCoordinates != null) {
+      var lat = _event.eventLocationCoordinates.split(",")[0];
+      var lng = _event.eventLocationCoordinates.split(",")[1];
+
+      final CameraPosition _kGooglePlex = CameraPosition(
+        target: LatLng(double.parse(lat), double.parse(lng)),
+        zoom: 14.4746,
+      );
+      return Container(
+        height: 300,
+        width: double.infinity,
+        child: GoogleMap(initialCameraPosition: _kGooglePlex),
+      );
+    } else {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        child: Text("Bilinmeyen Konum", style: TextStyle(fontSize: 24)),
+      );
+    }
+  }
 }

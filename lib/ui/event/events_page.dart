@@ -1,4 +1,6 @@
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';

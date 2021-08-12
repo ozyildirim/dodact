@@ -1,3 +1,5 @@
+import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,16 +16,23 @@ class ParallaxEvents extends StatelessWidget {
       child: Column(
         children: [
           for (final event in events)
-            EventListItem(
-              imageUrl: event.eventImages[0] != null
-                  ? event.eventImages[0]
-                  : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
-              name: event.eventTitle,
-              country: "Istanbul",
+            InkWell(
+              onTap: () => navigateEventDetail(event),
+              child: EventListItem(
+                imageUrl: event.eventImages[0] != null
+                    ? event.eventImages[0]
+                    : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
+                name: event.eventTitle,
+                country: "Istanbul",
+              ),
             ),
         ],
       ),
     );
+  }
+
+  navigateEventDetail(EventModel event) {
+    NavigationService.instance.navigate(k_ROUTE_EVENT_DETAIL, args: event);
   }
 }
 
