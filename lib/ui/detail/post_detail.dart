@@ -16,9 +16,11 @@ import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:just_audio/just_audio.dart' as Audio;
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PostDetail extends StatefulWidget {
   final String postId;
@@ -36,6 +38,8 @@ class _PostDetailState extends BaseState<PostDetail> {
   PostModel post;
   Future _postFuture;
   bool isFavorite = false;
+
+  final Audio.AudioPlayer _audioPlayer = Audio.AudioPlayer();
 
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController commentController = TextEditingController();
@@ -78,11 +82,23 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     isFavorite =
         authProvider.currentUser.favoritedPosts.contains(widget.postId);
+
+    _audioPlayer
+        .setAudioSource(Audio.ConcatenatingAudioSource(children: [
+      Audio.AudioSource.uri(
+        Uri.parse(post.postContentURL),
+      ),
+    ]))
+        .catchError((error) {
+      // catch load errors: 404, invalid url ...
+      print("An error occured $error");
+    });
   }
 
   @override
   void dispose() {
     commentController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -110,6 +126,16 @@ class _PostDetailState extends BaseState<PostDetail> {
                               title: Text("Düzenle"),
                               onTap: () async {
                                 await _showEditPostDialog();
+                              },
+                            ),
+                          ),
+                          PopupMenuItem(
+                            child: ListTile(
+                              leading: Icon(FontAwesome5Solid.share),
+                              title: Text("Paylaş"),
+                              onTap: () async {
+                                Share.share(
+                                    'check out my website https://example.com');
                               },
                             ),
                           ),
@@ -146,6 +172,16 @@ class _PostDetailState extends BaseState<PostDetail> {
                                         await addFavorite();
                                       }),
                                 ),
+                          PopupMenuItem(
+                            child: ListTile(
+                              leading: Icon(FontAwesome5Solid.share),
+                              title: Text("Paylaş"),
+                              onTap: () async {
+                                Share.share(
+                                    'check out my website https://example.com');
+                              },
+                            ),
+                          ),
                         ])
               ],
         centerTitle: true,
@@ -312,7 +348,34 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Widget buildHeaderAudio() {
-    //TODO: Ses player eklenecek.
+    return Container(
+      height: 250,
+      width: double.infinity,
+      child: PinchZoom(
+        child: CachedNetworkImage(
+          imageUrl: post.postContentURL,
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          placeholder: (context, url) =>
+              Container(child: Center(child: CircularProgressIndicator())),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+        resetDuration: const Duration(milliseconds: 100),
+        maxScale: 2.5,
+        onZoomStart: () {
+          print('Start zooming');
+        },
+        onZoomEnd: () {
+          print('Stop zooming');
+        },
+      ),
+    );
   }
 
   //Fonksiyonlar

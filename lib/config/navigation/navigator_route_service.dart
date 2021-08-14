@@ -19,6 +19,7 @@ import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/favorites_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/requests_status.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/notifications_settings_page.dart';
@@ -125,6 +126,9 @@ class NavigationRouteManager {
 
       case k_ROUTE_USER_FAVORITES:
         return _navigateToDefault(FavoritesPage(), settings);
+
+      case k_ROUTE_USER_CALENDAR_PAGE:
+        return _navigateToDefault(UserCalendarPage(), settings);
 
       //
 

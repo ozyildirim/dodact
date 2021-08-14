@@ -98,6 +98,11 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _formSubmit();
+          }),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 8,
@@ -105,6 +110,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Container(
+        height: dynamicHeight(1),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(kBackgroundImage),
@@ -117,34 +123,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             children: [
               _buildPrevivewPart(),
               _buildFormPart(size, context, provider),
-              _buildSubmissionPart()
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Expanded _buildSubmissionPart() {
-    return Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GestureDetector(
-          onTap: () {
-            _formSubmit();
-          },
-          child: Container(
-            alignment: Alignment.bottomRight,
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 25,
-              child: Icon(
-                Icons.navigate_next,
-                size: 30,
-                color: Colors.white,
-              ),
-            ),
           ),
         ),
       ),

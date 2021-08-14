@@ -1,6 +1,5 @@
-import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
@@ -12,7 +11,7 @@ class EventsPage extends StatefulWidget {
   _EventsPageState createState() => _EventsPageState();
 }
 
-class _EventsPageState extends State<EventsPage> {
+class _EventsPageState extends BaseState<EventsPage> {
   bool isFiltered = false;
 
   @override
@@ -34,6 +33,7 @@ class _EventsPageState extends State<EventsPage> {
         child: RefreshIndicator(
           onRefresh: () => _refreshEvents(),
           child: Container(
+            height: dynamicHeight(1),
             width: double.infinity,
             child: Consumer<EventProvider>(
               // ignore: missing_return

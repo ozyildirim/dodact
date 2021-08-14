@@ -23,7 +23,7 @@ class ParallaxEvents extends StatelessWidget {
                     ? event.eventImages[0]
                     : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
                 name: event.eventTitle,
-                country: "Istanbul",
+                country: event.city,
               ),
             ),
         ],

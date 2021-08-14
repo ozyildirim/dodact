@@ -85,8 +85,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
                         ])
               ]
             : null,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 8,
         backwardsCompatibility: true,
         iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true,
@@ -95,6 +94,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
+          fit: BoxFit.cover,
           image: AssetImage(kBackgroundImage),
         )),
         width: dynamicWidth(1),
@@ -341,7 +341,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
     await Provider.of<RequestProvider>(context, listen: false)
         .deleteRequest(_event.eventId);
 
-    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+    NavigationService.instance.navigateToReset(k_ROUTE_USER_PROFILE);
     //}
   }
 

@@ -1,3 +1,4 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -54,7 +55,12 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           ListTile(
             leading: Icon(Icons.calendar_today),
             title: Text("Takvimim", style: TextStyle(fontSize: 18)),
-            onTap: () {},
+            onTap: () {
+              CommonMethods().showInfoDialog(
+                  context, "Çok yakında bu özelliğimizi sunacağız.", "Yakında");
+
+              // NavigationService.instance.navigate(k_ROUTE_USER_CALENDAR_PAGE);
+            },
           ),
           ListTile(
             leading: Icon(Icons.star),
@@ -65,7 +71,10 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.request_page),
-            title: Text("İsteklerim", style: TextStyle(fontSize: 18)),
+            title: Text(
+              "İsteklerim",
+              style: TextStyle(fontSize: 18),
+            ),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_USER_REQUESTS);
             },
