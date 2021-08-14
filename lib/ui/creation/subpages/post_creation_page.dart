@@ -5,6 +5,7 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     print("İçerik Kategorisi: " + widget.postCategory);
     super.initState();
     _postProvider = Provider.of<PostProvider>(context, listen: false);
-    _postProvider.clearNewPost();
 
     _postTitleController = new TextEditingController();
     _postDescriptionController = new TextEditingController();
@@ -356,18 +356,20 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           height: 250,
           width: 250,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(FontAwesome5Regular.file_audio),
-                  onPressed: () async {
-                    await _selectFile(FileType.audio);
-                  },
-                ),
-                Text("Ses dosyası seçin")
-              ],
-            ),
+            child: postFile == null
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(FontAwesome5Regular.file_audio),
+                        onPressed: () async {
+                          await _selectFile(FileType.audio);
+                        },
+                      ),
+                      Text("Ses dosyası seçin")
+                    ],
+                  )
+                : Text(postFile.path),
           ),
         ),
       );
@@ -380,49 +382,33 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     //Implement new post features into variable.
     try {
       //TODO: GRUPLAR İÇİN DE EKLEME YAPISI OLUŞTUR.
-      _postProvider.newPost.postId = "";
-      _postProvider.newPost.ownerType = "User";
-      _postProvider.newPost.ownerId = authProvider.currentUser.uid;
-      _postProvider.newPost.postCategory = widget.postCategory;
-      _postProvider.newPost.postTitle = _postTitleController.text;
-      _postProvider.newPost.postDate = DateTime.now();
-      _postProvider.newPost.postDescription = _postDescriptionController.text;
-      _postProvider.newPost.postContentURL =
-          _postContentUrlController.text != null
-              ? _postContentUrlController.text
-              : null;
-      _postProvider.newPost..claps = 0;
-      _postProvider.newPost.supportersId = [];
 
-      if (widget.contentType == "Video") {
-        _postProvider.newPost.isVideo = true;
-        _postProvider.newPost.isLocatedInYoutube = true;
-      } else {
-        _postProvider.newPost.isVideo = false;
-        _postProvider.newPost.isLocatedInYoutube = false;
-      }
-      _postProvider.newPost.postContentType = widget.contentType;
-      _postProvider.newPost.approved = false;
+      PostModel newPost = new PostModel(
+        approved: false,
+        isLocatedInYoutube: widget.contentType == "Video" ? true : false,
+        isVideo: widget.contentType == "Video" ? true : false,
+        postContentType: widget.contentType,
+        ownerType: "User",
+        postId: "",
+        ownerId: authProvider.currentUser.uid,
+        postCategory: widget.postCategory,
+        postTitle: _postTitleController.text,
+        postDate: DateTime.now(),
+        postDescription: _postDescriptionController.text,
+        postContentURL: _postContentUrlController.text ?? null,
+        claps: 0,
+        supportersId: [],
+      );
 
-      if (widget.contentType == "Video") {
-        await Provider.of<PostProvider>(context, listen: false)
-            .addPost(postFile: postFile)
-            .then(
-          (_) {
-            //loaderDialog kapansın diye pop yapıyoruz.
-            NavigationService.instance.pop();
-            NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-          },
-        );
-      } else {
-        await Provider.of<PostProvider>(context, listen: false)
-            .addPost(postFile: postFile)
-            .then((_) {
+      await Provider.of<PostProvider>(context, listen: false)
+          .addPost(postFile: postFile, post: newPost)
+          .then(
+        (_) {
           //loaderDialog kapansın diye pop yapıyoruz.
           NavigationService.instance.pop();
           NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-        });
-      }
+        },
+      );
     } catch (e) {
       NavigationService.instance.pop();
       CommonMethods()

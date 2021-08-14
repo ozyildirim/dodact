@@ -164,16 +164,6 @@ class _CreationPageState extends State<CreationPage> {
               CurvedListItem(
                 textPos: 180,
                 boxSize: 240,
-                spaceValue: 440,
-                title: 'Topluluk',
-                onTap: () =>
-                    NavigationService.instance.navigate('/add_community'),
-                conImage:
-                    AssetImage('assets/images/creation/icerik_olustur.jpg'),
-              ),
-              CurvedListItem(
-                textPos: 180,
-                boxSize: 240,
                 spaceValue: 285,
                 title: 'Ekip',
                 onTap: () => NavigationService.instance.navigate('/add_group'),

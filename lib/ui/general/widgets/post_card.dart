@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/common/methods.dart';
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final PostModel post;
@@ -14,11 +15,15 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var contentURL =
+        post.postContentType == "Ses" ? kAudioCardImage : post.postContentURL;
+
     if (post.isVideo == true) {
       coverPhotoURL = CommonMethods.createThumbnailURL(
-          post.isLocatedInYoutube, post.postContentURL);
+          post.isLocatedInYoutube, contentURL,
+          isAudio: false);
     } else {
-      coverPhotoURL = post.postContentURL;
+      coverPhotoURL = contentURL;
     }
 
     return Padding(

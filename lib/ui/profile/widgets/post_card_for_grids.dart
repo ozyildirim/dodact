@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/common/methods.dart';
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -19,7 +20,8 @@ class PostCardForGrid extends StatelessWidget {
 
   Widget postView(PostModel post) {
     var thumbnailURL = CommonMethods.createThumbnailURL(
-        post.isLocatedInYoutube, post.postContentURL);
+        post.isLocatedInYoutube, post.postContentURL,
+        isAudio: post.postContentType == "Ses" ? true : false);
 
     return CachedNetworkImage(
       imageUrl: thumbnailURL,

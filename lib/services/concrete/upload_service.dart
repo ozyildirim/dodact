@@ -99,11 +99,15 @@ class UploadService {
   Future<String> uploadPostMedia(
       {@required String postId,
       @required fileNameAndExtension,
-      @required File fileToUpload}) async {
+      @required File fileToUpload,
+      @required bool isImage}) async {
     // Directory appDocDir = await getApplicationDocumentsDirectory();
     // var filePath = appDocDir.path + '/' + postId + '/' + fileNameAndExtension;
+    var mediaObject = fileToUpload;
 
-    var compressedImage = await compressImage(fileToUpload);
+    if (isImage) {
+      mediaObject = await compressImage(fileToUpload);
+    }
 
     _storageReference = _firebaseStorage
         .ref()
@@ -111,7 +115,7 @@ class UploadService {
         .child(postId)
         .child(fileNameAndExtension);
 
-    var uploadTask = _storageReference.putFile(compressedImage);
+    var uploadTask = _storageReference.putFile(mediaObject);
 
     var url = await (await uploadTask).ref.getDownloadURL();
 

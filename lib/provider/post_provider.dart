@@ -19,7 +19,7 @@ class PostProvider extends ChangeNotifier {
   FirebaseRequestService requestService = FirebaseRequestService();
 
   PostModel post;
-  PostModel newPost = new PostModel();
+
   List<PostModel> postList;
   List<PostModel> userPosts;
   List<PostModel> otherUsersPosts;
@@ -43,8 +43,10 @@ class PostProvider extends ChangeNotifier {
 
   // If the content is not video, provider will upload it to firestorage,
   // Otherwise youtube link will be added to firestore.
-  Future addPost({File postFile}) async {
+  Future addPost({File postFile, PostModel post}) async {
     try {
+      var newPost = post;
+
       //İÇERİK VİDEO İÇERİYOR İSE
       if (newPost.isVideo) {
         //Post modeli firestore ye ekleniyor ve Post ID geri döndürülüyor(İçerik URL olmadan).
@@ -61,7 +63,7 @@ class PostProvider extends ChangeNotifier {
           await _groupProvider.editGroupPostList(
               newPost.postId, newPost.ownerId, true);
         } else {
-          print("User type sıkıntısı");
+          debugPrint("User type sıkıntısı");
         }
 
         await createPostRequest(newPost);
@@ -71,11 +73,14 @@ class PostProvider extends ChangeNotifier {
         var postId = await postRepository.save(newPost);
         newPost.postId = postId;
 
+        bool isImage = newPost.postContentType == "Görüntü";
+
         //Post upload ediliyor.
         var uploadedContent = await UploadService().uploadPostMedia(
             postId: postId,
             fileNameAndExtension: postFile.path.split('/').last,
-            fileToUpload: postFile);
+            fileToUpload: postFile,
+            isImage: isImage);
 
         newPost.postContentURL = uploadedContent;
 
@@ -93,7 +98,7 @@ class PostProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      print("PostProvider add post error: " + e.toString());
+      debugPrint("PostProvider add post error: " + e.toString());
     }
   }
 
@@ -233,9 +238,5 @@ class PostProvider extends ChangeNotifier {
     } finally {
       changeState(false);
     }
-  }
-
-  void clearNewPost() {
-    newPost = new PostModel();
   }
 }
