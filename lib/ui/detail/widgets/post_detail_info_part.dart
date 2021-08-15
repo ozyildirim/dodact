@@ -9,6 +9,7 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PostDetailInfoPart extends StatefulWidget {
@@ -48,55 +49,65 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
       var post = postProvider.post;
 
       if (userProvider.otherUser != null) {
-        return Container(
-          color: Colors.white60,
-          child: ListTile(
-              leading: InkWell(
-                onTap: () {
-                  navigateToOwnerProfile(post);
-                },
-                child: CircleAvatar(
-                  maxRadius: 40,
-                  backgroundImage:
-                      NetworkImage(userProvider.otherUser.profilePictureURL),
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Colors.white60,
+            child: ListTile(
+                leading: InkWell(
+                  onTap: () {
+                    navigateToOwnerProfile(post);
+                  },
+                  child: CircleAvatar(
+                    maxRadius: 40,
+                    backgroundImage:
+                        NetworkImage(userProvider.otherUser.profilePictureURL),
+                  ),
                 ),
-              ),
-              title: Center(child: Text(post.postTitle)),
-              subtitle: Center(
-                child: Text(userProvider.otherUser.nameSurname),
-              ),
-              trailing: post.supportersId.length != null
-                  ? Column(
-                      children: [
-                        Consumer<PostProvider>(
-                          builder: (context, provider, child) {
-                            bool liked = provider.post.supportersId
-                                .contains(authProvider.currentUser.uid);
+                title: Center(
+                  child: Text(
+                    userProvider.otherUser.nameSurname != null
+                        ? userProvider.otherUser.nameSurname
+                        : userProvider.otherUser.username,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                subtitle: Center(
+                  child: Text(
+                    DateFormat('dd/MM/yyyy').format(post.postDate),
+                  ),
+                ),
+                trailing: post.supportersId.length != null
+                    ? post.ownerId != authProvider.currentUser.uid
+                        ? Consumer<PostProvider>(
+                            builder: (context, provider, child) {
+                              bool liked = provider.post.supportersId
+                                  .contains(authProvider.currentUser.uid);
 
-                            return Bounce(
-                              duration: Duration(milliseconds: 220),
-                              onPressed: () async {
-                                await provider.changePostDoddedStatus(
-                                    post.postId,
-                                    authProvider.currentUser.uid,
-                                    !liked);
-                              },
-                              child: liked
-                                  ? Icon(
-                                      Icons.flutter_dash_outlined,
-                                      color: Colors.red,
-                                      size: 50,
-                                    )
-                                  : Icon(
-                                      Icons.flutter_dash_outlined,
-                                      size: 50,
-                                    ),
-                            );
-                          },
-                        )
-                      ],
-                    )
-                  : null),
+                              return Bounce(
+                                duration: Duration(milliseconds: 220),
+                                onPressed: () async {
+                                  await provider.changePostDoddedStatus(
+                                      post.postId,
+                                      authProvider.currentUser.uid,
+                                      !liked);
+                                },
+                                child: liked
+                                    ? Icon(
+                                        Icons.flutter_dash_outlined,
+                                        color: Colors.red,
+                                        size: 45,
+                                      )
+                                    : Icon(
+                                        Icons.flutter_dash_outlined,
+                                        size: 45,
+                                      ),
+                              );
+                            },
+                          )
+                        : Text("${post.supportersId.length} Dod")
+                    : null),
+          ),
         );
       } else {
         return Center(child: spinkit);

@@ -10,7 +10,7 @@ class CommonMethods {
       {bool isAudio}) {
     String thumbnailURL;
 
-    if (isAudio) {
+    if (isAudio != null && isAudio == true) {
       return kAudioCardImage;
     }
 
@@ -34,17 +34,19 @@ class CommonMethods {
     );
   }
 
-  Future<void> showSuccessDialog(BuildContext context, String message) async {
-    CoolAlert.show(
-      context: context,
-      barrierDismissible: true,
-      type: CoolAlertType.success,
-      text: message,
-    );
+  Future<void> showSuccessDialog(BuildContext context, String message,
+      {String title}) async {
+    await CoolAlert.show(
+        context: context,
+        barrierDismissible: false,
+        type: CoolAlertType.success,
+        text: message,
+        confirmBtnText: "Tamam",
+        title: title ?? "İşlem Başarılı");
   }
 
-  void showErrorDialog(BuildContext context, String message) {
-    CoolAlert.show(
+  Future<void> showErrorDialog(BuildContext context, String message) async {
+    await CoolAlert.show(
       barrierDismissible: true,
       context: context,
       type: CoolAlertType.error,

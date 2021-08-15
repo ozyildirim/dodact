@@ -187,14 +187,16 @@ class PostProvider extends ChangeNotifier {
     try {
       if (dodOrUndod) {
         await postRepository.update(postId, {
-          'supportersId': FieldValue.arrayUnion([userId])
+          'supportersId': FieldValue.arrayUnion([userId]),
+          'dodCounter': FieldValue.increment(1)
         }).then((_) {
           post.supportersId.add(userId);
           notifyListeners();
         });
       } else {
         await postRepository.update(postId, {
-          'supportersId': FieldValue.arrayRemove([userId])
+          'supportersId': FieldValue.arrayRemove([userId]),
+          'dodCounter': FieldValue.increment(-1)
         }).then((_) {
           post.supportersId.remove(userId);
           notifyListeners();

@@ -55,9 +55,12 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
           return Container(
             height: 200,
             child: Center(
-              child: Text(
-                "Henüz yorum yapılmamış.",
-                style: TextStyle(fontSize: 20),
+              child: Container(
+                color: Colors.white70,
+                child: Text(
+                  "Henüz yorum yapılmamış.",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
           );
@@ -161,19 +164,25 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
       appBar: AppBar(
         title: Text("Yorumlar"),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 6,
-              child: buildBody(),
-            ),
-            buildCommentBox()
-          ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 6,
+                child: buildBody(),
+              ),
+              buildCommentBox()
+            ],
+          ),
         ),
       ),
     );

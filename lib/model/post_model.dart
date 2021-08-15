@@ -9,7 +9,8 @@ class PostModel {
   String postDescription;
   String postContentURL;
   DateTime postDate;
-  int claps;
+
+  int dodCounter;
   bool isVideo;
   bool isLocatedInYoutube;
 
@@ -28,7 +29,7 @@ class PostModel {
     this.postDescription,
     this.postContentURL,
     this.isVideo,
-    this.claps,
+    this.dodCounter,
     this.supportersId,
     this.isLocatedInYoutube,
     this.postContentType,
@@ -45,7 +46,7 @@ class PostModel {
         postDescription = json['postDescription'],
         postContentURL = json['postContentURL'],
         isVideo = json['isVideo'],
-        claps = json['claps'],
+        dodCounter = json['dodCounter'] ?? 0,
         isLocatedInYoutube = json['isLocatedInYoutube'],
         supportersId = json['supportersId'],
         postContentType = json['postContentType'],
@@ -62,7 +63,8 @@ class PostModel {
     data['postDescription'] = this.postDescription;
     data['postContentURL'] = this.postContentURL;
     data['isVideo'] = this.isVideo;
-    data['claps'] = this.claps;
+
+    data['dodCounter'] = this.dodCounter ?? 0;
     data['supportersId'] = this.supportersId;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;
@@ -72,6 +74,6 @@ class PostModel {
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, ownerType: $ownerType,approved: $approved , ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
+    return 'PostModel{postId: $postId, ownerType: $ownerType,approved: $approved , ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo}';
   }
 }

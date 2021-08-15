@@ -54,189 +54,196 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/loginBG.jpg'),
-                fit: BoxFit.cover)),
-        height: dynamicHeight(1),
-        child: FormBuilder(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: dynamicHeight(0.08),
-                ),
-                Hero(
-                  tag: "logo",
-                  child: Image(
-                    height: 150,
-                    width: 150,
-                    image: AssetImage('assets/images/logo.png'),
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/loginBG.jpg'),
+                  fit: BoxFit.cover)),
+          height: dynamicHeight(1),
+          child: FormBuilder(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: dynamicHeight(0.08),
                   ),
-                ),
-                SizedBox(height: dynamicHeight(0.03)),
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    name: "email",
-                    cursorColor: kPrimaryColor,
-                    autofocus: false,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.mail,
-                        color: kPrimaryColor,
-                      ),
-                      errorStyle: TextStyle(fontSize: 14),
-                      hintText: "E-posta adresi",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      border: InputBorder.none,
+                  Hero(
+                    tag: "logo",
+                    child: Image(
+                      height: 150,
+                      width: 150,
+                      image: AssetImage('assets/images/logo.png'),
                     ),
-                    focusNode: _emailFocus,
-                    textInputAction: TextInputAction.next,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Lütfen e-posta adresi giriniz."),
-                      FormBuilderValidators.email(context,
-                          errorText:
-                              "Lütfen geçerli bir e-posta adresi giriniz."),
-                    ]),
                   ),
-                ),
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    name: "password",
-                    obscureText: true,
-                    cursorColor: kPrimaryColor,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
-                      hintText: "Parola",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      errorStyle: TextStyle(fontSize: 14),
-                      icon: Icon(
-                        Icons.lock,
-                        color: kPrimaryColor,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Lütfen bir parolanı gir."),
-                      FormBuilderValidators.minLength(context, 6,
-                          errorText: "Parolan en az 6 karakter olmalı.")
-                    ]),
-                  ),
-                ),
-                Container(
-                  width: dynamicWidth(1) * 0.8,
-                  child: FormBuilderCheckbox(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    checkColor: Colors.white,
-                    activeColor: Colors.cyan,
-                    name: "privacyCheckbox",
-                    initialValue: false,
-                    focusNode: _checkboxFocus,
-                    title: InkWell(
-                        onTap: () {
-                          NavigationService.instance
-                              .navigate(k_ROUTE_PRIVACY_POLICY);
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            children: const <TextSpan>[
-                              TextSpan(
-                                text: "Gizlilik sözleşmesini ",
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              TextSpan(
-                                text: "okudum ve kabul ediyorum.",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      errorStyle: TextStyle(color: Colors.white, fontSize: 14),
-                    ),
-                    validator: FormBuilderValidators.equal(context, true,
-                        errorText: "Sözleşmeyi kabul etmelisin."),
-                  ),
-                ),
-                RoundedButton(
-                  textSize: 15,
-                  text: "Kayıt Ol",
-                  textColor: Colors.white,
-                  press: () {
-                    _signUp();
-                  },
-                ),
-                OrDivider(),
-                SocialIcon(
-                  iconSrc: "assets/images/google_logo.png",
-                  press: () {
-                    _signInWithGoogle();
-                  },
-                ),
-                InkWell(
-                  onTap: () {
-                    NavigationService.instance.navigate(k_ROUTE_LOGIN);
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Zaten hesabın var mı?  ",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                          ),
+                  SizedBox(height: dynamicHeight(0.03)),
+                  TextFieldContainer(
+                    child: FormBuilderTextField(
+                      name: "email",
+                      cursorColor: kPrimaryColor,
+                      autofocus: false,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.mail,
+                          color: kPrimaryColor,
                         ),
-                        TextSpan(
-                          text: "Giriş Yap",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
+                        errorStyle: TextStyle(fontSize: 14),
+                        hintText: "E-posta adresi",
+                        hintStyle: TextStyle(fontFamily: kFontFamily),
+                        border: InputBorder.none,
+                      ),
+                      focusNode: _emailFocus,
+                      textInputAction: TextInputAction.next,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,
+                            errorText: "Lütfen e-posta adresi giriniz."),
+                        FormBuilderValidators.email(context,
+                            errorText:
+                                "Lütfen geçerli bir e-posta adresi giriniz."),
+                      ]),
+                    ),
+                  ),
+                  TextFieldContainer(
+                    child: FormBuilderTextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      name: "password",
+                      obscureText: true,
+                      cursorColor: kPrimaryColor,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        hintText: "Parola",
+                        hintStyle: TextStyle(fontFamily: kFontFamily),
+                        errorStyle: TextStyle(fontSize: 14),
+                        icon: Icon(
+                          Icons.lock,
+                          color: kPrimaryColor,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,
+                            errorText: "Lütfen bir parolanı gir."),
+                        FormBuilderValidators.minLength(context, 6,
+                            errorText: "Parolan en az 6 karakter olmalı.")
+                      ]),
+                    ),
+                  ),
+                  Container(
+                    width: dynamicWidth(1) * 0.8,
+                    child: FormBuilderCheckbox(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      checkColor: Colors.white,
+                      activeColor: Colors.cyan,
+                      name: "privacyCheckbox",
+                      initialValue: false,
+                      focusNode: _checkboxFocus,
+                      title: InkWell(
+                          onTap: () {
+                            NavigationService.instance
+                                .navigate(k_ROUTE_PRIVACY_POLICY);
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              children: const <TextSpan>[
+                                TextSpan(
+                                  text: "Gizlilik sözleşmesini ",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "okudum ve kabul ediyorum.",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        errorStyle:
+                            TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                      validator: FormBuilderValidators.equal(context, true,
+                          errorText: "Sözleşmeyi kabul etmelisin."),
+                    ),
+                  ),
+                  RoundedButton(
+                    textSize: 15,
+                    text: "Kayıt Ol",
+                    textColor: Colors.white,
+                    press: () {
+                      _signUp();
+                    },
+                  ),
+                  OrDivider(),
+                  SocialIcon(
+                    iconSrc: "assets/images/google_logo.png",
+                    press: () {
+                      _signInWithGoogle();
+                    },
+                  ),
+                  InkWell(
+                    onTap: () {
+                      NavigationService.instance.navigate(k_ROUTE_LOGIN);
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Zaten hesabın var mı?  ",
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                            ),
+                          ),
+                          TextSpan(
+                            text: "Giriş Yap",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      icon: Icon(
-                        Icons.info,
-                        color: Colors.white,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomButton(
+                        icon: Icon(
+                          Icons.info,
+                          color: Colors.white,
+                        ),
+                        titleText: Text(
+                          "Dodact Nedir?",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          NavigationService.instance
+                              .navigate(k_ROUTE_ABOUT_DODACT);
+                        },
                       ),
-                      titleText: Text(
-                        "Dodact Nedir?",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        NavigationService.instance
-                            .navigate(k_ROUTE_ABOUT_DODACT);
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

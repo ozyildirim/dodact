@@ -571,9 +571,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuluyor.");
       setNewEventValues();
 
-      await _eventProvider.addEvent(_eventImages).then((_) {
+      await _eventProvider.addEvent(_eventImages).then((_) async {
         NavigationService.instance.pop();
-        // CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuldu.");
+        await CommonMethods().showSuccessDialog(context,
+            "Tebrikler! Etkinliğin bize ulaştı, en kısa zamanda yayınlayacağız.");
         NavigationService.instance.navigateToReset(k_ROUTE_HOME);
       });
     } catch (e) {

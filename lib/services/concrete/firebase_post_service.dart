@@ -116,10 +116,10 @@ class FirebasePostService extends BaseService<PostModel> {
 
     QuerySnapshot querySnapshot = await postsRef
         .where('approved', isEqualTo: true)
-        //TODO: Sıralama özelliği eklenmeli
-        // .orderBy('claps', descending: true)
-        .limit(10)
+        .orderBy('dodCounter', descending: true)
+        .limit(5)
         .get();
+
     for (DocumentSnapshot post in querySnapshot.docs) {
       PostModel _convertedPost = PostModel.fromJson(post.data());
       topPosts.add(_convertedPost);

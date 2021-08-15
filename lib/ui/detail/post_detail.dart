@@ -12,6 +12,7 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/detail/widgets/audio_player/audio_player_widget.dart';
 import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
 import 'package:flutter/material.dart';
@@ -93,163 +94,167 @@ class _PostDetailState extends BaseState<PostDetail> {
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context, listen: false);
+    var mediaQuery = MediaQuery.of(context);
+
+    var appBar = AppBar(
+      actions: isCurrentUserPostOwner()
+          ? [
+              PopupMenuButton(
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: ListTile(
+                              leading: Icon(FontAwesome5Regular.trash_alt),
+                              title: Text("Sil"),
+                              onTap: () async {
+                                await _showDeletePostDialog();
+                              }),
+                        ),
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: Icon(FontAwesome5Solid.cogs),
+                            title: Text("Düzenle"),
+                            onTap: () async {
+                              await _showEditPostDialog();
+                            },
+                          ),
+                        ),
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: Icon(FontAwesome5Solid.share),
+                            title: Text("Paylaş"),
+                            onTap: () async {
+                              Share.share(
+                                  'check out my website https://example.com');
+                            },
+                          ),
+                        ),
+                      ])
+            ]
+          : [
+              PopupMenuButton(
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: ListTile(
+                              leading: Icon(FontAwesome5Regular.flag),
+                              title: Text("Bildir"),
+                              onTap: () async {
+                                await _showReportPostDialog();
+                              }),
+                        ),
+                        isFavorite
+                            ? PopupMenuItem(
+                                child: ListTile(
+                                    leading: Icon(
+                                      FontAwesome5Solid.star,
+                                      color: Colors.yellow,
+                                    ),
+                                    title: Text("Favorilerden Çıkar"),
+                                    onTap: () async {
+                                      await removeFavorite();
+                                    }),
+                              )
+                            : PopupMenuItem(
+                                child: ListTile(
+                                    leading: Icon(FontAwesome5Regular.star),
+                                    title: Text("Favorilere Ekle"),
+                                    onTap: () async {
+                                      await addFavorite();
+                                    }),
+                              ),
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: Icon(FontAwesome5Solid.share),
+                            title: Text("Paylaş"),
+                            onTap: () async {
+                              Share.share(
+                                  'check out my website https://example.com');
+                            },
+                          ),
+                        ),
+                      ])
+            ],
+      centerTitle: true,
+      title: Text(
+        "İçerik Detay",
+        style: TextStyle(color: Colors.black),
+      ),
+      elevation: 8,
+      iconTheme: IconThemeData(color: Colors.black),
+    );
 
     return Scaffold(
-      appBar: AppBar(
-        actions: isCurrentUserPostOwner()
-            ? [
-                PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(FontAwesome5Regular.trash_alt),
-                                title: Text("Sil"),
-                                onTap: () async {
-                                  await _showDeletePostDialog();
-                                }),
-                          ),
-                          PopupMenuItem(
-                            child: ListTile(
-                              leading: Icon(FontAwesome5Solid.cogs),
-                              title: Text("Düzenle"),
-                              onTap: () async {
-                                await _showEditPostDialog();
-                              },
-                            ),
-                          ),
-                          PopupMenuItem(
-                            child: ListTile(
-                              leading: Icon(FontAwesome5Solid.share),
-                              title: Text("Paylaş"),
-                              onTap: () async {
-                                Share.share(
-                                    'check out my website https://example.com');
-                              },
-                            ),
-                          ),
-                        ])
-              ]
-            : [
-                PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(FontAwesome5Regular.flag),
-                                title: Text("Bildir"),
-                                onTap: () async {
-                                  await _showReportPostDialog();
-                                }),
-                          ),
-                          isFavorite
-                              ? PopupMenuItem(
-                                  child: ListTile(
-                                      leading: Icon(
-                                        FontAwesome5Solid.star,
-                                        color: Colors.yellow,
-                                      ),
-                                      title: Text("Favorilerden Çıkar"),
-                                      onTap: () async {
-                                        await removeFavorite();
-                                      }),
-                                )
-                              : PopupMenuItem(
-                                  child: ListTile(
-                                      leading: Icon(FontAwesome5Regular.star),
-                                      title: Text("Favorilere Ekle"),
-                                      onTap: () async {
-                                        await addFavorite();
-                                      }),
-                                ),
-                          PopupMenuItem(
-                            child: ListTile(
-                              leading: Icon(FontAwesome5Solid.share),
-                              title: Text("Paylaş"),
-                              onTap: () async {
-                                Share.share(
-                                    'check out my website https://example.com');
-                              },
-                            ),
-                          ),
-                        ])
-              ],
-        centerTitle: true,
-        title: Text(
-          "İçerik Detay",
-          style: TextStyle(color: Colors.black),
-        ),
-        elevation: 8,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
+      appBar: appBar,
       body: RefreshIndicator(
         onRefresh: () => _refreshPost(context),
-        child: Container(
-          height: dynamicHeight(1),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
-          ),
-          child: FutureBuilder(
-            future: _postFuture,
-            // ignore: missing_return
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: spinkit);
-              } else {
-                if (snapshot.error != null) {
-                  return Center(
-                    child: Text("Hata oluştu."),
-                  );
+        child: SingleChildScrollView(
+          child: Container(
+            height: dynamicHeight(1) -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+            ),
+            child: FutureBuilder(
+              future: _postFuture,
+              // ignore: missing_return
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: spinkit);
                 } else {
-                  post = snapshot.data;
-                  _getCreatorData(context, post.ownerId);
+                  if (snapshot.error != null) {
+                    return Center(
+                      child: Text("Hata oluştu."),
+                    );
+                  } else {
+                    post = snapshot.data;
+                    _getCreatorData(context, post.ownerId);
 
-                  switch (post.postContentType) {
-                    case "Video":
-                      return Column(
-                        children: [
-                          Column(
-                            children: [
-                              buildHeaderVideo(),
-                              PostDetailInfoPart(),
-                              buildPostDescriptionCard(),
-                              buildPostCommentsNavigator(),
-                            ],
-                          ),
-                        ],
-                      );
-                      break;
-                    case "Görüntü":
-                      return Column(
-                        children: [
-                          Column(
-                            children: [
-                              buildHeaderImage(),
-                              PostDetailInfoPart(),
-                              buildPostDescriptionCard(),
-                              buildPostCommentsNavigator(),
-                            ],
-                          ),
-                        ],
-                      );
-                      break;
-                    case "Ses":
-                      return Column(
-                        children: [
-                          Column(
-                            children: [
-                              buildHeaderAudio(),
-                              PostDetailInfoPart(),
-                              buildPostDescriptionCard(),
-                              buildPostCommentsNavigator(),
-                            ],
-                          ),
-                        ],
-                      );
-                      break;
+                    switch (post.postContentType) {
+                      case "Video":
+                        return Column(
+                          children: [
+                            buildHeaderVideo(),
+                            PostDetailInfoPart(),
+                            buildPostDescriptionCard(),
+                            Expanded(
+                              child: Container(),
+                            ),
+                            buildPostCommentsNavigator(),
+                          ],
+                        );
+                        break;
+                      case "Görüntü":
+                        return Column(
+                          children: [
+                            buildHeaderImage(),
+                            PostDetailInfoPart(),
+                            buildPostDescriptionCard(),
+                            Expanded(
+                              child: Container(),
+                            ),
+                            buildPostCommentsNavigator(),
+                          ],
+                        );
+                        break;
+                      case "Ses":
+                        return Column(
+                          children: [
+                            buildHeaderAudio(),
+                            PostDetailInfoPart(),
+                            buildPostDescriptionCard(),
+                            Expanded(
+                              child: Container(),
+                            ),
+                            buildPostCommentsNavigator(),
+                          ],
+                        );
+                        break;
+                    }
                   }
                 }
-              }
-            },
+              },
+            ),
           ),
         ),
       ),
@@ -262,21 +267,22 @@ class _PostDetailState extends BaseState<PostDetail> {
       color: Colors.amberAccent,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
-        height: 80,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("İçerik Açıklaması",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 20, color: Colors.grey)),
+              Text(
+                post.postTitle,
+                style: TextStyle(fontSize: 22),
+              ),
               SizedBox(
-                height: 8,
+                height: 16,
               ),
               Text(
                 post.postDescription,
-                style: TextStyle(fontSize: 14),
+                // overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 16),
               ),
             ],
           ),
@@ -395,18 +401,63 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> reportPost(String postId) async {
-    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
-    await FirebaseReportService()
-        .reportPost(authProvider.currentUser.uid, postId)
-        .then((value) {
-      CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
-      NavigationService.instance.pop();
-      NavigationService.instance.pop();
-    }).catchError((value) {
+    final SimpleDialog reportReasonDialog = SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text('Bildirim Sebebin'),
+      children: [
+        SimpleDialogItem(
+          text: 'Telif İhlali İçeriyor ',
+          onPressed: () {
+            Navigator.pop(context, "Telif");
+          },
+        ),
+        SimpleDialogItem(
+          text: 'Nefret Söylemi',
+          onPressed: () {
+            Navigator.pop(context, "Nefret Söylemi");
+          },
+        ),
+        SimpleDialogItem(
+          text: 'Çalıntı Paylaşım',
+          onPressed: () {
+            Navigator.pop(context, "Çalıntı");
+          },
+        ),
+        SimpleDialogItem(
+          text: 'Uygunsuz',
+          onPressed: () {
+            Navigator.pop(context, "Uygunsuz");
+          },
+        ),
+      ],
+    );
+
+    var reportReason = await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => reportReasonDialog,
+    );
+
+    if (reportReason != null) {
       CommonMethods()
-          .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+      await FirebaseReportService()
+          .reportPost(authProvider.currentUser.uid, postId, reportReason)
+          .then((value) async {
+        await CommonMethods().showSuccessDialog(context,
+            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        NavigationService.instance.pop();
+        NavigationService.instance.pop();
+      }).catchError((value) async {
+        await CommonMethods()
+            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+        NavigationService.instance.pop();
+      });
+    } else {
       NavigationService.instance.pop();
-    });
+    }
   }
 
   Future<void> _deletePost() async {
@@ -456,13 +507,16 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   buildPostCommentsNavigator() {
-    return ListTile(
-      title: Text("Yorumları Görüntüle", style: TextStyle(fontSize: 18)),
-      trailing: Icon(Icons.forward),
-      onTap: () {
-        NavigationService.instance
-            .navigate(k_ROUTE_POST_COMMENTS, args: [post.postId, post.ownerId]);
-      },
+    return Container(
+      color: Colors.white70,
+      child: ListTile(
+        title: Text("Yorumları Görüntüle", style: TextStyle(fontSize: 18)),
+        trailing: Icon(Icons.forward),
+        onTap: () {
+          NavigationService.instance.navigate(k_ROUTE_POST_COMMENTS,
+              args: [post.postId, post.ownerId]);
+        },
+      ),
     );
   }
 }

@@ -109,21 +109,27 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         title: Text("İçerik Oluştur"),
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: Container(
-        height: dynamicHeight(1),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          height: dynamicHeight(1),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              _buildPrevivewPart(),
-              _buildFormPart(size, context, provider),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                _buildPrevivewPart(),
+                _buildFormPart(size, context, provider),
+              ],
+            ),
           ),
         ),
       ),
@@ -396,16 +402,18 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         postDate: DateTime.now(),
         postDescription: _postDescriptionController.text,
         postContentURL: _postContentUrlController.text ?? null,
-        claps: 0,
+        dodCounter: 0,
         supportersId: [],
       );
 
       await Provider.of<PostProvider>(context, listen: false)
           .addPost(postFile: postFile, post: newPost)
           .then(
-        (_) {
+        (_) async {
           //loaderDialog kapansın diye pop yapıyoruz.
           NavigationService.instance.pop();
+          await CommonMethods().showSuccessDialog(context,
+              "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
           NavigationService.instance.navigateToReset(k_ROUTE_HOME);
         },
       );
