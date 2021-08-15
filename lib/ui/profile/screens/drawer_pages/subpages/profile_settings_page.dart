@@ -5,7 +5,7 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';

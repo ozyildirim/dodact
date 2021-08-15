@@ -3,7 +3,8 @@ import 'package:dodact_v1/ui/auth/forgot_password.dart';
 import 'package:dodact_v1/ui/auth/login_page.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
-import 'package:dodact_v1/ui/common_widgets/about_dodact_page.dart';
+import 'package:dodact_v1/ui/common/screens/about_dodact_page.dart';
+import 'package:dodact_v1/ui/common/screens/privacy_policy_page.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/event_creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
@@ -169,6 +170,9 @@ class NavigationRouteManager {
               eventPlatform: args[2],
             ),
             settings);
+
+      case k_ROUTE_PRIVACY_POLICY:
+        return _navigateToDefault(PrivacyPolicyPage(), settings);
 
       // case k_ROUTE_STORY_VIEW:
       //   List<dynamic> args = settings.arguments;

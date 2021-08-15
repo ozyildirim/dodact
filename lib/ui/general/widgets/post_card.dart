@@ -8,7 +8,7 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:flutter/material.dart';
 
 class PostCard extends StatelessWidget {
-  final PostModel post;
+  PostModel post;
 
   PostCard(this.post);
   String coverPhotoURL;

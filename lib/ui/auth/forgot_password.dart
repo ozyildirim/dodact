@@ -1,7 +1,7 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/ui/common_widgets/rounded_button.dart';
-import 'package:dodact_v1/ui/common_widgets/rounded_input_field.dart';
+import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
+import 'package:dodact_v1/ui/common/widgets/rounded_input_field.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordPage extends StatefulWidget {

@@ -41,7 +41,10 @@ const k_ROUTE_USER_SECURITY_SETTINGS = '/user_security_settings';
 
 const k_ROUTE_OTHERS_PROFILE_PAGE = '/others_profile';
 
+//Creation Routes
 const k_ROUTE_CREATE_POST_PAGE = '/add_post';
 const k_ROUTE_CREATE_EVENT_PAGE = '/add_event';
 
 const k_ROUTE_STORY_VIEW = "/story_view";
+
+const k_ROUTE_PRIVACY_POLICY = "/privacy_policy";

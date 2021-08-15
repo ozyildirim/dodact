@@ -6,9 +6,9 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
-import 'package:dodact_v1/ui/common_widgets/custom_button.dart';
-import 'package:dodact_v1/ui/common_widgets/rounded_button.dart';
-import 'package:dodact_v1/ui/common_widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/common/widgets/custom_button.dart';
+import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
+import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,11 +27,19 @@ class _SignUpPageState extends BaseState<SignUpPage> {
 
   FocusNode _emailFocus = FocusNode();
   FocusNode _passwordFocus = FocusNode();
+  FocusNode _checkboxFocus = FocusNode();
 
   @override
   void initState() {
     authProvider = getProvider<AuthProvider>();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
   }
 
   @override
@@ -46,15 +54,15 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/loginBG.jpg'),
-                  fit: BoxFit.cover)),
-          height: dynamicHeight(1),
-          child: FormBuilder(
-            key: _formKey,
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/loginBG.jpg'),
+                fit: BoxFit.cover)),
+        height: dynamicHeight(1),
+        child: FormBuilder(
+          key: _formKey,
+          child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 SizedBox(
@@ -73,6 +81,8 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   child: FormBuilderTextField(
                     name: "email",
                     cursorColor: kPrimaryColor,
+                    autofocus: false,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
                       icon: Icon(
                         Icons.mail,
@@ -100,6 +110,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     name: "password",
                     obscureText: true,
                     cursorColor: kPrimaryColor,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
                       hintText: "Parola",
                       hintStyle: TextStyle(fontFamily: kFontFamily),
@@ -112,8 +123,54 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context,
-                          errorText: "Lütfen parolanızı giriniz.")
+                          errorText: "Lütfen bir parolanı gir."),
+                      FormBuilderValidators.minLength(context, 6,
+                          errorText: "Parolan en az 6 karakter olmalı.")
                     ]),
+                  ),
+                ),
+                Container(
+                  width: dynamicWidth(1) * 0.8,
+                  child: FormBuilderCheckbox(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    checkColor: Colors.white,
+                    activeColor: Colors.cyan,
+                    name: "privacyCheckbox",
+                    initialValue: false,
+                    focusNode: _checkboxFocus,
+                    title: InkWell(
+                        onTap: () {
+                          NavigationService.instance
+                              .navigate(k_ROUTE_PRIVACY_POLICY);
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: "Gizlilik sözleşmesini ",
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "okudum ve kabul ediyorum.",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      errorStyle: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                    validator: FormBuilderValidators.equal(context, true,
+                        errorText: "Sözleşmeyi kabul etmelisin."),
                   ),
                 ),
                 RoundedButton(
@@ -125,45 +182,37 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   },
                 ),
                 OrDivider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SocialIcon(
-                      iconSrc: "assets/images/facebook_circular.png",
-                      press: () {},
-                    ),
-                    SocialIcon(
-                      iconSrc: "assets/images/google_logo.png",
-                      press: () {
-                        _signInWithGoogle();
-                      },
-                    ),
-                  ],
+                SocialIcon(
+                  iconSrc: "assets/images/google_logo.png",
+                  press: () {
+                    _signInWithGoogle();
+                  },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Zaten hesabın var mı?",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        navigateToLoginPage(context);
-                      },
-                      child: Text(
-                        "Giriş Yap",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
+                InkWell(
+                  onTap: () {
+                    NavigationService.instance.navigate(k_ROUTE_LOGIN);
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Zaten hesabın var mı?  ",
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Giriş Yap",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 10,
@@ -221,10 +270,6 @@ class _SignUpPageState extends BaseState<SignUpPage> {
       }
     }
   }
-
-  // void _signInWithFacebook() async {
-  //   UserObject _user = await authProvider.signInWithFacebook();
-  // }
 
   void _signUp() async {
     if (_formKey.currentState.saveAndValidate()) {

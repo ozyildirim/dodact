@@ -39,6 +39,7 @@ final spinkit = SpinKitChasingDots(
 //  ThemeData(primaryColor: kPrimaryColor, fontFamily: kFontFamily)
 
 ThemeData appTheme = new ThemeData(
+  unselectedWidgetColor: Colors.white,
   appBarTheme: const AppBarTheme(
       elevation: 8,
       textTheme: TextTheme(
