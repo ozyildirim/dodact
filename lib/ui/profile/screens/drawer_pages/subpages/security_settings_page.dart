@@ -23,36 +23,48 @@ class SecuritySettingsPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: CircleAvatar(
-                  child: Icon(Icons.vpn_key),
+              child: Container(
+                color: Colors.white70,
+                child: ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(Icons.vpn_key),
+                  ),
+                  title: Text(
+                    "Parola Değiştirme",
+                    style: TextStyle(fontSize: kDrawerTileTitleSize),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangePasswordPage(),
+                      ),
+                    );
+                  },
                 ),
-                title: Text("Parola Değiştirme"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChangePasswordPage(),
-                    ),
-                  );
-                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: CircleAvatar(
-                  child: Icon(Icons.mail),
+              child: Container(
+                color: Colors.white70,
+                child: ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(Icons.mail),
+                  ),
+                  title: Text(
+                    "E-posta Adresi Değiştirme",
+                    style: TextStyle(fontSize: kDrawerTileTitleSize),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangeEmailPage(),
+                      ),
+                    );
+                  },
                 ),
-                title: Text("E-posta Adresi Değiştirme"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChangeEmailPage(),
-                    ),
-                  );
-                },
               ),
             ),
           ],

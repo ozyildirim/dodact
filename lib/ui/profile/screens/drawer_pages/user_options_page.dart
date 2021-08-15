@@ -4,6 +4,8 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class UserOptionsPage extends StatelessWidget {
+  final double tileTitleSize = 20;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -17,89 +19,112 @@ class UserOptionsPage extends StatelessWidget {
           image: DecorationImage(
               image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
         ),
-        child: Container(
-          color: Colors.white60,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.white70,
                 child: ListTile(
                   leading: CircleAvatar(
                     child: Icon(Icons.notifications),
                   ),
-                  title: Text("Bildirim Hesapları"),
+                  title: Text(
+                    "Bildirim Hesapları",
+                    style: TextStyle(fontSize: tileTitleSize),
+                  ),
                   onTap: () {
                     NavigationService.instance
                         .navigate(k_ROUTE_USER_NOTIFICATON_SETTINGS);
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.white70,
                 child: ListTile(
                   leading: CircleAvatar(
                     child: Icon(Icons.person),
                   ),
-                  title: Text("Profil Ayarları"),
+                  title: Text(
+                    "Profil Ayarları",
+                    style: TextStyle(fontSize: tileTitleSize),
+                  ),
                   onTap: () {
                     NavigationService.instance
                         .navigate(k_ROUTE_USER_PROFILE_SETTINGS);
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.white70,
                 child: ListTile(
                   leading: CircleAvatar(
                     child: Icon(Icons.privacy_tip),
                   ),
-                  title: Text("Gizlilik Ayarları"),
+                  title: Text(
+                    "Gizlilik Ayarları",
+                    style: TextStyle(fontSize: tileTitleSize),
+                  ),
                   onTap: () {
                     NavigationService.instance
                         .navigate(k_ROUTE_USER_PRIVACY_SETTINGS);
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.white70,
                 child: ListTile(
                   leading: CircleAvatar(
                     child: Icon(Icons.security),
                   ),
-                  title: Text("Güvenlik"),
+                  title: Text(
+                    "Güvenlik",
+                    style: TextStyle(fontSize: tileTitleSize),
+                  ),
                   onTap: () {
                     NavigationService.instance
                         .navigate(k_ROUTE_USER_SECURITY_SETTINGS);
                   },
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        height: 30,
-                        child: Center(child: Text("Gizlilik Sözleşmesi")),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 30,
+                      child: Center(child: Text("Gizlilik Sözleşmesi")),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 30,
+                      child: Center(
+                        child: Text("İletişim"),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        height: 30,
-                        child: Center(child: Text("İletişim")),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

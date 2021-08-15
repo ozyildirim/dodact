@@ -17,6 +17,7 @@ class UserObject {
   List<String> eventIDs;
   String location;
   List<dynamic> rosettes;
+
   String twitterUsername;
   String instagramUsername;
   String youtubeLink;
@@ -24,6 +25,8 @@ class UserObject {
   String linkedInLink;
   String soundcloudLink;
   bool newUser;
+  String userDescription;
+  String schoolName;
 
   List<String> favoritedPosts;
 
@@ -57,7 +60,9 @@ class UserObject {
       this.hiddenMail,
       this.hiddenLocation,
       this.hiddenNameSurname,
-      this.newUser});
+      this.newUser,
+      this.userDescription,
+      this.schoolName});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -88,6 +93,8 @@ class UserObject {
     userData['hiddenLocation'] = this.hiddenLocation;
     userData['hiddenNameSurname'] = this.hiddenNameSurname;
     userData['newUser'] = this.newUser ?? true;
+    userData['userDescription'] = this.userDescription ?? '';
+    userData['schoolName'] = this.schoolName ?? '';
 
     return userData;
   }
@@ -118,7 +125,9 @@ class UserObject {
         hiddenMail = map['hiddenMail'],
         hiddenLocation = map['hiddenLocation'],
         hiddenNameSurname = map['hiddenNameSurname'],
-        newUser = map['newUser'] ?? true;
+        newUser = map['newUser'] ?? true,
+        schoolName = map['schoolName'] ?? '',
+        userDescription = map['userDescription'] ?? '';
 
   UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
@@ -146,10 +155,12 @@ class UserObject {
     hiddenMail = doc.data()['hiddenMail'];
     hiddenLocation = doc.data()['hiddenLocation'];
     hiddenNameSurname = doc.data()['hiddenNameSurname'];
+    userDescription = doc.data()['userDescription'] ?? '';
     newUser = doc.data()['newUser'] ?? true;
+    schoolName = doc.data()['schoolName'] ?? '';
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email,newUser: $newUser, username: $username, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
+    return 'UserObject{uid: $uid, email: $email,newUser: $newUser, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
   }
 }

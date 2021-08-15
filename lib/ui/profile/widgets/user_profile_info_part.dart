@@ -32,17 +32,6 @@ class UserProfileInfoPart extends StatelessWidget {
                         NetworkImage(provider.currentUser.profilePictureURL),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  child: Text(provider.currentUser.nameSurname,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-                Text("@${provider.currentUser.username}")
               ],
             ),
           ),
@@ -53,16 +42,16 @@ class UserProfileInfoPart extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              child: ProfileInfoPV(),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: ProfileInfoCard(),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
-  // AlertDialog(
-  //       content: ,
-  //     ),
 
   showProfilePictureContainer(BuildContext context, String url) {
     showDialog(
@@ -91,12 +80,12 @@ class UserProfileInfoPart extends StatelessWidget {
   }
 }
 
-class ProfileInfoPV extends StatefulWidget {
+class ProfileInfoCard extends StatefulWidget {
   @override
-  _ProfileInfoPVState createState() => _ProfileInfoPVState();
+  _ProfileInfoCardState createState() => _ProfileInfoCardState();
 }
 
-class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
+class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
   PageController _controller = PageController(
     initialPage: 0,
   );
@@ -109,24 +98,42 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      scrollDirection: Axis.horizontal,
-      controller: _controller,
-      children: [
-        Center(
-          child: _personalInfoPage(),
-        ),
-        Center(
-          child: Text("Örnek"),
-        ),
-        Center(
-          child: _socialInfoPage(),
-        ),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        // gradient: LinearGradient(
+        //   // Where the linear gradient begins and ends
+        //   begin: Alignment.topCenter,
+        //   end: Alignment.bottomCenter,
+        //   // Add one stop for each color. Stops should increase from 0 to 1
+        //   stops: [0.1, 0.3, 0.9],
+        //   colors: [
+        //     Color(0xFF71767E).withOpacity(0.5),
+        //     Color(0xFFAAB1BD).withOpacity(0.45),
+        //     Color(0xFF202226).withOpacity(0.56),
+        //   ],
+        // ),
+        // color: Color(0xFFD9D2C7).withOpacity(0.6),
+        color: Color(0xFFC8CDCE).withOpacity(0.4),
+      ),
+      child: PageView(
+        scrollDirection: Axis.horizontal,
+        controller: _controller,
+        children: [
+          Center(
+            child: _firstPage(),
+          ),
+          Center(
+            child: _secondPage(),
+          ),
+          Center(
+            child: _thirdPage(),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _socialInfoPage() {
+  Widget _thirdPage() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -166,7 +173,7 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
     );
   }
 
-  Widget _personalInfoPage() {
+  Widget _firstPage() {
     return Row(
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -175,6 +182,55 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  "Kişisel Bilgiler",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        "@${authProvider.currentUser.username}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              authProvider.currentUser.nameSurname != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              authProvider.currentUser.nameSurname,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : null,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(FontAwesome5Solid.map_marker_alt),
+                    Text(authProvider.currentUser.location)
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -189,6 +245,12 @@ class _ProfileInfoPVState extends BaseState<ProfileInfoPV> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _secondPage() {
+    return Center(
+      child: Text(authProvider.currentUser.userDescription),
     );
   }
 }

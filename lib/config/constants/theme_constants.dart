@@ -21,8 +21,10 @@ const kBackgroundImage = "assets/images/appBG.jpg";
 const kDodactLogo = "assets/images/logo.png";
 
 const kButtonFontSize = 20;
+const kDrawerTileTitleSize = 20.0;
+const kSettingsTitleSize = 18.0;
 
-const kFontFamily = "Roboto";
+const kFontFamily = "Raleway";
 
 const guzel = Color(0xFF162A49);
 
@@ -44,7 +46,7 @@ ThemeData appTheme = new ThemeData(
       elevation: 8,
       textTheme: TextTheme(
         title:
-            TextStyle(color: Colors.black, fontSize: 20, fontFamily: "Roboto"),
+            TextStyle(color: Colors.black, fontSize: 20, fontFamily: "Raleway"),
       ),
       backgroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.black),

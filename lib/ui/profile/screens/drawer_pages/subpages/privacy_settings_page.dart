@@ -1,5 +1,6 @@
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +12,18 @@ class PrivacySettingsPage extends StatefulWidget {
 }
 
 class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
-  bool _hiddenMail;
-  bool _hiddenLocation;
-  bool _hiddenNameSurname;
+  bool hiddenMail;
+  bool hiddenLocation;
+  bool hiddenNameSurname;
 
   bool _isChanged = false;
 
   @override
   void initState() {
     super.initState();
-    _hiddenMail = authProvider.currentUser.hiddenMail;
-    _hiddenLocation = authProvider.currentUser.hiddenLocation;
-    _hiddenNameSurname = authProvider.currentUser.hiddenNameSurname;
+    hiddenMail = authProvider.currentUser.hiddenMail;
+    hiddenLocation = authProvider.currentUser.hiddenLocation;
+    hiddenNameSurname = authProvider.currentUser.hiddenNameSurname;
   }
 
   @override
@@ -47,54 +48,80 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SwitchListTile(
-              title: Text('E-Posta Adresimi Gizle'),
-              subtitle: Text(
-                  "E-posta adresinizin profilinizde görüntülenmesini önlemek için aktive edin."),
-              value: _hiddenMail,
-              onChanged: (value) {
-                setState(() {
-                  _hiddenMail = !_hiddenMail;
-                  _isChanged = true;
-                });
-              },
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage(kBackgroundImage),
             ),
-            SwitchListTile(
-              title: Text('Lokasyonumu Gizle'),
-              subtitle: Text(
-                  'Lokasyonunuzun profilinizde görüntülenmesini önlemek için aktive edin.'),
-              value: _hiddenLocation,
-              onChanged: (value) {
-                setState(() {
-                  _hiddenLocation = !_hiddenLocation;
-                  _isChanged = true;
-                });
-              },
-            ),
-            SwitchListTile(
-              title: Text('Ad - Soyad Gizle'),
-              subtitle: Text(
-                  "Ad - Soyad bilgilerinizin profilinizde görüntülenmesini önlemek için aktive edin."),
-              value: _hiddenNameSurname,
-              onChanged: (value) {
-                setState(() {
-                  _hiddenNameSurname = !_hiddenNameSurname;
-                  _isChanged = true;
-                });
-              },
-            ),
-            // SwitchListTile(
-            //   title: Text('Salih"e kız bul'),
-            //   value: ornekAyar4,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       ornekAyar4 = !ornekAyar4;
-            //     });
-            //   },
-            // ),
-          ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white70,
+                child: SwitchListTile(
+                  title: Text(
+                    'E-Posta Adresimi Gizle',
+                    style: TextStyle(fontSize: kSettingsTitleSize),
+                  ),
+                  subtitle: Text(
+                      "E-posta adresinizin profilinizde görüntülenmesini önlemek için aktive edin."),
+                  value: hiddenMail,
+                  onChanged: (value) {
+                    setState(() {
+                      hiddenMail = !hiddenMail;
+                      _isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                color: Colors.white70,
+                child: SwitchListTile(
+                  title: Text(
+                    'Lokasyonumu Gizle',
+                    style: TextStyle(fontSize: kSettingsTitleSize),
+                  ),
+                  subtitle: Text(
+                      'Lokasyonunuzun profilinizde görüntülenmesini önlemek için aktive edin.'),
+                  value: hiddenLocation,
+                  onChanged: (value) {
+                    setState(() {
+                      hiddenLocation = !hiddenLocation;
+                      _isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                color: Colors.white70,
+                child: SwitchListTile(
+                  title: Text(
+                    'Ad - Soyad Gizle',
+                    style: TextStyle(fontSize: kSettingsTitleSize),
+                  ),
+                  subtitle: Text(
+                      "Ad - Soyad bilgilerinizin profilinizde görüntülenmesini önlemek için aktive edin."),
+                  value: hiddenNameSurname,
+                  onChanged: (value) {
+                    setState(() {
+                      hiddenNameSurname = !hiddenNameSurname;
+                      _isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              // SwitchListTile(
+              //   title: Text('Salih"e kız bul'),
+              //   value: ornekAyar4,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       ornekAyar4 = !ornekAyar4;
+              //     });
+              //   },
+              // ),
+            ],
+          ),
         ),
       ),
     );
@@ -104,13 +131,13 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
     try {
       CommonMethods().showLoaderDialog(context, "Değişiklikler kaydediliyor.");
       await authProvider.updateCurrentUser({
-        'hiddenMail': _hiddenMail,
-        'hiddenLocation': _hiddenLocation,
-        'hiddenNameSurname': _hiddenNameSurname,
+        'hiddenMail': hiddenMail,
+        'hiddenLocation': hiddenLocation,
+        'hiddenNameSurname': hiddenNameSurname,
       });
-      authProvider.currentUser.hiddenMail = _hiddenMail;
-      authProvider.currentUser.hiddenLocation = _hiddenLocation;
-      authProvider.currentUser.hiddenNameSurname = _hiddenNameSurname;
+      authProvider.currentUser.hiddenMail = hiddenMail;
+      authProvider.currentUser.hiddenLocation = hiddenLocation;
+      authProvider.currentUser.hiddenNameSurname = hiddenNameSurname;
 
       NavigationService.instance.pop();
       setState(() {

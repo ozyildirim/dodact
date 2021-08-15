@@ -24,9 +24,11 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/favorites_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/requests_status.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/notifications_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/personal_profile_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/social_accounts_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
@@ -149,6 +151,12 @@ class NavigationRouteManager {
 
       case k_ROUTE_USER_PROFILE_SETTINGS:
         return _navigateToDefault(ProfileSettingsPage(), settings);
+
+      case k_ROUTE_USER_SOCIAL_ACCOUNTS_SETTINGS:
+        return _navigateToDefault(UserSocialAccountsSettings(), settings);
+
+      case k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS:
+        return _navigateToDefault(UserPersonalProfileSettingsPage(), settings);
 
       ///////
 

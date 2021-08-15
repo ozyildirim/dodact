@@ -36,7 +36,12 @@ const k_ROUTE_USER_CALENDAR_PAGE = '/user_calendar';
 //User Settings Routes
 const k_ROUTE_USER_NOTIFICATON_SETTINGS = '/user_notification_settings';
 const k_ROUTE_USER_PRIVACY_SETTINGS = '/user_privacy_settings';
+
 const k_ROUTE_USER_PROFILE_SETTINGS = '/user_profile_settings';
+const k_ROUTE_USER_SOCIAL_ACCOUNTS_SETTINGS = '/user_social_accounts_settings';
+const k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS =
+    '/user_personal_profile_settings';
+
 const k_ROUTE_USER_SECURITY_SETTINGS = '/user_security_settings';
 
 const k_ROUTE_OTHERS_PROFILE_PAGE = '/others_profile';
