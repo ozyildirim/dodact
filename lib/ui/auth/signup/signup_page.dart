@@ -128,7 +128,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       ),
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(context,
-                            errorText: "Lütfen bir parolanı gir."),
+                            errorText: "Lütfen parolanı gir."),
                         FormBuilderValidators.minLength(context, 6,
                             errorText: "Parolan en az 6 karakter olmalı.")
                       ]),

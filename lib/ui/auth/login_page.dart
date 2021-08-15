@@ -82,125 +82,131 @@ class _LogInPageState extends BaseState<LogInPage> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent,
       ),
-      body: Container(
-        height: dynamicHeight(1),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(kAuthBackgroundImage), fit: BoxFit.cover),
-        ),
-        child: FormBuilder(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Hero(
-                tag: "logo",
-                child: Image(
-                  height: 180,
-                  width: 180,
-                  image: AssetImage(kDodactLogo),
-                ),
-              ),
-              SizedBox(
-                height: dynamicHeight(0.03),
-              ),
-              TextFieldContainer(
-                child: FormBuilderTextField(
-                  name: "email",
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.mail,
-                      color: kPrimaryColor,
-                    ),
-                    hintText: "E-posta adresi",
-                    hintStyle: TextStyle(fontFamily: kFontFamily),
-                    border: InputBorder.none,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          height: dynamicHeight(1),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(kAuthBackgroundImage), fit: BoxFit.cover),
+          ),
+          child: FormBuilder(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Hero(
+                  tag: "logo",
+                  child: Image(
+                    height: 180,
+                    width: 180,
+                    image: AssetImage(kDodactLogo),
                   ),
-                  focusNode: _emailFocus,
-                  onEditingComplete: () {
-                    setState(() {
-                      FocusScope.of(context).unfocus();
-                    });
-                  },
-                  textInputAction: TextInputAction.next,
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context,
-                        errorText: "Lütfen e-posta adresi giriniz."),
-                    FormBuilderValidators.email(context,
-                        errorText:
-                            "Lütfen geçerli bir e-posta adresi giriniz."),
-                  ]),
                 ),
-              ),
-              TextFieldContainer(
-                child: FormBuilderTextField(
-                  keyboardType: TextInputType.visiblePassword,
-                  name: "password",
-                  obscureText: true,
-                  focusNode: _passwordFocus,
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                    hintText: "Parola",
-                    hintStyle: TextStyle(fontFamily: kFontFamily),
-                    icon: Icon(
-                      Icons.lock,
-                      color: kPrimaryColor,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                  onEditingComplete: () {
-                    setState(() {
-                      FocusScope.of(context).unfocus();
-                    });
-                  },
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context,
-                        errorText: "Lütfen parolanızı giriniz.")
-                  ]),
+                SizedBox(
+                  height: dynamicHeight(0.03),
                 ),
-              ),
-              RoundedButton(
-                textSize: 15,
-                text: "Giriş Yap",
-                textColor: Colors.white,
-                press: () {
-                  _formSubmit();
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CustomButton(
-                    icon: Icon(
-                      Icons.lock,
-                      color: Colors.white,
+                TextFieldContainer(
+                  child: FormBuilderTextField(
+                    name: "email",
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.mail,
+                        color: kPrimaryColor,
+                      ),
+                      hintText: "E-posta adresi",
+                      hintStyle: TextStyle(fontFamily: kFontFamily),
+                      border: InputBorder.none,
                     ),
-                    titleText: Text(
-                      "Şifremi Unuttum",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      _navigateToForgotPassword(context);
+                    focusNode: _emailFocus,
+                    onEditingComplete: () {
+                      setState(() {
+                        FocusScope.of(context).unfocus();
+                      });
                     },
-                  )
-                ],
-              ),
-              OrDivider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SocialIcon(
-                    press: () {},
-                    iconSrc: "assets/images/facebook_circular.png",
+                    textInputAction: TextInputAction.next,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context,
+                          errorText: "Lütfen e-posta adresi giriniz."),
+                      FormBuilderValidators.email(context,
+                          errorText:
+                              "Lütfen geçerli bir e-posta adresi giriniz."),
+                    ]),
                   ),
-                  SocialIcon(
-                    press: () => _signInWithGoogle(),
-                    iconSrc: "assets/images/google_logo.png",
+                ),
+                TextFieldContainer(
+                  child: FormBuilderTextField(
+                    keyboardType: TextInputType.visiblePassword,
+                    name: "password",
+                    obscureText: true,
+                    focusNode: _passwordFocus,
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      hintText: "Parola",
+                      hintStyle: TextStyle(fontFamily: kFontFamily),
+                      icon: Icon(
+                        Icons.lock,
+                        color: kPrimaryColor,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    onEditingComplete: () {
+                      setState(() {
+                        FocusScope.of(context).unfocus();
+                      });
+                    },
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context,
+                          errorText: "Lütfen parolanızı giriniz.")
+                    ]),
                   ),
-                ],
-              ),
-            ],
+                ),
+                RoundedButton(
+                  textSize: 15,
+                  text: "Giriş Yap",
+                  textColor: Colors.white,
+                  press: () {
+                    _formSubmit();
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CustomButton(
+                      icon: Icon(
+                        Icons.lock,
+                        color: Colors.white,
+                      ),
+                      titleText: Text(
+                        "Şifremi Unuttum",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        _navigateToForgotPassword(context);
+                      },
+                    )
+                  ],
+                ),
+                OrDivider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SocialIcon(
+                      press: () {},
+                      iconSrc: "assets/images/facebook_circular.png",
+                    ),
+                    SocialIcon(
+                      press: () => _signInWithGoogle(),
+                      iconSrc: "assets/images/google_logo.png",
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
