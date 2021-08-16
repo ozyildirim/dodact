@@ -29,6 +29,7 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_setti
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/social_accounts_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/user_contributions_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
@@ -132,6 +133,9 @@ class NavigationRouteManager {
 
       case k_ROUTE_USER_CALENDAR_PAGE:
         return _navigateToDefault(UserCalendarPage(), settings);
+
+      case k_ROUTE_USER_CONTRIBUTIONS_PAGE:
+        return _navigateToDefault(UserContributionsPage(), settings);
 
       //
 

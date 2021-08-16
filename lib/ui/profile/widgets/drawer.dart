@@ -80,6 +80,14 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
           ListTile(
+            leading: Icon(Icons.help),
+            title: Text("Yardımlarım", style: TextStyle(fontSize: 18)),
+            onTap: () {
+              NavigationService.instance
+                  .navigate(k_ROUTE_USER_CONTRIBUTIONS_PAGE);
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text("Ayarlarım", style: TextStyle(fontSize: 18)),
             onTap: () {

@@ -104,6 +104,7 @@ flutter:
     - assets/images/creation/
     - assets/images/app/
     - assets/images/onboarding/
+    - assets/images/companies/
 
   fonts:
     - family: Roboto

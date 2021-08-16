@@ -20,6 +20,8 @@ const kAuthBackgroundImage = "assets/images/loginBG.jpg";
 const kBackgroundImage = "assets/images/appBG.jpg";
 const kDodactLogo = "assets/images/logo.png";
 
+const kTemaLogo = "assets/images/companies/tema.jpeg";
+
 const kButtonFontSize = 20;
 const kDrawerTileTitleSize = 20.0;
 const kSettingsTitleSize = 18.0;
