@@ -15,3 +15,5 @@ final CollectionReference reportsRef = firestore.collection('reports');
 final CollectionReference requestsRef = firestore.collection('requests');
 final CollectionReference userFavsRef = firestore.collection('user_favorites');
 final CollectionReference podcastsRef = firestore.collection('podcasts');
+final CollectionReference contributionsRef =
+    firestore.collection('contributions');

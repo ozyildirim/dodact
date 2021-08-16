@@ -45,8 +45,11 @@ class CommonMethods {
         title: title ?? "İşlem Başarılı");
   }
 
-  Future<void> showErrorDialog(BuildContext context, String message) async {
+  Future<void> showErrorDialog(BuildContext context, String message,
+      {String title = "Hata"}) async {
     await CoolAlert.show(
+      confirmBtnText: "Tamam",
+      title: title,
       barrierDismissible: true,
       context: context,
       type: CoolAlertType.error,

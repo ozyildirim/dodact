@@ -22,5 +22,5 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => RequestProvider()),
   ChangeNotifierProvider(create: (_) => CommentProvider()),
   ChangeNotifierProvider(create: (_) => PodcastProvider()),
-  ChangeNotifierProvider(create: (_) => UserFavoritesProvider())
+  ChangeNotifierProvider(create: (_) => UserFavoritesProvider()),
 ];

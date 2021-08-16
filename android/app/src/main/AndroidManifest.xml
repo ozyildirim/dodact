@@ -8,6 +8,10 @@
 
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyCcalb7hxJiha_uKPo7a1L4LuMNig7L_cE"/>
+
+        <meta-data
+    android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="ca-app-pub-4828991493508897~7865600588"/>
         <meta-data
       android:name="firebase_performance_logcat_enabled"
       android:value="true" />

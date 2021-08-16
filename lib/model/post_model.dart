@@ -10,6 +10,9 @@ class PostModel {
   String postContentURL;
   DateTime postDate;
 
+  bool isUsedForHelp;
+  String chosenCompany;
+
   int dodCounter;
   bool isVideo;
   bool isLocatedInYoutube;
@@ -30,6 +33,8 @@ class PostModel {
     this.postContentURL,
     this.isVideo,
     this.dodCounter,
+    this.isUsedForHelp,
+    this.chosenCompany,
     this.supportersId,
     this.isLocatedInYoutube,
     this.postContentType,
@@ -47,6 +52,8 @@ class PostModel {
         postContentURL = json['postContentURL'],
         isVideo = json['isVideo'],
         dodCounter = json['dodCounter'] ?? 0,
+        isUsedForHelp = json['isUsedForHelp'] ?? false,
+        chosenCompany = json['chosenCompany'] ?? "",
         isLocatedInYoutube = json['isLocatedInYoutube'],
         supportersId = json['supportersId'],
         postContentType = json['postContentType'],
@@ -64,6 +71,8 @@ class PostModel {
     data['postContentURL'] = this.postContentURL;
     data['isVideo'] = this.isVideo;
 
+    data['isUsedForHelp'] = this.isUsedForHelp ?? false;
+    data['chosenCompany'] = this.chosenCompany ?? "";
     data['dodCounter'] = this.dodCounter ?? 0;
     data['supportersId'] = this.supportersId;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;

@@ -7,10 +7,14 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
+import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 enum Content { Goruntu, Video, Ses }
@@ -29,19 +33,28 @@ class PostCreationPage extends StatefulWidget {
 
 class _PostCreationPageState extends BaseState<PostCreationPage> {
   GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
-  PostProvider _postProvider;
+  PostProvider postProvider;
 
   bool isSelected = false;
   bool isLoading = false;
   bool isUploaded = false;
+  bool isHelpChecked = false;
 
-  TextEditingController _postTitleController;
-  TextEditingController _postDescriptionController;
-  TextEditingController _postContentUrlController;
+  bool isAdWatched = false;
+  bool isRewardedAdReady = false;
 
-  FocusNode _postTitleFocus = new FocusNode();
-  FocusNode _postDescriptionFocus = new FocusNode();
-  FocusNode _postContentUrlFocus = new FocusNode();
+  String chosenCompany;
+
+  RewardedAd rewardedAd;
+
+  TextEditingController postTitleController;
+  TextEditingController postDescriptionController;
+  TextEditingController postContentUrlController;
+
+  FocusNode postTitleFocus = new FocusNode();
+  FocusNode postDescriptionFocus = new FocusNode();
+  FocusNode postContentUrlFocus = new FocusNode();
+  FocusNode checkboxFocus = new FocusNode();
 
   File postFile;
   FileImage imageThumbnail;
@@ -51,14 +64,15 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   @override
   void initState() {
+    prepareAd();
     print("İçerik Türü: " + widget.contentType);
     print("İçerik Kategorisi: " + widget.postCategory);
     super.initState();
-    _postProvider = Provider.of<PostProvider>(context, listen: false);
+    postProvider = Provider.of<PostProvider>(context, listen: false);
 
-    _postTitleController = new TextEditingController();
-    _postDescriptionController = new TextEditingController();
-    _postContentUrlController = new TextEditingController();
+    postTitleController = new TextEditingController();
+    postDescriptionController = new TextEditingController();
+    postContentUrlController = new TextEditingController();
 
     categoryMap = [
       {
@@ -86,10 +100,11 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   @override
   void dispose() {
-    // _postTitleFocus.dispose();
-    // _postDescriptionFocus.dispose();
-    // _postContentUrlFocus.dispose();
     super.dispose();
+    // postTitleFocus.dispose();
+    // postDescriptionFocus.dispose();
+    // postContentUrlFocus.dispose();
+    // checkboxFocus.dispose();
   }
 
   @override
@@ -170,8 +185,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 ),
                 child: FormBuilderTextField(
                   textInputAction: TextInputAction.next,
-                  focusNode: _postTitleFocus,
-                  controller: _postTitleController,
+                  focusNode: postTitleFocus,
+                  controller: postTitleController,
                   name: "postTitle",
                   autofocus: false,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -219,8 +234,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 ),
                 child: FormBuilderTextField(
                   textInputAction: TextInputAction.next,
-                  focusNode: _postDescriptionFocus,
-                  controller: _postDescriptionController,
+                  focusNode: postDescriptionFocus,
+                  controller: postDescriptionController,
                   name: "postDescription",
                   maxLines: 3,
                   autofocus: false,
@@ -266,16 +281,16 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       ),
                       child: FormBuilderTextField(
                         textInputAction: TextInputAction.next,
-                        focusNode: _postContentUrlFocus,
+                        focusNode: postContentUrlFocus,
                         name: "youtubeLink",
                         maxLines: 1,
                         autofocus: false,
                         keyboardType: TextInputType.text,
                         cursorColor: kPrimaryColor,
-                        controller: _postContentUrlController,
+                        controller: postContentUrlController,
                         onEditingComplete: () async {
                           setState(() {
-                            youtubeLink = _postContentUrlController.text;
+                            youtubeLink = postContentUrlController.text;
                           });
                         },
                         decoration: InputDecoration(
@@ -296,6 +311,31 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       ),
                     )
                   : Container(),
+              TextFieldContainer(
+                child: FormBuilderCheckbox(
+                  focusNode: checkboxFocus,
+                  name: "donation",
+                  initialValue: isHelpChecked,
+                  title: Text(
+                    "Bu paylaşımım ile kurumlara yardım etmek istiyorum",
+                  ),
+                  onChanged: (value) async {
+                    if (value == true) {
+                      await makeContribution();
+
+                      if (chosenCompany != null) {
+                        setState(() {
+                          isHelpChecked = value;
+                        });
+                      }
+                    } else {
+                      setState(() {
+                        isHelpChecked = value;
+                      });
+                    }
+                  },
+                ),
+              )
             ],
           ),
         ),
@@ -382,6 +422,75 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     }
   }
 
+  Future<void> makeContribution() async {
+    final SimpleDialog contributionCategoryDialog = SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text('Hangi kuruma yardım etmek istiyorsunuz?'),
+      children: [
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.image,
+          color: Colors.orange,
+          text: 'TEMA',
+          onPressed: () {
+            Navigator.pop(context, "TEMA");
+          },
+        ),
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.video,
+          color: Colors.green,
+          text: 'DODACT',
+          onPressed: () {
+            Navigator.pop(context, "DODACT");
+          },
+        ),
+      ],
+    );
+
+    var contributionDialog = await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => contributionCategoryDialog,
+    );
+
+    if (contributionDialog != null) {
+      print(contributionDialog);
+      chosenCompany = contributionDialog;
+    }
+  }
+
+  Future prepareAd() async {
+    RewardedAd.load(
+      adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          rewardedAd = ad;
+
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              setState(() {
+                isRewardedAdReady = false;
+              });
+              prepareAd();
+            },
+          );
+
+          setState(() {
+            isRewardedAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+          setState(() {
+            isRewardedAdReady = false;
+          });
+        },
+      ),
+    );
+  }
+
   //TODO: Thumbnail package ekle
   Future<bool> uploadPost() async {
     CommonMethods().showLoaderDialog(context, "İçerik yükleniyor.");
@@ -389,34 +498,79 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     try {
       //TODO: GRUPLAR İÇİN DE EKLEME YAPISI OLUŞTUR.
 
-      PostModel newPost = new PostModel(
-        approved: false,
-        isLocatedInYoutube: widget.contentType == "Video" ? true : false,
-        isVideo: widget.contentType == "Video" ? true : false,
-        postContentType: widget.contentType,
-        ownerType: "User",
-        postId: "",
-        ownerId: authProvider.currentUser.uid,
-        postCategory: widget.postCategory,
-        postTitle: _postTitleController.text,
-        postDate: DateTime.now(),
-        postDescription: _postDescriptionController.text,
-        postContentURL: _postContentUrlController.text ?? null,
-        dodCounter: 0,
-        supportersId: [],
-      );
+      //Bağış yapılacak ise
+      if (chosenCompany != null) {
+        Logger().i("Şirket seçildi");
+        await rewardedAd.show(
+            onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
+          isAdWatched = true;
+          Logger().i("Reklam ödülü verildi");
+        }).then((value) async {
+          Logger().i("Reklam izlendi");
+          PostModel newPost = new PostModel(
+            approved: false,
+            isLocatedInYoutube: widget.contentType == "Video" ? true : false,
+            isVideo: widget.contentType == "Video" ? true : false,
+            postContentType: widget.contentType,
+            ownerType: "User",
+            postId: "",
+            ownerId: authProvider.currentUser.uid,
+            postCategory: widget.postCategory,
+            postTitle: postTitleController.text,
+            postDate: DateTime.now(),
+            postDescription: postDescriptionController.text,
+            postContentURL: postContentUrlController.text ?? null,
+            dodCounter: 0,
+            chosenCompany: chosenCompany,
+            isUsedForHelp: true,
+            supportersId: [],
+          );
 
-      await Provider.of<PostProvider>(context, listen: false)
-          .addPost(postFile: postFile, post: newPost)
-          .then(
-        (_) async {
-          //loaderDialog kapansın diye pop yapıyoruz.
-          NavigationService.instance.pop();
-          await CommonMethods().showSuccessDialog(context,
-              "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
-          NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-        },
-      );
+          await Provider.of<PostProvider>(context, listen: false)
+              .addPost(postFile: postFile, post: newPost)
+              .then(
+            (_) async {
+              //loaderDialog kapansın diye pop yapıyoruz.
+
+              await CommonMethods().showSuccessDialog(context,
+                  "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
+              NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+            },
+          );
+        });
+      } else {
+        //Bağış yapılmayacak ise
+        PostModel newPost = new PostModel(
+          approved: false,
+          isLocatedInYoutube: widget.contentType == "Video" ? true : false,
+          isVideo: widget.contentType == "Video" ? true : false,
+          postContentType: widget.contentType,
+          ownerType: "User",
+          postId: "",
+          ownerId: authProvider.currentUser.uid,
+          postCategory: widget.postCategory,
+          postTitle: postTitleController.text,
+          postDate: DateTime.now(),
+          postDescription: postDescriptionController.text,
+          postContentURL: postContentUrlController.text ?? null,
+          dodCounter: 0,
+          chosenCompany: "",
+          isUsedForHelp: false,
+          supportersId: [],
+        );
+
+        await Provider.of<PostProvider>(context, listen: false)
+            .addPost(postFile: postFile, post: newPost)
+            .then(
+          (_) async {
+            //loaderDialog kapansın diye pop yapıyoruz.
+            NavigationService.instance.pop();
+            await CommonMethods().showSuccessDialog(context,
+                "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
+            NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+          },
+        );
+      }
     } catch (e) {
       NavigationService.instance.pop();
       CommonMethods()
