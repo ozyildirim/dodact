@@ -76,6 +76,8 @@ dependencies:
   table_calendar: ^3.0.2
   share_plus: ^2.1.4
   just_audio: ^0.9.5
+  infinite_scroll_pagination: ^3.1.0
+  search_choices: ^2.0.7
 
 
   
@@ -103,6 +105,7 @@ flutter:
     - assets/images/
     - assets/images/creation/
     - assets/images/app/
+    - assets/images/app/interests/
     - assets/images/onboarding/
     - assets/images/companies/
 

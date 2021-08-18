@@ -84,6 +84,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   SizedBox(height: dynamicHeight(0.03)),
                   TextFieldContainer(
                     child: FormBuilderTextField(
+                      keyboardType: TextInputType.emailAddress,
                       name: "email",
                       cursorColor: kPrimaryColor,
                       autofocus: false,

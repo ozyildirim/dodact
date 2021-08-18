@@ -264,7 +264,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   Widget buildPostDescriptionCard() {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      color: Colors.amberAccent,
+      color: Colors.cyan[200],
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Padding(

@@ -35,7 +35,10 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
       for (var postID in favoritedPostIDs) {
         var post = await Provider.of<PostProvider>(context, listen: false)
             .getDetail(postID);
-        fetchedPosts.add(post);
+
+        if (post != null) {
+          fetchedPosts.add(post);
+        }
       }
       setState(() {
         posts = fetchedPosts;

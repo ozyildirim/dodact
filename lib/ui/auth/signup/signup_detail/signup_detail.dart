@@ -12,6 +12,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:search_choices/search_choices.dart';
 
 class SignUpDetail extends StatefulWidget {
   @override
@@ -25,9 +26,14 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   FocusNode _nameFocus = FocusNode();
   FocusNode _usernameFocus = FocusNode();
   FocusNode _dropdownFocus = FocusNode();
+
+  TextEditingController nameController = TextEditingController();
+
   bool validation = false;
 
+  String name;
   CityListItem selectedCity;
+
   List<CityListItem> _dropdownItems = [];
   int _currentStep = 0;
 
@@ -95,16 +101,11 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
               width: size.width * 0.8,
               child: FormBuilderTextField(
                 textInputAction: TextInputAction.done,
-                //TODO: Burada hata var, düzenle
                 name: "name",
                 autofocus: false,
+                controller: nameController,
                 decoration: InputDecoration(border: InputBorder.none),
                 focusNode: _nameFocus,
-                validator: FormBuilderValidators.compose(
-                  [
-                    FormBuilderValidators.required(context),
-                  ],
-                ),
               ),
             ),
             SizedBox(
@@ -113,25 +114,46 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             Container(
               color: Colors.white70,
               child: Text(
-                "Lokasyon",
+                "Lokasyon Yedeek",
                 style: TextStyle(fontSize: 18),
               ),
             ),
             SizedBox(height: 4),
             TextFieldContainer(
-              width: size.width * 0.8,
-              child: FormBuilderDropdown(
-                decoration: InputDecoration(border: InputBorder.none),
-                name: "location",
-                items: _dropdownMenuItems,
-                onChanged: (city) {
-                  selectedCity = city;
-                },
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
+                width: size.width * 0.8,
+                child: SearchChoices.single(
+                  //TODO: Search bar çalışmıyor, düzelt.
+                  underline: Container(
+                    height: 1.0,
+                    decoration: BoxDecoration(),
+                  ),
+                  autofocus: false,
+                  items: _dropdownMenuItems,
+                  hint: "Şehir",
+                  searchHint: "Şehir",
+                  onClear: () {
+                    setState(() {
+                      selectedCity = null;
+                    });
+                  },
+                  value: selectedCity,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCity = value;
+                    });
+                  },
+                  isExpanded: true,
+                  closeButton: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Kapat",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 18),
+                    ),
+                  ),
+                )),
           ],
         ),
         isActive: _currentStep == 0,
@@ -194,8 +216,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             TextFieldContainer(
               width: size.width * 0.8,
               child: FormBuilderTextField(
-                textInputAction: TextInputAction.done,
                 name: "username",
+                textInputAction: TextInputAction.done,
                 autofocus: false,
                 decoration: InputDecoration(border: InputBorder.none),
                 focusNode: _usernameFocus,
@@ -228,49 +250,55 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           )
         ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: FormBuilder(
-          key: _formKey,
-          child: Stepper(
-            controlsBuilder: (BuildContext context,
-                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-              return Row(
-                children: <Widget>[
-                  _currentStep != steps.length - 1
-                      ?
-                      // TextButton(
-                      //     onPressed: forward,
-                      //     child: const Text('İleri'),
-                      //   )
-                      GFButton(
-                          onPressed: forward,
-                          child: const Text('İleri'),
-                          color: Theme.of(context).primaryColor,
-                        )
-                      : GFButton(
-                          color: Theme.of(context).primaryColor,
-                          child: Text('Tamamla'),
-                          onPressed: () async {
-                            await submitForm();
-                          },
-                        ),
-                  TextButton(
-                    onPressed: back,
-                    child: const Text('Geri'),
-                  ),
-                ],
-              );
-            },
-            currentStep: _currentStep,
-            type: StepperType.horizontal,
-            steps: steps,
-            onStepTapped: null,
+          child: FormBuilder(
+            key: _formKey,
+            child: Stepper(
+              controlsBuilder: (BuildContext context,
+                  {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                return Row(
+                  children: <Widget>[
+                    _currentStep != steps.length - 1
+                        ?
+                        // TextButton(
+                        //     onPressed: forward,
+                        //     child: const Text('İleri'),
+                        //   )
+                        GFButton(
+                            onPressed: forward,
+                            child: const Text('İleri'),
+                            color: Theme.of(context).primaryColor,
+                          )
+                        : GFButton(
+                            color: Theme.of(context).primaryColor,
+                            child: Text('Tamamla'),
+                            onPressed: () async {
+                              await submitForm();
+                            },
+                          ),
+                    TextButton(
+                      onPressed: back,
+                      child: const Text('Geri'),
+                    ),
+                  ],
+                );
+              },
+              currentStep: _currentStep,
+              type: StepperType.horizontal,
+              steps: steps,
+              onStepTapped: null,
+            ),
           ),
         ),
       ),
@@ -306,19 +334,17 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void submitForm() async {
+    CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
     if (_formKey.currentState.saveAndValidate()) {
-      var formNameSurname =
-          _formKey.currentState.value['name'].toString().trim();
       var formUsername =
           _formKey.currentState.value['username'].toString().trim();
-      print("nameSurname:" + formNameSurname);
-      print("username:" + formUsername);
 
       try {
         await updateDetails(
           username: formUsername,
-          name: formNameSurname,
+          name: nameController.text ?? "Dodact Kullanıcısı",
         );
+        CommonMethods().hideDialog();
         NavigationService.instance.navigate(k_ROUTE_INTERESTS_CHOICE);
       } catch (e) {
         showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");

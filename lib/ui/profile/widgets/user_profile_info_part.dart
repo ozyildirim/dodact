@@ -231,16 +231,6 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(FontAwesome5Solid.map_marker_alt),
-                    Text(authProvider.currentUser.location)
-                  ],
-                ),
-              ),
             ],
           ),
         ),
