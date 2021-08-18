@@ -10,7 +10,6 @@ class UserObject {
   String telephoneNumber;
   String profilePictureURL;
   int experiencePoint;
-  List<Interest> interests;
   List<String> groupIDs;
   List<String> ownedGroupIDs;
   List<String> postIDs;
@@ -29,6 +28,7 @@ class UserObject {
   String schoolName;
 
   List<String> favoritedPosts;
+  List<InterestModel> interests;
 
   //PrivacySettings
   bool hiddenMail;
@@ -46,7 +46,6 @@ class UserObject {
       this.experiencePoint,
       this.groupIDs,
       this.ownedGroupIDs,
-      this.interests,
       this.postIDs,
       this.eventIDs,
       this.location,
@@ -76,9 +75,6 @@ class UserObject {
     userData['experiencePoint'] = this.experiencePoint ?? 0;
     userData['groupIDs'] = this.groupIDs;
     userData['ownedGroupIDs'] = this.ownedGroupIDs;
-    if (this.interests != null) {
-      userData['interests'] = this.interests.map((v) => v.toMap()).toList();
-    }
     userData['postIDs'] = this.postIDs;
     userData['eventIDs'] = this.eventIDs;
     userData['location'] = this.location;
@@ -111,7 +107,6 @@ class UserObject {
         experiencePoint = map['experiencePoint'],
         groupIDs = map['groupIDs'],
         ownedGroupIDs = map['ownedGroupIDs'] ?? [],
-        interests = map['interests'],
         postIDs = map['postIDs'] ?? [],
         eventIDs = map['eventIDs'] ?? [],
         location = map['location'],
@@ -141,7 +136,6 @@ class UserObject {
     experiencePoint = doc.data()['experiencePoint'] ?? '';
     groupIDs = doc.data()['groupIDs'] ?? [];
     ownedGroupIDs = doc.data()['ownedGroupIDs'] ?? [];
-    interests = doc.data()['interests'];
     postIDs = doc.data()['postIDs']?.cast<String>() ?? [];
     eventIDs = doc.data()['eventIDs']?.cast<String>() ?? [];
     location = doc.data()['location'];
@@ -161,6 +155,6 @@ class UserObject {
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email,newUser: $newUser, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
+    return 'UserObject{uid: $uid, email: $email,newUser: $newUser, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs,  postIDs: $postIDs, eventIDs: $eventIDs},';
   }
 }

@@ -1,19 +1,23 @@
 import 'dart:io';
 
 import 'package:dodact_v1/locator.dart';
+import 'package:dodact_v1/model/interest_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
+import 'package:dodact_v1/services/concrete/firebase_interest_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 enum VerifyState { WAITING_TO_VERIFY, VERIFIED }
 
 class AuthProvider extends ChangeNotifier {
   AuthRepository _authRepository = locator<AuthRepository>();
+  Logger logger = Logger();
 
   AuthProvider() {
     getUser();
@@ -41,6 +45,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       currentUser = await _authRepository.currentUser();
       getUserFavoritePosts();
+      getUserInterests();
       notifyListeners();
 
       return currentUser;
@@ -142,11 +147,11 @@ class AuthProvider extends ChangeNotifier {
         currentUser = user;
         changeState(false);
       } else {
-        print("Auth Login failed.");
+        logger.e("Auth Login failed.");
         changeState(false);
       }
     } on FirebaseAuthException catch (e) {
-      debugPrint("AuthProvider signInWithEmail error: " + e.toString());
+      logger.e("AuthProvider signInWithEmail error: " + e.toString());
       authStatus = AuthExceptionHandler.handleException(e);
       changeState(false);
     }
@@ -158,7 +163,7 @@ class AuthProvider extends ChangeNotifier {
       changeState(true);
       await _authRepository.forgotPassword(email);
     } catch (e) {
-      debugPrint("AuthProvider forgotPassword error." + e.toString());
+      logger.e("AuthProvider forgotPassword error." + e.toString());
     } finally {
       changeState(false);
     }
@@ -168,7 +173,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _authRepository.updatePassword(password);
     } catch (e) {
-      debugPrint("AuthProvider updatePassword error." + e.toString());
+      logger.e("AuthProvider updatePassword error." + e.toString());
     }
   }
 
@@ -176,7 +181,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _authRepository.updateEmail(email);
     } catch (e) {
-      debugPrint("AuthProvider updateEmail error." + e.toString());
+      logger.e("AuthProvider updateEmail error." + e.toString());
     }
   }
 
@@ -185,7 +190,7 @@ class AuthProvider extends ChangeNotifier {
       await _authRepository.updateCurrentUser(newData, currentUser.uid);
       getUser();
     } catch (e) {
-      print("authProvider updateCurrentUser error: $e");
+      logger.e("authProvider updateCurrentUser error: $e");
     }
   }
 
@@ -200,7 +205,7 @@ class AuthProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print("authProvider editUserPostDetail error: $e");
+      logger.e("authProvider editUserPostDetail error: $e");
     }
   }
 
@@ -215,7 +220,7 @@ class AuthProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print("authProvider editUserPostDetail error: $e");
+      logger.e("authProvider editUserPostDetail error: $e");
     }
   }
 
@@ -229,7 +234,7 @@ class AuthProvider extends ChangeNotifier {
       await updateCurrentUser({'profilePictureURL': url});
       return url;
     } catch (e) {
-      debugPrint("AuthProvider updateCurrentUserProfilePicture error. " +
+      logger.e("AuthProvider updateCurrentUserProfilePicture error. " +
           e.toString());
       notifyListeners();
     }
@@ -241,7 +246,28 @@ class AuthProvider extends ChangeNotifier {
           .getUserFavoritePosts(currentUser.uid);
       notifyListeners();
     } catch (e) {
-      debugPrint("AuthProvider getUserFavoritePosts error: " + e.toString());
+      logger.e("AuthProvider getUserFavoritePosts error: " + e.toString());
+    }
+  }
+
+  Future<void> getUserInterests() async {
+    try {
+      currentUser.interests =
+          await FirebaseInterestService().getUserInterests(currentUser.uid);
+      notifyListeners();
+    } catch (e) {
+      logger.e("AuthProvider getUserFavoritePosts error: " + e.toString());
+    }
+  }
+
+  Future<void> updateUserInterests(List<InterestModel> interests) async {
+    try {
+      await FirebaseInterestService()
+          .updateUserInterests(currentUser.uid, interests);
+      currentUser.interests = interests;
+      notifyListeners();
+    } catch (e) {
+      logger.e("AuthProvider updateUserInterests error: " + e.toString());
     }
   }
 
@@ -252,7 +278,7 @@ class AuthProvider extends ChangeNotifier {
       currentUser.favoritedPosts.add(postId);
       notifyListeners();
     } catch (e) {
-      debugPrint("AuthProvider addFavoritePost error: " + e.toString());
+      logger.e("AuthProvider addFavoritePost error: " + e.toString());
     }
   }
 
@@ -263,7 +289,7 @@ class AuthProvider extends ChangeNotifier {
       currentUser.favoritedPosts.remove(postId);
       notifyListeners();
     } catch (e) {
-      debugPrint("AuthProvider removeFavoritePost error: " + e.toString());
+      logger.e("AuthProvider removeFavoritePost error: " + e.toString());
     }
   }
 }

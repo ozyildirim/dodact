@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/model/interest_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/abstract/auth_base.dart';
 import 'package:firebase_auth/firebase_auth.dart';

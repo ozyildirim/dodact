@@ -1,17 +1,25 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/constants/theme_constants.dart';
+
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/interest_model.dart';
+import 'package:expansion_card/expansion_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class InterestType {
+  String id;
   String name;
   String coverPhotoUrl;
   List<String> subCategories;
 
   InterestType(
-      {String name, String coverPhotoUrl, List<String> subCategories}) {
+      {String id,
+      String name,
+      String coverPhotoUrl,
+      List<String> subCategories}) {
+    this.id = id;
     this.name = name;
     this.coverPhotoUrl = coverPhotoUrl;
     this.subCategories = subCategories;
@@ -24,20 +32,34 @@ class InterestsPage extends StatefulWidget {
 }
 
 class _InterestsPageState extends BaseState<InterestsPage> {
-  GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-
   bool isSelected = false;
 
-  List<String> selectedTheaterCategories;
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  List<String> selectedMusicCategories;
+  String selectedTheaterCategories;
+  String selectedMusicCategories;
+  String selectedDanceCategories;
+  String selectedVisualCategories;
 
-  List<String> selectedDanceCategories;
+  getUserInterests() async {
+    await authProvider.getUserInterests();
 
-  List<String> selectedVisualCategories;
+    authProvider.currentUser.interests.map((e) {
+      if (e.interestCategory == 'Tiyatro') {
+        selectedTheaterCategories = e.interestSubcategory;
+      } else if (e.interestCategory == "Müzik") {
+        selectedMusicCategories = e.interestSubcategory;
+      } else if (e.interestCategory == "Dans") {
+        selectedDanceCategories = e.interestSubcategory;
+      } else if (e.interestCategory == "Görsel Sanatlar") {
+        selectedVisualCategories = e.interestSubcategory;
+      }
+    });
+  }
 
   List<InterestType> categoryList = [
     new InterestType(
+        id: "0",
         name: "Tiyatro",
         coverPhotoUrl: "assets/images/app/interests/tiyatro.jpeg",
         subCategories: [
@@ -48,6 +70,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           "Pandomim"
         ]),
     new InterestType(
+        id: "1",
         name: "Müzik",
         coverPhotoUrl: "assets/images/app/interests/muzik.jpeg",
         subCategories: [
@@ -58,57 +81,49 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           "Müzikal Dünyası"
         ]),
     new InterestType(
+        id: "2",
         name: "Dans",
         coverPhotoUrl: "assets/images/app/interests/dans.jpeg",
-        subCategories: ["Dans", "Dans", "Dans", "Dans", "Dans"]),
+        subCategories: ["Dans1", "Dans2", "Dans3", "Dans4", "Dans5"]),
     new InterestType(
+        id: "3",
         name: "Görsel Sanatlar",
         coverPhotoUrl: "assets/images/app/interests/resim.jpeg",
         subCategories: [
-          "Jang",
-          "Peyzaj",
-          "Duvar Boyama",
+          "Graffiti",
           "Illustrasyon",
-          "Soyut",
-          "Natürmort",
-          "Figüratif",
-          "Nü (Çıplak)",
           "Portre",
-          "Slayt",
-          "Duvar Boyama",
-          "Rölyef",
-          "Büst",
           "Anıt Heykeller",
-          "Gravür",
-          "Serigrafi",
-          "Taş Baskı",
-          "Ağaç Baskı",
           "Karikatür",
           "İllustrasyon",
           "Manga",
           "Animasyon",
-          "Çizgi Film",
           "Çizgi Roman",
           "Anime",
         ])
   ];
 
   @override
-  Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery.of(context);
+  void initState() {
+    super.initState();
+    getUserInterests();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    print(
+      authProvider.currentUser.interests.map(
+        (e) => print(e.interestCategory),
+      ),
+    );
+    var mediaQuery = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async => false,
       child: FormBuilder(
-        key: formKey,
-        autovalidateMode: AutovalidateMode.disabled,
+        key: _formKey,
         child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () async {
-                await updateIntereset();
-              }),
           appBar: AppBar(
+            title: Text("İlgi Alanları"),
             automaticallyImplyLeading: false,
             actionsIconTheme: IconThemeData(color: Colors.black),
             iconTheme: IconThemeData(color: Colors.black),
@@ -118,47 +133,64 @@ class _InterestsPageState extends BaseState<InterestsPage> {
               IconButton(
                   icon: Icon(Icons.home),
                   onPressed: () {
-                    _navigateToLanding();
+                    _navigateToLandingPage();
                   })
             ],
           ),
-          body: Container(
-            height: dynamicHeight(1),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
-            ),
-            child: pageBody(),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.save),
+            onPressed: () async {
+              _formKey.currentState.save();
+              if (_formKey.currentState.validate()) {
+                print(_formKey.currentState.value);
+                await updateInterests();
+              }
+            },
+          ),
+          body: Column(
+            children: [
+              Container(
+                height: dynamicHeight(0.8),
+                child: ListView.builder(
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    var category = categoryList[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: ExpansionCard(
+                          initiallyExpanded: false,
+                          onExpansionChanged: (value) {
+                            if (value == false) {
+                              _formKey.currentState.save();
+                              if (_formKey.currentState.validate()) {
+                                print(_formKey.currentState.value);
+                              }
+                            }
+                          },
+                          background: Image.asset(
+                            category.coverPhotoUrl,
+                          ),
+                          title: Container(
+                            child: Text(
+                              category.name,
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          children: [buildChoiceContainer(category)],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget pageBody() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-      ),
-      itemCount: 4,
-      itemBuilder: (BuildContext context, int index) {
-        var category = categoryList[index];
-        print("$index + ${category.name}");
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: InkWell(
-            onTap: () async {
-              await showInterestDialog(category);
-            },
-            child: Card(
-              child: Image.asset(
-                category.coverPhotoUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -191,42 +223,33 @@ class _InterestsPageState extends BaseState<InterestsPage> {
         chosenList = selectedVisualCategories;
         break;
       default:
-        chosenList = [];
+        break;
     }
 
-    return Container(
-      height: dynamicHeight(0.6),
-      child: Column(
-        children: [
-          Text("Alt Kategoriler", style: TextStyle(fontSize: 22)),
-          Container(
-            height: dynamicHeight(0.5),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  FormBuilderFilterChip(
-                    spacing: 6,
-                    padding: EdgeInsets.all(8),
-                    backgroundColor: Colors.amberAccent,
-                    labelStyle: TextStyle(fontSize: 16),
-                    name: "chips",
-                    options: buildChipOptions(interest),
-                  ),
-                ],
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    FormBuilderFilterChip(
+                      spacing: 6,
+                      padding: EdgeInsets.all(8),
+                      backgroundColor: Colors.amberAccent,
+                      labelStyle: TextStyle(fontSize: 16),
+                      name: interest.name,
+                      initialValue: buildPreselectedChipOptions(interest),
+                      options: buildChipOptions(interest),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Align(
-            child: FloatingActionButton(
-              onPressed: () {
-                formKey.currentState.save();
-                print(formKey.currentState.value);
-              },
-              child: Icon(Icons.add),
-            ),
-            alignment: Alignment.bottomRight,
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -246,13 +269,135 @@ class _InterestsPageState extends BaseState<InterestsPage> {
     return options;
   }
 
-  void _navigateToLanding() async {
+  buildPreselectedChipOptions(InterestType interest) {
+    List<String> options = [];
+
+    // print("preselected:" +
+    //     authProvider.currentUser.interests[0].interestSubcategory);
+    // var subCategory =
+    //     authProvider.currentUser.interests[0].interestSubcategory.split(',');
+    // for (var e in subCategory) {
+    //   print("tiyatro element:" + e);
+    // }
+
+    switch (interest.name) {
+      case "Tiyatro":
+        // for (var interestModel in authProvider.currentUser.interests) {
+        //   if (interestModel.interestCategory == "Tiyatro") {
+        //     var subCategories = interestModel.interestSubcategory.split(',');
+        //     for (var subCategory in subCategories) {
+        //       options.add(
+        //         FormBuilderFieldOption(
+        //           value: subCategory,
+        //           child: Text(subCategory),
+        //         ),
+        //       );
+        //     }
+        //   }
+        // }
+        var categories = selectedTheaterCategories?.split(',') ?? [];
+        options = categories;
+        return options;
+      case "Müzik":
+        // for (var interestModel in authProvider.currentUser.interests) {
+        //   if (interestModel.interestCategory == "Müzik") {
+        //     var subCategories = interestModel.interestSubcategory.split(',');
+        //     for (var subCategory in subCategories) {
+        //       options.add(
+        //         FormBuilderFieldOption(
+        //           value: subCategory,
+        //           child: Text(subCategory),
+        //         ),
+        //       );
+        //     }
+        //   }
+        // }
+        var categories = selectedMusicCategories?.split(',') ?? [];
+        options = categories;
+        return options;
+      case "Dans":
+        // for (var interestModel in authProvider.currentUser.interests) {
+        //   if (interestModel.interestCategory == "Dans") {
+        //     var subCategories = interestModel.interestSubcategory.split(',');
+        //     for (var subCategory in subCategories) {
+        //       options.add(
+        //         FormBuilderFieldOption(
+        //           value: subCategory,
+        //           child: Text(subCategory),
+        //         ),
+        //       );
+        //     }
+        //   }
+        // }
+        var categories = selectedDanceCategories?.split(',') ?? [];
+        options = categories;
+        return options;
+      case "Görsel Sanatlar":
+        // for (var interestModel in authProvider.currentUser.interests) {
+        //   if (interestModel.interestCategory == "Görsel Sanatlar") {
+        //     var subCategories = interestModel.interestSubcategory.split(',');
+        //     for (var subCategory in subCategories) {
+        //       options.add(
+        //         FormBuilderFieldOption(
+        //           value: subCategory,
+        //           child: Text(subCategory),
+        //         ),
+        //       );
+        //     }
+        //   }
+        // }
+        var categories = selectedVisualCategories?.split(',') ?? [];
+        options = categories;
+        return options;
+      default:
+        return [];
+        break;
+    }
+  }
+
+  void _navigateToLandingPage() {
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
   }
 
-  void updateIntereset() async {
-    if (formKey.currentState.validate()) {
-      var interests = formKey.currentState.value["chips"].toString();
+  Future<void> updateInterests() async {
+    try {
+      CommonMethods().showLoaderDialog(context, "Hemen hallediyoruz.");
+      selectedTheaterCategories =
+          _formKey.currentState.value['Tiyatro'].toString();
+      print("Tiyatro:" + selectedTheaterCategories ?? "Yok");
+      selectedMusicCategories = _formKey.currentState.value['Müzik'].toString();
+      print("Müzik:" + selectedMusicCategories ?? "Yok");
+      selectedDanceCategories = _formKey.currentState.value['Dans'].toString();
+      print("Dans:" + selectedDanceCategories ?? "Yok");
+      selectedVisualCategories =
+          _formKey.currentState.value['Görsel Sanatlar'].toString();
+      print("Görsel:" + selectedVisualCategories ?? "Yok");
+
+      List<InterestModel> selectedInterestsList = [
+        InterestModel(
+            interestId: "0",
+            interestCategory: "Tiyatro",
+            interestSubcategory: selectedTheaterCategories),
+        InterestModel(
+            interestId: "1",
+            interestCategory: "Müzik",
+            interestSubcategory: selectedMusicCategories),
+        InterestModel(
+            interestId: "2",
+            interestCategory: "Dans",
+            interestSubcategory: selectedDanceCategories),
+        InterestModel(
+            interestId: "3",
+            interestCategory: "Görsel Sanatlar",
+            interestSubcategory: selectedVisualCategories),
+      ];
+
+      await authProvider.updateUserInterests(selectedInterestsList);
+    } catch (e) {
+      CommonMethods().showErrorDialog(
+          context, "İlgi alanı güncellemesi sırasında hata oluştu.");
+    } finally {
+      CommonMethods().hideDialog();
     }
   }
 }

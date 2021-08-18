@@ -1,4 +1,5 @@
 import 'package:dodact_v1/locator.dart';
+import 'package:dodact_v1/model/interest_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';

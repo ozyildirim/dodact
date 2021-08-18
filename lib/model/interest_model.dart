@@ -1,16 +1,20 @@
-class Interest {
+class InterestModel {
+  String interestId;
   String interestCategory;
-  List<String> interestSubcategory;
+  String interestSubcategory;
 
-  Interest({this.interestCategory, this.interestSubcategory});
+  InterestModel(
+      {this.interestId, this.interestCategory, this.interestSubcategory});
 
-  Interest.fromJson(Map<String, dynamic> json) {
+  InterestModel.fromJson(Map<String, dynamic> json) {
+    interestId = json["interest_id"];
     interestCategory = json['interestCategory'];
-    interestSubcategory = json['interestSubcategory'].cast<String>();
+    interestSubcategory = json['interestSubcategory'];
   }
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data["interestId"] = interestId;
     data['interestCategory'] = this.interestCategory;
     data['interestSubcategory'] = this.interestSubcategory;
 
