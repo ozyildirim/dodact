@@ -4,27 +4,10 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/interest_model.dart';
+import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:expansion_card/expansion_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-
-class InterestType {
-  String id;
-  String name;
-  String coverPhotoUrl;
-  List<String> subCategories;
-
-  InterestType(
-      {String id,
-      String name,
-      String coverPhotoUrl,
-      List<String> subCategories}) {
-    this.id = id;
-    this.name = name;
-    this.coverPhotoUrl = coverPhotoUrl;
-    this.subCategories = subCategories;
-  }
-}
 
 class InterestsPage extends StatefulWidget {
   @override
@@ -36,86 +19,18 @@ class _InterestsPageState extends BaseState<InterestsPage> {
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  String selectedTheaterCategories;
-  String selectedMusicCategories;
-  String selectedDanceCategories;
-  String selectedVisualCategories;
-
-  getUserInterests() async {
-    await authProvider.getUserInterests();
-
-    authProvider.currentUser.interests.map((e) {
-      if (e.interestCategory == 'Tiyatro') {
-        selectedTheaterCategories = e.interestSubcategory;
-      } else if (e.interestCategory == "Müzik") {
-        selectedMusicCategories = e.interestSubcategory;
-      } else if (e.interestCategory == "Dans") {
-        selectedDanceCategories = e.interestSubcategory;
-      } else if (e.interestCategory == "Görsel Sanatlar") {
-        selectedVisualCategories = e.interestSubcategory;
-      }
-    });
-  }
-
-  List<InterestType> categoryList = [
-    new InterestType(
-        id: "0",
-        name: "Tiyatro",
-        coverPhotoUrl: "assets/images/app/interests/tiyatro.jpeg",
-        subCategories: [
-          "Doğaçlama",
-          "Tülüat",
-          "Yazılı Metin",
-          "Radyo Tiyatrosu",
-          "Pandomim"
-        ]),
-    new InterestType(
-        id: "1",
-        name: "Müzik",
-        coverPhotoUrl: "assets/images/app/interests/muzik.jpeg",
-        subCategories: [
-          "Müzik",
-          "Kültür",
-          "Müzikal",
-          "Müzikalizm",
-          "Müzikal Dünyası"
-        ]),
-    new InterestType(
-        id: "2",
-        name: "Dans",
-        coverPhotoUrl: "assets/images/app/interests/dans.jpeg",
-        subCategories: ["Dans1", "Dans2", "Dans3", "Dans4", "Dans5"]),
-    new InterestType(
-        id: "3",
-        name: "Görsel Sanatlar",
-        coverPhotoUrl: "assets/images/app/interests/resim.jpeg",
-        subCategories: [
-          "Graffiti",
-          "Illustrasyon",
-          "Portre",
-          "Anıt Heykeller",
-          "Karikatür",
-          "İllustrasyon",
-          "Manga",
-          "Animasyon",
-          "Çizgi Roman",
-          "Anime",
-        ])
-  ];
+  List<FormBuilderFieldOption> selectedTheaterCategories = [];
+  List<FormBuilderFieldOption> selectedMusicCategories = [];
+  List<FormBuilderFieldOption> selectedDanceCategories = [];
+  List<FormBuilderFieldOption> selectedVisualCategories = [];
 
   @override
   void initState() {
     super.initState();
-    getUserInterests();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(
-      authProvider.currentUser.interests.map(
-        (e) => print(e.interestCategory),
-      ),
-    );
     var mediaQuery = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async => false,
@@ -133,7 +48,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
               IconButton(
                   icon: Icon(Icons.home),
                   onPressed: () {
-                    _navigateToLandingPage();
+                    navigateLanding();
                   })
             ],
           ),
@@ -195,8 +110,6 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   }
 
   Future<Widget> showInterestDialog(InterestType interest) async {
-    var mediaQuery = MediaQuery.of(context);
-
     await showDialog(
       context: context,
       barrierDismissible: true,
@@ -207,24 +120,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   }
 
   buildChoiceContainer(InterestType interest) {
-    var chosenList;
-
-    switch (interest.name) {
-      case "Tiyatro":
-        chosenList = selectedTheaterCategories;
-        break;
-      case "Müzik":
-        chosenList = selectedMusicCategories;
-        break;
-      case "Dans":
-        chosenList = selectedDanceCategories;
-        break;
-      case "Görsel Sanatlar":
-        chosenList = selectedVisualCategories;
-        break;
-      default:
-        break;
-    }
+    var chosenList = buildPreselectedChipOptions(interest);
 
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -241,7 +137,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
                       backgroundColor: Colors.amberAccent,
                       labelStyle: TextStyle(fontSize: 16),
                       name: interest.name,
-                      initialValue: buildPreselectedChipOptions(interest),
+                      initialValue: chosenList,
                       options: buildChipOptions(interest),
                     ),
                   ],
@@ -270,108 +166,70 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   }
 
   buildPreselectedChipOptions(InterestType interest) {
-    List<String> options = [];
+    List<FormBuilderFieldOption> preselectedOptions = [];
 
-    // print("preselected:" +
-    //     authProvider.currentUser.interests[0].interestSubcategory);
-    // var subCategory =
-    //     authProvider.currentUser.interests[0].interestSubcategory.split(',');
-    // for (var e in subCategory) {
-    //   print("tiyatro element:" + e);
-    // }
+    if (authProvider.currentUser.interests != null) {
+      authProvider.currentUser.interests.map((interestElement) {
+        if (interestElement.interestCategory == interest.name) {
+          interestElement.interestSubcategory.map((subCategory) {
+            preselectedOptions.add(FormBuilderFieldOption(
+              value: subCategory,
+              child: Text(subCategory),
+            ));
+          });
 
-    switch (interest.name) {
-      case "Tiyatro":
-        // for (var interestModel in authProvider.currentUser.interests) {
-        //   if (interestModel.interestCategory == "Tiyatro") {
-        //     var subCategories = interestModel.interestSubcategory.split(',');
-        //     for (var subCategory in subCategories) {
-        //       options.add(
-        //         FormBuilderFieldOption(
-        //           value: subCategory,
-        //           child: Text(subCategory),
-        //         ),
-        //       );
-        //     }
-        //   }
-        // }
-        var categories = selectedTheaterCategories?.split(',') ?? [];
-        options = categories;
-        return options;
-      case "Müzik":
-        // for (var interestModel in authProvider.currentUser.interests) {
-        //   if (interestModel.interestCategory == "Müzik") {
-        //     var subCategories = interestModel.interestSubcategory.split(',');
-        //     for (var subCategory in subCategories) {
-        //       options.add(
-        //         FormBuilderFieldOption(
-        //           value: subCategory,
-        //           child: Text(subCategory),
-        //         ),
-        //       );
-        //     }
-        //   }
-        // }
-        var categories = selectedMusicCategories?.split(',') ?? [];
-        options = categories;
-        return options;
-      case "Dans":
-        // for (var interestModel in authProvider.currentUser.interests) {
-        //   if (interestModel.interestCategory == "Dans") {
-        //     var subCategories = interestModel.interestSubcategory.split(',');
-        //     for (var subCategory in subCategories) {
-        //       options.add(
-        //         FormBuilderFieldOption(
-        //           value: subCategory,
-        //           child: Text(subCategory),
-        //         ),
-        //       );
-        //     }
-        //   }
-        // }
-        var categories = selectedDanceCategories?.split(',') ?? [];
-        options = categories;
-        return options;
-      case "Görsel Sanatlar":
-        // for (var interestModel in authProvider.currentUser.interests) {
-        //   if (interestModel.interestCategory == "Görsel Sanatlar") {
-        //     var subCategories = interestModel.interestSubcategory.split(',');
-        //     for (var subCategory in subCategories) {
-        //       options.add(
-        //         FormBuilderFieldOption(
-        //           value: subCategory,
-        //           child: Text(subCategory),
-        //         ),
-        //       );
-        //     }
-        //   }
-        // }
-        var categories = selectedVisualCategories?.split(',') ?? [];
-        options = categories;
-        return options;
-      default:
-        return [];
-        break;
+          return preselectedOptions;
+        } else if (interestElement.interestCategory == interest.name) {
+          interestElement.interestSubcategory.map((subCategory) {
+            preselectedOptions.add(FormBuilderFieldOption(
+              value: subCategory,
+              child: Text(subCategory),
+            ));
+          });
+
+          return preselectedOptions;
+        } else if (interestElement.interestCategory == interest.name) {
+          interestElement.interestSubcategory.map((subCategory) {
+            preselectedOptions.add(FormBuilderFieldOption(
+              value: subCategory,
+              child: Text(subCategory),
+            ));
+          });
+
+          return preselectedOptions;
+        } else {
+          interestElement.interestSubcategory.map((subCategory) {
+            preselectedOptions.add(FormBuilderFieldOption(
+              value: subCategory,
+              child: Text(subCategory),
+            ));
+          });
+
+          return preselectedOptions;
+        }
+      });
+    } else {
+      return preselectedOptions;
     }
   }
 
-  void _navigateToLandingPage() {
+  void navigateLanding() {
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
   }
 
   Future<void> updateInterests() async {
     try {
       CommonMethods().showLoaderDialog(context, "Hemen hallediyoruz.");
-      selectedTheaterCategories =
-          _formKey.currentState.value['Tiyatro'].toString();
-      print("Tiyatro:" + selectedTheaterCategories ?? "Yok");
-      selectedMusicCategories = _formKey.currentState.value['Müzik'].toString();
-      print("Müzik:" + selectedMusicCategories ?? "Yok");
-      selectedDanceCategories = _formKey.currentState.value['Dans'].toString();
-      print("Dans:" + selectedDanceCategories ?? "Yok");
+      selectedTheaterCategories = _formKey.currentState.value['Tiyatro'] ?? [];
+      selectedMusicCategories = _formKey.currentState.value['Müzik'] ?? [];
+      selectedDanceCategories = _formKey.currentState.value['Dans'] ?? [];
       selectedVisualCategories =
-          _formKey.currentState.value['Görsel Sanatlar'].toString();
-      print("Görsel:" + selectedVisualCategories ?? "Yok");
+          _formKey.currentState.value['Görsel Sanatlar'] ?? [];
+
+      print(selectedTheaterCategories);
+      print(selectedMusicCategories);
+      print(selectedDanceCategories);
+      print(selectedVisualCategories);
 
       List<InterestModel> selectedInterestsList = [
         InterestModel(
@@ -393,6 +251,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
       ];
 
       await authProvider.updateUserInterests(selectedInterestsList);
+      print("ne yapıyoruz");
     } catch (e) {
       CommonMethods().showErrorDialog(
           context, "İlgi alanı güncellemesi sırasında hata oluştu.");

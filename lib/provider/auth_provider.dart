@@ -256,7 +256,7 @@ class AuthProvider extends ChangeNotifier {
           await FirebaseInterestService().getUserInterests(currentUser.uid);
       notifyListeners();
     } catch (e) {
-      logger.e("AuthProvider getUserFavoritePosts error: " + e.toString());
+      logger.e("AuthProvider getUserInterests error: " + e.toString());
     }
   }
 

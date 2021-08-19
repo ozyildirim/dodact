@@ -1,7 +1,7 @@
 class InterestModel {
   String interestId;
   String interestCategory;
-  String interestSubcategory;
+  List<dynamic> interestSubcategory;
 
   InterestModel(
       {this.interestId, this.interestCategory, this.interestSubcategory});
@@ -9,7 +9,7 @@ class InterestModel {
   InterestModel.fromJson(Map<String, dynamic> json) {
     interestId = json["interest_id"];
     interestCategory = json['interestCategory'];
-    interestSubcategory = json['interestSubcategory'];
+    interestSubcategory = json['interestSubcategory']?.cast<String>();
   }
 
   Map<String, dynamic> toMap() {
