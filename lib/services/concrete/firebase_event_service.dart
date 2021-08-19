@@ -22,7 +22,8 @@ class FirebaseEventService extends BaseService<EventModel> {
   Future<List<EventModel>> getList() async {
     List<EventModel> allEvents = [];
 
-    QuerySnapshot querySnapshot = await eventsRef.get();
+    QuerySnapshot querySnapshot =
+        await eventsRef.where('approved', isEqualTo: true).get();
     for (DocumentSnapshot event in querySnapshot.docs) {
       EventModel _convertedEvent = EventModel.fromJson(event.data());
       allEvents.add(_convertedEvent);

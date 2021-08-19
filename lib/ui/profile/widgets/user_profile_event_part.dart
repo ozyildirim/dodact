@@ -35,6 +35,13 @@ class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
             _userEvents != null
                 ? _userEvents.map((e) => print(e.eventTitle))
                 : print("Etkinlik yok");
+
+            _userEvents = _userEvents.map((e) {
+              if (e.approved) {
+                return e;
+              }
+            }).toList();
+
             return ListView(
               scrollDirection: Axis.horizontal,
               children: _userEvents != null

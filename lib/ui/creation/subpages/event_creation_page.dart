@@ -395,7 +395,9 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                                 validator: FormBuilderValidators.compose(
                                   [
                                     FormBuilderValidators.required(context,
-                                        errorText: "Bu alan boş bırakılamaz.")
+                                        errorText: "Bu alan boş bırakılamaz."),
+                                    FormBuilderValidators.notEqual(
+                                        context, null)
                                   ],
                                 ),
                               ),

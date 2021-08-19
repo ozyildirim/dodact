@@ -11,23 +11,20 @@ class ParallaxEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          for (final event in events)
-            InkWell(
-              onTap: () => navigateEventDetail(event),
-              child: EventListItem(
-                imageUrl: event.eventImages[0] != null
-                    ? event.eventImages[0]
-                    : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
-                name: event.eventTitle,
-                country: event.city,
-              ),
+    return Column(
+      children: [
+        for (final event in events)
+          InkWell(
+            onTap: () => navigateEventDetail(event),
+            child: EventListItem(
+              imageUrl: event.eventImages[0] != null
+                  ? event.eventImages[0]
+                  : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
+              name: event.eventTitle,
+              country: event.city,
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 
