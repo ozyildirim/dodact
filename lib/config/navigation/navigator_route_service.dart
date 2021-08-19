@@ -18,6 +18,8 @@ import 'package:dodact_v1/ui/group/group_detail.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/insterests_page.dart';
+import 'package:dodact_v1/ui/interest/temporary_interests_page.dart';
+import 'package:dodact_v1/ui/interest/widgets/temporary_registration_interests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
@@ -56,8 +58,16 @@ class NavigationRouteManager {
       case k_ROUTE_REGISTER:
         return _navigateToDefault(SignUpPage(), settings);
 
-      case k_ROUTE_INTERESTS_CHOICE:
-        return _navigateToDefault(InterestsPage(), settings);
+      // case k_ROUTE_INTERESTS_CHOICE:
+      //   return _navigateToDefault(InterestsPage(), settings);
+
+      case k_ROUTE_TEMPORARY_INTERESTS_CHOICE:
+        return _navigateToDefault(TemporaryInterestsPage(), settings);
+
+      case k_ROUTE_TEMPORARY_REGISTRATION_INTERESTS_CHOICE:
+        return _navigateToDefault(
+            TemporaryRegistrationInterestsPage(), settings);
+
       case k_ROUTE_HOME:
         return _navigateToDefault(HomePage(), settings);
       case k_ROUTE_CREATION:

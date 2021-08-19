@@ -345,7 +345,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           name: nameController.text ?? "Dodact Kullanıcısı",
         );
         CommonMethods().hideDialog();
-        NavigationService.instance.navigate(k_ROUTE_INTERESTS_CHOICE);
+        NavigationService.instance
+            .navigate(k_ROUTE_TEMPORARY_REGISTRATION_INTERESTS_CHOICE);
       } catch (e) {
         showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
       }
