@@ -196,7 +196,7 @@ class EventProvider extends ChangeNotifier {
   Future<List<EventModel>> getFilteredEventList({
     String category = "Tümü",
     String city = "Belirtilmemiş",
-    String type = "Açık Hava Etkinliği",
+    String type = "Tümü",
     bool showAllCategories = true,
     bool showAllTypes = true,
     bool wholeCountry = true,

@@ -1,10 +1,8 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/cities.dart';
-import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/event/filtered_events_page.dart';
-import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -32,7 +30,7 @@ class _EventsPageState extends BaseState<EventsPage> {
 
     selectedCategory = "Tümü";
     selectedCity = "İstanbul";
-    selectedType = "Açık Hava Etkinliği";
+    selectedType = "Tümü";
   }
 
   @override
@@ -216,9 +214,9 @@ class _EventsPageState extends BaseState<EventsPage> {
       await Provider.of<EventProvider>(context, listen: false)
           .getFilteredEventList(
               city: city,
-              wholeCountry: true,
+              wholeCountry: false,
               showAllTypes: true,
-              showAllCategories: false);
+              showAllCategories: true);
     } else if (category == "Tümü" &&
         city != "Belirtilmemiş" &&
         type != "Tümü") {
@@ -248,6 +246,16 @@ class _EventsPageState extends BaseState<EventsPage> {
               wholeCountry: true,
               showAllTypes: false,
               showAllCategories: false);
+    } else if (category != "Tümü" &&
+        city != "Belirtilmemiş" &&
+        type == "Tümü") {
+      await Provider.of<EventProvider>(context, listen: false)
+          .getFilteredEventList(
+              city: city,
+              category: category,
+              wholeCountry: false,
+              showAllTypes: true,
+              showAllCategories: false);
     } else {
       await Provider.of<EventProvider>(context, listen: false)
           .getFilteredEventList(
@@ -260,7 +268,13 @@ class _EventsPageState extends BaseState<EventsPage> {
     }
   }
 
-  List<String> categoryItemValues = ["Tümü", "Müzik", "Tiyatro", "Dans"];
+  List<String> categoryItemValues = [
+    "Tümü",
+    "Müzik",
+    "Tiyatro",
+    "Dans",
+    "Resim"
+  ];
   List<String> typeItemValues = [
     "Tümü",
     "Açık Hava Etkinliği",
@@ -285,6 +299,10 @@ class _EventsPageState extends BaseState<EventsPage> {
       text: "Dans",
       iconData: FontAwesome5Solid.star,
     ),
+    IconTitleCardItem(
+      text: "Resim",
+      iconData: FontAwesome5Solid.star,
+    ),
   ];
 
   List<CardItem> typeItems = [
@@ -307,6 +325,6 @@ class _EventsPageState extends BaseState<EventsPage> {
   ];
 
   Future<void> _refreshEvents() async {
-    await Provider.of<EventProvider>(context, listen: false).getAllEventsList();
+    await updateEventsByFilter(selectedCategory, selectedCity, selectedType);
   }
 }

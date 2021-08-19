@@ -101,31 +101,49 @@ class FirebaseEventService extends BaseService<EventModel> {
     QuerySnapshot querySnapshot;
 
     if (showAllCategories && wholeCountry && showAllTypes) {
-      querySnapshot = await eventsRef.get();
+      querySnapshot = await eventsRef.where('approved', isEqualTo: true).get();
     } else if (showAllCategories && wholeCountry && showAllTypes == false) {
-      querySnapshot =
-          await eventsRef.where("eventCategory", isEqualTo: category).get();
+      querySnapshot = await eventsRef
+          .where('approved', isEqualTo: true)
+          .where("eventType", isEqualTo: type)
+          .get();
     } else if (showAllCategories && wholeCountry == false && showAllTypes) {
-      querySnapshot = await eventsRef.where("city", isEqualTo: city).get();
+      querySnapshot = await eventsRef
+          .where('approved', isEqualTo: true)
+          .where("city", isEqualTo: city)
+          .get();
     } else if (showAllCategories &&
         wholeCountry == false &&
         showAllTypes == false) {
       querySnapshot = await eventsRef
+          .where('approved', isEqualTo: true)
           .where("city", isEqualTo: city)
           .where('eventType', isEqualTo: type)
           .get();
     } else if (showAllCategories == false && wholeCountry && showAllTypes) {
-      querySnapshot =
-          await eventsRef.where('eventCategory', isEqualTo: category).get();
+      querySnapshot = await eventsRef
+          .where('approved', isEqualTo: true)
+          .where('eventCategory', isEqualTo: category)
+          .get();
+    } else if (showAllCategories == false &&
+        wholeCountry == false &&
+        showAllTypes) {
+      querySnapshot = await eventsRef
+          .where('approved', isEqualTo: true)
+          .where('city', isEqualTo: city)
+          .where('eventCategory', isEqualTo: category)
+          .get();
     } else if (showAllCategories == false &&
         wholeCountry &&
         showAllTypes == false) {
       querySnapshot = await eventsRef
+          .where('approved', isEqualTo: true)
           .where('eventCategory', isEqualTo: category)
           .where('eventType', isEqualTo: type)
           .get();
     } else {
       querySnapshot = await eventsRef
+          .where('approved', isEqualTo: true)
           .where("city", isEqualTo: city)
           .where("eventCategory", isEqualTo: category)
           .where("eventType", isEqualTo: type)
