@@ -17,6 +17,7 @@ import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -30,9 +31,11 @@ class EventDetailPage extends StatefulWidget {
   _EventDetailPageState createState() => _EventDetailPageState();
 }
 
-class _EventDetailPageState extends BaseState<EventDetailPage> {
+class _EventDetailPageState extends BaseState<EventDetailPage>
+    with SingleTickerProviderStateMixin {
   EventModel _event;
   Completer<GoogleMapController> _controller = Completer();
+  TabController tabController;
 
   bool canUserControlEvent() {
     if (_event.ownerType == 'Group') {
@@ -53,7 +56,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
   @override
   void initState() {
     _event = widget.event;
-
+    tabController = new TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -89,7 +92,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
         backwardsCompatibility: true,
         iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true,
-        title: Text(_event.eventTitle, style: TextStyle(color: Colors.black)),
+        title: Text("Detay", style: TextStyle(color: Colors.black)),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -98,12 +101,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
           image: AssetImage(kBackgroundImage),
         )),
         width: dynamicWidth(1),
+        height: dynamicHeight(1),
         child: SingleChildScrollView(
           child: Column(
             children: [
               _buildEventImageCarousel(),
-              _buildEventHeaderPart(),
-              _buildMap()
+              _buildEventDetailBody(),
+              _buildEventDetailTabs()
+              // _buildMap()
             ],
           ),
         ),
@@ -113,43 +118,101 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
 
   Widget _buildEventImageCarousel() {
     if (_event.eventImages.isNotEmpty) {
-      return Container(
-        height: 250,
-        width: double.infinity,
-        child: GFCarousel(
-          autoPlay: true,
-          items: _event.eventImages.map((image) {
-            return Container(
-              margin: EdgeInsets.all(8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
-              ),
-            );
-          }).toList(),
-        ),
+      return GFCarousel(
+        passiveIndicator: Colors.white,
+        enlargeMainPage: true,
+        autoPlay: true,
+        activeIndicator: Colors.white,
+        items: _event.eventImages.map((image) {
+          return Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
+            ),
+          );
+        }).toList(),
       );
     } else {
       return Container();
     }
   }
 
-  Widget _buildEventHeaderPart() {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: _buildCreatorInfo(),
+  Widget _buildEventDetailBody() {
+    return Container(
+      color: Colors.white70,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16, bottom: 10),
+              child: Text(
+                _event.eventTitle,
+                style: GoogleFonts.poppins(fontSize: 26),
+              ),
+            ),
+            _getCreatorInfo(),
+            ListTile(
+                leading: Icon(Icons.calendar_today),
+                title: Text(DateFormat('dd,MM,yyyy hh:mm')
+                    .format(_event.eventStartDate))),
+            ListTile(
+                leading: Icon(Icons.location_city), title: Text(_event.city)),
+            ListTile(
+                leading: Icon(Icons.category), title: Text(_event.eventType))
+          ],
         ),
-        Expanded(
-          flex: 3,
-          child: _buildEventInfo(),
-        )
+      ),
+    );
+  }
+
+  Widget _buildEventDetailTabs() {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 50,
+          child: TabBar(
+            labelColor: Colors.black,
+            labelStyle: GoogleFonts.poppins(
+              fontSize: 18,
+            ),
+            controller: tabController,
+            tabs: const [
+              const Tab(text: "Detaylar"),
+              const Tab(text: "Konum"),
+            ],
+          ),
+        ),
+        Container(
+          height: 300,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TabBarView(controller: tabController, children: [
+              buildDetailTab(),
+              Container(),
+            ]),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildCreatorInfo() {
+  Widget buildDetailTab() {
+    return Container(
+      color: Colors.white70,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Text(
+          _event.eventDescription,
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget _getCreatorInfo() {
     if (_event.ownerType == "User") {
       final provider = Provider.of<UserProvider>(context, listen: false);
       return FutureBuilder(
@@ -168,30 +231,36 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
               }
               UserObject fetchedUser = snapshot.data;
 
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        NavigationService.instance.navigate(
-                            k_ROUTE_OTHERS_PROFILE_PAGE,
-                            args: fetchedUser.uid);
-                      },
-                      child: GFImageOverlay(
-                        width: 100,
-                        height: 100,
-                        shape: BoxShape.circle,
-                        image: NetworkImage(fetchedUser.profilePictureURL),
-                        boxFit: BoxFit.cover,
+              var nameToShow = fetchedUser.nameSurname ?? fetchedUser.username;
+
+              return ListTile(
+                leading: CircleAvatar(
+                  radius: 15,
+                  backgroundImage: NetworkImage(fetchedUser.profilePictureURL),
+                ),
+                title: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: "Oluşturan: ",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
+                      TextSpan(
+                        text: nameToShow,
+                        style: TextStyle(
+                          fontFamily: "Raleway",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    fetchedUser.nameSurname.toUpperCase(),
-                    textAlign: TextAlign.center,
-                  )
-                ],
+                ),
               );
           }
         },
@@ -244,61 +313,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
     } else {
       return spinkit;
     }
-  }
-
-  Widget _buildEventInfo() {
-    return Container(
-      height: 200,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(FontAwesome5Solid.adjust),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(_event.eventTitle)
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(FontAwesome5Solid.calendar),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      DateFormat('dd/MM/yyyy hh:mm')
-                          .format(_event.eventStartDate),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GFButton(
-                  onPressed: () {},
-                  color: Colors.cyan,
-                  text: "Takvime Ekle",
-                  shape: GFButtonShape.pills,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Future<void> _showDeleteEventDialog() async {

@@ -145,32 +145,33 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       initialValue: false,
                       focusNode: _checkboxFocus,
                       title: InkWell(
-                          onTap: () {
-                            NavigationService.instance
-                                .navigate(k_ROUTE_PRIVACY_POLICY);
-                          },
-                          child: RichText(
-                            text: TextSpan(
-                              children: const <TextSpan>[
-                                TextSpan(
-                                  text: "Gizlilik sözleşmesini ",
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                  ),
+                        onTap: () {
+                          NavigationService.instance
+                              .navigate(k_ROUTE_PRIVACY_POLICY);
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: "Gizlilik sözleşmesini ",
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
                                 ),
-                                TextSpan(
-                                  text: "okudum ve kabul ediyorum.",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                  ),
+                              ),
+                              TextSpan(
+                                text: "okudum ve kabul ediyorum.",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
                                 ),
-                              ],
-                            ),
-                          )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         errorStyle:

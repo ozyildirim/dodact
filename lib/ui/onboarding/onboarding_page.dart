@@ -21,6 +21,15 @@ class OnBoardingPage extends StatelessWidget {
             "Sanatçı ruhunu ortaya çıkar, yeteneklerini binlerce kişiye sergile.",
       ),
       PageViewModel(
+        image: Image.asset('assets/images/onboarding/onboarding_6.png'),
+        titleWidget: Text(
+          "Katkı Sağla",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Sanatçı ruhunu ortaya çıkar, yeteneklerini binlerce kişiye sergile.",
+      ),
+      PageViewModel(
         image: Image.asset('assets/images/onboarding/onboarding_1.png'),
         titleWidget: Text(
           "Ekibini Oluştur",

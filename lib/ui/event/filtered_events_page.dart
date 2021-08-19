@@ -23,7 +23,7 @@ class FilteredEventView extends StatelessWidget {
                 child: Center(
                   child: Center(
                     child: Text(
-                      "Henüz bir grup yok.",
+                      "Bu kriterlere uyan bir etkinlik bulunamadı.",
                       style: TextStyle(fontSize: 25),
                     ),
                   ),
@@ -43,68 +43,3 @@ class FilteredEventView extends StatelessWidget {
     );
   }
 }
-
-
-
-
-/*
-
-Column(
-                            children: [
-                              Card(
-                                color: Colors.transparent,
-                                elevation: 0,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(40),
-                                        child: Container(
-                                          height: 100,
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(groupItem
-                                                      .groupProfilePicture))),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: ListTile(
-                                        title: Text(
-                                          groupItem.groupName.toUpperCase(),
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        subtitle:
-                                            Text(groupItem.groupDescription),
-                                        trailing: IconButton(
-                                          icon: Icon(Icons.arrow_forward_ios),
-                                          onPressed: () {
-                                            NavigationService.instance.navigate(
-                                                k_ROUTE_GROUP_DETAIL,
-                                                args: groupItem);
-                                          },
-                                        ),
-                                        isThreeLine: true,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Divider(
-                                thickness: 0.6,
-                                indent: 40,
-                                endIndent: 40,
-                              )
-                            ],
-                          );
-
-
-
-
-*/
