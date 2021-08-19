@@ -23,15 +23,14 @@ class _TemporaryRegistrationInterestsPageState
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            updateUserInterest();
-          },
-          child: Icon(Icons.save),
-        ),
-        appBar: AppBar(
-          title: Text("İlgi Alanlarım"),
-        ),
+        floatingActionButton: selectedIndex != -1
+            ? FloatingActionButton(
+                onPressed: () {
+                  updateUserInterest();
+                },
+                child: Icon(Icons.save),
+              )
+            : null,
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(

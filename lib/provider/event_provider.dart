@@ -11,8 +11,10 @@ import 'package:dodact_v1/repository/event_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class EventProvider extends ChangeNotifier {
+  var logger = new Logger();
   EventRepository eventRepository = locator<EventRepository>();
   FirebaseRequestService requestService = FirebaseRequestService();
 
@@ -188,6 +190,32 @@ class EventProvider extends ChangeNotifier {
       return null;
     } finally {
       changeState(false);
+    }
+  }
+
+  Future<List<EventModel>> getFilteredEventList({
+    String category = "Tümü",
+    String city = "Belirtilmemiş",
+    String type = "Açık Hava Etkinliği",
+    bool showAllCategories = true,
+    bool showAllTypes = true,
+    bool wholeCountry = true,
+  }) async {
+    try {
+      var fetchedEvents = await eventRepository.getFilteredEventList(
+          category: category,
+          city: city,
+          type: type,
+          showAllCategories: showAllCategories,
+          showAllTypes: showAllTypes,
+          wholeCountry: wholeCountry);
+      eventList = fetchedEvents;
+      notifyListeners();
+      return eventList;
+    } catch (e) {
+      logger.e("EventProvider getFilteredEventList error: " + e.toString());
+      notifyListeners();
+      return null;
     }
   }
 

@@ -80,4 +80,24 @@ class EventRepository implements BaseService {
       return await _firebaseEventService.update(id, changes);
     }
   }
+
+  Future<List<EventModel>> getFilteredEventList(
+      {String category,
+      String city,
+      String type,
+      bool showAllCategories,
+      bool showAllTypes,
+      bool wholeCountry}) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      return await _firebaseEventService.getFilteredEventList(
+          category: category,
+          city: city,
+          type: type,
+          showAllCategories: showAllCategories,
+          showAllTypes: showAllTypes,
+          wholeCountry: wholeCountry);
+    }
+  }
 }

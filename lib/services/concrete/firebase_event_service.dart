@@ -88,4 +88,53 @@ class FirebaseEventService extends BaseService<EventModel> {
   Future<void> update(String id, Map<String, dynamic> changes) async {
     return await eventsRef.doc(id).update(changes);
   }
+
+  Future<List<EventModel>> getFilteredEventList(
+      {String category,
+      String city,
+      String type,
+      bool showAllCategories,
+      bool showAllTypes,
+      bool wholeCountry}) async {
+    List<EventModel> filteredEvents = [];
+    QuerySnapshot querySnapshot;
+
+    if (showAllCategories && wholeCountry && showAllTypes) {
+      querySnapshot = await eventsRef.get();
+    } else if (showAllCategories && wholeCountry && showAllTypes == false) {
+      querySnapshot =
+          await eventsRef.where("eventCategory", isEqualTo: category).get();
+    } else if (showAllCategories && wholeCountry == false && showAllTypes) {
+      querySnapshot = await eventsRef.where("city", isEqualTo: city).get();
+    } else if (showAllCategories &&
+        wholeCountry == false &&
+        showAllTypes == false) {
+      querySnapshot = await eventsRef
+          .where("city", isEqualTo: city)
+          .where('eventType', isEqualTo: type)
+          .get();
+    } else if (showAllCategories == false && wholeCountry && showAllTypes) {
+      querySnapshot =
+          await eventsRef.where('eventCategory', isEqualTo: category).get();
+    } else if (showAllCategories == false &&
+        wholeCountry &&
+        showAllTypes == false) {
+      querySnapshot = await eventsRef
+          .where('eventCategory', isEqualTo: category)
+          .where('eventType', isEqualTo: type)
+          .get();
+    } else {
+      querySnapshot = await eventsRef
+          .where("city", isEqualTo: city)
+          .where("eventCategory", isEqualTo: category)
+          .where("eventType", isEqualTo: type)
+          .get();
+    }
+
+    for (DocumentSnapshot event in querySnapshot.docs) {
+      EventModel _event = EventModel.fromJson(event.data());
+      filteredEvents.add(_event);
+    }
+    return filteredEvents;
+  }
 }
