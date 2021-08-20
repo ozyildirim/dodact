@@ -42,10 +42,12 @@ class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
               }
             }).toList();
 
+            var sortedEvents = _sortEvents(_userEvents);
+
             return ListView(
               scrollDirection: Axis.horizontal,
-              children: _userEvents != null
-                  ? _userEvents.map((e) => _buildUserEventCard(e)).toList()
+              children: sortedEvents != null
+                  ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
                   : [
                       Center(
                         child: Text("Etkinlik Yok :("),
@@ -59,6 +61,8 @@ class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
   }
 
   Widget _buildUserEventCard(EventModel event) {
+    bool isEnded = isEventEnded(event);
+
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
@@ -87,29 +91,66 @@ class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
                 },
               ),
               Positioned(
-                bottom: 0,
+                bottom: 10,
                 child: Container(
-                  height: 55,
                   width: 250,
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey[50].withOpacity(0.5),
+                    color: Colors.blueGrey[50].withOpacity(0.8),
                   ),
                   child: ListTile(
                     title: Text(
                       event.eventTitle,
-                      style: TextStyle(fontSize: 20, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: Text(
-                      DateFormat("dd/mm/yyyy")
-                          .format(event.eventStartDate)
-                          .toString(),
-                    ),
+                        DateFormat("dd/MM/yyyy")
+                            .format(event.eventStartDate)
+                            .toString(),
+                        style: TextStyle(fontSize: 18)),
                   ),
                 ),
+              ),
+              Positioned(
+                top: 1,
+                right: 1,
+                child: isEnded
+                    ? Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.white,
+                            child:
+                                Icon(Icons.hourglass_full, color: Colors.grey),
+                          ),
+                        ),
+                      )
+                    : Container(),
               )
             ]),
           ),
         ));
+  }
+
+  bool isEventEnded(EventModel event) {
+    var now = DateTime.now();
+    var eventEndDate = event.eventEndDate;
+    return now.isAfter(eventEndDate);
+  }
+
+  List<EventModel> _sortEvents(List<EventModel> events) {
+    events.sort((a, b) {
+      var firstEventDate = a.eventStartDate;
+      var secondEventDate = b.eventStartDate;
+      return firstEventDate.compareTo(secondEventDate);
+    });
+
+    return events;
   }
 }

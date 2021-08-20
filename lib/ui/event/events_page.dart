@@ -29,7 +29,7 @@ class _EventsPageState extends BaseState<EventsPage> {
     super.initState();
 
     selectedCategory = "Tümü";
-    selectedCity = "İstanbul";
+    selectedCity = "Belirtilmemiş";
     selectedType = "Tümü";
   }
 
@@ -325,6 +325,7 @@ class _EventsPageState extends BaseState<EventsPage> {
   ];
 
   Future<void> _refreshEvents() async {
+    print(selectedCategory + selectedCity + selectedType);
     await updateEventsByFilter(selectedCategory, selectedCity, selectedType);
   }
 }

@@ -20,6 +20,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class EventDetailPage extends StatefulWidget {
@@ -36,6 +37,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   EventModel _event;
   Completer<GoogleMapController> _controller = Completer();
   TabController tabController;
+  var logger = new Logger();
 
   bool canUserControlEvent() {
     if (_event.ownerType == 'Group') {
@@ -56,7 +58,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   @override
   void initState() {
     _event = widget.event;
-    tabController = new TabController(length: 2, vsync: this);
+    tabController = new TabController(length: 1, vsync: this);
     super.initState();
   }
 
@@ -118,19 +120,22 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   Widget _buildEventImageCarousel() {
     if (_event.eventImages.isNotEmpty) {
-      return GFCarousel(
-        passiveIndicator: Colors.white,
-        enlargeMainPage: true,
-        autoPlay: true,
-        activeIndicator: Colors.white,
-        items: _event.eventImages.map((image) {
-          return Container(
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
-            ),
-          );
-        }).toList(),
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GFCarousel(
+          passiveIndicator: Colors.white,
+          enlargeMainPage: true,
+          autoPlay: true,
+          activeIndicator: Colors.white,
+          items: _event.eventImages.map((image) {
+            return Container(
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
+              ),
+            );
+          }).toList(),
+        ),
       );
     } else {
       return Container();
@@ -145,22 +150,78 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 10),
-              child: Text(
-                _event.eventTitle,
-                style: GoogleFonts.poppins(fontSize: 26),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      _event.eventTitle,
+                      style: GoogleFonts.poppins(fontSize: 24),
+                    ),
+                  ),
+                ),
+                !_event.isOnline
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: FloatingActionButton(
+                          onPressed: () async {
+                            await _buildMap();
+                          },
+                          child: Icon(Icons.navigation),
+                        ),
+                      )
+                    : Container()
+              ],
             ),
             _getCreatorInfo(),
             ListTile(
-                leading: Icon(Icons.calendar_today),
-                title: Text(DateFormat('dd,MM,yyyy hh:mm')
-                    .format(_event.eventStartDate))),
+              leading: Icon(Icons.calendar_today),
+              title: Text(
+                DateFormat('dd,MM,yyyy hh:mm').format(_event.eventStartDate),
+                style: TextStyle(fontSize: 18),
+              ),
+              subtitle: Text("Etkinlik Başlangıç Tarihi"),
+            ),
             ListTile(
-                leading: Icon(Icons.location_city), title: Text(_event.city)),
+              leading: Icon(Icons.view_day),
+              title: Text(
+                DateFormat('dd,MM,yyyy hh:mm').format(_event.eventEndDate),
+                style: TextStyle(fontSize: 18),
+              ),
+              subtitle: Text("Etkinlik Bitiş Tarihi"),
+            ),
             ListTile(
-                leading: Icon(Icons.category), title: Text(_event.eventType))
+                leading: Icon(Icons.view_day),
+                title: Text(
+                  _event.isOnline ? "Online Etkinlik" : "Fiziksel Etkinlik",
+                  style: TextStyle(fontSize: 18),
+                )),
+            !_event.isOnline
+                ? ListTile(
+                    leading: Icon(Icons.location_city),
+                    title: Text(
+                      _event.city,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
+                : ListTile(
+                    leading: Icon(Icons.web),
+                    title: Text(
+                      _event.eventURL,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    onTap: () {
+                      CommonMethods.launchURL(_event.eventURL);
+                    },
+                  ),
+            ListTile(
+                leading: Icon(Icons.category),
+                title: Text(
+                  _event.eventType,
+                  style: TextStyle(fontSize: 18),
+                ))
           ],
         ),
       ),
@@ -181,7 +242,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             controller: tabController,
             tabs: const [
               const Tab(text: "Detaylar"),
-              const Tab(text: "Konum"),
             ],
           ),
         ),
@@ -191,7 +251,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             padding: const EdgeInsets.all(8.0),
             child: TabBarView(controller: tabController, children: [
               buildDetailTab(),
-              Container(),
             ]),
           ),
         ),
@@ -368,19 +427,57 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
       final CameraPosition _kGooglePlex = CameraPosition(
         target: LatLng(double.parse(lat), double.parse(lng)),
-        zoom: 14.4746,
+        zoom: 8,
       );
-      return Container(
-        height: 300,
-        width: double.infinity,
-        child: GoogleMap(initialCameraPosition: _kGooglePlex),
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return MapPage(_kGooglePlex);
+          },
+        ),
       );
     } else {
-      return Container(
-        height: 50,
-        width: double.infinity,
-        child: Text("Bilinmeyen Konum", style: TextStyle(fontSize: 24)),
-      );
+      logger.i("Bilinmeyen Konum");
     }
+  }
+}
+
+class MapPage extends StatefulWidget {
+  final CameraPosition googlePlex;
+
+  MapPage(this.googlePlex);
+
+  @override
+  _MapPageState createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Etkinlik Konum Bilgileri"),
+      ),
+      body: Container(
+        child: GoogleMap(
+          initialCameraPosition: widget.googlePlex,
+          compassEnabled: true,
+          mapToolbarEnabled: true,
+          myLocationButtonEnabled: true,
+          myLocationEnabled: true,
+          buildingsEnabled: false,
+          markers: {
+            Marker(
+              infoWindow: InfoWindow(title: "Etkinlik Lokasyonu"),
+              markerId: MarkerId("1"),
+              position: LatLng(widget.googlePlex.target.latitude,
+                  widget.googlePlex.target.longitude),
+            )
+          },
+        ),
+      ),
+    );
   }
 }

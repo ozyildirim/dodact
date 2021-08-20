@@ -67,7 +67,8 @@ class PostCard extends StatelessWidget {
                     child: Text(
                       post.postTitle,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

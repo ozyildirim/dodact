@@ -369,8 +369,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold)),
                           SizedBox(height: 4),
-                          InkWell(
-                            onTap: () => _showCityPicker(),
+                          GestureDetector(
+                            onTap: () async {
+                              await _showCityPicker();
+                            },
                             child: TextFieldContainer(
                               width: size.width * 0.6,
                               child: FormBuilderTextField(

@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 
 class ParallaxEvents extends StatelessWidget {
   List<EventModel> events;
@@ -11,9 +12,11 @@ class ParallaxEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var filteredEvents = _sortEvents(events);
+
     return Column(
       children: [
-        for (final event in events)
+        for (final event in filteredEvents)
           InkWell(
             onTap: () => navigateEventDetail(event),
             child: EventListItem(
@@ -21,11 +24,28 @@ class ParallaxEvents extends StatelessWidget {
                   ? event.eventImages[0]
                   : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
               name: event.eventTitle,
-              country: event.city,
+              country:
+                  "${event.city} - ${DateFormat('hh.MM.yyyy').format(event.eventStartDate)}",
+              isEventEnded: isEventEnded(event),
             ),
           ),
       ],
     );
+  }
+
+  List<EventModel> _sortEvents(List<EventModel> events) {
+    events.sort((a, b) {
+      var firstEventDate = a.eventStartDate;
+      var secondEventDate = b.eventStartDate;
+      return firstEventDate.compareTo(secondEventDate);
+    });
+    return events;
+  }
+
+  bool isEventEnded(EventModel event) {
+    var now = DateTime.now();
+    var eventEndDate = event.eventEndDate;
+    return now.isAfter(eventEndDate);
   }
 
   navigateEventDetail(EventModel event) {
@@ -34,15 +54,16 @@ class ParallaxEvents extends StatelessWidget {
 }
 
 class EventListItem extends StatelessWidget {
-  EventListItem({
-    @required this.imageUrl,
-    @required this.name,
-    @required this.country,
-  });
+  EventListItem(
+      {@required this.imageUrl,
+      @required this.name,
+      @required this.country,
+      this.isEventEnded});
 
   final String imageUrl;
   final String name;
   final String country;
+  final bool isEventEnded;
   final GlobalKey _backgroundImageKey = GlobalKey();
 
   @override
@@ -58,6 +79,29 @@ class EventListItem extends StatelessWidget {
               _buildParallaxBackground(context),
               _buildGradient(),
               _buildTitleAndSubtitle(),
+              isEventEnded
+                  ? Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Icon(Icons.hourglass_full, color: Colors.grey),
+                                Text("Geçmiş",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.grey))
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container()
             ],
           ),
         ),
@@ -77,7 +121,7 @@ class EventListItem extends StatelessWidget {
           imageUrl,
           key: _backgroundImageKey,
           fit: BoxFit.cover,
-        ),
+        )
       ],
     );
   }
