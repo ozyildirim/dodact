@@ -66,7 +66,19 @@ class _RequestStatusPageBodyPartState
     if (requestProvider.requests == null) {
       return Center(child: spinkit);
     } else if (requestProvider.requests.isEmpty) {
-      return Center(child: Text("Herhangi bir istekte bulunmadınız."));
+      return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage(kBackgroundImage),
+        )),
+        child: Center(
+            child: Container(
+          color: Colors.white70,
+          child: Text("Herhangi bir istekte bulunmadınız.",
+              style: TextStyle(fontSize: 22)),
+        )),
+      );
     } else {
       List<RequestModel> postRequests = requestProvider.requests
           .where((element) => element.requestFor == "Post")

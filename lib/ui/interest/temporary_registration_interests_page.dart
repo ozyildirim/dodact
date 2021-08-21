@@ -38,7 +38,7 @@ class _TemporaryRegistrationInterestsPageState
           ),
           child: Center(
             child: Container(
-              height: dynamicHeight(0.5),
+              height: dynamicHeight(0.6),
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2),

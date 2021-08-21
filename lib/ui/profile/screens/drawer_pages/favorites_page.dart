@@ -71,7 +71,9 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
           ),
         ),
         child: posts == null
-            ? Center(child: Text("Favorileriniz bulunamadı"))
+            ? Center(
+                child: Text("Favorileriniz bulunamadı",
+                    style: TextStyle(fontSize: 22)))
             : (posts.isEmpty
                 ? Center(child: Text("Favorilerim boş."))
                 : ListView.builder(

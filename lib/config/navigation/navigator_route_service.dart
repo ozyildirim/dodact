@@ -19,7 +19,7 @@ import 'package:dodact_v1/ui/group/group_detail.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/temporary_interests_page.dart';
-import 'package:dodact_v1/ui/interest/widgets/temporary_registration_interests_page.dart';
+import 'package:dodact_v1/ui/interest/temporary_registration_interests_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';

@@ -4,6 +4,7 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/post_card_for_grids.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class UserProfilePostsPart extends StatefulWidget {
@@ -25,9 +26,19 @@ class _UserProfilePostsPartState extends BaseState<UserProfilePostsPart>
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context);
     final postProvider = Provider.of<PostProvider>(context);
 
     if (postProvider.userPosts != null) {
+      if (postProvider.userPosts.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.all(36.0),
+          child: SvgPicture.asset(
+              "assets/images/app/situations/undraw_blank_canvas_3rbb.svg",
+              semanticsLabel: 'A red up arrow'),
+        );
+      }
+
       return StaggeredGridView.countBuilder(
         crossAxisCount: 4,
         itemCount: postProvider.userPosts.length,

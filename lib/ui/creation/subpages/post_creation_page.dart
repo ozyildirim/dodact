@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 enum Content { Goruntu, Video, Ses }
 enum Category { Tiyatro, Resim, Muzik, Dans }
@@ -532,7 +534,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             (_) async {
               //loaderDialog kapansın diye pop yapıyoruz.
 
-              await CommonMethods().showSuccessDialog(context,
+              await showPostShareSuccessDialog(context,
                   "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
               NavigationService.instance.navigateToReset(k_ROUTE_HOME);
             },
@@ -565,7 +567,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           (_) async {
             //loaderDialog kapansın diye pop yapıyoruz.
             NavigationService.instance.pop();
-            await CommonMethods().showSuccessDialog(context,
+            await showPostShareSuccessDialog(context,
                 "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
             NavigationService.instance.navigateToReset(k_ROUTE_HOME);
           },
@@ -609,6 +611,33 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   Future<void> _formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
       await uploadPost();
+    }
+  }
+
+  Future showPostShareSuccessDialog(
+      BuildContext context, String message) async {
+    await CoolAlert.show(
+        context: context,
+        barrierDismissible: false,
+        type: CoolAlertType.success,
+        text: message,
+        showCancelBtn: true,
+        cancelBtnText: "Paylaş",
+        confirmBtnColor: Colors.green,
+        onCancelBtnTap: () async {
+          await sharePostStatusCard();
+        },
+        confirmBtnText: "Tamam",
+        title: "İşlem Başarılı");
+  }
+
+  Future sharePostStatusCard() async {
+    if (chosenCompany != null && chosenCompany != '') {
+      await Share.share(
+          'Hey! Ben Dodact ile sanatımı yeniden keşfederken aynı zamanda ${chosenCompany} için maddi bir değer yaratmış oldum! Sen de bu platforma katılmak istemez misin? https://www.dodact.com');
+    } else {
+      await Share.share(
+          'Hey! Ben Dodact ile sanatımı ve kendimi yeniden keşfediyorum! Sen de bu platforma katılmak istemez misin? https://www.dodact.com');
     }
   }
 }

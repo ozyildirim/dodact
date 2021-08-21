@@ -6,6 +6,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,19 @@ class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
     final provider = Provider.of<EventProvider>(context);
 
     if (provider.userEventList != null) {
+      if (provider.userEventList.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.all(36.0),
+          child: Container(
+            height: 30,
+            width: 30,
+            child: SvgPicture.asset(
+                "assets/images/app/situations/undraw_not_found_60pq.svg",
+                semanticsLabel: 'A red up arrow'),
+          ),
+        );
+      }
+
       List<EventModel> _userEvents = provider.userEventList;
       _userEvents != null
           ? _userEvents.map((e) => print(e.eventTitle))

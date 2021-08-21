@@ -124,8 +124,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                             leading: Icon(FontAwesome5Solid.share),
                             title: Text("Paylaş"),
                             onTap: () async {
-                              Share.share(
-                                  'check out my website https://example.com');
+                              Share.share("asdads");
                             },
                           ),
                         ),

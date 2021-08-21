@@ -10,6 +10,7 @@ import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:intl/intl.dart';
+import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
 class PostDetailInfoPart extends StatefulWidget {
@@ -84,7 +85,28 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                               bool liked = provider.post.supportersId
                                   .contains(authProvider.currentUser.uid);
 
-                              return Bounce(
+                              return
+                                  // LikeButton(
+                                  //   size: 30,
+                                  //   circleColor: CircleColor(
+                                  //       start: Color(0xff00ddff),
+                                  //       end: Color(0xff0099cc)),
+                                  //   bubblesColor: BubblesColor(
+                                  //     dotPrimaryColor: Color(0xff33b5e5),
+                                  //     dotSecondaryColor: Color(0xff0099cc),
+                                  //   ),
+                                  //   likeBuilder: (bool isLiked) {
+                                  //     return Icon(
+                                  //       Icons.home,
+                                  //       color: isLiked
+                                  //           ? Colors.deepPurpleAccent
+                                  //           : Colors.grey,
+                                  //       size: 45,
+                                  //     );
+                                  //   },
+                                  //   isLiked: liked,
+                                  // );
+                                  Bounce(
                                 duration: Duration(milliseconds: 220),
                                 onPressed: () async {
                                   await provider.changePostDoddedStatus(
