@@ -91,7 +91,7 @@ class NavigationRouteManager {
         return _navigateToDefault(
             PostCommentsPage(
               postId: args[0],
-              ownerId: args[1],
+              postOwnerId: args[1],
             ),
             settings);
 
