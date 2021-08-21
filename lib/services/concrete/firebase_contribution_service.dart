@@ -11,6 +11,21 @@ class FirebaseContributionService {
     });
   }
 
+  Future<List<ContributionModel>> getContributions() async {
+    List<ContributionModel> contributions = [];
+
+    QuerySnapshot querySnapshot = await contributionsRef.get();
+
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      ContributionModel contributionModel =
+          ContributionModel.fromJson(doc.data());
+      contributionModel.contributionId = doc.id;
+      contributions.add(contributionModel);
+    }
+
+    return contributions;
+  }
+
   Future<List<ContributionModel>> getUserContributions(String userId) async {
     List<ContributionModel> contributions = [];
 

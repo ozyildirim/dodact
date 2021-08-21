@@ -30,8 +30,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage(chosenFieldImage ??
-                    "assets/images/app/interests/resim.jpeg"),
+                image: AssetImage(chosenFieldImage ?? setBackgroundImage()),
               ),
             ),
             child: Container(
@@ -148,19 +147,19 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
   setBackgroundImage() {
     switch (authProvider.currentUser.mainInterest) {
       case "Tiyatro":
-        chosenFieldImage = "assets/images/app/interests/tiyatro.jpeg";
+        return "assets/images/app/interests/tiyatro.jpeg";
         break;
       case "Müzik":
-        chosenFieldImage = "assets/images/app/interests/muzik.jpeg";
+        return "assets/images/app/interests/muzik.jpeg";
         break;
       case "Dans":
-        chosenFieldImage = "assets/images/app/interests/dans.jpeg";
+        return "assets/images/app/interests/dans.jpeg";
         break;
       case "Görsel Sanatlar":
-        chosenFieldImage = "assets/images/app/interests/resim.jpeg";
+        return "assets/images/app/interests/resim.jpeg";
         break;
       default:
-        chosenFieldImage = "assets/images/app/interests/tiyatro.jpeg";
+        return "assets/images/app/interests/tiyatro.jpeg";
     }
   }
 }

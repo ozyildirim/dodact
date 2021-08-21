@@ -14,6 +14,7 @@ import 'package:dodact_v1/ui/detail/widgets/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
+import 'package:dodact_v1/ui/general/subpages/contributions_page.dart';
 import 'package:dodact_v1/ui/group/group_detail.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
@@ -36,7 +37,7 @@ import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/user_notifications_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
-import 'package:dodact_v1/ui/spinner/spinner_page.dart';
+import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -118,6 +119,8 @@ class NavigationRouteManager {
 
       case k_ROUTE_SPINNER_PAGE:
         return _navigateToDefault(SpinnerPage(), settings);
+      case k_ROUTE_CONTRIBUTIONS_PAGE:
+        return _navigateToDefault(ContributionsPage(), settings);
 
       case k_ROUTE_USER_PROFILE:
         return _navigateToDefault(ProfilePage(), settings);

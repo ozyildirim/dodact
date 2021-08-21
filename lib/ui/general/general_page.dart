@@ -1,5 +1,6 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/general/widgets/announcement_part.dart';
+import 'package:dodact_v1/ui/general/widgets/contributions_part.dart';
 import 'package:dodact_v1/ui/general/widgets/event_part.dart';
 import 'package:dodact_v1/ui/general/widgets/podcast_part.dart';
 import 'package:dodact_v1/ui/general/widgets/post_part.dart';
@@ -54,21 +55,49 @@ class GeneralPage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    color: Colors.white60,
-                    child: Text(
-                      "Benim İçin Ne Var?",
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context)
-                          .textTheme
-                          .title
-                          .copyWith(color: Colors.black, fontSize: 22),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            color: Colors.white60,
+                            child: Text(
+                              "Çark",
+                              textAlign: TextAlign.start,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .title
+                                  .copyWith(color: Colors.black, fontSize: 22),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          SpinnerPart(),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            color: Colors.white60,
+                            child: Text(
+                              "Yardımlar",
+                              textAlign: TextAlign.start,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .title
+                                  .copyWith(color: Colors.black, fontSize: 22),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          ContributionsPart()
+                        ],
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  SpinnerPart(),
                   SizedBox(height: 20),
                   Container(
                     color: Colors.white60,

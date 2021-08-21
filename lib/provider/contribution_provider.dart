@@ -8,6 +8,7 @@ class ContributionProvider extends ChangeNotifier {
       FirebaseContributionService();
   Logger logger = Logger();
 
+  List<ContributionModel> allContributions;
   List<ContributionModel> contributions;
 
   Future createPostContribution(String contributorId, String objectId,
@@ -51,6 +52,16 @@ class ContributionProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       logger.e("Contribution Provider -> getUserContributions error: $e");
+    }
+  }
+
+  Future<List<ContributionModel>> getContributions() async {
+    try {
+      allContributions = await firebaseContributionService.getContributions();
+      notifyListeners();
+      return allContributions;
+    } catch (e) {
+      logger.e("Contribution Provider -> getContributions error: $e");
     }
   }
 }

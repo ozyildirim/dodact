@@ -79,7 +79,7 @@ dependencies:
   infinite_scroll_pagination: ^3.1.0
   search_choices: ^2.0.7
   expansion_card: ^0.1.0
-  flutter_svg: ^0.22.0
+  fl_chart: ^0.36.4
 
 
   
@@ -108,6 +108,7 @@ flutter:
     - assets/images/creation/
     - assets/images/app/
     - assets/images/app/interests/
+    - assets/images/app/situations/
     - assets/images/onboarding/
     - assets/images/companies/
 
