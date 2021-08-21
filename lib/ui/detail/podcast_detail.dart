@@ -2,6 +2,8 @@ import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/podcast_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:intl/intl.dart';
 
 class PodcastDetail extends StatelessWidget {
   final PodcastModel podcast;
@@ -11,86 +13,93 @@ class PodcastDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
+    var tileTitleSize = 20.0;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Podcast Detay"),
+        title: Text("Podcast Detayları"),
       ),
       body: Container(
+        width: mediaQuery.size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
               image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 300,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: mediaQuery.size.height * 0.3,
-                      width: mediaQuery.size.width * 0.7,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 2),
-                          image: DecorationImage(
-                              image: NetworkImage(podcast.podcastImageUrl),
-                              fit: BoxFit.cover),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(1, 1),
-                            )
-                          ]),
-                    ),
-                    Positioned(
-                      left: (mediaQuery.size.width * 0.7) - 200,
-                      bottom: -10,
-                      child: Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(podcast.podcastOwnerPhotoUrl),
-                          ),
+            Container(
+              height: mediaQuery.size.height * 0.3,
+              width: mediaQuery.size.width,
+              child: Image.network(podcast.podcastImageUrl),
+            ),
+            Divider(),
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                leading: Icon(Icons.list_alt),
+                title: Text(podcast.podcastOwner,
+                    style: TextStyle(fontSize: tileTitleSize)),
+                subtitle: Text("Podcast Yapımcısı"),
+                trailing: CircleAvatar(
+                  backgroundImage: NetworkImage(podcast.podcastOwnerPhotoUrl),
+                  radius: 30,
+                ),
+                onTap: () async {
+                  await launchOwnerUrl("www.dodact.com");
+                },
+              ),
+            ),
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                leading: Icon(Icons.list_alt),
+                title: Text(podcast.podcastTitle,
+                    style: TextStyle(fontSize: tileTitleSize)),
+                subtitle: Text("Podcast Başlığı"),
+              ),
+            ),
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                leading: Icon(Icons.calendar_today),
+                title: Text(
+                    DateFormat("dd MM yyyy").format(podcast.podcastReleaseDate),
+                    style: TextStyle(fontSize: tileTitleSize)),
+                subtitle: Text("Yayınlanma Tarihi"),
+              ),
+            ),
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                title: IconButton(
+                  onPressed: () async {
+                    await launchPodcastUrl();
+                  },
+                  icon: Icon(FontAwesome5Brands.spotify),
+                ),
+                subtitle: Center(child: Text("Yayın Kanalları")),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  elevation: 4,
+                  child: Container(
+                      width: mediaQuery.size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Podcast Açıklaması",
+                                style: TextStyle(fontSize: 18)),
+                            SizedBox(height: 18),
+                            Text(podcast.podcastDescription),
+                          ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Container(
-                color: Colors.white54,
-                child: ListTile(
-                  title: Text(
-                    podcast.podcastOwner,
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  trailing: IconButton(
-                    onPressed: () {
-                      CommonMethods.launchURL(podcast.podcastLink);
-                    },
-                    icon: Icon(Icons.link),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Container(
-                color: Colors.amberAccent,
-                height: 200,
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    podcast.podcastDescription,
-                    style: TextStyle(fontSize: 18),
-                  ),
+                      )),
                 ),
               ),
             )
@@ -99,10 +108,17 @@ class PodcastDetail extends StatelessWidget {
       ),
     );
   }
+
+  launchOwnerUrl(String url) {
+    CommonMethods.launchURL(url);
+  }
+
+  launchPodcastUrl() {
+    CommonMethods.launchURL(podcast.podcastLink);
+  }
 }
 
 /*
-
   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),

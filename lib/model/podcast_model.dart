@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 PodcastModel podcastModelFromJson(String str) =>
     PodcastModel.fromJson(json.decode(str));
 
@@ -16,6 +18,7 @@ class PodcastModel {
       this.podcastOwner,
       this.podcastDescription,
       this.podcastLink,
+      this.podcastReleaseDate,
       this.podcastOwnerPhotoUrl,
       this.podcastImageUrl});
 
@@ -24,6 +27,7 @@ class PodcastModel {
   String podcastOwner;
   String podcastDescription;
   String podcastLink;
+  DateTime podcastReleaseDate;
   String podcastOwnerPhotoUrl;
   String podcastImageUrl;
 
@@ -33,6 +37,7 @@ class PodcastModel {
       podcastOwner: json["podcastOwner"],
       podcastDescription: json["podcastDescription"],
       podcastLink: json["podcastLink"],
+      podcastReleaseDate: (json["podcastReleaseDate"] as Timestamp).toDate(),
       podcastOwnerPhotoUrl: json["podcastOwnerPhotoUrl"],
       podcastImageUrl: json["podcastImageUrl"]);
 
@@ -42,6 +47,7 @@ class PodcastModel {
         "podcastOwner": podcastOwner,
         "podcastDescription": podcastDescription,
         "podcastLink": podcastLink,
+        "podcastReleaseDate": podcastReleaseDate,
         "podcastOwnerPhotoUrl": podcastOwnerPhotoUrl,
         "podcastImageUrl": podcastImageUrl,
       };
