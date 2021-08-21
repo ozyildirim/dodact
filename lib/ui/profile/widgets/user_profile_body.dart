@@ -1,8 +1,10 @@
+import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_collections_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile_event_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile_posts_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 
 class UserProfileBody extends StatefulWidget {
   @override

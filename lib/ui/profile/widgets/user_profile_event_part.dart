@@ -16,48 +16,45 @@ class UserProfileEventsPart extends StatefulWidget {
 
 class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<EventProvider>(context, listen: false)
+        .getUserEvents(authProvider.currentUser);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<EventProvider>(context, listen: false);
+    final provider = Provider.of<EventProvider>(context);
 
-    return FutureBuilder(
-      // ignore: missing_return
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return Center(child: spinkit);
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
-            }
-            List<EventModel> _userEvents = snapshot.data;
-            _userEvents != null
-                ? _userEvents.map((e) => print(e.eventTitle))
-                : print("Etkinlik yok");
+    if (provider.userEventList != null) {
+      List<EventModel> _userEvents = provider.userEventList;
+      _userEvents != null
+          ? _userEvents.map((e) => print(e.eventTitle))
+          : print("Etkinlik yok");
 
-            _userEvents = _userEvents.map((e) {
-              if (e.approved) {
-                return e;
-              }
-            }).toList();
-
-            var sortedEvents = _sortEvents(_userEvents);
-
-            return ListView(
-              scrollDirection: Axis.horizontal,
-              children: sortedEvents != null
-                  ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
-                  : [
-                      Center(
-                        child: Text("Etkinlik Yok :("),
-                      )
-                    ],
-            );
+      _userEvents = _userEvents.map((e) {
+        if (e.approved) {
+          return e;
         }
-      },
-      future: provider.getUserEvents(authProvider.currentUser),
-    );
+      }).toList();
+
+      var sortedEvents = _sortEvents(_userEvents);
+
+      return ListView(
+        scrollDirection: Axis.horizontal,
+        children: sortedEvents != null
+            ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
+            : [
+                Center(
+                  child: Text("Etkinlik Yok :("),
+                )
+              ],
+      );
+    } else {
+      return Center(
+        child: spinkit,
+      );
+    }
   }
 
   Widget _buildUserEventCard(EventModel event) {

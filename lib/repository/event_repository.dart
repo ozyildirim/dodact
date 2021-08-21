@@ -100,4 +100,11 @@ class EventRepository implements BaseService {
           wholeCountry: wholeCountry);
     }
   }
+
+  Future<List<EventModel>> getSpecialEvents() async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    }
+    return await _firebaseEventService.getSpecialEvents();
+  }
 }

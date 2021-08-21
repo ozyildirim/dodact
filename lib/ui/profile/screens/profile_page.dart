@@ -26,7 +26,6 @@ class _ProfilePageState extends BaseState<ProfilePage>
   void initState() {
     _controller = new TabController(length: 3, vsync: this);
     super.initState();
-    authProvider.getUser();
   }
 
   @override

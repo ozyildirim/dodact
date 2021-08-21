@@ -156,4 +156,18 @@ class FirebaseEventService extends BaseService<EventModel> {
     }
     return filteredEvents;
   }
+
+  Future<List<EventModel>> getSpecialEvents() async {
+    List<EventModel> specialEvents = [];
+
+    QuerySnapshot querySnapshot =
+        await eventsRef.where('approved', isEqualTo: true).limit(3).get();
+
+    for (DocumentSnapshot event in querySnapshot.docs) {
+      EventModel _convertedEvent = EventModel.fromJson(event.data());
+      specialEvents.add(_convertedEvent);
+    }
+
+    return specialEvents;
+  }
 }

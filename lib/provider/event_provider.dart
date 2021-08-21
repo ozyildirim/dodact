@@ -29,6 +29,9 @@ class EventProvider extends ChangeNotifier {
   List<EventModel> userEventList;
   List<EventModel> otherUserEventList;
 
+  //Events that showed in general page
+  List<EventModel> specialEvents;
+
   List<EventModel> groupEvents;
   clear() {
     event = null;
@@ -190,6 +193,15 @@ class EventProvider extends ChangeNotifier {
       return null;
     } finally {
       changeState(false);
+    }
+  }
+
+  Future<void> getSpecialEvents() async {
+    try {
+      specialEvents = await eventRepository.getSpecialEvents();
+      notifyListeners();
+    } catch (e) {
+      logger.e("EventProvider getSpecialEvents error: " + e.toString());
     }
   }
 

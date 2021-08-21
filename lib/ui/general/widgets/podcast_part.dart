@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/model/podcast_model.dart';
 import 'package:dodact_v1/provider/podcast_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
@@ -10,38 +10,24 @@ import 'package:provider/provider.dart';
 class PodcastPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final podcastProvider =
-        Provider.of<PodcastProvider>(context, listen: false);
+    final podcastProvider = Provider.of<PodcastProvider>(context);
 
-    return FutureBuilder(
-      future: podcastProvider.getPodcastList(),
-      // ignore: missing_return
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return Center(child: spinkit);
-
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return Text("Hata!");
-            }
-            List<PodcastModel> podcasts = snapshot.data;
-            if (podcasts.isEmpty) {
-              return Text("Boş");
-            }
-
-            return GFItemsCarousel(
-              itemHeight: 208,
-              rowCount: 2,
-              children: podcasts.map((podcast) {
-                return InkWell(
-                  onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_PODCAST_DETAIL, args: podcast);
-                  },
-                  child: Container(
+    if (podcastProvider.podcastList != null) {
+      return GFItemsCarousel(
+        itemHeight: 208,
+        rowCount: 2,
+        children: podcastProvider.podcastList.map((podcast) {
+          return InkWell(
+            onTap: () {
+              NavigationService.instance
+                  .navigate(k_ROUTE_PODCAST_DETAIL, args: podcast);
+            },
+            child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                height: 100,
+                imageUrl: podcast.podcastImageUrl,
+                imageBuilder: (context, imageProvider) {
+                  return Container(
                     height: 120,
                     width: 100,
                     decoration: BoxDecoration(
@@ -50,12 +36,17 @@ class PodcastPart extends StatelessWidget {
                         image: NetworkImage(podcast.podcastImageUrl),
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
-            );
-        }
-      },
-    );
+                  );
+                }),
+          );
+        }).toList(),
+      );
+    } else {
+      return Container(
+        child: Center(
+          child: spinkit,
+        ),
+      );
+    }
   }
 }

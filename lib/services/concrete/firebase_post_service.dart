@@ -117,7 +117,7 @@ class FirebasePostService extends BaseService<PostModel> {
     QuerySnapshot querySnapshot = await postsRef
         .where('approved', isEqualTo: true)
         .orderBy('dodCounter', descending: true)
-        .limit(5)
+        .limit(3)
         .get();
 
     for (DocumentSnapshot post in querySnapshot.docs) {

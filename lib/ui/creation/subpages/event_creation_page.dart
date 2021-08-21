@@ -34,13 +34,14 @@ class EventCreationPage extends StatefulWidget {
 }
 
 class _EventCreationPageState extends BaseState<EventCreationPage> {
-  List<File> _eventImages;
+  List<File> _eventImages = [];
   String eventCoordinates;
   String eventCity;
 
   EventProvider _eventProvider;
 
   GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   TextEditingController _eventLocationController = new TextEditingController();
 
@@ -115,7 +116,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   }
 
   Widget _buildEventImagePart() {
-    if (_eventImages == null) {
+    if (_eventImages.length == 0) {
       return Expanded(
         child: Container(
           height: 250,
@@ -299,10 +300,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     fieldLabelText: "Etkinlik Başlangıç Tarihi",
                     helpText: "Bir başlangıç tarihi seç",
                     fieldHintText: "Gün/Ay/Yıl",
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Bir başlangıç tarihi seçmelisin"),
-                    ]),
+                    // validator: FormBuilderValidators.compose([
+                    //   FormBuilderValidators.required(context,
+                    //       errorText: "Bir başlangıç tarihi seçmelisin"),
+                    // ]),
                     firstDate: DateTime.now(),
                   ),
                 ),
@@ -336,10 +337,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                       ),
                       border: InputBorder.none,
                     ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Bir tarih seçmelisin.")
-                    ]),
+                    // validator: FormBuilderValidators.compose([
+                    //   FormBuilderValidators.required(context,
+                    //       errorText: "Bir tarih seçmelisin.")
+                    // ]),
                   ),
                 ),
                 isOnline
@@ -615,19 +616,25 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   Future<void> _formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
       try {
-        if (chosenCompany != null) {
-          Logger().i("Şirket seçildi");
-          await rewardedAd.show(
-              onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
-            isAdWatched = true;
-            Logger().i("Reklam ödülü verildi");
-          }).then((value) async {
-            Logger().i("Reklam izlendi");
-            await createEvent(isUsedForHelp: true);
-          });
+        var imageCheck = checkEventHasImages();
+        if (imageCheck == false) {
+          await CommonMethods()
+              .showErrorDialog(context, "En az 1 fotoğraf seçmelisin");
         } else {
-          Logger().i("Şirket seçilmedi");
-          await createEvent(isUsedForHelp: false);
+          if (chosenCompany != null) {
+            Logger().i("Şirket seçildi");
+            await rewardedAd.show(
+                onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
+              isAdWatched = true;
+              Logger().i("Reklam ödülü verildi");
+            }).then((value) async {
+              Logger().i("Reklam izlendi");
+              await createEvent(isUsedForHelp: true);
+            });
+          } else {
+            Logger().i("Şirket seçilmedi");
+            await createEvent(isUsedForHelp: false);
+          }
         }
       } catch (e) {
         Logger().e("Form submit edilirken hata oluştu: " + e.toString());
@@ -765,5 +772,11 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     );
   }
 
+  bool checkEventHasImages() {
+    if (_eventImages.length == 0) {
+      return false;
+    }
+    return true;
+  }
   //TODO: UPLOAD EDİLDİKTEN SONRA GEÇİCİ DOSYALAR SİLİNMELİ
 }

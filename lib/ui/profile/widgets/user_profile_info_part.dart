@@ -26,11 +26,13 @@ class UserProfileInfoPart extends StatelessWidget {
                 InkWell(
                   onTap: () => showProfilePictureContainer(
                       context, provider.currentUser.profilePictureURL),
-                  child: CircleAvatar(
-                    maxRadius: 80,
-                    backgroundImage:
-                        NetworkImage(provider.currentUser.profilePictureURL),
-                  ),
+                  child: CachedNetworkImage(
+                      imageUrl: provider.currentUser.profilePictureURL,
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                            maxRadius: 80,
+                            backgroundImage: NetworkImage(
+                                provider.currentUser.profilePictureURL),
+                          )),
                 ),
               ],
             ),

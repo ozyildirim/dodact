@@ -1,6 +1,9 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/event_provider.dart';
+import 'package:dodact_v1/provider/podcast_provider.dart';
+import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
@@ -25,20 +28,19 @@ class _LandingPageState extends BaseState<LandingPage> {
         if (model.isLoading == false) {
           if (model.currentUser == null) {
             return WelcomePage();
-          } else {
-            if (model.currentUser.newUser) {
-              return SignUpDetail();
-            }
-            return HomePage();
           }
-        } else {
-          //If state is "Busy"
-          return Scaffold(
-            body: Center(
-              child: spinkit,
-            ),
-          );
+          if (model.currentUser.newUser) {
+            return SignUpDetail();
+          }
+          fetchAppContent();
+          return HomePage();
         }
+        //If state is "Busy"
+        return Scaffold(
+          body: Center(
+            child: spinkit,
+          ),
+        );
       },
     );
   }
@@ -50,5 +52,18 @@ class _LandingPageState extends BaseState<LandingPage> {
     } else {
       return false;
     }
+  }
+
+  fetchAppContent() {
+    // var userProvider = Provider.of<UserProvider>(context, listen: false);
+    var postProvider = Provider.of<PostProvider>(context, listen: false);
+    var eventProvider = Provider.of<EventProvider>(context, listen: false);
+    var podcastProvider = Provider.of<PodcastProvider>(context, listen: false);
+
+    postProvider.getTopPosts();
+    eventProvider.getSpecialEvents();
+    postProvider.getUserPosts(authProvider.currentUser);
+    eventProvider.getUserEvents(authProvider.currentUser);
+    podcastProvider.getPodcastList();
   }
 }
