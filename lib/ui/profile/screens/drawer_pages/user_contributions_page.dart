@@ -71,8 +71,23 @@ class _UserContributionsPageState extends BaseState<UserContributionsPage> {
         );
       } else {
         if (provider.contributions.isEmpty) {
-          return Center(
-            child: Text("Bir yardım bulunmamakta."),
+          return Container(
+            color: Colors.white70,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Henüz bir yardım bulunmamakta.",
+                    style: TextStyle(fontSize: 24)),
+                SizedBox(
+                  height: 40,
+                ),
+                Text(
+                  "Sen de içerik ve etkinlik oluşturarak kurumlara/topluluklara yardım edebilirsin!",
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                )
+              ],
+            ),
           );
         } else {
           return buildListView();

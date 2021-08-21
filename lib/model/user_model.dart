@@ -28,7 +28,7 @@ class UserObject {
   String userDescription;
   String schoolName;
 
-  List<String> favoritedPosts;
+  List<String> favoritedPosts = [];
   List<InterestModel> interests;
 
   //PrivacySettings

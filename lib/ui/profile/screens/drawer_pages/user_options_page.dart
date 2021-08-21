@@ -26,6 +26,7 @@ class UserOptionsPage extends StatelessWidget {
               child: Container(
                 color: Colors.white70,
                 child: ListTile(
+                  enabled: false,
                   leading: CircleAvatar(
                     child: Icon(Icons.notifications),
                   ),
@@ -106,7 +107,10 @@ class UserOptionsPage extends StatelessWidget {
                     onTap: () {},
                     child: Container(
                       height: 30,
-                      child: Center(child: Text("Gizlilik Sözleşmesi")),
+                      color: Colors.white70,
+                      child: Center(
+                          child: Text("Gizlilik Sözleşmesi",
+                              style: TextStyle(fontSize: 18))),
                     ),
                   ),
                 ),
@@ -116,8 +120,9 @@ class UserOptionsPage extends StatelessWidget {
                     onTap: () {},
                     child: Container(
                       height: 30,
+                      color: Colors.white70,
                       child: Center(
-                        child: Text("İletişim"),
+                        child: Text("İletişim", style: TextStyle(fontSize: 18)),
                       ),
                     ),
                   ),

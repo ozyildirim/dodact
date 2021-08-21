@@ -15,7 +15,9 @@ class FilteredEventView extends StatelessWidget {
           if (provider.eventList.isNotEmpty) {
             List<EventModel> events = provider.eventList;
 
-            return ParallaxEvents(events: events);
+            var sortedEvents = _sortEvents(events);
+
+            return ParallaxEvents(events: sortedEvents);
           } else {
             return Center(
               child: Padding(
@@ -41,5 +43,15 @@ class FilteredEventView extends StatelessWidget {
         }
       },
     );
+  }
+
+  List<EventModel> _sortEvents(List<EventModel> events) {
+    events.sort((a, b) {
+      var firstEventDate = a.eventStartDate;
+      var secondEventDate = b.eventStartDate;
+      return firstEventDate.compareTo(secondEventDate);
+    });
+
+    return events;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -13,6 +12,7 @@ class ProfileDrawer extends StatefulWidget {
 }
 
 class _ProfileDrawerState extends BaseState<ProfileDrawer> {
+  String chosenFieldImage;
   @override
   void initState() {
     super.initState();
@@ -30,35 +30,37 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage("assets/images/drawerBg.jpg"),
+                image: AssetImage(chosenFieldImage ??
+                    "assets/images/app/interests/resim.jpeg"),
               ),
             ),
             child: Container(
-              alignment: Alignment.center,
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: authProvider.currentUser.profilePictureURL !=
-                          null
-                      ? NetworkImage(authProvider.currentUser.profilePictureURL)
-                      : null,
-                  radius: 30,
+              alignment: Alignment.bottomCenter,
+              child: Card(
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage:
+                        authProvider.currentUser.profilePictureURL != null
+                            ? NetworkImage(
+                                authProvider.currentUser.profilePictureURL)
+                            : null,
+                    radius: 30,
+                  ),
+                  title: Text(
+                    authProvider.currentUser.nameSurname,
+                    style: TextStyle(color: Colors.black, fontSize: 22),
+                  ),
+                  subtitle: Text(authProvider.currentUser.email,
+                      style: TextStyle(color: Colors.black, fontSize: 16)),
                 ),
-                title: Text(
-                  authProvider.currentUser.nameSurname,
-                  style: TextStyle(color: Colors.white, fontSize: 22),
-                ),
-                subtitle: Text(authProvider.currentUser.email,
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
               ),
             ),
           ),
           ListTile(
+            enabled: false,
             leading: Icon(Icons.calendar_today),
             title: Text("Takvimim", style: TextStyle(fontSize: 18)),
             onTap: () {
-              CommonMethods().showInfoDialog(
-                  context, "Çok yakında bu özelliğimizi sunacağız.", "Yakında");
-
               // NavigationService.instance.navigate(k_ROUTE_USER_CALENDAR_PAGE);
             },
           ),
@@ -141,5 +143,24 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
     Provider.of<UserProvider>(context, listen: false).removeUser();
     NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
     //TODO: Problem var, burayı düzelt.
+  }
+
+  setBackgroundImage() {
+    switch (authProvider.currentUser.mainInterest) {
+      case "Tiyatro":
+        chosenFieldImage = "assets/images/app/interests/tiyatro.jpeg";
+        break;
+      case "Müzik":
+        chosenFieldImage = "assets/images/app/interests/muzik.jpeg";
+        break;
+      case "Dans":
+        chosenFieldImage = "assets/images/app/interests/dans.jpeg";
+        break;
+      case "Görsel Sanatlar":
+        chosenFieldImage = "assets/images/app/interests/resim.jpeg";
+        break;
+      default:
+        chosenFieldImage = "assets/images/app/interests/tiyatro.jpeg";
+    }
   }
 }

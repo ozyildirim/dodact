@@ -12,11 +12,9 @@ class ParallaxEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filteredEvents = _sortEvents(events);
-
     return Column(
       children: [
-        for (final event in filteredEvents)
+        for (final event in events)
           InkWell(
             onTap: () => navigateEventDetail(event),
             child: EventListItem(
@@ -31,15 +29,6 @@ class ParallaxEvents extends StatelessWidget {
           ),
       ],
     );
-  }
-
-  List<EventModel> _sortEvents(List<EventModel> events) {
-    events.sort((a, b) {
-      var firstEventDate = a.eventStartDate;
-      var secondEventDate = b.eventStartDate;
-      return firstEventDate.compareTo(secondEventDate);
-    });
-    return events;
   }
 
   bool isEventEnded(EventModel event) {

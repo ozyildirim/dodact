@@ -8,6 +8,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/components/carousel/gf_items_carousel.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -42,9 +44,16 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
   TextEditingController _eventLocationController = new TextEditingController();
 
-  FocusNode _eventTitleFocus = new FocusNode();
-  FocusNode _eventDescriptionFocus = new FocusNode();
-  FocusNode _eventURLFocus = new FocusNode();
+  FocusNode eventTitleFocus = new FocusNode();
+  FocusNode eventDescriptionFocus = new FocusNode();
+  FocusNode eventURLFocus = new FocusNode();
+  FocusNode checkboxFocus = new FocusNode();
+
+  bool isHelpChecked = false;
+  bool isAdWatched = false;
+  bool isRewardedAdReady = false;
+  String chosenCompany;
+  RewardedAd rewardedAd;
 
   DateTime _eventStartDate = new DateTime.now();
   DateTime _eventEndDate = new DateTime.now().add(Duration(days: 1));
@@ -59,13 +68,14 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   @override
   void dispose() {
     super.dispose();
-    _eventDescriptionFocus.dispose();
-    _eventTitleFocus.dispose();
+    eventDescriptionFocus.dispose();
+    eventTitleFocus.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    prepareAd();
     _eventProvider = Provider.of<EventProvider>(context, listen: false);
     _eventProvider.clearNewEvent();
     isOnline = widget.eventPlatform == 'Online Etkinlik' ? true : false;
@@ -190,7 +200,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   ),
                   child: FormBuilderTextField(
                     textInputAction: TextInputAction.next,
-                    focusNode: _eventTitleFocus,
+                    focusNode: eventTitleFocus,
                     name: "eventTitle",
                     keyboardType: TextInputType.text,
                     cursorColor: kPrimaryColor,
@@ -235,7 +245,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   ),
                   child: FormBuilderTextField(
                     textInputAction: TextInputAction.next,
-                    focusNode: _eventDescriptionFocus,
+                    focusNode: eventDescriptionFocus,
                     name: "eventDescription",
                     keyboardType: TextInputType.text,
                     cursorColor: kPrimaryColor,
@@ -264,17 +274,20 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   key: Key(DateFormat("dd/mm/yyyy").format(_eventStartDate)),
                   width: size.width * 0.6,
                   child: FormBuilderDateTimePicker(
-                    initialValue: _eventStartDate,
                     format: DateFormat("dd/MM/yyyy hh:mm"),
                     onChanged: (date) {
-                      setState(() {
-                        _eventStartDate = date;
-                      });
+                      if (date != null) {
+                        setState(() {
+                          _eventStartDate = date;
+                        });
+                      }
                     },
-                    initialDate: _eventStartDate,
+                    initialDate: _eventEndDate ?? null,
                     alwaysUse24HourFormat: true,
                     name: "eventStartDate",
                     decoration: InputDecoration(
+                      hintText: DateFormat("dd/MM/yyyy hh:mm")
+                          .format(_eventStartDate),
                       icon: Icon(
                         FontAwesome5Solid.calendar,
                         color: Colors.black,
@@ -284,11 +297,11 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     confirmText: "Tamam",
                     cancelText: "İptal",
                     fieldLabelText: "Etkinlik Başlangıç Tarihi",
-                    helpText: "Etkinlik tarihini seçiniz",
+                    helpText: "Bir başlangıç tarihi seç",
                     fieldHintText: "Gün/Ay/Yıl",
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context,
-                          errorText: "Bu alan boş bırakılamaz."),
+                          errorText: "Bir başlangıç tarihi seçmelisin"),
                     ]),
                     firstDate: DateTime.now(),
                   ),
@@ -301,17 +314,22 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   key: Key(DateFormat("dd/mm/yyyy").format(_eventEndDate)),
                   width: size.width * 0.6,
                   child: FormBuilderDateTimePicker(
-                    initialValue: _eventEndDate,
+                    helpText: "Bir bitiş tarihi seç",
                     format: DateFormat("dd/MM/yyyy hh:mm"),
                     onChanged: (date) {
-                      setState(() {
-                        _eventEndDate = date;
-                      });
+                      if (date != null) {
+                        setState(() {
+                          _eventEndDate = date;
+                        });
+                      }
                     },
-                    initialDate: _eventStartDate,
+                    initialDate: _eventEndDate ?? null,
                     alwaysUse24HourFormat: true,
                     name: "eventEndDate",
+                    firstDate: _eventStartDate,
                     decoration: InputDecoration(
+                      hintText:
+                          DateFormat("dd/MM/yyyy hh:mm").format(_eventEndDate),
                       icon: Icon(
                         FontAwesome5Solid.calendar,
                         color: Colors.black,
@@ -320,7 +338,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context,
-                          errorText: "Bu alan boş bırakılamaz."),
+                          errorText: "Bir tarih seçmelisin.")
                     ]),
                   ),
                 ),
@@ -334,7 +352,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             width: size.width * 0.6,
                             child: FormBuilderTextField(
                               textInputAction: TextInputAction.next,
-                              focusNode: _eventURLFocus,
+                              focusNode: eventURLFocus,
                               name: "eventURL",
                               autofocus: false,
                               autovalidateMode:
@@ -452,6 +470,38 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                           ),
                         ],
                       ),
+                TextFieldContainer(
+                  child: FormBuilderCheckbox(
+                    focusNode: checkboxFocus,
+                    name: "donation",
+                    initialValue: isHelpChecked,
+                    title: Text(
+                      "Bu paylaşımım ile kurumlara yardım etmek istiyorum",
+                    ),
+                    onChanged: (value) async {
+                      if (value == true) {
+                        print(chosenCompany);
+                        await makeContribution();
+
+                        if (chosenCompany != null) {
+                          setState(() {
+                            isHelpChecked = value;
+                          });
+                        } else {
+                          setState(() {
+                            isHelpChecked = !value;
+                          });
+                        }
+                      } else {
+                        chosenCompany = null;
+
+                        setState(() {
+                          isHelpChecked = value;
+                        });
+                      }
+                    },
+                  ),
+                )
               ],
             ),
           ),
@@ -565,15 +615,30 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   Future<void> _formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
       try {
-        await createEvent();
-      } catch (e) {}
+        if (chosenCompany != null) {
+          Logger().i("Şirket seçildi");
+          await rewardedAd.show(
+              onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
+            isAdWatched = true;
+            Logger().i("Reklam ödülü verildi");
+          }).then((value) async {
+            Logger().i("Reklam izlendi");
+            await createEvent(isUsedForHelp: true);
+          });
+        } else {
+          Logger().i("Şirket seçilmedi");
+          await createEvent(isUsedForHelp: false);
+        }
+      } catch (e) {
+        Logger().e("Form submit edilirken hata oluştu: " + e.toString());
+      }
     }
   }
 
-  Future<void> createEvent() async {
+  Future<void> createEvent({bool isUsedForHelp}) async {
     try {
       CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuluyor.");
-      setNewEventValues();
+      setNewEventValues(isUsedForHelp: isUsedForHelp);
 
       await _eventProvider.addEvent(_eventImages).then((_) async {
         NavigationService.instance.pop();
@@ -589,7 +654,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     }
   }
 
-  void setNewEventValues() {
+  void setNewEventValues({bool isUsedForHelp}) {
     _eventProvider.newEvent.approved = false;
     _eventProvider.newEvent.eventId = "";
     _eventProvider.newEvent.eventTitle =
@@ -601,6 +666,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     //TODO: Start Date ve End Date farkını ayarla
 
     _eventProvider.newEvent.eventStartDate = _eventStartDate;
+    _eventProvider.newEvent.eventEndDate = _eventEndDate;
     _eventProvider.newEvent.isDone = false;
     _eventProvider.newEvent.isOnline = isOnline;
     _eventProvider.newEvent.eventURL = isOnline
@@ -622,6 +688,81 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     _eventProvider.newEvent.city = eventCity;
     _eventProvider.newEvent.eventCategory = widget.eventCategory;
     _eventProvider.newEvent.eventType = widget.eventType;
+
+    if (isUsedForHelp) {
+      _eventProvider.newEvent.isUsedForHelp = true;
+    } else {
+      _eventProvider.newEvent.isUsedForHelp = false;
+    }
+  }
+
+  Future<void> makeContribution() async {
+    final SimpleDialog contributionCategoryDialog = SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text('Hangi kuruma yardım etmek istiyorsunuz?'),
+      children: [
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.image,
+          color: Colors.orange,
+          text: 'TEMA',
+          onPressed: () {
+            Navigator.pop(context, "TEMA");
+          },
+        ),
+        SimpleDialogItem(
+          icon: FontAwesome5Solid.video,
+          color: Colors.green,
+          text: 'DODACT',
+          onPressed: () {
+            Navigator.pop(context, "DODACT");
+          },
+        ),
+      ],
+    );
+
+    var contributionDialog = await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => contributionCategoryDialog,
+    );
+
+    if (contributionDialog != null) {
+      print(contributionDialog);
+      chosenCompany = contributionDialog;
+    }
+  }
+
+  Future prepareAd() async {
+    RewardedAd.load(
+      adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          rewardedAd = ad;
+
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              setState(() {
+                isRewardedAdReady = false;
+              });
+              prepareAd();
+            },
+          );
+
+          setState(() {
+            isRewardedAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+          setState(() {
+            isRewardedAdReady = false;
+          });
+        },
+      ),
+    );
   }
 
   //TODO: UPLOAD EDİLDİKTEN SONRA GEÇİCİ DOSYALAR SİLİNMELİ

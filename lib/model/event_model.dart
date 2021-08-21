@@ -18,6 +18,8 @@ class EventModel {
   String eventType;
   bool isDone;
   String ownerType;
+  bool isUsedForHelp;
+  String chosenCompanyForHelp;
 
   EventModel(
       {this.eventId,
@@ -36,7 +38,9 @@ class EventModel {
       this.eventAddress,
       this.eventType,
       this.isDone,
-      this.ownerType});
+      this.ownerType,
+      this.isUsedForHelp,
+      this.chosenCompanyForHelp});
 
   EventModel.fromJson(Map<String, dynamic> json) {
     eventId = json['eventId'];
@@ -56,6 +60,8 @@ class EventModel {
     eventType = json['eventType'];
     isDone = json['isDone'];
     ownerType = json['ownerType'];
+    isUsedForHelp = json['isUsedForHelp'] ?? false;
+    chosenCompanyForHelp = json['chosenCompanyForHelp'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +84,8 @@ class EventModel {
     data['eventType'] = this.eventType;
     data['isDone'] = this.isDone;
     data['ownerType'] = this.ownerType;
+    data['isUsedForHelp'] = this.isUsedForHelp;
+    data['chosenCompanyForHelp'] = this.chosenCompanyForHelp;
     return data;
   }
 
