@@ -23,6 +23,7 @@ import 'package:dodact_v1/ui/interest/widgets/temporary_registration_interests_p
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/dod_card_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/favorites_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/requests_status.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/notifications_settings_page.dart';
@@ -148,6 +149,8 @@ class NavigationRouteManager {
 
       case k_ROUTE_USER_CONTRIBUTIONS_PAGE:
         return _navigateToDefault(UserContributionsPage(), settings);
+      case k_ROUTE_DOD_CARD:
+        return _navigateToDefault(DodCardPage(), settings);
 
       //
 

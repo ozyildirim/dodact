@@ -139,30 +139,42 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton(
-          icon: Icon(
-            FontAwesome5Brands.linkedin,
-            size: 30,
-          ),
-          onPressed: () {
-            CommonMethods.launchURL(authProvider.currentUser.linkedInLink);
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            FontAwesome5Brands.dribbble,
-            size: 30,
-          ),
-          onPressed: () {
-            CommonMethods.launchURL(authProvider.currentUser.dribbbleLink);
-          },
-        ),
-        IconButton(
-          icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
-          onPressed: () {
-            CommonMethods.launchURL(authProvider.currentUser.soundcloudLink);
-          },
-        ),
+        authProvider.currentUser.linkedInLink != null &&
+                authProvider.currentUser.linkedInLink != ''
+            ? IconButton(
+                icon: Icon(
+                  FontAwesome5Brands.linkedin,
+                  size: 30,
+                ),
+                onPressed: () {
+                  CommonMethods.launchURL(
+                      authProvider.currentUser.linkedInLink);
+                },
+              )
+            : Container(),
+        authProvider.currentUser.dribbbleLink != null &&
+                authProvider.currentUser.dribbbleLink != ''
+            ? IconButton(
+                icon: Icon(
+                  FontAwesome5Brands.dribbble,
+                  size: 30,
+                ),
+                onPressed: () {
+                  CommonMethods.launchURL(
+                      authProvider.currentUser.dribbbleLink);
+                },
+              )
+            : Container(),
+        authProvider.currentUser.soundcloudLink != null &&
+                authProvider.currentUser.soundcloudLink != ''
+            ? IconButton(
+                icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
+                onPressed: () {
+                  CommonMethods.launchURL(
+                      authProvider.currentUser.soundcloudLink);
+                },
+              )
+            : Container(),
         IconButton(
           icon: Icon(FontAwesome5Solid.envelope, size: 30),
           // ignore: todo

@@ -119,6 +119,13 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             onTap: () {},
           ),
           ListTile(
+            leading: Icon(Icons.star),
+            title: Text("DodKartım", style: TextStyle(fontSize: 18)),
+            onTap: () {
+              NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.info),
             title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
             onTap: () {

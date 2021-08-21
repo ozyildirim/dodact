@@ -111,6 +111,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                         ),
                         PopupMenuItem(
                           child: ListTile(
+                            enabled: false,
                             leading: Icon(FontAwesome5Solid.cogs),
                             title: Text("Düzenle"),
                             onTap: () async {
