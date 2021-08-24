@@ -3,6 +3,8 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/event_provider.dart';
+import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile_body.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile_info_part.dart'
@@ -26,6 +28,9 @@ class _ProfilePageState extends BaseState<ProfilePage>
   void initState() {
     _controller = new TabController(length: 3, vsync: this);
     super.initState();
+
+    Provider.of<EventProvider>(context, listen: false)
+        .getUserEvents(authProvider.currentUser);
   }
 
   @override
@@ -54,7 +59,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
         ],
         centerTitle: true,
         title: Text(
-          "Profil",
+          "@" + authProvider.currentUser.username,
           style: Theme.of(context).appBarTheme.textTheme.title,
         ),
         elevation: 0,
@@ -70,7 +75,6 @@ class _ProfilePageState extends BaseState<ProfilePage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProfileInfo.UserProfileInfoPart(),
-            Divider(),
             Expanded(child: UserProfileBody()),
           ],
         ),

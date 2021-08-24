@@ -11,15 +11,18 @@ class SpinnerPart extends StatelessWidget {
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: Container(
-          height: 100,
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Image(image: AssetImage("assets/images/app/spinner_image.png")),
-            // Text(
-            //   "Dodact Çark",
-            //   style: TextStyle(fontSize: 18),
-            // )
-          ]),
+        child: Card(
+          elevation: 2,
+          child: Container(
+            height: 100,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Image(image: AssetImage("assets/images/app/spinner_image.png")),
+              // Text(
+              //   "Dodact Çark",
+              //   style: TextStyle(fontSize: 18),
+              // )
+            ]),
+          ),
         ),
       ),
     );

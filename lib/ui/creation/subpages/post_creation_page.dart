@@ -610,8 +610,29 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   Future<void> _formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
-      await uploadPost();
+      try {
+        if (widget.contentType == "Görüntü") {
+          var hasImage = checkEventHasImages();
+          if (hasImage) {
+            await uploadPost();
+          } else {
+            await CommonMethods()
+                .showErrorDialog(context, "Bir görüntü seçmelisin");
+          }
+        } else {
+          await uploadPost();
+        }
+      } catch (e) {
+        Logger().e("Form submit edilirken hata oluştu: " + e.toString());
+      }
     }
+  }
+
+  bool checkEventHasImages() {
+    if (isSelected) {
+      return true;
+    }
+    return false;
   }
 
   Future showPostShareSuccessDialog(

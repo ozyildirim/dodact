@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gradients/flutter_gradients.dart';
 
 class UserProfileInfoPart extends StatelessWidget {
   @override
@@ -27,12 +28,13 @@ class UserProfileInfoPart extends StatelessWidget {
                   onTap: () => showProfilePictureContainer(
                       context, provider.currentUser.profilePictureURL),
                   child: CachedNetworkImage(
-                      imageUrl: provider.currentUser.profilePictureURL,
-                      imageBuilder: (context, imageProvider) => CircleAvatar(
-                            maxRadius: 80,
-                            backgroundImage: NetworkImage(
-                                provider.currentUser.profilePictureURL),
-                          )),
+                    imageUrl: provider.currentUser.profilePictureURL,
+                    imageBuilder: (context, imageProvider) => CircleAvatar(
+                      maxRadius: 80,
+                      backgroundImage:
+                          NetworkImage(provider.currentUser.profilePictureURL),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -102,21 +104,11 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        // gradient: LinearGradient(
-        //   // Where the linear gradient begins and ends
-        //   begin: Alignment.topCenter,
-        //   end: Alignment.bottomCenter,
-        //   // Add one stop for each color. Stops should increase from 0 to 1
-        //   stops: [0.1, 0.3, 0.9],
-        //   colors: [
-        //     Color(0xFF71767E).withOpacity(0.5),
-        //     Color(0xFFAAB1BD).withOpacity(0.45),
-        //     Color(0xFF202226).withOpacity(0.56),
-        //   ],
-        // ),
-        // color: Color(0xFFD9D2C7).withOpacity(0.6),
-        color: Color(0xFFC8CDCE).withOpacity(0.4),
+        gradient: FlutterGradients.winterNeva(
+          tileMode: TileMode.clamp,
+        ),
       ),
+      // color: Colors.white10),
       child: PageView(
         scrollDirection: Axis.horizontal,
         controller: _controller,
@@ -178,10 +170,11 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
         IconButton(
           icon: Icon(FontAwesome5Solid.envelope, size: 30),
           // ignore: todo
-          //TODO: Mail atma özelliği ekle
-          // onPressed: () {
-          //   CommonMethods.launchEmail(authProvider, subject, message)
-          // },
+
+          onPressed: () {
+            CommonMethods.launchEmail(
+                authProvider.currentUser.email, "Konu", "Mesaj");
+          },
         ),
       ],
     );
@@ -196,55 +189,73 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  "Kişisel Bilgiler",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Text(
-                        "@${authProvider.currentUser.username}",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              authProvider.currentUser.nameSurname != null
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
+              authProvider.currentUser.nameSurname != null &&
+                      authProvider.currentUser.nameSurname != ''
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.person),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
                             child: Text(
                               authProvider.currentUser.nameSurname,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: 18),
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     )
-                  : null,
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(FontAwesome5Solid.map_marker_alt),
-                    Text(authProvider.currentUser.location)
-                  ],
-                ),
-              ),
+                  : Container(),
+              authProvider.currentUser.education != null &&
+                      authProvider.currentUser.education != ''
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.school),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            authProvider.currentUser.education,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        )
+                      ],
+                    )
+                  : Container(),
+              authProvider.currentUser.profession != null &&
+                      authProvider.currentUser.profession != ''
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.work),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            authProvider.currentUser.profession,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        )
+                      ],
+                    )
+                  : Container(),
+              authProvider.currentUser.nameSurname != null
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(FontAwesome5Solid.map_marker_alt),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(authProvider.currentUser.location,
+                              style: TextStyle(fontSize: 18)),
+                        )
+                      ],
+                    )
+                  : Container,
             ],
           ),
         ),
@@ -253,7 +264,8 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
   }
 
   Widget _secondPage() {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Text(authProvider.currentUser.userDescription),
     );
   }

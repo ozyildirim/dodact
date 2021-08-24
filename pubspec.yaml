@@ -28,7 +28,6 @@ dependencies:
   cloud_firestore: ^2.4.0
   firebase_messaging: ^10.0.3
   google_mobile_ads: ^0.13.0
-  paginate_firestore: ^1.0.2
   
   google_sign_in: ^5.0.1
   get_it: ^7.2.0
@@ -84,6 +83,7 @@ dependencies:
   qr_flutter: ^4.0.0
   like_button: ^2.0.3
   flutter_svg: ^0.22.0
+  flutter_gradients: ^1.0.0+3
 
   
   

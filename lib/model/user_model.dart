@@ -26,7 +26,8 @@ class UserObject {
   String soundcloudLink;
   bool newUser;
   String userDescription;
-  String schoolName;
+  String education;
+  String profession;
 
   List<String> favoritedPosts = [];
   List<InterestModel> interests;
@@ -36,34 +37,36 @@ class UserObject {
   bool hiddenLocation;
   bool hiddenNameSurname;
 
-  UserObject(
-      {this.uid,
-      this.email,
-      this.username,
-      this.nameSurname,
-      this.userRegistrationDate,
-      this.telephoneNumber,
-      this.profilePictureURL,
-      this.experiencePoint,
-      this.groupIDs,
-      this.ownedGroupIDs,
-      this.postIDs,
-      this.eventIDs,
-      this.location,
-      this.rosettes,
-      this.mainInterest,
-      this.twitterUsername,
-      this.instagramUsername,
-      this.youtubeLink,
-      this.dribbbleLink,
-      this.linkedInLink,
-      this.soundcloudLink,
-      this.hiddenMail,
-      this.hiddenLocation,
-      this.hiddenNameSurname,
-      this.newUser,
-      this.userDescription,
-      this.schoolName});
+  UserObject({
+    this.uid,
+    this.email,
+    this.username,
+    this.nameSurname,
+    this.userRegistrationDate,
+    this.telephoneNumber,
+    this.profilePictureURL,
+    this.experiencePoint,
+    this.groupIDs,
+    this.ownedGroupIDs,
+    this.postIDs,
+    this.eventIDs,
+    this.location,
+    this.rosettes,
+    this.mainInterest,
+    this.twitterUsername,
+    this.instagramUsername,
+    this.youtubeLink,
+    this.dribbbleLink,
+    this.linkedInLink,
+    this.soundcloudLink,
+    this.hiddenMail,
+    this.hiddenLocation,
+    this.hiddenNameSurname,
+    this.newUser,
+    this.userDescription,
+    this.education,
+    this.profession,
+  });
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -93,7 +96,8 @@ class UserObject {
     userData['hiddenNameSurname'] = this.hiddenNameSurname;
     userData['newUser'] = this.newUser ?? true;
     userData['userDescription'] = this.userDescription ?? '';
-    userData['schoolName'] = this.schoolName ?? '';
+    userData['education'] = this.education ?? '';
+    userData['profession'] = this.profession ?? '';
 
     return userData;
   }
@@ -125,8 +129,9 @@ class UserObject {
         hiddenLocation = map['hiddenLocation'],
         hiddenNameSurname = map['hiddenNameSurname'],
         newUser = map['newUser'] ?? true,
-        schoolName = map['schoolName'] ?? '',
-        userDescription = map['userDescription'] ?? '';
+        education = map['education'] ?? '',
+        userDescription = map['userDescription'] ?? '',
+        profession = map['profession'] ?? '';
 
   UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
@@ -156,7 +161,8 @@ class UserObject {
     hiddenNameSurname = doc.data()['hiddenNameSurname'];
     userDescription = doc.data()['userDescription'] ?? '';
     newUser = doc.data()['newUser'] ?? true;
-    schoolName = doc.data()['schoolName'] ?? '';
+    education = doc.data()['education'] ?? '';
+    profession = doc.data()['profession'] ?? '';
   }
 
   String toString() {

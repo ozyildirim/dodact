@@ -27,16 +27,22 @@ class _UserPersonalProfileSettingsPageState
   TextEditingController usernameController;
   TextEditingController locationController;
   TextEditingController descriptionController;
+  TextEditingController educationController;
+  TextEditingController professionController;
 
   PickedFile _picture;
   String nameSurname;
   String location;
+  String education;
+  String profession;
 
   bool _isChanged = false;
 
   FocusNode nameSurnameFocus = new FocusNode();
   FocusNode usernameFocus = new FocusNode();
   FocusNode descriptionFocus = new FocusNode();
+  FocusNode educationFocus = new FocusNode();
+  FocusNode professionFocus = new FocusNode();
 
   @override
   void initState() {
@@ -49,6 +55,14 @@ class _UserPersonalProfileSettingsPageState
         ? authProvider.currentUser.location
         : "Belirtilmemiş";
 
+    education = authProvider.currentUser.education != null
+        ? authProvider.currentUser.education
+        : "";
+
+    profession = authProvider.currentUser.profession != null
+        ? authProvider.currentUser.profession
+        : "";
+
     emailController =
         TextEditingController(text: authProvider.currentUser.email);
     nameSurnameController = TextEditingController(text: nameSurname);
@@ -58,12 +72,20 @@ class _UserPersonalProfileSettingsPageState
 
     descriptionController =
         TextEditingController(text: authProvider.currentUser.userDescription);
+
+    educationController =
+        TextEditingController(text: authProvider.currentUser.education);
+    professionController =
+        TextEditingController(text: authProvider.currentUser.profession);
   }
 
   @override
   void dispose() {
     usernameFocus.dispose();
     nameSurnameFocus.dispose();
+    descriptionFocus.dispose();
+    educationFocus.dispose();
+    professionFocus.dispose();
     super.dispose();
   }
 
@@ -226,6 +248,54 @@ class _UserPersonalProfileSettingsPageState
                       },
                     ),
                   ),
+                  Container(
+                    color: Colors.white70,
+                    child: Text(
+                      "Okul/Eğitim Kurumu",
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                  ),
+                  TextFieldContainer(
+                    width: mediaQuery.size.width * 0.9,
+                    child: TextField(
+                      maxLines: 1,
+                      focusNode: educationFocus,
+                      controller: educationController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.school),
+                      ),
+                      onChanged: (_) {
+                        setState(() {
+                          _isChanged = true;
+                        });
+                      },
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white70,
+                    child: Text(
+                      "Meslek",
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                  ),
+                  TextFieldContainer(
+                    width: mediaQuery.size.width * 0.9,
+                    child: TextField(
+                      maxLines: 1,
+                      focusNode: professionFocus,
+                      controller: professionController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.work),
+                      ),
+                      onChanged: (_) {
+                        setState(() {
+                          _isChanged = true;
+                        });
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -365,6 +435,8 @@ class _UserPersonalProfileSettingsPageState
         'username': usernameController.text,
         'nameSurname': nameSurnameController.text,
         'userDescription': descriptionController.text,
+        'education': educationController.text,
+        'profession': professionController.text,
       });
       NavigationService.instance.pop();
       setState(() {

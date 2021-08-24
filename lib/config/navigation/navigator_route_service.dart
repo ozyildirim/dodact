@@ -25,7 +25,7 @@ import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/dod_card_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/favorites_page.dart';
-import 'package:dodact_v1/ui/profile/screens/drawer_pages/requests_status.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/requests_status_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/notifications_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/personal_profile_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_settings_page.dart';
