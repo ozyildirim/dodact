@@ -37,7 +37,9 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   void _signInWithGoogle() async {
     var status = await authProvider.signInWithGoogle();
+    showLoadingProgressContainer();
     if (status != AuthResultStatus.successful) {
+      NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
         _scaffoldKey.currentState.showSnackBar(
@@ -61,6 +63,9 @@ class _LogInPageState extends BaseState<LogInPage> {
           ),
         );
       }
+    } else {
+      NavigationService.instance.pop();
+      NavigationService.instance.popUntil(k_ROUTE_LANDING);
     }
   }
 
@@ -262,7 +267,7 @@ class _LogInPageState extends BaseState<LogInPage> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.loading,
-        text: "Giriş Yapılıyor.",
+        text: "Giriş Yapılıyor",
         barrierDismissible: false);
   }
 }

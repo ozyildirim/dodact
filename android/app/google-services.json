@@ -15,13 +15,43 @@
       },
       "oauth_client": [
         {
-          "client_id": "1030067077144-ij0oot0sq9hd5le7i3rh8sag7qm6am56.apps.googleusercontent.com",
+          "client_id": "1030067077144-0rpqe1lsl6ie2k22mi2ektj4cs1grecu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dodact.dodact_v1",
-            "certificate_hash": "93a2919157492b3bb6c1d24e042af977a2b32704"
+            "certificate_hash": "b0bea007aaaf2571bfc9636cc876c907e08b5a1a"
           }
         },
+        {
+          "client_id": "1030067077144-glo8b84id09i3530dumelq46f8a1t93q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCur_xaGI8hBvETnR5QHQUIy_VZtoISBg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030067077144-glo8b84id09i3530dumelq46f8a1t93q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-4828991493508897~7865600588"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030067077144:android:67aa1aeb59490038b1c36d",
+        "android_client_info": {
+          "package_name": "com.example.dodact_panel_flutter"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "1030067077144-glo8b84id09i3530dumelq46f8a1t93q.apps.googleusercontent.com",
           "client_type": 3

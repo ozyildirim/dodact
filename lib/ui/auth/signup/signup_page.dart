@@ -255,28 +255,35 @@ class _SignUpPageState extends BaseState<SignUpPage> {
 
   void _signInWithGoogle() async {
     var status = await authProvider.signInWithGoogle();
+    showLoadingProgressContainer();
     if (status != AuthResultStatus.successful) {
+      NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  errorMsg,
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
+        _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(
+            duration: new Duration(seconds: 2),
+            content: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // new CircularProgressIndicator(),
+                Expanded(
+                  child: new Text(
+                    errorMsg,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
+              ],
+            ),
           ),
-        ));
+        );
       }
+    } else {
+      NavigationService.instance.pop();
+      NavigationService.instance.popUntil(k_ROUTE_LANDING);
     }
   }
 
@@ -329,7 +336,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     CoolAlert.show(
       context: context,
       type: CoolAlertType.loading,
-      text: "Lütfen Bekleyin.",
+      text: "Lütfen Bekle",
     );
   }
 

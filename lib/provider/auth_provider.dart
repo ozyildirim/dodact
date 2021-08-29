@@ -90,22 +90,21 @@ class AuthProvider extends ChangeNotifier {
   Future<AuthResultStatus> signInWithGoogle() async {
     try {
       authStatus = null;
-      changeState(true);
       var user = await _authRepository.signInWithGoogle();
       if (user != null) {
         print("AuthProvider user logged with google");
         authStatus = AuthResultStatus.successful;
         currentUser = user;
-        changeState(false);
+        notifyListeners();
       } else {
         print("AuthProvider google user null");
         authStatus = AuthResultStatus.abortedByUser;
-        changeState(false);
+        notifyListeners();
       }
     } catch (e) {
-      debugPrint("AuthProvider signInWithGoogle error: " + e.toString());
+      logger.e("AuthProvider signInWithGoogle error:" + e.toString());
       authStatus = AuthResultStatus.abortedByUser;
-      changeState(false);
+      notifyListeners();
     }
     return authStatus;
   }
