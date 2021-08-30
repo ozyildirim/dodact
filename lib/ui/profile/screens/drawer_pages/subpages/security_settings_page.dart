@@ -106,86 +106,94 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
           : null,
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Parola Değiştir"),
+        title: Text("Parola Değişikliği"),
       ),
-      body: Container(
-        width: dynamicWidth(1),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
-        ),
-        child: FormBuilder(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFieldContainer(
-                  width: mediaQuery.size.width * 0.8,
-                  child: FormBuilderTextField(
-                    obscureText: true,
-                    textInputAction: TextInputAction.next,
-                    focusNode: _passwordFocus,
-                    controller: passwordController,
-                    name: "password",
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      hintText: "Yeni parola",
-                      border: InputBorder.none,
-                      icon: Icon(Icons.lock),
-                    ),
-                    onEditingComplete: () {
-                      setState(() {
-                        isChanged = true;
-                      });
-                    },
-                    onSubmitted: (value) {
-                      FocusScope.of(context).requestFocus(_secondPasswordFocus);
-                    },
-                    validator: FormBuilderValidators.compose(
-                      [
-                        FormBuilderValidators.required(context,
-                            errorText: "Yeni parolanızı giriniz"),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                TextFieldContainer(
-                  width: mediaQuery.size.width * 0.8,
-                  child: FormBuilderTextField(
-                    obscureText: true,
-                    textInputAction: TextInputAction.done,
-                    focusNode: _secondPasswordFocus,
-                    controller: secondPasswordController,
-                    name: "secondPassword",
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      hintText: "Tekrar yeni parola",
-                      border: InputBorder.none,
-                      icon: Icon(Icons.lock),
-                    ),
-                    onEditingComplete: () {
-                      setState(() {
-                        FocusScope.of(context).unfocus();
-                        isChanged = true;
-                      });
-                    },
-                    validator: FormBuilderValidators.compose(
-                      [
-                        FormBuilderValidators.required(context,
-                            errorText: "Yeni parolanızı giriniz"),
-                        FormBuilderValidators.equal(
-                            context, passwordController.text,
-                            errorText: "Parolalar eşleşmiyor"),
-                      ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          width: dynamicWidth(1),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+          ),
+          child: FormBuilder(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFieldContainer(
+                    width: mediaQuery.size.width * 0.9,
+                    child: FormBuilderTextField(
+                      obscureText: true,
+                      textInputAction: TextInputAction.next,
+                      focusNode: _passwordFocus,
+                      controller: passwordController,
+                      name: "password",
+                      cursorColor: kPrimaryColor,
+                      decoration: InputDecoration(
+                        hintText: "Yeni parola",
+                        border: InputBorder.none,
+                        icon: Icon(Icons.lock),
+                      ),
+                      onEditingComplete: () {
+                        setState(() {
+                          isChanged = true;
+                        });
+                      },
+                      onSubmitted: (value) {
+                        FocusScope.of(context)
+                            .requestFocus(_secondPasswordFocus);
+                      },
+                      validator: FormBuilderValidators.compose(
+                        [
+                          FormBuilderValidators.required(context,
+                              errorText: "Yeni parolanı gir"),
+                        ],
+                      ),
                     ),
                   ),
-                )
-              ],
+                  SizedBox(
+                    height: 4,
+                  ),
+                  TextFieldContainer(
+                    width: mediaQuery.size.width * 0.9,
+                    child: FormBuilderTextField(
+                      obscureText: true,
+                      textInputAction: TextInputAction.done,
+                      focusNode: _secondPasswordFocus,
+                      controller: secondPasswordController,
+                      name: "secondPassword",
+                      cursorColor: kPrimaryColor,
+                      decoration: InputDecoration(
+                        hintText: "Tekrar yeni parola",
+                        border: InputBorder.none,
+                        icon: Icon(Icons.lock),
+                      ),
+                      onEditingComplete: () {
+                        setState(() {
+                          FocusScope.of(context).unfocus();
+                          isChanged = true;
+                        });
+                      },
+                      validator: FormBuilderValidators.compose(
+                        [
+                          FormBuilderValidators.required(context,
+                              errorText: "Yeni parolanı gir"),
+                          FormBuilderValidators.equal(
+                              context, passwordController.text,
+                              errorText: "Parolalar eşleşmiyor"),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -208,47 +216,52 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
 
       var password = _formKey.currentState.value['password'];
       CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor");
-      await authProvider.updatePassword(password);
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        duration: new Duration(seconds: 2),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                "Şifreniz başarıyla değiştirildi.",
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ));
+      var result = await authProvider.updatePassword(password);
+      if (result == true) {
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: new Duration(seconds: 2),
+          content: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new CircularProgressIndicator(),
+              Expanded(
+                child: new Text(
+                  "Şifreniz başarıyla değiştirildi.",
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            ],
+          ),
+        ));
+      } else {
+        print("result: " + result.toString());
+        final errorMessage =
+            AuthExceptionHandler.generateExceptionMessage(result);
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: new Duration(seconds: 2),
+          content: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // new CircularProgressIndicator(),
+              Expanded(
+                child: new Text(
+                  errorMessage,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            ],
+          ),
+        ));
+      }
+
       CommonMethods().hideDialog();
-    } on FirebaseAuthException catch (e) {
-      final errorMessage = AuthExceptionHandler.generateExceptionMessage(e);
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        duration: new Duration(seconds: 2),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                errorMessage,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ));
-    }
+    } catch (e) {}
   }
 }
 
@@ -281,57 +294,67 @@ class _ChangeEmailPageState extends BaseState<ChangeEmailPage> {
             )
           : null,
       appBar: AppBar(
-        title: Text("E-posta Adres Değiştir"),
+        title: Text("E-posta Adresi Değişikliği"),
       ),
-      body: Container(
-        width: dynamicWidth(1),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
-        ),
-        child: FormBuilder(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFieldContainer(
-                  width: mediaQuery.size.width * 0.8,
-                  child: FormBuilderTextField(
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: false,
-                    textInputAction: TextInputAction.done,
-                    focusNode: emailFocusNode,
-                    controller: emailController,
-                    name: "email",
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      hintText: "Yeni e-posta adresi",
-                      border: InputBorder.none,
-                      icon: Icon(Icons.mail),
-                    ),
-                    onEditingComplete: () {
-                      setState(() {
-                        isChanged = true;
-                      });
-                    },
-                    onSubmitted: (value) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    validator: FormBuilderValidators.compose(
-                      [
-                        FormBuilderValidators.required(context,
-                            errorText: "Yeni e-posta adresini gir."),
-                        FormBuilderValidators.email(context)
-                      ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          width: dynamicWidth(1),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+          ),
+          child: FormBuilder(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFieldContainer(
+                    width: mediaQuery.size.width * 0.9,
+                    child: FormBuilderTextField(
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: false,
+                      textInputAction: TextInputAction.done,
+                      focusNode: emailFocusNode,
+                      controller: emailController,
+                      name: "email",
+                      cursorColor: kPrimaryColor,
+                      decoration: InputDecoration(
+                        hintText: "Yeni e-posta adresi",
+                        border: InputBorder.none,
+                        icon: Icon(Icons.mail),
+                      ),
+                      onEditingComplete: () {
+                        setState(() {
+                          isChanged = true;
+                        });
+                      },
+                      onSubmitted: (value) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      validator: FormBuilderValidators.compose(
+                        [
+                          FormBuilderValidators.required(context,
+                              errorText: "Yeni e-posta adresini gir."),
+                          FormBuilderValidators.notEqual(
+                              context, authProvider.currentUser.email,
+                              errorText:
+                                  "Farklı bir e-posta adresi belirtmelisin."),
+                          FormBuilderValidators.email(context)
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-              ],
+                  SizedBox(
+                    height: 4,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

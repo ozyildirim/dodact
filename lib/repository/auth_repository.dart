@@ -132,8 +132,7 @@ class AuthRepository {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.updatePassword(pass);
     } else {
-      var result = await _firebaseAuthService.updatePassword(pass);
-      return result;
+      await _firebaseAuthService.updatePassword(pass);
     }
   }
 

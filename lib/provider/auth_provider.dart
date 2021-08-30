@@ -117,16 +117,16 @@ class AuthProvider extends ChangeNotifier {
       var user = await _authRepository.createAccountWithEmailAndPassword(
           email, password);
       if (user != null) {
-        debugPrint("AuthProvider user signed up: " + user.uid + user.email);
+        logger.i("AuthProvider user signed up: " + user.uid + user.email);
         authStatus = AuthResultStatus.successful;
         currentUser = user;
         changeState(false);
       } else {
-        print('AuthStore signUp user null');
+        logger.i('AuthStore signUp user null');
         changeState(false);
       }
     } on FirebaseAuthException catch (e) {
-      print("AuthProvider login create account error: $e");
+      logger.e("AuthProvider login create account error: $e");
       authStatus = AuthExceptionHandler.handleException(e);
       changeState(false);
     }
@@ -141,7 +141,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       var user = await _authRepository.signInWithEmail(email, password);
       if (user != null) {
-        print("User ${user.email} logged in.");
+        logger.i("User ${user.email} logged in.");
         authStatus = AuthResultStatus.successful;
         currentUser = user;
         changeState(false);
@@ -168,11 +168,13 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updatePassword(String password) async {
+  Future<dynamic> updatePassword(String password) async {
     try {
       await _authRepository.updatePassword(password);
+      return true;
     } catch (e) {
       logger.e("AuthProvider updatePassword error." + e.toString());
+      return e;
     }
   }
 

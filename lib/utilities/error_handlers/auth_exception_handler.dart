@@ -78,6 +78,9 @@ class AuthExceptionHandler {
       case "ERROR_REQUIRES_RECENT_LOGIN":
         status = AuthResultStatus.requiresRecentLogin;
         break;
+      case "requires-recent-login":
+        status = AuthResultStatus.requiresRecentLogin;
+        break;
       default:
         status = AuthResultStatus.undefined;
     }

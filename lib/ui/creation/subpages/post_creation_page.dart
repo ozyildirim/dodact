@@ -145,8 +145,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                _buildPrevivewPart(),
-                _buildFormPart(size, context, provider),
+                buildPrevivewPart(),
+                buildFormPart(size, context, provider),
               ],
             ),
           ),
@@ -155,7 +155,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     );
   }
 
-  Expanded _buildFormPart(
+  Expanded buildFormPart(
       Size size, BuildContext context, PostProvider provider) {
     return Expanded(
       flex: 3,
@@ -172,25 +172,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                         TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
               ),
               SizedBox(height: 4),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                width: size.width * 0.8,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        1.0,
-                        1.0,
-                      ),
-                      blurRadius: 5.0,
-                      spreadRadius: 0.5,
-                    ),
-                  ],
-                  color: kPrimaryLightColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
+              TextFieldContainer(
                 child: FormBuilderTextField(
                   textInputAction: TextInputAction.next,
                   focusNode: postTitleFocus,
@@ -253,26 +235,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 ),
               ),
               widget.contentType == "Video"
-                  ? Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      width: size.width * 0.8,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: const Offset(
-                              1.0,
-                              1.0,
-                            ),
-                            blurRadius: 5.0,
-                            spreadRadius: 0.5,
-                          ),
-                        ],
-                        color: kPrimaryLightColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                  ? TextFieldContainer(
                       child: FormBuilderTextField(
                         textInputAction: TextInputAction.done,
                         focusNode: postContentUrlFocus,
@@ -291,7 +254,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                               FontAwesome5Brands.youtube,
                               color: kPrimaryColor,
                             ),
-                            //FIXME: Geçersiz youtube linki girilmesi durumunda kırmızı ekran çıkıyor, onu düzelt
                             hintText: "Youtube Linki",
                             border: InputBorder.none,
                             errorStyle: Theme.of(context)
@@ -339,7 +301,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     );
   }
 
-  Widget _buildPrevivewPart() {
+  Widget buildPrevivewPart() {
     if (widget.contentType == "Video") {
       return Container();
       // return Expanded(

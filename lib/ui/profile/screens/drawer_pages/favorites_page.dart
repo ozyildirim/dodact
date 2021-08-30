@@ -72,10 +72,18 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
         ),
         child: posts == null
             ? Center(
-                child: Text("Favorileriniz bulunamadı",
-                    style: TextStyle(fontSize: 22)))
+                child: Text(
+                "Favorileriniz bulunamadı",
+                style: TextStyle(fontSize: 22),
+              ))
             : (posts.isEmpty
-                ? Center(child: Text("Favorilerim boş."))
+                ? Center(
+                    child: Container(
+                      color: Colors.white70,
+                      child: Text("Henüz favorilere eklenmiş bir paylaşım yok.",
+                          style: TextStyle(fontSize: 18)),
+                    ),
+                  )
                 : ListView.builder(
                     itemBuilder: (context, index) {
                       var postPhoto;
@@ -88,18 +96,21 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                       return Column(
                         children: [
                           Slidable(
-                            child: GFListTile(
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_POST_DETAIL,
-                                    args: element.postId);
-                              },
-                              avatar: GFAvatar(
-                                backgroundImage: NetworkImage(postPhoto),
-                                radius: 50,
+                            child: Container(
+                              color: Colors.white70,
+                              child: GFListTile(
+                                onTap: () {
+                                  NavigationService.instance.navigate(
+                                      k_ROUTE_POST_DETAIL,
+                                      args: element.postId);
+                                },
+                                avatar: GFAvatar(
+                                  backgroundImage: NetworkImage(postPhoto),
+                                  radius: 50,
+                                ),
+                                titleText: element.postTitle,
+                                subTitleText: element.postCategory,
                               ),
-                              titleText: element.postTitle,
-                              subTitleText: element.postCategory,
                             ),
                             actionPane: SlidableDrawerActionPane(),
                             actionExtentRatio: 0.25,
@@ -119,7 +130,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                         ],
                       );
                     },
-                    itemCount: authProvider.currentUser.favoritedPosts.length,
+                    itemCount: posts.length,
                   )),
       ),
     );
