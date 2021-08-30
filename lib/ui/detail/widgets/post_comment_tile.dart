@@ -38,6 +38,7 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
         .getUserByID(comment.authorId)
         .then((value) {
       authorUser = value;
+      setState(() {});
     });
   }
 

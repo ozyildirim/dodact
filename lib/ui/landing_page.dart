@@ -45,9 +45,9 @@ class _LandingPageState extends BaseState<LandingPage> {
     );
   }
 
-  bool isNewUser(AuthProvider model) {
-    if (model.currentUser.username == null ||
-        model.currentUser.profilePictureURL == null) {
+  bool isNewUser() {
+    if (authProvider.currentUser.username == null ||
+        authProvider.currentUser.profilePictureURL == null) {
       return true;
     } else {
       return false;

@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -37,7 +38,7 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   void _signInWithGoogle() async {
     var status = await authProvider.signInWithGoogle();
-    showLoadingProgressContainer();
+    CommonMethods().showLoaderDialog(context, "Google ile giriş yapılıyor");
     if (status != AuthResultStatus.successful) {
       NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {
@@ -200,10 +201,10 @@ class _LogInPageState extends BaseState<LogInPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SocialIcon(
-                      press: () {},
-                      iconSrc: "assets/images/facebook_circular.png",
-                    ),
+                    // SocialIcon(
+                    //   press: () {},
+                    //   iconSrc: "assets/images/facebook_circular.png",
+                    // ),
                     SocialIcon(
                       press: () => _signInWithGoogle(),
                       iconSrc: "assets/images/google_logo.png",
@@ -220,7 +221,7 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   void _formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
-      showLoadingProgressContainer();
+      CommonMethods().showLoaderDialog(context, "Giriş yapılıyor");
       var status = await authProvider.signInWithEmail(
           _formKey.currentState.value['email'].toString().trim(),
           _formKey.currentState.value['password'].toString().trim());
@@ -261,13 +262,5 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   void _navigateToForgotPassword(BuildContext context) {
     NavigationService.instance.navigate(k_ROUTE_FORGOT_PASSWORD);
-  }
-
-  showLoadingProgressContainer() {
-    CoolAlert.show(
-        context: context,
-        type: CoolAlertType.loading,
-        text: "Giriş Yapılıyor",
-        barrierDismissible: false);
   }
 }

@@ -8,7 +8,7 @@ import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 
-class UserProfileInfoPart extends StatelessWidget {
+class UserProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthProvider>(context);

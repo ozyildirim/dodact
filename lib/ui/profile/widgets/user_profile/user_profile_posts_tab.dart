@@ -7,18 +7,15 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class UserProfilePostsPart extends StatefulWidget {
+class UserProfilePostsTab extends StatefulWidget {
   @override
-  _UserProfilePostsPartState createState() => _UserProfilePostsPartState();
+  _UserProfilePostsTabState createState() => _UserProfilePostsTabState();
 }
 
-class _UserProfilePostsPartState extends BaseState<UserProfilePostsPart>
+class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
-
   @override
   void initState() {
-    _controller = new TabController(length: 4, vsync: this);
     super.initState();
     Provider.of<PostProvider>(context, listen: false)
         .getUserPosts(authProvider.currentUser);
@@ -26,7 +23,6 @@ class _UserProfilePostsPartState extends BaseState<UserProfilePostsPart>
 
   @override
   Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery.of(context);
     final postProvider = Provider.of<PostProvider>(context);
 
     if (postProvider.userPosts != null) {

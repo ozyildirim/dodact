@@ -6,8 +6,9 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
-import 'package:dodact_v1/ui/profile/widgets/others_profile_info_part.dart';
-import 'package:dodact_v1/ui/profile/widgets/others_profile_posts_part.dart';
+import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_info_part.dart';
+import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_posts_part.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';

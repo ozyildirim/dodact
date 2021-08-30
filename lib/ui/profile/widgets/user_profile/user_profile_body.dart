@@ -1,6 +1,6 @@
-import 'package:dodact_v1/ui/profile/widgets/user_collections_part.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile_event_part.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile_posts_part.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_events_tab.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_info_tab.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_posts_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
@@ -15,7 +15,7 @@ class _UserProfileBodyState extends State<UserProfileBody>
 
   @override
   void initState() {
-    _controller = new TabController(length: 4, vsync: this);
+    _controller = new TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -33,9 +33,8 @@ class _UserProfileBodyState extends State<UserProfileBody>
             controller: _controller,
             tabs: const [
               const Tab(icon: Icon(FontAwesome5Solid.adjust)),
-              const Tab(icon: Icon(FontAwesome5Solid.clone)),
+              const Tab(icon: Icon(FontAwesome5Solid.info)),
               const Tab(icon: Icon(FontAwesome5Solid.calendar_alt)),
-              const Tab(icon: Icon(FontAwesome5Solid.star)),
             ],
           ),
         ),
@@ -46,17 +45,14 @@ class _UserProfileBodyState extends State<UserProfileBody>
               controller: _controller,
               children: [
                 Container(
-                  child: UserProfilePostsPart(),
+                  child: UserProfilePostsTab(),
                 ),
                 Container(
-                  child: UserCollectionsPart(),
+                  child: UserProfileInfoTab(),
                 ),
                 Container(
-                  child: UserProfileEventsPart(),
+                  child: UserProfileEventsTab(),
                 ),
-                Container(
-                  child: UserProfilePostsPart(),
-                )
               ],
             ),
           ),

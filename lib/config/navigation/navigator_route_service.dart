@@ -36,7 +36,7 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_contributions_pag
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
-import 'package:dodact_v1/ui/profile/screens/user_notifications_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_notifications_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
 import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
 import 'package:flutter/cupertino.dart';

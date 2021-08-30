@@ -35,6 +35,7 @@ class PostCreationPage extends StatefulWidget {
 
 class _PostCreationPageState extends BaseState<PostCreationPage> {
   GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PostProvider postProvider;
 
   bool isSelected = false;
@@ -60,7 +61,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   File postFile;
   FileImage imageThumbnail;
-  String youtubeLink;
+  String youtubeThumbnail;
 
   List<Map<String, dynamic>> categoryMap;
 
@@ -115,10 +116,11 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      key: _scaffoldKey,
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            _formSubmit();
+            formSubmit();
           }),
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -163,8 +165,12 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           key: _formKey,
           child: ListView(
             children: [
-              Text("İçerik Başlığı",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              Container(
+                color: Colors.white70,
+                child: Text("İçerik Başlığı",
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              ),
               SizedBox(height: 4),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
@@ -212,28 +218,14 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 ),
               ),
               SizedBox(height: 6),
-              Text("İçerik Açıklaması",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                width: size.width * 0.8,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        1.0,
-                        1.0,
-                      ),
-                      blurRadius: 5.0,
-                      spreadRadius: 0.5,
-                    ),
-                  ],
-                  color: kPrimaryLightColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                color: Colors.white60,
+                child: Text("İçerik Açıklaması",
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(height: 4),
+              TextFieldContainer(
                 child: FormBuilderTextField(
                   textInputAction: TextInputAction.next,
                   focusNode: postDescriptionFocus,
@@ -282,7 +274,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: FormBuilderTextField(
-                        textInputAction: TextInputAction.next,
+                        textInputAction: TextInputAction.done,
                         focusNode: postContentUrlFocus,
                         name: "youtubeLink",
                         maxLines: 1,
@@ -291,9 +283,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                         cursorColor: kPrimaryColor,
                         controller: postContentUrlController,
                         onEditingComplete: () async {
-                          setState(() {
-                            youtubeLink = postContentUrlController.text;
-                          });
+                          // await checkThumbnailAvailable();
+                          FocusScope.of(context).unfocus();
                         },
                         decoration: InputDecoration(
                             icon: Icon(
@@ -316,10 +307,13 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
               TextFieldContainer(
                 child: FormBuilderCheckbox(
                   focusNode: checkboxFocus,
+                  activeColor: Colors.white,
+                  checkColor: Colors.blue,
                   name: "donation",
                   initialValue: isHelpChecked,
                   title: Text(
                     "Bu paylaşımım ile kurumlara yardım etmek istiyorum",
+                    style: TextStyle(fontSize: 16),
                   ),
                   onChanged: (value) async {
                     if (value == true) {
@@ -347,32 +341,35 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   Widget _buildPrevivewPart() {
     if (widget.contentType == "Video") {
-      return Expanded(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            height: 250,
-            width: 250,
-            decoration: BoxDecoration(
-                image: youtubeLink != null
-                    ? DecorationImage(
-                        image: NetworkImage(CommonMethods.createThumbnailURL(
-                            true, youtubeLink)),
-                        fit: BoxFit.cover,
-                      )
-                    : null),
-            child: youtubeLink != null
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Icon(FontAwesome5Brands.youtube, color: red),
-                    ),
-                  )
-                : null,
-          ),
-        ),
-      );
+      return Container();
+      // return Expanded(
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.circular(15),
+      //     child: Container(
+      //       height: 250,
+      //       width: 250,
+      //       decoration: BoxDecoration(
+      //           image: youtubeThumbnail != null
+      //               ? DecorationImage(
+      //                   image: NetworkImage(
+      //                     CommonMethods.createThumbnailURL(
+      //                         true, youtubeThumbnail),
+      //                   ),
+      //                   fit: BoxFit.cover,
+      //                 )
+      //               : null),
+      //       // child: youtubeThumbnail != null
+      //       //     ? Padding(
+      //       //         padding: const EdgeInsets.all(8.0),
+      //       //         child: Align(
+      //       //           alignment: Alignment.bottomLeft,
+      //       //           child: Icon(FontAwesome5Brands.youtube, color: red),
+      //       //         ),
+      //       //       )
+      //       //     : null,
+      //     ),
+      //   ),
+      // );
     } else if (widget.contentType == "Görüntü") {
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
@@ -422,6 +419,41 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         ),
       );
     }
+  }
+
+  // checkThumbnailAvailable() async {
+  //   var image = await NetworkImage(postContentUrlController.text);
+
+  //   if (image != null) {
+  //     setState(() {
+  //       youtubeThumbnail = postContentUrlController.text;
+  //     });
+  //   } else {
+  //     showSnackBar("Geçersiz youtube linki!");
+  //   }
+  // }
+
+  void showSnackBar(String message) {
+    _scaffoldKey.currentState.showSnackBar(
+      new SnackBar(
+        duration: new Duration(seconds: 2),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                message,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> makeContribution() async {
@@ -568,7 +600,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             //loaderDialog kapansın diye pop yapıyoruz.
             NavigationService.instance.pop();
             await showPostShareSuccessDialog(context,
-                "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
+                "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda inceleyeceğiz.");
             NavigationService.instance.navigateToReset(k_ROUTE_HOME);
           },
         );
@@ -608,7 +640,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     }
   }
 
-  Future<void> _formSubmit() async {
+  Future<void> formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
       try {
         if (widget.contentType == "Görüntü") {

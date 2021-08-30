@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -186,14 +187,14 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     text: "Kayıt Ol",
                     textColor: Colors.white,
                     press: () {
-                      _signUp();
+                      signUp();
                     },
                   ),
                   OrDivider(),
                   SocialIcon(
                     iconSrc: "assets/images/google_logo.png",
                     press: () {
-                      _signInWithGoogle();
+                      googleSignIn();
                     },
                   ),
                   InkWell(
@@ -253,33 +254,14 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     );
   }
 
-  void _signInWithGoogle() async {
+  void googleSignIn() async {
     var status = await authProvider.signInWithGoogle();
-    showLoadingProgressContainer();
+    CommonMethods().showLoaderDialog(context, "Google ile giriş yapılıyor");
     if (status != AuthResultStatus.successful) {
       NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        _scaffoldKey.currentState.showSnackBar(
-          new SnackBar(
-            duration: new Duration(seconds: 2),
-            content: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // new CircularProgressIndicator(),
-                Expanded(
-                  child: new Text(
-                    errorMsg,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    maxLines: 1,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
+        showSnackBar(errorMsg);
       }
     } else {
       NavigationService.instance.pop();
@@ -287,9 +269,9 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     }
   }
 
-  void _signUp() async {
+  void signUp() async {
     if (_formKey.currentState.saveAndValidate()) {
-      showLoadingProgressContainer();
+      CommonMethods().showLoaderDialog(context, "Kayıt oluşturuluyor");
       var registrationResult =
           await authProvider.createAccountWithEmailAndPassword(
         _formKey.currentState.value['email'].toString().trim(),
@@ -299,26 +281,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         NavigationService.instance.pop();
         final errorMsg =
             AuthExceptionHandler.generateExceptionMessage(registrationResult);
-        _scaffoldKey.currentState.showSnackBar(
-          new SnackBar(
-            duration: new Duration(seconds: 2),
-            content: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // new CircularProgressIndicator(),
-                Expanded(
-                  child: new Text(
-                    errorMsg,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    maxLines: 1,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
+        showSnackBar(errorMsg);
       } else {
         NavigationService.instance.pop();
         NavigationService.instance.popUntil(k_ROUTE_LANDING);
@@ -332,15 +295,30 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     }
   }
 
-  showLoadingProgressContainer() {
-    CoolAlert.show(
-      context: context,
-      type: CoolAlertType.loading,
-      text: "Lütfen Bekle",
+  void showSnackBar(String message) {
+    _scaffoldKey.currentState.showSnackBar(
+      new SnackBar(
+        duration: new Duration(seconds: 2),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                message,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
-  void navigateToLoginPage(BuildContext context) {
+  void navigateLogin(BuildContext context) {
     NavigationService.instance.navigate(k_ROUTE_LOGIN);
   }
 }

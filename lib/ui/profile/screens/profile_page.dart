@@ -4,11 +4,9 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
-import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile_body.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile_info_part.dart'
-    as ProfileInfo;
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_body.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -22,24 +20,16 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends BaseState<ProfilePage>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
-
   @override
   void initState() {
-    _controller = new TabController(length: 3, vsync: this);
     super.initState();
-
     Provider.of<EventProvider>(context, listen: false)
         .getUserEvents(authProvider.currentUser);
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AuthProvider>(context);
-    // EventRepository()
-    //     .getUserEvents(authProvider.currentUser)
-    //     .then((value) => print(value));
-
+    var authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
@@ -74,7 +64,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ProfileInfo.UserProfileInfoPart(),
+            UserProfileHeader(),
             Expanded(child: UserProfileBody()),
           ],
         ),

@@ -10,12 +10,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class UserProfileEventsPart extends StatefulWidget {
+class UserProfileEventsTab extends StatefulWidget {
   @override
-  _UserProfileEventsPartState createState() => _UserProfileEventsPartState();
+  _UserProfileEventsTabState createState() => _UserProfileEventsTabState();
 }
 
-class _UserProfileEventsPartState extends BaseState<UserProfileEventsPart> {
+class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
   @override
   void initState() {
     super.initState();
