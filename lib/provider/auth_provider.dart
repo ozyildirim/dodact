@@ -122,7 +122,7 @@ class AuthProvider extends ChangeNotifier {
         currentUser = user;
         changeState(false);
       } else {
-        logger.i('AuthStore signUp user null');
+        logger.i('AuthProvider signUp user null');
         changeState(false);
       }
     } on FirebaseAuthException catch (e) {
@@ -157,12 +157,14 @@ class AuthProvider extends ChangeNotifier {
     return authStatus;
   }
 
-  Future<void> forgotPassword(String email) async {
+  Future<bool> forgotPassword(String email) async {
     try {
       changeState(true);
       await _authRepository.forgotPassword(email);
+      return true;
     } catch (e) {
       logger.e("AuthProvider forgotPassword error." + e.toString());
+      return false;
     } finally {
       changeState(false);
     }

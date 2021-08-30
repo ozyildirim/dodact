@@ -114,7 +114,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             Container(
               color: Colors.white70,
               child: Text(
-                "Lokasyon Yedeek",
+                "Lokasyon",
                 style: TextStyle(fontSize: 18),
               ),
             ),

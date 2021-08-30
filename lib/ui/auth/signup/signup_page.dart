@@ -1,4 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
@@ -208,7 +207,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                             text: "Zaten hesabın var mı?  ",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 16,
                             ),
                           ),
                           TextSpan(
@@ -216,7 +215,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],

@@ -189,7 +189,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                       ),
                       titleText: Text(
                         "Şifremi Unuttum",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       onPressed: () {
                         _navigateToForgotPassword(context);
