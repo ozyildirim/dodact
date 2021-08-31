@@ -70,50 +70,11 @@ class UserRepository {
   //   }
   // }
 
-  @override
-  Future<UserObject> createAccountWithEmailAndPassword(
-      String email, String password) async {
-    if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.createAccountWithEmailAndPassword(
-          email, password);
-    } else {
-      UserObject _user = await _firebaseAuthService
-          .createAccountWithEmailAndPassword(email, password);
-      bool result = await _firestoreUserService.save(_user);
-      if (result) {
-        return await _firestoreUserService.readUser(_user.uid);
-      } else {
-        return null;
-      }
-    }
-  }
-
-  @override
-  Future<UserObject> signInWithEmail(String email, String password) async {
-    if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInWithEmail(email, password);
-    } else {
-      UserObject _user =
-          await _firebaseAuthService.signInWithEmail(email, password);
-      return _firestoreUserService.readUser(_user.uid);
-    }
-  }
-
   Future<UserObject> getUserByID(String userId) async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.currentUser();
     } else {
       var result = await _firebaseAuthService.getUserByID(userId);
-      return result;
-    }
-  }
-
-  @override
-  Future<void> changeEmail(String newEmail) async {
-    if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.currentUser();
-    } else {
-      var result = await _firebaseAuthService.updateEmail(newEmail);
       return result;
     }
   }

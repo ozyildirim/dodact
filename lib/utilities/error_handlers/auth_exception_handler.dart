@@ -13,6 +13,7 @@ enum AuthResultStatus {
   accountAlreadyExist,
   credentialAlreadyInUse,
   requiresRecentLogin,
+  emailNotVerified
 }
 
 class AuthExceptionHandler {
@@ -50,6 +51,9 @@ class AuthExceptionHandler {
         break;
       case "emaıl-already-ın-use":
         status = AuthResultStatus.emailAlreadyExists;
+        break;
+      case "email-not-verified":
+        status = AuthResultStatus.emailNotVerified;
         break;
       case "invalid-credential":
         status = AuthResultStatus.invalidCredential;
@@ -123,6 +127,11 @@ class AuthExceptionHandler {
       case AuthResultStatus.credentialAlreadyInUse:
         errorMessage =
             "Bu giriş kimliği başka bir hesapla ilişkilendirilmiş. Lütfen başka bir hesapla giriş yapmayı deneyin";
+        break;
+
+      case AuthResultStatus.emailNotVerified:
+        errorMessage =
+            "E-posta adresinizi doğrulamak için gönderilen e-posta adresinize gönderilen linke tıklayın.";
         break;
       case AuthResultStatus.invalidCredential:
         errorMessage =

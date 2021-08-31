@@ -123,10 +123,12 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                 width: size.width * 0.8,
                 child: SearchChoices.single(
                   //TODO: Search bar çalışmıyor, düzelt.
+
                   underline: Container(
                     height: 1.0,
                     decoration: BoxDecoration(),
                   ),
+                  isCaseSensitiveSearch: false,
                   autofocus: false,
                   items: _dropdownMenuItems,
                   hint: "Şehir",
@@ -141,6 +143,30 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                     setState(() {
                       selectedCity = value;
                     });
+                  },
+                  searchFn: (String keyword,
+                      List<DropdownMenuItem<CityListItem>> items) {
+                    List<int> ret = List<int>();
+                    if (keyword != null && items != null) {
+                      keyword.split(" ").forEach((k) {
+                        int i = 0;
+                        items.forEach((item) {
+                          if (keyword.isEmpty ||
+                              (k.isNotEmpty &&
+                                  (item.value
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(k.toLowerCase())))) {
+                            ret.add(i);
+                          }
+                          i++;
+                        });
+                      });
+                    }
+                    if (keyword.isEmpty) {
+                      ret = Iterable<int>.generate(items.length).toList();
+                    }
+                    return (ret);
                   },
                   isExpanded: true,
                   closeButton: TextButton(

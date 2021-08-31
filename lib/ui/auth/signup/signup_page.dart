@@ -23,7 +23,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool _autoValidate = false;
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
 
   FocusNode _emailFocus = FocusNode();
   FocusNode _passwordFocus = FocusNode();
@@ -88,7 +88,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       name: "email",
                       cursorColor: kPrimaryColor,
                       autofocus: false,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      autovalidateMode: _autoValidate,
                       decoration: InputDecoration(
                         icon: Icon(
                           Icons.mail,
@@ -116,7 +116,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       name: "password",
                       obscureText: true,
                       cursorColor: kPrimaryColor,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      autovalidateMode: _autoValidate,
                       decoration: InputDecoration(
                         hintText: "Parola",
                         hintStyle: TextStyle(fontFamily: kFontFamily),
@@ -138,7 +138,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   Container(
                     width: dynamicWidth(1) * 0.8,
                     child: FormBuilderCheckbox(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      autovalidateMode: _autoValidate,
                       checkColor: Colors.white,
                       activeColor: Colors.cyan,
                       name: "privacyCheckbox",
@@ -283,21 +283,20 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         showSnackBar(errorMsg);
       } else {
         NavigationService.instance.pop();
-        NavigationService.instance.popUntil(k_ROUTE_LANDING);
-        print(
-            "AFTER REGISTERING, USER INFO\n: ${authProvider.currentUser.toString()}");
+        showSnackBar("Onay linki e-posta hesabına gönderildi.", duration: 4);
+        _formKey.currentState.reset();
       }
     } else {
       setState(() {
-        _autoValidate = true;
+        _autoValidate = AutovalidateMode.always;
       });
     }
   }
 
-  void showSnackBar(String message) {
+  void showSnackBar(String message, {int duration = 2}) {
     _scaffoldKey.currentState.showSnackBar(
       new SnackBar(
-        duration: new Duration(seconds: 2),
+        duration: new Duration(seconds: duration),
         content: new Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

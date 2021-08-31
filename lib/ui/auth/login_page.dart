@@ -1,4 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
@@ -176,7 +175,8 @@ class _LogInPageState extends BaseState<LogInPage> {
                   text: "Giriş Yap",
                   textColor: Colors.white,
                   press: () {
-                    _formSubmit();
+                    FocusScope.of(context).unfocus();
+                    submitForm();
                   },
                 ),
                 Row(
@@ -219,7 +219,7 @@ class _LogInPageState extends BaseState<LogInPage> {
     );
   }
 
-  void _formSubmit() async {
+  void submitForm() async {
     if (_formKey.currentState.saveAndValidate()) {
       CommonMethods().showLoaderDialog(context, "Giriş yapılıyor");
       var status = await authProvider.signInWithEmail(

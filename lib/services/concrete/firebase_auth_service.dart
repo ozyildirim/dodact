@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
-import 'package:dodact_v1/model/interest_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/services/abstract/auth_base.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FirebaseAuthService implements AuthBase {
+class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
@@ -87,9 +85,13 @@ class FirebaseAuthService implements AuthBase {
       String email, String password) async {
     UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
+
     UserObject user = _userFromFirebase(result.user);
+
     if (user != null) {
+      await result.user.sendEmailVerification();
       return user;
+      ;
     } else {
       return null;
     }
@@ -99,11 +101,13 @@ class FirebaseAuthService implements AuthBase {
   Future<UserObject> signInWithEmail(String email, String password) async {
     UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
-    UserObject user = _userFromFirebase(result.user);
-    if (user != null) {
+
+    if (result.user.emailVerified) {
+      var user = _userFromFirebase(result.user);
       return user;
     } else {
-      return null;
+      _firebaseAuth.signOut();
+      throw FirebaseAuthException(code: 'email-not-verified');
     }
   }
 

@@ -113,22 +113,20 @@ class AuthProvider extends ChangeNotifier {
       String email, String password) async {
     try {
       authStatus = null;
-      changeState(true);
+
       var user = await _authRepository.createAccountWithEmailAndPassword(
           email, password);
-      if (user != null) {
-        logger.i("AuthProvider user signed up: " + user.uid + user.email);
+      if (user == true) {
+        logger.i("AuthProvider user signed up: ");
         authStatus = AuthResultStatus.successful;
-        currentUser = user;
-        changeState(false);
       } else {
         logger.i('AuthProvider signUp user null');
-        changeState(false);
       }
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       logger.e("AuthProvider login create account error: $e");
       authStatus = AuthExceptionHandler.handleException(e);
-      changeState(false);
+      notifyListeners();
     }
     changeState(false);
     return authStatus;
@@ -136,7 +134,6 @@ class AuthProvider extends ChangeNotifier {
 
   Future<AuthResultStatus> signInWithEmail(
       String email, String password) async {
-    changeState(true);
     authStatus = null;
     try {
       var user = await _authRepository.signInWithEmail(email, password);
@@ -144,10 +141,10 @@ class AuthProvider extends ChangeNotifier {
         logger.i("User ${user.email} logged in.");
         authStatus = AuthResultStatus.successful;
         currentUser = user;
-        changeState(false);
+        notifyListeners();
       } else {
-        logger.e("Auth Login failed.");
-        changeState(false);
+        logger.e("E-posta onayı gerekmekte.");
+        notifyListeners();
       }
     } on FirebaseAuthException catch (e) {
       logger.e("AuthProvider signInWithEmail error: " + e.toString());

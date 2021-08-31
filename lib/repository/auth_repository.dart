@@ -1,5 +1,4 @@
 import 'package:dodact_v1/locator.dart';
-import 'package:dodact_v1/model/interest_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
@@ -73,19 +72,19 @@ class AuthRepository {
   // }
 
   @override
-  Future<UserObject> createAccountWithEmailAndPassword(
+  Future<bool> createAccountWithEmailAndPassword(
       String email, String password) async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.createAccountWithEmailAndPassword(
-          email, password);
+      // return true;
     } else {
-      UserObject _user = await _firebaseAuthService
-          .createAccountWithEmailAndPassword(email, password);
-      bool result = await _firebaseUserService.save(_user);
+      var user = await _firebaseAuthService.createAccountWithEmailAndPassword(
+          email, password);
+
+      bool result = await _firebaseUserService.save(user);
       if (result) {
-        return await _firebaseUserService.readUser(_user.uid);
+        return true;
       } else {
-        return null;
+        return false;
       }
     }
   }
@@ -97,7 +96,12 @@ class AuthRepository {
     } else {
       UserObject _user =
           await _firebaseAuthService.signInWithEmail(email, password);
-      return _firebaseUserService.readUser(_user.uid);
+
+      if (_user != null) {
+        return _firebaseUserService.readUser(_user.uid);
+      } else {
+        return null;
+      }
     }
   }
 
