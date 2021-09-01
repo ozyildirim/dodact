@@ -96,4 +96,12 @@ class PostRepository implements BaseService {
       return await _firebasePostService.getTopPosts();
     }
   }
+
+  Future<List<PostModel>> getContributedPosts(String organizationName) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(List<PostModel>.empty());
+    } else {
+      return await _firebasePostService.getContributedPosts(organizationName);
+    }
+  }
 }

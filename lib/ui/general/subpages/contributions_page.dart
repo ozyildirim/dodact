@@ -1,4 +1,6 @@
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/contribution_model.dart';
 import 'package:dodact_v1/provider/contribution_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -71,11 +73,12 @@ class _ContributionsPageState extends State<ContributionsPage> {
   pageBody() {
     var size = MediaQuery.of(context).size;
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: Container(
             height: size.height * 0.6,
-            width: size.width * 0.8,
+            width: size.width * 0.7,
             child: Center(
                 child: allContributions != null
                     ? allContributions.isNotEmpty
@@ -89,18 +92,39 @@ class _ContributionsPageState extends State<ContributionsPage> {
                     : spinkit),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            color: Colors.white70,
-            height: size.height * 0.2,
-            child: Text(
-              "Yukarıdaki grafikte uygulamamız araclığıyla, sizlerin sayesinde yapılan yardımları görüntülemektesin.",
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(16.0),
+        //   child: Container(
+        //     color: Colors.white70,
+        //     height: size.height * 0.2,
+        //     child: Text(
+        //       "Yukarıdaki grafikte uygulamamız araclığıyla, sizlerin sayesinde yapılan yardımları görüntülemektesin.",
+        //       style: TextStyle(fontSize: 20),
+        //       textAlign: TextAlign.center,
+        //     ),
+        //   ),
+        // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton(
+                child: Text("T"),
+                heroTag: "2",
+                onPressed: () {
+                  NavigationService.instance.navigate(
+                      k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE,
+                      args: "TEMA");
+                }),
+            FloatingActionButton(
+                heroTag: "1",
+                child: Text("D"),
+                onPressed: () {
+                  NavigationService.instance.navigate(
+                      k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE,
+                      args: "DODACT");
+                }),
+          ],
+        )
       ],
     );
   }
@@ -115,24 +139,38 @@ class _ContributionsPageState extends State<ContributionsPage> {
         titleStyle: TextStyle(color: Colors.white, fontSize: 22),
         badgeWidget: Container(
           color: Colors.amberAccent,
-          width: 80,
-          height: 80,
-          child: Image.asset(
-            "assets/images/app/logo.png",
-            fit: BoxFit.cover,
+          width: 60,
+          height: 60,
+          child: GestureDetector(
+            onTap: () {
+              print("asdads");
+              NavigationService.instance.navigate(
+                  k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE,
+                  args: "DODACT");
+            },
+            child: Image.asset(
+              "assets/images/app/logo.png",
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
       PieChartSectionData(
           showTitle: false,
           color: Colors.green,
-          badgeWidget: Container(
-            color: Colors.amberAccent,
-            width: 80,
-            height: 80,
-            child: Image.asset(
-              "assets/images/companies/tema.jpeg",
-              fit: BoxFit.cover,
+          badgeWidget: GestureDetector(
+            onTap: () {
+              NavigationService.instance
+                  .navigate(k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE, args: "TEMA");
+            },
+            child: Container(
+              color: Colors.amberAccent,
+              width: 60,
+              height: 60,
+              child: Image.asset(
+                "assets/images/companies/tema.jpeg",
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           value: temaRatio,

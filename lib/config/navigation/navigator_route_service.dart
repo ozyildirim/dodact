@@ -14,6 +14,7 @@ import 'package:dodact_v1/ui/detail/widgets/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
+import 'package:dodact_v1/ui/general/subpages/contributed_post_list_page.dart';
 import 'package:dodact_v1/ui/general/subpages/contributions_page.dart';
 import 'package:dodact_v1/ui/group/group_detail.dart';
 import 'package:dodact_v1/ui/group/groups_page.dart';
@@ -122,6 +123,13 @@ class NavigationRouteManager {
         return _navigateToDefault(SpinnerPage(), settings);
       case k_ROUTE_CONTRIBUTIONS_PAGE:
         return _navigateToDefault(ContributionsPage(), settings);
+
+      case k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE:
+        return _navigateToDefault(
+            ContributedPostListPage(
+              organizationName: args,
+            ),
+            settings);
 
       case k_ROUTE_USER_PROFILE:
         return _navigateToDefault(ProfilePage(), settings);

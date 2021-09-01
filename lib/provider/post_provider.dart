@@ -11,12 +11,15 @@ import 'package:dodact_v1/repository/post_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 
 class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
   AuthProvider _authProvider = AuthProvider();
   GroupProvider _groupProvider = GroupProvider();
   FirebaseRequestService requestService = FirebaseRequestService();
+
+  var logger = new Logger();
 
   PostModel post;
 
@@ -243,6 +246,15 @@ class PostProvider extends ChangeNotifier {
       return null;
     } finally {
       changeState(false);
+    }
+  }
+
+  Future<void> getContributedPosts(String organizationName) async {
+    try {
+      postList = await postRepository.getContributedPosts(organizationName);
+      notifyListeners();
+    } catch (e) {
+      logger.e("PostProvider getContributedPosts error: $e");
     }
   }
 }

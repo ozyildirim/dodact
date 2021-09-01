@@ -127,4 +127,21 @@ class FirebasePostService extends BaseService<PostModel> {
 
     return topPosts;
   }
+
+  Future<List<PostModel>> getContributedPosts(String organizationName) async {
+    List<PostModel> contributedPosts = [];
+
+    // var month = DateTime.now().month;
+
+    QuerySnapshot querySnapshot = await postsRef
+        .where('chosenCompany', isEqualTo: organizationName)
+        .get();
+
+    for (DocumentSnapshot post in querySnapshot.docs) {
+      PostModel convertedPost = PostModel.fromJson(post.data());
+      contributedPosts.add(convertedPost);
+    }
+
+    return contributedPosts;
+  }
 }
