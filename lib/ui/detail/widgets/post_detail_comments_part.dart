@@ -1,11 +1,14 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/comment_model.dart';
 import 'package:dodact_v1/provider/comment_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/detail/widgets/post_comment_tile.dart';
+import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:profanity_filter/profanity_filter.dart';
 import 'package:provider/provider.dart';
 
 class PostCommentsPage extends StatefulWidget {
@@ -111,6 +114,7 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
     return Container(
       alignment: Alignment(0.0, -1.0),
       height: 70,
+      //TODO: Form builder ekle
       child: Form(
         key: _formKey,
         child: Row(
@@ -155,18 +159,29 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
   void submitComment(BuildContext context) async {
     // formKey.currentState.saveAndValidate();
     if (_formKey.currentState.validate()) {
-      var commentProvider =
-          Provider.of<CommentProvider>(context, listen: false);
-      var commentModel = CommentModel(
-        authorId: authProvider.currentUser.uid,
-        commentDate: DateTime.now(),
-        comment: commentController.text,
-      );
+      bool profanityResult =
+          ProfanityChecker.hasProfanity(commentController.text);
 
-      await commentProvider.saveComment(commentModel, widget.postId);
-      setState(() {});
-      FocusScope.of(context).unfocus();
-      commentController.text = "";
+      if (profanityResult) {
+        CommonMethods()
+            .showErrorDialog(context, "Küfür içeren bir yorum yapamazsın!");
+        FocusScope.of(context).unfocus();
+
+        commentController.clear();
+      } else {
+        var commentProvider =
+            Provider.of<CommentProvider>(context, listen: false);
+        var commentModel = CommentModel(
+          authorId: authProvider.currentUser.uid,
+          commentDate: DateTime.now(),
+          comment: commentController.text,
+        );
+
+        await commentProvider.saveComment(commentModel, widget.postId);
+        setState(() {});
+        FocusScope.of(context).unfocus();
+        commentController.text = "";
+      }
     }
   }
 

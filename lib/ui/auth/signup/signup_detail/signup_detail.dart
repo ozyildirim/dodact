@@ -7,6 +7,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -106,6 +107,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                 controller: nameController,
                 decoration: InputDecoration(border: InputBorder.none),
                 focusNode: _nameFocus,
+                validator: (value) {
+                  return ProfanityChecker.profanityValidator(value);
+                },
               ),
             ),
             SizedBox(
@@ -252,6 +256,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                     context,
                     errorText: "Bu alan boş bırakılamaz.",
                   ),
+                  (value) {
+                    return ProfanityChecker.profanityValidator(value);
+                  },
                 ]),
               ),
             ),
@@ -360,8 +367,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void submitForm() async {
-    CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
     if (_formKey.currentState.saveAndValidate()) {
+      CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
       var formUsername =
           _formKey.currentState.value['username'].toString().trim();
 
@@ -383,7 +390,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void showErrorSnackBar(String errorMessage) {
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 2),
+      duration: new Duration(seconds: 1),
       content: new Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
