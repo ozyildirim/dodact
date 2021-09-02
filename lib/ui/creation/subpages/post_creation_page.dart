@@ -10,6 +10,7 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -604,17 +605,37 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   Future<void> formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
+      bool profanityResultPostTitle =
+          ProfanityChecker.hasProfanity(postTitleController.text);
+      bool profanityResultPostDescription =
+          ProfanityChecker.hasProfanity(postDescriptionController.text);
       try {
-        if (widget.contentType == "Görüntü") {
-          var hasImage = checkEventHasImages();
-          if (hasImage) {
-            await uploadPost();
-          } else {
-            await CommonMethods()
-                .showErrorDialog(context, "Bir görüntü seçmelisin");
-          }
+        if (profanityResultPostDescription) {
+          CommonMethods()
+              .showErrorDialog(context, "Küfür içeren bir yorum yapamazsın!");
+          FocusScope.of(context).unfocus();
+
+          postDescriptionController.clear();
         } else {
-          await uploadPost();
+          if (profanityResultPostTitle) {
+            CommonMethods()
+                .showErrorDialog(context, "Küfür içeren bir yorum yapamazsın!");
+            FocusScope.of(context).unfocus();
+
+            postTitleController.clear();
+          } else {
+            if (widget.contentType == "Görüntü") {
+              var hasImage = checkEventHasImages();
+              if (hasImage) {
+                await uploadPost();
+              } else {
+                await CommonMethods()
+                    .showErrorDialog(context, "Bir görüntü seçmelisin");
+              }
+            } else {
+              await uploadPost();
+            }
+          }
         }
       } catch (e) {
         Logger().e("Form submit edilirken hata oluştu: " + e.toString());
