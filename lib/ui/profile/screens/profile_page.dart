@@ -23,6 +23,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
   @override
   void initState() {
     super.initState();
+    Provider.of<AuthProvider>(context, listen: false).getUser();
     Provider.of<EventProvider>(context, listen: false)
         .getUserEvents(authProvider.currentUser);
   }

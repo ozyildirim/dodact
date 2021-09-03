@@ -9,6 +9,7 @@ import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -216,8 +217,16 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             Theme.of(context).inputDecorationTheme.errorStyle),
                     validator: FormBuilderValidators.compose(
                       [
-                        FormBuilderValidators.required(context,
-                            errorText: "Bu alan boş bırakılamaz.")
+                        FormBuilderValidators.required(
+                          context,
+                          errorText: "Bu alan boş bırakılamaz.",
+                        ),
+                        (value) {
+                          return ProfanityChecker.profanityValidator(value);
+                        },
+                        FormBuilderValidators.minLength(context, 20,
+                            errorText: "Etkinlik başlığı en az 10 harf olmalı.",
+                            allowEmpty: false)
                       ],
                     ),
                   ),
@@ -261,8 +270,17 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             Theme.of(context).inputDecorationTheme.errorStyle),
                     validator: FormBuilderValidators.compose(
                       [
-                        FormBuilderValidators.required(context,
-                            errorText: "Bu alan boş bırakılamaz.")
+                        FormBuilderValidators.required(
+                          context,
+                          errorText: "Bu alan boş bırakılamaz.",
+                        ),
+                        (value) {
+                          return ProfanityChecker.profanityValidator(value);
+                        },
+                        FormBuilderValidators.minLength(context, 20,
+                            errorText:
+                                "Biraz daha detay verilmeli (En az 50 harf).",
+                            allowEmpty: false)
                       ],
                     ),
                   ),
@@ -372,9 +390,15 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                                       .errorStyle),
                               validator: FormBuilderValidators.compose(
                                 [
-                                  FormBuilderValidators.required(context,
-                                      errorText: "Bu alan boş bırakılamaz."),
-                                  FormBuilderValidators.url(context)
+                                  FormBuilderValidators.required(
+                                    context,
+                                    errorText: "Bu alan boş bırakılamaz.",
+                                  ),
+                                  (value) {
+                                    return ProfanityChecker.profanityValidator(
+                                        value);
+                                  },
+                                  FormBuilderValidators.url(context),
                                 ],
                               ),
                             ),

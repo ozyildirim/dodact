@@ -243,7 +243,7 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
                       ],
                     )
                   : Container(),
-              authProvider.currentUser.nameSurname != null
+              authProvider.currentUser.location != null
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -255,7 +255,7 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
                         )
                       ],
                     )
-                  : Container,
+                  : Container(),
             ],
           ),
         ),

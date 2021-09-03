@@ -7,7 +7,9 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
@@ -22,21 +24,18 @@ class UserPersonalProfileSettingsPage extends StatefulWidget {
 
 class _UserPersonalProfileSettingsPageState
     extends BaseState<UserPersonalProfileSettingsPage> {
-  TextEditingController emailController;
-  TextEditingController nameSurnameController;
-  TextEditingController usernameController;
-  TextEditingController locationController;
-  TextEditingController descriptionController;
-  TextEditingController educationController;
-  TextEditingController professionController;
+  GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
-  PickedFile _picture;
+  TextEditingController emailController;
+  TextEditingController locationController;
+
+  PickedFile picture;
   String nameSurname;
   String location;
   String education;
   String profession;
 
-  bool _isChanged = false;
+  bool isChanged = false;
 
   FocusNode nameSurnameFocus = new FocusNode();
   FocusNode usernameFocus = new FocusNode();
@@ -47,36 +46,15 @@ class _UserPersonalProfileSettingsPageState
   @override
   void initState() {
     super.initState();
-    nameSurname = authProvider.currentUser.nameSurname != null
-        ? authProvider.currentUser.nameSurname
-        : "Belirtilmemiş";
 
     location = authProvider.currentUser.location != null
         ? authProvider.currentUser.location
         : "Belirtilmemiş";
 
-    education = authProvider.currentUser.education != null
-        ? authProvider.currentUser.education
-        : "";
-
-    profession = authProvider.currentUser.profession != null
-        ? authProvider.currentUser.profession
-        : "";
-
     emailController =
         TextEditingController(text: authProvider.currentUser.email);
-    nameSurnameController = TextEditingController(text: nameSurname);
-    usernameController =
-        TextEditingController(text: authProvider.currentUser.username);
+
     locationController = TextEditingController(text: location);
-
-    descriptionController =
-        TextEditingController(text: authProvider.currentUser.userDescription);
-
-    educationController =
-        TextEditingController(text: authProvider.currentUser.education);
-    professionController =
-        TextEditingController(text: authProvider.currentUser.profession);
   }
 
   @override
@@ -94,7 +72,7 @@ class _UserPersonalProfileSettingsPageState
     final mediaQuery = MediaQuery.of(context);
     final provider = Provider.of<AuthProvider>(context);
     return Scaffold(
-      floatingActionButton: _isChanged
+      floatingActionButton: isChanged
           ? FloatingActionButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
@@ -134,169 +112,187 @@ class _UserPersonalProfileSettingsPageState
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _profilePicturePart(),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "E-posta Adresi",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: TextField(
-                      controller: emailController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.email),
+              child: FormBuilder(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    profilePicturePart(),
+                    Container(
+                      color: Colors.white70,
+                      child: Text(
+                        "E-posta Adresi",
+                        style: TextStyle(fontSize: kSettingsTitleSize),
                       ),
                     ),
-                  ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Ad - Soyad",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: TextField(
-                      focusNode: nameSurnameFocus,
-                      controller: nameSurnameController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                      onChanged: (_) {
-                        setState(() {
-                          _isChanged = true;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Kullanıcı Adı",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: TextField(
-                      focusNode: usernameFocus,
-                      controller: usernameController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                      onChanged: (_) {
-                        setState(() {
-                          _isChanged = true;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Lokasyon",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () => _showLocationPicker(),
-                    child: TextFieldContainer(
+                    TextFieldContainer(
                       width: mediaQuery.size.width * 0.9,
                       child: TextField(
-                        enabled: false,
+                        controller: emailController,
                         readOnly: true,
-                        controller: locationController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          prefixIcon: Icon(Icons.location_city),
+                          prefixIcon: Icon(Icons.email),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Hakkımda",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: TextField(
-                      maxLines: 3,
-                      focusNode: descriptionFocus,
-                      controller: descriptionController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.person),
+                    Container(
+                      color: Colors.white70,
+                      child: Text(
+                        "Ad - Soyad",
+                        style: TextStyle(fontSize: kSettingsTitleSize),
                       ),
-                      onChanged: (_) {
-                        setState(() {
-                          _isChanged = true;
-                        });
-                      },
                     ),
-                  ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Okul/Eğitim Kurumu",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: TextField(
-                      maxLines: 1,
-                      focusNode: educationFocus,
-                      controller: educationController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.school),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "nameSurname",
+                        focusNode: nameSurnameFocus,
+                        initialValue:
+                            authProvider.currentUser.nameSurname ?? "",
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        onChanged: (_) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        },
                       ),
-                      onChanged: (_) {
-                        setState(() {
-                          _isChanged = true;
-                        });
-                      },
                     ),
-                  ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Meslek",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: TextField(
-                      maxLines: 1,
-                      focusNode: professionFocus,
-                      controller: professionController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.work),
+                    Container(
+                      color: Colors.white70,
+                      child: Text(
+                        "Kullanıcı Adı",
+                        style: TextStyle(fontSize: kSettingsTitleSize),
                       ),
-                      onChanged: (_) {
-                        setState(() {
-                          _isChanged = true;
-                        });
-                      },
                     ),
-                  ),
-                ],
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "username",
+                        focusNode: usernameFocus,
+                        initialValue: authProvider.currentUser.username,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        onChanged: (_) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        },
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(
+                            context,
+                            errorText: "Bu alan boş bırakılamaz.",
+                          ),
+                          (value) {
+                            return ProfanityChecker.profanityValidator(value);
+                          },
+                        ]),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white70,
+                      child: Text(
+                        "Lokasyon",
+                        style: TextStyle(fontSize: kSettingsTitleSize),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => _showLocationPicker(),
+                      child: TextFieldContainer(
+                        width: mediaQuery.size.width * 0.9,
+                        child: TextField(
+                          enabled: false,
+                          readOnly: true,
+                          controller: locationController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.location_city),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white70,
+                      child: Text(
+                        "Hakkımda",
+                        style: TextStyle(fontSize: kSettingsTitleSize),
+                      ),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "userDescription",
+                        maxLines: 3,
+                        focusNode: descriptionFocus,
+                        initialValue: authProvider.currentUser.userDescription,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        onChanged: (_) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white70,
+                      child: Text(
+                        "Okul/Eğitim Kurumu",
+                        style: TextStyle(fontSize: kSettingsTitleSize),
+                      ),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "education",
+                        maxLines: 1,
+                        focusNode: educationFocus,
+                        initialValue: authProvider.currentUser.education,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.school),
+                        ),
+                        onChanged: (_) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white70,
+                      child: Text(
+                        "Meslek",
+                        style: TextStyle(fontSize: kSettingsTitleSize),
+                      ),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "profession",
+                        maxLines: 1,
+                        focusNode: professionFocus,
+                        initialValue: authProvider.currentUser.profession,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.work),
+                        ),
+                        onChanged: (_) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -305,7 +301,7 @@ class _UserPersonalProfileSettingsPageState
     );
   }
 
-  Widget _profilePicturePart() {
+  Widget profilePicturePart() {
     return Container(
       height: 250,
       width: double.infinity,
@@ -327,7 +323,7 @@ class _UserPersonalProfileSettingsPageState
             left: 160,
             child: InkWell(
               onTap: () {
-                _showPickerOptions();
+                showPickerOptions();
               },
               child: GFBadge(
                 size: 60,
@@ -342,7 +338,7 @@ class _UserPersonalProfileSettingsPageState
     );
   }
 
-  Future<void> _showPickerOptions() {
+  Future<void> showPickerOptions() {
     return showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -374,10 +370,10 @@ class _UserPersonalProfileSettingsPageState
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
-      _picture = newImage;
+      picture = newImage;
       NavigationService.instance.pop();
     });
-    if (_picture != null) {
+    if (picture != null) {
       _updateProfilePhoto();
     } else {
       print("Kullanıcı fotoğraf seçmekten vazgeçti.");
@@ -388,10 +384,10 @@ class _UserPersonalProfileSettingsPageState
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     setState(() {
-      _picture = newImage;
+      picture = newImage;
       NavigationService.instance.pop();
     });
-    if (_picture != null) {
+    if (picture != null) {
       _updateProfilePhoto();
     } else {
       print("Kullanıcı fotoğraf seçmekten vazgeçti.");
@@ -401,7 +397,7 @@ class _UserPersonalProfileSettingsPageState
   void _updateProfilePhoto() async {
     CommonMethods().showLoaderDialog(context, "Fotoğrafınız değiştiriliyor.");
     await authProvider
-        .updateCurrentUserProfilePicture(File(_picture.path))
+        .updateCurrentUserProfilePicture(File(picture.path))
         .then((url) {
       NavigationService.instance.pop();
       debugPrint("Picture uploaded.");
@@ -421,7 +417,7 @@ class _UserPersonalProfileSettingsPageState
         setState(() {
           location = value;
           locationController.text = value;
-          _isChanged = true;
+          isChanged = true;
         });
       },
     );
@@ -429,19 +425,27 @@ class _UserPersonalProfileSettingsPageState
 
   Future<void> updateUser() async {
     try {
-      CommonMethods().showLoaderDialog(context, "Değişiklikler kaydediliyor.");
-      await authProvider.updateCurrentUser({
-        'location': locationController.text,
-        'username': usernameController.text,
-        'nameSurname': nameSurnameController.text,
-        'userDescription': descriptionController.text,
-        'education': educationController.text,
-        'profession': professionController.text,
-      });
-      NavigationService.instance.pop();
-      setState(() {
-        _isChanged = false;
-      });
+      if (formKey.currentState.saveAndValidate()) {
+        CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
+        await authProvider.updateCurrentUser({
+          'location': locationController.text,
+          'username': formKey.currentState.value['username'].toString().trim(),
+          'nameSurname': formKey.currentState.value['nameSurname'].toString(),
+          'userDescription':
+              formKey.currentState.value['userDescription'].toString().trim(),
+          'education':
+              formKey.currentState.value['education'].toString().trim(),
+          'profession':
+              formKey.currentState.value['profession'].toString().trim(),
+        });
+        NavigationService.instance.pop();
+        setState(() {
+          isChanged = false;
+        });
+      } else {
+        CommonMethods().showErrorDialog(
+            context, "Lütfen tüm alanları uygun bir şekilde doldur");
+      }
     } catch (e) {
       CommonMethods().showErrorDialog(
           context, "Değişiklikler kaydedilirken bir hata oluştu");

@@ -104,27 +104,6 @@ class _ContributionsPageState extends State<ContributionsPage> {
         //     ),
         //   ),
         // ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FloatingActionButton(
-                child: Text("T"),
-                heroTag: "2",
-                onPressed: () {
-                  NavigationService.instance.navigate(
-                      k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE,
-                      args: "TEMA");
-                }),
-            FloatingActionButton(
-                heroTag: "1",
-                child: Text("D"),
-                onPressed: () {
-                  NavigationService.instance.navigate(
-                      k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE,
-                      args: "DODACT");
-                }),
-          ],
-        )
       ],
     );
   }
@@ -132,7 +111,6 @@ class _ContributionsPageState extends State<ContributionsPage> {
   buildSections() {
     sections = [
       PieChartSectionData(
-        title: "Dodact",
         color: Colors.black,
         showTitle: true,
         value: dodactRatio,

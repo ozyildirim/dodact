@@ -194,8 +194,16 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                           Theme.of(context).inputDecorationTheme.errorStyle),
                   validator: FormBuilderValidators.compose(
                     [
-                      FormBuilderValidators.required(context,
-                          errorText: "Bu alan boş bırakılamaz.")
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      ),
+                      (value) {
+                        return ProfanityChecker.profanityValidator(value);
+                      },
+                      FormBuilderValidators.minLength(context, 10,
+                          errorText: "İçerik adı en az 10 harften oluşmalı.",
+                          allowEmpty: false)
                     ],
                   ),
                 ),
@@ -229,8 +237,17 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                           Theme.of(context).inputDecorationTheme.errorStyle),
                   validator: FormBuilderValidators.compose(
                     [
-                      FormBuilderValidators.required(context,
-                          errorText: "Bu alan boş bırakılamaz.")
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      ),
+                      (value) {
+                        return ProfanityChecker.profanityValidator(value);
+                      },
+                      FormBuilderValidators.minLength(context, 20,
+                          errorText:
+                              "Biraz daha detay verilmeli (En az 20 harf).",
+                          allowEmpty: false)
                     ],
                   ),
                 ),
@@ -260,10 +277,17 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                             errorStyle: Theme.of(context)
                                 .inputDecorationTheme
                                 .errorStyle),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context,
-                              errorText: "Bu alan boş bırakılamaz."),
-                        ]),
+                        validator: FormBuilderValidators.compose(
+                          [
+                            FormBuilderValidators.required(
+                              context,
+                              errorText: "Bu alan boş bırakılamaz.",
+                            ),
+                            (value) {
+                              return ProfanityChecker.profanityValidator(value);
+                            },
+                          ],
+                        ),
                       ),
                     )
                   : Container(),
@@ -605,37 +629,17 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   Future<void> formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
-      bool profanityResultPostTitle =
-          ProfanityChecker.hasProfanity(postTitleController.text);
-      bool profanityResultPostDescription =
-          ProfanityChecker.hasProfanity(postDescriptionController.text);
       try {
-        if (profanityResultPostDescription) {
-          CommonMethods()
-              .showErrorDialog(context, "Küfür içeren bir yorum yapamazsın!");
-          FocusScope.of(context).unfocus();
-
-          postDescriptionController.clear();
-        } else {
-          if (profanityResultPostTitle) {
-            CommonMethods()
-                .showErrorDialog(context, "Küfür içeren bir yorum yapamazsın!");
-            FocusScope.of(context).unfocus();
-
-            postTitleController.clear();
+        if (widget.contentType == "Görüntü") {
+          var hasImage = checkEventHasImages();
+          if (hasImage) {
+            await uploadPost();
           } else {
-            if (widget.contentType == "Görüntü") {
-              var hasImage = checkEventHasImages();
-              if (hasImage) {
-                await uploadPost();
-              } else {
-                await CommonMethods()
-                    .showErrorDialog(context, "Bir görüntü seçmelisin");
-              }
-            } else {
-              await uploadPost();
-            }
+            await CommonMethods()
+                .showErrorDialog(context, "Bir görüntü seçmelisin");
           }
+        } else {
+          await uploadPost();
         }
       } catch (e) {
         Logger().e("Form submit edilirken hata oluştu: " + e.toString());
