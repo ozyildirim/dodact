@@ -139,7 +139,8 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
 
   buildTabViews() {
     return Container(
-      height: 300,
+      //TODO: Boyutu ayarla
+      height: dynamicHeight(0.4),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TabBarView(

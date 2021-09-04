@@ -53,11 +53,13 @@ class FirebasePostService extends BaseService<PostModel> {
   }
 
   Future<List<PostModel>> getGroupPosts(GroupModel group) async {
-    //Get post IDs from user object
-    List<String> postIDs = group.groupPostIDs;
+    List<String> postIDs = group.groupPosts;
+
     List<PostModel> allGroupPosts = [];
 
     print("Group Post IDs from  group object:" + postIDs.toString());
+
+    print(group.groupPosts);
     if (postIDs != null) {
       if (postIDs.isNotEmpty) {
         for (String post in postIDs) {

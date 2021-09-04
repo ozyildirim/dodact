@@ -9,7 +9,7 @@ class GroupModel {
   String groupDescription;
   String groupProfilePicture;
   List<String> groupPhotos;
-  List<String> groupPostIDs;
+
   List<String> groupMemberList;
   DateTime creationDate;
   List<String> eventIDs;
@@ -24,7 +24,6 @@ class GroupModel {
     this.groupDescription,
     this.groupProfilePicture,
     this.groupPhotos,
-    this.groupPostIDs,
     this.groupMemberList,
     this.creationDate,
     this.eventIDs,
@@ -39,7 +38,7 @@ class GroupModel {
     groupDescription = json['groupDescription'];
     groupProfilePicture = json['groupProfilePicture'];
     groupPhotos = json['groupPhotos']?.cast<String>();
-    groupPostIDs = json['groupPostIDs']?.cast<String>();
+    groupPosts = json['groupPosts']?.cast<String>();
     groupMemberList = json['groupMemberList']?.cast<String>();
     creationDate = (json['creationDate'] as Timestamp).toDate();
     eventIDs = json['eventIDs'];
@@ -55,7 +54,7 @@ class GroupModel {
     data['groupDescription'] = this.groupDescription;
     data['groupProfilePicture'] = this.groupProfilePicture;
     data['groupPhotos'] = this.groupPhotos;
-    data['groupPostIDs'] = this.groupPostIDs;
+    data['groupPosts'] = this.groupPosts;
     data['groupMemberList'] = this.groupMemberList;
     data['creationDate'] = FieldValue.serverTimestamp();
     data['eventIDs'] = this.eventIDs;
@@ -66,6 +65,6 @@ class GroupModel {
 
   @override
   String toString() {
-    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupPostIDs: $groupPostIDs, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
+    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
   }
 }
