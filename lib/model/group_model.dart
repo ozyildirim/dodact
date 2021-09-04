@@ -12,7 +12,7 @@ class GroupModel {
 
   List<String> groupMemberList;
   DateTime creationDate;
-  List<String> eventIDs;
+  List<String> events;
   String groupLocation;
   List<String> groupPosts;
 
@@ -26,7 +26,7 @@ class GroupModel {
     this.groupPhotos,
     this.groupMemberList,
     this.creationDate,
-    this.eventIDs,
+    this.events,
     this.groupLocation,
   });
 
@@ -41,7 +41,7 @@ class GroupModel {
     groupPosts = json['groupPosts']?.cast<String>();
     groupMemberList = json['groupMemberList']?.cast<String>();
     creationDate = (json['creationDate'] as Timestamp).toDate();
-    eventIDs = json['eventIDs'];
+    events = json['events']?.cast<String>();
     groupLocation = json['groupLocation'];
   }
 
@@ -57,7 +57,7 @@ class GroupModel {
     data['groupPosts'] = this.groupPosts;
     data['groupMemberList'] = this.groupMemberList;
     data['creationDate'] = FieldValue.serverTimestamp();
-    data['eventIDs'] = this.eventIDs;
+    data['events'] = this.events;
     data['groupLocation'] = this.groupLocation;
 
     return data;
@@ -65,6 +65,6 @@ class GroupModel {
 
   @override
   String toString() {
-    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
+    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupMemberList: $groupMemberList, creationDate: $creationDate, events: $events}';
   }
 }
