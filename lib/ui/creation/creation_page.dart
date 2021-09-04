@@ -1,7 +1,7 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 // ignore: must_be_immutable
 class CreationPage extends StatefulWidget {
@@ -14,138 +14,6 @@ class _CreationPageState extends State<CreationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final SimpleDialog postTypeDialog = SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Text('İçerik Türü'),
-      children: [
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.image,
-          color: Colors.orange,
-          text: 'Görüntü',
-          onPressed: () {
-            Navigator.pop(context, "Görüntü");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.video,
-          color: Colors.green,
-          text: 'Video',
-          onPressed: () {
-            Navigator.pop(context, "Video");
-          },
-        ),
-        SimpleDialogItem(
-          icon: Icons.audiotrack,
-          color: Colors.grey,
-          text: 'Ses',
-          onPressed: () {
-            Navigator.pop(context, "Ses");
-          },
-        ),
-      ],
-    );
-
-    final SimpleDialog categoryDialog = SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Text('Kategori'),
-      children: [
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.theater_masks,
-          color: Colors.orange,
-          text: 'Tiyatro',
-          onPressed: () {
-            Navigator.pop(context, "Tiyatro");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.palette,
-          color: Colors.green,
-          text: 'Resim',
-          onPressed: () {
-            Navigator.pop(context, "Resim");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.music,
-          color: Colors.grey,
-          text: 'Müzik',
-          onPressed: () {
-            Navigator.pop(context, "Müzik");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.user_ninja,
-          color: Colors.grey,
-          text: 'Dans',
-          onPressed: () {
-            Navigator.pop(context, "Dans");
-          },
-        ),
-      ],
-    );
-
-    final SimpleDialog eventTypeDialog = SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Text('Etkinlik Türü'),
-      children: [
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.theater_masks,
-          color: Colors.orange,
-          text: 'Açık Hava Etkinliği',
-          onPressed: () {
-            Navigator.pop(context, "Açık Hava Etkinliği");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.home,
-          color: Colors.green,
-          text: 'Kapalı Mekan Etkinliği',
-          onPressed: () {
-            Navigator.pop(context, "Kapalı Mekan Etkinliği");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.shapes,
-          color: Colors.grey,
-          text: 'Workshop',
-          onPressed: () {
-            Navigator.pop(context, "Workshop");
-          },
-        ),
-      ],
-    );
-
-    final SimpleDialog eventPlatformDialog = SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Text('Platform'),
-      children: [
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.city,
-          color: Colors.orange,
-          text: 'Fiziksel Etkinlik',
-          onPressed: () {
-            Navigator.pop(context, "Fiziksel Etkinlik");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.globe,
-          color: Colors.green,
-          text: 'Online Etkinlik',
-          onPressed: () {
-            Navigator.pop(context, "Online Etkinlik");
-          },
-        ),
-      ],
-    );
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -178,18 +46,18 @@ class _CreationPageState extends State<CreationPage> {
                   var eventCategoryData = await showDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) => categoryDialog);
+                      builder: (context) => categoryDialog(context));
 
                   if (eventCategoryData != null) {
                     var eventTypeData = await showDialog(
                         barrierDismissible: true,
                         context: context,
-                        builder: (context) => eventTypeDialog);
+                        builder: (context) => eventTypeDialog(context));
                     if (eventTypeData != null) {
                       var eventPlatformData = await showDialog(
                           barrierDismissible: true,
                           context: context,
-                          builder: (context) => eventPlatformDialog);
+                          builder: (context) => eventPlatformDialog(context));
                       if (eventPlatformData != null) {
                         NavigationService.instance
                             .navigate(k_ROUTE_CREATE_EVENT_PAGE, args: [
@@ -213,13 +81,13 @@ class _CreationPageState extends State<CreationPage> {
                   var postCategoryData = await showDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) => categoryDialog);
+                      builder: (context) => categoryDialog(context));
 
                   if (postCategoryData != null) {
                     var postTypeData = await showDialog(
                         barrierDismissible: true,
                         context: context,
-                        builder: (context) => postTypeDialog);
+                        builder: (context) => postTypeDialog(context));
                     if (postTypeData != null) {
                       NavigationService.instance.navigate(
                           k_ROUTE_CREATE_POST_PAGE,
@@ -231,35 +99,6 @@ class _CreationPageState extends State<CreationPage> {
                     AssetImage('assets/images/creation/icerik_olustur.jpg'),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SimpleDialogItem extends StatelessWidget {
-  const SimpleDialogItem(
-      {Key key, this.icon, this.color, this.text, this.onPressed})
-      : super(key: key);
-
-  final IconData icon;
-  final Color color;
-  final String text;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialogOption(
-      onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, size: 36.0, color: color),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 16.0),
-            child: Text(text),
           ),
         ],
       ),

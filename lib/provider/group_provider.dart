@@ -16,6 +16,7 @@ class GroupProvider extends ChangeNotifier {
   List<PostModel> groupPosts;
   List<UserObject> groupMembers;
   List<EventModel> groupEvents;
+  List<GroupModel> userGroups;
 
   List<GroupModel> groupList;
   bool isLoading = false;
@@ -135,12 +136,24 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
+  Future<List<GroupModel>> getUserGroups(List<String> groupIdList) async {
+    try {
+      Future.forEach(groupIdList, (element) async {
+        var group = await _groupRepository.getDetail(element);
+        userGroups.add(group);
+      });
+      notifyListeners();
+    } catch (e) {
+      logger.e("GroupProvider getUserGroups error: " + e.toString());
+    }
+  }
+
   Future<GroupModel> getGroupDetail(String groupId, {bool isNotify}) async {
     try {
       var fetchedGroup = await _groupRepository.getDetail(groupId);
       group = fetchedGroup;
       notifyListeners();
-      return group;
+      return fetchedGroup;
     } catch (e) {
       print("GroupProvider getDetail error: " + e.toString());
       notifyListeners();

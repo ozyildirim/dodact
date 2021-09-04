@@ -12,17 +12,16 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
-import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:dodact_v1/ui/detail/widgets/audio_player/audio_player_widget.dart';
 import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PostDetail extends StatefulWidget {
   final String postId;
@@ -401,43 +400,10 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> reportPost(String postId) async {
-    final SimpleDialog reportReasonDialog = SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Text('Bildirim Sebebin'),
-      children: [
-        SimpleDialogItem(
-          text: 'Telif İhlali İçeriyor ',
-          onPressed: () {
-            Navigator.pop(context, "Telif");
-          },
-        ),
-        SimpleDialogItem(
-          text: 'Nefret Söylemi',
-          onPressed: () {
-            Navigator.pop(context, "Nefret Söylemi");
-          },
-        ),
-        SimpleDialogItem(
-          text: 'Çalıntı Paylaşım',
-          onPressed: () {
-            Navigator.pop(context, "Çalıntı");
-          },
-        ),
-        SimpleDialogItem(
-          text: 'Uygunsuz',
-          onPressed: () {
-            Navigator.pop(context, "Uygunsuz");
-          },
-        ),
-      ],
-    );
-
     var reportReason = await showDialog(
       barrierDismissible: true,
       context: context,
-      builder: (context) => reportReasonDialog,
+      builder: (context) => reportReasonDialog(context),
     );
 
     if (reportReason != null) {

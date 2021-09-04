@@ -9,7 +9,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
-import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +51,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   RewardedAd rewardedAd;
 
+  List<CreatorDialogItem> creatorList;
+
   TextEditingController postTitleController;
   TextEditingController postDescriptionController;
   TextEditingController postContentUrlController;
@@ -66,12 +68,28 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   List<Map<String, dynamic>> categoryMap;
 
+  // buildCreatorList() async {
+  //   GroupProvider groupProvider =
+  //       Provider.of<GroupProvider>(context, listen: false);
+  //   List<CreatorDialogItem> creators = [];
+
+  //   creators = groups
+  //       .map((group) => CreatorDialogItem(
+  //           accountType: "Group",
+  //           id: group.groupId,
+  //           name: group.groupName,
+  //           profilePicture: group.groupProfilePicture))
+  //       .toList();
+  // }
+
   @override
   void initState() {
     prepareAd();
     print("İçerik Türü: " + widget.contentType);
     print("İçerik Kategorisi: " + widget.postCategory);
     super.initState();
+    // buildCreatorList();
+
     postProvider = Provider.of<PostProvider>(context, listen: false);
 
     postTitleController = new TextEditingController();
@@ -160,167 +178,162 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       Size size, BuildContext context, PostProvider provider) {
     return Expanded(
       flex: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FormBuilder(
-          key: _formKey,
-          child: ListView(
-            children: [
-              Container(
-                color: Colors.white70,
-                child: Text("İçerik Başlığı",
-                    style:
-                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              ),
-              SizedBox(height: 4),
-              TextFieldContainer(
-                child: FormBuilderTextField(
-                  textInputAction: TextInputAction.next,
-                  focusNode: postTitleFocus,
-                  controller: postTitleController,
-                  name: "postTitle",
-                  autofocus: false,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  keyboardType: TextInputType.text,
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.people_alt_sharp,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "İçerik Başlığı",
-                      border: InputBorder.none,
-                      errorStyle:
-                          Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(
-                        context,
-                        errorText: "Bu alan boş bırakılamaz.",
-                      ),
-                      (value) {
-                        return ProfanityChecker.profanityValidator(value);
-                      },
-                      FormBuilderValidators.minLength(context, 10,
-                          errorText: "İçerik adı en az 10 harften oluşmalı.",
-                          allowEmpty: false)
-                    ],
-                  ),
+      child: FormBuilder(
+        key: _formKey,
+        child: ListView(
+          children: [
+            Container(
+              color: Colors.white70,
+              child: Text("İçerik Başlığı",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            ),
+            SizedBox(height: 4),
+            TextFieldContainer(
+              child: FormBuilderTextField(
+                textInputAction: TextInputAction.next,
+                focusNode: postTitleFocus,
+                controller: postTitleController,
+                name: "postTitle",
+                autofocus: false,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                keyboardType: TextInputType.text,
+                cursorColor: kPrimaryColor,
+                decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.people_alt_sharp,
+                      color: kPrimaryColor,
+                    ),
+                    hintText: "İçerik Başlığı",
+                    border: InputBorder.none,
+                    errorStyle:
+                        Theme.of(context).inputDecorationTheme.errorStyle),
+                validator: FormBuilderValidators.compose(
+                  [
+                    FormBuilderValidators.required(
+                      context,
+                      errorText: "Bu alan boş bırakılamaz.",
+                    ),
+                    (value) {
+                      return ProfanityChecker.profanityValidator(value);
+                    },
+                    FormBuilderValidators.minLength(context, 10,
+                        errorText: "İçerik adı en az 10 harften oluşmalı.",
+                        allowEmpty: false)
+                  ],
                 ),
               ),
-              SizedBox(height: 6),
-              Container(
-                color: Colors.white60,
-                child: Text("İçerik Açıklaması",
-                    style:
-                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              ),
-              SizedBox(height: 4),
-              TextFieldContainer(
-                child: FormBuilderTextField(
-                  textInputAction: TextInputAction.next,
-                  focusNode: postDescriptionFocus,
-                  controller: postDescriptionController,
-                  name: "postDescription",
-                  maxLines: 3,
-                  autofocus: false,
-                  keyboardType: TextInputType.text,
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.people_alt_sharp,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "İçerik Açıklaması",
-                      border: InputBorder.none,
-                      errorStyle:
-                          Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(
-                        context,
-                        errorText: "Bu alan boş bırakılamaz.",
-                      ),
-                      (value) {
-                        return ProfanityChecker.profanityValidator(value);
-                      },
-                      FormBuilderValidators.minLength(context, 20,
-                          errorText:
-                              "Biraz daha detay verilmeli (En az 20 harf).",
-                          allowEmpty: false)
-                    ],
-                  ),
+            ),
+            SizedBox(height: 6),
+            Container(
+              color: Colors.white60,
+              child: Text("İçerik Açıklaması",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            ),
+            SizedBox(height: 4),
+            TextFieldContainer(
+              child: FormBuilderTextField(
+                textInputAction: TextInputAction.next,
+                focusNode: postDescriptionFocus,
+                controller: postDescriptionController,
+                name: "postDescription",
+                maxLines: 3,
+                autofocus: false,
+                keyboardType: TextInputType.text,
+                cursorColor: kPrimaryColor,
+                decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.people_alt_sharp,
+                      color: kPrimaryColor,
+                    ),
+                    hintText: "İçerik Açıklaması",
+                    border: InputBorder.none,
+                    errorStyle:
+                        Theme.of(context).inputDecorationTheme.errorStyle),
+                validator: FormBuilderValidators.compose(
+                  [
+                    FormBuilderValidators.required(
+                      context,
+                      errorText: "Bu alan boş bırakılamaz.",
+                    ),
+                    (value) {
+                      return ProfanityChecker.profanityValidator(value);
+                    },
+                    FormBuilderValidators.minLength(context, 20,
+                        errorText:
+                            "Biraz daha detay verilmeli (En az 20 harf).",
+                        allowEmpty: false)
+                  ],
                 ),
               ),
-              widget.contentType == "Video"
-                  ? TextFieldContainer(
-                      child: FormBuilderTextField(
-                        textInputAction: TextInputAction.done,
-                        focusNode: postContentUrlFocus,
-                        name: "youtubeLink",
-                        maxLines: 1,
-                        autofocus: false,
-                        keyboardType: TextInputType.text,
-                        cursorColor: kPrimaryColor,
-                        controller: postContentUrlController,
-                        onEditingComplete: () async {
-                          // await checkThumbnailAvailable();
-                          FocusScope.of(context).unfocus();
-                        },
-                        decoration: InputDecoration(
-                            icon: Icon(
-                              FontAwesome5Brands.youtube,
-                              color: kPrimaryColor,
-                            ),
-                            hintText: "Youtube Linki",
-                            border: InputBorder.none,
-                            errorStyle: Theme.of(context)
-                                .inputDecorationTheme
-                                .errorStyle),
-                        validator: FormBuilderValidators.compose(
-                          [
-                            FormBuilderValidators.required(
-                              context,
-                              errorText: "Bu alan boş bırakılamaz.",
-                            ),
-                            (value) {
-                              return ProfanityChecker.profanityValidator(value);
-                            },
-                          ],
-                        ),
+            ),
+            widget.contentType == "Video"
+                ? TextFieldContainer(
+                    child: FormBuilderTextField(
+                      textInputAction: TextInputAction.done,
+                      focusNode: postContentUrlFocus,
+                      name: "youtubeLink",
+                      maxLines: 1,
+                      autofocus: false,
+                      keyboardType: TextInputType.text,
+                      cursorColor: kPrimaryColor,
+                      controller: postContentUrlController,
+                      onEditingComplete: () async {
+                        // await checkThumbnailAvailable();
+                        FocusScope.of(context).unfocus();
+                      },
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            FontAwesome5Brands.youtube,
+                            color: kPrimaryColor,
+                          ),
+                          hintText: "Youtube Linki",
+                          border: InputBorder.none,
+                          errorStyle: Theme.of(context)
+                              .inputDecorationTheme
+                              .errorStyle),
+                      validator: FormBuilderValidators.compose(
+                        [
+                          FormBuilderValidators.required(
+                            context,
+                            errorText: "Bu alan boş bırakılamaz.",
+                          ),
+                          (value) {
+                            return ProfanityChecker.profanityValidator(value);
+                          },
+                        ],
                       ),
-                    )
-                  : Container(),
-              TextFieldContainer(
-                child: FormBuilderCheckbox(
-                  focusNode: checkboxFocus,
-                  activeColor: Colors.white,
-                  checkColor: Colors.blue,
-                  name: "donation",
-                  initialValue: isHelpChecked,
-                  title: Text(
-                    "Bu paylaşımım ile kurumlara yardım etmek istiyorum",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  onChanged: (value) async {
-                    if (value == true) {
-                      await makeContribution();
+                    ),
+                  )
+                : Container(),
+            TextFieldContainer(
+              child: FormBuilderCheckbox(
+                focusNode: checkboxFocus,
+                activeColor: Colors.white,
+                checkColor: Colors.blue,
+                name: "donation",
+                initialValue: isHelpChecked,
+                title: Text(
+                  "Bu paylaşımım ile kurumlara yardım etmek istiyorum",
+                  style: TextStyle(fontSize: 16),
+                ),
+                onChanged: (value) async {
+                  if (value == true) {
+                    await makeContribution();
 
-                      if (chosenCompany != null) {
-                        setState(() {
-                          isHelpChecked = value;
-                        });
-                      }
-                    } else {
+                    if (chosenCompany != null) {
                       setState(() {
                         isHelpChecked = value;
                       });
                     }
-                  },
-                ),
-              )
-            ],
-          ),
+                  } else {
+                    setState(() {
+                      isHelpChecked = value;
+                    });
+                  }
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -444,35 +457,10 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Future<void> makeContribution() async {
-    final SimpleDialog contributionCategoryDialog = SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Text('Hangi kuruma yardım etmek istiyorsunuz?'),
-      children: [
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.image,
-          color: Colors.orange,
-          text: 'TEMA',
-          onPressed: () {
-            Navigator.pop(context, "TEMA");
-          },
-        ),
-        SimpleDialogItem(
-          icon: FontAwesome5Solid.video,
-          color: Colors.green,
-          text: 'DODACT',
-          onPressed: () {
-            Navigator.pop(context, "DODACT");
-          },
-        ),
-      ],
-    );
-
     var contributionDialog = await showDialog(
       barrierDismissible: true,
       context: context,
-      builder: (context) => contributionCategoryDialog,
+      builder: (context) => contributionCategoryDialog(context),
     );
 
     if (contributionDialog != null) {
@@ -680,4 +668,14 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           'Hey! Ben Dodact ile sanatımı ve kendimi yeniden keşfediyorum! Sen de bu platforma katılmak istemez misin? https://www.dodact.com');
     }
   }
+}
+
+class CreatorDialogItem {
+  String name;
+  String id;
+  String accountType;
+  String profilePicture;
+
+  CreatorDialogItem(
+      {String name, String id, String accountType, String profilePicture});
 }

@@ -143,7 +143,7 @@ class UserObject {
     telephoneNumber = doc.data()['telephoneNumber'] ?? '';
     profilePictureURL = doc.data()['profilePictureURL'] ?? '';
     experiencePoint = doc.data()['experiencePoint'] ?? '';
-    groupIDs = doc.data()['groupIDs'] ?? [];
+    groupIDs = doc.data()['groupIDs']?.cast<String>() ?? [];
     ownedGroupIDs = doc.data()['ownedGroupIDs'] ?? [];
     postIDs = doc.data()['postIDs']?.cast<String>() ?? [];
     eventIDs = doc.data()['eventIDs']?.cast<String>() ?? [];
