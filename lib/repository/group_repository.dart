@@ -8,6 +8,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/firebase_event_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_group_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_post_service.dart';
+import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 
 enum AppMode { DEBUG, RELEASE }
 
@@ -15,6 +16,7 @@ class GroupRepository implements BaseService {
   FirebasePostService _firebasePostService = locator<FirebasePostService>();
   FirebaseGroupService _firebaseGroupService = locator<FirebaseGroupService>();
   FirebaseEventService _firebaseEventService = locator<FirebaseEventService>();
+  FirebaseUserService _firebaseUserService = locator<FirebaseUserService>();
 
   AppMode appMode = AppMode.RELEASE;
 
@@ -87,9 +89,8 @@ class GroupRepository implements BaseService {
   Future<List<UserObject>> getGroupMembers(GroupModel group) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
-    } else {
-      return await _firebaseGroupService.getGroupMembers(group);
     }
+    return await _firebaseUserService.getGroupMembers(group);
   }
 
   Future<bool> addGroupMember(String userID, String groupID) async {

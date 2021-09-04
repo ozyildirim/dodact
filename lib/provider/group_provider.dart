@@ -6,13 +6,21 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/group_repository.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 
 class GroupProvider extends ChangeNotifier {
   GroupRepository _groupRepository = locator<GroupRepository>();
 
   GroupModel group;
+
+  List<PostModel> groupPosts;
+  List<UserObject> groupMembers;
+  List<EventModel> groupEvents;
+
   List<GroupModel> groupList;
   bool isLoading = false;
+
+  var logger = new Logger();
 
   changeState(bool _isLoading, {bool isNotify}) {
     isLoading = _isLoading;
@@ -140,42 +148,33 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<PostModel>> getGroupPosts(GroupModel group,
-      {bool isNotify}) async {
+  Future<void> getGroupPosts(GroupModel group) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository.getGroupPosts(group);
+      groupPosts = await _groupRepository.getGroupPosts(group);
+      notifyListeners();
     } catch (e) {
-      print("GroupProvider getGroupPosts error: " + e.toString());
+      logger.e("GroupProvider getGroupPosts error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group,
-      {bool isNotify}) async {
+  Future<void> getGroupEvents(GroupModel group) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository.getGroupEvents(group);
+      groupEvents = await _groupRepository.getGroupEvents(group);
+      notifyListeners();
     } catch (e) {
-      print("GroupProvider getGroupEvents error: " + e.toString());
+      logger.e("GroupProvider getGroupEvents error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
-  Future<List<UserObject>> getGroupMembers(GroupModel group,
-      {bool isNotify}) async {
+  Future<void> getGroupMembers(GroupModel group) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository.getGroupMembers(group);
+      groupMembers = await _groupRepository.getGroupMembers(group);
+      notifyListeners();
     } catch (e) {
-      print("GroupProvider getGroupMembers error: " + e.toString());
+      logger.e("GroupProvider getGroupMembers error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 

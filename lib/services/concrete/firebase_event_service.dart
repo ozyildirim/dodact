@@ -49,15 +49,19 @@ class FirebaseEventService extends BaseService<EventModel> {
 
   Future<List<EventModel>> getGroupEvents(GroupModel group) async {
     //Get post IDs from user object
-    List<dynamic> eventIDs = group.eventIDs;
+    List<String> eventIDs = group.eventIDs;
     List<EventModel> allGroupEvents = [];
 
     print("Event IDs from group object:" + eventIDs.toString());
-    for (dynamic event in eventIDs) {
-      DocumentSnapshot documentSnapshot =
-          await eventsRef.doc(event.toString()).get();
-      EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
-      allGroupEvents.add(singleEvent);
+    if (eventIDs != null) {
+      if (eventIDs.isNotEmpty) {
+        for (String event in eventIDs) {
+          DocumentSnapshot documentSnapshot =
+              await eventsRef.doc(event.toString()).get();
+          EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
+          allGroupEvents.add(singleEvent);
+        }
+      }
     }
     return allGroupEvents;
   }

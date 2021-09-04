@@ -46,7 +46,10 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                     radius: 30,
                   ),
                   title: Text(
-                    authProvider.currentUser.nameSurname,
+                    authProvider.currentUser.nameSurname != null &&
+                            authProvider.currentUser.nameSurname != ""
+                        ? authProvider.currentUser.nameSurname
+                        : "@${authProvider.currentUser.username}",
                     style: TextStyle(color: Colors.black, fontSize: 22),
                   ),
                   subtitle: Text(authProvider.currentUser.email,

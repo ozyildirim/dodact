@@ -24,6 +24,7 @@ const k_ROUTE_COMMUNITIES_PAGE = '/communities';
 const k_ROUTE_COMMUNITY_DETAIL = '/community';
 const k_ROUTE_GROUPS_PAGE = '/groups';
 const k_ROUTE_GROUP_DETAIL = '/group';
+const k_ROUTE_GROUP_MANAGEMENT_PAGE = '/group_management';
 
 const k_ROUTE_SPINNER_PAGE = '/spinner';
 const k_ROUTE_CONTRIBUTIONS_PAGE = '/contributions';

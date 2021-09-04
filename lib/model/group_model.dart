@@ -5,7 +5,7 @@ class GroupModel {
   String groupName;
   String groupCategory;
   String founderId;
-  int numOfMembers;
+
   String groupDescription;
   String groupProfilePicture;
   List<String> groupPhotos;
@@ -21,7 +21,6 @@ class GroupModel {
     this.groupName,
     this.groupCategory,
     this.founderId,
-    this.numOfMembers,
     this.groupDescription,
     this.groupProfilePicture,
     this.groupPhotos,
@@ -37,7 +36,6 @@ class GroupModel {
     groupName = json['groupName'];
     groupCategory = json['groupCategory'];
     founderId = json['founderId'];
-    numOfMembers = json['numOfMembers'];
     groupDescription = json['groupDescription'];
     groupProfilePicture = json['groupProfilePicture'];
     groupPhotos = json['groupPhotos']?.cast<String>();
@@ -54,7 +52,6 @@ class GroupModel {
     data['groupName'] = this.groupName;
     data['groupCategory'] = this.groupCategory;
     data['founderId'] = this.founderId;
-    data['numOfMembers'] = this.numOfMembers;
     data['groupDescription'] = this.groupDescription;
     data['groupProfilePicture'] = this.groupProfilePicture;
     data['groupPhotos'] = this.groupPhotos;
@@ -69,6 +66,6 @@ class GroupModel {
 
   @override
   String toString() {
-    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, numOfMembers: $numOfMembers, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupPostIDs: $groupPostIDs, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
+    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupPostIDs: $groupPostIDs, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
   }
 }

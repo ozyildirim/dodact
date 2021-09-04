@@ -52,21 +52,6 @@ class FirebaseGroupService extends BaseService<GroupModel> {
     return await groupsRef.doc(id).update(changes);
   }
 
-  Future<List<UserObject>> getGroupMembers(GroupModel group) async {
-    //Get post IDs from user object
-    List<dynamic> memberIDs = group.groupMemberList;
-    List<UserObject> allGroupMembers = [];
-
-    print("Member IDs from group object:" + memberIDs.toString());
-    for (dynamic member in memberIDs) {
-      DocumentSnapshot documentSnapshot =
-          await usersRef.doc(member.toString()).get();
-      UserObject singleMember = UserObject.fromMap(documentSnapshot.data());
-      allGroupMembers.add(singleMember);
-    }
-    return allGroupMembers;
-  }
-
   // TODO: addGroupMember fonksiyonunun doğruluğunu sor.
   Future<bool> addGroupMember(String userID, String groupID) async {
     QuerySnapshot check = await groupsRef

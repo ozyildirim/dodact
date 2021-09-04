@@ -43,8 +43,10 @@ class _DodCardPageState extends BaseState<DodCardPage> {
           Container(
             color: Colors.white60,
             child: Text(
-                authProvider.currentUser.nameSurname ??
-                    authProvider.currentUser.username,
+                ((authProvider.currentUser.nameSurname != null) &&
+                        (authProvider.currentUser.nameSurname != ""))
+                    ? authProvider.currentUser.nameSurname
+                    : authProvider.currentUser.username,
                 style: TextStyle(
                   fontSize: 24,
                 )),

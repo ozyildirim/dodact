@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 
 class FirebaseUserService {
@@ -47,5 +48,19 @@ class FirebaseUserService {
     UserObject user = UserObject.fromDoc(fetchedUser);
 
     return user;
+  }
+
+  Future<List<UserObject>> getGroupMembers(GroupModel group) async {
+    //Get post IDs from user object
+    List<String> memberIDs = group.groupMemberList;
+    List<UserObject> allGroupMembers = [];
+
+    print("Member IDs from group object:" + memberIDs.toString());
+    for (String memberID in memberIDs) {
+      DocumentSnapshot documentSnapshot = await usersRef.doc(memberID).get();
+      UserObject singleMember = UserObject.fromDoc(documentSnapshot);
+      allGroupMembers.add(singleMember);
+    }
+    return allGroupMembers;
   }
 }

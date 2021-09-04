@@ -53,7 +53,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
           "@" + authProvider.currentUser.username,
           style: Theme.of(context).appBarTheme.textTheme.title,
         ),
-        elevation: 0,
+        elevation: 8,
       ),
       body: Container(
         decoration: BoxDecoration(

@@ -290,7 +290,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               }
               UserObject fetchedUser = snapshot.data;
 
-              var nameToShow = fetchedUser.nameSurname ?? fetchedUser.username;
+              var nameToShow = fetchedUser.nameSurname == null &&
+                      fetchedUser.nameSurname == ""
+                  ? fetchedUser.username
+                  : fetchedUser.nameSurname;
 
               return ListTile(
                 leading: CircleAvatar(
