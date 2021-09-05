@@ -21,6 +21,8 @@ class EventModel {
   bool isUsedForHelp;
   String chosenCompanyForHelp;
 
+  List<String> searchKeywords;
+
   EventModel(
       {this.eventId,
       this.ownerId,
@@ -40,7 +42,8 @@ class EventModel {
       this.isDone,
       this.ownerType,
       this.isUsedForHelp,
-      this.chosenCompanyForHelp});
+      this.chosenCompanyForHelp,
+      this.searchKeywords});
 
   EventModel.fromJson(Map<String, dynamic> json) {
     eventId = json['eventId'];
@@ -62,6 +65,7 @@ class EventModel {
     ownerType = json['ownerType'];
     isUsedForHelp = json['isUsedForHelp'] ?? false;
     chosenCompanyForHelp = json['chosenCompanyForHelp'] ?? "";
+    searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
   }
 
   Map<String, dynamic> toJson() {
@@ -86,11 +90,12 @@ class EventModel {
     data['ownerType'] = this.ownerType;
     data['isUsedForHelp'] = this.isUsedForHelp;
     data['chosenCompanyForHelp'] = this.chosenCompanyForHelp;
+    data['searchKeywords'] = this.searchKeywords;
     return data;
   }
 
   @override
   String toString() {
-    return 'EventModel{eventId: $eventId,eventType: $eventType,approved: $approved, eventLocationCoordinates: $eventLocationCoordinates, ownerId: $ownerId, eventAddress: $eventAddress, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType}';
+    return 'EventModel{eventId: $eventId,eventType: $eventType,approved: $approved, eventLocationCoordinates: $eventLocationCoordinates, ownerId: $ownerId, eventAddress: $eventAddress, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType, searchKeywords: $searchKeywords}';
   }
 }

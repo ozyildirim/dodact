@@ -29,6 +29,8 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   FocusNode _passwordFocus = FocusNode();
   FocusNode _checkboxFocus = FocusNode();
 
+  bool obsecure = true;
+
   @override
   void initState() {
     authProvider = getProvider<AuthProvider>();
@@ -114,10 +116,22 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     child: FormBuilderTextField(
                       keyboardType: TextInputType.visiblePassword,
                       name: "password",
-                      obscureText: true,
+                      obscureText: obsecure,
                       cursorColor: kPrimaryColor,
                       autovalidateMode: _autoValidate,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obsecure = !obsecure;
+                            });
+                          },
+                          icon: Icon(
+                            obsecure == true
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
                         hintText: "Parola",
                         hintStyle: TextStyle(fontFamily: kFontFamily),
                         errorStyle: TextStyle(fontSize: 14),

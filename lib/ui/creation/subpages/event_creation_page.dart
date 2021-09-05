@@ -6,6 +6,7 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/dialogs.dart';
@@ -683,11 +684,24 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     }
   }
 
+  List<String> createSearchKeywords(EventModel event) {
+    List<String> searchKeywords = [];
+
+    var title = event.eventTitle;
+    for (int i = 1; i < title.length; i++) {
+      searchKeywords.add(title.substring(0, i));
+    }
+    return searchKeywords;
+  }
+
   void setNewEventValues({bool isUsedForHelp}) {
     _eventProvider.newEvent.approved = false;
     _eventProvider.newEvent.eventId = "";
     _eventProvider.newEvent.eventTitle =
         _formKey.currentState.value['eventTitle'].toString().trim();
+
+    _eventProvider.newEvent.searchKeywords =
+        createSearchKeywords(_eventProvider.newEvent);
 
     _eventProvider.newEvent.eventDescription =
         _formKey.currentState.value['eventDescription'].toString().trim();

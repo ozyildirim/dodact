@@ -29,6 +29,8 @@ class _LogInPageState extends BaseState<LogInPage> {
   FocusNode _emailFocus = FocusNode();
   FocusNode _passwordFocus = FocusNode();
 
+  bool obsecure = true;
+
   bool showCircular = false;
 
   // void _signInWithFacebook() async {
@@ -118,6 +120,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                   child: FormBuilderTextField(
                     name: "email",
                     cursorColor: kPrimaryColor,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       icon: Icon(
                         Icons.mail,
@@ -147,10 +150,22 @@ class _LogInPageState extends BaseState<LogInPage> {
                   child: FormBuilderTextField(
                     keyboardType: TextInputType.visiblePassword,
                     name: "password",
-                    obscureText: true,
+                    obscureText: obsecure,
                     focusNode: _passwordFocus,
                     cursorColor: kPrimaryColor,
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obsecure = !obsecure;
+                          });
+                        },
+                        icon: Icon(
+                          obsecure == true
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
                       hintText: "Parola",
                       hintStyle: TextStyle(fontFamily: kFontFamily),
                       icon: Icon(

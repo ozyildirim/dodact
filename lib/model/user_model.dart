@@ -37,36 +37,38 @@ class UserObject {
   bool hiddenLocation;
   bool hiddenNameSurname;
 
-  UserObject({
-    this.uid,
-    this.email,
-    this.username,
-    this.nameSurname,
-    this.userRegistrationDate,
-    this.telephoneNumber,
-    this.profilePictureURL,
-    this.experiencePoint,
-    this.groupIDs,
-    this.ownedGroupIDs,
-    this.postIDs,
-    this.eventIDs,
-    this.location,
-    this.rosettes,
-    this.mainInterest,
-    this.twitterUsername,
-    this.instagramUsername,
-    this.youtubeLink,
-    this.dribbbleLink,
-    this.linkedInLink,
-    this.soundcloudLink,
-    this.hiddenMail,
-    this.hiddenLocation,
-    this.hiddenNameSurname,
-    this.newUser,
-    this.userDescription,
-    this.education,
-    this.profession,
-  });
+  List<String> searchKeywords;
+
+  UserObject(
+      {this.uid,
+      this.email,
+      this.username,
+      this.nameSurname,
+      this.userRegistrationDate,
+      this.telephoneNumber,
+      this.profilePictureURL,
+      this.experiencePoint,
+      this.groupIDs,
+      this.ownedGroupIDs,
+      this.postIDs,
+      this.eventIDs,
+      this.location,
+      this.rosettes,
+      this.mainInterest,
+      this.twitterUsername,
+      this.instagramUsername,
+      this.youtubeLink,
+      this.dribbbleLink,
+      this.linkedInLink,
+      this.soundcloudLink,
+      this.hiddenMail,
+      this.hiddenLocation,
+      this.hiddenNameSurname,
+      this.newUser,
+      this.userDescription,
+      this.education,
+      this.profession,
+      this.searchKeywords});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -98,6 +100,7 @@ class UserObject {
     userData['userDescription'] = this.userDescription ?? '';
     userData['education'] = this.education ?? '';
     userData['profession'] = this.profession ?? '';
+    userData['searchKeywords'] = this.searchKeywords ?? [];
 
     return userData;
   }
@@ -131,7 +134,8 @@ class UserObject {
         newUser = map['newUser'] ?? true,
         education = map['education'] ?? '',
         userDescription = map['userDescription'] ?? '',
-        profession = map['profession'] ?? '';
+        profession = map['profession'] ?? '',
+        searchKeywords = map['searchKeywords'] ?? [];
 
   UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
@@ -163,9 +167,10 @@ class UserObject {
     newUser = doc.data()['newUser'] ?? true;
     education = doc.data()['education'] ?? '';
     profession = doc.data()['profession'] ?? '';
+    searchKeywords = doc.data()['searchKeywords']?.cast<String>() ?? [];
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email,newUser: $newUser,mainInterest: $mainInterest, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs,  postIDs: $postIDs, eventIDs: $eventIDs},';
+    return 'UserObject{uid: $uid, email: $email,newUser: $newUser,mainInterest: $mainInterest, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs,  postIDs: $postIDs, eventIDs: $eventIDs,searchKeywords: $searchKeywords},';
   }
 }

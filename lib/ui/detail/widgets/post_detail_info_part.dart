@@ -89,7 +89,8 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                   ),
                   title: Center(
                     child: Text(
-                      userProvider.otherUser.nameSurname != null
+                      userProvider.otherUser.nameSurname != null &&
+                              userProvider.otherUser.nameSurname != ""
                           ? userProvider.otherUser.nameSurname
                           : userProvider.otherUser.username,
                       style: TextStyle(fontSize: 20),

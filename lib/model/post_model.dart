@@ -22,6 +22,8 @@ class PostModel {
 
   bool approved;
 
+  List<String> searchKeywords;
+
   PostModel({
     this.postId,
     this.ownerType,
@@ -39,6 +41,7 @@ class PostModel {
     this.isLocatedInYoutube,
     this.postContentType,
     this.approved,
+    this.searchKeywords,
   });
 
   PostModel.fromJson(Map<String, dynamic> json)
@@ -57,7 +60,8 @@ class PostModel {
         isLocatedInYoutube = json['isLocatedInYoutube'],
         supportersId = json['supportersId'],
         postContentType = json['postContentType'],
-        approved = json['approved'];
+        approved = json['approved'],
+        searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -78,11 +82,12 @@ class PostModel {
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;
     data['approved'] = this.approved;
+    data['searchKeywords'] = this.searchKeywords;
     return data;
   }
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, ownerType: $ownerType,approved: $approved , ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo}';
+    return 'PostModel{postId: $postId, ownerType: $ownerType,approved: $approved , ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo,searchKeywords: $searchKeywords}';
   }
 }

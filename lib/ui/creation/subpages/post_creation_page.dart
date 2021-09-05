@@ -544,6 +544,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             supportersId: [],
           );
 
+          newPost.searchKeywords = createSearchKeywords(newPost);
+
           await Provider.of<PostProvider>(context, listen: false)
               .addPost(postFile: postFile, post: newPost)
               .then(
@@ -579,6 +581,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           supportersId: [],
         );
 
+        newPost.searchKeywords = createSearchKeywords(newPost);
+
         await Provider.of<PostProvider>(context, listen: false)
             .addPost(postFile: postFile, post: newPost)
             .then(
@@ -596,6 +600,16 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       CommonMethods()
           .showErrorDialog(context, "İçerik yüklenirken bir hata oluştu");
     } //
+  }
+
+  List<String> createSearchKeywords(PostModel post) {
+    List<String> searchKeywords = [];
+
+    var title = post.postTitle;
+    for (int i = 1; i < title.length; i++) {
+      searchKeywords.add(title.substring(0, i));
+    }
+    return searchKeywords;
   }
 
   Future<void> _selectFile(FileType selectedType) async {

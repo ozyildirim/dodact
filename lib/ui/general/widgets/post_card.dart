@@ -33,7 +33,7 @@ class PostCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             NavigationService.instance
-                .navigate(k_ROUTE_POST_DETAIL, args: post.postId);
+                .navigate(k_ROUTE_POST_DETAIL, args: post);
           },
           child: Container(
             color: kBackgroundColor,
