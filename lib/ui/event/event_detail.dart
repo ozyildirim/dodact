@@ -410,14 +410,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           .editUserEventIDs(event.eventId, event.ownerId, false);
     } else if (event.ownerType == "Group") {
       await Provider.of<GroupProvider>(context, listen: false)
-          .editGroupPostList(event.eventId, event.ownerId, false);
+          .editGroupEventList(event.eventId, event.ownerId, false);
     }
 
     //REQUESTİNİ SİL
     await Provider.of<RequestProvider>(context, listen: false)
         .deleteRequest(event.eventId);
 
-    NavigationService.instance.navigateToReset(k_ROUTE_USER_PROFILE);
+    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //}
   }
 

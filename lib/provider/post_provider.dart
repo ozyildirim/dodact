@@ -47,6 +47,11 @@ class PostProvider extends ChangeNotifier {
     postList.clear();
   }
 
+  setPost(PostModel post) {
+    this.post = post;
+    notifyListeners();
+  }
+
   // If the content is not video, provider will upload it to firestorage,
   // Otherwise youtube link will be added to firestore.
   Future addPost({File postFile, PostModel post}) async {

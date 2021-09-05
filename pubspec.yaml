@@ -84,6 +84,7 @@ dependencies:
   flutter_svg: ^0.22.0
   flutter_gradients: ^1.0.0+3
   profanity_filter: ^2.0.0
+  circular_menu: ^1.2.3
 
   
   

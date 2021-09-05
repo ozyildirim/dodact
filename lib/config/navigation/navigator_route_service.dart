@@ -90,7 +90,7 @@ class NavigationRouteManager {
       case k_ROUTE_POST_DETAIL:
         return _navigateToDefault(
             PostDetail(
-              postId: args,
+              post: args,
             ),
             settings);
 

@@ -10,11 +10,10 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
-import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:dodact_v1/ui/detail/widgets/audio_player/audio_player_widget.dart';
 import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
+import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -24,11 +23,9 @@ import 'package:share_plus/share_plus.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PostDetail extends StatefulWidget {
-  final String postId;
+  final PostModel post;
 
-  PostDetail({
-    this.postId,
-  });
+  PostDetail({this.post});
 
   @override
   _PostDetailState createState() => _PostDetailState();
@@ -37,7 +34,7 @@ class PostDetail extends StatefulWidget {
 class _PostDetailState extends BaseState<PostDetail> {
   String videoId;
   PostModel post;
-  Future _postFuture;
+
   bool isFavorite = false;
 
   final formKey = GlobalKey<FormBuilderState>();
@@ -46,11 +43,18 @@ class _PostDetailState extends BaseState<PostDetail> {
   FocusNode focusNode = new FocusNode();
 
   bool isCurrentUserPostOwner() {
-    if (authProvider.currentUser.postIDs != null &&
-        authProvider.currentUser.postIDs.contains(widget.postId)) {
-      return true;
+    if (post.ownerType == 'User') {
+      if (authProvider.currentUser.postIDs != null &&
+          authProvider.currentUser.postIDs.contains(post.postId)) {
+        return true;
+      }
+      return false;
+    } else if (post.ownerType == 'Group') {
+      if (authProvider.currentUser.ownedGroupIDs.contains(post.ownerId)) {
+        return true;
+      }
+      return false;
     }
-    return false;
   }
 
   bool isPostFavorited() {
@@ -60,23 +64,12 @@ class _PostDetailState extends BaseState<PostDetail> {
     return false;
   }
 
-  Future _obtainPostFuture(BuildContext context) {
-    return Provider.of<PostProvider>(context, listen: false)
-        .getDetail(widget.postId);
-  }
-
-  Future<void> _refreshPost(BuildContext context) async {
-    await Provider.of<PostProvider>(context, listen: false)
-        .getDetail(widget.postId);
-  }
-
   @override
   void initState() {
-    _postFuture = _obtainPostFuture(context);
     super.initState();
+    post = widget.post;
 
-    isFavorite =
-        authProvider.currentUser.favoritedPosts.contains(widget.postId);
+    isFavorite = authProvider.currentUser.favoritedPosts.contains(post.postId);
   }
 
   @override
@@ -179,80 +172,64 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     return Scaffold(
       appBar: appBar,
-      body: RefreshIndicator(
-        onRefresh: () => _refreshPost(context),
-        child: SingleChildScrollView(
-          child: Container(
-            height: dynamicHeight(1) -
-                appBar.preferredSize.height -
-                mediaQuery.padding.top,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
-            ),
-            child: FutureBuilder(
-              future: _postFuture,
-              // ignore: missing_return
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: spinkit);
-                } else {
-                  if (snapshot.error != null) {
-                    return Center(
-                      child: Text("Hata oluştu."),
-                    );
-                  } else {
-                    post = snapshot.data;
-
-                    switch (post.postContentType) {
-                      case "Video":
-                        return Column(
-                          children: [
-                            buildHeaderVideo(),
-                            PostDetailInfoPart(post: post),
-                            buildPostDescriptionCard(),
-                            Expanded(
-                              child: Container(),
-                            ),
-                            buildPostCommentsNavigator(),
-                          ],
-                        );
-                        break;
-                      case "Görüntü":
-                        return Column(
-                          children: [
-                            buildHeaderImage(),
-                            PostDetailInfoPart(post: post),
-                            buildPostDescriptionCard(),
-                            Expanded(
-                              child: Container(),
-                            ),
-                            buildPostCommentsNavigator(),
-                          ],
-                        );
-                        break;
-                      case "Ses":
-                        return Column(
-                          children: [
-                            buildHeaderAudio(),
-                            PostDetailInfoPart(post: post),
-                            buildPostDescriptionCard(),
-                            Expanded(
-                              child: Container(),
-                            ),
-                            buildPostCommentsNavigator(),
-                          ],
-                        );
-                        break;
-                    }
-                  }
-                }
-              },
-            ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: dynamicHeight(1) -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
           ),
+          child: pageView(),
         ),
       ),
     );
+  }
+
+  pageView() {
+    switch (post.postContentType) {
+      case "Video":
+        return Column(
+          children: [
+            buildHeaderVideo(),
+            PostDetailInfoPart(post: post),
+            buildPostDescriptionCard(),
+            Expanded(
+              child: Container(),
+            ),
+            buildPostCommentsNavigator(),
+          ],
+        );
+        break;
+      case "Görüntü":
+        return Column(
+          children: [
+            buildHeaderImage(),
+            PostDetailInfoPart(post: post),
+            buildPostDescriptionCard(),
+            Expanded(
+              child: Container(),
+            ),
+            buildPostCommentsNavigator(),
+          ],
+        );
+        break;
+      case "Ses":
+        return Column(
+          children: [
+            buildHeaderAudio(),
+            PostDetailInfoPart(post: post),
+            buildPostDescriptionCard(),
+            Expanded(
+              child: Container(),
+            ),
+            buildPostCommentsNavigator(),
+          ],
+        );
+        break;
+    }
+    ;
   }
 
   Widget buildPostDescriptionCard() {
