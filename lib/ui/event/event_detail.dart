@@ -34,20 +34,20 @@ class EventDetailPage extends StatefulWidget {
 
 class _EventDetailPageState extends BaseState<EventDetailPage>
     with SingleTickerProviderStateMixin {
-  EventModel _event;
-  Completer<GoogleMapController> _controller = Completer();
+  EventModel event;
+  Completer<GoogleMapController> controller = Completer();
   TabController tabController;
   var logger = new Logger();
 
   bool canUserControlEvent() {
-    if (_event.ownerType == 'Group') {
-      if (authProvider.currentUser.ownedGroupIDs.contains(_event.ownerId)) {
+    if (event.ownerType == 'Group') {
+      if (authProvider.currentUser.ownedGroupIDs.contains(event.ownerId)) {
         return true;
       } else {
         return false;
       }
-    } else if (_event.ownerType == "User") {
-      if (authProvider.currentUser.uid == _event.ownerId) {
+    } else if (event.ownerType == "User") {
+      if (authProvider.currentUser.uid == event.ownerId) {
         return true;
       } else {
         return false;
@@ -57,7 +57,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   @override
   void initState() {
-    _event = widget.event;
+    event = widget.event;
     tabController = new TabController(length: 1, vsync: this);
     super.initState();
   }
@@ -119,7 +119,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Widget _buildEventImageCarousel() {
-    if (_event.eventImages.isNotEmpty) {
+    if (event.eventImages.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: GFCarousel(
@@ -127,7 +127,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           enlargeMainPage: true,
           autoPlay: true,
           activeIndicator: Colors.white,
-          items: _event.eventImages.map((image) {
+          items: event.eventImages.map((image) {
             return Container(
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -157,12 +157,12 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
-                      _event.eventTitle,
+                      event.eventTitle,
                       style: GoogleFonts.poppins(fontSize: 24),
                     ),
                   ),
                 ),
-                !_event.isOnline
+                !event.isOnline
                     ? Padding(
                         padding: const EdgeInsets.only(right: 10),
                         child: FloatingActionButton(
@@ -179,7 +179,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             ListTile(
               leading: Icon(Icons.calendar_today),
               title: Text(
-                DateFormat('dd,MM,yyyy hh:mm').format(_event.eventStartDate),
+                DateFormat('dd,MM,yyyy hh:mm').format(event.eventStartDate),
                 style: TextStyle(fontSize: 18),
               ),
               subtitle: Text("Etkinlik Başlangıç Tarihi"),
@@ -187,7 +187,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             ListTile(
               leading: Icon(Icons.view_day),
               title: Text(
-                DateFormat('dd,MM,yyyy hh:mm').format(_event.eventEndDate),
+                DateFormat('dd,MM,yyyy hh:mm').format(event.eventEndDate),
                 style: TextStyle(fontSize: 18),
               ),
               subtitle: Text("Etkinlik Bitiş Tarihi"),
@@ -195,31 +195,31 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             ListTile(
                 leading: Icon(Icons.view_day),
                 title: Text(
-                  _event.isOnline ? "Online Etkinlik" : "Fiziksel Etkinlik",
+                  event.isOnline ? "Online Etkinlik" : "Fiziksel Etkinlik",
                   style: TextStyle(fontSize: 18),
                 )),
-            !_event.isOnline
+            !event.isOnline
                 ? ListTile(
                     leading: Icon(Icons.location_city),
                     title: Text(
-                      _event.city,
+                      event.city,
                       style: TextStyle(fontSize: 18),
                     ),
                   )
                 : ListTile(
                     leading: Icon(Icons.web),
                     title: Text(
-                      _event.eventURL,
+                      event.eventURL,
                       style: TextStyle(fontSize: 18),
                     ),
                     onTap: () {
-                      CommonMethods.launchURL(_event.eventURL);
+                      CommonMethods.launchURL(event.eventURL);
                     },
                   ),
             ListTile(
                 leading: Icon(Icons.category),
                 title: Text(
-                  _event.eventType,
+                  event.eventType,
                   style: TextStyle(fontSize: 18),
                 ))
           ],
@@ -264,7 +264,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Text(
-          _event.eventDescription,
+          event.eventDescription,
           style: TextStyle(fontSize: 18),
         ),
       ),
@@ -272,10 +272,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Widget _getCreatorInfo() {
-    if (_event.ownerType == "User") {
+    if (event.ownerType == "User") {
       final provider = Provider.of<UserProvider>(context, listen: false);
       return FutureBuilder(
-        future: provider.getOtherUser(_event.ownerId),
+        future: provider.getOtherUser(event.ownerId),
         // ignore: missing_return
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
@@ -290,7 +290,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               }
               UserObject fetchedUser = snapshot.data;
 
-              var nameToShow = fetchedUser.nameSurname == null &&
+              var nameToShow = fetchedUser.nameSurname == null ||
                       fetchedUser.nameSurname == ""
                   ? fetchedUser.username
                   : fetchedUser.nameSurname;
@@ -327,10 +327,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           }
         },
       );
-    } else if (_event.ownerType == "Group") {
+    } else if (event.ownerType == "Group") {
       final provider = Provider.of<GroupProvider>(context, listen: false);
       return FutureBuilder(
-        future: provider.getGroupDetail(_event.ownerId),
+        future: provider.getGroupDetail(event.ownerId),
         // ignore: missing_return
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
@@ -396,26 +396,26 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Future<void> _deleteEvent() async {
     //TODO: Bunlardan herhangi birisi patlarsa ne yapacağız?
 
-    bool isLocatedInStorage = _event.eventImages != [] ? true : false;
+    bool isLocatedInStorage = event.eventImages != [] ? true : false;
 
     //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
     CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
 
     await Provider.of<EventProvider>(context, listen: false)
-        .deleteEvent(_event.eventId, isLocatedInStorage);
+        .deleteEvent(event.eventId, isLocatedInStorage);
 
     //KULLANICININ / GRUBUN POSTIDS den SİL
-    if (_event.ownerType == "User") {
+    if (event.ownerType == "User") {
       await Provider.of<AuthProvider>(context, listen: false)
-          .editUserEventIDs(_event.eventId, _event.ownerId, false);
-    } else if (_event.ownerType == "Group") {
+          .editUserEventIDs(event.eventId, event.ownerId, false);
+    } else if (event.ownerType == "Group") {
       await Provider.of<GroupProvider>(context, listen: false)
-          .editGroupPostList(_event.eventId, _event.ownerId, false);
+          .editGroupPostList(event.eventId, event.ownerId, false);
     }
 
     //REQUESTİNİ SİL
     await Provider.of<RequestProvider>(context, listen: false)
-        .deleteRequest(_event.eventId);
+        .deleteRequest(event.eventId);
 
     NavigationService.instance.navigateToReset(k_ROUTE_USER_PROFILE);
     //}
@@ -424,9 +424,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   _showEditEventDialog() {}
 
   _buildMap() {
-    if (_event.eventLocationCoordinates != null) {
-      var lat = _event.eventLocationCoordinates.split(",")[0];
-      var lng = _event.eventLocationCoordinates.split(",")[1];
+    if (event.eventLocationCoordinates != null) {
+      var lat = event.eventLocationCoordinates.split(",")[0];
+      var lng = event.eventLocationCoordinates.split(",")[1];
 
       final CameraPosition _kGooglePlex = CameraPosition(
         target: LatLng(double.parse(lat), double.parse(lng)),

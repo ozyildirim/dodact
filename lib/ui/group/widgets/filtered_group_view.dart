@@ -52,6 +52,7 @@ class FilteredGroupView extends StatelessWidget {
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 onTap: () {
+                                  provider.setGroup(groupItem);
                                   NavigationService.instance.navigate(
                                       k_ROUTE_GROUP_DETAIL,
                                       args: groupItem);

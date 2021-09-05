@@ -39,6 +39,10 @@ class GroupProvider extends ChangeNotifier {
     groupList.clear();
   }
 
+  setGroup(GroupModel group) {
+    this.group = group;
+  }
+
   Future addGroup({GroupModel model, bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
@@ -117,9 +121,9 @@ class GroupProvider extends ChangeNotifier {
 
   Future<List<GroupModel>> getFilteredGroupList(
       {String category = "Tümü",
-      String city = "İstanbul",
+      String city = "Belirtilmemiş",
       bool showAllCategories = true,
-      bool wholeCountry = false}) async {
+      bool wholeCountry = true}) async {
     try {
       var fetchedGroup = await _groupRepository.getFilteredGroupList(
           category: category,
@@ -138,13 +142,18 @@ class GroupProvider extends ChangeNotifier {
 
   Future<List<GroupModel>> getUserGroups(List<String> groupIdList) async {
     try {
+      List<GroupModel> groups = [];
       Future.forEach(groupIdList, (element) async {
-        var group = await _groupRepository.getDetail(element);
-        userGroups.add(group);
+        GroupModel group = await _groupRepository.getDetail(element);
+        groups.add(group);
       });
+
+      userGroups = groups;
       notifyListeners();
+      return userGroups;
     } catch (e) {
       logger.e("GroupProvider getUserGroups error: " + e.toString());
+      return null;
     }
   }
 

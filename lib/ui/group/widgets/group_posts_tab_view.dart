@@ -33,8 +33,12 @@ class GroupPostsTab extends StatelessWidget {
                 mainAxisSpacing: 8.0,
                 crossAxisSpacing: 4.0,
               )
-            : Container(
-                child: Text("Boş"),
+            : Center(
+                child: Container(
+                  color: Colors.white60,
+                  child: Text("Bu grup henüz bir içerik paylaşmadı.",
+                      style: TextStyle(fontSize: 22)),
+                ),
               )
         : Center(child: spinkit);
   }

@@ -74,7 +74,11 @@ class NavigationRouteManager {
       case k_ROUTE_HOME:
         return _navigateToDefault(HomePage(), settings);
       case k_ROUTE_CREATION:
-        return _navigateToDefault(CreationPage(), settings);
+        return _navigateToDefault(
+            CreationPage(
+              groupId: args,
+            ),
+            settings);
 
       case k_ROUTE_SEARCH:
         return _navigateToDefault(SearchPage(), settings);
@@ -197,6 +201,7 @@ class NavigationRouteManager {
             PostCreationPage(
               contentType: args[0],
               postCategory: args[1],
+              groupId: args[2],
             ),
             settings);
 

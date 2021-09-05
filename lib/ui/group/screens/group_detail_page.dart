@@ -6,10 +6,12 @@ import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/group_events_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_members_tab_view.dart';
+import 'package:dodact_v1/ui/group/widgets/group_photos_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_posts_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class GroupDetailPage extends StatefulWidget {
@@ -29,7 +31,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   @override
   void initState() {
     group = widget.group;
-    tabController = new TabController(length: 5, vsync: this);
+    tabController = new TabController(length: 6, vsync: this);
     super.initState();
 
     Provider.of<GroupProvider>(context, listen: false).getGroupPosts(group);
@@ -52,8 +54,17 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
     var size = MediaQuery.of(context).size;
+    Logger().i(provider.group);
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            navigateCreationPage(group.groupId);
+          }),
       appBar: AppBar(
         actions: isUserGroupFounder()
             ? [
@@ -131,6 +142,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           Tab(text: "Üyeler"),
           Tab(text: "İçerikler"),
           Tab(text: "Etkinlikler"),
+          Tab(text: "Fotoğraflar"),
           Tab(text: "Duyurular"),
         ],
       ),
@@ -150,6 +162,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             buildMembersTabView(),
             buildPostsTabView(),
             buildEventsTabView(),
+            buildPhotosTabView(),
             buildAnnouncementsTabView(),
           ],
         ),
@@ -175,5 +188,13 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
 
   buildAnnouncementsTabView() {
     return Container();
+  }
+
+  void navigateCreationPage(String groupId) {
+    NavigationService.instance.navigate(k_ROUTE_CREATION, args: group.groupId);
+  }
+
+  buildPhotosTabView() {
+    return GroupPhotosTabView();
   }
 }

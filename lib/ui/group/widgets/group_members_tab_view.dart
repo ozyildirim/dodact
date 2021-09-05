@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -22,10 +23,15 @@ class GroupMembersTab extends StatelessWidget {
                         padding: const EdgeInsets.all(12.0),
                         child: Column(
                           children: [
-                            CircleAvatar(
-                              radius: 80,
-                              backgroundImage:
-                                  NetworkImage(user.profilePictureURL),
+                            CachedNetworkImage(
+                              imageUrl: user.profilePictureURL,
+                              imageBuilder: (context, imageProvider) {
+                                return CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage:
+                                      NetworkImage(user.profilePictureURL),
+                                );
+                              },
                             ),
                             Text("@" + user.username,
                                 style: TextStyle(

@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class CreationPage extends StatefulWidget {
+  final String groupId;
+
+  CreationPage({this.groupId});
+
   @override
   _CreationPageState createState() => _CreationPageState();
 }
@@ -89,9 +93,12 @@ class _CreationPageState extends State<CreationPage> {
                         context: context,
                         builder: (context) => postTypeDialog(context));
                     if (postTypeData != null) {
-                      NavigationService.instance.navigate(
-                          k_ROUTE_CREATE_POST_PAGE,
-                          args: [postTypeData, postCategoryData]);
+                      NavigationService.instance
+                          .navigate(k_ROUTE_CREATE_POST_PAGE, args: [
+                        postTypeData,
+                        postCategoryData,
+                        widget.groupId ?? null
+                      ]);
                     }
                   }
                 },

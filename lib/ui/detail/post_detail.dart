@@ -70,10 +70,6 @@ class _PostDetailState extends BaseState<PostDetail> {
         .getDetail(widget.postId);
   }
 
-  Future<void> _getCreatorData(BuildContext context, String creatorId) async {
-    await Provider.of<UserProvider>(context).getOtherUser(creatorId);
-  }
-
   @override
   void initState() {
     _postFuture = _obtainPostFuture(context);
@@ -207,14 +203,13 @@ class _PostDetailState extends BaseState<PostDetail> {
                     );
                   } else {
                     post = snapshot.data;
-                    _getCreatorData(context, post.ownerId);
 
                     switch (post.postContentType) {
                       case "Video":
                         return Column(
                           children: [
                             buildHeaderVideo(),
-                            PostDetailInfoPart(),
+                            PostDetailInfoPart(post: post),
                             buildPostDescriptionCard(),
                             Expanded(
                               child: Container(),
@@ -227,7 +222,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                         return Column(
                           children: [
                             buildHeaderImage(),
-                            PostDetailInfoPart(),
+                            PostDetailInfoPart(post: post),
                             buildPostDescriptionCard(),
                             Expanded(
                               child: Container(),
@@ -240,7 +235,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                         return Column(
                           children: [
                             buildHeaderAudio(),
-                            PostDetailInfoPart(),
+                            PostDetailInfoPart(post: post),
                             buildPostDescriptionCard(),
                             Expanded(
                               child: Container(),

@@ -1,4 +1,5 @@
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_events_tab.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_groups_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_info_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_posts_tab.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _UserProfileBodyState extends State<UserProfileBody>
 
   @override
   void initState() {
-    _controller = new TabController(length: 3, vsync: this);
+    _controller = new TabController(length: 4, vsync: this);
     super.initState();
   }
 
@@ -34,6 +35,7 @@ class _UserProfileBodyState extends State<UserProfileBody>
             tabs: const [
               const Tab(icon: Icon(FontAwesome5Solid.adjust)),
               const Tab(icon: Icon(FontAwesome5Solid.info)),
+              const Tab(icon: Icon(FontAwesome5Solid.object_group)),
               const Tab(icon: Icon(FontAwesome5Solid.calendar_alt)),
             ],
           ),
@@ -49,6 +51,9 @@ class _UserProfileBodyState extends State<UserProfileBody>
                 ),
                 Container(
                   child: UserProfileInfoTab(),
+                ),
+                Container(
+                  child: UserProfileGroupsTab(),
                 ),
                 Container(
                   child: UserProfileEventsTab(),

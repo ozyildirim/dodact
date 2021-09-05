@@ -5,11 +5,9 @@ class GroupModel {
   String groupName;
   String groupCategory;
   String founderId;
-
   String groupDescription;
   String groupProfilePicture;
   List<String> groupPhotos;
-
   List<String> groupMemberList;
   DateTime creationDate;
   List<String> events;

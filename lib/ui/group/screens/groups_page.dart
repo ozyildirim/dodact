@@ -25,7 +25,7 @@ class _GroupsPageState extends State<GroupsPage> {
     Provider.of<GroupProvider>(context, listen: false).getFilteredGroupList();
 
     selectedCategory = "Tümü";
-    selectedCity = "İstanbul";
+    selectedCity = "Belirtilmemiş";
   }
 
   @override

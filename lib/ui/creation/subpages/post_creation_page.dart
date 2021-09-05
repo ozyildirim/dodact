@@ -27,8 +27,9 @@ enum Source { Telefon, Youtube }
 class PostCreationPage extends StatefulWidget {
   final String contentType;
   final String postCategory;
+  final String groupId;
 
-  PostCreationPage({this.contentType, this.postCategory});
+  PostCreationPage({this.contentType, this.postCategory, this.groupId});
 
   @override
   _PostCreationPageState createState() => _PostCreationPageState();
@@ -87,6 +88,12 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     prepareAd();
     print("İçerik Türü: " + widget.contentType);
     print("İçerik Kategorisi: " + widget.postCategory);
+
+    widget.groupId != null
+        ? Logger()
+            .i("Grup için post oluşturma aşaması başladı: ${widget.groupId}")
+        : null;
+
     super.initState();
     // buildCreatorList();
 
@@ -521,9 +528,11 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             isLocatedInYoutube: widget.contentType == "Video" ? true : false,
             isVideo: widget.contentType == "Video" ? true : false,
             postContentType: widget.contentType,
-            ownerType: "User",
+            ownerType: widget.groupId != null ? "Group" : "User",
             postId: "",
-            ownerId: authProvider.currentUser.uid,
+            ownerId: widget.groupId != null
+                ? widget.groupId
+                : authProvider.currentUser.uid,
             postCategory: widget.postCategory,
             postTitle: postTitleController.text,
             postDate: DateTime.now(),
@@ -554,9 +563,11 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           isLocatedInYoutube: widget.contentType == "Video" ? true : false,
           isVideo: widget.contentType == "Video" ? true : false,
           postContentType: widget.contentType,
-          ownerType: "User",
+          ownerType: widget.groupId != null ? "Group" : "User",
           postId: "",
-          ownerId: authProvider.currentUser.uid,
+          ownerId: widget.groupId != null
+              ? widget.groupId
+              : authProvider.currentUser.uid,
           postCategory: widget.postCategory,
           postTitle: postTitleController.text,
           postDate: DateTime.now(),

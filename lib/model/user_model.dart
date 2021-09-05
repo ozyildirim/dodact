@@ -144,7 +144,7 @@ class UserObject {
     profilePictureURL = doc.data()['profilePictureURL'] ?? '';
     experiencePoint = doc.data()['experiencePoint'] ?? '';
     groupIDs = doc.data()['groupIDs']?.cast<String>() ?? [];
-    ownedGroupIDs = doc.data()['ownedGroupIDs'] ?? [];
+    ownedGroupIDs = doc.data()['ownedGroupIDs']?.cast<String>() ?? [];
     postIDs = doc.data()['postIDs']?.cast<String>() ?? [];
     eventIDs = doc.data()['eventIDs']?.cast<String>() ?? [];
     location = doc.data()['location'];

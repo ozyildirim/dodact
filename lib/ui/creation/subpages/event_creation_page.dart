@@ -27,8 +27,10 @@ class EventCreationPage extends StatefulWidget {
   final String eventCategory;
   final String eventType;
   final String eventPlatform;
+  final String groupId;
 
-  EventCreationPage({this.eventCategory, this.eventType, this.eventPlatform});
+  EventCreationPage(
+      {this.eventCategory, this.eventType, this.eventPlatform, this.groupId});
 
   @override
   _EventCreationPageState createState() => _EventCreationPageState();
@@ -59,7 +61,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   DateTime _eventStartDate = new DateTime.now();
   DateTime _eventEndDate = new DateTime.now().add(Duration(days: 1));
   bool isOnline;
-  String postOwnerType = "User";
+  String postOwnerType;
   String ownerGroupId;
 
   PickResult selectedPlace;
@@ -80,6 +82,12 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     _eventProvider = Provider.of<EventProvider>(context, listen: false);
     _eventProvider.clearNewEvent();
     isOnline = widget.eventPlatform == 'Online Etkinlik' ? true : false;
+
+    widget.groupId != null
+        ? Logger().i(
+            "Grup için etkinlik oluşturma aşaması başladı: ${widget.groupId}")
+        : null;
+    postOwnerType = widget.groupId == null ? "User" : "Group";
   }
 
   @override
@@ -701,7 +709,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       _eventProvider.newEvent.ownerId = authProvider.currentUser.uid;
       _eventProvider.newEvent.ownerType = "User";
     } else if (postOwnerType == "Group") {
-      _eventProvider.newEvent.ownerId = ownerGroupId;
+      _eventProvider.newEvent.ownerId = widget.groupId;
       _eventProvider.newEvent.ownerType = "Group";
     }
 
