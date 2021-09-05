@@ -28,7 +28,7 @@ class PostCardForGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: () => NavigationService.instance
-              .navigate(k_ROUTE_POST_DETAIL, args: post.postId),
+              .navigate(k_ROUTE_POST_DETAIL, args: post),
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(

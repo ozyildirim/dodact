@@ -1,3 +1,4 @@
+import 'package:circular_menu/circular_menu.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -26,6 +27,7 @@ class GroupDetailPage extends StatefulWidget {
 class _GroupDetailPageState extends BaseState<GroupDetailPage>
     with SingleTickerProviderStateMixin {
   GroupModel group;
+
   TabController tabController;
 
   @override
@@ -57,14 +59,14 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     Logger().i(provider.group);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            navigateCreationPage(group.groupId);
-          }),
+      // floatingActionButton: FloatingActionButton(
+      //     child: Icon(
+      //       Icons.add,
+      //       color: Colors.white,
+      //     ),
+      //     onPressed: () {
+      //       navigateCreationPage(group.groupId);
+      //     }),
       appBar: AppBar(
         actions: isUserGroupFounder()
             ? [
@@ -97,9 +99,69 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             ),
           ),
         ),
-        child: pageBody(),
+        child: isUserGroupFounder() ? adminView() : userView(),
       ),
     );
+  }
+
+  adminView() {
+    return CircularMenu(
+        // menu alignment
+        alignment: Alignment.bottomRight,
+        // menu radius
+        radius: 100,
+        // widget in the background holds actual page content
+        backgroundWidget: pageBody(),
+        // global key to control the animation anywhere in the code.
+        key: GlobalKey<CircularMenuState>(),
+        // animation duration
+        animationDuration: Duration(milliseconds: 500),
+        // animation curve in forward
+        curve: Curves.bounceIn,
+        // animation curve in reverse
+        reverseCurve: Curves.fastOutSlowIn,
+        // first item angle
+        startingAngleInRadian: 3.14,
+        endingAngleInRadian: 1.5 * 3.14,
+        // toggle button callback
+        toggleButtonOnPressed: () {
+          //callback
+        },
+        // toggle button appearance properties
+        toggleButtonColor: Colors.pink,
+        // toggleButtonBoxShadow: [
+        //   BoxShadow(
+        //     color: Colors.blue,
+        //     blurRadius: 10,
+        //   ),
+        // ],
+        toggleButtonIconColor: Colors.white,
+        toggleButtonMargin: 15.0,
+        toggleButtonPadding: 15.0,
+        toggleButtonSize: 30.0,
+        items: [
+          CircularMenuItem(
+            // menu item callback
+            onTap: () {
+              NavigationService.instance
+                  .navigate(k_ROUTE_CREATION, args: group.groupId);
+            },
+            // menu item appearance properties
+            icon: Icons.add,
+
+            iconColor: Colors.white,
+            iconSize: 30.0,
+            margin: 10.0,
+            padding: 10.0,
+            // when 'animatedIcon' is passed,above 'icon' will be ignored
+          ),
+          CircularMenuItem(icon: Icons.search, onTap: () {}),
+          CircularMenuItem(icon: Icons.pages, onTap: () {}),
+        ]);
+  }
+
+  userView() {
+    return pageBody();
   }
 
   pageBody() {

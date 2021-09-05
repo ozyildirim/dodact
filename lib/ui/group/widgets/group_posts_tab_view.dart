@@ -1,6 +1,7 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/post_card_for_grids.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class GroupPostsTab extends StatelessWidget {
         : Center(child: spinkit);
   }
 
-  navigatePost(String postId) {
-    NavigationService.instance.navigate(k_ROUTE_POST_DETAIL, args: postId);
+  navigatePost(PostModel post) {
+    NavigationService.instance.navigate(k_ROUTE_POST_DETAIL, args: post);
   }
 }
