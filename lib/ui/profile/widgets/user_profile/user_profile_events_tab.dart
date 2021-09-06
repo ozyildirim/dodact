@@ -8,6 +8,7 @@ import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileEventsTab extends StatefulWidget {
@@ -53,6 +54,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
       }).toList();
 
       var sortedEvents = _sortEvents(_userEvents);
+      Logger().e("soortedEvents:" + sortedEvents[0].eventTitle);
 
       return ListView(
         scrollDirection: Axis.horizontal,

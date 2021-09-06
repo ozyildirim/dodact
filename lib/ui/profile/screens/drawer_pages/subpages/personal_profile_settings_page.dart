@@ -410,7 +410,9 @@ class _UserPersonalProfileSettingsPageState
   Future<String> _showLocationPicker() {
     return showMaterialScrollPicker<String>(
       context: context,
-      title: 'Pick Your State',
+      title: 'Şehir Listesi',
+      cancelText: 'İptal',
+      confirmText: 'Seç',
       items: cities,
       selectedItem: location,
       onChanged: (value) {

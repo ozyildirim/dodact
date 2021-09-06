@@ -10,9 +10,11 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:search_choices/search_choices.dart';
 
 class SignUpDetail extends StatefulWidget {
@@ -21,21 +23,21 @@ class SignUpDetail extends StatefulWidget {
 }
 
 class _SignUpDetailState extends BaseState<SignUpDetail> {
-  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   FocusNode _nameFocus = FocusNode();
   FocusNode _usernameFocus = FocusNode();
-  FocusNode _dropdownFocus = FocusNode();
+  FocusNode dropdownFocus = FocusNode();
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
 
-  bool validation = false;
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
 
   String name;
-  CityListItem selectedCity;
+  String city;
 
-  List<CityListItem> _dropdownItems = [];
   int _currentStep = 0;
 
   PickedFile profilePicture;
@@ -45,20 +47,21 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void initState() {
     super.initState();
-
-    _dropdownItems = _buildDropdownItems(cities);
-    _dropdownMenuItems = buildDropdownMenuItems(_dropdownItems);
   }
 
   void forward() {
-    _currentStep < 1
-        ? setState(() {
-            _currentStep++;
-          })
-        : null;
+    if (formKey.currentState.saveAndValidate()) {
+      _currentStep < 1
+          ? setState(() {
+              _currentStep++;
+            })
+          : null;
+    } else {}
   }
 
   void back() {
+    formKey.currentState.save();
+
     _currentStep != 0
         ? setState(() {
             _currentStep--;
@@ -99,13 +102,16 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             ),
             SizedBox(height: 4),
             TextFieldContainer(
-              width: size.width * 0.8,
+              width: size.width * 0.9,
               child: FormBuilderTextField(
                 textInputAction: TextInputAction.done,
                 name: "name",
                 autofocus: false,
+                autovalidateMode: autoValidateMode,
                 controller: nameController,
-                decoration: InputDecoration(border: InputBorder.none),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                ),
                 focusNode: _nameFocus,
                 validator: (value) {
                   return ProfanityChecker.profanityValidator(value);
@@ -124,66 +130,20 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             ),
             SizedBox(height: 4),
             TextFieldContainer(
-                width: size.width * 0.8,
-                child: SearchChoices.single(
-                  //TODO: Search bar çalışmıyor, düzelt.
-
-                  underline: Container(
-                    height: 1.0,
-                    decoration: BoxDecoration(),
-                  ),
-                  isCaseSensitiveSearch: false,
-                  autofocus: false,
-                  items: _dropdownMenuItems,
-                  hint: "Şehir",
-                  searchHint: "Şehir",
-                  onClear: () {
-                    setState(() {
-                      selectedCity = null;
-                    });
-                  },
-                  value: selectedCity,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedCity = value;
-                    });
-                  },
-                  searchFn: (String keyword,
-                      List<DropdownMenuItem<CityListItem>> items) {
-                    List<int> ret = List<int>();
-                    if (keyword != null && items != null) {
-                      keyword.split(" ").forEach((k) {
-                        int i = 0;
-                        items.forEach((item) {
-                          if (keyword.isEmpty ||
-                              (k.isNotEmpty &&
-                                  (item.value
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(k.toLowerCase())))) {
-                            ret.add(i);
-                          }
-                          i++;
-                        });
-                      });
-                    }
-                    if (keyword.isEmpty) {
-                      ret = Iterable<int>.generate(items.length).toList();
-                    }
-                    return (ret);
-                  },
-                  isExpanded: true,
-                  closeButton: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Kapat",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 18),
-                    ),
-                  ),
-                )),
+              width: size.width * 0.9,
+              child: FormBuilderDropdown(
+                focusNode: dropdownFocus,
+                hint: Text("Şehir Seçin"),
+                decoration: InputDecoration(border: InputBorder.none),
+                name: "location",
+                items: cities
+                    .map((city) => DropdownMenuItem(
+                          value: city,
+                          child: Text('$city'),
+                        ))
+                    .toList(),
+              ),
+            ),
           ],
         ),
         isActive: _currentStep == 0,
@@ -222,7 +182,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                     left: 160,
                     child: InkWell(
                       onTap: () {
-                        _showPickerOptions();
+                        showPickerOptions();
                       },
                       child: GFBadge(
                         size: 60,
@@ -244,7 +204,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             ),
             SizedBox(height: 4),
             TextFieldContainer(
-              width: size.width * 0.8,
+              width: size.width * 0.9,
               child: FormBuilderTextField(
                 name: "username",
                 textInputAction: TextInputAction.done,
@@ -296,33 +256,47 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             ),
           ),
           child: FormBuilder(
-            key: _formKey,
+            key: formKey,
             child: Stepper(
               controlsBuilder: (BuildContext context,
                   {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
                 return Row(
                   children: <Widget>[
                     _currentStep != steps.length - 1
-                        ?
-                        // TextButton(
-                        //     onPressed: forward,
-                        //     child: const Text('İleri'),
-                        //   )
-                        GFButton(
+                        ? GFButton(
+                            size: GFSize.LARGE,
+                            shape: GFButtonShape.pills,
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .button
+                                .copyWith(fontSize: 18),
+                            text: "İleri",
                             onPressed: forward,
                             child: const Text('İleri'),
                             color: Theme.of(context).primaryColor,
                           )
                         : GFButton(
+                            size: GFSize.LARGE,
+                            shape: GFButtonShape.pills,
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .button
+                                .copyWith(fontSize: 18),
                             color: Theme.of(context).primaryColor,
                             child: Text('Tamamla'),
                             onPressed: () async {
                               await submitForm();
                             },
                           ),
-                    TextButton(
-                      onPressed: back,
-                      child: const Text('Geri'),
+                    Container(
+                      color: Colors.white70,
+                      child: TextButton(
+                        onPressed: back,
+                        child: const Text(
+                          'Geri',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
                     ),
                   ],
                 );
@@ -338,7 +312,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     );
   }
 
-  Future<dynamic> _showPickerOptions() {
+  Future<dynamic> showPickerOptions() {
     return showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -350,14 +324,14 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                   leading: Icon(Icons.image),
                   title: Text("Galeriden Seç"),
                   onTap: () {
-                    _takePhotoFromGallery(context);
+                    takePhotoFromGallery(context);
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.camera),
                   title: Text("Kameradan Çek"),
                   onTap: () {
-                    _takePhotoFromCamera(context);
+                    takePhotoFromCamera(context);
                   },
                 )
               ],
@@ -367,15 +341,21 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void submitForm() async {
-    if (_formKey.currentState.saveAndValidate()) {
+    if (formKey.currentState.saveAndValidate()) {
       CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
-      var formUsername =
-          _formKey.currentState.value['username'].toString().trim();
+
+      var name = formKey.currentState.value['name'].toString().trim();
+      var location = formKey.currentState.value['location'].toString().trim();
+
+      var username = formKey.currentState.value['username'].toString().trim();
+
+      Logger().e("name: $name, location: $location, username: $username");
 
       try {
         await updateDetails(
-          username: formUsername,
-          name: nameController.text ?? "Dodact Kullanıcısı",
+          username: username,
+          name: name ?? "Dodact Kullanıcısı",
+          location: location,
         );
         CommonMethods().hideDialog();
         NavigationService.instance
@@ -409,14 +389,15 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     ));
   }
 
-  Future<void> updateDetails({String username, String name}) async {
+  Future<void> updateDetails(
+      {String username, String name, String location}) async {
     try {
-      var url = await _updateProfilePhoto(context);
+      var url = await updateProfilePhoto(context);
 
       var result = await authProvider.updateCurrentUser({
         'username': username,
         'nameSurname': name,
-        'location': selectedCity.name,
+        'location': location,
         'hiddenLocation': false,
         'hiddenNameSurname': false,
         'hiddenMail': false,
@@ -424,39 +405,17 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       });
       authProvider.currentUser.username = username;
       authProvider.currentUser.nameSurname = name;
-      authProvider.currentUser.location = selectedCity.name;
+      authProvider.currentUser.location = location;
     } catch (e) {
       showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
     }
   }
 
-  List<DropdownMenuItem<CityListItem>> buildDropdownMenuItems(
-      List<CityListItem> listItems) {
-    List<DropdownMenuItem<CityListItem>> items = [];
-    for (CityListItem cityListItem in listItems) {
-      items.add(DropdownMenuItem(
-        child: Text(cityListItem.name),
-        value: cityListItem,
-      ));
-    }
-    return items;
-  }
-
-  List<CityListItem> _buildDropdownItems(List<String> cities) {
-    List<CityListItem> _items = [];
-    for (int i = 0; i < cities.length; i++) {
-      _items.add(new CityListItem(i, cities[i]));
-    }
-    return _items;
-  }
-
-  List<DropdownMenuItem<CityListItem>> _dropdownMenuItems;
-
   _signOut() async {
     await authProvider.signOut();
   }
 
-  void _takePhotoFromGallery(BuildContext context) async {
+  void takePhotoFromGallery(BuildContext context) async {
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -465,7 +424,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     });
   }
 
-  void _takePhotoFromCamera(BuildContext context) async {
+  void takePhotoFromCamera(BuildContext context) async {
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     setState(() {
@@ -474,7 +433,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     });
   }
 
-  Future<String> _updateProfilePhoto(BuildContext context) async {
+  Future<String> updateProfilePhoto(BuildContext context) async {
     if (profilePicture != null) {
       CommonMethods().showLoaderDialog(context, "Fotoğraf yükleniyor");
       await authProvider
@@ -490,12 +449,12 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       });
       debugPrint("Picture uploaded.");
     } else {
-      await _uploadDefaultPicture();
+      await uploadDefaultPicture();
       navigateInterestSelectionPage();
     }
   }
 
-  void _uploadDefaultPicture() async {
+  void uploadDefaultPicture() async {
     try {
       await authProvider.updateCurrentUser({
         'profilePictureURL':
@@ -513,10 +472,4 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     NavigationService.instance
         .navigateReplacement(k_ROUTE_TEMPORARY_REGISTRATION_INTERESTS_CHOICE);
   }
-}
-
-class CityListItem {
-  int value;
-  String name;
-  CityListItem(this.value, this.name);
 }

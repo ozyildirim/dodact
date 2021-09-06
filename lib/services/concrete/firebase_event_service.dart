@@ -37,12 +37,15 @@ class FirebaseEventService extends BaseService<EventModel> {
     List<dynamic> eventIDs = user.eventIDs;
     List<EventModel> allUserEvents = [];
 
-    print("Event IDs from user object:" + eventIDs.toString());
-    for (dynamic event in eventIDs) {
-      DocumentSnapshot documentSnapshot =
-          await eventsRef.doc(event.toString()).get();
-      EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
-      allUserEvents.add(singleEvent);
+    if (eventIDs != null) {
+      if (eventIDs.isNotEmpty) {
+        for (String eventId in eventIDs) {
+          DocumentSnapshot documentSnapshot =
+              await eventsRef.doc(eventId).get();
+          EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
+          allUserEvents.add(singleEvent);
+        }
+      }
     }
     return allUserEvents;
   }
