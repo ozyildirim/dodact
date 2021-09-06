@@ -14,6 +14,7 @@ import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class UserPersonalProfileSettingsPage extends StatefulWidget {
@@ -37,6 +38,8 @@ class _UserPersonalProfileSettingsPageState
 
   bool isChanged = false;
 
+  AutovalidateMode autoValidate = AutovalidateMode.disabled;
+
   FocusNode nameSurnameFocus = new FocusNode();
   FocusNode usernameFocus = new FocusNode();
   FocusNode descriptionFocus = new FocusNode();
@@ -53,8 +56,6 @@ class _UserPersonalProfileSettingsPageState
 
     emailController =
         TextEditingController(text: authProvider.currentUser.email);
-
-    locationController = TextEditingController(text: location);
   }
 
   @override
@@ -113,6 +114,7 @@ class _UserPersonalProfileSettingsPageState
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: FormBuilder(
+                autovalidateMode: autoValidate,
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +129,8 @@ class _UserPersonalProfileSettingsPageState
                     ),
                     TextFieldContainer(
                       width: mediaQuery.size.width * 0.9,
-                      child: TextField(
+                      child: FormBuilderTextField(
+                        name: "email",
                         controller: emailController,
                         readOnly: true,
                         decoration: InputDecoration(
@@ -154,11 +157,22 @@ class _UserPersonalProfileSettingsPageState
                           border: InputBorder.none,
                           prefixIcon: Icon(Icons.person),
                         ),
-                        onChanged: (_) {
-                          setState(() {
-                            isChanged = true;
-                          });
+                        onChanged: (value) {
+                          if (authProvider.currentUser.nameSurname != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
                         },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(value);
+                          }
+                        ]),
                       ),
                     ),
                     Container(
@@ -178,10 +192,16 @@ class _UserPersonalProfileSettingsPageState
                           border: InputBorder.none,
                           prefixIcon: Icon(Icons.person),
                         ),
-                        onChanged: (_) {
-                          setState(() {
-                            isChanged = true;
-                          });
+                        onChanged: (value) {
+                          if (authProvider.currentUser.username != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
                         },
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
@@ -201,18 +221,36 @@ class _UserPersonalProfileSettingsPageState
                         style: TextStyle(fontSize: kSettingsTitleSize),
                       ),
                     ),
-                    InkWell(
-                      onTap: () => _showLocationPicker(),
-                      child: TextFieldContainer(
-                        width: mediaQuery.size.width * 0.9,
-                        child: TextField(
-                          enabled: false,
-                          readOnly: true,
-                          controller: locationController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            prefixIcon: Icon(Icons.location_city),
-                          ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderDropdown(
+                        name: "location",
+                        initialValue: location,
+                        items: cities
+                            .map((city) => DropdownMenuItem(
+                                  value: city,
+                                  child: Text('$city'),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          if (location != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
+                        },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(value);
+                          }
+                        ]),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.location_city),
                         ),
                       ),
                     ),
@@ -234,11 +272,23 @@ class _UserPersonalProfileSettingsPageState
                           border: InputBorder.none,
                           prefixIcon: Icon(Icons.person),
                         ),
-                        onChanged: (_) {
-                          setState(() {
-                            isChanged = true;
-                          });
+                        onChanged: (value) {
+                          if (authProvider.currentUser.userDescription !=
+                              value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
                         },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(value);
+                          }
+                        ]),
                       ),
                     ),
                     Container(
@@ -259,10 +309,21 @@ class _UserPersonalProfileSettingsPageState
                           border: InputBorder.none,
                           prefixIcon: Icon(Icons.school),
                         ),
-                        onChanged: (_) {
-                          setState(() {
-                            isChanged = true;
-                          });
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(value);
+                          }
+                        ]),
+                        onChanged: (value) {
+                          if (authProvider.currentUser.education != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
                         },
                       ),
                     ),
@@ -284,11 +345,23 @@ class _UserPersonalProfileSettingsPageState
                           border: InputBorder.none,
                           prefixIcon: Icon(Icons.work),
                         ),
-                        onChanged: (_) {
-                          setState(() {
-                            isChanged = true;
-                          });
+                        onChanged: (value) {
+                          if (authProvider.currentUser.profession != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
                         },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(
+                                value.trim());
+                          }
+                        ]),
                       ),
                     ),
                   ],
@@ -350,14 +423,14 @@ class _UserPersonalProfileSettingsPageState
                   leading: Icon(Icons.image),
                   title: Text("Galeriden Seç"),
                   onTap: () {
-                    _takePhotoFromGallery();
+                    takePhotoFromGallery();
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.camera),
                   title: Text("Kameradan Çek"),
                   onTap: () {
-                    _takePhotoFromCamera();
+                    takePhotoFromCamera();
                   },
                 )
               ],
@@ -366,7 +439,7 @@ class _UserPersonalProfileSettingsPageState
         });
   }
 
-  void _takePhotoFromGallery() async {
+  void takePhotoFromGallery() async {
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -374,13 +447,13 @@ class _UserPersonalProfileSettingsPageState
       NavigationService.instance.pop();
     });
     if (picture != null) {
-      _updateProfilePhoto();
+      updateProfilePhoto();
     } else {
       print("Kullanıcı fotoğraf seçmekten vazgeçti.");
     }
   }
 
-  void _takePhotoFromCamera() async {
+  void takePhotoFromCamera() async {
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     setState(() {
@@ -388,13 +461,13 @@ class _UserPersonalProfileSettingsPageState
       NavigationService.instance.pop();
     });
     if (picture != null) {
-      _updateProfilePhoto();
+      updateProfilePhoto();
     } else {
       print("Kullanıcı fotoğraf seçmekten vazgeçti.");
     }
   }
 
-  void _updateProfilePhoto() async {
+  void updateProfilePhoto() async {
     CommonMethods().showLoaderDialog(context, "Fotoğrafınız değiştiriliyor.");
     await authProvider
         .updateCurrentUserProfilePicture(File(picture.path))
@@ -407,30 +480,12 @@ class _UserPersonalProfileSettingsPageState
     });
   }
 
-  Future<String> _showLocationPicker() {
-    return showMaterialScrollPicker<String>(
-      context: context,
-      title: 'Şehir Listesi',
-      cancelText: 'İptal',
-      confirmText: 'Seç',
-      items: cities,
-      selectedItem: location,
-      onChanged: (value) {
-        setState(() {
-          location = value;
-          locationController.text = value;
-          isChanged = true;
-        });
-      },
-    );
-  }
-
   Future<void> updateUser() async {
-    try {
-      if (formKey.currentState.saveAndValidate()) {
+    if (formKey.currentState.saveAndValidate()) {
+      try {
         CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
         await authProvider.updateCurrentUser({
-          'location': locationController.text,
+          'location': formKey.currentState.value['location'].toString().trim(),
           'username': formKey.currentState.value['username'].toString().trim(),
           'nameSurname': formKey.currentState.value['nameSurname'].toString(),
           'userDescription':
@@ -444,13 +499,10 @@ class _UserPersonalProfileSettingsPageState
         setState(() {
           isChanged = false;
         });
-      } else {
+      } catch (e) {
         CommonMethods().showErrorDialog(
-            context, "Lütfen tüm alanları uygun bir şekilde doldur");
+            context, "Değişiklikler kaydedilirken bir hata oluştu");
       }
-    } catch (e) {
-      CommonMethods().showErrorDialog(
-          context, "Değişiklikler kaydedilirken bir hata oluştu");
-    }
+    } else {}
   }
 }

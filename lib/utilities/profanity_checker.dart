@@ -712,7 +712,7 @@ class ProfanityChecker {
     var filter = ProfanityFilter.filterAdditionally(turkce_kufurler);
     var result = filter.hasProfanity(value);
     if (result) {
-      return "";
+      return "Argo içerikli giriş yapıldı";
     }
   }
 }

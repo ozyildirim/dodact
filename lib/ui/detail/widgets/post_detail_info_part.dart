@@ -49,7 +49,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     return true;
   }
 
-  void navigateOwnerProfile(PostModel post, GroupModel group) {
+  void navigateOwnerProfile(PostModel post, {GroupModel group}) {
     if (post.ownerType == "User") {
       if (post.ownerId == authProvider.currentUser.uid) {
       } else {
@@ -80,7 +80,9 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
               color: Colors.white60,
               child: ListTile(
                   leading: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      navigateOwnerProfile(post);
+                    },
                     child: CircleAvatar(
                       maxRadius: 40,
                       backgroundImage: NetworkImage(
@@ -145,7 +147,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
               child: ListTile(
                   leading: InkWell(
                     onTap: () {
-                      navigateOwnerProfile(post, groupProvider.group);
+                      navigateOwnerProfile(post, group: groupProvider.group);
                     },
                     child: CircleAvatar(
                       maxRadius: 40,
