@@ -163,7 +163,7 @@ class _PostDetailState extends BaseState<PostDetail> {
             ],
       centerTitle: true,
       title: Text(
-        "İçerik Detay",
+        "İçerik Detayı",
         style: TextStyle(color: Colors.black),
       ),
       elevation: 8,

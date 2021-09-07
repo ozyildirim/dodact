@@ -66,7 +66,8 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
             ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
             : [
                 Center(
-                  child: Text("Etkinlik Yok :("),
+                  child: Text("Etkinlik bulunmuyor",
+                      style: TextStyle(fontSize: 22)),
                 )
               ],
       );

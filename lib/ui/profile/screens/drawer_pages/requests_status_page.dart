@@ -77,7 +77,7 @@ class _RequestStatusPageBodyPartState
         child: Center(
             child: Container(
           color: Colors.white70,
-          child: Text("Herhangi bir istekte bulunmadınız.",
+          child: Text("Herhangi bir istekte bulunmadın.",
               style: TextStyle(fontSize: 22)),
         )),
       );

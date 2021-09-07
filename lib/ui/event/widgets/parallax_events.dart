@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
@@ -106,11 +107,11 @@ class EventListItem extends StatelessWidget {
         backgroundImageKey: _backgroundImageKey,
       ),
       children: [
-        Image.network(
-          imageUrl,
+        CachedNetworkImage(
           key: _backgroundImageKey,
+          imageUrl: imageUrl,
           fit: BoxFit.cover,
-        )
+        ),
       ],
     );
   }

@@ -50,7 +50,10 @@ class _EventsPageState extends BaseState<EventsPage> {
               width: double.infinity,
               child: Column(
                 children: [
-                  _buildFilterBar(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _buildFilterBar(),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: FilteredEventView(),
@@ -95,7 +98,7 @@ class _EventsPageState extends BaseState<EventsPage> {
   Future<String> _showCityPicker() {
     return showMaterialScrollPicker<String>(
       context: context,
-      title: 'Lokasyon Seçiniz',
+      title: 'Lokasyon Seçin',
       items: cities,
       selectedItem: selectedCity,
       onChanged: (value) {

@@ -45,7 +45,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
       List<EventModel> _userEvents = provider.userEventList;
       _userEvents != null
           ? _userEvents.map((e) => print(e.eventTitle))
-          : print("Etkinlik yok");
+          : Center(child: Text("Etkinlik yok", style: TextStyle(fontSize: 22)));
 
       _userEvents = _userEvents.map((e) {
         if (e.approved) {
@@ -101,78 +101,78 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
     bool isEnded = isEventEnded(event);
 
     return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InkWell(
-          onTap: () {
-            NavigationService.instance
-                .navigate(k_ROUTE_EVENT_DETAIL, args: event);
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Stack(children: [
-              CachedNetworkImage(
-                imageUrl: event.eventImages[0],
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    height: 320,
-                    width: 250,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          event.eventImages[0],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              Positioned(
-                bottom: 10,
-                child: Container(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          NavigationService.instance
+              .navigate(k_ROUTE_EVENT_DETAIL, args: event);
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(children: [
+            CachedNetworkImage(
+              imageUrl: event.eventImages[0],
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  height: 320,
                   width: 250,
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey[50].withOpacity(0.8),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      event.eventTitle,
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        event.eventImages[0],
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    subtitle: Text(
-                        DateFormat("dd/MM/yyyy")
-                            .format(event.eventStartDate)
-                            .toString(),
-                        style: TextStyle(fontSize: 18)),
                   ),
+                );
+              },
+            ),
+            Positioned(
+              bottom: 10,
+              child: Container(
+                width: 250,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey[50].withOpacity(0.8),
+                ),
+                child: ListTile(
+                  title: Text(
+                    event.eventTitle,
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Text(
+                      DateFormat("dd/MM/yyyy")
+                          .format(event.eventStartDate)
+                          .toString(),
+                      style: TextStyle(fontSize: 18)),
                 ),
               ),
-              Positioned(
-                top: 1,
-                right: 1,
-                child: isEnded
-                    ? Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.white,
-                            child:
-                                Icon(Icons.hourglass_full, color: Colors.grey),
-                          ),
+            ),
+            Positioned(
+              top: 1,
+              right: 1,
+              child: isEnded
+                  ? Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.hourglass_full, color: Colors.grey),
                         ),
-                      )
-                    : Container(),
-              )
-            ]),
-          ),
-        ));
+                      ),
+                    )
+                  : Container(),
+            )
+          ]),
+        ),
+      ),
+    );
   }
 
   bool isEventEnded(EventModel event) {

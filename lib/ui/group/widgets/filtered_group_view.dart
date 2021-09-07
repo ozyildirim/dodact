@@ -66,17 +66,14 @@ class FilteredGroupView extends StatelessWidget {
               ],
             );
           } else {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
                 child: Container(
-                  height: 200,
-                  color: Colors.purple,
-                  child: Center(
-                    child: Text(
-                      "Henüz bir grup yok :(",
-                      style: TextStyle(fontSize: 25),
-                    ),
+                  color: Colors.white60,
+                  child: Text(
+                    "Bu girdilerle eşleşen bir grup bulunmuyor.",
+                    style: TextStyle(fontSize: 22),
                   ),
                 ),
               ),

@@ -150,7 +150,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                       navigateOwnerProfile(post, group: groupProvider.group);
                     },
                     child: CircleAvatar(
-                      maxRadius: 40,
+                      maxRadius: 25,
                       backgroundImage:
                           NetworkImage(groupProvider.group.groupProfilePicture),
                     ),

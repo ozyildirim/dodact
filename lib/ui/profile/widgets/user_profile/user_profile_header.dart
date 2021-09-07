@@ -18,6 +18,7 @@ class UserProfileHeader extends StatelessWidget {
     return Container(
       height: 240,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
             flex: 2,
@@ -39,16 +40,20 @@ class UserProfileHeader extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: ProfileInfoCard(),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Container(
+              height: mediaQuery.size.height * 0.2,
+              width: mediaQuery.size.width * 0.5,
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: ProfileInfoCard(),
+                ),
               ),
             ),
           ),

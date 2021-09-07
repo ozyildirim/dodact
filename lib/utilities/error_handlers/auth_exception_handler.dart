@@ -135,7 +135,7 @@ class AuthExceptionHandler {
         break;
       case AuthResultStatus.invalidCredential:
         errorMessage =
-            "Bu giriş yönteminde bir sorun var. Lütfen farklı bir giriş yöntemi seçiniz.";
+            "Bu giriş yönteminde bir sorun var. Lütfen farklı bir giriş yöntemi seçin.";
         break;
       case AuthResultStatus.abortedByUser:
         errorMessage = "Giriş kullanıcı tarafından iptal edildi.";

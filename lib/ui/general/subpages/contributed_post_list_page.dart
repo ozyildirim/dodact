@@ -1,4 +1,6 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,32 +20,45 @@ class ContributedPostListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Oluşturulan İçerikler"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: provider.postList == null
-              ? Center(child: CircularProgressIndicator())
-              : provider.postList.isEmpty
-                  ? Text("Henüz içerik yok")
-                  : ListView.builder(
-                      itemCount: provider.postList.length,
-                      itemBuilder: (context, index) {
-                        var post = provider.postList[index];
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.cyanAccent,
-                            radius: 26,
-                          ),
-                          onTap: () {
-                            NavigationService.instance.navigate(
-                                k_ROUTE_POST_DETAIL,
-                                args: post.postId);
-                          },
-                          title: Text(post.postTitle),
-                        );
-                      }),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
         ),
+        width: MediaQuery.of(context).size.width,
+        child: provider.postList == null
+            ? Center(child: CircularProgressIndicator())
+            : provider.postList.isEmpty
+                ? Text("Henüz içerik yok")
+                : ListView.builder(
+                    itemCount: provider.postList.length,
+                    itemBuilder: (context, index) {
+                      var post = provider.postList[index];
+
+                      var thumbnail = CommonMethods.createThumbnailURL(
+                          post.isLocatedInYoutube, post.postContentURL);
+
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          color: Colors.white60,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.cyanAccent,
+                              backgroundImage: NetworkImage(thumbnail),
+                              maxRadius: 50,
+                            ),
+                            onTap: () {
+                              NavigationService.instance.navigate(
+                                  k_ROUTE_POST_DETAIL,
+                                  args: post.postId);
+                            },
+                            title: Text(post.postTitle),
+                            subtitle: Text(post.postCategory),
+                          ),
+                        ),
+                      );
+                    }),
       ),
     );
   }

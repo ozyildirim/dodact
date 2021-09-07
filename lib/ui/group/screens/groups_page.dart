@@ -35,24 +35,24 @@ class _GroupsPageState extends State<GroupsPage> {
 
     final mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(kBackgroundImage),
-              fit: BoxFit.cover,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
+        ),
+        height: mediaQuery.size.height - 56,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _buildFilterBar(),
             ),
-          ),
-          height: mediaQuery.size.height - 56,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _buildFilterBar(),
-              ),
-              FilteredGroupView()
-            ],
-          ),
+            SingleChildScrollView(
+              child: FilteredGroupView(),
+            )
+          ],
         ),
       ),
     );
@@ -186,7 +186,7 @@ class _GroupsPageState extends State<GroupsPage> {
   Future<String> _showCityPicker() {
     return showMaterialScrollPicker<String>(
       context: context,
-      title: 'Lokasyon Seçiniz',
+      title: 'Lokasyon Seçin',
       items: cities,
       selectedItem: selectedCity,
       onChanged: (value) {
