@@ -28,7 +28,7 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
       provider.getUserGroups(authProvider.currentUser.groupIDs);
     }
 
-    Logger().i("UserGroups: " + provider.userGroups.toString());
+    // Logger().i("UserGroups: " + provider.userGroups.toString());
     if (provider.userGroups != null) {
       if (provider.userGroups.isEmpty) {
         return Center(

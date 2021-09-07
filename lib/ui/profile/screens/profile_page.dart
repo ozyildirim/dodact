@@ -34,20 +34,20 @@ class _ProfilePageState extends BaseState<ProfilePage>
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
-        actions: [
-          GFIconBadge(
-            counterChild: Text("1"),
-            child: IconButton(
-              onPressed: () {
-                NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
-              },
-              icon: Icon(
-                FontAwesome5Solid.bell,
-                color: Colors.cyan,
-              ),
-            ),
-          )
-        ],
+        // actions: [
+        //   GFIconBadge(
+        //     counterChild: Text("1"),
+        //     child: IconButton(
+        //       onPressed: () {
+        //         NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
+        //       },
+        //       icon: Icon(
+        //         FontAwesome5Solid.bell,
+        //         color: Colors.cyan,
+        //       ),
+        //     ),
+        //   )
+        // ],
         centerTitle: true,
         title: Text(
           "@" + authProvider.currentUser.username,

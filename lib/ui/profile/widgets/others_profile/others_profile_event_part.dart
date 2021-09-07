@@ -5,6 +5,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -16,12 +17,15 @@ class OthersProfileEventsTab extends StatefulWidget {
   _OthersProfileEventsTabState createState() => _OthersProfileEventsTabState();
 }
 
-class _OthersProfileEventsTabState extends BaseState<OthersProfileEventsTab> {
+class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
+  UserProvider userProvider;
+
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     Provider.of<EventProvider>(context, listen: false)
-        .getUserEvents(authProvider.currentUser);
+        .getUserEvents(userProvider.otherUser);
   }
 
   @override

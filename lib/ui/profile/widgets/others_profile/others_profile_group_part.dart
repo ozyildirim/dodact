@@ -38,7 +38,7 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
       if (provider.userGroups.isEmpty) {
         return Center(
           child: Text(
-            "Herhangi bir gruba dahil değilsin.",
+            "Herhangi bir gruba dahil değil.",
           ),
         );
       } else {

@@ -53,19 +53,43 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
         }
       }).toList();
 
-      var sortedEvents = _sortEvents(_userEvents);
-      Logger().e("soortedEvents:" + sortedEvents[0].eventTitle);
+      // Logger().i(_userEvents.length);
+      // _userEvents.forEach((event) {
+      //   Logger().e(event.eventStartDate);
+      // });
 
-      return ListView(
-        scrollDirection: Axis.horizontal,
-        children: sortedEvents != null
-            ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
-            : [
-                Center(
-                  child: Text("Etkinlik Yok :("),
-                )
-              ],
-      );
+      if (_userEvents.isNotEmpty && _userEvents != null) {
+        var sortedEvents = _sortEvents(_userEvents);
+
+        return ListView(
+          scrollDirection: Axis.horizontal,
+          children: sortedEvents != null
+              ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
+              : [
+                  Padding(
+                    padding: const EdgeInsets.all(36.0),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      child: SvgPicture.asset(
+                          "assets/images/app/situations/undraw_not_found_60pq.svg",
+                          semanticsLabel: 'A red up arrow'),
+                    ),
+                  )
+                ],
+        );
+      } else {
+        return Padding(
+          padding: const EdgeInsets.all(36.0),
+          child: Container(
+            height: 30,
+            width: 30,
+            child: SvgPicture.asset(
+                "assets/images/app/situations/undraw_not_found_60pq.svg",
+                semanticsLabel: 'A red up arrow'),
+          ),
+        );
+      }
     } else {
       return Center(
         child: spinkit,
