@@ -27,6 +27,7 @@ class GroupDetailPage extends StatefulWidget {
 class _GroupDetailPageState extends BaseState<GroupDetailPage>
     with SingleTickerProviderStateMixin {
   GroupModel group;
+  GroupProvider groupProvider;
 
   TabController tabController;
 
@@ -34,11 +35,13 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   void initState() {
     group = widget.group;
     tabController = new TabController(length: 6, vsync: this);
+    groupProvider = getProvider<GroupProvider>();
     super.initState();
 
-    Provider.of<GroupProvider>(context, listen: false).getGroupPosts(group);
-    Provider.of<GroupProvider>(context, listen: false).getGroupMembers(group);
-    Provider.of<GroupProvider>(context, listen: false).getGroupEvents(group);
+    groupProvider.setGroup(group);
+    groupProvider.getGroupPosts(group);
+    groupProvider.getGroupMembers(group);
+    groupProvider.getGroupEvents(group);
   }
 
   bool isUserGroupFounder() {
@@ -59,14 +62,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     Logger().i(provider.group);
 
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //     child: Icon(
-      //       Icons.add,
-      //       color: Colors.white,
-      //     ),
-      //     onPressed: () {
-      //       navigateCreationPage(group.groupId);
-      //     }),
       appBar: AppBar(
         actions: isUserGroupFounder()
             ? [
@@ -168,7 +163,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     return Column(
       children: [
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Center(
               child: ClipRRect(
             borderRadius: BorderRadius.circular(18),
@@ -180,7 +175,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         Divider(),
         buildTabs(),
         Expanded(
-          flex: 3,
           child: SingleChildScrollView(child: buildTabViews()),
         )
       ],

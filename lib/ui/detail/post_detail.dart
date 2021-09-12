@@ -68,6 +68,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   void initState() {
     super.initState();
     post = widget.post;
+    Provider.of<PostProvider>(context, listen: false).setPost(post);
 
     isFavorite = authProvider.currentUser.favoritedPosts.contains(post.postId);
   }

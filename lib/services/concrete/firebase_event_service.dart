@@ -57,14 +57,12 @@ class FirebaseEventService extends BaseService<EventModel> {
     List<EventModel> groupEvents = [];
 
     print("Event IDs from group object:" + events.toString());
-    if (events != null) {
-      if (events.isNotEmpty) {
-        for (String event in events) {
-          DocumentSnapshot documentSnapshot =
-              await eventsRef.doc(event.toString()).get();
-          EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
-          groupEvents.add(singleEvent);
-        }
+    if (events != null && events.length > 0) {
+      for (String event in events) {
+        print(event);
+        // DocumentSnapshot documentSnapshot = await eventsRef.doc(event).get();
+        // EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
+        // groupEvents.add(singleEvent);
       }
     }
     return groupEvents;

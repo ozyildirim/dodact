@@ -22,38 +22,29 @@ class UserProfileHeader extends StatelessWidget {
         children: [
           Expanded(
             flex: 2,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () => showProfilePictureContainer(
-                      context, provider.currentUser.profilePictureURL),
-                  child: CachedNetworkImage(
-                    imageUrl: provider.currentUser.profilePictureURL,
-                    imageBuilder: (context, imageProvider) => CircleAvatar(
-                      maxRadius: 80,
-                      backgroundImage:
-                          NetworkImage(provider.currentUser.profilePictureURL),
-                    ),
-                  ),
+            child: InkWell(
+              onTap: () => showProfilePictureContainer(
+                  context, provider.currentUser.profilePictureURL),
+              child: CachedNetworkImage(
+                imageUrl: provider.currentUser.profilePictureURL,
+                imageBuilder: (context, imageProvider) => CircleAvatar(
+                  maxRadius: 80,
+                  backgroundImage:
+                      NetworkImage(provider.currentUser.profilePictureURL),
                 ),
-              ],
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Container(
-              height: mediaQuery.size.height * 0.2,
-              width: mediaQuery.size.width * 0.5,
-              child: Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: ProfileInfoCard(),
-                ),
+          Expanded(
+            flex: 3,
+            child: Card(
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: ProfileInfoCard(),
               ),
             ),
           ),
@@ -121,9 +112,7 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
           Center(
             child: _firstPage(),
           ),
-          Center(
-            child: _secondPage(),
-          ),
+          _secondPage(),
           Center(
             child: _thirdPage(),
           ),
@@ -169,6 +158,16 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
                 onPressed: () {
                   CommonMethods.launchURL(
                       authProvider.currentUser.soundcloudLink);
+                },
+              )
+            : Container(),
+        authProvider.currentUser.instagramUsername != null &&
+                authProvider.currentUser.instagramUsername != ''
+            ? IconButton(
+                icon: Icon(FontAwesome5Brands.instagram, size: 30),
+                onPressed: () {
+                  CommonMethods.launchURL("https://www.instagram.com/" +
+                      authProvider.currentUser.instagramUsername);
                 },
               )
             : Container(),
@@ -271,7 +270,10 @@ class _ProfileInfoCardState extends BaseState<ProfileInfoCard> {
   Widget _secondPage() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Text(authProvider.currentUser.userDescription),
+      child: Text(
+        authProvider.currentUser.userDescription,
+        style: TextStyle(fontSize: 18),
+      ),
     );
   }
 }

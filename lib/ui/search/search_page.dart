@@ -98,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
                             post.postTitle,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w300,
                               fontSize: 20,
                             ),
                           ),

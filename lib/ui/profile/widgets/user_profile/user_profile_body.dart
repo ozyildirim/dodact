@@ -33,10 +33,26 @@ class _UserProfileBodyState extends State<UserProfileBody>
             labelStyle: TextStyle(fontSize: 16),
             controller: _controller,
             tabs: const [
-              const Tab(icon: Icon(FontAwesome5Solid.adjust)),
-              const Tab(icon: Icon(FontAwesome5Solid.info)),
-              const Tab(icon: Icon(FontAwesome5Solid.object_group)),
-              const Tab(icon: Icon(FontAwesome5Solid.calendar_alt)),
+              const Tab(
+                  icon: Icon(
+                FontAwesome5Solid.layer_group,
+                size: 20,
+              )),
+              const Tab(
+                  icon: Icon(
+                FontAwesome5Solid.question,
+                size: 20,
+              )),
+              const Tab(
+                  icon: Icon(
+                FontAwesome5Solid.user_friends,
+                size: 20,
+              )),
+              const Tab(
+                  icon: Icon(
+                FontAwesome5Solid.calendar_alt,
+                size: 20,
+              )),
             ],
           ),
         ),

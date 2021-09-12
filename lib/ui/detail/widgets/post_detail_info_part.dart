@@ -31,10 +31,10 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
   @override
   void initState() {
     super.initState();
-    _getCreatorData(context, widget.post.ownerType, widget.post.ownerId);
+    getCreatorData(context, widget.post.ownerType, widget.post.ownerId);
   }
 
-  Future<void> _getCreatorData(
+  Future<void> getCreatorData(
       BuildContext context, String ownerType, String creatorId) async {
     if (ownerType == 'User') {
       await Provider.of<UserProvider>(context, listen: false)

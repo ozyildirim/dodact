@@ -4,6 +4,7 @@ import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:logger/logger.dart';
 
 class FirebasePostService extends BaseService<PostModel> {
   @override
@@ -53,24 +54,27 @@ class FirebasePostService extends BaseService<PostModel> {
   }
 
   Future<List<PostModel>> getGroupPosts(GroupModel group) async {
-    List<String> postIDs = group.groupPosts;
+    try {
+      List<String> postIDs = group.groupPosts;
 
-    List<PostModel> allGroupPosts = [];
+      List<PostModel> allGroupPosts = [];
 
-    print("Group Post IDs from  group object:" + postIDs.toString());
+      print("Group Post IDs from  group object:" + postIDs.toString());
 
-    print(group.groupPosts);
-    if (postIDs != null) {
-      if (postIDs.isNotEmpty) {
-        for (String post in postIDs) {
-          DocumentSnapshot documentSnapshot =
-              await postsRef.doc(post.toString()).get();
-          PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
-          allGroupPosts.add(singlePost);
+      print(group.groupPosts);
+      if (postIDs != null) {
+        if (postIDs.isNotEmpty) {
+          for (String post in postIDs) {
+            DocumentSnapshot documentSnapshot = await postsRef.doc(post).get();
+            PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
+            allGroupPosts.add(singlePost);
+          }
         }
       }
+      return allGroupPosts;
+    } catch (e) {
+      Logger().e(e);
     }
-    return allGroupPosts;
   }
 
   //fetch events by query

@@ -49,9 +49,8 @@ class ContributedPostListPage extends StatelessWidget {
                               maxRadius: 50,
                             ),
                             onTap: () {
-                              NavigationService.instance.navigate(
-                                  k_ROUTE_POST_DETAIL,
-                                  args: post.postId);
+                              NavigationService.instance
+                                  .navigate(k_ROUTE_POST_DETAIL, args: post);
                             },
                             title: Text(post.postTitle),
                             subtitle: Text(post.postCategory),

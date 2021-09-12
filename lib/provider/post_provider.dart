@@ -49,7 +49,6 @@ class PostProvider extends ChangeNotifier {
 
   setPost(PostModel post) {
     this.post = post;
-    notifyListeners();
   }
 
   // If the content is not video, provider will upload it to firestorage,

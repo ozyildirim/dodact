@@ -452,6 +452,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                         SizedBox(height: 4),
+                        //TODO: Picker ı değiştir.
                         Row(
                           children: [
                             TextFieldContainer(

@@ -1,4 +1,3 @@
-import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -39,6 +38,7 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
         return Center(
           child: Text(
             "Herhangi bir gruba dahil değil.",
+            style: TextStyle(fontSize: 22),
           ),
         );
       } else {

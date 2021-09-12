@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 
 class GroupPhotosTabView extends StatelessWidget {
@@ -10,6 +10,19 @@ class GroupPhotosTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
 
+    if (provider.group.groupPhotos.length == 0 ||
+        provider.group.groupPhotos == null) {
+      return Padding(
+        padding: const EdgeInsets.all(36.0),
+        child: Container(
+          height: 30,
+          width: 30,
+          child: SvgPicture.asset(
+              "assets/images/app/situations/undraw_not_found_60pq.svg",
+              semanticsLabel: 'A red up arrow'),
+        ),
+      );
+    }
     return GFItemsCarousel(
       rowCount: 3,
       children: provider.group.groupPhotos.map(

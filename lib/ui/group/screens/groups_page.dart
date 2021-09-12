@@ -49,8 +49,10 @@ class _GroupsPageState extends State<GroupsPage> {
               padding: const EdgeInsets.all(8.0),
               child: _buildFilterBar(),
             ),
-            SingleChildScrollView(
-              child: FilteredGroupView(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: FilteredGroupView(),
+              ),
             )
           ],
         ),
