@@ -144,14 +144,4 @@ class AuthRepository {
       Map<String, dynamic> newData, String uid) async {
     await _firebaseAuthService.updateCurrentUser(newData, uid);
   }
-
-  Future<void> editUserPostIDs(
-      String postId, String userId, bool addOrRemove) async {
-    await _firebaseAuthService.editUserPostIDs(postId, userId, addOrRemove);
-  }
-
-  Future<void> editUserEventIDs(
-      String eventId, String userId, bool addOrRemove) async {
-    await _firebaseAuthService.editUserEventIDs(eventId, userId, addOrRemove);
-  }
 }

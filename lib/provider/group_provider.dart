@@ -16,7 +16,7 @@ class GroupProvider extends ChangeNotifier {
   List<PostModel> groupPosts;
   List<UserObject> groupMembers;
   List<EventModel> groupEvents;
-  List<GroupModel> userGroups;
+  List<GroupModel> userGroupList;
 
   List<GroupModel> groupList;
   bool isLoading = false;
@@ -81,15 +81,6 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future editGroupPostList(
-      String postId, String groupId, bool addOrRemove) async {
-    try {
-      await _groupRepository.editGroupPostList(postId, groupId, addOrRemove);
-    } catch (e) {
-      print("GroupProvider editGroupPostDetail error: " + e.toString());
-    }
-  }
-
   Future<List<GroupModel>> getGroupList({bool isNotify}) async {
     try {
       changeState(true, isNotify: isNotify);
@@ -140,17 +131,12 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<GroupModel>> getUserGroups(List<String> groupIdList) async {
+  Future<List<GroupModel>> getUserGroups(String userId) async {
     try {
-      List<GroupModel> groups = [];
-      Future.forEach(groupIdList, (element) async {
-        GroupModel group = await _groupRepository.getDetail(element);
-        groups.add(group);
-      });
-
-      userGroups = groups;
+      userGroupList = await _groupRepository.getUserGroups(userId);
       notifyListeners();
-      return userGroups;
+      Logger().d(userGroupList);
+      return userGroupList;
     } catch (e) {
       logger.e("GroupProvider getUserGroups error: " + e.toString());
       return null;
@@ -170,9 +156,9 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getGroupPosts(GroupModel group) async {
+  Future<void> getGroupPosts(String groupId) async {
     try {
-      groupPosts = await _groupRepository.getGroupPosts(group);
+      groupPosts = await _groupRepository.getGroupPosts(groupId);
       notifyListeners();
     } catch (e) {
       logger.e("GroupProvider getGroupPosts error: " + e.toString());
@@ -180,9 +166,9 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getGroupEvents(GroupModel group) async {
+  Future<void> getGroupEvents(String groupId) async {
     try {
-      groupEvents = await _groupRepository.getGroupEvents(group);
+      groupEvents = await _groupRepository.getGroupEvents(groupId);
       notifyListeners();
     } catch (e) {
       logger.e("GroupProvider getGroupEvents error: " + e.toString());
@@ -217,28 +203,22 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> addGroupMember(String userID, String groupID,
-      {bool isNotify}) async {
-    try {
-      changeState(true, isNotify: isNotify);
-      var result = await _groupRepository.addGroupMember(userID, groupID);
-      if (result != false) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print("GroupProvider addGroupMember error: " + e.toString());
-      return false;
-    } finally {
-      changeState(false);
-    }
-  }
+  // Future<bool> addGroupMember(String userID, String groupID,
+  //     {bool isNotify}) async {
+  //   try {
+  //     changeState(true, isNotify: isNotify);
+  //     var result = await _groupRepository.addGroupMember(userID, groupID);
+  //     if (result != false) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     print("GroupProvider addGroupMember error: " + e.toString());
+  //     return false;
+  //   } finally {
+  //     changeState(false);
+  //   }
+  // }
 
-  Future<void> editGroupEventList(
-      String eventId, String groupId, bool addOrRemove) async {
-    try {
-      await _groupRepository.editGroupEventList(eventId, groupId, addOrRemove);
-    } catch (e) {}
-  }
 }

@@ -70,19 +70,19 @@ class GroupRepository implements BaseService {
     }
   }
 
-  Future<List<PostModel>> getGroupPosts(GroupModel group) async {
+  Future<List<PostModel>> getGroupPosts(String groupId) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
-      return await _firebasePostService.getGroupPosts(group);
+      return await _firebasePostService.getGroupPosts(groupId);
     }
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group) async {
+  Future<List<EventModel>> getGroupEvents(String groupId) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
-      return await _firebaseEventService.getGroupEvents(group);
+      return await _firebaseEventService.getGroupEvents(groupId);
     }
   }
 
@@ -93,13 +93,13 @@ class GroupRepository implements BaseService {
     return await _firebaseUserService.getGroupMembers(group);
   }
 
-  Future<bool> addGroupMember(String userID, String groupID) async {
-    if (appMode == AppMode.DEBUG) {
-      return Future.value(null);
-    } else {
-      return await _firebaseGroupService.addGroupMember(userID, groupID);
-    }
-  }
+  // Future<bool> addGroupMember(String userID, String groupID) async {
+  //   if (appMode == AppMode.DEBUG) {
+  //     return Future.value(null);
+  //   } else {
+  //     return await _firebaseGroupService.addGroupMember(userID, groupID);
+  //   }
+  // }
 
   Future<List<GroupModel>> getGroupsByCategory(String category) async {
     if (appMode == AppMode.DEBUG) {
@@ -125,23 +125,11 @@ class GroupRepository implements BaseService {
     }
   }
 
-  Future editGroupPostList(
-      String postId, String groupId, bool addOrRemove) async {
+  Future<List<GroupModel>> getUserGroups(String userId) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
-      await _firebaseGroupService.editGroupPostList(
-          postId, groupId, addOrRemove);
-    }
-  }
-
-  Future<void> editGroupEventList(
-      String eventId, String groupId, bool addOrRemove) async {
-    if (appMode == AppMode.DEBUG) {
-      return Future.value(null);
-    } else {
-      await _firebaseGroupService.editGroupEventList(
-          eventId, groupId, addOrRemove);
+      return await _firebaseGroupService.getUserGroups(userId);
     }
   }
 }

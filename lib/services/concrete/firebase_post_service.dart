@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
-import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:logger/logger.dart';
@@ -35,15 +34,23 @@ class FirebasePostService extends BaseService<PostModel> {
 
   Future<List<PostModel>> getUserPosts(UserObject user) async {
     //Get post IDs from user object
-    List<String> postIDs = user.postIDs;
+    // List<String> postIDs = user.postIDs;
     List<PostModel> userPosts = [];
 
-    print("Post IDs from object:" + postIDs.toString());
-    await Future.forEach(postIDs, (post) async {
-      DocumentSnapshot documentSnapshot = await postsRef.doc(post).get();
-      PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
-      userPosts.add(singlePost);
-    });
+    QuerySnapshot querySnapshot =
+        await postsRef.where('ownerId', isEqualTo: user.uid).get();
+
+    for (DocumentSnapshot post in querySnapshot.docs) {
+      PostModel _convertedPost = PostModel.fromJson(post.data());
+      userPosts.add(_convertedPost);
+    }
+
+    // print("Post IDs from object:" + postIDs.toString());
+    // await Future.forEach(postIDs, (post) async {
+    //   DocumentSnapshot documentSnapshot = await postsRef.doc(post).get();
+    //   PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
+    //   userPosts.add(singlePost);
+    // });
     // for (String post in postIDs) {
     //   DocumentSnapshot documentSnapshot =
     //       await postsRef.doc(post).get();
@@ -53,24 +60,18 @@ class FirebasePostService extends BaseService<PostModel> {
     return userPosts;
   }
 
-  Future<List<PostModel>> getGroupPosts(GroupModel group) async {
+  Future<List<PostModel>> getGroupPosts(String groupId) async {
     try {
-      List<String> postIDs = group.groupPosts;
-
       List<PostModel> allGroupPosts = [];
 
-      print("Group Post IDs from  group object:" + postIDs.toString());
+      QuerySnapshot querySnapshot =
+          await postsRef.where('ownerId', isEqualTo: groupId).get();
 
-      print(group.groupPosts);
-      if (postIDs != null) {
-        if (postIDs.isNotEmpty) {
-          for (String post in postIDs) {
-            DocumentSnapshot documentSnapshot = await postsRef.doc(post).get();
-            PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
-            allGroupPosts.add(singlePost);
-          }
-        }
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
+        allGroupPosts.add(singlePost);
       }
+
       return allGroupPosts;
     } catch (e) {
       Logger().e(e);

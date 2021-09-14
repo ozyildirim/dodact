@@ -3,7 +3,6 @@ import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/group_model.dart';
-import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 
 class FirebaseGroupService extends BaseService<GroupModel> {
@@ -52,38 +51,34 @@ class FirebaseGroupService extends BaseService<GroupModel> {
     return await groupsRef.doc(id).update(changes);
   }
 
-  // TODO: addGroupMember fonksiyonunun doğruluğunu sor.
-  Future<bool> addGroupMember(String userID, String groupID) async {
-    QuerySnapshot check = await groupsRef
-        .where('groupMemberList', arrayContains: userID) //?
-        .where('groupId', isEqualTo: groupID)
-        .get();
+  // // TODO: addGroupMember fonksiyonunun doğruluğunu sor.
+  // Future<bool> addGroupMember(String userID, String groupID) async {
+  //   QuerySnapshot check = await groupsRef
+  //       .where('groupMemberList', arrayContains: userID) //?
+  //       .where('groupId', isEqualTo: groupID)
+  //       .get();
 
-    if (check.docs.isEmpty) {
-      GroupModel group = await getDetail(groupID);
-      group.groupMemberList.add(userID);
-      await update(groupID, group.toJson());
+  //   if (check.docs.isEmpty) {
+  //     GroupModel group = await getDetail(groupID);
+  //     group.groupMemberList.add(userID);
+  //     await update(groupID, group.toJson());
 
-      UserObject user = await _firebaseUserService.readUser(userID);
-      user.groupIDs.add(groupID);
-      await usersRef.doc(userID).update(user.toMap());
+  //     UserObject user = await _firebaseUserService.readUser(userID);
+  //     user.groupIDs.add(groupID);
+  //     await usersRef.doc(userID).update(user.toMap());
 
-      return true;
-      //User added to group
-    } else {
-      return false;
-      //Same user exists in same group
-    }
-  }
+  //     return true;
+  //     //User added to group
+  //   } else {
+  //     return false;
+  //     //Same user exists in same group
+  //   }
+  // }
 
   Future<bool> removeGroupMember(String userID, String groupID) async {
     GroupModel group = await getDetail(groupID);
     group.groupMemberList.remove(userID);
     await update(groupID, group.toJson());
-
-    UserObject user = await _firebaseUserService.readUser(userID);
-    user.groupIDs.remove(groupID);
-    await usersRef.doc(userID).update(user.toMap());
 
     return true;
   }
@@ -130,32 +125,16 @@ class FirebaseGroupService extends BaseService<GroupModel> {
     return filteredGroups;
   }
 
-  Future editGroupPostList(
-      String postId, String groupId, bool addOrRemove) async {
-    List<String> idList = [postId];
-    // ADD: true, REMOVE: false
-    if (addOrRemove) {
-      await groupsRef.doc(groupId).update({
-        "groupPosts": FieldValue.arrayUnion(idList),
-      });
-    } else {
-      await groupsRef.doc(groupId).update({
-        "groupPosts": FieldValue.arrayRemove(idList),
-      });
-    }
-  }
+  Future<List<GroupModel>> getUserGroups(String userId) async {
+    List<GroupModel> userGroups = [];
 
-  Future editGroupEventList(
-      String eventId, String groupId, bool addOrRemove) async {
-    if (addOrRemove == true) {
-      print(eventId);
-      await groupsRef.doc(groupId).update({
-        'events': FieldValue.arrayUnion([eventId])
-      });
-    } else {
-      await groupsRef.doc(groupId).update({
-        "events": FieldValue.arrayRemove([eventId])
-      });
+    QuerySnapshot querySnapshot =
+        await groupsRef.where("groupMemberList", arrayContains: userId).get();
+    for (DocumentSnapshot group in querySnapshot.docs) {
+      GroupModel groupObject = GroupModel.fromJson(group.data());
+
+      userGroups.add(groupObject);
     }
+    return userGroups;
   }
 }

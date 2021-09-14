@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/event_model.dart';
-import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 
 class FirebaseEventService extends BaseService<EventModel> {
@@ -34,36 +33,28 @@ class FirebaseEventService extends BaseService<EventModel> {
 
   Future<List<EventModel>> getUserEvents(UserObject user) async {
     //Get post IDs from user object
-    List<dynamic> eventIDs = user.eventIDs;
-    List<EventModel> allUserEvents = [];
+    QuerySnapshot querySnapshot =
+        await eventsRef.where('ownerId', isEqualTo: user.uid).get();
 
-    if (eventIDs != null) {
-      if (eventIDs.isNotEmpty) {
-        for (String eventId in eventIDs) {
-          DocumentSnapshot documentSnapshot =
-              await eventsRef.doc(eventId).get();
-          EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
-          allUserEvents.add(singleEvent);
-        }
-      }
+    List<EventModel> allUserEvents = [];
+    for (DocumentSnapshot event in querySnapshot.docs) {
+      EventModel _convertedEvent = EventModel.fromJson(event.data());
+      allUserEvents.add(_convertedEvent);
     }
     return allUserEvents;
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group) async {
+  Future<List<EventModel>> getGroupEvents(String groupId) async {
     //Get post IDs from user object
-    List<String> events = group.events;
-    print(group.events);
+
     List<EventModel> groupEvents = [];
 
-    print("Event IDs from group object:" + events.toString());
-    if (events != null && events.length > 0) {
-      for (String event in events) {
-        print(event);
-        // DocumentSnapshot documentSnapshot = await eventsRef.doc(event).get();
-        // EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
-        // groupEvents.add(singleEvent);
-      }
+    QuerySnapshot querySnapshot =
+        await eventsRef.where("ownerId", isEqualTo: groupId).get();
+
+    for (DocumentSnapshot event in querySnapshot.docs) {
+      EventModel singleEvent = EventModel.fromJson(event.data());
+      groupEvents.add(singleEvent);
     }
     return groupEvents;
   }

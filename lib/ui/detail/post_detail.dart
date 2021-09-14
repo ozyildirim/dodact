@@ -6,8 +6,6 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
@@ -36,21 +34,17 @@ class _PostDetailState extends BaseState<PostDetail> {
   PostModel post;
 
   bool isFavorite = false;
+  bool canUserManagePost = false;
 
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController commentController = TextEditingController();
 
   FocusNode focusNode = new FocusNode();
 
-  bool isCurrentUserPostOwner() {
+  // ignore: missing_return
+  bool canUserManagePostMethod() {
     if (post.ownerType == 'User') {
-      if (authProvider.currentUser.postIDs != null &&
-          authProvider.currentUser.postIDs.contains(post.postId)) {
-        return true;
-      }
-      return false;
-    } else if (post.ownerType == 'Group') {
-      if (authProvider.currentUser.ownedGroupIDs.contains(post.ownerId)) {
+      if (post.ownerId == authProvider.currentUser.uid) {
         return true;
       }
       return false;
@@ -69,6 +63,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     super.initState();
     post = widget.post;
     Provider.of<PostProvider>(context, listen: false).setPost(post);
+    canUserManagePost = canUserManagePostMethod();
 
     isFavorite = authProvider.currentUser.favoritedPosts.contains(post.postId);
   }
@@ -86,7 +81,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     var mediaQuery = MediaQuery.of(context);
 
     var appBar = AppBar(
-      actions: isCurrentUserPostOwner()
+      actions: canUserManagePost == true
           ? [
               PopupMenuButton(
                   itemBuilder: (context) => [
@@ -409,15 +404,6 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     await Provider.of<PostProvider>(context, listen: false)
         .deletePost(post.postId, isLocatedInStorage);
-
-    //KULLANICININ / GRUBUN POSTIDS den SİL
-    if (post.ownerType == "User") {
-      await Provider.of<AuthProvider>(context, listen: false)
-          .editUserPostIDs(post.postId, post.ownerId, false);
-    } else if (post.ownerType == "Group") {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .editGroupPostList(post.postId, post.ownerId, false);
-    }
 
     //REQUESTİNİ SİL
     await Provider.of<RequestProvider>(context, listen: false)

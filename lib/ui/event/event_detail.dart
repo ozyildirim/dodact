@@ -40,13 +40,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   var logger = new Logger();
 
   bool canUserControlEvent() {
-    if (event.ownerType == 'Group') {
-      if (authProvider.currentUser.ownedGroupIDs.contains(event.ownerId)) {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (event.ownerType == "User") {
+    if (event.ownerType == "User") {
       if (authProvider.currentUser.uid == event.ownerId) {
         return true;
       } else {
@@ -403,15 +397,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
     await Provider.of<EventProvider>(context, listen: false)
         .deleteEvent(event.eventId, isLocatedInStorage);
-
-    //KULLANICININ / GRUBUN POSTIDS den SİL
-    if (event.ownerType == "User") {
-      await Provider.of<AuthProvider>(context, listen: false)
-          .editUserEventIDs(event.eventId, event.ownerId, false);
-    } else if (event.ownerType == "Group") {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .editGroupEventList(event.eventId, event.ownerId, false);
-    }
 
     //REQUESTİNİ SİL
     await Provider.of<RequestProvider>(context, listen: false)

@@ -64,18 +64,6 @@ class PostProvider extends ChangeNotifier {
           newPost.postId = id;
         });
 
-        //ve post sahibinin post listesine ekleniyor.
-
-        if (newPost.ownerType == "User") {
-          await _authProvider.editUserPostIDs(
-              newPost.postId, newPost.ownerId, true);
-        } else if (newPost.ownerType == "Group") {
-          await _groupProvider.editGroupPostList(
-              newPost.postId, newPost.ownerId, true);
-        } else {
-          debugPrint("User type sıkıntısı");
-        }
-
         await createPostRequest(newPost);
         //İÇERİK VİDEO İÇERMİYOR İSE
       } else {
@@ -99,13 +87,6 @@ class PostProvider extends ChangeNotifier {
 
         //Post isteği oluşturuluyor.
         await createPostRequest(newPost);
-
-        //ve post sahibinin post listesine ekleniyor.
-        if (newPost.ownerType == "User") {
-          await _authProvider.editUserPostIDs(postId, newPost.ownerId, true);
-        } else if (newPost.ownerType == "Group") {
-          await _groupProvider.editGroupPostList(postId, newPost.ownerId, true);
-        }
       }
     } catch (e) {
       debugPrint("PostProvider add post error: " + e.toString());

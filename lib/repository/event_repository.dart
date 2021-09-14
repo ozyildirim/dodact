@@ -50,14 +50,6 @@ class EventRepository implements BaseService {
     }
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group) async {
-    if (appMode == AppMode.DEBUG) {
-      return Future.value(List<EventModel>.empty());
-    } else {
-      return await _firebaseEventService.getGroupEvents(group);
-    }
-  }
-
   @override
   Query getListQuery() {
     throw UnimplementedError();

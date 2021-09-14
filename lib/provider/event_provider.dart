@@ -83,14 +83,6 @@ class EventProvider extends ChangeNotifier {
 
       //Post isteği oluşturuluyor.
       await createEventRequest(newEvent);
-
-      if (newEvent.ownerType == 'User') {
-        await authProvider.editUserEventIDs(
-            newEvent.eventId, newEvent.ownerId, true);
-      } else if (newEvent.ownerType == 'Group') {
-        await groupProvider.editGroupEventList(
-            newEvent.eventId, newEvent.ownerId, true);
-      }
     } catch (e) {
       print("EventProvider addEvent error: $e");
     }
@@ -178,21 +170,6 @@ class EventProvider extends ChangeNotifier {
     } catch (e) {
       print("EventProvider getOtherUserEvents error: " + e.toString());
       return null;
-    }
-  }
-
-  Future<List<EventModel>> getGroupEvents(GroupModel group,
-      {bool isNotify}) async {
-    try {
-      changeState(true, isNotify: isNotify);
-      var fetchedList = await eventRepository.getGroupEvents(group);
-      eventList = fetchedList;
-      return eventList;
-    } catch (e) {
-      print("EventProvider getGroupEvents error: " + e.toString());
-      return null;
-    } finally {
-      changeState(false);
     }
   }
 

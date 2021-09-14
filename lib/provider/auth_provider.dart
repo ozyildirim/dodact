@@ -194,36 +194,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> editUserPostIDs(
-      String postId, String userId, bool addOrRemove) async {
-    try {
-      await _authRepository.editUserPostIDs(postId, userId, addOrRemove);
-      if (addOrRemove) {
-        currentUser.postIDs.add(postId);
-      } else {
-        currentUser.postIDs.remove(postId);
-      }
-      notifyListeners();
-    } catch (e) {
-      logger.e("authProvider editUserPostDetail error: $e");
-    }
-  }
-
-  Future<void> editUserEventIDs(
-      String eventId, String userId, bool addOrRemove) async {
-    try {
-      await _authRepository.editUserEventIDs(eventId, userId, addOrRemove);
-      if (addOrRemove) {
-        currentUser.eventIDs.add(eventId);
-      } else {
-        currentUser.eventIDs.remove(eventId);
-      }
-      notifyListeners();
-    } catch (e) {
-      logger.e("authProvider editUserPostDetail error: $e");
-    }
-  }
-
   Future<String> updateCurrentUserProfilePicture(File image) async {
     //First: upload users photo to firestorage
     try {

@@ -10,21 +10,16 @@ class UserObject {
   String telephoneNumber;
   String profilePictureURL;
   int experiencePoint;
-  List<String> groupIDs;
-  List<String> ownedGroupIDs;
-  List<String> postIDs;
-  List<String> eventIDs;
+  bool newUser;
   String location;
   List<dynamic> rosettes;
   String mainInterest;
-
   String twitterUsername;
   String instagramUsername;
   String youtubeLink;
   String dribbbleLink;
   String linkedInLink;
   String soundcloudLink;
-  bool newUser;
   String userDescription;
   String education;
   String profession;
@@ -48,10 +43,6 @@ class UserObject {
       this.telephoneNumber,
       this.profilePictureURL,
       this.experiencePoint,
-      this.groupIDs,
-      this.ownedGroupIDs,
-      this.postIDs,
-      this.eventIDs,
       this.location,
       this.rosettes,
       this.mainInterest,
@@ -80,10 +71,7 @@ class UserObject {
     userData['telephoneNumber'] = this.telephoneNumber ?? '';
     userData['profilePictureURL'] = this.profilePictureURL;
     userData['experiencePoint'] = this.experiencePoint ?? 0;
-    userData['groupIDs'] = this.groupIDs;
-    userData['ownedGroupIDs'] = this.ownedGroupIDs;
-    userData['postIDs'] = this.postIDs;
-    userData['eventIDs'] = this.eventIDs;
+
     userData['location'] = this.location;
     userData['mainInterest'] = this.mainInterest;
     userData['rosettes'] = this.rosettes;
@@ -115,10 +103,6 @@ class UserObject {
         telephoneNumber = map['telephoneNumber'],
         profilePictureURL = map['profilePictureURL'],
         experiencePoint = map['experiencePoint'],
-        groupIDs = map['groupIDs'],
-        ownedGroupIDs = map['ownedGroupIDs'] ?? [],
-        postIDs = map['postIDs'] ?? [],
-        eventIDs = map['eventIDs'] ?? [],
         location = map['location'],
         rosettes = map['rosettes'],
         mainInterest = map['mainInterest'] ?? "",
@@ -147,10 +131,7 @@ class UserObject {
     telephoneNumber = doc.data()['telephoneNumber'] ?? '';
     profilePictureURL = doc.data()['profilePictureURL'] ?? '';
     experiencePoint = doc.data()['experiencePoint'] ?? '';
-    groupIDs = doc.data()['groupIDs']?.cast<String>() ?? [];
-    ownedGroupIDs = doc.data()['ownedGroupIDs']?.cast<String>() ?? [];
-    postIDs = doc.data()['postIDs']?.cast<String>() ?? [];
-    eventIDs = doc.data()['eventIDs']?.cast<String>() ?? [];
+
     location = doc.data()['location'];
     rosettes = doc.data()['rosettes'];
     mainInterest = doc.data()['mainInterest'] ?? "";
@@ -171,6 +152,6 @@ class UserObject {
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email,newUser: $newUser,mainInterest: $mainInterest, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs,  postIDs: $postIDs, eventIDs: $eventIDs,searchKeywords: $searchKeywords},';
+    return 'UserObject{uid: $uid, email: $email,newUser: $newUser,mainInterest: $mainInterest, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
   }
 }

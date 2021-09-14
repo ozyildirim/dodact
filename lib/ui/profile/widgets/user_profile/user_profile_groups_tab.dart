@@ -4,7 +4,6 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileGroupsTab extends StatefulWidget {
@@ -16,21 +15,16 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
   @override
   void initState() {
     super.initState();
+    Provider.of<GroupProvider>(context, listen: false)
+        .getUserGroups(authProvider.currentUser.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
 
-    if (provider.userGroups == null ||
-        provider.userGroups.length !=
-            authProvider.currentUser.groupIDs.length) {
-      provider.getUserGroups(authProvider.currentUser.groupIDs);
-    }
-
-    // Logger().i("UserGroups: " + provider.userGroups.toString());
-    if (provider.userGroups != null) {
-      if (provider.userGroups.isEmpty) {
+    if (provider.userGroupList != null) {
+      if (provider.userGroupList.isEmpty) {
         return Center(
           child: Text(
             "Herhangi bir gruba dahil değilsin.",
@@ -42,9 +36,9 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
             shrinkWrap: true,
             primary: false,
             scrollDirection: Axis.vertical,
-            itemCount: provider.userGroups.length,
+            itemCount: provider.userGroupList.length,
             itemBuilder: (context, index) {
-              var groupItem = provider.userGroups[index];
+              var groupItem = provider.userGroupList[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(

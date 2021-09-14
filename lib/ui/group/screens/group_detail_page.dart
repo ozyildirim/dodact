@@ -39,9 +39,9 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     super.initState();
 
     groupProvider.setGroup(group);
-    groupProvider.getGroupPosts(group);
+    groupProvider.getGroupPosts(group.groupId);
     groupProvider.getGroupMembers(group);
-    groupProvider.getGroupEvents(group);
+    groupProvider.getGroupEvents(group.groupId);
   }
 
   bool isUserGroupFounder() {

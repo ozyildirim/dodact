@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -139,35 +138,5 @@ class FirebaseAuthService {
   Future<void> updateCurrentUser(
       Map<String, dynamic> newData, String uid) async {
     await usersRef.doc(uid).update(newData);
-  }
-
-  Future<void> editUserPostIDs(
-      String postId, String userId, bool addOrRemove) async {
-    //ADD: true, REMOVE: false
-    if (addOrRemove == true) {
-      print(postId);
-      await usersRef.doc(userId).update({
-        'postIDs': FieldValue.arrayUnion([postId])
-      });
-    } else {
-      await usersRef.doc(userId).update({
-        "postIDs": FieldValue.arrayRemove([postId])
-      });
-    }
-  }
-
-  Future<void> editUserEventIDs(
-      String eventId, String userId, bool addOrRemove) async {
-    //ADD: true, REMOVE: false
-    if (addOrRemove == true) {
-      print(eventId);
-      await usersRef.doc(userId).update({
-        'eventIDs': FieldValue.arrayUnion([eventId])
-      });
-    } else {
-      await usersRef.doc(userId).update({
-        "eventIDs": FieldValue.arrayRemove([eventId])
-      });
-    }
   }
 }

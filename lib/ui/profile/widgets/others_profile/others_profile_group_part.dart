@@ -20,21 +20,18 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
     Provider.of<GroupProvider>(context, listen: false)
-        .getUserGroups(userProvider.otherUser.groupIDs);
+        .getUserGroups(userProvider.otherUser.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
 
-    if (provider.userGroups == null ||
-        provider.userGroups.length != userProvider.otherUser.groupIDs.length) {
-      provider.getUserGroups(userProvider.otherUser.groupIDs);
-    }
+    provider.getUserGroups(userProvider.otherUser.uid);
 
-    Logger().i("UserGroups: " + provider.userGroups.toString());
-    if (provider.userGroups != null) {
-      if (provider.userGroups.isEmpty) {
+    Logger().i("UserGroups: " + provider.userGroupList.toString());
+    if (provider.userGroupList != null) {
+      if (provider.userGroupList.isEmpty) {
         return Center(
           child: Text(
             "Herhangi bir gruba dahil değil.",
@@ -46,9 +43,9 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
             shrinkWrap: true,
             primary: false,
             scrollDirection: Axis.vertical,
-            itemCount: provider.userGroups.length,
+            itemCount: provider.userGroupList.length,
             itemBuilder: (context, index) {
-              var groupItem = provider.userGroups[index];
+              var groupItem = provider.userGroupList[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(

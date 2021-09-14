@@ -25,34 +25,55 @@ class _UserProfileBodyState extends State<UserProfileBody>
     return Column(
       children: [
         Container(
-          color: Colors.white,
+          color: Colors.white54,
           width: double.infinity,
           height: 60,
           child: TabBar(
             labelColor: Colors.black,
             labelStyle: TextStyle(fontSize: 16),
             controller: _controller,
-            tabs: const [
+            indicatorSize: TabBarIndicatorSize.label,
+            tabs: [
+              Tab(
+                icon: Icon(
+                  FontAwesome5Solid.layer_group,
+                  size: 20,
+                ),
+                child: Text(
+                  "Paylaşımlar",
+                  style: TextStyle(fontSize: 13),
+                ),
+              ),
               const Tab(
-                  icon: Icon(
-                FontAwesome5Solid.layer_group,
-                size: 20,
-              )),
+                icon: Icon(
+                  FontAwesome5Solid.question,
+                  size: 20,
+                ),
+                child: Text(
+                  "Hakkında",
+                  style: TextStyle(fontSize: 13),
+                ),
+              ),
               const Tab(
-                  icon: Icon(
-                FontAwesome5Solid.question,
-                size: 20,
-              )),
+                icon: Icon(
+                  FontAwesome5Solid.user_friends,
+                  size: 20,
+                ),
+                child: Text(
+                  "Gruplar",
+                  style: TextStyle(fontSize: 13),
+                ),
+              ),
               const Tab(
-                  icon: Icon(
-                FontAwesome5Solid.user_friends,
-                size: 20,
-              )),
-              const Tab(
-                  icon: Icon(
-                FontAwesome5Solid.calendar_alt,
-                size: 20,
-              )),
+                icon: Icon(
+                  FontAwesome5Solid.calendar_alt,
+                  size: 20,
+                ),
+                child: Text(
+                  "Etkinlikler",
+                  style: TextStyle(fontSize: 13),
+                ),
+              ),
             ],
           ),
         ),
