@@ -4,6 +4,7 @@ import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
+import 'package:logger/logger.dart';
 
 class FirebaseGroupService extends BaseService<GroupModel> {
   FirebaseUserService _firebaseUserService = locator<FirebaseUserService>();
@@ -51,36 +52,22 @@ class FirebaseGroupService extends BaseService<GroupModel> {
     return await groupsRef.doc(id).update(changes);
   }
 
-  // // TODO: addGroupMember fonksiyonunun doğruluğunu sor.
-  // Future<bool> addGroupMember(String userID, String groupID) async {
-  //   QuerySnapshot check = await groupsRef
-  //       .where('groupMemberList', arrayContains: userID) //?
-  //       .where('groupId', isEqualTo: groupID)
-  //       .get();
+  // TODO: addGroupMember fonksiyonunun doğruluğunu sor.
+  Future<bool> addGroupMember(String userID, String groupID) async {
+    GroupModel group = await getDetail(groupID);
+    group.groupMemberList.add(userID);
+    await update(groupID, group.toJson()).then((value) {
+      return true;
+    });
+    return false;
+    //User added to group
+  }
 
-  //   if (check.docs.isEmpty) {
-  //     GroupModel group = await getDetail(groupID);
-  //     group.groupMemberList.add(userID);
-  //     await update(groupID, group.toJson());
-
-  //     UserObject user = await _firebaseUserService.readUser(userID);
-  //     user.groupIDs.add(groupID);
-  //     await usersRef.doc(userID).update(user.toMap());
-
-  //     return true;
-  //     //User added to group
-  //   } else {
-  //     return false;
-  //     //Same user exists in same group
-  //   }
-  // }
-
-  Future<bool> removeGroupMember(String userID, String groupID) async {
+  Future<void> removeGroupMember(String userID, String groupID) async {
     GroupModel group = await getDetail(groupID);
     group.groupMemberList.remove(userID);
     await update(groupID, group.toJson());
-
-    return true;
+    Logger().d("Grup üyesi silindi");
   }
 
   Future<List<GroupModel>> getGroupsByCategory(String category) async {

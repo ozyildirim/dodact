@@ -93,13 +93,21 @@ class GroupRepository implements BaseService {
     return await _firebaseUserService.getGroupMembers(group);
   }
 
-  // Future<bool> addGroupMember(String userID, String groupID) async {
-  //   if (appMode == AppMode.DEBUG) {
-  //     return Future.value(null);
-  //   } else {
-  //     return await _firebaseGroupService.addGroupMember(userID, groupID);
-  //   }
-  // }
+  Future<bool> addGroupMember(String userID, String groupID) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      return await _firebaseGroupService.addGroupMember(userID, groupID);
+    }
+  }
+
+  Future<void> removeGroupMember(String userID, String groupID) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await _firebaseGroupService.removeGroupMember(userID, groupID);
+    }
+  }
 
   Future<List<GroupModel>> getGroupsByCategory(String category) async {
     if (appMode == AppMode.DEBUG) {

@@ -197,28 +197,38 @@ class GroupProvider extends ChangeNotifier {
       // await _groupRepository
       //     .update(group.groupId, {'groupProfilePicture': pictureDownloadURL});
     } catch (e) {
-      print("GroupProvider setGroupProfilePicture error: " + e.toString());
+      logger.e("GroupProvider setGroupProfilePicture error: " + e.toString());
     } finally {
       changeState(false);
     }
   }
 
-  // Future<bool> addGroupMember(String userID, String groupID,
-  //     {bool isNotify}) async {
-  //   try {
-  //     changeState(true, isNotify: isNotify);
-  //     var result = await _groupRepository.addGroupMember(userID, groupID);
-  //     if (result != false) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     print("GroupProvider addGroupMember error: " + e.toString());
-  //     return false;
-  //   } finally {
-  //     changeState(false);
-  //   }
-  // }
+  Future<bool> addGroupMember(
+    String userID,
+    String groupID,
+  ) async {
+    try {
+      if (group.groupMemberList.contains(userID)) {
+        return false;
+      } else {
+        await _groupRepository.addGroupMember(userID, groupID);
+        group.groupMemberList.add(userID);
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      logger.e("GroupProvider addGroupMember error: " + e.toString());
+      return false;
+    }
+  }
 
+  Future<void> removeGroupMember(String userID, String groupID) async {
+    try {
+      await _groupRepository.removeGroupMember(userID, groupID);
+      group.groupMemberList.remove(userID);
+      notifyListeners();
+    } catch (e) {
+      logger.e("GroupProvider removeGroupMember error: " + e.toString());
+    }
+  }
 }
