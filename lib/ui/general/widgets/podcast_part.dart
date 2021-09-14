@@ -15,7 +15,7 @@ class PodcastPart extends StatelessWidget {
     if (podcastProvider.podcastList != null) {
       return GFItemsCarousel(
         itemHeight: 208,
-        rowCount: 2,
+        rowCount: 1,
         children: podcastProvider.podcastList.map((podcast) {
           return InkWell(
             onTap: () {

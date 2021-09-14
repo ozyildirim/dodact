@@ -607,7 +607,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
     var title = post.postTitle;
     for (int i = 1; i < title.length; i++) {
-      searchKeywords.add(title.substring(0, i));
+      searchKeywords.add(title.substring(0, i).toLowerCase());
     }
     return searchKeywords;
   }
