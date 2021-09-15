@@ -131,7 +131,6 @@ class UserObject {
     telephoneNumber = doc.data()['telephoneNumber'] ?? '';
     profilePictureURL = doc.data()['profilePictureURL'] ?? '';
     experiencePoint = doc.data()['experiencePoint'] ?? '';
-
     location = doc.data()['location'];
     rosettes = doc.data()['rosettes'];
     mainInterest = doc.data()['mainInterest'] ?? "";

@@ -72,7 +72,10 @@ class _RequestStatusPageBodyPartState
       return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover),
         ),
         child: Center(
             child: Container(
@@ -97,7 +100,10 @@ class _RequestStatusPageBodyPartState
       return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.6), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover),
         ),
         child: SingleChildScrollView(
           child: RefreshIndicator(
