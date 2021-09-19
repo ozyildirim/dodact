@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/locator.dart';
+import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/request_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/repository/post_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
@@ -15,8 +14,6 @@ import 'package:logger/logger.dart';
 
 class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
-  AuthProvider _authProvider = AuthProvider();
-  GroupProvider _groupProvider = GroupProvider();
   FirebaseRequestService requestService = FirebaseRequestService();
 
   var logger = new Logger();
@@ -26,6 +23,7 @@ class PostProvider extends ChangeNotifier {
   List<PostModel> postList;
   List<PostModel> userPosts;
   List<PostModel> otherUsersPosts;
+  List<DodderModel> postDodders;
 
   List<PostModel> topPosts;
 
@@ -117,6 +115,7 @@ class PostProvider extends ChangeNotifier {
           await UploadService().deletePostMedia(postId);
         }
       });
+      await postRepository.delete(postId);
       PostModel selectedPost =
           postList.firstWhere((element) => element.postId == postId);
       postList.remove(selectedPost);
@@ -174,28 +173,39 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changePostDoddedStatus(
-      String postId, String userId, bool dodOrUndod) async {
+  Future<List<DodderModel>> getDodders(String postId) async {
     try {
-      if (dodOrUndod) {
-        await postRepository.update(postId, {
-          'supportersId': FieldValue.arrayUnion([userId]),
-          'dodCounter': FieldValue.increment(1)
-        }).then((_) {
-          post.supportersId.add(userId);
-          notifyListeners();
-        });
-      } else {
-        await postRepository.update(postId, {
-          'supportersId': FieldValue.arrayRemove([userId]),
-          'dodCounter': FieldValue.increment(-1)
-        }).then((_) {
-          post.supportersId.remove(userId);
-          notifyListeners();
-        });
-      }
+      postDodders = await postRepository.getDodders(postId);
+      post.dodders = postDodders;
+      notifyListeners();
+      return postDodders;
     } catch (e) {
-      print("PostProvider changePostDoddedStatus error: " + e.toString());
+      logger.e("PostProvider getDodders error: " + e.toString());
+      return null;
+    }
+  }
+
+  Future<void> dodPost(String postId, String userId) async {
+    try {
+      await postRepository.dodPost(postId, userId);
+      post.dodders.add(
+        DodderModel(date: DateTime.now(), dodderId: userId),
+      );
+      notifyListeners();
+    } catch (e) {
+      logger.e("PostProvider dodPost error: " + e.toString());
+    }
+  }
+
+  Future<void> undodPost(String postId, String userId) async {
+    try {
+      await postRepository.undodPost(postId, userId);
+      var dodder =
+          post.dodders.firstWhere((element) => element.dodderId == userId);
+      post.dodders.remove(dodder);
+      notifyListeners();
+    } catch (e) {
+      logger.e("PostProvider undodPost error: " + e.toString());
     }
   }
 

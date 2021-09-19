@@ -31,6 +31,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
   @override
   void initState() {
     super.initState();
+    authProvider = Provider.of(context, listen: false);
     getCreatorData(context, widget.post.ownerType, widget.post.ownerId);
   }
 
@@ -43,10 +44,6 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
       await Provider.of<GroupProvider>(context, listen: false)
           .getGroupDetail(creatorId);
     }
-  }
-
-  bool checkIfDodded() {
-    return true;
   }
 
   void navigateOwnerProfile(PostModel post, {GroupModel group}) {
@@ -64,16 +61,15 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
-    final userProvider = Provider.of<UserProvider>(context);
-    final groupProvider = Provider.of<GroupProvider>(context);
+    var post = postProvider.post;
 
-    if (postProvider.post == null) {
-      return Center(child: spinkit);
-    } else {
-      var post = postProvider.post;
+    return buildInfoPart(post);
+  }
 
-      if (widget.post.ownerType == 'User') {
-        if (userProvider.otherUser != null) {
+  Widget buildInfoPart(PostModel post) {
+    if (post.ownerType == 'User') {
+      return Consumer<UserProvider>(
+        builder: (context, provider, child) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -81,83 +77,21 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
               child: ListTile(
                   leading: InkWell(
                     onTap: () {
-                      navigateOwnerProfile(post);
-                    },
-                    child: CircleAvatar(
-                      maxRadius: 40,
-                      backgroundImage: NetworkImage(
-                          userProvider.otherUser.profilePictureURL),
-                    ),
-                  ),
-                  title: Center(
-                    child: Text(
-                      userProvider.otherUser.nameSurname != null &&
-                              userProvider.otherUser.nameSurname != ""
-                          ? userProvider.otherUser.nameSurname
-                          : userProvider.otherUser.username,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  subtitle: Center(
-                    child: Text(
-                      DateFormat('dd/MM/yyyy').format(post.postDate),
-                    ),
-                  ),
-                  trailing: post.supportersId.length != null
-                      ? post.ownerId != authProvider.currentUser.uid
-                          ? Consumer<PostProvider>(
-                              builder: (context, provider, child) {
-                                bool liked = provider.post.supportersId
-                                    .contains(authProvider.currentUser.uid);
-
-                                return Bounce(
-                                  duration: Duration(milliseconds: 220),
-                                  onPressed: () async {
-                                    await provider.changePostDoddedStatus(
-                                        post.postId,
-                                        authProvider.currentUser.uid,
-                                        !liked);
-                                  },
-                                  child: liked
-                                      ? Icon(
-                                          Icons.flutter_dash_outlined,
-                                          color: Colors.red,
-                                          size: 45,
-                                        )
-                                      : Icon(
-                                          Icons.flutter_dash_outlined,
-                                          size: 45,
-                                        ),
-                                );
-                              },
-                            )
-                          : Text("${post.supportersId.length} Dod")
-                      : null),
-            ),
-          );
-        } else {
-          return Center(child: spinkit);
-        }
-      } else if (widget.post.ownerType == 'Group') {
-        if (groupProvider.group != null) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: Colors.white60,
-              child: ListTile(
-                  leading: InkWell(
-                    onTap: () {
-                      navigateOwnerProfile(post, group: groupProvider.group);
+                      navigateOwnerProfile(
+                        post,
+                      );
                     },
                     child: CircleAvatar(
                       maxRadius: 25,
                       backgroundImage:
-                          NetworkImage(groupProvider.group.groupProfilePicture),
+                          NetworkImage(provider.otherUser.profilePictureURL),
                     ),
                   ),
                   title: Center(
                     child: Text(
-                      groupProvider.group.groupName,
+                      provider.otherUser.nameSurname != null
+                          ? provider.otherUser.nameSurname
+                          : provider.otherUser.username,
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -166,42 +100,83 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                       DateFormat('dd/MM/yyyy').format(post.postDate),
                     ),
                   ),
-                  trailing: post.supportersId.length != null
-                      ? post.ownerId != authProvider.currentUser.uid
-                          ? Consumer<PostProvider>(
-                              builder: (context, provider, child) {
-                                bool liked = provider.post.supportersId
-                                    .contains(authProvider.currentUser.uid);
-
-                                return Bounce(
-                                  duration: Duration(milliseconds: 220),
-                                  onPressed: () async {
-                                    await provider.changePostDoddedStatus(
-                                        post.postId,
-                                        authProvider.currentUser.uid,
-                                        !liked);
-                                  },
-                                  child: liked
-                                      ? Icon(
-                                          Icons.flutter_dash_outlined,
-                                          color: Colors.red,
-                                          size: 45,
-                                        )
-                                      : Icon(
-                                          Icons.flutter_dash_outlined,
-                                          size: 45,
-                                        ),
-                                );
-                              },
-                            )
-                          : Text("${post.supportersId.length} Dod")
-                      : null),
+                  trailing: buildTrailingPart(post)),
             ),
+          );
+        },
+      );
+    } else {
+      return Consumer<GroupProvider>(builder: (context, provider, child) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Colors.white60,
+            child: ListTile(
+                leading: InkWell(
+                  onTap: () {
+                    navigateOwnerProfile(
+                      post,
+                    );
+                  },
+                  child: CircleAvatar(
+                    maxRadius: 25,
+                    backgroundImage:
+                        NetworkImage(provider.group.groupProfilePicture),
+                  ),
+                ),
+                title: Center(
+                  child: Text(
+                    provider.group.groupName,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                subtitle: Center(
+                  child: Text(
+                    DateFormat('dd/MM/yyyy').format(post.postDate),
+                  ),
+                ),
+                trailing: buildTrailingPart(post)),
+          ),
+        );
+      });
+    }
+  }
+
+  Widget buildTrailingPart(PostModel post) {
+    return Consumer<PostProvider>(
+      builder: (context, provider, child) {
+        if (post.ownerId == authProvider.currentUser.uid) {
+          return Text("${provider.post.dodCounter} Dod");
+        } else if (provider.postDodders != null) {
+          bool liked = provider.postDodders.any(
+              (element) => element.dodderId == authProvider.currentUser.uid);
+
+          return Bounce(
+            duration: Duration(milliseconds: 220),
+            onPressed: () async {
+              if (liked) {
+                await provider.undodPost(
+                    post.postId, authProvider.currentUser.uid);
+              } else {
+                await provider.dodPost(
+                    post.postId, authProvider.currentUser.uid);
+              }
+            },
+            child: liked
+                ? Icon(
+                    Icons.flutter_dash_outlined,
+                    color: Colors.red,
+                    size: 45,
+                  )
+                : Icon(
+                    Icons.flutter_dash_outlined,
+                    size: 45,
+                  ),
           );
         } else {
           return Center(child: spinkit);
         }
-      }
-    }
+      },
+    );
   }
 }

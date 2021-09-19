@@ -66,6 +66,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     canUserManagePost = canUserManagePostMethod();
 
     isFavorite = authProvider.currentUser.favoritedPosts.contains(post.postId);
+    Provider.of<PostProvider>(context, listen: false).getDodders(post.postId);
   }
 
   @override

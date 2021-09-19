@@ -541,7 +541,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             dodCounter: 0,
             chosenCompany: chosenCompany,
             isUsedForHelp: true,
-            supportersId: [],
           );
 
           newPost.searchKeywords = createSearchKeywords(newPost);
@@ -578,7 +577,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           dodCounter: 0,
           chosenCompany: "",
           isUsedForHelp: false,
-          supportersId: [],
         );
 
         newPost.searchKeywords = createSearchKeywords(newPost);

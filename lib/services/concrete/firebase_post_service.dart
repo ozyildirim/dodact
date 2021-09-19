@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:logger/logger.dart';
@@ -154,5 +155,34 @@ class FirebasePostService extends BaseService<PostModel> {
     }
 
     return contributedPosts;
+  }
+
+  Future<List<DodderModel>> getDodders(String postId) async {
+    List<DodderModel> dodders = [];
+
+    QuerySnapshot querySnapshot =
+        await postsRef.doc(postId).collection('dodders').get();
+
+    for (DocumentSnapshot post in querySnapshot.docs) {
+      DodderModel _convertedPost = DodderModel.fromMap(post.data());
+      dodders.add(_convertedPost);
+    }
+
+    return dodders;
+  }
+
+  Future<void> dodPost(String postId, String userId) async {
+    await postsRef
+        .doc(postId)
+        .collection('dodders')
+        .doc(userId)
+        .set(DodderModel(
+          date: DateTime.now(),
+          dodderId: userId,
+        ).toMap());
+  }
+
+  Future<void> undodPost(String postId, String userId) async {
+    await postsRef.doc(postId).collection('dodders').doc(userId).delete();
   }
 }
