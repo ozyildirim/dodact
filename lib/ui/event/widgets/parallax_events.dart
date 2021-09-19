@@ -28,6 +28,9 @@ class ParallaxEvents extends StatelessWidget {
               isEventEnded: isEventEnded(event),
             ),
           ),
+        SizedBox(
+          height: kToolbarHeight,
+        )
       ],
     );
   }

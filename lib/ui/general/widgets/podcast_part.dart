@@ -15,29 +15,32 @@ class PodcastPart extends StatelessWidget {
     if (podcastProvider.podcastList != null) {
       return GFItemsCarousel(
         itemHeight: 208,
-        rowCount: 1,
+        rowCount: 2,
         children: podcastProvider.podcastList.map((podcast) {
-          return InkWell(
-            onTap: () {
-              NavigationService.instance
-                  .navigate(k_ROUTE_PODCAST_DETAIL, args: podcast);
-            },
-            child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                height: 100,
-                imageUrl: podcast.podcastImageUrl,
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    height: 120,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: NetworkImage(podcast.podcastImageUrl),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                NavigationService.instance
+                    .navigate(k_ROUTE_PODCAST_DETAIL, args: podcast);
+              },
+              child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  height: 100,
+                  imageUrl: podcast.podcastImageUrl,
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      height: 120,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: NetworkImage(podcast.podcastImageUrl),
+                        ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+            ),
           );
         }).toList(),
       );

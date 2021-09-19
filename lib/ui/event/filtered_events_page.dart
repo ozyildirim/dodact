@@ -32,6 +32,9 @@ class FilteredEventView extends StatelessWidget {
                     style: TextStyle(fontSize: 22),
                     textAlign: TextAlign.center,
                   ),
+                  SizedBox(
+                    height: kToolbarHeight,
+                  )
                 ],
               ),
             );

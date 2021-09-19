@@ -8,7 +8,6 @@ import 'package:dodact_v1/ui/detail/widgets/post_comment_tile.dart';
 import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:profanity_filter/profanity_filter.dart';
 import 'package:provider/provider.dart';
 
 class PostCommentsPage extends StatefulWidget {

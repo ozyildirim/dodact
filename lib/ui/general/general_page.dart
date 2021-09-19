@@ -133,7 +133,10 @@ class GeneralPage extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  EventPart()
+                  EventPart(),
+                  SizedBox(
+                    height: kToolbarHeight,
+                  )
                 ],
               ),
             ),

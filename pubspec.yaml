@@ -76,7 +76,6 @@ dependencies:
   table_calendar: ^3.0.2
   share_plus: ^2.1.4
   just_audio: ^0.9.5
-  infinite_scroll_pagination: ^3.1.0
   search_choices: ^2.0.7
   expansion_card: ^0.1.0
   fl_chart: ^0.36.4
@@ -86,6 +85,8 @@ dependencies:
   profanity_filter: ^2.0.0
   circular_menu: ^1.2.3
   page_view_indicators: ^2.0.0
+  awesome_notifications: ^0.0.6+10
+  paginate_firestore: ^1.0.2
 
   
   

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 
 import 'package:getwidget/components/button/gf_button.dart';
+import 'package:getwidget/shape/gf_button_shape.dart';
 
 class SpinnerPage extends StatefulWidget {
   @override
@@ -38,24 +39,76 @@ class _SpinnerPageState extends BaseState<SpinnerPage> {
 
     List<FortuneItem> objeler = [
       FortuneItem(
-        child: Text("Profesyonel Sanatçı"),
-        style: FortuneItemStyle(color: Colors.blue),
+        child: Text(
+          "Profesyonel Sanatçı",
+          style: TextStyle(color: Colors.black),
+        ),
+        style: FortuneItemStyle(
+            color: Colors.grey[200],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
       ),
       FortuneItem(
-        child: Text("Eğitim Kurumu"),
-        style: FortuneItemStyle(color: Colors.blueAccent),
-      ),
+          child: Text("Eğitim Kurumu"),
+          style: FortuneItemStyle(
+              color: Colors.orange[900],
+              borderColor: Colors.orangeAccent,
+              borderWidth: 10)),
       FortuneItem(
-        child: Text("Etkinlik Önerisi"),
-        style: FortuneItemStyle(color: Colors.deepPurple),
+        child: Text("Etkinlik Önerisi", style: TextStyle(color: Colors.black)),
+        style: FortuneItemStyle(
+            color: Colors.grey[200],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
       ),
       FortuneItem(
         child: Text("Kaynak Önerisi"),
-        style: FortuneItemStyle(color: Colors.red),
+        style: FortuneItemStyle(
+            color: Colors.orange[900],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
       ),
       FortuneItem(
-        child: Text("Sürpriz"),
-        style: FortuneItemStyle(color: Colors.green),
+        child: Text("Sürpriz", style: TextStyle(color: Colors.black)),
+        style: FortuneItemStyle(
+            color: Colors.grey[200],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
+      ),
+      FortuneItem(
+        child: Text("Kaynak Önerisi"),
+        style: FortuneItemStyle(
+            color: Colors.orange[900],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
+      ),
+      FortuneItem(
+        child: Text("Sürpriz", style: TextStyle(color: Colors.black)),
+        style: FortuneItemStyle(
+            color: Colors.grey[200],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
+      ),
+      FortuneItem(
+        child: Text("Kaynak Önerisi"),
+        style: FortuneItemStyle(
+            color: Colors.orange[900],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
+      ),
+      FortuneItem(
+        child: Text("Sürpriz", style: TextStyle(color: Colors.black)),
+        style: FortuneItemStyle(
+            color: Colors.grey[200],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
+      ),
+      FortuneItem(
+        child: Text("Kaynak Önerisi"),
+        style: FortuneItemStyle(
+            color: Colors.orange[900],
+            borderColor: Colors.orangeAccent,
+            borderWidth: 10),
       ),
     ];
 
@@ -71,41 +124,61 @@ class _SpinnerPageState extends BaseState<SpinnerPage> {
           ),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: Text(
-                  "Bana ne var?",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+            Container(
+              height: 400,
+              width: double.infinity,
+              child: FortuneWheel(
+                animateFirst: false,
+                indicators: [
+                  FortuneIndicator(
+                    child: Stack(children: [
+                      Center(
+                        child: Transform(
+                          transform: Matrix4.rotationX(180),
+                          child: TriangleIndicator(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(175.0),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ]),
+                  )
+                ],
+                rotationCount: 6,
+                selected: selected.stream,
+                afterSpinningValue: value,
+                items: objeler,
+                onAnimationEnd: () async {
+                  print("animasyon bitti");
+                  print(value);
+                },
+                onAnimationStart: () {},
               ),
             ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FortuneWheel(
-                  animateFirst: false,
-                  rotationCount: 6,
-                  selected: selected.stream,
-                  items: objeler,
-                  onAnimationEnd: () async {
-                    print("animasyon bitti");
-                    print(value);
-                  },
-                  onAnimationStart: () {},
-                ),
-              ),
+            SizedBox(
+              height: 20,
             ),
             GFButton(
+              shape: GFButtonShape.pills,
+              color: Colors.black,
               onPressed: () {
                 setState(() {
                   var sayi = Fortune.randomInt(0, objeler.length);
                   selected.add(sayi);
                 });
               },
-              child: Text("Çevir"),
+              child: Text(
+                "Çevir",
+                style: TextStyle(fontSize: 18, fontFamily: "Raleway"),
+              ),
             )
           ],
         ),

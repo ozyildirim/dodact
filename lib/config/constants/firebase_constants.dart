@@ -17,3 +17,4 @@ final CollectionReference userFavsRef = firestore.collection('user_favorites');
 final CollectionReference podcastsRef = firestore.collection('podcasts');
 final CollectionReference contributionsRef =
     firestore.collection('contributions');
+final CollectionReference tokensRef = firestore.collection('tokens');

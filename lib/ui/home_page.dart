@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
@@ -15,7 +18,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends BaseState<HomePage> {
+  FirebaseMessaging messaging;
   int selectedIndex = 0;
 
   final List<Widget> _children = [
@@ -26,19 +30,18 @@ class _HomePageState extends State<HomePage> {
     ProfilePage(),
   ];
 
-  FirebaseMessaging messaging;
-
   @override
   void initState() {
     super.initState();
     messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value) {
-      print("token:" + value);
+      updateToken(value);
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
       print(event.notification.body);
+      //TODO: Awesome notif ekle
 
       //Bildirim ile diyalog gösterimi
       // showDialog(
@@ -66,6 +69,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
         body: _children[selectedIndex],
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () {
@@ -75,8 +80,8 @@ class _HomePageState extends State<HomePage> {
         // ),
         bottomNavigationBar: CurvedNavigationBar(
           animationDuration: Duration(milliseconds: 400),
-          color: Colors.cyan[300],
-          backgroundColor: Colors.white,
+          color: Colors.orange[700],
+          backgroundColor: Colors.transparent,
           height: 60,
           items: [
             Icon(FontAwesome5Solid.home),
@@ -91,5 +96,12 @@ class _HomePageState extends State<HomePage> {
             });
           },
         ));
+  }
+
+  updateToken(String token) async {
+    await tokensRef.doc(authProvider.currentUser.uid).set({
+      'token': token,
+      'lastTokenUpdate': FieldValue.serverTimestamp(),
+    });
   }
 }

@@ -60,30 +60,30 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: canUserControlEvent()
-            ? [
-                PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(FontAwesome5Regular.trash_alt),
-                                title: Text("Sil"),
-                                onTap: () async {
-                                  await _showDeleteEventDialog();
-                                }),
-                          ),
-                          PopupMenuItem(
-                            child: ListTile(
-                              leading: Icon(FontAwesome5Solid.cogs),
-                              title: Text("Düzenle"),
-                              onTap: () async {
-                                await _showEditEventDialog();
-                              },
-                            ),
-                          ),
-                        ])
-              ]
-            : null,
+        // actions: canUserControlEvent()
+        //     ? [
+        //         PopupMenuButton(
+        //             itemBuilder: (context) => [
+        //                   PopupMenuItem(
+        //                     child: ListTile(
+        //                         leading: Icon(FontAwesome5Regular.trash_alt),
+        //                         title: Text("Sil"),
+        //                         onTap: () async {
+        //                           await _showDeleteEventDialog();
+        //                         }),
+        //                   ),
+        //                   PopupMenuItem(
+        //                     child: ListTile(
+        //                       leading: Icon(FontAwesome5Solid.cogs),
+        //                       title: Text("Düzenle"),
+        //                       onTap: () async {
+        //                         await _showEditEventDialog();
+        //                       },
+        //                     ),
+        //                   ),
+        //                 ])
+        //       ]
+        //     : null,
         elevation: 8,
         backwardsCompatibility: true,
         iconTheme: IconThemeData(color: Colors.black),

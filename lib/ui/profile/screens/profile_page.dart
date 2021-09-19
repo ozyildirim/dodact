@@ -63,7 +63,10 @@ class _ProfilePageState extends BaseState<ProfilePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserProfileHeader(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: UserProfileHeader(),
+            ),
             Expanded(child: UserProfileBody()),
           ],
         ),
