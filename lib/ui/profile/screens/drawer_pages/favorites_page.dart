@@ -102,7 +102,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                                 onTap: () {
                                   NavigationService.instance.navigate(
                                       k_ROUTE_POST_DETAIL,
-                                      args: element.postId);
+                                      args: element);
                                 },
                                 avatar: GFAvatar(
                                   backgroundImage: NetworkImage(postPhoto),

@@ -13,7 +13,6 @@ class AuthRepository {
 
   AppMode appMode = AppMode.RELEASE;
 
-  @override
   Future<UserObject> currentUser() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.currentUser();
@@ -23,7 +22,6 @@ class AuthRepository {
     }
   }
 
-  @override
   Future<UserObject> signInAnonymously() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInAnonymously();
@@ -32,7 +30,6 @@ class AuthRepository {
     }
   }
 
-  @override
   Future<bool> signOut() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signOut();
@@ -41,7 +38,6 @@ class AuthRepository {
     }
   }
 
-  @override
   Future<UserObject> signInWithGoogle() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInWithGoogle();
@@ -56,7 +52,7 @@ class AuthRepository {
     }
   }
   //
-  // @override
+  //
   // Future<UserObject> signInWithFacebook() async {
   //   if (appMode == AppMode.DEBUG) {
   //     return await _fakeAuthService.signInWithFacebook();
@@ -71,7 +67,6 @@ class AuthRepository {
   //   }
   // }
 
-  @override
   Future<bool> createAccountWithEmailAndPassword(
       String email, String password) async {
     if (appMode == AppMode.DEBUG) {
@@ -89,7 +84,6 @@ class AuthRepository {
     }
   }
 
-  @override
   Future<UserObject> signInWithEmail(String email, String password) async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInWithEmail(email, password);
@@ -131,7 +125,6 @@ class AuthRepository {
     }
   }
 
-  @override
   Future<void> updatePassword(String pass) async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.updatePassword(pass);

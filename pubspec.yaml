@@ -52,7 +52,6 @@ dependencies:
 
   flutter_native_splash: ^1.2.0
   shared_preferences: ^2.0.6
-  flutter_material_pickers: ^3.1.0
   ff_navigation_bar:
     git:
       url: https://github.com/ozyildirim/Flutter-FFNavigationBar
@@ -81,7 +80,6 @@ dependencies:
   fl_chart: ^0.36.4
   qr_flutter: ^4.0.0
   flutter_svg: ^0.22.0
-  flutter_gradients: ^1.0.0+3
   profanity_filter: ^2.0.0
   circular_menu: ^1.2.3
   page_view_indicators: ^2.0.0

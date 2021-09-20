@@ -1,10 +1,8 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/filtered_group_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:horizontal_card_pager/card_item.dart';
 import 'package:horizontal_card_pager/horizontal_card_pager.dart';
@@ -69,9 +67,9 @@ class _GroupsPageState extends State<GroupsPage> {
           SizedBox(width: 20),
           GestureDetector(
             child: filterCardContainer(selectedCity, Icon(Icons.location_on)),
-            onTap: () {
-              _showCityPicker();
-            },
+            // onTap: () {
+            //   _showCityPicker();
+            // },
           ),
           GestureDetector(
             child: filterCardContainer(selectedCategory, Icon(Icons.category)),
@@ -185,18 +183,18 @@ class _GroupsPageState extends State<GroupsPage> {
     }
   }
 
-  Future<String> _showCityPicker() {
-    return showMaterialScrollPicker<String>(
-      context: context,
-      title: 'Lokasyon Seçin',
-      items: cities,
-      selectedItem: selectedCity,
-      onChanged: (value) {
-        setState(() => selectedCity = value);
-        updateGroupsByFilter(selectedCategory, selectedCity);
-      },
-    );
-  }
+  // Future<String> _showCityPicker() {
+  //   return showMaterialScrollPicker<String>(
+  //     context: context,
+  //     title: 'Lokasyon Seçin',
+  //     items: cities,
+  //     selectedItem: selectedCity,
+  //     onChanged: (value) {
+  //       setState(() => selectedCity = value);
+  //       updateGroupsByFilter(selectedCategory, selectedCity);
+  //     },
+  //   );
+  // }
 
   Future<void> _refreshGroups() async {
     await Provider.of<GroupProvider>(context, listen: false)

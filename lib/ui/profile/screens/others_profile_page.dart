@@ -88,7 +88,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
           ],
           title: Text(
             "@" + provider.otherUser.username ?? "",
-            style: Theme.of(context).appBarTheme.textTheme.title,
+            style: Theme.of(context).appBarTheme.textTheme.headline1,
           ),
           centerTitle: true,
         ),

@@ -46,7 +46,7 @@ class GeneralPage extends StatelessWidget {
                       textAlign: TextAlign.start,
                       style: Theme.of(context)
                           .textTheme
-                          .title
+                          .headline1
                           .copyWith(color: Colors.black, fontSize: 22),
                     ),
                   ),
@@ -69,7 +69,7 @@ class GeneralPage extends StatelessWidget {
                               textAlign: TextAlign.start,
                               style: Theme.of(context)
                                   .textTheme
-                                  .title
+                                  .headline1
                                   .copyWith(color: Colors.black, fontSize: 22),
                             ),
                           ),
@@ -88,7 +88,7 @@ class GeneralPage extends StatelessWidget {
                               textAlign: TextAlign.start,
                               style: Theme.of(context)
                                   .textTheme
-                                  .title
+                                  .headline1
                                   .copyWith(color: Colors.black, fontSize: 22),
                             ),
                           ),
@@ -108,7 +108,7 @@ class GeneralPage extends StatelessWidget {
                       textAlign: TextAlign.start,
                       style: Theme.of(context)
                           .textTheme
-                          .title
+                          .headline1
                           .copyWith(color: Colors.black, fontSize: 22),
                     ),
                   ),
@@ -126,7 +126,7 @@ class GeneralPage extends StatelessWidget {
                       textAlign: TextAlign.start,
                       style: Theme.of(context)
                           .textTheme
-                          .title
+                          .headline1
                           .copyWith(color: Colors.black, fontSize: 22),
                     ),
                   ),

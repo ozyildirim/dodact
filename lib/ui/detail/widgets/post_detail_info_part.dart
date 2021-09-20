@@ -35,29 +35,6 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     getCreatorData(context, widget.post.ownerType, widget.post.ownerId);
   }
 
-  Future<void> getCreatorData(
-      BuildContext context, String ownerType, String creatorId) async {
-    if (ownerType == 'User') {
-      await Provider.of<UserProvider>(context, listen: false)
-          .getOtherUser(creatorId);
-    } else if (ownerType == 'Group') {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .getGroupDetail(creatorId);
-    }
-  }
-
-  void navigateOwnerProfile(PostModel post, {GroupModel group}) {
-    if (post.ownerType == "User") {
-      if (post.ownerId == authProvider.currentUser.uid) {
-      } else {
-        NavigationService.instance
-            .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: post.ownerId);
-      }
-    } else {
-      NavigationService.instance.navigate(k_ROUTE_GROUP_DETAIL, args: group);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
@@ -70,6 +47,47 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     if (post.ownerType == 'User') {
       return Consumer<UserProvider>(
         builder: (context, provider, child) {
+          if (provider.otherUser != null) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.white60,
+                child: ListTile(
+                    leading: InkWell(
+                      onTap: () {
+                        navigateOwnerProfile(
+                          post,
+                        );
+                      },
+                      child: CircleAvatar(
+                        maxRadius: 25,
+                        backgroundImage:
+                            NetworkImage(provider.otherUser.profilePictureURL),
+                      ),
+                    ),
+                    title: Center(
+                      child: Text(
+                        provider.otherUser.nameSurname != null
+                            ? provider.otherUser.nameSurname
+                            : provider.otherUser.username,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    subtitle: Center(
+                      child: Text(
+                        DateFormat('dd/MM/yyyy').format(post.postDate),
+                      ),
+                    ),
+                    trailing: buildTrailingPart(post)),
+              ),
+            );
+          }
+          return Center(child: spinkit);
+        },
+      );
+    } else {
+      return Consumer<GroupProvider>(builder: (context, provider, child) {
+        if (provider.group != null) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -84,14 +102,12 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                     child: CircleAvatar(
                       maxRadius: 25,
                       backgroundImage:
-                          NetworkImage(provider.otherUser.profilePictureURL),
+                          NetworkImage(provider.group.groupProfilePicture),
                     ),
                   ),
                   title: Center(
                     child: Text(
-                      provider.otherUser.nameSurname != null
-                          ? provider.otherUser.nameSurname
-                          : provider.otherUser.username,
+                      provider.group.groupName,
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -103,41 +119,8 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                   trailing: buildTrailingPart(post)),
             ),
           );
-        },
-      );
-    } else {
-      return Consumer<GroupProvider>(builder: (context, provider, child) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            color: Colors.white60,
-            child: ListTile(
-                leading: InkWell(
-                  onTap: () {
-                    navigateOwnerProfile(
-                      post,
-                    );
-                  },
-                  child: CircleAvatar(
-                    maxRadius: 25,
-                    backgroundImage:
-                        NetworkImage(provider.group.groupProfilePicture),
-                  ),
-                ),
-                title: Center(
-                  child: Text(
-                    provider.group.groupName,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                subtitle: Center(
-                  child: Text(
-                    DateFormat('dd/MM/yyyy').format(post.postDate),
-                  ),
-                ),
-                trailing: buildTrailingPart(post)),
-          ),
-        );
+        }
+        return Center(child: spinkit);
       });
     }
   }
@@ -178,5 +161,28 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
         }
       },
     );
+  }
+
+  Future<void> getCreatorData(
+      BuildContext context, String ownerType, String creatorId) async {
+    if (ownerType == 'User') {
+      await Provider.of<UserProvider>(context, listen: false)
+          .getOtherUser(creatorId);
+    } else if (ownerType == 'Group') {
+      await Provider.of<GroupProvider>(context, listen: false)
+          .getGroupDetail(creatorId);
+    }
+  }
+
+  void navigateOwnerProfile(PostModel post, {GroupModel group}) {
+    if (post.ownerType == "User") {
+      if (post.ownerId == authProvider.currentUser.uid) {
+      } else {
+        NavigationService.instance
+            .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: post.ownerId);
+      }
+    } else {
+      NavigationService.instance.navigate(k_ROUTE_GROUP_DETAIL, args: group);
+    }
   }
 }

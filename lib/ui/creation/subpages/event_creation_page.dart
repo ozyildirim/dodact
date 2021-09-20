@@ -14,7 +14,6 @@ import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/components/carousel/gf_items_carousel.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -52,6 +51,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   FocusNode eventDescriptionFocus = new FocusNode();
   FocusNode eventURLFocus = new FocusNode();
   FocusNode checkboxFocus = new FocusNode();
+  FocusNode dropdownFocus = FocusNode();
 
   bool isHelpChecked = false;
   bool isAdWatched = false;
@@ -414,38 +414,20 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                         SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () async {
-                            await _showCityPicker();
-                          },
-                          child: TextFieldContainer(
-                            width: size.width * 0.6,
-                            child: FormBuilderTextField(
-                              key: Key(eventCity != null ? eventCity : null),
-                              readOnly: true,
-                              name: "eventCity",
-                              autofocus: false,
-                              keyboardType: TextInputType.text,
-                              cursorColor: kPrimaryColor,
-                              initialValue: eventCity != null ? eventCity : "",
-                              decoration: InputDecoration(
-                                  icon: Icon(
-                                    FontAwesome5Solid.city,
-                                    color: kPrimaryColor,
-                                  ),
-                                  hintText: "Etkinlik Şehir",
-                                  border: InputBorder.none,
-                                  errorStyle: Theme.of(context)
-                                      .inputDecorationTheme
-                                      .errorStyle),
-                              validator: FormBuilderValidators.compose(
-                                [
-                                  FormBuilderValidators.required(context,
-                                      errorText: "Bu alan boş bırakılamaz."),
-                                  FormBuilderValidators.notEqual(context, null)
-                                ],
-                              ),
-                            ),
+                        TextFieldContainer(
+                          width: size.width * 0.6,
+                          child: FormBuilderDropdown(
+                            focusNode: dropdownFocus,
+                            hint: Text("Şehir Seçin"),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
+                            name: "location",
+                            items: cities
+                                .map((city) => DropdownMenuItem(
+                                      value: city,
+                                      child: Text('$city'),
+                                    ))
+                                .toList(),
                           ),
                         ),
                         Text("Etkinlik Lokasyonu",
@@ -552,20 +534,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     } else {
       print("Fotoğraflar seçilmedi");
     }
-  }
-
-  Future<String> _showCityPicker() {
-    return showMaterialScrollPicker<String>(
-      context: context,
-      title: 'Şehir Seç',
-      items: cities,
-      selectedItem: eventCity,
-      onChanged: (value) {
-        setState(() {
-          eventCity = value;
-        });
-      },
-    );
   }
 
   Future _showMapPicker() async {
@@ -728,8 +696,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       _eventProvider.newEvent.ownerType = "Group";
     }
 
-    //TODO: Bu lokasyondan elde edilecek.
-    _eventProvider.newEvent.city = eventCity;
+    _eventProvider.newEvent.city =
+        _formKey.currentState.value['location'].toString().trim();
     _eventProvider.newEvent.eventCategory = widget.eventCategory;
     _eventProvider.newEvent.eventType = widget.eventType;
 

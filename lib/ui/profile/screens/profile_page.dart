@@ -47,7 +47,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
         centerTitle: true,
         title: Text(
           "@" + authProvider.currentUser.username,
-          style: Theme.of(context).appBarTheme.textTheme.title,
+          style: Theme.of(context).appBarTheme.textTheme.headline1,
         ),
         elevation: 8,
       ),
@@ -68,6 +68,9 @@ class _ProfilePageState extends BaseState<ProfilePage>
               child: UserProfileHeader(),
             ),
             Expanded(child: UserProfileBody()),
+            SizedBox(
+              height: kToolbarHeight,
+            )
           ],
         ),
       ),
