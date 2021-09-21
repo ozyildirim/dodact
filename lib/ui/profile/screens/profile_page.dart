@@ -44,18 +44,18 @@ class _ProfilePageState extends BaseState<ProfilePage>
         //     ),
         //   )
         // ],
-        centerTitle: true,
-        title: Text(
-          "@" + authProvider.currentUser.username,
-          style: Theme.of(context).appBarTheme.textTheme.headline1,
-        ),
+        // centerTitle: true,
+        // title: Text(
+        //   "@" + authProvider.currentUser.username,
+        //   style: Theme.of(context).appBarTheme.textTheme.headline1,
+        // ),
         elevation: 8,
       ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
             image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),

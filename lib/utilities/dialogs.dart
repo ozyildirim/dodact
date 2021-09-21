@@ -169,7 +169,7 @@ SimpleDialog eventTypeDialog(BuildContext context) {
 }
 
 SimpleDialog reportReasonDialog(BuildContext context) {
-  SimpleDialog(
+  return SimpleDialog(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
     ),

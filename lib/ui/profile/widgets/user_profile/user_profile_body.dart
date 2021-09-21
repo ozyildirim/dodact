@@ -3,7 +3,6 @@ import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_groups_ta
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_info_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_posts_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class UserProfileBody extends StatefulWidget {
   @override
@@ -22,56 +21,43 @@ class _UserProfileBodyState extends State<UserProfileBody>
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(
           color: Colors.white54,
-          width: double.infinity,
+          width: size.width,
           height: 60,
           child: TabBar(
+            labelPadding: EdgeInsets.all(2),
+            padding: EdgeInsets.all(18),
             labelColor: Colors.black,
-            labelStyle: TextStyle(fontSize: 16),
+            // labelStyle: TextStyle(fontSize: 10),
             controller: _controller,
             indicatorSize: TabBarIndicatorSize.label,
             tabs: [
-              Tab(
-                icon: Icon(
-                  FontAwesome5Solid.layer_group,
-                  size: 20,
-                ),
-                child: Text(
-                  "Paylaşımlar",
-                  style: TextStyle(fontSize: 13),
-                ),
-              ),
               const Tab(
-                icon: Icon(
-                  FontAwesome5Solid.question,
-                  size: 20,
-                ),
                 child: Text(
                   "Hakkında",
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 15),
                 ),
               ),
               const Tab(
-                icon: Icon(
-                  FontAwesome5Solid.user_friends,
-                  size: 20,
+                child: Text(
+                  "Paylaşımlar",
+                  style: TextStyle(fontSize: 15),
                 ),
+              ),
+              const Tab(
                 child: Text(
                   "Gruplar",
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 15),
                 ),
               ),
               const Tab(
-                icon: Icon(
-                  FontAwesome5Solid.calendar_alt,
-                  size: 20,
-                ),
                 child: Text(
                   "Etkinlikler",
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 15),
                 ),
               ),
             ],
@@ -84,10 +70,10 @@ class _UserProfileBodyState extends State<UserProfileBody>
               controller: _controller,
               children: [
                 Container(
-                  child: UserProfilePostsTab(),
+                  child: UserProfileInfoTab(),
                 ),
                 Container(
-                  child: UserProfileInfoTab(),
+                  child: UserProfilePostsTab(),
                 ),
                 Container(
                   child: UserProfileGroupsTab(),

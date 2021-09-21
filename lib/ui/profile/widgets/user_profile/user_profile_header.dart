@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
-import 'package:page_view_indicators/page_view_indicators.dart';
 
 class UserProfileHeader extends StatefulWidget {
   @override
@@ -14,21 +13,8 @@ class UserProfileHeader extends StatefulWidget {
 }
 
 class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
-  final _items = [
-    Colors.blue,
-    Colors.orange,
-    Colors.green,
-    Colors.pink,
-  ];
-
-  final _currentPageNotifier = ValueNotifier<int>(0);
-  PageController _controller = PageController(
-    initialPage: 0,
-  );
-
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -37,63 +23,73 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
     final provider = Provider.of<AuthProvider>(context);
     final mediaQuery = MediaQuery.of(context);
 
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            height: mediaQuery.size.height * 0.3,
-            width: mediaQuery.size.width * 0.8,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: PageView(
-                onPageChanged: (int index) {
-                  _currentPageNotifier.value = index;
-                },
-                scrollDirection: Axis.horizontal,
-                controller: _controller,
-                children: [
-                  _picturePage(authProvider.currentUser.profilePictureURL),
-                  Card(
-                    elevation: 8,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Center(
-                      child: _firstPage(),
-                    ),
-                  ),
-                  _secondPage(),
-                  Center(
-                    child: _thirdPage(),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            child: _buildCircleIndicator(),
-          )
-        ],
-      ),
-    );
-  }
+    // return Center(
+    //   child: Column(
+    //     children: [
+    //       Container(
+    //         height: mediaQuery.size.height * 0.3,
+    //         width: mediaQuery.size.width * 0.8,
+    //         child: ClipRRect(
+    //           borderRadius: BorderRadius.circular(15),
+    //           child: PageView(
+    //             onPageChanged: (int index) {
+    //               _currentPageNotifier.value = index;
+    //             },
+    //             scrollDirection: Axis.horizontal,
+    //             controller: _controller,
+    //             children: [
+    //               _picturePage(authProvider.currentUser.profilePictureURL),
+    //               Card(
+    //                 elevation: 8,
+    //                 shape: RoundedRectangleBorder(
+    //                   borderRadius: BorderRadius.circular(15.0),
+    //                 ),
+    //                 child: Center(
+    //                   child: _firstPage(),
+    //                 ),
+    //               ),
+    //               _secondPage(),
+    //               Center(
+    //                 child: _thirdPage(),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //       Container(
+    //         child: _buildCircleIndicator(),
+    //       )
+    //     ],
+    //   ),
+    // );
 
-  Widget _picturePage(String imageUrl) {
-    return Container(
-      child: InkWell(
-        onTap: () => showProfilePictureContainer(context, imageUrl),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
-          fit: BoxFit.contain,
-          imageBuilder: (context, imageProvider) => CircleAvatar(
-            backgroundImage: imageProvider,
-            radius: 20,
+    return Column(
+      children: [
+        Center(
+          child: CachedNetworkImage(
+            imageUrl: authProvider.currentUser.profilePictureURL,
+            imageBuilder: (context, imageProvider) {
+              return CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: 100,
+                child: CircleAvatar(
+                  radius: 95,
+                  backgroundImage:
+                      NetworkImage(authProvider.currentUser.profilePictureURL),
+                ),
+              );
+            },
           ),
         ),
-      ),
+        SizedBox(
+          height: 4,
+        ),
+        Text(
+          "@" + authProvider.currentUser.username,
+          style: TextStyle(fontSize: 18),
+        )
+      ],
     );
-    // return Padding(
-    //     padding: const EdgeInsets.all(16.0), child: Image.network(imageUrl));
   }
 
   Widget _firstPage() {
@@ -277,19 +273,6 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  _buildCircleIndicator() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: CirclePageIndicator(
-        size: 6,
-        selectedDotColor: Colors.cyan,
-        dotColor: Colors.grey,
-        itemCount: _items.length,
-        currentPageNotifier: _currentPageNotifier,
       ),
     );
   }

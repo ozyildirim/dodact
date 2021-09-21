@@ -47,13 +47,13 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                   ),
                   title: Text(
                     authProvider.currentUser.nameSurname != null &&
-                            authProvider.currentUser.nameSurname != ""
+                            authProvider.currentUser.nameSurname.isNotEmpty
                         ? authProvider.currentUser.nameSurname
                         : "@${authProvider.currentUser.username}",
                     style: TextStyle(color: Colors.black, fontSize: 22),
                   ),
                   subtitle: Text(authProvider.currentUser.email,
-                      style: TextStyle(color: Colors.black, fontSize: 16)),
+                      style: TextStyle(color: Colors.black, fontSize: 13)),
                 ),
               ),
             ),
