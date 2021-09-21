@@ -16,8 +16,8 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfilePage extends StatefulWidget {
-  String otherUserID;
-  OthersProfilePage({this.otherUserID});
+  UserObject otherUser;
+  OthersProfilePage({this.otherUser});
 
   @override
   _OthersProfilePageState createState() => _OthersProfilePageState();
@@ -25,14 +25,14 @@ class OthersProfilePage extends StatefulWidget {
 
 class _OthersProfilePageState extends BaseState<OthersProfilePage>
     with SingleTickerProviderStateMixin {
-  String otherUserID;
+  UserObject otherUser;
 
   TabController controller;
 
   @override
   void initState() {
-    otherUserID = widget.otherUserID;
-    Provider.of<UserProvider>(context, listen: false).getOtherUser(otherUserID);
+    otherUser = widget.otherUser;
+    Provider.of<UserProvider>(context, listen: false).setOtherUser(otherUser);
     super.initState();
   }
 
@@ -48,7 +48,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
           NavigationService.instance.pop();
         },
         onConfirmBtnTap: () async {
-          await reportUser(otherUserID);
+          await reportUser(otherUser.uid);
           NavigationService.instance.pop();
         });
   }
@@ -56,7 +56,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   Future<void> reportUser(String userId) async {
     CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
     await FirebaseReportService()
-        .reportUser(authProvider.currentUser.uid, otherUserID)
+        .reportUser(authProvider.currentUser.uid, otherUser.uid)
         .then((value) {
       CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
       NavigationService.instance.pop();
@@ -96,7 +96,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
             ? Center(
                 child: spinkit,
               )
-            : OtherUserProfileSubpage(provider.otherUser));
+            : OtherUserProfileSubpage(otherUser));
   }
 }
 

@@ -85,17 +85,19 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           ),
                         ])
               ]
-            : PopupMenuButton(
-                itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: ListTile(
-                            leading: Icon(FontAwesome5Regular.trash_alt),
-                            title: Text("Bildir"),
-                            onTap: () async {
-                              await _showReportEventDialog();
-                            }),
-                      ),
-                    ]),
+            : [
+                PopupMenuButton(
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: ListTile(
+                                leading: Icon(FontAwesome5Regular.trash_alt),
+                                title: Text("Bildir"),
+                                onTap: () async {
+                                  await _showReportEventDialog();
+                                }),
+                          ),
+                        ])
+              ],
         elevation: 8,
         backwardsCompatibility: true,
         iconTheme: IconThemeData(color: Colors.black),

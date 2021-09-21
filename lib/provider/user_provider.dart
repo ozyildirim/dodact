@@ -37,7 +37,6 @@ class UserProvider with ChangeNotifier {
 
   setOtherUser(UserObject user) {
     otherUser = user;
-    notifyListeners();
   }
 
   Future<UserObject> getUserByID(String userId) async {

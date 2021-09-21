@@ -145,7 +145,7 @@ class NavigationRouteManager {
       case k_ROUTE_OTHERS_PROFILE_PAGE:
         return _navigateToDefault(
             OthersProfilePage(
-              otherUserID: args,
+              otherUser: args,
             ),
             settings);
 
