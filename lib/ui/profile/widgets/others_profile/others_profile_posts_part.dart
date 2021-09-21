@@ -1,7 +1,4 @@
-import 'package:dodact_v1/common/methods.dart';
-import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
@@ -33,37 +30,59 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
   @override
   Widget build(BuildContext context) {
     if (postProvider.otherUsersPosts != null) {
-      if (postProvider.otherUsersPosts.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.all(36.0),
-          child: SvgPicture.asset(
-              "assets/images/app/situations/undraw_blank_canvas_3rbb.svg",
-              semanticsLabel: 'A red up arrow'),
-        );
-      }
+      if (postProvider.otherUsersPosts.isNotEmpty) {
+        List<PostModel> approvedPosts =
+            getApprovedPosts(postProvider.otherUsersPosts);
 
-      return StaggeredGridView.countBuilder(
-        crossAxisCount: 4,
-        itemCount: postProvider.otherUsersPosts.length,
-        itemBuilder: (BuildContext context, int index) {
-          var postItem = postProvider.otherUsersPosts[index];
-          return Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Container(
-              height: 200,
-              child: PostCardForGrid(
-                post: postItem,
-              ),
+        if (approvedPosts.isNotEmpty && approvedPosts != null) {
+          return StaggeredGridView.countBuilder(
+            crossAxisCount: 4,
+            itemCount: approvedPosts.length,
+            itemBuilder: (BuildContext context, int index) {
+              var postItem = approvedPosts[index];
+              return Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Container(
+                  height: 200,
+                  child: PostCardForGrid(
+                    post: postItem,
+                  ),
+                ),
+              );
+            },
+            staggeredTileBuilder: (int index) =>
+                new StaggeredTile.count(2, index.isEven ? 2 : 1),
+            mainAxisSpacing: 8.0,
+            crossAxisSpacing: 4.0,
+          );
+        } else {
+          return Center(
+            child: Text(
+              "Herhangi bir içerik oluşturulmamış.",
+              style: TextStyle(fontSize: 22),
             ),
           );
-        },
-        staggeredTileBuilder: (int index) =>
-            new StaggeredTile.count(2, index.isEven ? 2 : 1),
-        mainAxisSpacing: 8.0,
-        crossAxisSpacing: 4.0,
-      );
+        }
+      } else {
+        return Center(
+          child: Text(
+            "Herhangi bir içerik oluşturulmamış.",
+            style: TextStyle(fontSize: 22),
+          ),
+        );
+      }
     } else {
       return Center(child: spinkit);
     }
+  }
+
+  List<PostModel> getApprovedPosts(List<PostModel> posts) {
+    List<PostModel> userPosts = posts;
+    List<PostModel> approvedPosts = [];
+
+    approvedPosts =
+        userPosts.where((element) => element.approved == true).toList();
+
+    return approvedPosts;
   }
 }

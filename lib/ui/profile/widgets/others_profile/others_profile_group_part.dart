@@ -4,7 +4,6 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfileGroupsTab extends StatefulWidget {
@@ -27,9 +26,8 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
 
-    provider.getUserGroups(userProvider.otherUser.uid);
+    // provider.getUserGroups(userProvider.otherUser.uid);
 
-    Logger().i("UserGroups: " + provider.userGroupList.toString());
     if (provider.userGroupList != null) {
       if (provider.userGroupList.isEmpty) {
         return Center(

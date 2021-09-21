@@ -2,12 +2,7 @@ import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_event
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_group_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_info_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_posts_part.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_events_tab.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_groups_tab.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_info_tab.dart';
-import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_posts_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class OthersProfileBody extends StatefulWidget {
   @override
@@ -29,18 +24,41 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
     return Column(
       children: [
         Container(
-          color: Colors.white,
+          color: Colors.white54,
           width: double.infinity,
           height: 60,
           child: TabBar(
+            labelPadding: EdgeInsets.all(2),
+            padding: EdgeInsets.all(18),
             labelColor: Colors.black,
             labelStyle: TextStyle(fontSize: 16),
             controller: _controller,
+            indicatorSize: TabBarIndicatorSize.label,
             tabs: const [
-              const Tab(icon: Icon(FontAwesome5Solid.adjust)),
-              const Tab(icon: Icon(FontAwesome5Solid.info)),
-              const Tab(icon: Icon(FontAwesome5Solid.object_group)),
-              const Tab(icon: Icon(FontAwesome5Solid.calendar_alt)),
+              const Tab(
+                child: Text(
+                  "Hakkında",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+              const Tab(
+                child: Text(
+                  "Paylaşımlar",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+              const Tab(
+                child: Text(
+                  "Gruplar",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+              const Tab(
+                child: Text(
+                  "Etkinlikler",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
             ],
           ),
         ),
@@ -51,10 +69,10 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
               controller: _controller,
               children: [
                 Container(
-                  child: OthersProfilePostsTab(),
+                  child: OthersProfileInfoTab(),
                 ),
                 Container(
-                  child: OthersProfileInfoTab(),
+                  child: OthersProfilePostsTab(),
                 ),
                 Container(
                   child: OthersProfileGroupsTab(),

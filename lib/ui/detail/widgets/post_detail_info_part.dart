@@ -97,6 +97,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                     onTap: () {
                       navigateOwnerProfile(
                         post,
+                        group: provider.group,
                       );
                     },
                     child: CircleAvatar(

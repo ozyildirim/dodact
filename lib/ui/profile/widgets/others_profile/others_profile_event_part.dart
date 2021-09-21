@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -34,40 +33,26 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
 
     if (provider.userEventList != null) {
       if (provider.userEventList.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.all(36.0),
-          child: Container(
-            height: 30,
-            width: 30,
-            child: SvgPicture.asset(
-                "assets/images/app/situations/undraw_not_found_60pq.svg",
-                semanticsLabel: 'A red up arrow'),
+        return Center(
+          child: Text(
+            "Herhangi bir etkinlik oluşturulmamış.",
+            style: TextStyle(fontSize: 22),
           ),
         );
       }
 
-      List<EventModel> _userEvents = provider.userEventList;
-      _userEvents != null
-          ? _userEvents.map((e) => print(e.eventTitle))
-          : print("Etkinlik yok");
-
-      _userEvents = _userEvents.map((e) {
-        if (e.approved) {
-          return e;
-        }
-      }).toList();
-
-      var sortedEvents = _sortEvents(_userEvents);
-      Logger().e("soortedEvents:" + sortedEvents[0].eventTitle);
+      var approvedEvents = getApprovedEvents(provider.userEventList);
 
       return ListView(
         scrollDirection: Axis.horizontal,
-        children: sortedEvents != null
-            ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
+        children: approvedEvents != null
+            ? approvedEvents.map((e) => _buildUserEventCard(e)).toList()
             : [
                 Center(
-                  child: Text("Etkinlik bulunmuyor",
-                      style: TextStyle(fontSize: 22)),
+                  child: Text(
+                    "Herhangi bir etkinlik oluşturulmamış.",
+                    style: TextStyle(fontSize: 22),
+                  ),
                 )
               ],
       );
@@ -76,6 +61,19 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
         child: spinkit,
       );
     }
+  }
+
+  List<EventModel> getApprovedEvents(List<EventModel> eventList) {
+    List<EventModel> _userEvents = eventList;
+    List<EventModel> approvedEvents = [];
+
+    approvedEvents = _userEvents.map((e) {
+      if (e.approved) {
+        return e;
+      }
+    }).toList();
+
+    return approvedEvents;
   }
 
   Widget _buildUserEventCard(EventModel event) {

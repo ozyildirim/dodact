@@ -34,6 +34,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   @override
   void initState() {
     group = widget.group;
+    Logger().i(group);
     tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
     super.initState();

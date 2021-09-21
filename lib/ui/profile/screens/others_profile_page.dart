@@ -128,13 +128,24 @@ class _OtherUserProfileSubpageState extends State<OtherUserProfileSubpage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
+          colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3), BlendMode.dstATop),
           image: AssetImage(kBackgroundImage),
           fit: BoxFit.cover,
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [OthersProfileHeader(), Expanded(child: OthersProfileBody())],
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: OthersProfileHeader(),
+          ),
+          Expanded(
+            child: OthersProfileBody(),
+          ),
+          SizedBox(height: kToolbarHeight)
+        ],
       ),
     );
   }

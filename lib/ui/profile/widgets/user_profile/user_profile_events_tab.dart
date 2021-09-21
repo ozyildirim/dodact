@@ -6,8 +6,8 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileEventsTab extends StatefulWidget {
@@ -28,72 +28,50 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
     final provider = Provider.of<EventProvider>(context);
 
     if (provider.userEventList != null) {
-      if (provider.userEventList.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.all(36.0),
-          child: Container(
-            height: 30,
-            width: 30,
-            child: SvgPicture.asset(
-                "assets/images/app/situations/undraw_not_found_60pq.svg",
-                semanticsLabel: 'A red up arrow'),
-          ),
-        );
-      }
+      if (provider.userEventList.isNotEmpty) {
+        Logger().i("EventList boş değil");
+        List<EventModel> approvedEvents =
+            getApprovedEvents(provider.userEventList);
 
-      List<EventModel> _userEvents = provider.userEventList;
-      _userEvents != null
-          ? _userEvents.map((e) => print(e.eventTitle))
-          : Center(child: Text("Etkinlik yok", style: TextStyle(fontSize: 22)));
-
-      _userEvents = _userEvents.map((e) {
-        if (e.approved) {
-          return e;
+        if (approvedEvents != null && approvedEvents.isNotEmpty) {
+          Logger().i("onaylanan listeler boş değil");
+          Logger().i("onaylanan listeler: ${approvedEvents.length}");
+          return ListView(
+              scrollDirection: Axis.horizontal,
+              children:
+                  approvedEvents.map((e) => _buildUserEventCard(e)).toList());
+        } else {
+          Logger().i("onaylanan listeler boş");
+          return Center(
+            child: Text(
+              "Herhangi bir etkinlik oluşturulmamış.",
+              style: TextStyle(fontSize: 22),
+            ),
+          );
         }
-      }).toList();
-
-      // Logger().i(_userEvents.length);
-      // _userEvents.forEach((event) {
-      //   Logger().e(event.eventStartDate);
-      // });
-
-      if (_userEvents.isNotEmpty && _userEvents != null) {
-        var sortedEvents = _sortEvents(_userEvents);
-
-        return ListView(
-          scrollDirection: Axis.horizontal,
-          children: sortedEvents != null
-              ? sortedEvents.map((e) => _buildUserEventCard(e)).toList()
-              : [
-                  Padding(
-                    padding: const EdgeInsets.all(36.0),
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      child: SvgPicture.asset(
-                          "assets/images/app/situations/undraw_not_found_60pq.svg",
-                          semanticsLabel: 'A red up arrow'),
-                    ),
-                  )
-                ],
-        );
       } else {
-        return Padding(
-          padding: const EdgeInsets.all(36.0),
-          child: Container(
-            height: 30,
-            width: 30,
-            child: SvgPicture.asset(
-                "assets/images/app/situations/undraw_not_found_60pq.svg",
-                semanticsLabel: 'A red up arrow'),
+        Logger().i("EventList boş");
+        return Center(
+          child: Text(
+            "Herhangi bir etkinlik oluşturulmamış.",
+            style: TextStyle(fontSize: 22),
           ),
         );
       }
     } else {
-      return Center(
-        child: spinkit,
-      );
+      Logger().i("EventList null");
+      return Center(child: spinkit);
     }
+  }
+
+  List<EventModel> getApprovedEvents(List<EventModel> eventList) {
+    List<EventModel> _userEvents = eventList;
+    List<EventModel> approvedEvents = [];
+
+    approvedEvents =
+        _userEvents.where((element) => element.approved == true).toList();
+
+    return approvedEvents;
   }
 
   Widget _buildUserEventCard(EventModel event) {
@@ -180,13 +158,13 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
     return now.isAfter(eventEndDate);
   }
 
-  List<EventModel> _sortEvents(List<EventModel> events) {
-    events.sort((a, b) {
-      var firstEventDate = a.eventStartDate;
-      var secondEventDate = b.eventStartDate;
-      return firstEventDate.compareTo(secondEventDate);
-    });
+// List<EventModel> _sortEvents(List<EventModel> events) {
+//   events.sort((a, b) {
+//     var firstEventDate = a.eventStartDate;
+//     var secondEventDate = b.eventStartDate;
+//     return firstEventDate.compareTo(secondEventDate);
+//   });
 
-    return events;
-  }
+//   return events;
+// }
 }

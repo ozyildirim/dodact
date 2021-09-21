@@ -98,14 +98,14 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_USER_OPTIONS);
             },
           ),
-          ListTile(
-            enabled: false,
-            leading: Icon(Icons.settings),
-            title: Text("İlgi Alanlarım", style: TextStyle(fontSize: 18)),
-            onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_INTERESTS_CHOICE);
-            },
-          ),
+          // ListTile(
+          //   enabled: false,
+          //   leading: Icon(Icons.settings),
+          //   title: Text("İlgi Alanlarım", style: TextStyle(fontSize: 18)),
+          //   onTap: () {
+          //     NavigationService.instance.navigate(k_ROUTE_INTERESTS_CHOICE);
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.settings),
             title:

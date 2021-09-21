@@ -64,9 +64,11 @@ class _SearchPageState extends State<SearchPage> {
             ? FirebaseFirestore.instance
                 .collection('posts')
                 .where("searchKeywords", arrayContains: name)
+                .where('approved', isEqualTo: true)
                 .snapshots()
             : FirebaseFirestore.instance
                 .collection("posts")
+                .where('approved', isEqualTo: true)
                 .limit(10)
                 .snapshots(),
         builder: (context, snapshot) {

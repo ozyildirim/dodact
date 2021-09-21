@@ -55,7 +55,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
         decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                Colors.black.withOpacity(0.3), BlendMode.dstATop),
             image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),
