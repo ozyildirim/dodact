@@ -4,6 +4,7 @@ class GroupModel {
   String groupId;
   String groupName;
   String groupCategory;
+  String groupSubtitle;
   String founderId;
   String groupDescription;
   String groupProfilePicture;
@@ -16,6 +17,7 @@ class GroupModel {
     this.groupId,
     this.groupName,
     this.groupCategory,
+    this.groupSubtitle,
     this.founderId,
     this.groupDescription,
     this.groupProfilePicture,
@@ -29,6 +31,7 @@ class GroupModel {
     groupId = json['groupId'];
     groupName = json['groupName'];
     groupCategory = json['groupCategory'];
+    groupSubtitle = json['groupSubtitle'];
     founderId = json['founderId'];
     groupDescription = json['groupDescription'];
     groupProfilePicture = json['groupProfilePicture'];
@@ -43,6 +46,7 @@ class GroupModel {
     data['groupId'] = this.groupId;
     data['groupName'] = this.groupName;
     data['groupCategory'] = this.groupCategory;
+    data['groupSubtitle'] = this.groupSubtitle;
     data['founderId'] = this.founderId;
     data['groupDescription'] = this.groupDescription;
     data['groupProfilePicture'] = this.groupProfilePicture;

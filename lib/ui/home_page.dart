@@ -64,6 +64,7 @@ class _HomePageState extends BaseState<HomePage> {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
+    checkUserSearchKeywords();
   }
 
   @override
@@ -103,5 +104,12 @@ class _HomePageState extends BaseState<HomePage> {
       'token': token,
       'lastTokenUpdate': FieldValue.serverTimestamp(),
     });
+  }
+
+  checkUserSearchKeywords() async {
+    if (authProvider.currentUser.searchKeywords == null ||
+        authProvider.currentUser.searchKeywords.length < 1) {
+      await authProvider.updateUserSearchKeywords();
+    }
   }
 }

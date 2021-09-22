@@ -262,4 +262,17 @@ class AuthProvider extends ChangeNotifier {
       logger.e("AuthProvider removeFavoritePost error: " + e.toString());
     }
   }
+
+  Future<void> updateUserSearchKeywords() async {
+    try {
+      List<String> searchKeywords = [];
+
+      for (int i = 1; i <= currentUser.username.length; i++) {
+        searchKeywords.add(currentUser.username.substring(0, i).toLowerCase());
+      }
+      await updateCurrentUser({'searchKeywords': searchKeywords});
+    } catch (e) {
+      logger.e("AuthProvider updateUserSearchKeywords error: " + e.toString());
+    }
+  }
 }

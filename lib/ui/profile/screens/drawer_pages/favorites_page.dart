@@ -66,6 +66,8 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
             image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),

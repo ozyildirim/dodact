@@ -119,6 +119,8 @@ class _SpinnerPageState extends BaseState<SpinnerPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
             image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),

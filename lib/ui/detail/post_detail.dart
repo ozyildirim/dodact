@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
@@ -9,16 +8,18 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
-import 'package:dodact_v1/ui/detail/widgets/audio_player/audio_player_widget.dart';
-import 'package:dodact_v1/ui/detail/widgets/post_detail_info_part.dart';
+import 'package:dodact_v1/ui/detail/widgets/post/post_description_card.dart';
+import 'package:dodact_v1/ui/detail/widgets/post/post_detail_info_part.dart';
+import 'package:dodact_v1/ui/detail/widgets/post/post_headers/audio_post_header.dart';
+import 'package:dodact_v1/ui/detail/widgets/post/post_headers/image_post_header.dart';
+import 'package:dodact_v1/ui/detail/widgets/post/post_headers/video_post_header.dart';
+
 import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PostDetail extends StatefulWidget {
   final PostModel post;
@@ -37,7 +38,6 @@ class _PostDetailState extends BaseState<PostDetail> {
   bool canUserManagePost = false;
 
   final formKey = GlobalKey<FormBuilderState>();
-  final TextEditingController commentController = TextEditingController();
 
   FocusNode focusNode = new FocusNode();
 
@@ -70,94 +70,12 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   @override
-  void dispose() {
-    commentController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context, listen: false);
     var mediaQuery = MediaQuery.of(context);
 
     var appBar = AppBar(
-      actions: canUserManagePost == true
-          ? [
-              PopupMenuButton(
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: ListTile(
-                              leading: Icon(FontAwesome5Regular.trash_alt),
-                              title: Text("Sil"),
-                              onTap: () async {
-                                await _showDeletePostDialog();
-                              }),
-                        ),
-                        PopupMenuItem(
-                          child: ListTile(
-                            enabled: false,
-                            leading: Icon(FontAwesome5Solid.cogs),
-                            title: Text("Düzenle"),
-                            onTap: () async {
-                              await _showEditPostDialog();
-                            },
-                          ),
-                        ),
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: Icon(FontAwesome5Solid.share),
-                            title: Text("Paylaş"),
-                            onTap: () async {
-                              Share.share("asdads");
-                            },
-                          ),
-                        ),
-                      ])
-            ]
-          : [
-              PopupMenuButton(
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: ListTile(
-                              leading: Icon(FontAwesome5Regular.flag),
-                              title: Text("Bildir"),
-                              onTap: () async {
-                                await _showReportPostDialog();
-                              }),
-                        ),
-                        isFavorite
-                            ? PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(
-                                      FontAwesome5Solid.star,
-                                      color: Colors.yellow,
-                                    ),
-                                    title: Text("Favorilerden Çıkar"),
-                                    onTap: () async {
-                                      await removeFavorite();
-                                    }),
-                              )
-                            : PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(FontAwesome5Regular.star),
-                                    title: Text("Favorilere Ekle"),
-                                    onTap: () async {
-                                      await addFavorite();
-                                    }),
-                              ),
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: Icon(FontAwesome5Solid.share),
-                            title: Text("Paylaş"),
-                            onTap: () async {
-                              Share.share(
-                                  'check out my website https://example.com');
-                            },
-                          ),
-                        ),
-                      ])
-            ],
+      actions: buildAppbarActions(),
       centerTitle: true,
       title: Text(
         "İçerik Detayı",
@@ -176,82 +94,21 @@ class _PostDetailState extends BaseState<PostDetail> {
               mediaQuery.padding.top,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
-          child: pageView(),
-        ),
-      ),
-    );
-  }
-
-  pageView() {
-    switch (post.postContentType) {
-      case "Video":
-        return Column(
-          children: [
-            buildHeaderVideo(),
-            PostDetailInfoPart(post: post),
-            buildPostDescriptionCard(),
-            Expanded(
-              child: Container(),
-            ),
-            buildPostCommentsNavigator(),
-          ],
-        );
-        break;
-      case "Görüntü":
-        return Column(
-          children: [
-            buildHeaderImage(),
-            PostDetailInfoPart(post: post),
-            buildPostDescriptionCard(),
-            Expanded(
-              child: Container(),
-            ),
-            buildPostCommentsNavigator(),
-          ],
-        );
-        break;
-      case "Ses":
-        return Column(
-          children: [
-            buildHeaderAudio(),
-            PostDetailInfoPart(post: post),
-            buildPostDescriptionCard(),
-            Expanded(
-              child: Container(),
-            ),
-            buildPostCommentsNavigator(),
-          ],
-        );
-        break;
-    }
-    ;
-  }
-
-  Widget buildPostDescriptionCard() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      color: Colors.cyan[200],
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                post.postTitle,
-                style: TextStyle(fontSize: 22),
+              buildHeaderPart(),
+              PostDetailInfoPart(post: post),
+              PostDescriptionCard(post: post),
+              Expanded(
+                child: Container(),
               ),
-              SizedBox(
-                height: 16,
-              ),
-              Text(
-                post.postDescription,
-                // overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16),
-              ),
+              buildPostCommentsNavigator(),
             ],
           ),
         ),
@@ -259,64 +116,97 @@ class _PostDetailState extends BaseState<PostDetail> {
     );
   }
 
-  Widget buildHeaderVideo() {
-    return Container(
-      child: YoutubePlayer(
-        controller: YoutubePlayerController(
-          initialVideoId:
-              YoutubePlayer.convertUrlToId(post.postContentURL), //Add videoID.
-          flags: YoutubePlayerFlags(
-            hideControls: false,
-            controlsVisibleAtStart: true,
-            autoPlay: false,
-            mute: false,
-          ),
-        ),
-        showVideoProgressIndicator: true,
-        progressIndicatorColor: Colors.blueAccent,
-      ),
-    );
+  buildAppbarActions() {
+    return canUserManagePost == true
+        ? [
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: ListTile(
+                            leading: Icon(FontAwesome5Regular.trash_alt),
+                            title: Text("Sil"),
+                            onTap: () async {
+                              await _showDeletePostDialog();
+                            }),
+                      ),
+                      PopupMenuItem(
+                        child: ListTile(
+                          enabled: false,
+                          leading: Icon(FontAwesome5Solid.cogs),
+                          title: Text("Düzenle"),
+                          onTap: () async {
+                            await _showEditPostDialog();
+                          },
+                        ),
+                      ),
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(FontAwesome5Solid.share),
+                          title: Text("Paylaş"),
+                          onTap: () async {
+                            Share.share("asdads");
+                          },
+                        ),
+                      ),
+                    ])
+          ]
+        : [
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: ListTile(
+                            leading: Icon(FontAwesome5Regular.flag),
+                            title: Text("Bildir"),
+                            onTap: () async {
+                              await _showReportPostDialog();
+                            }),
+                      ),
+                      isFavorite
+                          ? PopupMenuItem(
+                              child: ListTile(
+                                  leading: Icon(
+                                    FontAwesome5Solid.star,
+                                    color: Colors.yellow,
+                                  ),
+                                  title: Text("Favorilerden Çıkar"),
+                                  onTap: () async {
+                                    await removeFavorite();
+                                  }),
+                            )
+                          : PopupMenuItem(
+                              child: ListTile(
+                                  leading: Icon(FontAwesome5Regular.star),
+                                  title: Text("Favorilere Ekle"),
+                                  onTap: () async {
+                                    await addFavorite();
+                                  }),
+                            ),
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(FontAwesome5Solid.share),
+                          title: Text("Paylaş"),
+                          onTap: () async {
+                            Share.share(
+                                'check out my website https://example.com');
+                          },
+                        ),
+                      ),
+                    ])
+          ];
   }
 
-  Widget buildHeaderImage() {
-    return Container(
-      height: 250,
-      width: double.infinity,
-      child: PinchZoom(
-        child: CachedNetworkImage(
-          imageUrl: post.postContentURL,
-          imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          placeholder: (context, url) =>
-              Container(child: Center(child: CircularProgressIndicator())),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
-        resetDuration: const Duration(milliseconds: 100),
-        maxScale: 2.5,
-        onZoomStart: () {
-          print('Start zooming');
-        },
-        onZoomEnd: () {
-          print('Stop zooming');
-        },
-      ),
-    );
-  }
-
-  Widget buildHeaderAudio() {
-    return Container(
-      height: 250,
-      width: double.infinity,
-      child: AudioPlayerWidget(
-        contentURL: post.postContentURL,
-      ),
-    );
+  buildHeaderPart() {
+    switch (post.postContentType) {
+      case "Video":
+        return VideoPostHeader(post: post);
+        break;
+      case "Görüntü":
+        return ImagePostHeader(post: post);
+        break;
+      case "Ses":
+        return AudioPostHeader(post: post);
+        break;
+    }
   }
 
   //Fonksiyonlar

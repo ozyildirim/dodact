@@ -115,6 +115,7 @@ class PostProvider extends ChangeNotifier {
           await UploadService().deletePostMedia(postId);
         }
       });
+
       await postRepository.delete(postId);
       PostModel selectedPost =
           postList.firstWhere((element) => element.postId == postId);

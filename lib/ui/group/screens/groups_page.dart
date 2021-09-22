@@ -36,6 +36,8 @@ class _GroupsPageState extends State<GroupsPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
             image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),

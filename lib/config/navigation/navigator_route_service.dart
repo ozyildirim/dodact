@@ -10,7 +10,7 @@ import 'package:dodact_v1/ui/creation/subpages/event_creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/detail/podcast_detail.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
-import 'package:dodact_v1/ui/detail/widgets/post_detail_comments_part.dart';
+import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';

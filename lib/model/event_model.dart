@@ -7,6 +7,7 @@ class EventModel {
   String eventTitle;
   String eventDescription;
   String eventURL;
+  DateTime eventCreationDate;
   DateTime eventStartDate;
   DateTime eventEndDate;
   String eventCategory;
@@ -31,6 +32,7 @@ class EventModel {
       this.eventDescription,
       this.city,
       this.eventURL,
+      this.eventCreationDate,
       this.eventStartDate,
       this.eventEndDate,
       this.eventCategory,
@@ -53,6 +55,7 @@ class EventModel {
     eventDescription = json['eventDescription'];
     city = json['city'];
     eventURL = json['eventURL'];
+    eventCreationDate = (json['eventCreationDate'] as Timestamp).toDate();
     eventStartDate = (json['eventStartDate'] as Timestamp).toDate();
     eventEndDate = (json['eventEndDate'] as Timestamp).toDate();
     eventCategory = json['eventCategory'];
@@ -77,6 +80,8 @@ class EventModel {
     data['eventDescription'] = this.eventDescription;
     data['city'] = this.city;
     data['eventURL'] = this.eventURL;
+    data['eventCreationDate'] =
+        this.eventCreationDate ?? FieldValue.serverTimestamp();
     data['eventStartDate'] =
         this.eventStartDate ?? FieldValue.serverTimestamp();
     data['eventEndDate'] = this.eventEndDate ?? FieldValue.serverTimestamp();
@@ -96,6 +101,6 @@ class EventModel {
 
   @override
   String toString() {
-    return 'EventModel{eventId: $eventId,eventType: $eventType,approved: $approved, eventLocationCoordinates: $eventLocationCoordinates, ownerId: $ownerId, eventAddress: $eventAddress, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType, searchKeywords: $searchKeywords}';
+    return 'EventModel{eventId: $eventId,eventType: $eventType,approved: $approved, eventLocationCoordinates: $eventLocationCoordinates, eventCreationDate: $eventCreationDate, ownerId: $ownerId, eventAddress: $eventAddress, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType, searchKeywords: $searchKeywords}';
   }
 }

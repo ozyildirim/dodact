@@ -391,6 +391,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       {String username, String name, String location}) async {
     try {
       var url = await updateProfilePhoto(context);
+      var searchKeywords = createSearchKeywords(username);
 
       var result = await authProvider.updateCurrentUser({
         'username': username,
@@ -400,6 +401,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         'hiddenNameSurname': false,
         'hiddenMail': false,
         'newUser': false,
+        'searchKeywords': searchKeywords,
       });
       authProvider.currentUser.username = username;
       authProvider.currentUser.nameSurname = name;
@@ -407,6 +409,15 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     } catch (e) {
       showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
     }
+  }
+
+  List<String> createSearchKeywords(String username) {
+    List<String> searchKeywords = [];
+
+    for (int i = 1; i < username.length; i++) {
+      searchKeywords.add(username.substring(0, i).toLowerCase());
+    }
+    return searchKeywords;
   }
 
   _signOut() async {

@@ -55,7 +55,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                 child: ListTile(
                     leading: InkWell(
                       onTap: () {
-                        navigateOwnerProfile(
+                        showOwnerProfile(
                           post,
                         );
                       },
@@ -95,7 +95,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
               child: ListTile(
                   leading: InkWell(
                     onTap: () {
-                      navigateOwnerProfile(
+                      showOwnerProfile(
                         post,
                         group: provider.group,
                       );
@@ -175,12 +175,12 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     }
   }
 
-  void navigateOwnerProfile(PostModel post, {GroupModel group}) {
+  void showOwnerProfile(PostModel post, {GroupModel group}) {
     if (post.ownerType == "User") {
       if (post.ownerId == authProvider.currentUser.uid) {
       } else {
-        NavigationService.instance
-            .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: post.ownerId);
+        NavigationService.instance.navigate(k_ROUTE_OTHERS_PROFILE_PAGE,
+            args: Provider.of<UserProvider>(context, listen: false).otherUser);
       }
     } else {
       NavigationService.instance.navigate(k_ROUTE_GROUP_DETAIL, args: group);

@@ -6,6 +6,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/group_events_tab_view.dart';
+import 'package:dodact_v1/ui/group/widgets/group_info_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_members_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_photos_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_posts_tab_view.dart';
@@ -89,10 +90,10 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         height: dynamicHeight(1),
         decoration: BoxDecoration(
           image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
-            image: AssetImage(
-              kBackgroundImage,
-            ),
           ),
         ),
         child: isUserGroupFounder() ? adminView() : userView(),
@@ -228,7 +229,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   buildDetailTabView() {
-    return Container();
+    return GroupInfoTab();
   }
 
   buildMembersTabView() {

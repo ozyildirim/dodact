@@ -41,7 +41,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   String eventCoordinates;
   String eventCity;
 
-  EventProvider _eventProvider;
+  EventProvider eventProvider;
 
   GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
 
@@ -80,8 +80,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   void initState() {
     super.initState();
     prepareAd();
-    _eventProvider = Provider.of<EventProvider>(context, listen: false);
-    _eventProvider.clearNewEvent();
+    eventProvider = Provider.of<EventProvider>(context, listen: false);
+    eventProvider.clearNewEvent();
     isOnline = widget.eventPlatform == 'Online Etkinlik' ? true : false;
 
     widget.groupId != null
@@ -107,6 +107,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
             image: AssetImage(kBackgroundImage),
             fit: BoxFit.cover,
           ),
@@ -639,7 +641,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuluyor.");
       setNewEventValues(isUsedForHelp: isUsedForHelp);
 
-      await _eventProvider.addEvent(_eventImages).then((_) async {
+      await eventProvider.addEvent(_eventImages).then((_) async {
         NavigationService.instance.pop();
         await CommonMethods().showSuccessDialog(context,
             "Tebrikler! Etkinliğin bize ulaştı, en kısa zamanda yayınlayacağız.");
@@ -657,54 +659,55 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     List<String> searchKeywords = [];
 
     var title = event.eventTitle;
-    for (int i = 1; i < title.length; i++) {
+    for (int i = 1; i <= title.length; i++) {
       searchKeywords.add(title.substring(0, i).toLowerCase());
     }
     return searchKeywords;
   }
 
   void setNewEventValues({bool isUsedForHelp}) {
-    _eventProvider.newEvent.approved = false;
-    _eventProvider.newEvent.eventId = "";
-    _eventProvider.newEvent.eventTitle =
+    eventProvider.newEvent.approved = false;
+    eventProvider.newEvent.eventId = "";
+    eventProvider.newEvent.eventTitle =
         _formKey.currentState.value['eventTitle'].toString().trim();
 
-    _eventProvider.newEvent.searchKeywords =
-        createSearchKeywords(_eventProvider.newEvent);
+    eventProvider.newEvent.searchKeywords =
+        createSearchKeywords(eventProvider.newEvent);
 
-    _eventProvider.newEvent.eventDescription =
+    eventProvider.newEvent.eventDescription =
         _formKey.currentState.value['eventDescription'].toString().trim();
 
     //TODO: Start Date ve End Date farkını ayarla
 
-    _eventProvider.newEvent.eventStartDate = _eventStartDate;
-    _eventProvider.newEvent.eventEndDate = _eventEndDate;
-    _eventProvider.newEvent.isDone = false;
-    _eventProvider.newEvent.isOnline = isOnline;
-    _eventProvider.newEvent.eventURL = isOnline
+    eventProvider.newEvent.eventCreationDate = DateTime.now();
+    eventProvider.newEvent.eventStartDate = _eventStartDate;
+    eventProvider.newEvent.eventEndDate = _eventEndDate;
+    eventProvider.newEvent.isDone = false;
+    eventProvider.newEvent.isOnline = isOnline;
+    eventProvider.newEvent.eventURL = isOnline
         ? _formKey.currentState.value['eventURL'].toString().trim()
         : "";
 
-    _eventProvider.newEvent.eventLocationCoordinates =
+    eventProvider.newEvent.eventLocationCoordinates =
         isOnline ? "" : selectedPlace.geometry.location.toString();
 
     if (postOwnerType == "User") {
-      _eventProvider.newEvent.ownerId = authProvider.currentUser.uid;
-      _eventProvider.newEvent.ownerType = "User";
+      eventProvider.newEvent.ownerId = authProvider.currentUser.uid;
+      eventProvider.newEvent.ownerType = "User";
     } else if (postOwnerType == "Group") {
-      _eventProvider.newEvent.ownerId = widget.groupId;
-      _eventProvider.newEvent.ownerType = "Group";
+      eventProvider.newEvent.ownerId = widget.groupId;
+      eventProvider.newEvent.ownerType = "Group";
     }
 
-    _eventProvider.newEvent.city =
+    eventProvider.newEvent.city =
         _formKey.currentState.value['location'].toString().trim();
-    _eventProvider.newEvent.eventCategory = widget.eventCategory;
-    _eventProvider.newEvent.eventType = widget.eventType;
+    eventProvider.newEvent.eventCategory = widget.eventCategory;
+    eventProvider.newEvent.eventType = widget.eventType;
 
     if (isUsedForHelp) {
-      _eventProvider.newEvent.isUsedForHelp = true;
+      eventProvider.newEvent.isUsedForHelp = true;
     } else {
-      _eventProvider.newEvent.isUsedForHelp = false;
+      eventProvider.newEvent.isUsedForHelp = false;
     }
   }
 

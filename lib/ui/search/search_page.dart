@@ -62,7 +62,11 @@ class _SearchPageState extends State<SearchPage> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -155,27 +159,24 @@ class _SearchPageState extends State<SearchPage> {
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            color: Colors.white70,
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance
-                                    .navigate(k_ROUTE_POST_DETAIL, args: post);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(thumbnail),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                post.postTitle,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              subtitle: Text(post.postCategory),
+                          child: ListTile(
+                            onTap: () {
+                              NavigationService.instance
+                                  .navigate(k_ROUTE_POST_DETAIL, args: post);
+                            },
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(thumbnail),
+                              radius: 40,
                             ),
+                            title: Text(
+                              post.postTitle,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 20,
+                              ),
+                            ),
+                            subtitle: Text(post.postCategory),
                           ),
                         );
                       },
@@ -192,7 +193,8 @@ class _SearchPageState extends State<SearchPage> {
             stream: (input != "" && input != null)
                 ? FirebaseFirestore.instance
                     .collection('users')
-                    .where("username", arrayContains: name)
+                    .where("searchKeywords", arrayContains: name)
+                    .where('newUser', isEqualTo: false)
                     .where('isAdmin', isEqualTo: false)
                     .snapshots()
                 : FirebaseFirestore.instance
@@ -201,6 +203,7 @@ class _SearchPageState extends State<SearchPage> {
                     .limit(5)
                     .snapshots(),
             builder: (context, snapshot) {
+              Logger().d(snapshot.data.docs.length);
               return (snapshot.connectionState == ConnectionState.waiting)
                   ? Center(child: spinkit)
                   : ListView.builder(
@@ -211,29 +214,26 @@ class _SearchPageState extends State<SearchPage> {
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            color: Colors.white70,
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_OTHERS_PROFILE_PAGE,
-                                    args: user);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(user.profilePictureURL),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                user.username,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              subtitle: Text(user.profession),
+                          child: ListTile(
+                            onTap: () {
+                              NavigationService.instance.navigate(
+                                  k_ROUTE_OTHERS_PROFILE_PAGE,
+                                  args: user);
+                            },
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(user.profilePictureURL),
+                              radius: 40,
                             ),
+                            title: Text(
+                              user.username,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 20,
+                              ),
+                            ),
+                            subtitle: Text(user.profession),
                           ),
                         );
                       },
@@ -269,29 +269,25 @@ class _SearchPageState extends State<SearchPage> {
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            color: Colors.white70,
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_EVENT_DETAIL,
-                                    args: event);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(event.eventImages[0]),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                event.eventTitle,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              subtitle: Text(event.eventCategory),
+                          child: ListTile(
+                            onTap: () {
+                              NavigationService.instance
+                                  .navigate(k_ROUTE_EVENT_DETAIL, args: event);
+                            },
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(event.eventImages[0]),
+                              radius: 40,
                             ),
+                            title: Text(
+                              event.eventTitle,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 20,
+                              ),
+                            ),
+                            subtitle: Text(event.eventCategory),
                           ),
                         );
                       },
@@ -325,29 +321,25 @@ class _SearchPageState extends State<SearchPage> {
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            color: Colors.white70,
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_GROUP_DETAIL,
-                                    args: group);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(group.groupProfilePicture),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                group.groupName,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              subtitle: Text(group.groupCategory),
+                          child: ListTile(
+                            onTap: () {
+                              NavigationService.instance
+                                  .navigate(k_ROUTE_GROUP_DETAIL, args: group);
+                            },
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(group.groupProfilePicture),
+                              radius: 40,
                             ),
+                            title: Text(
+                              group.groupName,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 20,
+                              ),
+                            ),
+                            subtitle: Text(group.groupCategory),
                           ),
                         );
                       },
