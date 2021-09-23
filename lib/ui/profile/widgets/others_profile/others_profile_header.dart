@@ -25,8 +25,7 @@ class OthersProfileHeader extends StatelessWidget {
                 radius: 100,
                 child: CircleAvatar(
                   radius: 95,
-                  backgroundImage:
-                      NetworkImage(provider.otherUser.profilePictureURL),
+                  backgroundImage: imageProvider,
                 ),
               );
             },

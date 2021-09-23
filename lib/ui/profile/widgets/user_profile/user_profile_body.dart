@@ -25,7 +25,6 @@ class _UserProfileBodyState extends State<UserProfileBody>
     return Column(
       children: [
         Container(
-          color: Colors.white54,
           width: size.width,
           height: 60,
           child: TabBar(
@@ -39,25 +38,25 @@ class _UserProfileBodyState extends State<UserProfileBody>
               const Tab(
                 child: Text(
                   "Hakkında",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Paylaşımlar",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Gruplar",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Etkinlikler",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
             ],

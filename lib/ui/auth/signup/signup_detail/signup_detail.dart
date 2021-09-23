@@ -92,10 +92,10 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                 SizedBox(
                   width: 6,
                 ),
-                Text(
-                  "(Opsiyonel)",
-                  style: TextStyle(fontSize: 14),
-                )
+                // Text(
+                //   "(Opsiyonel)",
+                //   style: TextStyle(fontSize: 14),
+                // )
               ],
             ),
             SizedBox(height: 4),
@@ -111,9 +111,15 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                   border: InputBorder.none,
                 ),
                 focusNode: _nameFocus,
-                validator: (value) {
-                  return ProfanityChecker.profanityValidator(value);
-                },
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(
+                    context,
+                    errorText: "Bu alan boş bırakılamaz.",
+                  ),
+                  (value) {
+                    return ProfanityChecker.profanityValidator(value);
+                  },
+                ]),
               ),
             ),
             SizedBox(
@@ -140,6 +146,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                           child: Text('$city'),
                         ))
                     .toList(),
+                validator: FormBuilderValidators.required(context,
+                    errorText: "Lütfen bulunduğun şehri belirt"),
               ),
             ),
           ],
@@ -249,6 +257,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
               image: AssetImage(kBackgroundImage),
               fit: BoxFit.cover,
             ),

@@ -104,8 +104,10 @@ class _UserPersonalProfileSettingsPageState
           width: dynamicWidth(1),
           decoration: BoxDecoration(
             image: DecorationImage(
-              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
               image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
             ),
           ),
           child: SingleChildScrollView(
@@ -167,6 +169,8 @@ class _UserPersonalProfileSettingsPageState
                           }
                         },
                         validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: "Bu alan boş bırakılamaz"),
                           (value) {
                             return ProfanityChecker.profanityValidator(value);
                           }
@@ -242,6 +246,8 @@ class _UserPersonalProfileSettingsPageState
                           }
                         },
                         validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: "Bu alan boş bırakılamaz"),
                           (value) {
                             return ProfanityChecker.profanityValidator(value);
                           }

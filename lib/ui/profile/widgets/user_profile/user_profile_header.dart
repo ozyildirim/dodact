@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -22,60 +23,25 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthProvider>(context);
     final mediaQuery = MediaQuery.of(context);
-
-    // return Center(
-    //   child: Column(
-    //     children: [
-    //       Container(
-    //         height: mediaQuery.size.height * 0.3,
-    //         width: mediaQuery.size.width * 0.8,
-    //         child: ClipRRect(
-    //           borderRadius: BorderRadius.circular(15),
-    //           child: PageView(
-    //             onPageChanged: (int index) {
-    //               _currentPageNotifier.value = index;
-    //             },
-    //             scrollDirection: Axis.horizontal,
-    //             controller: _controller,
-    //             children: [
-    //               _picturePage(authProvider.currentUser.profilePictureURL),
-    //               Card(
-    //                 elevation: 8,
-    //                 shape: RoundedRectangleBorder(
-    //                   borderRadius: BorderRadius.circular(15.0),
-    //                 ),
-    //                 child: Center(
-    //                   child: _firstPage(),
-    //                 ),
-    //               ),
-    //               _secondPage(),
-    //               Center(
-    //                 child: _thirdPage(),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       Container(
-    //         child: _buildCircleIndicator(),
-    //       )
-    //     ],
-    //   ),
-    // );
+    var user = provider.currentUser;
 
     return Column(
       children: [
         Center(
           child: CachedNetworkImage(
-            imageUrl: authProvider.currentUser.profilePictureURL,
+            placeholder: (context, url) => Container(
+              child: spinkit,
+            ),
+            imageUrl: user.profilePictureURL,
+            fit: BoxFit.cover,
+            errorWidget: (context, url, error) => Icon(Icons.error),
             imageBuilder: (context, imageProvider) {
               return CircleAvatar(
                 backgroundColor: Colors.black,
                 radius: 100,
                 child: CircleAvatar(
                   radius: 95,
-                  backgroundImage:
-                      NetworkImage(authProvider.currentUser.profilePictureURL),
+                  backgroundImage: imageProvider,
                 ),
               );
             },
@@ -84,9 +50,23 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
         SizedBox(
           height: 4,
         ),
-        Text(
-          "@" + authProvider.currentUser.username,
-          style: TextStyle(fontSize: 18),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "@" + user.username,
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            user.isVerified == true
+                ? Icon(
+                    Icons.verified,
+                    color: Colors.deepOrangeAccent,
+                  )
+                : SizedBox(),
+          ],
         )
       ],
     );

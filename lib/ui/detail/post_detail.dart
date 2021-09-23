@@ -104,6 +104,7 @@ class _PostDetailState extends BaseState<PostDetail> {
             children: [
               buildHeaderPart(),
               PostDetailInfoPart(post: post),
+              SizedBox(height: 10),
               PostDescriptionCard(post: post),
               Expanded(
                 child: Container(),
@@ -120,6 +121,9 @@ class _PostDetailState extends BaseState<PostDetail> {
     return canUserManagePost == true
         ? [
             PopupMenuButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 itemBuilder: (context) => [
                       PopupMenuItem(
                         child: ListTile(
@@ -139,26 +143,20 @@ class _PostDetailState extends BaseState<PostDetail> {
                           },
                         ),
                       ),
-                      PopupMenuItem(
-                        child: ListTile(
-                          leading: Icon(FontAwesome5Solid.share),
-                          title: Text("Paylaş"),
-                          onTap: () async {
-                            Share.share("asdads");
-                          },
-                        ),
-                      ),
                     ])
           ]
         : [
             PopupMenuButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 itemBuilder: (context) => [
                       PopupMenuItem(
                         child: ListTile(
                             leading: Icon(FontAwesome5Regular.flag),
                             title: Text("Bildir"),
                             onTap: () async {
-                              await _showReportPostDialog();
+                              await showReportPostDialog();
                             }),
                       ),
                       isFavorite
@@ -166,7 +164,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                               child: ListTile(
                                   leading: Icon(
                                     FontAwesome5Solid.star,
-                                    color: Colors.yellow,
+                                    color: Colors.orangeAccent,
                                   ),
                                   title: Text("Favorilerden Çıkar"),
                                   onTap: () async {
@@ -181,16 +179,6 @@ class _PostDetailState extends BaseState<PostDetail> {
                                     await addFavorite();
                                   }),
                             ),
-                      PopupMenuItem(
-                        child: ListTile(
-                          leading: Icon(FontAwesome5Solid.share),
-                          title: Text("Paylaş"),
-                          onTap: () async {
-                            Share.share(
-                                'check out my website https://example.com');
-                          },
-                        ),
-                      ),
                     ])
           ];
   }
@@ -241,7 +229,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     );
   }
 
-  Future<void> _showReportPostDialog() async {
+  Future<void> showReportPostDialog() async {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,

@@ -23,6 +23,7 @@ class UserObject {
   String userDescription;
   String education;
   String profession;
+  bool isVerified;
 
   List<String> favoritedPosts = [];
   List<InterestModel> interests;
@@ -34,32 +35,34 @@ class UserObject {
 
   List<String> searchKeywords;
 
-  UserObject(
-      {this.uid,
-      this.email,
-      this.username,
-      this.nameSurname,
-      this.userRegistrationDate,
-      this.telephoneNumber,
-      this.profilePictureURL,
-      this.experiencePoint,
-      this.location,
-      this.rosettes,
-      this.mainInterest,
-      this.twitterUsername,
-      this.instagramUsername,
-      this.youtubeLink,
-      this.dribbbleLink,
-      this.linkedInLink,
-      this.soundcloudLink,
-      this.hiddenMail,
-      this.hiddenLocation,
-      this.hiddenNameSurname,
-      this.newUser,
-      this.userDescription,
-      this.education,
-      this.profession,
-      this.searchKeywords});
+  UserObject({
+    this.uid,
+    this.email,
+    this.username,
+    this.nameSurname,
+    this.userRegistrationDate,
+    this.telephoneNumber,
+    this.profilePictureURL,
+    this.experiencePoint,
+    this.location,
+    this.rosettes,
+    this.mainInterest,
+    this.twitterUsername,
+    this.instagramUsername,
+    this.youtubeLink,
+    this.dribbbleLink,
+    this.linkedInLink,
+    this.soundcloudLink,
+    this.hiddenMail,
+    this.hiddenLocation,
+    this.hiddenNameSurname,
+    this.newUser,
+    this.userDescription,
+    this.education,
+    this.profession,
+    this.searchKeywords,
+    this.isVerified,
+  });
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -89,6 +92,7 @@ class UserObject {
     userData['education'] = this.education ?? '';
     userData['profession'] = this.profession ?? '';
     userData['searchKeywords'] = this.searchKeywords ?? [];
+    userData['isVerified'] = this.isVerified ?? false;
 
     return userData;
   }
@@ -119,7 +123,8 @@ class UserObject {
         education = map['education'] ?? '',
         userDescription = map['userDescription'] ?? '',
         profession = map['profession'] ?? '',
-        searchKeywords = map['searchKeywords'] ?? [];
+        searchKeywords = map['searchKeywords'] ?? [],
+        isVerified = map['isVerified'] ?? false;
 
   UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
@@ -148,9 +153,10 @@ class UserObject {
     education = doc.data()['education'] ?? '';
     profession = doc.data()['profession'] ?? '';
     searchKeywords = doc.data()['searchKeywords']?.cast<String>() ?? [];
+    isVerified = doc.data()['isVerified'] ?? false;
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email,newUser: $newUser,mainInterest: $mainInterest, username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
+    return 'UserObject{uid: $uid, email: $email,newUser: $newUser,mainInterest: $mainInterest,verified: $isVerified,  username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
   }
 }

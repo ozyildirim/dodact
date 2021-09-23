@@ -18,48 +18,45 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.white70,
           image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.vpn_key),
-                  ),
-                  title: Text(
-                    "Kişisel Profil Ayarları",
-                    style: TextStyle(fontSize: kDrawerTileTitleSize),
-                  ),
-                  onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
-                  },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.vpn_key),
                 ),
+                title: Text(
+                  "Kişisel Profil Ayarları",
+                  style: TextStyle(fontSize: kDrawerTileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
+                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.mail),
-                  ),
-                  title: Text(
-                    "Sosyal Medya Hesap Ayarları",
-                    style: TextStyle(fontSize: kDrawerTileTitleSize),
-                  ),
-                  onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_USER_SOCIAL_ACCOUNTS_SETTINGS);
-                  },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.mail),
                 ),
+                title: Text(
+                  "Sosyal Medya Hesap Ayarları",
+                  style: TextStyle(fontSize: kDrawerTileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_USER_SOCIAL_ACCOUNTS_SETTINGS);
+                },
               ),
             ),
           ],

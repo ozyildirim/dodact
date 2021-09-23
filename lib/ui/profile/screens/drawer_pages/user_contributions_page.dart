@@ -45,20 +45,17 @@ class _UserContributionsPageState extends BaseState<UserContributionsPage> {
         itemBuilder: (context, index) {
           var item = provider.contributions[index];
           print(item);
-          return Container(
-            color: Colors.white70,
-            child: GFListTile(
-              avatar: GFAvatar(
-                backgroundImage: AssetImage(
-                  createAvatar(item.contributedCompany),
-                ),
+          return GFListTile(
+            avatar: GFAvatar(
+              backgroundImage: AssetImage(
+                createAvatar(item.contributedCompany),
               ),
-              title: Text(
-                item.contributedCompany,
-                style: TextStyle(fontSize: 20),
-              ),
-              subTitleText: DateFormat('dd/MM/yy').format(item.creationDate),
             ),
+            title: Text(
+              item.contributedCompany,
+              style: TextStyle(fontSize: 20),
+            ),
+            subTitleText: DateFormat('dd/MM/yy').format(item.creationDate),
           );
         },
       );

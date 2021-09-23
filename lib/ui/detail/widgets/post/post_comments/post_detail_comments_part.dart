@@ -47,14 +47,12 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
       } else {
         if (commentProvider.comments.isEmpty) {
           return Container(
-            height: 200,
+            // height: 200,
+
             child: Center(
-              child: Container(
-                color: Colors.white70,
-                child: Text(
-                  "Henüz yorum yapılmamış.",
-                  style: TextStyle(fontSize: 20),
-                ),
+              child: Text(
+                "Henüz yorum yapılmamış.",
+                style: TextStyle(fontSize: 20),
               ),
             ),
           );
@@ -92,7 +90,11 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.25), BlendMode.dstATop),
+                image: AssetImage(kBackgroundImage),
+                fit: BoxFit.cover,
+              ),
             ),
             child: Column(
               children: [
@@ -143,8 +145,12 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
               ),
             ),
             CircleAvatar(
+              backgroundColor: Colors.orange,
               child: IconButton(
-                  icon: Icon(FontAwesome5Regular.paper_plane),
+                  icon: Icon(
+                    FontAwesome5Regular.paper_plane,
+                    color: Colors.black,
+                  ),
                   onPressed: () {
                     submitComment(context);
                   }),

@@ -44,10 +44,10 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         Divider(
           thickness: 1,
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 12, left: 12),
-          child: Text("Açıklama", style: TextStyle(fontSize: 16)),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 12, left: 12),
+        //   child: Text("Açıklama", style: TextStyle(fontSize: 16)),
+        // ),
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Text(

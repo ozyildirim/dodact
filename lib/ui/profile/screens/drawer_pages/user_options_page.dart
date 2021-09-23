@@ -17,85 +17,77 @@ class UserOptionsPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  enabled: false,
-                  leading: CircleAvatar(
-                    child: Icon(Icons.notifications),
-                  ),
-                  title: Text(
-                    "Bildirim Hesapları",
-                    style: TextStyle(fontSize: tileTitleSize),
-                  ),
-                  onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_USER_NOTIFICATON_SETTINGS);
-                  },
+              child: ListTile(
+                enabled: false,
+                leading: CircleAvatar(
+                  child: Icon(Icons.notifications),
                 ),
+                title: Text(
+                  "Bildirim Ayarları",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_USER_NOTIFICATON_SETTINGS);
+                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
-                  title: Text(
-                    "Profil Ayarları",
-                    style: TextStyle(fontSize: tileTitleSize),
-                  ),
-                  onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_USER_PROFILE_SETTINGS);
-                  },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.person),
                 ),
+                title: Text(
+                  "Profil Ayarları",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_USER_PROFILE_SETTINGS);
+                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.privacy_tip),
-                  ),
-                  title: Text(
-                    "Gizlilik Ayarları",
-                    style: TextStyle(fontSize: tileTitleSize),
-                  ),
-                  onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_USER_PRIVACY_SETTINGS);
-                  },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.privacy_tip),
                 ),
+                title: Text(
+                  "Gizlilik Ayarları",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_USER_PRIVACY_SETTINGS);
+                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.security),
-                  ),
-                  title: Text(
-                    "Güvenlik",
-                    style: TextStyle(fontSize: tileTitleSize),
-                  ),
-                  onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_USER_SECURITY_SETTINGS);
-                  },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.security),
                 ),
+                title: Text(
+                  "Güvenlik",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_USER_SECURITY_SETTINGS);
+                },
               ),
             ),
             Row(
@@ -105,25 +97,17 @@ class UserOptionsPage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
                     onTap: () {},
-                    child: Container(
-                      height: 30,
-                      color: Colors.white70,
-                      child: Center(
-                          child: Text("Gizlilik Sözleşmesi",
-                              style: TextStyle(fontSize: 18))),
-                    ),
+                    child: Center(
+                        child: Text("Gizlilik Sözleşmesi",
+                            style: TextStyle(fontSize: 18))),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
                     onTap: () {},
-                    child: Container(
-                      height: 30,
-                      color: Colors.white70,
-                      child: Center(
-                        child: Text("İletişim", style: TextStyle(fontSize: 18)),
-                      ),
+                    child: Center(
+                      child: Text("İletişim", style: TextStyle(fontSize: 18)),
                     ),
                   ),
                 ),

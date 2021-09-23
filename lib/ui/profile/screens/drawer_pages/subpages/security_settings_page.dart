@@ -3,7 +3,6 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -17,54 +16,52 @@ class SecuritySettingsPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.vpn_key),
-                  ),
-                  title: Text(
-                    "Parola Değiştirme",
-                    style: TextStyle(fontSize: kDrawerTileTitleSize),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangePasswordPage(),
-                      ),
-                    );
-                  },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.vpn_key),
                 ),
+                title: Text(
+                  "Parola Değiştirme",
+                  style: TextStyle(fontSize: kDrawerTileTitleSize),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangePasswordPage(),
+                    ),
+                  );
+                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white70,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.mail),
-                  ),
-                  title: Text(
-                    "E-posta Adresi Değiştirme",
-                    style: TextStyle(fontSize: kDrawerTileTitleSize),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangeEmailPage(),
-                      ),
-                    );
-                  },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.mail),
                 ),
+                title: Text(
+                  "E-posta Adresi Değiştirme",
+                  style: TextStyle(fontSize: kDrawerTileTitleSize),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangeEmailPage(),
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -117,7 +114,11 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
           width: dynamicWidth(1),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
           child: FormBuilder(
             key: _formKey,
@@ -305,7 +306,11 @@ class _ChangeEmailPageState extends BaseState<ChangeEmailPage> {
           width: dynamicWidth(1),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
           child: FormBuilder(
             key: _formKey,

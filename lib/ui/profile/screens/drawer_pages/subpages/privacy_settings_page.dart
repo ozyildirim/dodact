@@ -51,8 +51,10 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
               image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
             ),
           ),
           child: Column(

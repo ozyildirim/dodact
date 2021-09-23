@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 class GroupDetailPage extends StatefulWidget {
   final GroupModel group;
 
-  const GroupDetailPage({Key key, this.group}) : super(key: key);
+  const GroupDetailPage({this.group});
 
   @override
   _GroupDetailPageState createState() => _GroupDetailPageState();
@@ -34,11 +34,11 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
 
   @override
   void initState() {
+    super.initState();
     group = widget.group;
-    Logger().i(group);
+
     tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
-    super.initState();
 
     groupProvider.setGroup(group);
     groupProvider.getGroupPosts(group.groupId);

@@ -34,58 +34,65 @@ class _TemporaryRegistrationInterestsPageState
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.4), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
           child: Center(
-            child: Container(
-              height: dynamicHeight(0.6),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemCount: categoryList.length,
-                itemBuilder: (BuildContext context, int position) {
-                  return InkWell(
-                    onTap: () => setState(() => selectedIndex = position),
-                    child: Stack(children: [
-                      Card(
-                        shape: (selectedIndex == position)
-                            ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(
-                                    color: Colors.amberAccent, width: 4),
-                              )
-                            : null,
-                        elevation: 5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  categoryList[position].coverPhotoUrl),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: dynamicHeight(0.6),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  itemCount: categoryList.length,
+                  itemBuilder: (BuildContext context, int position) {
+                    return InkWell(
+                      onTap: () => setState(() => selectedIndex = position),
+                      child: Stack(children: [
+                        Card(
+                          shape: (selectedIndex == position)
+                              ? RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  side: BorderSide(
+                                      color: Colors.amberAccent, width: 4),
+                                )
+                              : null,
+                          elevation: 5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                    categoryList[position].coverPhotoUrl),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        left: 10,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              categoryList[position].name,
-                              style: TextStyle(fontSize: 18),
+                        Positioned(
+                          bottom: 10,
+                          left: 10,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                categoryList[position].name,
+                                style: TextStyle(fontSize: 18),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ]),
-                  );
-                },
+                      ]),
+                    );
+                  },
+                ),
               ),
             ),
           ),
