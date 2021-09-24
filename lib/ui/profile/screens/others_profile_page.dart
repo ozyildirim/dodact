@@ -11,6 +11,7 @@ import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_body.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +74,9 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
     var provider = Provider.of<UserProvider>(context);
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           actions: [
             PopupMenuButton(
                 itemBuilder: (context) => [
@@ -86,11 +90,6 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
                       ),
                     ])
           ],
-          title: Text(
-            "@" + provider.otherUser.username ?? "",
-            style: Theme.of(context).appBarTheme.textTheme.headline1,
-          ),
-          centerTitle: true,
         ),
         body: provider.otherUser == null
             ? Center(
@@ -144,7 +143,6 @@ class _OtherUserProfileSubpageState extends State<OtherUserProfileSubpage> {
           Expanded(
             child: OthersProfileBody(),
           ),
-          SizedBox(height: kToolbarHeight)
         ],
       ),
     );

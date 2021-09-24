@@ -44,10 +44,10 @@ class GeneralPage extends StatelessWidget {
                     child: Text(
                       "Haftanın Öne Çıkan Paylaşımları",
                       textAlign: TextAlign.start,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          .copyWith(color: Colors.black, fontSize: 22),
+                      style: Theme.of(context).textTheme.headline1.copyWith(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -70,7 +70,10 @@ class GeneralPage extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1
-                                  .copyWith(color: Colors.black, fontSize: 22),
+                                  .copyWith(
+                                      color: Colors.black,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold),
                             ),
                           ),
                           SizedBox(
@@ -89,7 +92,10 @@ class GeneralPage extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1
-                                  .copyWith(color: Colors.black, fontSize: 22),
+                                  .copyWith(
+                                      color: Colors.black,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold),
                             ),
                           ),
                           SizedBox(
@@ -106,10 +112,10 @@ class GeneralPage extends StatelessWidget {
                     child: Text(
                       "Podcast Önerileri",
                       textAlign: TextAlign.start,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          .copyWith(color: Colors.black, fontSize: 22),
+                      style: Theme.of(context).textTheme.headline1.copyWith(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -124,10 +130,10 @@ class GeneralPage extends StatelessWidget {
                     child: Text(
                       "Kaçırılmaması Gereken Etkinlikler",
                       textAlign: TextAlign.start,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          .copyWith(color: Colors.black, fontSize: 22),
+                      style: Theme.of(context).textTheme.headline1.copyWith(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(

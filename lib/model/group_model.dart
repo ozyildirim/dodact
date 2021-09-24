@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dodact_v1/model/invitation_model.dart';
 
 class GroupModel {
   String groupId;
@@ -12,6 +13,8 @@ class GroupModel {
   List<String> groupMemberList;
   DateTime creationDate;
   String groupLocation;
+  InvitationModel invitations;
+  //TODO: bunu servisten çek
 
   GroupModel({
     this.groupId,

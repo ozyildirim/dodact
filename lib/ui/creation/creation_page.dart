@@ -20,8 +20,7 @@ class _CreationPageState extends State<CreationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 8,
         backwardsCompatibility: false,
         title: Text(
           "Oluştur",

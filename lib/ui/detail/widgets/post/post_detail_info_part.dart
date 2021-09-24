@@ -53,33 +53,6 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 color: Colors.white60,
-                // child: ListTile(
-                //     leading: InkWell(
-                //       onTap: () {
-                //         showOwnerProfile(
-                //           post,
-                //         );
-                //       },
-                //       child: CircleAvatar(
-                //         maxRadius: 25,
-                //         backgroundImage:
-                //             NetworkImage(provider.otherUser.profilePictureURL),
-                //       ),
-                //     ),
-                //     title: Center(
-                //       child: Text(
-                //         provider.otherUser.nameSurname != null
-                //             ? provider.otherUser.nameSurname
-                //             : provider.otherUser.username,
-                //         style: TextStyle(fontSize: 20),
-                //       ),
-                //     ),
-                //     subtitle: Center(
-                //       child: Text(
-                //         DateFormat('dd/MM/yyyy').format(post.postDate),
-                //       ),
-                //     ),
-                //     trailing: buildTrailingPart(post)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   // crossAxisAlignment: CrossAxisAlignment.end,
@@ -111,32 +84,6 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               color: Colors.white60,
-              // child: ListTile(
-              //     leading: InkWell(
-              //       onTap: () {
-              //         showOwnerProfile(
-              //           post,
-              //           group: provider.group,
-              //         );
-              //       },
-              //       child: CircleAvatar(
-              //         maxRadius: 25,
-              //         backgroundImage:
-              //             NetworkImage(provider.group.groupProfilePicture),
-              //       ),
-              //     ),
-              //     title: Center(
-              //       child: Text(
-              //         provider.group.groupName,
-              //         style: TextStyle(fontSize: 20),
-              //       ),
-              //     ),
-              //     subtitle: Center(
-              //       child: Text(
-              //         DateFormat('dd/MM/yyyy').format(post.postDate),
-              //       ),
-              //     ),
-              //     trailing: buildTrailingPart(post)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 // crossAxisAlignment: CrossAxisAlignment.end,

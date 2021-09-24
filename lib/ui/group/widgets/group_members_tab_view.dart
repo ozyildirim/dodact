@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class GroupMembersTab extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var user = provider.groupMembers[index];
                     return InkWell(
-                      onTap: () => navigateUserProfile(user.uid),
+                      onTap: () => navigateUserProfile(user),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Column(
@@ -52,8 +53,8 @@ class GroupMembersTab extends StatelessWidget {
     );
   }
 
-  navigateUserProfile(String userId) {
+  navigateUserProfile(UserObject user) {
     NavigationService.instance
-        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: userId);
+        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
   }
 }

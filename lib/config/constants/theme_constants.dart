@@ -47,8 +47,11 @@ ThemeData appTheme = new ThemeData(
   appBarTheme: const AppBarTheme(
       elevation: 8,
       textTheme: TextTheme(
-        headline1:
-            TextStyle(color: Colors.black, fontSize: 20, fontFamily: "Raleway"),
+        headline1: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontFamily: "Raleway",
+            fontWeight: FontWeight.w600),
       ),
       backgroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.black),

@@ -7,6 +7,7 @@ import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_body.dart
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -49,7 +50,9 @@ class _ProfilePageState extends BaseState<ProfilePage>
         //   "@" + authProvider.currentUser.username,
         //   style: Theme.of(context).appBarTheme.textTheme.headline1,
         // ),
-        elevation: 8,
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        elevation: 0,
       ),
       body: Container(
         decoration: BoxDecoration(

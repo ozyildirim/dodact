@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';

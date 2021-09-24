@@ -13,13 +13,11 @@ import 'package:dodact_v1/ui/detail/widgets/post/post_detail_info_part.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_headers/audio_post_header.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_headers/image_post_header.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_headers/video_post_header.dart';
-
 import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class PostDetail extends StatefulWidget {
   final PostModel post;
