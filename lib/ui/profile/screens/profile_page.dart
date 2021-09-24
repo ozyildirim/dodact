@@ -1,5 +1,7 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
@@ -8,6 +10,8 @@ import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_header.da
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/components/badge/gf_icon_badge.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -31,25 +35,25 @@ class _ProfilePageState extends BaseState<ProfilePage>
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
-        // actions: [
-        //   GFIconBadge(
-        //     counterChild: Text("1"),
-        //     child: IconButton(
-        //       onPressed: () {
-        //         NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
-        //       },
-        //       icon: Icon(
-        //         FontAwesome5Solid.bell,
-        //         color: Colors.cyan,
-        //       ),
-        //     ),
-        //   )
-        // ],
-        // centerTitle: true,
-        // title: Text(
-        //   "@" + authProvider.currentUser.username,
-        //   style: Theme.of(context).appBarTheme.textTheme.headline1,
-        // ),
+        actions: [
+          GFIconBadge(
+            counterChild: Container(),
+            child: IconButton(
+              onPressed: () {
+                NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
+              },
+              icon: Icon(
+                FontAwesome5Solid.bell,
+                color: Colors.deepOrange,
+              ),
+            ),
+          )
+        ],
+        centerTitle: true,
+        title: Text(
+          "@" + authProvider.currentUser.username,
+          style: Theme.of(context).appBarTheme.textTheme.headline1,
+        ),
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         elevation: 0,

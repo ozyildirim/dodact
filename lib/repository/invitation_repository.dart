@@ -18,15 +18,15 @@ class InvitationRepository {
     }
   }
 
-  // Future<List<InvitationModel>> getGroupMembershipInvitations(
-  //     String userId) async {
-  //   if (appMode == AppMode.DEBUG) {
-  //     return Future.value(null);
-  //   } else {
-  //     return await firebaseInvitationService
-  //         .getGroupMembershipInvitations(userId);
-  //   }
-  // }
+  Future<List<InvitationModel>> getUsersInvitations(String userId,
+      {String type}) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      return await firebaseInvitationService.getReceivedInvitations(userId,
+          type: type);
+    }
+  }
 
   Future<void> inviteUserToGroup(
       String senderId, String receiverId, String type) async {
@@ -38,12 +38,13 @@ class InvitationRepository {
     }
   }
 
-  Future<bool> acceptGroupInvitation(String userId, String groupId) async {
+  Future<void> acceptGroupInvitation(
+      String userId, String groupId, String invitationId) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
-      return await firebaseInvitationService.acceptGroupInvitation(
-          userId, groupId);
+      await firebaseInvitationService.acceptGroupInvitation(
+          userId, groupId, invitationId);
     }
   }
 

@@ -31,6 +31,7 @@ const k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE = '/contribution_list';
 
 const k_ROUTE_USER_PROFILE = '/profile';
 const k_ROUTE_USER_NOTIFICATIONS = '/user_notifications';
+const k_ROUTE_USER_INVITATIONS_PAGE = '/user_invitations';
 
 //User Drawer Routes
 const k_ROUTE_USER_OPTIONS = '/profile_options';

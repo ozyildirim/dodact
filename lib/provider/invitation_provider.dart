@@ -39,17 +39,16 @@ class InvitationProvider with ChangeNotifier {
     }
   }
 
-  // Future<List<InvitationModel>> getGroupMembershipInvitations(
-  //     String userId) async {
-  //   try {
-  //     usersInvitations =
-  //         await invitationRepository.getGroupMembershipInvitations(userId);
-  //     notifyListeners();
-  //     return usersInvitations;
-  //   } catch (e) {
-  //     logger.e("GetGroupMembershipInvitations Provider Error: " + e);
-  //   }
-  // }
+  Future<List<InvitationModel>> getUsersInvitations(String userId) async {
+    try {
+      usersInvitations = await invitationRepository.getUsersInvitations(userId);
+      notifyListeners();
+      return usersInvitations;
+    } catch (e) {
+      logger.e("GetGroupMembershipInvitations Provider Error: " + e);
+      return null;
+    }
+  }
 
   Future<void> inviteUserToGroup(
       String userId, String groupId, String type) async {
@@ -68,8 +67,13 @@ class InvitationProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> acceptGroupInvitation(String userId, String groupId) async {
-    return await invitationRepository.acceptGroupInvitation(userId, groupId);
+  Future<void> acceptGroupInvitation(
+      String userId, String groupId, String invitationId) async {
+    //TODO:Invitations tablosundan daveti sil
+    //TODO:Cloud Functions ile kullanıcıyı grup üyelerine ekle
+
+    await invitationRepository.acceptGroupInvitation(
+        userId, groupId, invitationId);
   }
 
   Future<void> rollbackGroupMembershipInvitation(

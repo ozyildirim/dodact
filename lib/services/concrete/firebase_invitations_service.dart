@@ -21,13 +21,19 @@ class FirebaseInvitationService {
     return invitations;
   }
 
-  Future<List<InvitationModel>> getReceivedInvitations(
-      String receiverId, String type) async {
+  Future<List<InvitationModel>> getReceivedInvitations(String receiverId,
+      {String type}) async {
     List<InvitationModel> invitations = [];
-    QuerySnapshot snapshot = await invitationsRef
-        .where('receiverId', isEqualTo: receiverId)
-        .where('type', isEqualTo: type)
-        .get();
+    QuerySnapshot snapshot;
+    if (type == null) {
+      snapshot =
+          await invitationsRef.where('receiverId', isEqualTo: receiverId).get();
+    } else {
+      snapshot = await invitationsRef
+          .where('receiverId', isEqualTo: receiverId)
+          .where('type', isEqualTo: type)
+          .get();
+    }
 
     for (DocumentSnapshot doc in snapshot.docs) {
       invitations.add(InvitationModel.fromJson(doc.data()));
@@ -51,7 +57,11 @@ class FirebaseInvitationService {
   }
 
   //Cloud Functions ile kabul işlemi gerçekleştirilir.
-  Future<bool> acceptGroupInvitation(String userId, String groupId) async {}
+  Future<void> acceptGroupInvitation(
+      String userId, String groupId, String invitationId) async {
+    //TODO: Cloud Functions ile kabul işlemi gerçekleştirilir.
+    await invitationsRef.doc(invitationId).delete();
+  }
 
   Future<List<InvitationModel>> getInvitations() async {
     List<InvitationModel> invitations = [];

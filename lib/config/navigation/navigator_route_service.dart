@@ -41,9 +41,10 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_sett
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/social_accounts_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_contributions_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
+import 'package:dodact_v1/ui/profile/screens/notifications/user_invitations_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
-import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_notifications_page.dart';
+import 'package:dodact_v1/ui/profile/screens/notifications/user_notifications_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
 import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -174,6 +175,9 @@ class NavigationRouteManager {
 
       case k_ROUTE_USER_NOTIFICATIONS:
         return _navigateToDefault(UserNotificationsPage(), settings);
+
+      case k_ROUTE_USER_INVITATIONS_PAGE:
+        return _navigateToDefault(UserInvitationsPage(), settings);
 
       //USER SETTINGS
 
