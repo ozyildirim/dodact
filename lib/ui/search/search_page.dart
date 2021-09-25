@@ -51,65 +51,68 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     Logger().i(category);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Ara'),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
-              image: AssetImage(kBackgroundImage),
-              fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        // appBar: AppBar(
+        //   title: Text('Ara'),
+        // ),
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                image: AssetImage(kBackgroundImage),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    TextFieldContainer(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Ara',
-                            border: InputBorder.none,
-                            suffixIcon: Icon(Icons.search)),
-                        onChanged: (value) {
-                          setState(() {
-                            name = value;
-                          });
-                        },
-                      ),
-                    ),
-                    TextFieldContainer(
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      child: FormBuilderDropdown(
-                        name: "searchCategory",
-                        initialValue: category,
-                        items: categoryItems,
-                        hint: Text("Kategori", style: TextStyle(fontSize: 10)),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextFieldContainer(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: TextField(
+                          decoration: InputDecoration(
+                              hintText: 'Ara',
+                              border: InputBorder.none,
+                              suffixIcon: Icon(Icons.search)),
+                          onChanged: (value) {
+                            setState(() {
+                              name = value;
+                            });
+                          },
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            category = value;
-                            Logger().i("onchanged value: category");
-                          });
-                        },
                       ),
-                    ),
-                  ],
-                ),
-                buildStreamer(context, name, category),
-              ],
+                      TextFieldContainer(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        child: FormBuilderDropdown(
+                          name: "searchCategory",
+                          initialValue: category,
+                          items: categoryItems,
+                          hint:
+                              Text("Kategori", style: TextStyle(fontSize: 10)),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              category = value;
+                              Logger().i("onchanged value: category");
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  buildStreamer(context, name, category),
+                ],
+              ),
             ),
           ),
         ),

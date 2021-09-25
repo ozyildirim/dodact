@@ -4,8 +4,11 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/podcast_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
+import 'package:dodact_v1/services/concrete/network_status_service.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
+import 'package:dodact_v1/ui/common/screens/no_internet_page.dart';
+import 'package:dodact_v1/ui/common/widgets/network_aware_widget.dart';
 import 'package:dodact_v1/ui/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,25 +26,32 @@ class _LandingPageState extends BaseState<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(
-      builder: (_, model, child) {
-        if (model.isLoading == false) {
-          if (model.currentUser == null) {
-            return WelcomePage();
-          }
-          if (model.currentUser.newUser) {
-            return SignUpDetail();
-          }
-          fetchAppContent();
-          return HomePage();
-        }
-        //If state is "Busy"
-        return Scaffold(
-          body: Center(
-            child: spinkit,
-          ),
-        );
-      },
+    return StreamProvider<NetworkStatus>(
+      create: (context) =>
+          NetworkStatusService().networkStatusController.stream,
+      child: NetworkAwareWidget(
+        onlineChild: Consumer<AuthProvider>(
+          builder: (_, model, child) {
+            if (model.isLoading == false) {
+              if (model.currentUser == null) {
+                return WelcomePage();
+              }
+              if (model.currentUser.newUser) {
+                return SignUpDetail();
+              }
+              fetchAppContent();
+              return HomePage();
+            }
+            //If state is "Busy"
+            return Scaffold(
+              body: Center(
+                child: spinkit,
+              ),
+            );
+          },
+        ),
+        offlineChild: NoInternetPage(),
+      ),
     );
   }
 
