@@ -198,7 +198,6 @@ class _SearchPageState extends State<SearchPage> {
                     .collection('users')
                     .where("searchKeywords", arrayContains: name)
                     .where('newUser', isEqualTo: false)
-                    .where('isAdmin', isEqualTo: false)
                     .snapshots()
                 : FirebaseFirestore.instance
                     .collection("users")

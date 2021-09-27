@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/invitation_model.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +60,26 @@ class FirebaseInvitationService {
   //Cloud Functions ile kabul işlemi gerçekleştirilir.
   Future<void> acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
-    //TODO: Cloud Functions ile kabul işlemi gerçekleştirilir.
-    await invitationsRef.doc(invitationId).delete();
+    // //TODO: Cloud Functions ile kabul işlemi gerçekleştirilir.
+    // await invitationsRef.doc(invitationId).delete();
+
+    FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
+    HttpsCallable callable = firebaseFunctions.httpsCallable('addUserToGroup');
+    try {
+      final HttpsCallableResult result = await callable.call(<String, dynamic>{
+        'groupId': groupId,
+        'userId': userId,
+        'invitationId': invitationId,
+      });
+      print(result.data);
+    } on FirebaseFunctionsException catch (e) {
+      print('Firebase Functions Exception');
+      print(e.code);
+      print(e.message);
+    } catch (e) {
+      print('Caught Exception');
+      print(e);
+    }
   }
 
   Future<List<InvitationModel>> getInvitations() async {

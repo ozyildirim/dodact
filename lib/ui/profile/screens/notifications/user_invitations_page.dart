@@ -1,5 +1,6 @@
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/invitation_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
@@ -11,14 +12,21 @@ class UserInvitationsPage extends StatefulWidget {
   State<UserInvitationsPage> createState() => _UserInvitationsPageState();
 }
 
-class _UserInvitationsPageState extends State<UserInvitationsPage> {
-  List<GroupModel> groups;
+class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
+  List<GroupInvitationModel> groupInvitationModels = [];
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<InvitationProvider>(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          sendNotification(authProvider.currentUser.uid);
+        },
+        child: Icon(Icons.send),
+      ),
       appBar: AppBar(
+        actions: [],
         title: Text('Davetler'),
       ),
       body: Container(
@@ -32,14 +40,15 @@ class _UserInvitationsPageState extends State<UserInvitationsPage> {
         ),
         child: Column(
           children: [
-            buildGroupInvitations(provider, groups),
+            buildGroupInvitations(provider, groupInvitationModels),
           ],
         ),
       ),
     );
   }
 
-  buildGroupInvitations(InvitationProvider provider, List<GroupModel> groups) {
+  buildGroupInvitations(InvitationProvider provider,
+      List<GroupInvitationModel> groupInvitationModels) {
     List<InvitationModel> groupInvitations = [];
 
     groupInvitations = provider.usersInvitations.map((e) {
@@ -50,27 +59,38 @@ class _UserInvitationsPageState extends State<UserInvitationsPage> {
 
     if (groupInvitations.isNotEmpty) {
       getGroups(groupInvitations);
-      if (groups != null && groups.length > 0) {
+
+      if (groupInvitationModels != null && groupInvitationModels.length > 0) {
         return Container(
           height: 400,
           child: ListView.builder(
-              itemCount: groups.length,
+              itemCount: groupInvitationModels.length,
               itemBuilder: (context, index) {
-                var group = groups[index];
+                String groupId = groupInvitationModels[index].groupId;
+                String groupProfilePicture =
+                    groupInvitationModels[index].groupProfilePicture;
+                String groupName = groupInvitationModels[index].groupName;
+                // String groupCategory =
+                //     groupInvitationModels[index].groupCategory;
+                String invitationId = groupInvitationModels[index].invitationId;
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 45,
-                      backgroundImage: NetworkImage(group.groupProfilePicture),
+                      backgroundImage: NetworkImage(groupProfilePicture),
                     ),
-                    title:
-                        Text(group.groupName, style: TextStyle(fontSize: 20)),
+                    title: Text(groupName, style: TextStyle(fontSize: 20)),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              acceptGroupInvitation(
+                                  provider.usersInvitations.first.receiverId,
+                                  groupId,
+                                  invitationId);
+                            },
                             icon: Icon(Icons.check),
                             color: Colors.green),
                         IconButton(
@@ -101,19 +121,64 @@ class _UserInvitationsPageState extends State<UserInvitationsPage> {
 
   getGroups(List<InvitationModel> groupInvitations) async {
     var groupProvider = Provider.of<GroupProvider>(context, listen: false);
-    List<GroupModel> tempGroups = [];
+
+    List<GroupInvitationModel> models = [];
+
     groupInvitations.forEach((invitation) async {
       var group = await groupProvider.getGroupDetail(invitation.senderId);
-      print(group.founderId);
-      tempGroups.add(group);
+      // tempGroups.add(group);
+      models.add(GroupInvitationModel(
+        groupCategory: group.groupCategory,
+        groupId: group.groupId,
+        groupName: group.groupName,
+        groupProfilePicture: group.groupProfilePicture,
+        invitationId: invitation.invitationId,
+      ));
     });
     setState(() {
-      groups = tempGroups;
+      groupInvitationModels = models;
     });
   }
 
   acceptGroupInvitation(
-      String userId, String groupId, String invitationId) async {}
+      String userId, String groupId, String invitationId) async {
+    await Provider.of<InvitationProvider>(context, listen: false)
+        .acceptGroupInvitation(userId, groupId, invitationId);
+  }
 
   rejectGroupInvitation() {}
+
+  sendNotification(String userId) async {
+    debugPrint(userId);
+    FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
+    firebaseFunctions.useFunctionsEmulator("localhost", 5001);
+    var callable = firebaseFunctions.httpsCallable('sendNotificationToUser');
+    try {
+      final HttpsCallableResult result =
+          await callable.call(<String, dynamic>{'userId': userId});
+      print(result.data);
+    } on FirebaseFunctionsException catch (e) {
+      print('Firebase Functions Exception');
+      print(e.code);
+      print(e.message);
+    } catch (e) {
+      print('Caught Exception');
+      print(e);
+    }
+  }
+}
+
+class GroupInvitationModel {
+  String groupId;
+  String invitationId;
+  String groupProfilePicture;
+  String groupName;
+  String groupCategory;
+
+  GroupInvitationModel(
+      {this.groupId,
+      this.invitationId,
+      this.groupProfilePicture,
+      this.groupName,
+      this.groupCategory});
 }

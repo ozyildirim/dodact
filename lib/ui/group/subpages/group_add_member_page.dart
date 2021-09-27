@@ -120,8 +120,8 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
       child: StreamBuilder<QuerySnapshot>(
         stream: (input != "" && input != null)
             ? usersRef
-                .where('username', isEqualTo: input)
-                // .where('isAdmin', isEqualTo: false)
+                .where('searchKeywords', arrayContains: input)
+                .where('newUser', isEqualTo: false)
                 .snapshots()
             : usersRef.limit(5).snapshots(),
         builder: (context, snapshot) {

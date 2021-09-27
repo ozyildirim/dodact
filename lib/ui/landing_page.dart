@@ -29,28 +29,48 @@ class _LandingPageState extends BaseState<LandingPage> {
     return StreamProvider<NetworkStatus>(
       create: (context) =>
           NetworkStatusService().networkStatusController.stream,
-      child: NetworkAwareWidget(
-        onlineChild: Consumer<AuthProvider>(
-          builder: (_, model, child) {
-            if (model.isLoading == false) {
-              if (model.currentUser == null) {
-                return WelcomePage();
-              }
-              if (model.currentUser.newUser) {
-                return SignUpDetail();
-              }
-              fetchAppContent();
-              return HomePage();
+      // child: NetworkAwareWidget(
+      //   onlineChild: Consumer<AuthProvider>(
+      //     builder: (_, model, child) {
+      //       if (model.isLoading == false) {
+      //         if (model.currentUser == null) {
+      //           return WelcomePage();
+      //         }
+      //         if (model.currentUser.newUser) {
+      //           return SignUpDetail();
+      //         }
+      //         fetchAppContent();
+      //         return HomePage();
+      //       }
+      //       //If state is "Busy"
+      //       return Scaffold(
+      //         body: Center(
+      //           child: spinkit,
+      //         ),
+      //       );
+      //     },
+      //   ),
+      //   offlineChild: NoInternetPage(),
+      // ),
+      child: Consumer<AuthProvider>(
+        builder: (_, model, child) {
+          if (model.isLoading == false) {
+            if (model.currentUser == null) {
+              return WelcomePage();
             }
-            //If state is "Busy"
-            return Scaffold(
-              body: Center(
-                child: spinkit,
-              ),
-            );
-          },
-        ),
-        offlineChild: NoInternetPage(),
+            if (model.currentUser.newUser) {
+              return SignUpDetail();
+            }
+            fetchAppContent();
+            return HomePage();
+          }
+          //If state is "Busy"
+          return Scaffold(
+            body: Center(
+              child: spinkit,
+            ),
+          );
+        },
       ),
     );
   }

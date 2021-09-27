@@ -11,6 +11,8 @@ const postsRef = db.collection('posts');
 const usersRef = db.collection('users');
 const groupsRef = db.collection('groups');
 const requestsRef = db.collection('requests');
+const invitationsRef = db.collection('invitations');
+const tokensRef = db.collection('tokens');
 
 
 
@@ -35,6 +37,93 @@ firestore.document('posts/{postId}/dodders/{dodderId}')
             'dodCounter': admin.firestore.FieldValue.increment(-1)
         });
     });
+
+exports.addUserToGroup = functions.https.onCall(async (req, res) => {
+    const groupId = req.query.groupId;
+    const userId = req.query.userId;
+    const invitationId = req.query.invitationId;
+
+    const groupRef = groupsRef.doc(groupId);
+    const userRef = usersRef.doc(userId);
+
+    const group = await groupRef.doc(groupId).get();
+    const user = await userRef.doc(userId).get();
+
+    if (!group.exists) {
+        res.status(404).send('GROUP_NOT_FOUND');
+    } else if (!user.exists) {
+        res.status(404).send('USER_NOT_FOUND');
+    } else {
+        const groupData = group.data();
+        const userData = user.data();
+
+        if (groupData.groupMemberList.includes(userId)) {
+            res.status(400).send('USER_ALREADY_IN_GROUP');
+            await deleteInvitation(invitationId);
+        } else {
+            await groupRef.update({
+                'groupMemberList': admin.firestore.FieldValue.arrayUnion(userId)
+            });
+
+            res.status(200).send('USER_ADDED_TO_GROUP');
+            await deleteInvitation(invitationId);
+
+            let payload = {
+                notification: {
+                    title: 'Gruba başarıyla dahil oldun!',
+                    body: `${groupData.groupName} ile güzel günlere!`,
+                    sound: "default",
+                },
+                // data:{
+                //     title: 'Gruba başarıyla dahil oldun!',
+                //     body: `${groupData.groupName} ile güzel günlere!`,
+                // }
+            }
+            sendNotificationToUser(userId, payload);
+
+        }
+    }
+})
+
+exports.sendNotificationToUser = functions.https.onCall(async (data, context) => {
+    const userId = data.userId;
+    const tokenRef = await tokensRef.doc(userId).get();
+
+    const token = tokenRef.data();
+
+    const payload = {
+        notification: {
+            title: "Örnek bildirim",
+            body: "Örnek bildirim",
+            sound: "default",
+        },
+    };
+
+    const response = await admin
+        .messaging()
+        .sendToDevice(token.token, payload).then((value) => {
+            console.log("Notification sent successfully.");
+        }).catch((error) => {
+            console.log(error);
+        });
+})
+
+sendNotificationToUser = async (userId, payload) => {
+    var ref = db.doc('tokens/${userId}');
+    const token = ref.data().token;
+    admin.messaging().sendToDevice(token, payload)
+}
+
+deleteInvitation = async (invitationId) => {
+    const invitationRef = invitationsRef.doc(invitationId);
+    const invitation = await invitationRef.get();
+
+    if (invitation.exists) {
+        invitationRef.delete();
+    }
+};
+
+
 
 
 // exports.deletePost = functions.firestore.document('posts/{postId}').onDelete((snapshot, context) => {

@@ -43,23 +43,23 @@ class _HomePageState extends BaseState<HomePage> {
       print(event.notification.body);
       //TODO: Awesome notif ekle
 
-      //Bildirim ile diyalog gösterimi
-      // showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return AlertDialog(
-      //         title: Text("Notification"),
-      //         content: Text(event.notification.body),
-      //         actions: [
-      //           TextButton(
-      //             child: Text("Ok"),
-      //             onPressed: () {
-      //               Navigator.of(context).pop();
-      //             },
-      //           )
-      //         ],
-      //       );
-      //     });
+      // Bildirim ile diyalog gösterimi
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Notification"),
+              content: Text(event.notification.body),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
@@ -73,12 +73,6 @@ class _HomePageState extends BaseState<HomePage> {
         extendBody: true,
         extendBodyBehindAppBar: true,
         body: _children[selectedIndex],
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     NavigationService.instance.navigate(k_ROUTE_CREATION);
-        //   },
-        //   child: Icon(Icons.add),
-        // ),
         bottomNavigationBar: CurvedNavigationBar(
           animationDuration: Duration(milliseconds: 400),
           color: Colors.orange[700],

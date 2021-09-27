@@ -69,11 +69,17 @@ class InvitationProvider with ChangeNotifier {
 
   Future<void> acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
-    //TODO:Invitations tablosundan daveti sil
-    //TODO:Cloud Functions ile kullanıcıyı grup üyelerine ekle
+    try {
+      await invitationRepository.acceptGroupInvitation(
+          userId, groupId, invitationId);
 
-    await invitationRepository.acceptGroupInvitation(
-        userId, groupId, invitationId);
+      //TODO:Invitations tablosundan daveti sil
+      usersInvitations
+          .removeWhere((element) => element.invitationId == invitationId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("AcceptGroupInvitation Provider Error: " + e);
+    }
   }
 
   Future<void> rollbackGroupMembershipInvitation(
