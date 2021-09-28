@@ -151,7 +151,7 @@ class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
   sendNotification(String userId) async {
     debugPrint(userId);
     FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
-    firebaseFunctions.useFunctionsEmulator("localhost", 5001);
+    // firebaseFunctions.useFunctionsEmulator("localhost", 5001);
     var callable = firebaseFunctions.httpsCallable('sendNotificationToUser');
     try {
       final HttpsCallableResult result =

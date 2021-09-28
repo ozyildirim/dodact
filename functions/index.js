@@ -1,12 +1,17 @@
+const fs = require('fs');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const {
     Storage
 } = require("@google-cloud/storage");
+const nodemailer = require('nodemailer');
 
-admin.initializeApp();
+admin.initializeApp({
+    credential: admin.credential.applicationDefault()
+});
 const db = admin.firestore();
 
+//REFS
 const postsRef = db.collection('posts');
 const usersRef = db.collection('users');
 const groupsRef = db.collection('groups');
@@ -14,6 +19,41 @@ const requestsRef = db.collection('requests');
 const invitationsRef = db.collection('invitations');
 const tokensRef = db.collection('tokens');
 
+
+//Mail
+
+const mailAddress = 'no-reply@dodact.com';
+const mailPassword = '$Dodact_159753$';
+var mailTransport = nodemailer.createTransport({
+    host: 'srvc109.turhost.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: mailAddress,
+        pass: mailPassword
+    }
+});
+
+
+exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+    var welcomeHtmlMail = fs.readFileSync("./welcome.html", "utf-8").toString();
+    const recipent_email = user.email;
+
+    const mailOptions = {
+        from: `Dodact <no-reply@dodact.com>`,
+        to: recipent_email,
+        // subject: `Dodact'e hoş geldin!`,
+        html: welcomeHtmlMail,
+    };
+
+    try {
+        mailTransport.sendMail(mailOptions);
+        console.log('mail sent successfuly');
+
+    } catch (error) {
+        console.error('There was an error while sending the email:', error);
+    }
+});
 
 
 exports.incrementPostDodders = functions.
@@ -107,6 +147,10 @@ exports.sendNotificationToUser = functions.https.onCall(async (data, context) =>
             console.log(error);
         });
 })
+
+
+
+
 
 sendNotificationToUser = async (userId, payload) => {
     var ref = db.doc('tokens/${userId}');
