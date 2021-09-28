@@ -42,7 +42,7 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
     const mailOptions = {
         from: `Dodact <no-reply@dodact.com>`,
         to: recipent_email,
-        // subject: `Dodact'e hoş geldin!`,
+        subject: `Dodact'e hoş geldin!`,
         html: welcomeHtmlMail,
     };
 
