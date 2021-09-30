@@ -28,15 +28,14 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
 
     if (postProvider.userPosts != null) {
       if (postProvider.userPosts.isNotEmpty) {
-        List<PostModel> approvedPosts =
-            getApprovedPosts(postProvider.userPosts);
+        List<PostModel> posts = postProvider.userPosts;
 
-        if (approvedPosts.isNotEmpty && approvedPosts != null) {
+        if (posts.isNotEmpty && posts != null) {
           return StaggeredGridView.countBuilder(
             crossAxisCount: 4,
-            itemCount: approvedPosts.length,
+            itemCount: posts.length,
             itemBuilder: (BuildContext context, int index) {
-              var postItem = approvedPosts[index];
+              var postItem = posts[index];
               return Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Container(
@@ -71,15 +70,5 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
     } else {
       return Center(child: spinkit);
     }
-  }
-
-  List<PostModel> getApprovedPosts(List<PostModel> posts) {
-    List<PostModel> userPosts = posts;
-    List<PostModel> approvedPosts = [];
-
-    approvedPosts =
-        userPosts.where((element) => element.approved == true).toList();
-
-    return approvedPosts;
   }
 }

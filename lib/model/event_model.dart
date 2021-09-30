@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventModel {
-  bool approved;
   String eventId;
   String ownerId;
   String eventTitle;
@@ -27,7 +26,6 @@ class EventModel {
   EventModel(
       {this.eventId,
       this.ownerId,
-      this.approved,
       this.eventTitle,
       this.eventDescription,
       this.city,
@@ -49,7 +47,6 @@ class EventModel {
 
   EventModel.fromJson(Map<String, dynamic> json) {
     eventId = json['eventId'];
-    approved = json['approved'];
     ownerId = json['ownerId'];
     eventTitle = json['eventTitle'];
     eventDescription = json['eventDescription'];
@@ -74,7 +71,6 @@ class EventModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['eventId'] = this.eventId;
-    data['approved'] = this.approved;
     data['ownerId'] = this.ownerId;
     data['eventTitle'] = this.eventTitle;
     data['eventDescription'] = this.eventDescription;
@@ -101,6 +97,6 @@ class EventModel {
 
   @override
   String toString() {
-    return 'EventModel{eventId: $eventId,eventType: $eventType,approved: $approved, eventLocationCoordinates: $eventLocationCoordinates, eventCreationDate: $eventCreationDate, ownerId: $ownerId, eventAddress: $eventAddress, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType, searchKeywords: $searchKeywords}';
+    return 'EventModel{eventId: $eventId,eventType: $eventType, eventLocationCoordinates: $eventLocationCoordinates, eventCreationDate: $eventCreationDate, ownerId: $ownerId, eventAddress: $eventAddress, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType, searchKeywords: $searchKeywords}';
   }
 }

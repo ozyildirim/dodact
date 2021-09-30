@@ -30,16 +30,14 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
     if (provider.userEventList != null) {
       if (provider.userEventList.isNotEmpty) {
         Logger().i("EventList boş değil");
-        List<EventModel> approvedEvents =
-            getApprovedEvents(provider.userEventList);
+        List<EventModel> events = provider.userEventList;
 
-        if (approvedEvents != null && approvedEvents.isNotEmpty) {
+        if (events != null && events.isNotEmpty) {
           Logger().i("onaylanan listeler boş değil");
-          Logger().i("onaylanan listeler: ${approvedEvents.length}");
+          Logger().i("onaylanan listeler: ${events.length}");
           return ListView(
               scrollDirection: Axis.horizontal,
-              children:
-                  approvedEvents.map((e) => _buildUserEventCard(e)).toList());
+              children: events.map((e) => _buildUserEventCard(e)).toList());
         } else {
           Logger().i("onaylanan listeler boş");
           return Center(
@@ -62,16 +60,6 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
       Logger().i("EventList null");
       return Center(child: spinkit);
     }
-  }
-
-  List<EventModel> getApprovedEvents(List<EventModel> eventList) {
-    List<EventModel> _userEvents = eventList;
-    List<EventModel> approvedEvents = [];
-
-    approvedEvents =
-        _userEvents.where((element) => element.approved == true).toList();
-
-    return approvedEvents;
   }
 
   Widget _buildUserEventCard(EventModel event) {

@@ -1,14 +1,10 @@
 import 'dart:io';
-
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/event_model.dart';
-import 'package:dodact_v1/model/group_model.dart';
-import 'package:dodact_v1/model/request_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/repository/event_repository.dart';
-import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -16,7 +12,6 @@ import 'package:logger/logger.dart';
 class EventProvider extends ChangeNotifier {
   var logger = new Logger();
   EventRepository eventRepository = locator<EventRepository>();
-  FirebaseRequestService requestService = FirebaseRequestService();
 
   AuthProvider authProvider = AuthProvider();
   GroupProvider groupProvider = GroupProvider();
@@ -80,28 +75,8 @@ class EventProvider extends ChangeNotifier {
 
       //Event linkleri event modeline dahil ediliyor.
       await eventRepository.save(newEvent);
-
-      //Post isteği oluşturuluyor.
-      await createEventRequest(newEvent);
     } catch (e) {
       print("EventProvider addEvent error: $e");
-    }
-  }
-
-  Future<void> createEventRequest(EventModel event) async {
-    try {
-      var requestModel = new RequestModel();
-      requestModel.requestOwnerId = event.ownerId;
-      requestModel.requestDate = DateTime.now();
-      requestModel.subjectId = event.eventId;
-      requestModel.requestFor = "Event";
-      requestModel.isExamined = false;
-      requestModel.isApproved = false;
-      requestModel.rejectionMessage = "";
-
-      await requestService.addRequest(requestModel);
-    } catch (e) {
-      print("PostProvider createPostRequestModel error: $e ");
     }
   }
 

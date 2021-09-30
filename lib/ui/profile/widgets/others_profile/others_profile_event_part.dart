@@ -6,9 +6,7 @@ import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfileEventsTab extends StatefulWidget {
@@ -41,12 +39,12 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
         );
       }
 
-      var approvedEvents = getApprovedEvents(provider.userEventList);
+      var events = provider.userEventList;
 
       return ListView(
         scrollDirection: Axis.horizontal,
-        children: approvedEvents != null
-            ? approvedEvents.map((e) => _buildUserEventCard(e)).toList()
+        children: events != null
+            ? events.map((e) => _buildUserEventCard(e)).toList()
             : [
                 Center(
                   child: Text(
@@ -61,19 +59,6 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
         child: spinkit,
       );
     }
-  }
-
-  List<EventModel> getApprovedEvents(List<EventModel> eventList) {
-    List<EventModel> _userEvents = eventList;
-    List<EventModel> approvedEvents = [];
-
-    approvedEvents = _userEvents.map((e) {
-      if (e.approved) {
-        return e;
-      }
-    }).toList();
-
-    return approvedEvents;
   }
 
   Widget _buildUserEventCard(EventModel event) {

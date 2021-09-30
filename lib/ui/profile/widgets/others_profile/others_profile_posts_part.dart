@@ -5,7 +5,6 @@ import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/post_card_for_grids.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfilePostsTab extends StatefulWidget {
@@ -31,15 +30,14 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
   Widget build(BuildContext context) {
     if (postProvider.otherUsersPosts != null) {
       if (postProvider.otherUsersPosts.isNotEmpty) {
-        List<PostModel> approvedPosts =
-            getApprovedPosts(postProvider.otherUsersPosts);
+        List<PostModel> posts = postProvider.otherUsersPosts;
 
-        if (approvedPosts.isNotEmpty && approvedPosts != null) {
+        if (posts.isNotEmpty && posts != null) {
           return StaggeredGridView.countBuilder(
             crossAxisCount: 4,
-            itemCount: approvedPosts.length,
+            itemCount: posts.length,
             itemBuilder: (BuildContext context, int index) {
-              var postItem = approvedPosts[index];
+              var postItem = posts[index];
               return Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Container(
@@ -74,15 +72,5 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
     } else {
       return Center(child: spinkit);
     }
-  }
-
-  List<PostModel> getApprovedPosts(List<PostModel> posts) {
-    List<PostModel> userPosts = posts;
-    List<PostModel> approvedPosts = [];
-
-    approvedPosts =
-        userPosts.where((element) => element.approved == true).toList();
-
-    return approvedPosts;
   }
 }

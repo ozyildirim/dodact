@@ -666,7 +666,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   }
 
   void setNewEventValues({bool isUsedForHelp}) {
-    eventProvider.newEvent.approved = false;
     eventProvider.newEvent.eventId = "";
     eventProvider.newEvent.eventTitle =
         _formKey.currentState.value['eventTitle'].toString().trim();

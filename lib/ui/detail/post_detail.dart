@@ -6,7 +6,6 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
-import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_description_card.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_detail_info_part.dart';
@@ -281,10 +280,6 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     await Provider.of<PostProvider>(context, listen: false)
         .deletePost(post.postId, isLocatedInStorage);
-
-    //REQUESTİNİ SİL
-    await Provider.of<RequestProvider>(context, listen: false)
-        .deleteRequest(post.postId);
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //

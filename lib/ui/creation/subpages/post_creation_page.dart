@@ -524,7 +524,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         }).then((value) async {
           Logger().i("Reklam izlendi");
           PostModel newPost = new PostModel(
-            approved: false,
             isLocatedInYoutube: widget.contentType == "Video" ? true : false,
             isVideo: widget.contentType == "Video" ? true : false,
             postContentType: widget.contentType,
@@ -560,7 +559,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       } else {
         //Bağış yapılmayacak ise
         PostModel newPost = new PostModel(
-          approved: false,
           isLocatedInYoutube: widget.contentType == "Video" ? true : false,
           isVideo: widget.contentType == "Video" ? true : false,
           postContentType: widget.contentType,

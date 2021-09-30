@@ -3,17 +3,14 @@ import 'dart:io';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
-import 'package:dodact_v1/model/request_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/post_repository.dart';
-import 'package:dodact_v1/services/concrete/firebase_request_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
 class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
-  FirebaseRequestService requestService = FirebaseRequestService();
 
   var logger = new Logger();
 
@@ -61,7 +58,6 @@ class PostProvider extends ChangeNotifier {
           newPost.postId = id;
         });
 
-        await createPostRequest(newPost);
         //İÇERİK VİDEO İÇERMİYOR İSE
       } else {
         //Post modeli firestore ye ekleniyor ve Post ID geri döndürülüyor(İçerik URL olmadan).
@@ -81,29 +77,9 @@ class PostProvider extends ChangeNotifier {
 
         //Post URL, post modele ekleniyor.
         await postRepository.save(newPost);
-
-        //Post isteği oluşturuluyor.
-        await createPostRequest(newPost);
       }
     } catch (e) {
       debugPrint("PostProvider add post error: " + e.toString());
-    }
-  }
-
-  Future<void> createPostRequest(PostModel post) async {
-    try {
-      var requestModel = new RequestModel();
-      requestModel.requestOwnerId = post.ownerId;
-      requestModel.requestDate = DateTime.now();
-      requestModel.subjectId = post.postId;
-      requestModel.requestFor = "Post";
-      requestModel.isExamined = false;
-      requestModel.isApproved = false;
-      requestModel.rejectionMessage = "";
-
-      await requestService.addRequest(requestModel);
-    } catch (e) {
-      print("PostProvider createPostRequestModel error: $e ");
     }
   }
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
@@ -9,10 +8,8 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
-import 'package:dodact_v1/provider/request_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -412,10 +409,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
     await Provider.of<EventProvider>(context, listen: false)
         .deleteEvent(event.eventId, isLocatedInStorage);
-
-    //REQUESTİNİ SİL
-    await Provider.of<RequestProvider>(context, listen: false)
-        .deleteRequest(event.eventId);
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //}
