@@ -309,16 +309,13 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   buildPostCommentsNavigator() {
-    return Container(
-      color: Colors.white70,
-      child: ListTile(
-        title: Text("Yorumları Görüntüle", style: TextStyle(fontSize: 18)),
-        trailing: Icon(Icons.forward),
-        onTap: () {
-          NavigationService.instance.navigate(k_ROUTE_POST_COMMENTS,
-              args: [post.postId, post.ownerId]);
-        },
-      ),
+    return ListTile(
+      title: Text("Yorumları Görüntüle", style: TextStyle(fontSize: 18)),
+      trailing: Icon(Icons.forward),
+      onTap: () {
+        NavigationService.instance
+            .navigate(k_ROUTE_POST_COMMENTS, args: [post.postId, post.ownerId]);
+      },
     );
   }
 }
