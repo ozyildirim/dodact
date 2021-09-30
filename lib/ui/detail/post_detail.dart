@@ -308,6 +308,8 @@ class _PostDetailState extends BaseState<PostDetail> {
     });
   }
 
+  //Post onay durumundan önce
+
   buildPostCommentsNavigator() {
     return ListTile(
       title: Text("Yorumları Görüntüle", style: TextStyle(fontSize: 18)),
