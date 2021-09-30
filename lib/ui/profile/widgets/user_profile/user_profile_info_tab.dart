@@ -99,6 +99,12 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 icon: Icon(FontAwesome5Brands.youtube, size: 30),
               )
             : Container(),
+        user.pinterestLink != null && user.pinterestLink.isNotEmpty
+            ? IconButton(
+                onPressed: () {},
+                icon: Icon(FontAwesome5Brands.pinterest, size: 30),
+              )
+            : Container(),
       ],
     );
   }

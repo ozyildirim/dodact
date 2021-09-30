@@ -20,6 +20,7 @@ class UserObject {
   String dribbbleLink;
   String linkedInLink;
   String soundcloudLink;
+  String pinterestLink;
   String userDescription;
   String education;
   String profession;
@@ -53,6 +54,7 @@ class UserObject {
     this.dribbbleLink,
     this.linkedInLink,
     this.soundcloudLink,
+    this.pinterestLink,
     this.hiddenMail,
     this.hiddenLocation,
     this.hiddenNameSurname,
@@ -84,6 +86,7 @@ class UserObject {
     userData['dribbbleLink'] = this.dribbbleLink;
     userData['linkedInLink'] = this.linkedInLink;
     userData['soundcloudLink'] = this.soundcloudLink;
+    userData['pinterestLink'] = this.pinterestLink;
     userData['hiddenMail'] = this.hiddenMail;
     userData['hiddenLocation'] = this.hiddenLocation;
     userData['hiddenNameSurname'] = this.hiddenNameSurname;
@@ -116,6 +119,7 @@ class UserObject {
         dribbbleLink = map['dribbbleLink'],
         linkedInLink = map['linkedInLink'],
         soundcloudLink = map['soundcloudLink'],
+        pinterestLink = map['pinterestLink'],
         hiddenMail = map['hiddenMail'],
         hiddenLocation = map['hiddenLocation'],
         hiddenNameSurname = map['hiddenNameSurname'],
@@ -145,6 +149,7 @@ class UserObject {
     dribbbleLink = doc.data()['dribbbleLink'];
     linkedInLink = doc.data()['linkedInLink'];
     soundcloudLink = doc.data()['soundcloudLink'];
+    pinterestLink = doc.data()['pinterestLink'];
     hiddenMail = doc.data()['hiddenMail'];
     hiddenLocation = doc.data()['hiddenLocation'];
     hiddenNameSurname = doc.data()['hiddenNameSurname'];
@@ -157,6 +162,6 @@ class UserObject {
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email,newUser: $newUser,mainInterest: $mainInterest,verified: $isVerified,  username: $username,userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
+    return 'UserObject{uid: $uid, email: $email, newUser: $newUser, mainInterest: $mainInterest, verified: $isVerified, username: $username, userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
   }
 }

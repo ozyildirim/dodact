@@ -98,6 +98,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_USER_OPTIONS);
             },
           ),
+
           // ListTile(
           //   enabled: false,
           //   leading: Icon(Icons.settings),
@@ -139,6 +140,9 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             leading: Icon(Icons.logout),
             title: Text("Çıkış Yap", style: TextStyle(fontSize: 18)),
             onTap: () => signOut(context),
+          ),
+          SizedBox(
+            height: kToolbarHeight,
           ),
         ],
       ),

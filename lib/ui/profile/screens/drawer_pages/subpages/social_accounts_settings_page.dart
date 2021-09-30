@@ -27,12 +27,14 @@ class _UserSocialAccountsSettingsState
   String twitter;
   String dribbble;
   String soundCloud;
+  String pinterest;
 
   FocusNode youtubeFocus = new FocusNode();
   FocusNode linkedInFocus = new FocusNode();
   FocusNode dribbbleFocus = new FocusNode();
   FocusNode soundCloudFocus = new FocusNode();
   FocusNode instagramFocus = new FocusNode();
+  FocusNode pinterestFocus = new FocusNode();
 
   @override
   void dispose() {
@@ -40,6 +42,7 @@ class _UserSocialAccountsSettingsState
     linkedInFocus.dispose();
     dribbbleFocus.dispose();
     soundCloudFocus.dispose();
+    pinterestFocus.dispose();
     super.dispose();
   }
 
@@ -61,6 +64,9 @@ class _UserSocialAccountsSettingsState
         : "";
     soundCloud = authProvider.currentUser.soundcloudLink != null
         ? authProvider.currentUser.soundcloudLink
+        : "";
+    pinterest = authProvider.currentUser.pinterestLink != null
+        ? authProvider.currentUser.pinterestLink
         : "";
   }
 
@@ -217,6 +223,43 @@ class _UserSocialAccountsSettingsState
                   Container(
                     color: Colors.white70,
                     child: Text(
+                      "Pinterest",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  TextFieldContainer(
+                    width: mediaQuery.size.width * 0.9,
+                    child: FormBuilderTextField(
+                      name: "pinterest",
+                      initialValue:
+                          authProvider.currentUser.pinterestLink ?? "",
+                      focusNode: pinterestFocus,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(FontAwesome5Brands.pinterest),
+                      ),
+                      onChanged: (value) {
+                        if (authProvider.currentUser.pinterestLink != value) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        } else {
+                          setState(() {
+                            isChanged = false;
+                          });
+                        }
+                      },
+                      validator: FormBuilderValidators.compose([
+                        (value) {
+                          return ProfanityChecker.profanityValidator(
+                              value.trim());
+                        },
+                      ]),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white70,
+                    child: Text(
                       "SoundCloud",
                       style: TextStyle(fontSize: 18),
                     ),
@@ -310,6 +353,8 @@ class _UserSocialAccountsSettingsState
             formKey.currentState.value['soundcloud'].toString().trim();
         var instagramUsername =
             formKey.currentState.value['instagram'].toString().trim();
+        var pinterestLink =
+            formKey.currentState.value['pinterest'].toString().trim();
 
         CommonMethods()
             .showLoaderDialog(context, "Değişiklikler kaydediliyor.");
@@ -319,12 +364,14 @@ class _UserSocialAccountsSettingsState
           'linkedInLink': linkedInLink,
           'soundcloudLink': soundCloudLink,
           'instagramUsername': instagramUsername,
+          'pinterestLink': pinterestLink,
         }).then((value) {
           authProvider.currentUser.youtubeLink = youtubeLink;
           authProvider.currentUser.dribbbleLink = dribbbleLink;
           authProvider.currentUser.linkedInLink = linkedInLink;
           authProvider.currentUser.soundcloudLink = soundCloudLink;
           authProvider.currentUser.instagramUsername = instagramUsername;
+          authProvider.currentUser.pinterestLink = pinterestLink;
         });
         NavigationService.instance.pop();
         setState(() {

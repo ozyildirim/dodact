@@ -34,9 +34,23 @@ class OthersProfileHeader extends StatelessWidget {
         SizedBox(
           height: 4,
         ),
-        Text(
-          "@" + provider.otherUser.username,
-          style: TextStyle(fontSize: 18),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "@" + provider.otherUser.username,
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            provider.otherUser.isVerified == true
+                ? Icon(
+                    Icons.verified,
+                    color: Colors.deepOrangeAccent,
+                  )
+                : SizedBox(),
+          ],
         )
       ],
     );

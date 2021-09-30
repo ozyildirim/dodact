@@ -156,10 +156,11 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getGroupPosts(String groupId) async {
+  Future<List<PostModel>> getGroupPosts(String groupId) async {
     try {
       groupPosts = await _groupRepository.getGroupPosts(groupId);
       notifyListeners();
+      return groupPosts;
     } catch (e) {
       logger.e("GroupProvider getGroupPosts error: " + e.toString());
       return null;
