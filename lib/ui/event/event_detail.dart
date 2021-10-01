@@ -387,7 +387,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği silmek istediğinizden emin misiniz?",
+        text: "Bu içeriği silmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",

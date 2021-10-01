@@ -200,7 +200,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği silmek istediğinizden emin misiniz?",
+        text: "Bu içeriği silmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",
@@ -230,7 +230,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği bildirmek istediğinizden emin misiniz?",
+        text: "Bu içeriği bildirmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",

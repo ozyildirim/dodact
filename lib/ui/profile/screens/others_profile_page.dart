@@ -41,7 +41,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu kullanıcıyı bildirmek istediğinizden emin misiniz?",
+        text: "Bu kullanıcıyı bildirmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",

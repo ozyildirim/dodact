@@ -168,19 +168,45 @@ firestore.document('reports/{reportId}')
         if (report.reportedObjectType == "Post") {
             var postId = report.reportedObjectId;
 
-
+            //Post raporlarını say ve kontrol et, ona göre postu pasif duruma getir
             const postRef = postsRef.doc(postId);
             const postSnapshot = await postRef.get();
             const postData = postSnapshot.data();
 
-            if (postData.reportCounter < 3) {
+            if (postData.reportCounter < 2) {
                 postRef.update({
                     'reportCounter': admin.firestore.FieldValue.increment(1)
                 });
             } else {
-                postRef.update({
+                await postRef.update({
                     'visible': false
                 });
+
+                if (postData.ownerType == "User") {
+                    const payload = {
+                        notification: {
+                            title: 'Oluşturduğun içerikle alakalı',
+                            body: 'Oluşturduğun içerik 3 defa rapor edildiği için içerik incelemeye alındı.',
+                            sound: "default",
+                        }
+                    }
+                    this.sendNotificationToUser(postData.ownerId, payload);
+                }
+                //Postu oluşturan kişi grup ise, grup kurucusunun bilgileri alınır ve ona token gönderilir.
+                else {
+                    const groupRef = groupsRef.doc(postData.ownerId);
+                    const groupSnapshot = await groupRef.get();
+                    const groupData = groupSnapshot.data();
+
+                    const payload = {
+                        notification: {
+                            title: 'Oluşturduğun içerikle alakalı',
+                            body: 'Oluşturduğun içerik 3 defa rapor edildiği için içerik incelemeye alındı.',
+                            sound: "default",
+                        }
+                    }
+                    sendNotificationToUser(groupData.founderId, payload);
+                }
             }
         }
     });
@@ -190,9 +216,9 @@ firestore.document('reports/{reportId}')
 
 
 sendNotificationToUser = async (userId, payload) => {
-    var ref = db.doc('tokens/${userId}');
-    const token = ref.data().token;
-    admin.messaging().sendToDevice(token, payload)
+    var tokenRef = await tokensRef.doc(userId).get();
+    const tokenObject = tokenRef.data();
+    admin.messaging().sendToDevice(tokenObject.token, payload)
 }
 
 deleteInvitation = async (invitationId) => {
@@ -210,12 +236,6 @@ deleteInvitation = async (invitationId) => {
 // exports.deletePost = functions.firestore.document('posts/{postId}').onDelete((snapshot, context) => {
 //     const postId = context.params.postId;
 //     var post = snapshot.data();
-
-//     //delete request for post
-//     const requestRef = requestsRef.where('subjectId', '==', postId).get();
-//     requestRef.forEach(async (doc) => {
-//         await doc.ref.delete();
-//     });
 
 
 //     //delete storage files for post

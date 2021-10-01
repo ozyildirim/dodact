@@ -113,7 +113,7 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu yorumu bildirmek istediğinizden emin misiniz?",
+        text: "Bu yorumu bildirmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",
@@ -150,7 +150,7 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu yorumu silmek istediğinizden emin misiniz?",
+        text: "Bu yorumu silmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "Onay",
