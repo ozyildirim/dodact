@@ -1,4 +1,5 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/ui/general/widgets/acik_sahne_part.dart';
 import 'package:dodact_v1/ui/general/widgets/announcement_part.dart';
 import 'package:dodact_v1/ui/general/widgets/contributions_part.dart';
 import 'package:dodact_v1/ui/general/widgets/event_part.dart';
@@ -33,7 +34,7 @@ class GeneralPage extends StatelessWidget {
           child: SingleChildScrollView(
             child: Container(
               child: Padding(
-                padding: const EdgeInsets.all(22.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -58,6 +59,40 @@ class GeneralPage extends StatelessWidget {
                     PostPart(),
                     SizedBox(
                       height: 20,
+                    ),
+                    Container(
+                      color: Colors.white60,
+                      child: Text(
+                        "Açık Sahne",
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.headline1.copyWith(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    AcikSahnePart(),
+                    SizedBox(height: 20),
+                    Container(
+                      color: Colors.white60,
+                      child: Text(
+                        "Podcast Önerileri",
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.headline1.copyWith(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    PodcastPart(),
+                    SizedBox(
+                      height: 15,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -108,22 +143,6 @@ class GeneralPage extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(height: 20),
-                    Container(
-                      color: Colors.white60,
-                      child: Text(
-                        "Podcast Önerileri",
-                        textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.headline1.copyWith(
-                            color: Colors.black,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    PodcastPart(),
                     SizedBox(
                       height: 20,
                     ),

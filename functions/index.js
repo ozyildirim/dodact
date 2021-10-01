@@ -185,12 +185,16 @@ firestore.document('reports/{reportId}')
                 if (postData.ownerType == "User") {
                     const payload = {
                         notification: {
-                            title: 'Oluşturduğun içerikle alakalı',
+                            title: 'Oluşturduğun içerik incelemeye alındı',
                             body: 'Oluşturduğun içerik 3 defa rapor edildiği için içerik incelemeye alındı.',
                             sound: "default",
                         }
                     }
-                    this.sendNotificationToUser(postData.ownerId, payload);
+
+                    //send notification to post creator
+                    var tokenRef = await tokensRef.doc(postData.ownerId).get();
+                    const tokenObject = tokenRef.data();
+                    admin.messaging().sendToDevice(tokenObject.token, payload)
                 }
                 //Postu oluşturan kişi grup ise, grup kurucusunun bilgileri alınır ve ona token gönderilir.
                 else {
@@ -200,12 +204,16 @@ firestore.document('reports/{reportId}')
 
                     const payload = {
                         notification: {
-                            title: 'Oluşturduğun içerikle alakalı',
+                            title: 'Oluşturduğun içerik incelemeye alındı',
                             body: 'Oluşturduğun içerik 3 defa rapor edildiği için içerik incelemeye alındı.',
                             sound: "default",
                         }
                     }
-                    sendNotificationToUser(groupData.founderId, payload);
+
+                    //send notification to post creator
+                    var tokenRef = await tokensRef.doc(groupData.founderId).get();
+                    const tokenObject = tokenRef.data();
+                    admin.messaging().sendToDevice(tokenObject.token, payload)
                 }
             }
         }
@@ -215,11 +223,11 @@ firestore.document('reports/{reportId}')
 
 
 
-sendNotificationToUser = async (userId, payload) => {
-    var tokenRef = await tokensRef.doc(userId).get();
-    const tokenObject = tokenRef.data();
-    admin.messaging().sendToDevice(tokenObject.token, payload)
-}
+// sendNotificationToUser = async (userId, payload) => {
+//     var tokenRef = await tokensRef.doc(userId).get();
+//     const tokenObject = tokenRef.data();
+//     admin.messaging().sendToDevice(tokenObject.token, payload)
+// }
 
 deleteInvitation = async (invitationId) => {
     const invitationRef = invitationsRef.doc(invitationId);
