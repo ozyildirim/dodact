@@ -28,6 +28,8 @@ class UserObject {
 
   List<String> favoritedPosts = [];
   List<InterestModel> interests;
+  List<String> followers = [];
+  List<String> following = [];
 
   //PrivacySettings
   bool hiddenMail;
