@@ -7,6 +7,7 @@ const {
 const nodemailer = require('nodemailer');
 
 admin.initializeApp({
+    storageBucket: "gs://dodact-7ccd3.appspot.com/",
     credential: admin.credential.applicationDefault()
 });
 const db = admin.firestore();
@@ -159,6 +160,43 @@ firestore.document('posts/{postId}/dodders/{dodderId}')
             'dodCounter': admin.firestore.FieldValue.increment(1)
         });
     });
+
+
+
+exports.deletePostFiles = functions.
+firestore.document('posts/{postId}').onDelete(async (snapshot, context) => {
+    const postId = context.params.postId;
+    const postData = snapshot.data();
+    var hasFile = !postData.isLocatedInYoutube;
+
+    if (hasFile) {
+        try {
+            var bucket = admin.storage().bucket();
+            await bucket.deleteFiles({
+                prefix: `posts/${postId}`
+            });
+            console.log('Post files deleted successfully: ' + postId);
+        } catch (e) {
+            console.log("Error occured while deleting post file: " + postId + e);
+        }
+    } else {
+        console.log('Post has no file: ' + postId);
+    }
+});
+
+exports.deleteEventFiles = functions.
+firestore.document('events/{eventId}').onDelete(async (snapshot, context) => {
+    const eventId = context.params.eventId;
+    try {
+        var bucket = admin.storage().bucket();
+        await bucket.deleteFiles({
+            prefix: `events/${eventId}`
+        });
+        console.log('Event files deleted successfully: ' + eventId);
+    } catch (e) {
+        console.log("Error occured while deleting event file: " + eventId + e);
+    }
+});
 
 exports.checkPostReports = functions.
 firestore.document('reports/{reportId}')

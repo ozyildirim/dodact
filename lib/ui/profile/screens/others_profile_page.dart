@@ -10,6 +10,7 @@ import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_body.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_header.dart';
+import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -55,18 +56,28 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   Future<void> reportUser(String userId) async {
-    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
-    await FirebaseReportService()
-        .reportUser(authProvider.currentUser.uid, otherUser.uid)
-        .then((value) {
-      CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
-      NavigationService.instance.pop();
-      NavigationService.instance.pop();
-    }).catchError((value) {
+    var reportReason = await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => reportReasonDialog(context),
+    );
+    if (reportReason != null) {
       CommonMethods()
-          .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+      await FirebaseReportService()
+          .reportUser(authProvider.currentUser.uid, otherUser.uid, reportReason)
+          .then((value) {
+        CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
+        NavigationService.instance.pop();
+        NavigationService.instance.pop();
+      }).catchError((value) {
+        CommonMethods()
+            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+        NavigationService.instance.pop();
+      });
+    } else {
       NavigationService.instance.pop();
-    });
+    }
   }
 
   @override

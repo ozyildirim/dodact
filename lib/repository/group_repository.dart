@@ -140,4 +140,20 @@ class GroupRepository implements BaseService {
       return await _firebaseGroupService.getUserGroups(userId);
     }
   }
+
+  Future<void> deleteGroupPost(String postId) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await _firebasePostService.delete(postId);
+    }
+  }
+
+  Future<void> deleteGroupEvent(String eventId) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await _firebaseEventService.delete(eventId);
+    }
+  }
 }

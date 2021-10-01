@@ -11,6 +11,8 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
@@ -36,18 +38,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   TabController tabController;
   var logger = new Logger();
 
-  bool canUserControlEvent() {
-    if (event.ownerType == "User") {
-      if (authProvider.currentUser.uid == event.ownerId) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-
   @override
   void initState() {
     event = widget.event;
@@ -59,42 +49,19 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: canUserControlEvent()
-            ? [
-                PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(FontAwesome5Regular.trash_alt),
-                                title: Text("Sil"),
-                                onTap: () async {
-                                  await _showReportEventDialog();
-                                }),
-                          ),
-                          PopupMenuItem(
-                            child: ListTile(
-                              leading: Icon(FontAwesome5Solid.cogs),
-                              title: Text("Düzenle"),
-                              onTap: () async {
-                                await _showEditEventDialog();
-                              },
-                            ),
-                          ),
-                        ])
-              ]
-            : [
-                PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(FontAwesome5Regular.trash_alt),
-                                title: Text("Bildir"),
-                                onTap: () async {
-                                  await _showReportEventDialog();
-                                }),
-                          ),
-                        ])
-              ],
+        actions: [
+          PopupMenuButton(
+              itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: ListTile(
+                          leading: Icon(FontAwesome5Regular.bell),
+                          title: Text("Bildir"),
+                          onTap: () async {
+                            await _showReportEventDialog(event.eventId);
+                          }),
+                    ),
+                  ])
+        ],
         elevation: 8,
         backwardsCompatibility: true,
         iconTheme: IconThemeData(color: Colors.black),
@@ -382,7 +349,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     }
   }
 
-  Future<void> _showReportEventDialog() async {
+  Future<void> _showDeleteEventDialog(String eventId) async {
     //TODO: burayı düzelt
     CoolAlert.show(
         context: context,
@@ -395,13 +362,29 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           NavigationService.instance.pop();
         },
         onConfirmBtnTap: () async {
-          await _deleteEvent();
+          await _deleteEvent(eventId);
         });
   }
 
-  Future<void> _deleteEvent() async {
-    //TODO: Bunlardan herhangi birisi patlarsa ne yapacağız?
+  Future<void> _showReportEventDialog(String eventId) async {
+    //TODO: burayı düzelt
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu içeriği bildirmek istediğinden emin misin?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await reportEvent(eventId);
+          NavigationService.instance.pop();
+        });
+  }
 
+  Future<void> _deleteEvent(String eventId) async {
     bool isLocatedInStorage = event.eventImages != [] ? true : false;
 
     //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
@@ -436,6 +419,34 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       );
     } else {
       logger.i("Bilinmeyen Konum");
+    }
+  }
+
+  Future<void> reportEvent(String eventId) async {
+    var reportReason = await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => reportReasonDialog(context),
+    );
+
+    if (reportReason != null) {
+      CommonMethods()
+          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+      await FirebaseReportService()
+          .reportEvent(
+              authProvider.currentUser.uid, event.eventId, reportReason)
+          .then((value) async {
+        await CommonMethods().showSuccessDialog(context,
+            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        NavigationService.instance.pop();
+        NavigationService.instance.pop();
+      }).catchError((value) async {
+        await CommonMethods()
+            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+        NavigationService.instance.pop();
+      });
+    } else {
+      NavigationService.instance.pop();
     }
   }
 }

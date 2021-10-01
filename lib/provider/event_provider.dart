@@ -82,11 +82,8 @@ class EventProvider extends ChangeNotifier {
 
   Future<void> deleteEvent(String eventId, bool isLocatedInStorage) async {
     try {
-      await eventRepository.delete(eventId).then((value) async {
-        if (isLocatedInStorage) {
-          await UploadService().deleteEventMedia(eventId);
-        }
-      });
+      await eventRepository.delete(eventId);
+
       EventModel event =
           eventList.firstWhere((element) => element.eventId == eventId);
       eventList.remove(event);

@@ -2,21 +2,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 
 class FirebaseReportService {
-  Future<void> reportUser(String reporterId, String reportedUserId) async {
+  Future<void> reportUser(
+      String reporterId, String reportedUserId, String reportReason) async {
     DocumentReference reference = await reportsRef.add({
       'reportedObjectType': "User",
       'reporterId': reporterId,
       'reportedObjectId': reportedUserId,
-      'reportedTime': new DateTime.now()
+      'reportedTime': new DateTime.now(),
+      'reason': reportReason
     });
   }
 
-  Future<void> reportGroup(String reporterId, String reportedGroupId) async {
+  Future<void> reportGroup(
+      String reporterId, String reportedGroupId, String reportReason) async {
     DocumentReference reference = await reportsRef.add({
       'reportedObjectType': "Group",
       'reporterId': reporterId,
       'reportedObjectId': reportedGroupId,
-      'reportedTime': new DateTime.now()
+      'reportedTime': new DateTime.now(),
+      'reason': reportReason
+    });
+  }
+
+  Future<void> reportEvent(
+      String reporterId, String reportedEventId, String reportReason) async {
+    DocumentReference reference = await reportsRef.add({
+      'reportedObjectType': "Event",
+      'reporterId': reporterId,
+      'reportedObjectId': reportedEventId,
+      'reportedTime': new DateTime.now(),
+      'reason': reportReason
     });
   }
 
