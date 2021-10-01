@@ -15,9 +15,9 @@ const db = admin.firestore();
 const postsRef = db.collection('posts');
 const usersRef = db.collection('users');
 const groupsRef = db.collection('groups');
-const requestsRef = db.collection('requests');
 const invitationsRef = db.collection('invitations');
 const tokensRef = db.collection('tokens');
+const reportsRef = db.collection('reports');
 
 
 //Mail
@@ -147,6 +147,43 @@ exports.sendNotificationToUser = functions.https.onCall(async (data, context) =>
             console.log(error);
         });
 })
+
+
+exports.incrementPostDodders = functions.
+firestore.document('posts/{postId}/dodders/{dodderId}')
+    .onCreate((snapshot, context) => {
+        const userId = context.params.dodderId;
+        const postId = context.params.postId;
+
+        postsRef.doc(postId).update({
+            'dodCounter': admin.firestore.FieldValue.increment(1)
+        });
+    });
+
+exports.checkPostReports = functions.
+firestore.document('reports/{reportId}')
+    .onCreate(async (snapshot, context) => {
+        const report = snapshot.data();
+
+        if (report.reportedObjectType == "Post") {
+            var postId = report.reportedObjectId;
+
+
+            const postRef = postsRef.doc(postId);
+            const postSnapshot = await postRef.get();
+            const postData = postSnapshot.data();
+
+            if (postData.reportCounter < 3) {
+                postRef.update({
+                    'reportCounter': admin.firestore.FieldValue.increment(1)
+                });
+            } else {
+                postRef.update({
+                    'visible': false
+                });
+            }
+        }
+    });
 
 
 

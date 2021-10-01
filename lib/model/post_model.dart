@@ -13,10 +13,12 @@ class PostModel {
   bool isUsedForHelp;
   String chosenCompany;
   int dodCounter;
+  int reportCounter;
   List<DodderModel> dodders;
   bool isVideo;
   bool isLocatedInYoutube;
   String postContentType;
+  bool visible;
 
   List<String> searchKeywords;
 
@@ -31,11 +33,13 @@ class PostModel {
     this.postContentURL,
     this.isVideo,
     this.dodCounter,
+    this.reportCounter,
     this.isUsedForHelp,
     this.chosenCompany,
     this.isLocatedInYoutube,
     this.postContentType,
     this.searchKeywords,
+    this.visible,
   });
 
   PostModel.fromJson(Map<String, dynamic> json)
@@ -49,10 +53,12 @@ class PostModel {
         postContentURL = json['postContentURL'],
         isVideo = json['isVideo'],
         dodCounter = json['dodCounter'] ?? 0,
+        reportCounter = json['reportCounter'] ?? 0,
         isUsedForHelp = json['isUsedForHelp'] ?? false,
         chosenCompany = json['chosenCompany'] ?? "",
         isLocatedInYoutube = json['isLocatedInYoutube'],
         postContentType = json['postContentType'],
+        visible = json['visible'],
         searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
 
   Map<String, dynamic> toJson() {
@@ -69,14 +75,16 @@ class PostModel {
     data['isUsedForHelp'] = this.isUsedForHelp ?? false;
     data['chosenCompany'] = this.chosenCompany ?? "";
     data['dodCounter'] = this.dodCounter ?? 0;
+    data['reportCounter'] = this.reportCounter ?? 0;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;
+    data['visible'] = this.visible;
     data['searchKeywords'] = this.searchKeywords;
     return data;
   }
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, ownerType: $ownerType, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo,searchKeywords: $searchKeywords}';
+    return 'PostModel{postId: $postId, ownerType: $ownerType, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo,searchKeywords: $searchKeywords, reportCounter: $reportCounter}';
   }
 }

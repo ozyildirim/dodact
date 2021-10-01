@@ -90,7 +90,7 @@ class _UserSocialAccountsSettingsState
             )
           : null,
       appBar: AppBar(
-        title: Text("Sosyal Medya Hesap Ayarları"),
+        title: Text("Sosyal Medya Hesapları"),
       ),
       body: Container(
         height: dynamicHeight(1),

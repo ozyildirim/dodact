@@ -524,6 +524,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         }).then((value) async {
           Logger().i("Reklam izlendi");
           PostModel newPost = new PostModel(
+            visible: true,
             isLocatedInYoutube: widget.contentType == "Video" ? true : false,
             isVideo: widget.contentType == "Video" ? true : false,
             postContentType: widget.contentType,
@@ -559,6 +560,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       } else {
         //Bağış yapılmayacak ise
         PostModel newPost = new PostModel(
+          visible: true,
           isLocatedInYoutube: widget.contentType == "Video" ? true : false,
           isVideo: widget.contentType == "Video" ? true : false,
           postContentType: widget.contentType,
@@ -585,8 +587,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           (_) async {
             //loaderDialog kapansın diye pop yapıyoruz.
             NavigationService.instance.pop();
-            await showPostShareSuccessDialog(context,
-                "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda inceleyeceğiz.");
+            await showPostShareSuccessDialog(
+                context, "Tebrikler! İçeriğin başarıyla paylaşıldı.");
             NavigationService.instance.navigateToReset(k_ROUTE_HOME);
           },
         );

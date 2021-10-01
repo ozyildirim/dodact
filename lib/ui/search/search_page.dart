@@ -141,11 +141,11 @@ class _SearchPageState extends State<SearchPage> {
                 ? FirebaseFirestore.instance
                     .collection('posts')
                     .where("searchKeywords", arrayContains: name)
-                    .where('approved', isEqualTo: true)
+                    .where('visible', isEqualTo: true)
                     .snapshots()
                 : FirebaseFirestore.instance
                     .collection("posts")
-                    .where('approved', isEqualTo: true)
+                    .where('visible', isEqualTo: true)
                     .limit(5)
                     .snapshots(),
             builder: (context, snapshot) {
@@ -253,11 +253,11 @@ class _SearchPageState extends State<SearchPage> {
                 ? FirebaseFirestore.instance
                     .collection('events')
                     .where("searchKeywords", arrayContains: name)
-                    .where('approved', isEqualTo: true)
+                    .where('visible', isEqualTo: true)
                     .snapshots()
                 : FirebaseFirestore.instance
                     .collection("events")
-                    .where('approved', isEqualTo: true)
+                    .where('visible', isEqualTo: true)
                     .limit(5)
                     .snapshots(),
             builder: (context, snapshot) {

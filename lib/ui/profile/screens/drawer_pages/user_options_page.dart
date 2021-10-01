@@ -10,7 +10,7 @@ class UserOptionsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Kullanıcı Ayarları",
+          "Ayarlar",
         ),
         centerTitle: true,
       ),
@@ -33,7 +33,7 @@ class UserOptionsPage extends StatelessWidget {
                   child: Icon(Icons.notifications),
                 ),
                 title: Text(
-                  "Bildirim Ayarları",
+                  "Bildirimler",
                   style: TextStyle(fontSize: tileTitleSize),
                 ),
                 onTap: () {
@@ -49,7 +49,7 @@ class UserOptionsPage extends StatelessWidget {
                   child: Icon(Icons.person),
                 ),
                 title: Text(
-                  "Profil Ayarları",
+                  "Profil",
                   style: TextStyle(fontSize: tileTitleSize),
                 ),
                 onTap: () {
@@ -65,7 +65,7 @@ class UserOptionsPage extends StatelessWidget {
                   child: Icon(Icons.privacy_tip),
                 ),
                 title: Text(
-                  "Gizlilik Ayarları",
+                  "Gizlilik",
                   style: TextStyle(fontSize: tileTitleSize),
                 ),
                 onTap: () {

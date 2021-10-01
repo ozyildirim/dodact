@@ -20,6 +20,7 @@ class EventModel {
   String ownerType;
   bool isUsedForHelp;
   String chosenCompanyForHelp;
+  bool visible;
 
   List<String> searchKeywords;
 
@@ -43,7 +44,8 @@ class EventModel {
       this.ownerType,
       this.isUsedForHelp,
       this.chosenCompanyForHelp,
-      this.searchKeywords});
+      this.searchKeywords,
+      this.visible});
 
   EventModel.fromJson(Map<String, dynamic> json) {
     eventId = json['eventId'];
@@ -66,6 +68,7 @@ class EventModel {
     isUsedForHelp = json['isUsedForHelp'] ?? false;
     chosenCompanyForHelp = json['chosenCompanyForHelp'] ?? "";
     searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
+    visible = json['visible'] ?? true;
   }
 
   Map<String, dynamic> toJson() {
@@ -92,6 +95,7 @@ class EventModel {
     data['isUsedForHelp'] = this.isUsedForHelp;
     data['chosenCompanyForHelp'] = this.chosenCompanyForHelp;
     data['searchKeywords'] = this.searchKeywords;
+    data['visible'] = this.visible;
     return data;
   }
 

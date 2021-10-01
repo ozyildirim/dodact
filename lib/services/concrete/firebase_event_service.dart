@@ -22,7 +22,7 @@ class FirebaseEventService extends BaseService<EventModel> {
     List<EventModel> allEvents = [];
 
     QuerySnapshot querySnapshot =
-        await eventsRef.where('approved', isEqualTo: true).get();
+        await eventsRef.where('visible', isEqualTo: true).get();
     for (DocumentSnapshot event in querySnapshot.docs) {
       EventModel _convertedEvent = EventModel.fromJson(event.data());
       allEvents.add(_convertedEvent);
@@ -33,8 +33,10 @@ class FirebaseEventService extends BaseService<EventModel> {
 
   Future<List<EventModel>> getUserEvents(UserObject user) async {
     //Get post IDs from user object
-    QuerySnapshot querySnapshot =
-        await eventsRef.where('ownerId', isEqualTo: user.uid).get();
+    QuerySnapshot querySnapshot = await eventsRef
+        .where('ownerId', isEqualTo: user.uid)
+        .where('visible', isEqualTo: true)
+        .get();
 
     List<EventModel> allUserEvents = [];
     for (DocumentSnapshot event in querySnapshot.docs) {
@@ -49,8 +51,10 @@ class FirebaseEventService extends BaseService<EventModel> {
 
     List<EventModel> groupEvents = [];
 
-    QuerySnapshot querySnapshot =
-        await eventsRef.where("ownerId", isEqualTo: groupId).get();
+    QuerySnapshot querySnapshot = await eventsRef
+        .where("ownerId", isEqualTo: groupId)
+        .where("visible", isEqualTo: true)
+        .get();
 
     for (DocumentSnapshot event in querySnapshot.docs) {
       EventModel singleEvent = EventModel.fromJson(event.data());
@@ -98,35 +102,35 @@ class FirebaseEventService extends BaseService<EventModel> {
     QuerySnapshot querySnapshot;
 
     if (showAllCategories && wholeCountry && showAllTypes) {
-      querySnapshot = await eventsRef.where('approved', isEqualTo: true).get();
+      querySnapshot = await eventsRef.where('visible', isEqualTo: true).get();
     } else if (showAllCategories && wholeCountry && showAllTypes == false) {
       querySnapshot = await eventsRef
-          .where('approved', isEqualTo: true)
+          .where('visible', isEqualTo: true)
           .where("eventType", isEqualTo: type)
           .get();
     } else if (showAllCategories && wholeCountry == false && showAllTypes) {
       querySnapshot = await eventsRef
-          .where('approved', isEqualTo: true)
+          .where('visible', isEqualTo: true)
           .where("city", isEqualTo: city)
           .get();
     } else if (showAllCategories &&
         wholeCountry == false &&
         showAllTypes == false) {
       querySnapshot = await eventsRef
-          .where('approved', isEqualTo: true)
+          .where('visible', isEqualTo: true)
           .where("city", isEqualTo: city)
           .where('eventType', isEqualTo: type)
           .get();
     } else if (showAllCategories == false && wholeCountry && showAllTypes) {
       querySnapshot = await eventsRef
-          .where('approved', isEqualTo: true)
+          .where('visible', isEqualTo: true)
           .where('eventCategory', isEqualTo: category)
           .get();
     } else if (showAllCategories == false &&
         wholeCountry == false &&
         showAllTypes) {
       querySnapshot = await eventsRef
-          .where('approved', isEqualTo: true)
+          .where('visible', isEqualTo: true)
           .where('city', isEqualTo: city)
           .where('eventCategory', isEqualTo: category)
           .get();
@@ -134,13 +138,13 @@ class FirebaseEventService extends BaseService<EventModel> {
         wholeCountry &&
         showAllTypes == false) {
       querySnapshot = await eventsRef
-          .where('approved', isEqualTo: true)
+          .where('visible', isEqualTo: true)
           .where('eventCategory', isEqualTo: category)
           .where('eventType', isEqualTo: type)
           .get();
     } else {
       querySnapshot = await eventsRef
-          .where('approved', isEqualTo: true)
+          .where('visible', isEqualTo: true)
           .where("city", isEqualTo: city)
           .where("eventCategory", isEqualTo: category)
           .where("eventType", isEqualTo: type)
@@ -158,7 +162,7 @@ class FirebaseEventService extends BaseService<EventModel> {
     List<EventModel> specialEvents = [];
 
     QuerySnapshot querySnapshot =
-        await eventsRef.where('approved', isEqualTo: true).limit(3).get();
+        await eventsRef.where('visible', isEqualTo: true).limit(3).get();
 
     for (DocumentSnapshot event in querySnapshot.docs) {
       EventModel _convertedEvent = EventModel.fromJson(event.data());

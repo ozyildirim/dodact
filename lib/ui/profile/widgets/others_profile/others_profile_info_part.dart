@@ -15,12 +15,10 @@ class OthersProfileInfoTab extends StatelessWidget {
     }
     return ListView(
       children: [
-        user.nameSurname != null && user.nameSurname.isNotEmpty
-            ? ListTile(
-                leading: Icon(Icons.person),
-                title: Text(user.nameSurname),
-              )
-            : Container(),
+        ListTile(
+          leading: Icon(Icons.person),
+          title: Text(user.nameSurname),
+        ),
         user.education != null && user.education.isNotEmpty
             ? ListTile(
                 leading: Icon(Icons.school),

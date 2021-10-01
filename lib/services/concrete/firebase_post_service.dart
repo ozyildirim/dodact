@@ -24,7 +24,8 @@ class FirebasePostService extends BaseService<PostModel> {
   Future<List<PostModel>> getList() async {
     List<PostModel> allposts = [];
 
-    QuerySnapshot querySnapshot = await postsRef.get();
+    QuerySnapshot querySnapshot =
+        await postsRef.where('visible', isEqualTo: true).get();
     for (DocumentSnapshot post in querySnapshot.docs) {
       PostModel _convertedPost = PostModel.fromJson(post.data());
       allposts.add(_convertedPost);
@@ -37,8 +38,10 @@ class FirebasePostService extends BaseService<PostModel> {
     // List<String> postIDs = user.postIDs;
     List<PostModel> userPosts = [];
 
-    QuerySnapshot querySnapshot =
-        await postsRef.where('ownerId', isEqualTo: user.uid).get();
+    QuerySnapshot querySnapshot = await postsRef
+        .where('ownerId', isEqualTo: user.uid)
+        .where('visible', isEqualTo: true)
+        .get();
 
     for (DocumentSnapshot post in querySnapshot.docs) {
       PostModel _convertedPost = PostModel.fromJson(post.data());
@@ -64,8 +67,10 @@ class FirebasePostService extends BaseService<PostModel> {
     try {
       List<PostModel> allGroupPosts = [];
 
-      QuerySnapshot querySnapshot =
-          await postsRef.where('ownerId', isEqualTo: groupId).get();
+      QuerySnapshot querySnapshot = await postsRef
+          .where('ownerId', isEqualTo: groupId)
+          .where('visible', isEqualTo: true)
+          .get();
 
       for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
@@ -111,8 +116,10 @@ class FirebasePostService extends BaseService<PostModel> {
   }
 
   Future<List<PostModel>> getAllPostsWithCategory(String category) async {
-    QuerySnapshot querySnapshot =
-        await postsRef.where('postCategory', isEqualTo: category).get();
+    QuerySnapshot querySnapshot = await postsRef
+        .where('postCategory', isEqualTo: category)
+        .where('visible', isEqualTo: true)
+        .get();
     List<PostModel> allFilteredPosts = [];
 
     for (DocumentSnapshot post in querySnapshot.docs) {
@@ -125,8 +132,11 @@ class FirebasePostService extends BaseService<PostModel> {
   Future<List<PostModel>> getTopPosts() async {
     List<PostModel> topPosts = [];
 
-    QuerySnapshot querySnapshot =
-        await postsRef.orderBy('dodCounter', descending: true).limit(3).get();
+    QuerySnapshot querySnapshot = await postsRef
+        .where("visible", isEqualTo: true)
+        .orderBy('dodCounter', descending: true)
+        .limit(3)
+        .get();
 
     for (DocumentSnapshot post in querySnapshot.docs) {
       PostModel _convertedPost = PostModel.fromJson(post.data());
@@ -143,6 +153,7 @@ class FirebasePostService extends BaseService<PostModel> {
 
     QuerySnapshot querySnapshot = await postsRef
         .where('chosenCompany', isEqualTo: organizationName)
+        .where('visible', isEqualTo: true)
         .get();
 
     for (DocumentSnapshot post in querySnapshot.docs) {

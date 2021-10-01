@@ -23,7 +23,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
     super.initState();
     hiddenMail = authProvider.currentUser.hiddenMail;
     hiddenLocation = authProvider.currentUser.hiddenLocation;
-    hiddenNameSurname = authProvider.currentUser.hiddenNameSurname;
+    ;
   }
 
   @override
@@ -44,7 +44,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
             )
           : null,
       appBar: AppBar(
-        title: Text("Gizlilik Ayarları"),
+        title: Text("Gizlilik"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,7 +67,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
                     style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   subtitle: Text(
-                      "E-posta adresinizin profilinizde görüntülenmesini önlemek için aktive edin."),
+                      "E-posta adresinin profilinde görüntülenmesini önlemek için aktive edebilirsin."),
                   value: hiddenMail,
                   onChanged: (value) {
                     setState(() {
@@ -85,7 +85,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
                     style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   subtitle: Text(
-                      'Lokasyonunuzun profilinizde görüntülenmesini önlemek için aktive edin.'),
+                      'Lokasyonun profilinde görüntülenmesini önlemek için aktive edebilirsin.'),
                   value: hiddenLocation,
                   onChanged: (value) {
                     setState(() {
@@ -95,24 +95,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
                   },
                 ),
               ),
-              Container(
-                color: Colors.white70,
-                child: SwitchListTile(
-                  title: Text(
-                    'Ad - Soyad Gizle',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
-                  ),
-                  subtitle: Text(
-                      "Ad - Soyad bilgilerinizin profilinizde görüntülenmesini önlemek için aktive edin."),
-                  value: hiddenNameSurname,
-                  onChanged: (value) {
-                    setState(() {
-                      hiddenNameSurname = !hiddenNameSurname;
-                      _isChanged = true;
-                    });
-                  },
-                ),
-              ),
+
               // SwitchListTile(
               //   title: Text('Salih"e kız bul'),
               //   value: ornekAyar4,
@@ -139,7 +122,6 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
       });
       authProvider.currentUser.hiddenMail = hiddenMail;
       authProvider.currentUser.hiddenLocation = hiddenLocation;
-      authProvider.currentUser.hiddenNameSurname = hiddenNameSurname;
 
       NavigationService.instance.pop();
       setState(() {

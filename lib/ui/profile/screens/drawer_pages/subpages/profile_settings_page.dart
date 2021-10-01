@@ -14,7 +14,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profil Ayarları"),
+        title: Text("Profil"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -34,7 +34,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
                   child: Icon(Icons.vpn_key),
                 ),
                 title: Text(
-                  "Kişisel Profil Ayarları",
+                  "Kişisel Bilgiler",
                   style: TextStyle(fontSize: kDrawerTileTitleSize),
                 ),
                 onTap: () {
@@ -50,7 +50,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
                   child: Icon(Icons.mail),
                 ),
                 title: Text(
-                  "Sosyal Medya Hesap Ayarları",
+                  "Sosyal Medya Hesapları",
                   style: TextStyle(fontSize: kDrawerTileTitleSize),
                 ),
                 onTap: () {
