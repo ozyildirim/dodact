@@ -126,10 +126,13 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           autoPlay: true,
           activeIndicator: Colors.white,
           items: event.eventImages.map((image) {
-            return Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
+                ),
               ),
             );
           }).toList(),

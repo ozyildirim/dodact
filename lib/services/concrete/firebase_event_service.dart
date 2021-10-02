@@ -92,63 +92,40 @@ class FirebaseEventService extends BaseService<EventModel> {
   }
 
   Future<List<EventModel>> getFilteredEventList(
-      {String category,
-      String city,
-      String type,
-      bool showAllCategories,
-      bool showAllTypes,
-      bool wholeCountry}) async {
+      {String category, String city, String type}) async {
     List<EventModel> filteredEvents = [];
     QuerySnapshot querySnapshot;
 
-    if (showAllCategories && wholeCountry && showAllTypes) {
-      querySnapshot = await eventsRef.where('visible', isEqualTo: true).get();
-    } else if (showAllCategories && wholeCountry && showAllTypes == false) {
+    if (category != null && type != null && city != null) {
       querySnapshot = await eventsRef
-          .where('visible', isEqualTo: true)
-          .where("eventType", isEqualTo: type)
-          .get();
-    } else if (showAllCategories && wholeCountry == false && showAllTypes) {
-      querySnapshot = await eventsRef
-          .where('visible', isEqualTo: true)
-          .where("city", isEqualTo: city)
-          .get();
-    } else if (showAllCategories &&
-        wholeCountry == false &&
-        showAllTypes == false) {
-      querySnapshot = await eventsRef
-          .where('visible', isEqualTo: true)
-          .where("city", isEqualTo: city)
-          .where('eventType', isEqualTo: type)
-          .get();
-    } else if (showAllCategories == false && wholeCountry && showAllTypes) {
-      querySnapshot = await eventsRef
-          .where('visible', isEqualTo: true)
           .where('eventCategory', isEqualTo: category)
-          .get();
-    } else if (showAllCategories == false &&
-        wholeCountry == false &&
-        showAllTypes) {
-      querySnapshot = await eventsRef
-          .where('visible', isEqualTo: true)
+          .where('eventType', isEqualTo: type)
           .where('city', isEqualTo: city)
-          .where('eventCategory', isEqualTo: category)
           .get();
-    } else if (showAllCategories == false &&
-        wholeCountry &&
-        showAllTypes == false) {
+    } else if (category != null && type != null) {
       querySnapshot = await eventsRef
-          .where('visible', isEqualTo: true)
           .where('eventCategory', isEqualTo: category)
           .where('eventType', isEqualTo: type)
           .get();
-    } else {
+    } else if (category != null && city != null) {
       querySnapshot = await eventsRef
-          .where('visible', isEqualTo: true)
-          .where("city", isEqualTo: city)
-          .where("eventCategory", isEqualTo: category)
-          .where("eventType", isEqualTo: type)
+          .where('eventCategory', isEqualTo: category)
+          .where('city', isEqualTo: city)
           .get();
+    } else if (type != null && city != null) {
+      querySnapshot = await eventsRef
+          .where('eventType', isEqualTo: type)
+          .where('city', isEqualTo: city)
+          .get();
+    } else if (category != null) {
+      querySnapshot =
+          await eventsRef.where('eventCategory', isEqualTo: category).get();
+    } else if (type != null) {
+      querySnapshot = await eventsRef.where('eventType', isEqualTo: type).get();
+    } else if (city != null) {
+      querySnapshot = await eventsRef.where('city', isEqualTo: city).get();
+    } else {
+      querySnapshot = await eventsRef.get();
     }
 
     for (DocumentSnapshot event in querySnapshot.docs) {

@@ -1,11 +1,13 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/event/filtered_events_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:horizontal_card_pager/card_item.dart';
-import 'package:horizontal_card_pager/horizontal_card_pager.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/components/button/gf_button.dart';
+import 'package:getwidget/shape/gf_button_shape.dart';
 import 'package:provider/provider.dart';
 
 class EventsPage extends StatefulWidget {
@@ -16,24 +18,32 @@ class EventsPage extends StatefulWidget {
 class _EventsPageState extends BaseState<EventsPage> {
   bool isFiltered = false;
   String selectedCategory;
-  int selectedCategoryIndex = 0;
   String selectedCity;
   String selectedType;
-  int selectedTypeIndex = 0;
 
   @override
   void initState() {
     Provider.of<EventProvider>(context, listen: false).getAllEventsList();
     super.initState();
-
-    selectedCategory = "Tümü";
-    selectedCity = "Belirtilmemiş";
-    selectedType = "Tümü";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: kToolbarHeight),
+        child: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () {
+            showFilterDialog();
+          },
+          child: Icon(
+            Icons.filter_list_rounded,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -50,10 +60,25 @@ class _EventsPageState extends BaseState<EventsPage> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _buildFilterBar(),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: filterCardContainer(
+                  //     Container(
+                  //       child: Text(
+                  //         "selam",
+                  //         overflow: TextOverflow.ellipsis,
+                  //       ),
+                  //     ),
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         showFilterDialog();
+                  //       },
+                  //       icon: Icon(Icons.filter_list),
+                  //     ),
+                  //     width: dynamicWidth(0.9),
+                  //   ),
+                  // ),
+
                   Expanded(
                     child: SingleChildScrollView(
                       child: FilteredEventView(),
@@ -66,52 +91,11 @@ class _EventsPageState extends BaseState<EventsPage> {
     );
   }
 
-  Container _buildFilterBar() {
+  Container filterCardContainer(Widget text, Widget icon,
+      {double width, double height}) {
     return Container(
-      height: 50,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            child: filterCardContainer(selectedCity, Icon(Icons.location_on)),
-            onTap: () {
-              // _showCityPicker();
-            },
-          ),
-          GestureDetector(
-            child: filterCardContainer(selectedCategory, Icon(Icons.category)),
-            onTap: () {
-              _showCategoryPicker();
-            },
-          ),
-          GestureDetector(
-            child: filterCardContainer(selectedType, Icon(Icons.category)),
-            onTap: () {
-              _showTypePicker();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Future<String> _showCityPicker() {
-  //   return showMaterialScrollPicker<String>(
-  //     context: context,
-  //     title: 'Lokasyon Seçin',
-  //     items: cities,
-  //     selectedItem: selectedCity,
-  //     onChanged: (value) {
-  //       setState(() => selectedCity = value);
-  //       updateEventsByFilter(selectedCategory, selectedCity, selectedType);
-  //     },
-  //   );
-  // }
-
-  Container filterCardContainer(String interest, Icon icon) {
-    return Container(
-      width: dynamicWidth(0.3),
-      height: dynamicHeight(0.2),
+      width: width,
+      height: height,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -120,14 +104,10 @@ class _EventsPageState extends BaseState<EventsPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              icon,
-              Flexible(
-                child: Container(
-                  child: Text(
-                    interest,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+              Expanded(child: text),
+              Container(
+                width: dynamicWidth(0.1),
+                child: icon,
               ),
             ],
           ),
@@ -136,199 +116,175 @@ class _EventsPageState extends BaseState<EventsPage> {
     );
   }
 
-  Future _showCategoryPicker() {
-    return showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        height: 120,
-        child: Center(
-            child: HorizontalCardPager(
-          initialPage: selectedCategoryIndex,
-          onPageChanged: (page) {
-            setState(() {
-              selectedCategoryIndex = page.toInt();
-              selectedCategory = categoryItemValues[page.toInt()];
-            });
-            updateEventsByFilter(selectedCategory, selectedCity, selectedType);
-          },
-          onSelectedItem: (page) {
-            setState(() {
-              selectedCategoryIndex = page.toInt();
-              selectedCategory = categoryItemValues[page];
-
-              updateEventsByFilter(
-                  selectedCategory, selectedCity, selectedType);
-            });
-          },
-          items: categoryItems,
-        )),
-      ),
-    );
-  }
-
-  Future _showTypePicker() {
-    return showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        height: 120,
-        child: Center(
-            child: HorizontalCardPager(
-          initialPage: selectedTypeIndex,
-          onPageChanged: (page) {
-            setState(() {
-              selectedTypeIndex = page.toInt();
-              selectedType = typeItemValues[page.toInt()];
-            });
-            updateEventsByFilter(selectedCategory, selectedCity, selectedType);
-          },
-          onSelectedItem: (page) {
-            setState(() {
-              selectedTypeIndex = page.toInt();
-              selectedType = typeItemValues[page];
-
-              updateEventsByFilter(
-                  selectedCategory, selectedCity, selectedType);
-            });
-          },
-          items: typeItems,
-        )),
-      ),
-    );
-  }
-
   void updateEventsByFilter(String category, String city, String type) async {
-    if (category == "Tümü" && city == "Belirtilmemiş" && type == "Tümü") {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              showAllCategories: true, wholeCountry: true, showAllTypes: true);
-    } else if (category == "Tümü" &&
-        city == "Belirtilmemiş" &&
-        type != "Tümü") {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              city: city,
-              type: type,
-              showAllCategories: true,
-              wholeCountry: false,
-              showAllTypes: false);
-    } else if (category == "Tümü" &&
-        city != "Belirtilmemiş" &&
-        type == "Tümü") {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              city: city,
-              wholeCountry: false,
-              showAllTypes: true,
-              showAllCategories: true);
-    } else if (category == "Tümü" &&
-        city != "Belirtilmemiş" &&
-        type != "Tümü") {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              city: city,
-              type: type,
-              wholeCountry: false,
-              showAllTypes: false,
-              showAllCategories: true);
-    } else if (category != "Tümü" &&
-        city == "Belirtilmemiş" &&
-        type == "Tümü") {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              category: category,
-              wholeCountry: true,
-              showAllTypes: true,
-              showAllCategories: false);
-    } else if (category != "Tümü" &&
-        city == "Belirtilmemiş" &&
-        type != "Tümü") {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              city: city,
-              category: category,
-              wholeCountry: true,
-              showAllTypes: false,
-              showAllCategories: false);
-    } else if (category != "Tümü" &&
-        city != "Belirtilmemiş" &&
-        type == "Tümü") {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              city: city,
-              category: category,
-              wholeCountry: false,
-              showAllTypes: true,
-              showAllCategories: false);
-    } else {
-      await Provider.of<EventProvider>(context, listen: false)
-          .getFilteredEventList(
-              category: category,
-              city: city,
-              type: type,
-              showAllCategories: false,
-              showAllTypes: false,
-              wholeCountry: false);
-    }
+    await Provider.of<EventProvider>(context, listen: false)
+        .getFilteredEventList(category: category, city: city, type: type);
   }
 
-  List<String> categoryItemValues = [
-    "Tümü",
-    "Müzik",
-    "Tiyatro",
-    "Dans",
-    "Resim"
-  ];
-  List<String> typeItemValues = [
-    "Tümü",
-    "Açık Hava Etkinliği",
-    "Kapalı Mekan Etkinliği",
-    "Workshop"
+  List<FormBuilderFieldOption<dynamic>> categoryOptions = [
+    FormBuilderFieldOption(value: "Müzik", child: Text("Müzik")),
+    FormBuilderFieldOption(value: "Tiyatro", child: Text("Tiyatro")),
+    FormBuilderFieldOption(
+        value: "Görsel Sanatlar", child: Text("Görsel Sanatlar")),
+    FormBuilderFieldOption(value: "Dans", child: Text("Dans")),
   ];
 
-  List<CardItem> categoryItems = [
-    IconTitleCardItem(
-      text: "Tümü",
-      iconData: Icons.all_inclusive,
-    ),
-    IconTitleCardItem(
-      text: "Müzik",
-      iconData: Icons.music_note,
-    ),
-    IconTitleCardItem(
-      text: "Tiyatro",
-      iconData: Icons.theater_comedy,
-    ),
-    IconTitleCardItem(
-      text: "Dans",
-      iconData: FontAwesome5Solid.star,
-    ),
-    IconTitleCardItem(
-      text: "Resim",
-      iconData: FontAwesome5Solid.star,
-    ),
-  ];
-
-  List<CardItem> typeItems = [
-    IconTitleCardItem(
-      text: "Tümü",
-      iconData: Icons.all_inclusive,
-    ),
-    IconTitleCardItem(
-      text: "Açık Hava Etkinliği",
-      iconData: Icons.music_note,
-    ),
-    IconTitleCardItem(
-      text: "Kapalı Mekan Etkinliği",
-      iconData: Icons.theater_comedy,
-    ),
-    IconTitleCardItem(
-      text: "Workshop",
-      iconData: FontAwesome5Solid.star,
-    ),
+  List<FormBuilderFieldOption<dynamic>> typeOptions = [
+    FormBuilderFieldOption(
+        value: "Açık Hava Etkinliği", child: Text("Açık Hava Etkinliği")),
+    FormBuilderFieldOption(
+        value: "Kapalı Mekan Etkinliği", child: Text("Kapalı Mekan Etkinliği")),
+    FormBuilderFieldOption(value: "Workshop", child: Text("Workshop")),
+    FormBuilderFieldOption(value: "Online", child: Text("Online")),
   ];
 
   Future<void> _refreshEvents() async {
-    print(selectedCategory + selectedCity + selectedType);
-    await updateEventsByFilter(selectedCategory, selectedCity, selectedType);
+    updateEventsByFilter(selectedCategory, selectedCity, selectedType);
+  }
+
+  Future<void> showFilterDialog() async {
+    showDialog(context: context, builder: (ctx) => FilterDialog());
+  }
+
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+
+  Dialog FilterDialog() {
+    var size = MediaQuery.of(context).size;
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Container(
+        width: size.width * 0.9,
+        height: size.height * 0.6,
+        child: FormBuilder(
+          key: _formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Filtre",
+                  style: TextStyle(fontSize: 22),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Şehir"),
+                    Container(
+                      width: size.width * 0.6,
+                      child: FormBuilderDropdown(
+                          initialValue: selectedCity ?? null,
+                          name: "city",
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          items: cities.map((e) {
+                            return DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            );
+                          }).toList()),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Kategori"),
+                    Container(
+                      width: size.width * 0.6,
+                      child: FormBuilderChoiceChip(
+                        initialValue: selectedCategory ?? null,
+                        name: "category",
+                        options: categoryOptions,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Center(
+                      child: Text(
+                        "Tür",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Container(
+                      width: size.width * 0.6,
+                      child: FormBuilderChoiceChip(
+                        initialValue: selectedType ?? null,
+                        name: "type",
+                        options: typeOptions,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GFButton(
+                    color: Colors.orange[700],
+                    shape: GFButtonShape.pills,
+                    onPressed: () {
+                      submitFilterDialog();
+                    },
+                    text: "Tamam",
+                    textStyle: Theme.of(context).textTheme.button.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Raleway"),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GFButton(
+                    color: Colors.orange[700],
+                    shape: GFButtonShape.pills,
+                    onPressed: () {
+                      NavigationService.instance.pop();
+                    },
+                    text: "Vazgeç",
+                    textStyle: Theme.of(context).textTheme.button.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Raleway"),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  submitFilterDialog() {
+    if (_formKey.currentState.saveAndValidate()) {
+      setState(() {
+        selectedCity = _formKey.currentState.value["city"];
+        selectedCategory = _formKey.currentState.value["category"];
+        selectedType = _formKey.currentState.value["type"];
+      });
+      updateEventsByFilter(selectedCategory, selectedCity, selectedType);
+      NavigationService.instance.pop();
+    }
   }
 }

@@ -19,9 +19,9 @@ SimpleDialog categoryDialog(BuildContext context) {
       SimpleDialogItem(
         icon: FontAwesome5Solid.palette,
         color: Colors.green,
-        text: 'Resim',
+        text: 'Görsel Sanatlar',
         onPressed: () {
-          Navigator.pop(context, "Resim");
+          Navigator.pop(context, "Görsel Sanatlar");
         },
       ),
       SimpleDialogItem(

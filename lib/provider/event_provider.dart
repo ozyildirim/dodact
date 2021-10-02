@@ -154,22 +154,14 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<EventModel>> getFilteredEventList({
-    String category = "Tümü",
-    String city = "Belirtilmemiş",
-    String type = "Tümü",
-    bool showAllCategories = true,
-    bool showAllTypes = true,
-    bool wholeCountry = true,
-  }) async {
+  Future<List<EventModel>> getFilteredEventList(
+      {String category, String city, String type}) async {
     try {
       var fetchedEvents = await eventRepository.getFilteredEventList(
-          category: category,
-          city: city,
-          type: type,
-          showAllCategories: showAllCategories,
-          showAllTypes: showAllTypes,
-          wholeCountry: wholeCountry);
+        category: category,
+        city: city,
+        type: type,
+      );
       eventList = fetchedEvents;
       notifyListeners();
       return eventList;
