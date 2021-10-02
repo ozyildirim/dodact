@@ -118,18 +118,12 @@ class GroupRepository implements BaseService {
   }
 
   Future<List<GroupModel>> getFilteredGroupList(
-      {String category = "Müzik",
-      String city = "İstanbul",
-      bool showAllCategories = false,
-      bool wholeCountry = false}) async {
+      {String category, String city}) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
       return await _firebaseGroupService.getFilteredGroupList(
-          category: category,
-          city: city,
-          showAllCategories: showAllCategories,
-          wholeCountry: wholeCountry);
+          category: category, city: city);
     }
   }
 

@@ -101,31 +101,43 @@ class FirebaseEventService extends BaseService<EventModel> {
           .where('eventCategory', isEqualTo: category)
           .where('eventType', isEqualTo: type)
           .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true)
           .get();
     } else if (category != null && type != null) {
       querySnapshot = await eventsRef
           .where('eventCategory', isEqualTo: category)
           .where('eventType', isEqualTo: type)
+          .where('visible', isEqualTo: true)
           .get();
     } else if (category != null && city != null) {
       querySnapshot = await eventsRef
           .where('eventCategory', isEqualTo: category)
           .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true)
           .get();
     } else if (type != null && city != null) {
       querySnapshot = await eventsRef
           .where('eventType', isEqualTo: type)
           .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true)
           .get();
     } else if (category != null) {
-      querySnapshot =
-          await eventsRef.where('eventCategory', isEqualTo: category).get();
+      querySnapshot = await eventsRef
+          .where('eventCategory', isEqualTo: category)
+          .where('visible', isEqualTo: true)
+          .get();
     } else if (type != null) {
-      querySnapshot = await eventsRef.where('eventType', isEqualTo: type).get();
+      querySnapshot = await eventsRef
+          .where('eventType', isEqualTo: type)
+          .where('visible', isEqualTo: true)
+          .get();
     } else if (city != null) {
-      querySnapshot = await eventsRef.where('city', isEqualTo: city).get();
+      querySnapshot = await eventsRef
+          .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true)
+          .get();
     } else {
-      querySnapshot = await eventsRef.get();
+      querySnapshot = await eventsRef.where('visible', isEqualTo: true).get();
     }
 
     for (DocumentSnapshot event in querySnapshot.docs) {

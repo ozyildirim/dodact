@@ -111,16 +111,10 @@ class GroupProvider extends ChangeNotifier {
   }
 
   Future<List<GroupModel>> getFilteredGroupList(
-      {String category = "Tümü",
-      String city = "Belirtilmemiş",
-      bool showAllCategories = true,
-      bool wholeCountry = true}) async {
+      {String category, String city}) async {
     try {
       var fetchedGroup = await _groupRepository.getFilteredGroupList(
-          category: category,
-          city: city,
-          showAllCategories: showAllCategories,
-          wholeCountry: wholeCountry);
+          category: category, city: city);
       groupList = fetchedGroup;
       notifyListeners();
       return groupList;

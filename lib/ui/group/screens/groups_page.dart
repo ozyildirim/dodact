@@ -1,11 +1,12 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/filtered_group_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:horizontal_card_pager/card_item.dart';
-import 'package:horizontal_card_pager/horizontal_card_pager.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class GroupsPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   String selectedCategory;
   String selectedCity;
 
@@ -21,10 +23,15 @@ class _GroupsPageState extends State<GroupsPage> {
   void initState() {
     super.initState();
     Provider.of<GroupProvider>(context, listen: false).getFilteredGroupList();
-
-    selectedCategory = "Tümü";
-    selectedCity = "Belirtilmemiş";
   }
+
+  List<FormBuilderFieldOption<dynamic>> categoryOptions = [
+    FormBuilderFieldOption(value: "Müzik", child: Text("Müzik")),
+    FormBuilderFieldOption(value: "Tiyatro", child: Text("Tiyatro")),
+    FormBuilderFieldOption(
+        value: "Görsel Sanatlar", child: Text("Görsel Sanatlar")),
+    FormBuilderFieldOption(value: "Dans", child: Text("Dans")),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +40,19 @@ class _GroupsPageState extends State<GroupsPage> {
 
     final mediaQuery = MediaQuery.of(context);
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: kToolbarHeight),
+        child: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () {
+            showFilterDialog();
+          },
+          child: Icon(
+            Icons.filter_list_rounded,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -45,10 +65,6 @@ class _GroupsPageState extends State<GroupsPage> {
         height: mediaQuery.size.height - 56,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _buildFilterBar(),
-            ),
             Expanded(
               child: SingleChildScrollView(
                 child: FilteredGroupView(),
@@ -60,53 +76,109 @@ class _GroupsPageState extends State<GroupsPage> {
     );
   }
 
-  Container _buildFilterBar() {
-    return Container(
-      height: 50,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(width: 20),
-          GestureDetector(
-            child: filterCardContainer(selectedCity, Icon(Icons.location_on)),
-            // onTap: () {
-            //   _showCityPicker();
-            // },
-          ),
-          GestureDetector(
-            child: filterCardContainer(selectedCategory, Icon(Icons.category)),
-            onTap: () {
-              _showCategoryPicker();
-            },
-          ),
-        ],
-      ),
-    );
+  Future<void> showFilterDialog() async {
+    showDialog(context: context, builder: (ctx) => FilterDialog());
   }
 
-  Future _showCategoryPicker() {
-    return showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        height: 120,
-        child: Center(
-            child: HorizontalCardPager(
-          initialPage: 0,
-          onPageChanged: (page) {
-            setState(() {
-              selectedCategory = categoryItemValues[page.toInt()];
-            });
-            updateGroupsByFilter(selectedCategory, selectedCity);
-          },
-          onSelectedItem: (page) {
-            setState(() {
-              selectedCategory = categoryItemValues[page];
-
-              updateGroupsByFilter(selectedCategory, selectedCity);
-            });
-          },
-          items: categoryItems,
-        )),
+  Dialog FilterDialog() {
+    var size = MediaQuery.of(context).size;
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Container(
+        width: size.width * 0.9,
+        height: size.height * 0.4,
+        child: FormBuilder(
+          key: _formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Filtre",
+                  style: TextStyle(fontSize: 22),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Şehir"),
+                    Container(
+                      width: size.width * 0.6,
+                      child: FormBuilderDropdown(
+                          initialValue: selectedCity ?? null,
+                          name: "city",
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          items: cities.map((e) {
+                            return DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            );
+                          }).toList()),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Kategori"),
+                    Container(
+                      width: size.width * 0.6,
+                      child: FormBuilderChoiceChip(
+                        initialValue: selectedCategory ?? null,
+                        name: "category",
+                        options: categoryOptions,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GFButton(
+                    color: Colors.orange[700],
+                    shape: GFButtonShape.pills,
+                    onPressed: () {
+                      submitFilterDialog();
+                    },
+                    text: "Tamam",
+                    textStyle: Theme.of(context).textTheme.button.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Raleway"),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GFButton(
+                    color: Colors.orange[700],
+                    shape: GFButtonShape.pills,
+                    onPressed: () {
+                      NavigationService.instance.pop();
+                    },
+                    text: "Vazgeç",
+                    textStyle: Theme.of(context).textTheme.button.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Raleway"),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -132,71 +204,23 @@ class _GroupsPageState extends State<GroupsPage> {
     );
   }
 
-  List<String> categoryItemValues = ["Tümü", "Müzik", "Tiyatro", "Dans"];
-  List<CardItem> categoryItems = [
-    IconTitleCardItem(
-      text: "Tümü",
-      iconData: Icons.all_inclusive,
-    ),
-    IconTitleCardItem(
-      text: "Müzik",
-      iconData: Icons.music_note,
-    ),
-    IconTitleCardItem(
-      text: "Tiyatro",
-      iconData: Icons.theater_comedy,
-    ),
-    IconTitleCardItem(
-      text: "Dans",
-      iconData: FontAwesome5Solid.star,
-    ),
-  ];
+  submitFilterDialog() {
+    if (_formKey.currentState.saveAndValidate()) {
+      setState(() {
+        selectedCity = _formKey.currentState.value["city"];
+        selectedCategory = _formKey.currentState.value["category"];
+      });
+      updateGroupsByFilter(selectedCategory, selectedCity);
+      NavigationService.instance.pop();
+    }
+  }
 
   //TODO: kategori ile birlikte şehir bilgisini de sorgulatarak gruplar getirilmeli, bunu servise ekle.
 
-  void updateGroupsByCategory(String category) async {
-    if (category == "Tümü") {
-      await Provider.of<GroupProvider>(context, listen: false).getGroupList();
-    } else {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .getGroupListByCategory(category);
-    }
-  }
-
   void updateGroupsByFilter(String category, String city) async {
-    if (category == "Tümü" && city == "Belirtilmemiş") {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .getFilteredGroupList(showAllCategories: true, wholeCountry: true);
-    } else if (category == "Tümü" && city != "Belirtilmemiş") {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .getFilteredGroupList(
-              city: selectedCity, showAllCategories: true, wholeCountry: false);
-    } else if (category != "Tümü" && city == "Belirtilmemiş") {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .getFilteredGroupList(
-              category: category, wholeCountry: true, showAllCategories: false);
-    } else {
-      await Provider.of<GroupProvider>(context, listen: false)
-          .getFilteredGroupList(
-              category: category,
-              city: city,
-              showAllCategories: false,
-              wholeCountry: false);
-    }
+    await Provider.of<GroupProvider>(context, listen: false)
+        .getFilteredGroupList(category: category, city: city);
   }
-
-  // Future<String> _showCityPicker() {
-  //   return showMaterialScrollPicker<String>(
-  //     context: context,
-  //     title: 'Lokasyon Seçin',
-  //     items: cities,
-  //     selectedItem: selectedCity,
-  //     onChanged: (value) {
-  //       setState(() => selectedCity = value);
-  //       updateGroupsByFilter(selectedCategory, selectedCity);
-  //     },
-  //   );
-  // }
 
   Future<void> _refreshGroups() async {
     await Provider.of<GroupProvider>(context, listen: false)
