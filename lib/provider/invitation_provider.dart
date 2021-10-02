@@ -67,16 +67,17 @@ class InvitationProvider with ChangeNotifier {
     }
   }
 
-  Future<void> acceptGroupInvitation(
+  Future<String> acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
     try {
-      await invitationRepository.acceptGroupInvitation(
+      var result = await invitationRepository.acceptGroupInvitation(
           userId, groupId, invitationId);
 
       //TODO:Invitations tablosundan daveti sil
       usersInvitations
           .removeWhere((element) => element.invitationId == invitationId);
       notifyListeners();
+      return result;
     } catch (e) {
       logger.e("AcceptGroupInvitation Provider Error: " + e);
     }

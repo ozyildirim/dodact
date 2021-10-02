@@ -1,6 +1,8 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/invitation_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
@@ -142,8 +144,11 @@ class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
 
   acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
-    await Provider.of<InvitationProvider>(context, listen: false)
+    CommonMethods().showLoaderDialog(context, "İşlemini gerçekleştiriyoruz");
+    var result = await Provider.of<InvitationProvider>(context, listen: false)
         .acceptGroupInvitation(userId, groupId, invitationId);
+    print(result);
+    NavigationService.instance.pop();
   }
 
   rejectGroupInvitation() {}
@@ -154,8 +159,9 @@ class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
     // firebaseFunctions.useFunctionsEmulator("localhost", 5001);
     var callable = firebaseFunctions.httpsCallable('sendNotificationToUser');
     try {
-      final HttpsCallableResult result =
-          await callable.call(<String, dynamic>{'userId': userId});
+      final HttpsCallableResult result = await callable.call(<String, dynamic>{
+        'userId': userId,
+      });
       print(result.data);
     } on FirebaseFunctionsException catch (e) {
       print('Firebase Functions Exception');

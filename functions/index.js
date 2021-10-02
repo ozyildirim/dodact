@@ -79,52 +79,62 @@ firestore.document('posts/{postId}/dodders/{dodderId}')
         });
     });
 
-exports.addUserToGroup = functions.https.onCall(async (req, res) => {
-    const groupId = req.query.groupId;
-    const userId = req.query.userId;
-    const invitationId = req.query.invitationId;
+// exports.addUserToGroup = functions.https.onCall(async (data, context) => {
+//     const groupId = data.groupId;
+//     const userId = data.userId;
+//     const invitationId = data.invitationId;
 
-    const groupRef = groupsRef.doc(groupId);
-    const userRef = usersRef.doc(userId);
+//     const groupRef = groupsRef.doc(groupId);
+//     const groupSnapshot = await groupRef.get();
 
-    const group = await groupRef.doc(groupId).get();
-    const user = await userRef.doc(userId).get();
+//     const groupData = groupSnapshot.data();
 
-    if (!group.exists) {
-        res.status(404).send('GROUP_NOT_FOUND');
-    } else if (!user.exists) {
-        res.status(404).send('USER_NOT_FOUND');
-    } else {
-        const groupData = group.data();
-        const userData = user.data();
+//     if (!groupSnapshot.exists) {
+//         console.log("Grup bulunamadı");
+//         return {
+//             result: 'GROUP_NOT_FOUND'
+//         }
 
-        if (groupData.groupMemberList.includes(userId)) {
-            res.status(400).send('USER_ALREADY_IN_GROUP');
-            await deleteInvitation(invitationId);
-        } else {
-            await groupRef.update({
-                'groupMemberList': admin.firestore.FieldValue.arrayUnion(userId)
-            });
+//     } else {
+//         if (groupData.groupMemberList.includes(userId)) {
 
-            res.status(200).send('USER_ADDED_TO_GROUP');
-            await deleteInvitation(invitationId);
+//             //delete invitation
+//             invitationsRef.doc(invitationId).delete();
 
-            let payload = {
-                notification: {
-                    title: 'Gruba başarıyla dahil oldun!',
-                    body: `${groupData.groupName} ile güzel günlere!`,
-                    sound: "default",
-                },
-                // data:{
-                //     title: 'Gruba başarıyla dahil oldun!',
-                //     body: `${groupData.groupName} ile güzel günlere!`,
-                // }
-            }
-            sendNotificationToUser(userId, payload);
+//             return {
+//                 result: 'USER_ALREADY_IN_GROUP'
+//             }
+//         } else {
+//             await groupRef.update({
+//                 'groupMemberList': admin.firestore.FieldValue.arrayUnion(userId)
+//             });
 
-        }
-    }
-})
+//             //delete invitation
+//             invitationsRef.doc(invitationId).delete();
+
+
+//             let payload = {
+//                 notification: {
+//                     title: 'Gruba başarıyla dahil oldun!',
+//                     body: `${groupData.groupName} ile güzel günlere!`,
+//                     sound: "default",
+//                 },
+//                 // data:{
+//                 //     title: 'Gruba başarıyla dahil oldun!',
+//                 //     body: `${groupData.groupName} ile güzel günlere!`,
+//                 // }
+//             }
+
+//             //send notification to post creator
+//             var tokenRef = await tokensRef.doc(userId).get();
+//             const tokenObject = tokenRef.data();
+//             admin.messaging().sendToDevice(tokenObject.token, payload)
+//             return {
+//                 result: 'USER_ADDED_TO_GROUP'
+//             }
+//         }
+//     }
+// })
 
 exports.sendNotificationToUser = functions.https.onCall(async (data, context) => {
     const userId = data.userId;

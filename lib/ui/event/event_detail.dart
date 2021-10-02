@@ -38,6 +38,18 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   TabController tabController;
   var logger = new Logger();
 
+  bool canUserControlEvent() {
+    if (event.ownerType == "User") {
+      if (authProvider.currentUser.uid == event.ownerId) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   @override
   void initState() {
     event = widget.event;
@@ -49,19 +61,33 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          PopupMenuButton(
-              itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: ListTile(
-                          leading: Icon(FontAwesome5Regular.bell),
-                          title: Text("Bildir"),
-                          onTap: () async {
-                            await _showReportEventDialog(event.eventId);
-                          }),
-                    ),
-                  ])
-        ],
+        actions: canUserControlEvent()
+            ? [
+                PopupMenuButton(
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: ListTile(
+                                leading: Icon(FontAwesome5Regular.trash_alt),
+                                title: Text("Sil"),
+                                onTap: () async {
+                                  await _showDeleteEventDialog(event.eventId);
+                                }),
+                          )
+                        ])
+              ]
+            : [
+                PopupMenuButton(
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: ListTile(
+                                leading: Icon(FontAwesome5Regular.bell),
+                                title: Text("Bildir"),
+                                onTap: () async {
+                                  await _showReportEventDialog(event.eventId);
+                                }),
+                          ),
+                        ])
+              ],
         elevation: 8,
         backwardsCompatibility: true,
         iconTheme: IconThemeData(color: Colors.black),

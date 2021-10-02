@@ -38,12 +38,12 @@ class InvitationRepository {
     }
   }
 
-  Future<void> acceptGroupInvitation(
+  Future<String> acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
-      await firebaseInvitationService.acceptGroupInvitation(
+      return await firebaseInvitationService.acceptGroupInvitation(
           userId, groupId, invitationId);
     }
   }

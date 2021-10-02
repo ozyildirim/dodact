@@ -643,8 +643,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
       await eventProvider.addEvent(_eventImages).then((_) async {
         NavigationService.instance.pop();
-        await CommonMethods().showSuccessDialog(context,
-            "Tebrikler! Etkinliğin bize ulaştı, en kısa zamanda yayınlayacağız.");
+        await CommonMethods().showSuccessDialog(
+            context, "Tebrikler! Etkinliğin başarıyla yayınlandı.");
         NavigationService.instance.navigateToReset(k_ROUTE_HOME);
       });
     } catch (e) {

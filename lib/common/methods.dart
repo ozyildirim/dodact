@@ -1,6 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/services/concrete/youtube_video_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -8,20 +9,23 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class CommonMethods {
   static String createThumbnailURL(bool isLocatedInYoutube, String videoURL,
       {bool isAudio}) {
-    String thumbnailURL;
+    try {
+      String thumbnailURL;
 
-    if (isAudio != null && isAudio == true) {
-      return kAudioCardImage;
+      if (isAudio != null && isAudio == true) {
+        return kAudioCardImage;
+      }
+
+      if (isLocatedInYoutube) {
+        String videoID = YoutubePlayer.convertUrlToId(videoURL);
+        thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
+      } else {
+        thumbnailURL = videoURL;
+      }
+      return thumbnailURL;
+    } catch (e) {
+      throw Exception(e);
     }
-
-    if (isLocatedInYoutube) {
-      String videoID = YoutubePlayer.convertUrlToId(videoURL);
-      thumbnailURL = "https://img.youtube.com/vi/" + videoID + "/0.jpg";
-    } else {
-      thumbnailURL = videoURL;
-    }
-
-    return thumbnailURL;
   }
 
 //TODO: Uygulamadaki diğer progress indicatorları da buradan kullan.

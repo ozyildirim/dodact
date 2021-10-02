@@ -58,7 +58,7 @@ class FirebaseInvitationService {
   }
 
   //Cloud Functions ile kabul işlemi gerçekleştirilir.
-  Future<void> acceptGroupInvitation(
+  Future<String> acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
     // //TODO: Cloud Functions ile kabul işlemi gerçekleştirilir.
     // await invitationsRef.doc(invitationId).delete();
@@ -71,7 +71,7 @@ class FirebaseInvitationService {
         'userId': userId,
         'invitationId': invitationId,
       });
-      print(result.data);
+      return result.data.result;
     } on FirebaseFunctionsException catch (e) {
       print('Firebase Functions Exception');
       print(e.code);

@@ -39,6 +39,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PostProvider postProvider;
+  var logger = Logger();
 
   bool isSelected = false;
   bool isLoading = false;
@@ -90,7 +91,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     print("İçerik Kategorisi: " + widget.postCategory);
 
     widget.groupId != null
-        ? Logger()
+        ? logger
             .i("Grup için post oluşturma aşaması başladı: ${widget.groupId}")
         : null;
 
@@ -274,42 +275,61 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
               ),
             ),
             widget.contentType == "Video"
-                ? TextFieldContainer(
-                    child: FormBuilderTextField(
-                      textInputAction: TextInputAction.done,
-                      focusNode: postContentUrlFocus,
-                      name: "youtubeLink",
-                      maxLines: 1,
-                      autofocus: false,
-                      keyboardType: TextInputType.text,
-                      cursorColor: kPrimaryColor,
-                      controller: postContentUrlController,
-                      onEditingComplete: () async {
-                        // await checkThumbnailAvailable();
-                        FocusScope.of(context).unfocus();
-                      },
-                      decoration: InputDecoration(
-                          icon: Icon(
-                            FontAwesome5Brands.youtube,
-                            color: kPrimaryColor,
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        color: Colors.white60,
+                        child: Text("İçerik Açıklaması",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        children: [
+                          TextFieldContainer(
+                            width: size.width * 0.8,
+                            child: FormBuilderTextField(
+                              textInputAction: TextInputAction.done,
+                              focusNode: postContentUrlFocus,
+                              name: "youtubeLink",
+                              maxLines: 1,
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              cursorColor: kPrimaryColor,
+                              controller: postContentUrlController,
+                              onEditingComplete: () async {
+                                FocusScope.of(context).unfocus();
+                              },
+                              decoration: InputDecoration(
+                                  icon: Icon(
+                                    FontAwesome5Brands.youtube,
+                                    color: kPrimaryColor,
+                                  ),
+                                  hintText: "Youtube Linki",
+                                  border: InputBorder.none,
+                                  errorStyle: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .errorStyle),
+                              validator: FormBuilderValidators.compose(
+                                [
+                                  FormBuilderValidators.required(
+                                    context,
+                                    errorText: "Bu alan boş bırakılamaz.",
+                                  ),
+                                  (value) {
+                                    return ProfanityChecker.profanityValidator(
+                                        value);
+                                  },
+                                ],
+                              ),
+                            ),
                           ),
-                          hintText: "Youtube Linki",
-                          border: InputBorder.none,
-                          errorStyle: Theme.of(context)
-                              .inputDecorationTheme
-                              .errorStyle),
-                      validator: FormBuilderValidators.compose(
-                        [
-                          FormBuilderValidators.required(
-                            context,
-                            errorText: "Bu alan boş bırakılamaz.",
-                          ),
-                          (value) {
-                            return ProfanityChecker.profanityValidator(value);
-                          },
+                          IconButton(
+                              onPressed: () async {}, icon: Icon(Icons.check))
                         ],
                       ),
-                    ),
+                    ],
                   )
                 : Container(),
             TextFieldContainer(
@@ -640,9 +660,10 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   Future<void> formSubmit() async {
     if (_formKey.currentState.saveAndValidate()) {
+      print("form submitted");
       try {
         if (widget.contentType == "Görüntü") {
-          var hasImage = checkEventHasImages();
+          var hasImage = checkPostHasImages();
           if (hasImage) {
             await uploadPost();
           } else {
@@ -653,12 +674,14 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           await uploadPost();
         }
       } catch (e) {
-        Logger().e("Form submit edilirken hata oluştu: " + e.toString());
+        logger.e("Form submit edilirken hata oluştu: " + e.toString());
       }
+    } else {
+      print("form not submitted");
     }
   }
 
-  bool checkEventHasImages() {
+  bool checkPostHasImages() {
     if (isSelected) {
       return true;
     }
