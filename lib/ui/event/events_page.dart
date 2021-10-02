@@ -179,7 +179,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                           name: "city",
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                           items: cities.map((e) {
@@ -201,6 +201,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                     Container(
                       width: size.width * 0.6,
                       child: FormBuilderChoiceChip(
+                        padding: EdgeInsets.all(5),
                         initialValue: selectedCategory ?? null,
                         name: "category",
                         options: categoryOptions,

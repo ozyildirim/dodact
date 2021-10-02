@@ -36,9 +36,9 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
             imageBuilder: (context, imageProvider) {
               return CircleAvatar(
                 backgroundColor: Colors.black,
-                radius: 100,
+                radius: dynamicWidth(0.2),
                 child: CircleAvatar(
-                  radius: 95,
+                  radius: dynamicWidth(0.19),
                   backgroundImage: imageProvider,
                 ),
               );
