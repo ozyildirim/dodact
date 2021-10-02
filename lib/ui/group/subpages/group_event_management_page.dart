@@ -1,5 +1,4 @@
 import 'package:cool_alert/cool_alert.dart';
-import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
@@ -59,44 +58,70 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(22),
                           child: Card(
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Image(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(event.eventImages[0]),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(event.eventImages[0]),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  color: Colors.orange,
+                                  child: ListTile(
+                                    title: Text(
+                                      event.eventTitle,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      DateFormat("dd/MM/yyyy")
+                                          .format(event.eventCreationDate),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: () {
+                                        //TODO: BU kısmı düzenle
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text("Uyarı"),
+                                              content: Text(
+                                                  "Bu etkinliği silmek istediğine emin misin?"),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Evet"),
+                                                  onPressed: () {
+                                                    deleteGroupEvent(
+                                                        event.eventId);
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                FlatButton(
+                                                  child: Text("Hayır"),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                            // return showDeletePostDialog(
+                                            //     post.postId);
+                                          },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
-                                Expanded(
-                                    flex: 1,
-                                    child: ListTile(
-                                      leading: Text(
-                                        event.city,
-                                        style: TextStyle(fontSize: 13),
-                                      ),
-                                      title: Text(
-                                        event.eventTitle.substring(0, 15),
-                                      ),
-                                      subtitle: Text(
-                                        DateFormat("dd/MM/yyyy")
-                                            .format(event.eventCreationDate),
-                                      ),
-                                      trailing: PopupMenuButton(
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                              value: 'Sil',
-                                              child: Text('Sil'),
-                                              onTap: () async {
-                                                // await showDeleteEventDialog(
-                                                //     event.eventId);
-                                                deleteGroupEvent(event.eventId);
-                                                setState(() {});
-                                              }),
-                                        ],
-                                      ),
-                                    ))
-                              ],
+                              ),
                             ),
                           ),
                         ),
@@ -111,12 +136,12 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
     );
   }
 
-  Future<void> showDeleteEventDialog(String postId) async {
+  Future<void> showDeleteEventDialog(String eventId) async {
     print("asdasd");
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği silmek istediğinden emin misin?",
+        text: "Bu etkinliği silmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",
@@ -124,7 +149,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
           NavigationService.instance.pop();
         },
         onConfirmBtnTap: () async {
-          await deleteGroupEvent(postId);
+          await deleteGroupEvent(eventId);
         });
   }
 

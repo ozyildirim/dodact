@@ -53,7 +53,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                     itemCount: asyncSnapshot.data.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
-                      childAspectRatio: 3 / 2,
+                      childAspectRatio: 1.5,
                       crossAxisSpacing: mediaQuery.size.width * 0.02,
                       mainAxisSpacing: mediaQuery.size.width * 0.02,
                     ),
@@ -69,42 +69,70 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(22),
                           child: Card(
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Image(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(postCoverPhoto),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(postCoverPhoto),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  color: Colors.orange,
+                                  child: ListTile(
+                                    title: Text(
+                                      post.postTitle,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      DateFormat("dd/MM/yyyy")
+                                          .format(post.postDate),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: () {
+                                        //TODO: BU kısmı düzenle
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text("Uyarı"),
+                                              content: Text(
+                                                  "Bu gönderiyi silmek istediğine emin misin?"),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Evet"),
+                                                  onPressed: () {
+                                                    deleteGroupPost(
+                                                        post.postId);
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                FlatButton(
+                                                  child: Text("Hayır"),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                            // return showDeletePostDialog(
+                                            //     post.postId);
+                                          },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
-                                Expanded(
-                                    flex: 1,
-                                    child: ListTile(
-                                      leading: Text(
-                                        post.postContentType,
-                                        style: TextStyle(fontSize: 13),
-                                      ),
-                                      title: Text(
-                                        post.postTitle.substring(0, 15),
-                                      ),
-                                      subtitle: Text(
-                                        DateFormat("dd/MM/yyyy")
-                                            .format(post.postDate),
-                                      ),
-                                      trailing: PopupMenuButton(
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                              value: 'Sil',
-                                              child: Text('Sil'),
-                                              onTap: () async {
-                                                await showDeletePostDialog(
-                                                    post.postId);
-                                              }),
-                                        ],
-                                      ),
-                                    ))
-                              ],
+                              ),
                             ),
                           ),
                         ),
@@ -158,8 +186,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
     );
   }
 
-  Future<void> showDeletePostDialog(String postId) async {
-    print("asdasd");
+  showDeletePostDialog(String postId) async {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
