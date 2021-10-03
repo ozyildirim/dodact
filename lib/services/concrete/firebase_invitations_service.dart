@@ -60,9 +60,6 @@ class FirebaseInvitationService {
   //Cloud Functions ile kabul işlemi gerçekleştirilir.
   Future<String> acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
-    // //TODO: Cloud Functions ile kabul işlemi gerçekleştirilir.
-    // await invitationsRef.doc(invitationId).delete();
-
     FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
     HttpsCallable callable = firebaseFunctions.httpsCallable('addUserToGroup');
     try {

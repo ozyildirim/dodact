@@ -624,7 +624,12 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     List<String> searchKeywords = [];
 
     var title = post.postTitle;
-    for (int i = 1; i < title.length; i++) {
+    var splittedTitle = title.split(" ");
+    splittedTitle.forEach((word) {
+      searchKeywords.add(word.toLowerCase());
+    });
+
+    for (int i = 1; i <= title.length; i++) {
       searchKeywords.add(title.substring(0, i).toLowerCase());
     }
     return searchKeywords;

@@ -14,6 +14,7 @@ String invitationModelToJson(InvitationModel data) =>
 
 class InvitationModel {
   InvitationModel({
+    this.invitationId,
     this.senderId,
     this.receiverId,
     this.type,
@@ -28,6 +29,7 @@ class InvitationModel {
 
   factory InvitationModel.fromJson(Map<String, dynamic> json) =>
       InvitationModel(
+        invitationId: json["invitationId"],
         senderId: json["senderId"],
         receiverId: json["receiverId"],
         type: json["type"],
@@ -35,6 +37,7 @@ class InvitationModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "invitationId": invitationId,
         "senderId": senderId,
         "receiverId": receiverId,
         "type": type,

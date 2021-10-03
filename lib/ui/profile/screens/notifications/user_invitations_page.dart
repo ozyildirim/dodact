@@ -144,6 +144,7 @@ class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
 
   acceptGroupInvitation(
       String userId, String groupId, String invitationId) async {
+    print(invitationId);
     CommonMethods().showLoaderDialog(context, "İşlemini gerçekleştiriyoruz");
     var result = await Provider.of<InvitationProvider>(context, listen: false)
         .acceptGroupInvitation(userId, groupId, invitationId);

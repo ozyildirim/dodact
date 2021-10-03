@@ -659,6 +659,12 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     List<String> searchKeywords = [];
 
     var title = event.eventTitle;
+
+    var splittedTitle = title.split(" ");
+    splittedTitle.forEach((word) {
+      searchKeywords.add(word.toLowerCase());
+    });
+
     for (int i = 1; i <= title.length; i++) {
       searchKeywords.add(title.substring(0, i).toLowerCase());
     }

@@ -2,7 +2,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
-import 'package:dodact_v1/ui/group/widgets/filtered_group_view.dart';
+import 'package:dodact_v1/ui/group/screens/filtered_group_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

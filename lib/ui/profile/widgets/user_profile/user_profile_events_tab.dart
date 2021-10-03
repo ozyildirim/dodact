@@ -26,6 +26,8 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<EventProvider>(context);
+    var size = MediaQuery.of(context).size;
+    print("ekran boyutları width: ${size.width}, height: ${size.height}");
 
     if (provider.userEventList != null) {
       if (provider.userEventList.isNotEmpty) {
@@ -79,8 +81,8 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
               imageUrl: event.eventImages[0],
               imageBuilder: (context, imageProvider) {
                 return Container(
-                  height: 320,
-                  width: 250,
+                  height: dynamicHeight(0.40),
+                  width: dynamicWidth(0.50),
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
@@ -89,33 +91,33 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
                       ),
                     ),
                   ),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey[50].withOpacity(0.8),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          event.eventTitle,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                            DateFormat("dd/MM/yyyy")
+                                .format(event.eventStartDate)
+                                .toString(),
+                            style: TextStyle(fontSize: 18)),
+                      ),
+                    ),
+                  ),
                 );
               },
-            ),
-            Positioned(
-              bottom: 10,
-              child: Container(
-                width: 250,
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey[50].withOpacity(0.8),
-                ),
-                child: ListTile(
-                  title: Text(
-                    event.eventTitle,
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                      DateFormat("dd/MM/yyyy")
-                          .format(event.eventStartDate)
-                          .toString(),
-                      style: TextStyle(fontSize: 18)),
-                ),
-              ),
             ),
             Positioned(
               top: 1,
