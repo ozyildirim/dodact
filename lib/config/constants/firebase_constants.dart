@@ -18,3 +18,5 @@ final CollectionReference contributionsRef =
     firestore.collection('contributions');
 final CollectionReference tokensRef = firestore.collection('tokens');
 final CollectionReference invitationsRef = firestore.collection('invitations');
+final CollectionReference spinnerResultsRef =
+    firestore.collection('spinner_results');

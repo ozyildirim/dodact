@@ -41,14 +41,6 @@ class _GeneralPageState extends BaseState<GeneralPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        //   centerTitle: true,
-        //   elevation: 5,
-        //   title: Text(
-        //     "Anasayfa",
-        //   ),
-        // ),
-
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
