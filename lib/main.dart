@@ -23,8 +23,7 @@ void main() async {
   MobileAds.instance.initialize();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   initScreen = _prefs.getInt("initScreen");
-  // await _prefs.setInt('initScreen', 1);
-  // print('initScreen $initScreen');
+  await _prefs.setInt('initScreen', 1);
   await Firebase.initializeApp();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -47,9 +46,14 @@ void main() async {
   }
 
   AwesomeNotifications().initialize(
-      'resource://drawable/notification_icon.png',
+      'resource://drawable/notification_logo',
       [
         NotificationChannel(
+            defaultRingtoneType: DefaultRingtoneType.Notification,
+            icon: 'resource://drawable/notification_logo',
+            groupAlertBehavior: GroupAlertBehavior.Summary,
+            locked: true,
+            enableLights: true,
             channelKey: 'basic_channel',
             channelName: 'Basic notifications',
             channelDescription: 'Notification channel for basic tests',
