@@ -59,14 +59,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             ),
           ),
           ListTile(
-            enabled: false,
-            leading: Icon(Icons.calendar_today),
-            title: Text("Takvimim", style: TextStyle(fontSize: 18)),
-            onTap: () {
-              // NavigationService.instance.navigate(k_ROUTE_USER_CALENDAR_PAGE);
-            },
-          ),
-          ListTile(
             leading: Icon(Icons.star),
             title: Text("Favorilerim", style: TextStyle(fontSize: 18)),
             onTap: () {
@@ -82,6 +74,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
           ListTile(
+            enabled: false,
             leading: Icon(Icons.help),
             title: Text("Başvurularım", style: TextStyle(fontSize: 18)),
             onTap: () {
@@ -96,15 +89,14 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_USER_OPTIONS);
             },
           ),
-
-          // ListTile(
-          //   enabled: false,
-          //   leading: Icon(Icons.settings),
-          //   title: Text("İlgi Alanlarım", style: TextStyle(fontSize: 18)),
-          //   onTap: () {
-          //     NavigationService.instance.navigate(k_ROUTE_INTERESTS_CHOICE);
-          //   },
-          // ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text("İlgi Alanlarım", style: TextStyle(fontSize: 18)),
+            onTap: () {
+              NavigationService.instance
+                  .navigate(k_ROUTE_INTERESTS_CHOICE, args: false);
+            },
+          ),
           ListTile(
             leading: Icon(Icons.settings),
             title:
