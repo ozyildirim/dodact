@@ -97,9 +97,7 @@ class FilteredGroupView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(group.groupName,
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(group.groupName, style: TextStyle(fontSize: 24)),
                   SizedBox(height: 5),
                   Text(group.groupSubtitle, style: TextStyle(fontSize: 16))
                 ],

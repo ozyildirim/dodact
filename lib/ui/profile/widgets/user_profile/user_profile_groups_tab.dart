@@ -34,18 +34,21 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
           ),
         );
       } else {
-        return ListView.builder(
-            shrinkWrap: true,
-            primary: false,
-            scrollDirection: Axis.vertical,
-            itemCount: provider.userGroupList.length,
-            itemBuilder: (context, index) {
-              var groupItem = provider.userGroupList[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: buildCustomListTile(context, groupItem),
-              );
-            });
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+              shrinkWrap: true,
+              primary: false,
+              scrollDirection: Axis.vertical,
+              itemCount: provider.userGroupList.length,
+              itemBuilder: (context, index) {
+                var groupItem = provider.userGroupList[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: buildCustomListTile(context, groupItem),
+                );
+              }),
+        );
       }
     } else {
       return Center(child: spinkit);

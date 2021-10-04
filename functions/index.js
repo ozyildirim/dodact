@@ -265,6 +265,63 @@ firestore.document('reports/{reportId}')
         }
     });
 
+exports.commentNotificationToCreator = functions.firestore.document('posts/{postId}/comments/{commentId}').onCreate(async (snapshot, context) => {
+    const comment = snapshot.data();
+    const postId = context.params.postId;
+    const commentId = context.params.commentId;
+
+    const postRef = postsRef.doc(postId);
+    const postSnapshot = await postRef.get();
+    const postData = postSnapshot.data();
+
+
+
+    if (postData.ownerType == "User") {
+        const userRef = usersRef.doc(postData.ownerId);
+        const userSnapshot = await userRef.get();
+        const userData = userSnapshot.data();
+
+        if (userData.allowCommentNotifications) {
+            const payload = {
+                notification: {
+                    title: `İçeriğine yorum yapıldı.`,
+                    body: `${postData.postTitle} başlıklı içeriğine yorum yapıldı.`,
+                    sound: "default",
+                }
+            }
+
+            //send notification to post creator
+            var tokenRef = await tokensRef.doc(postData.ownerId).get();
+            const tokenObject = tokenRef.data();
+            admin.messaging().sendToDevice(tokenObject.token, payload);
+        }
+    } else {
+        const groupRef = groupsRef.doc(postData.ownerId);
+        const groupSnapshot = await groupRef.get();
+        const groupData = groupSnapshot.data();
+
+        const founderUserRef = usersRef.doc(groupData.founderId);
+        const founderUserSnapshot = await founderUserRef.get();
+        const founderUserData = founderUserSnapshot.data();
+
+        if (founderUserData.allowCommentNotifications) {
+            const payload = {
+                notification: {
+                    title: `Grubunun içeriğine yorum yapıldı.`,
+                    body: `${postData.postTitle} başlıklı grup içeriğine yorum yapıldı.`,
+                    sound: "default",
+                }
+            }
+
+            //send notification to post creator
+            var tokenRef = await tokensRef.doc(groupData.founderId).get();
+            const tokenObject = tokenRef.data();
+            admin.messaging().sendToDevice(tokenObject.token, payload)
+        }
+        //TODO: Notificationlara kaydet
+    }
+});
+
 
 
 
