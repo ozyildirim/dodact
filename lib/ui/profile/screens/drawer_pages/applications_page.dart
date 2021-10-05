@@ -11,12 +11,6 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xff483D8B),
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: Text("BAŞVUR"),
-        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
