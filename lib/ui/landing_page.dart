@@ -96,7 +96,7 @@ class _LandingPageState extends BaseState<LandingPage> {
                       if (model.currentUser.newUser) {
                         return SignUpDetail();
                       }
-                      fetchAppContent();
+
                       return HomePage();
                     }
                     //If state is "Busy"
@@ -129,19 +129,6 @@ class _LandingPageState extends BaseState<LandingPage> {
     } else {
       return false;
     }
-  }
-
-  fetchAppContent() {
-    // var userProvider = Provider.of<UserProvider>(context, listen: false);
-    var postProvider = Provider.of<PostProvider>(context, listen: false);
-    var eventProvider = Provider.of<EventProvider>(context, listen: false);
-    var podcastProvider = Provider.of<PodcastProvider>(context, listen: false);
-
-    postProvider.getTopPosts();
-    eventProvider.getSpecialEvents();
-    postProvider.getUserPosts(authProvider.currentUser);
-    eventProvider.getUserEvents(authProvider.currentUser);
-    podcastProvider.getPodcastList();
   }
 
   buildUnderConstructionPage(BuildContext context) {

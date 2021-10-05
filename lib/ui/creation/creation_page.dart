@@ -66,7 +66,8 @@ class _CreationPageState extends State<CreationPage> {
                             .navigate(k_ROUTE_CREATE_EVENT_PAGE, args: [
                           eventCategoryData,
                           eventTypeData,
-                          eventPlatformData
+                          eventPlatformData,
+                          widget.groupId ?? null
                         ]);
                       }
                     }

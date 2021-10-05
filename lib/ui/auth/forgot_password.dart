@@ -1,7 +1,10 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -14,6 +17,8 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TextEditingController emailController = new TextEditingController();
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   FocusNode emailFocus = FocusNode();
 
@@ -85,7 +90,7 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
                   text: "Sıfırlama Linki Gönder",
                   textColor: Colors.white,
                   press: () {
-                    resetPassword();
+                    submitForm();
                     FocusScope.of(context).unfocus();
                   },
                 ),
@@ -97,53 +102,80 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
     );
   }
 
-  Future resetPassword() async {
+  submitForm() async {
     if (_formKey.currentState.saveAndValidate()) {
-      var email = _formKey.currentState.value['email'].toString().trim();
-      var result = await authProvider.forgotPassword(email);
-
-      if (result) {
-        _formKey.currentState.reset();
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  "Şifre sıfırlama talimatları mail adresinize gönderildi.",
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
-          ),
-        ));
-      } else {
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  "Bir hata ile karşılaşıldı.",
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
-          ),
-        ));
-      }
+      await sendPasswordResetMail();
     } else {}
 
-    emailController.text = "";
+    _formKey.currentState.reset();
+  }
+
+  sendPasswordResetMail() async {
+    try {
+      var email = _formKey.currentState.value['email'].toString().trim();
+
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        duration: new Duration(seconds: 2),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                "Şifre sıfırlama talimatları mail adresine gönderildi.",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ));
+
+      print("şifre sıfırlandı");
+    } on FirebaseAuthException catch (e) {
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(e.message);
+
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        duration: new Duration(seconds: 2),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                errorMsg,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ));
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        duration: new Duration(seconds: 2),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                "Bir hata ile karşılaşıldı.",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ));
+    }
   }
 }

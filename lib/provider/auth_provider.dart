@@ -154,16 +154,11 @@ class AuthProvider extends ChangeNotifier {
     return authStatus;
   }
 
-  Future<bool> forgotPassword(String email) async {
+  Future<void> forgotPassword(String email) async {
     try {
-      changeState(true);
       await _authRepository.forgotPassword(email);
-      return true;
     } catch (e) {
       logger.e("AuthProvider forgotPassword error." + e.toString());
-      return false;
-    } finally {
-      changeState(false);
     }
   }
 

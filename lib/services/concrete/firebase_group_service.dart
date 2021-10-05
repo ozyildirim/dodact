@@ -83,26 +83,28 @@ class FirebaseGroupService extends BaseService<GroupModel> {
   }
 
   Future<List<GroupModel>> getFilteredGroupList(
-      {String category = "Müzik",
-      String city = "İstanbul",
-      bool showAllCategories = false,
-      bool wholeCountry = false}) async {
+      {String category, String city}) async {
     List<GroupModel> filteredGroups = [];
     QuerySnapshot querySnapshot;
 
-    if (showAllCategories && wholeCountry) {
-      querySnapshot = await groupsRef.get();
-    } else if (showAllCategories && wholeCountry == false) {
-      querySnapshot =
-          await groupsRef.where("groupLocation", isEqualTo: city).get();
-    } else if (showAllCategories == false && wholeCountry) {
-      querySnapshot =
-          await groupsRef.where("groupCategory", isEqualTo: category).get();
-    } else {
+    if (category != null && city != null) {
       querySnapshot = await groupsRef
           .where("groupCategory", isEqualTo: category)
-          .where("groupLocation", isEqualTo: city)
+          .where("groupCity", isEqualTo: city)
+          .where('visible', isEqualTo: true)
           .get();
+    } else if (category != null) {
+      querySnapshot = await groupsRef
+          .where("groupCategory", isEqualTo: category)
+          .where('visible', isEqualTo: true)
+          .get();
+    } else if (city != null) {
+      querySnapshot = await groupsRef
+          .where("groupCity", isEqualTo: city)
+          .where('visible', isEqualTo: true)
+          .get();
+    } else {
+      querySnapshot = await groupsRef.where('visible', isEqualTo: true).get();
     }
 
     for (DocumentSnapshot group in querySnapshot.docs) {

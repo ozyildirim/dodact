@@ -22,9 +22,9 @@ class OthersProfileHeader extends StatelessWidget {
             imageBuilder: (context, imageProvider) {
               return CircleAvatar(
                 backgroundColor: Colors.black,
-                radius: 100,
+                radius: mediaQuery.size.width * 0.2,
                 child: CircleAvatar(
-                  radius: 95,
+                  radius: mediaQuery.size.width * 0.19,
                   backgroundImage: imageProvider,
                 ),
               );

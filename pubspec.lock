@@ -36,6 +36,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.2"
+  awesome_notifications:
+    dependency: "direct main"
+    description:
+      name: awesome_notifications
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6+10"
+  awesome_select:
+    dependency: "direct main"
+    description:
+      name: awesome_select
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.3"
   bloc:
     dependency: transitive
     description:
@@ -155,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.16"
+  confetti:
+    dependency: "direct main"
+    description:
+      name: confetti
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   connectivity_plus:
     dependency: "direct main"
     description:

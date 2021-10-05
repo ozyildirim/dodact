@@ -643,8 +643,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
       await eventProvider.addEvent(_eventImages).then((_) async {
         NavigationService.instance.pop();
-        await CommonMethods().showSuccessDialog(context,
-            "Tebrikler! Etkinliğin bize ulaştı, en kısa zamanda yayınlayacağız.");
+        await CommonMethods().showSuccessDialog(
+            context, "Tebrikler! Etkinliğin başarıyla yayınlandı.");
         NavigationService.instance.navigateToReset(k_ROUTE_HOME);
       });
     } catch (e) {
@@ -659,6 +659,12 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     List<String> searchKeywords = [];
 
     var title = event.eventTitle;
+
+    var splittedTitle = title.split(" ");
+    splittedTitle.forEach((word) {
+      searchKeywords.add(word.toLowerCase());
+    });
+
     for (int i = 1; i <= title.length; i++) {
       searchKeywords.add(title.substring(0, i).toLowerCase());
     }

@@ -101,7 +101,7 @@ class AuthRepository {
 
   Future<void> forgotPassword(String email) async {
     if (appMode == AppMode.DEBUG) {
-      return true;
+      // return true;
     } else {
       await _firebaseAuthService.forgotPassword(email);
     }

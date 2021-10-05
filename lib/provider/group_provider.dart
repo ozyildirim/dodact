@@ -111,16 +111,10 @@ class GroupProvider extends ChangeNotifier {
   }
 
   Future<List<GroupModel>> getFilteredGroupList(
-      {String category = "Tümü",
-      String city = "Belirtilmemiş",
-      bool showAllCategories = true,
-      bool wholeCountry = true}) async {
+      {String category, String city}) async {
     try {
       var fetchedGroup = await _groupRepository.getFilteredGroupList(
-          category: category,
-          city: city,
-          showAllCategories: showAllCategories,
-          wholeCountry: wholeCountry);
+          category: category, city: city);
       groupList = fetchedGroup;
       notifyListeners();
       return groupList;
@@ -167,10 +161,11 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getGroupEvents(String groupId) async {
+  Future<List<EventModel>> getGroupEvents(String groupId) async {
     try {
       groupEvents = await _groupRepository.getGroupEvents(groupId);
       notifyListeners();
+      return groupEvents;
     } catch (e) {
       logger.e("GroupProvider getGroupEvents error: " + e.toString());
       return null;
@@ -230,6 +225,26 @@ class GroupProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       logger.e("GroupProvider removeGroupMember error: " + e.toString());
+    }
+  }
+
+  Future<void> deleteGroupPost(String postId) async {
+    try {
+      await _groupRepository.deleteGroupPost(postId);
+      groupPosts.removeWhere((post) => post.postId == postId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("GroupProvider deleteGroupPost error: " + e.toString());
+    }
+  }
+
+  Future<void> deleteGroupEvent(String eventId) async {
+    try {
+      await _groupRepository.deleteGroupEvent(eventId);
+      groupEvents.removeWhere((event) => event.eventId == eventId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("GroupProvider deleteGroupPost error: " + e.toString());
     }
   }
 }

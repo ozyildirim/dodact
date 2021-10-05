@@ -489,6 +489,6 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void navigateInterestSelectionPage() async {
     NavigationService.instance
-        .navigateReplacement(k_ROUTE_TEMPORARY_REGISTRATION_INTERESTS_CHOICE);
+        .navigateReplacement(k_ROUTE_INTERESTS_CHOICE, args: true);
   }
 }

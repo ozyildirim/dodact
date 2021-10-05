@@ -1,4 +1,8 @@
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/provider/event_provider.dart';
+import 'package:dodact_v1/provider/podcast_provider.dart';
+import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/general/widgets/acik_sahne_part.dart';
 import 'package:dodact_v1/ui/general/widgets/announcement_part.dart';
 import 'package:dodact_v1/ui/general/widgets/contributions_part.dart';
@@ -8,20 +12,35 @@ import 'package:dodact_v1/ui/general/widgets/post_part.dart';
 import 'package:dodact_v1/ui/general/widgets/spinner_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class GeneralPage extends StatelessWidget {
+class GeneralPage extends StatefulWidget {
+  @override
+  State<GeneralPage> createState() => _GeneralPageState();
+}
+
+class _GeneralPageState extends BaseState<GeneralPage> {
+  @override
+  initState() {
+    super.initState();
+    fetchAppContent();
+  }
+
+  fetchAppContent() {
+    // var userProvider = Provider.of<UserProvider>(context, listen: false);
+    var postProvider = Provider.of<PostProvider>(context, listen: false);
+    var eventProvider = Provider.of<EventProvider>(context, listen: false);
+    var podcastProvider = Provider.of<PodcastProvider>(context, listen: false);
+
+    postProvider.getTopPosts();
+    eventProvider.getSpecialEvents();
+    podcastProvider.getPodcastList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        //   centerTitle: true,
-        //   elevation: 5,
-        //   title: Text(
-        //     "Anasayfa",
-        //   ),
-        // ),
-
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(

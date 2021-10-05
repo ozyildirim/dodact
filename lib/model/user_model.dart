@@ -35,6 +35,9 @@ class UserObject {
   bool hiddenMail;
   bool hiddenLocation;
 
+  //NotificationSettings
+  bool allowCommentNotifications;
+
   List<String> searchKeywords;
 
   UserObject({
@@ -64,6 +67,7 @@ class UserObject {
     this.profession,
     this.searchKeywords,
     this.isVerified,
+    this.allowCommentNotifications,
   });
 
   Map<String, dynamic> toMap() {
@@ -95,6 +99,8 @@ class UserObject {
     userData['profession'] = this.profession ?? '';
     userData['searchKeywords'] = this.searchKeywords ?? [];
     userData['isVerified'] = this.isVerified ?? false;
+    userData['allowCommentNotifications'] =
+        this.allowCommentNotifications ?? true;
 
     return userData;
   }
@@ -126,7 +132,8 @@ class UserObject {
         userDescription = map['userDescription'] ?? '',
         profession = map['profession'] ?? '',
         searchKeywords = map['searchKeywords'] ?? [],
-        isVerified = map['isVerified'] ?? false;
+        isVerified = map['isVerified'] ?? false,
+        allowCommentNotifications = map['allowCommentNotifications'] ?? true;
 
   UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
@@ -156,6 +163,7 @@ class UserObject {
     profession = doc.data()['profession'] ?? '';
     searchKeywords = doc.data()['searchKeywords']?.cast<String>() ?? [];
     isVerified = doc.data()['isVerified'] ?? false;
+    allowCommentNotifications = doc.data()['allowCommentNotifications'] ?? true;
   }
 
   String toString() {

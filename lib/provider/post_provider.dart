@@ -83,14 +83,8 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deletePost(String postId, bool isInStorage) async {
+  Future<void> deletePost(String postId) async {
     try {
-      await postRepository.delete(postId).then((_) async {
-        if (isInStorage) {
-          await UploadService().deletePostMedia(postId);
-        }
-      });
-
       await postRepository.delete(postId);
       PostModel selectedPost =
           postList.firstWhere((element) => element.postId == postId);

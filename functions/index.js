@@ -7,6 +7,7 @@ const {
 const nodemailer = require('nodemailer');
 
 admin.initializeApp({
+    storageBucket: "gs://dodact-7ccd3.appspot.com/",
     credential: admin.credential.applicationDefault()
 });
 const db = admin.firestore();
@@ -56,16 +57,7 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
 });
 
 
-exports.incrementPostDodders = functions.
-firestore.document('posts/{postId}/dodders/{dodderId}')
-    .onCreate((snapshot, context) => {
-        const userId = context.params.dodderId;
-        const postId = context.params.postId;
 
-        postsRef.doc(postId).update({
-            'dodCounter': admin.firestore.FieldValue.increment(1)
-        });
-    });
 
 exports.decrementPostDodders = functions.
 firestore.document('posts/{postId}/dodders/{dodderId}')
@@ -78,35 +70,43 @@ firestore.document('posts/{postId}/dodders/{dodderId}')
         });
     });
 
-exports.addUserToGroup = functions.https.onCall(async (req, res) => {
-    const groupId = req.query.groupId;
-    const userId = req.query.userId;
-    const invitationId = req.query.invitationId;
+exports.addUserToGroup = functions.https.onCall(async (data, context) => {
+    const groupId = data.groupId;
+    console.log(groupId);
+
+    const userId = data.userId;
+    console.log(userId);
+    const invitationId = data.invitationId;
+    console.log(invitationId);
 
     const groupRef = groupsRef.doc(groupId);
-    const userRef = usersRef.doc(userId);
+    const groupSnapshot = await groupRef.get();
 
-    const group = await groupRef.doc(groupId).get();
-    const user = await userRef.doc(userId).get();
+    const groupData = groupSnapshot.data();
 
-    if (!group.exists) {
-        res.status(404).send('GROUP_NOT_FOUND');
-    } else if (!user.exists) {
-        res.status(404).send('USER_NOT_FOUND');
+    if (!groupSnapshot.exists) {
+        console.log("Grup bulunamadı");
+        return {
+            result: 'GROUP_NOT_FOUND'
+        }
+
     } else {
-        const groupData = group.data();
-        const userData = user.data();
-
         if (groupData.groupMemberList.includes(userId)) {
-            res.status(400).send('USER_ALREADY_IN_GROUP');
-            await deleteInvitation(invitationId);
+
+            //delete invitation
+            invitationsRef.doc(invitationId).delete();
+
+            return {
+                result: 'USER_ALREADY_IN_GROUP'
+            }
         } else {
             await groupRef.update({
                 'groupMemberList': admin.firestore.FieldValue.arrayUnion(userId)
             });
 
-            res.status(200).send('USER_ADDED_TO_GROUP');
-            await deleteInvitation(invitationId);
+            //delete invitation
+            invitationsRef.doc(invitationId).delete();
+
 
             let payload = {
                 notification: {
@@ -119,8 +119,14 @@ exports.addUserToGroup = functions.https.onCall(async (req, res) => {
                 //     body: `${groupData.groupName} ile güzel günlere!`,
                 // }
             }
-            sendNotificationToUser(userId, payload);
 
+            //send notification to post creator
+            var tokenRef = await tokensRef.doc(userId).get();
+            const tokenObject = tokenRef.data();
+            admin.messaging().sendToDevice(tokenObject.token, payload)
+            return {
+                result: 'USER_ADDED_TO_GROUP'
+            }
         }
     }
 })
@@ -149,6 +155,7 @@ exports.sendNotificationToUser = functions.https.onCall(async (data, context) =>
 })
 
 
+
 exports.incrementPostDodders = functions.
 firestore.document('posts/{postId}/dodders/{dodderId}')
     .onCreate((snapshot, context) => {
@@ -159,6 +166,43 @@ firestore.document('posts/{postId}/dodders/{dodderId}')
             'dodCounter': admin.firestore.FieldValue.increment(1)
         });
     });
+
+
+
+exports.deletePostFiles = functions.
+firestore.document('posts/{postId}').onDelete(async (snapshot, context) => {
+    const postId = context.params.postId;
+    const postData = snapshot.data();
+    var hasFile = !postData.isLocatedInYoutube;
+
+    if (hasFile) {
+        try {
+            var bucket = admin.storage().bucket();
+            await bucket.deleteFiles({
+                prefix: `posts/${postId}`
+            });
+            console.log('Post files deleted successfully: ' + postId);
+        } catch (e) {
+            console.log("Error occured while deleting post file: " + postId + e);
+        }
+    } else {
+        console.log('Post has no file: ' + postId);
+    }
+});
+
+exports.deleteEventFiles = functions.
+firestore.document('events/{eventId}').onDelete(async (snapshot, context) => {
+    const eventId = context.params.eventId;
+    try {
+        var bucket = admin.storage().bucket();
+        await bucket.deleteFiles({
+            prefix: `events/${eventId}`
+        });
+        console.log('Event files deleted successfully: ' + eventId);
+    } catch (e) {
+        console.log("Error occured while deleting event file: " + eventId + e);
+    }
+});
 
 exports.checkPostReports = functions.
 firestore.document('reports/{reportId}')
@@ -214,20 +258,79 @@ firestore.document('reports/{reportId}')
                     var tokenRef = await tokensRef.doc(groupData.founderId).get();
                     const tokenObject = tokenRef.data();
                     admin.messaging().sendToDevice(tokenObject.token, payload)
+
+                    sendNo
                 }
             }
         }
     });
 
+exports.commentNotificationToCreator = functions.firestore.document('posts/{postId}/comments/{commentId}').onCreate(async (snapshot, context) => {
+    const comment = snapshot.data();
+    const postId = context.params.postId;
+    const commentId = context.params.commentId;
+
+    const postRef = postsRef.doc(postId);
+    const postSnapshot = await postRef.get();
+    const postData = postSnapshot.data();
+
+
+
+    if (postData.ownerType == "User") {
+        const userRef = usersRef.doc(postData.ownerId);
+        const userSnapshot = await userRef.get();
+        const userData = userSnapshot.data();
+
+        if (userData.allowCommentNotifications) {
+            const payload = {
+                notification: {
+                    title: `İçeriğine yorum yapıldı.`,
+                    body: `${postData.postTitle} başlıklı içeriğine yorum yapıldı.`,
+                    sound: "default",
+                }
+            }
+
+            //send notification to post creator
+            var tokenRef = await tokensRef.doc(postData.ownerId).get();
+            const tokenObject = tokenRef.data();
+            admin.messaging().sendToDevice(tokenObject.token, payload);
+        }
+    } else {
+        const groupRef = groupsRef.doc(postData.ownerId);
+        const groupSnapshot = await groupRef.get();
+        const groupData = groupSnapshot.data();
+
+        const founderUserRef = usersRef.doc(groupData.founderId);
+        const founderUserSnapshot = await founderUserRef.get();
+        const founderUserData = founderUserSnapshot.data();
+
+        if (founderUserData.allowCommentNotifications) {
+            const payload = {
+                notification: {
+                    title: `Grubunun içeriğine yorum yapıldı.`,
+                    body: `${postData.postTitle} başlıklı grup içeriğine yorum yapıldı.`,
+                    sound: "default",
+                }
+            }
+
+            //send notification to post creator
+            var tokenRef = await tokensRef.doc(groupData.founderId).get();
+            const tokenObject = tokenRef.data();
+            admin.messaging().sendToDevice(tokenObject.token, payload)
+        }
+        //TODO: Notificationlara kaydet
+    }
+});
 
 
 
 
-// sendNotificationToUser = async (userId, payload) => {
-//     var tokenRef = await tokensRef.doc(userId).get();
-//     const tokenObject = tokenRef.data();
-//     admin.messaging().sendToDevice(tokenObject.token, payload)
-// }
+
+sendNotificationToUser = async (userId, payload) => {
+    var tokenRef = await tokensRef.doc(userId).get();
+    const tokenObject = tokenRef.data();
+    admin.messaging().sendToDevice(tokenObject.token, payload)
+}
 
 deleteInvitation = async (invitationId) => {
     const invitationRef = invitationsRef.doc(invitationId);

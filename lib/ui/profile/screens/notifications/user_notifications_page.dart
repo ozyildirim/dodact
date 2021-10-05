@@ -68,6 +68,7 @@ class _UserInvitationsPartState extends BaseState<UserInvitationsPart> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListTile(
+        // enabled: false,
         onTap: () {
           NavigationService.instance.navigate(k_ROUTE_USER_INVITATIONS_PAGE);
         },

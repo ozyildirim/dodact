@@ -271,15 +271,10 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> _deletePost() async {
-//TODO: Bunlardan herhangi birisi patlarsa ne yapacağız?
-
-    bool isLocatedInStorage = !post.isLocatedInYoutube;
-
-    //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
     CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
 
     await Provider.of<PostProvider>(context, listen: false)
-        .deletePost(post.postId, isLocatedInStorage);
+        .deletePost(post.postId);
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //

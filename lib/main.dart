@@ -1,4 +1,4 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 int initScreen;
 
 Future<void> _messageHandler(RemoteMessage message) async {
-  print('background message ${message.notification.body}');
+  AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
 void main() async {
@@ -23,10 +23,63 @@ void main() async {
   MobileAds.instance.initialize();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   initScreen = _prefs.getInt("initScreen");
-  // await _prefs.setInt('initScreen', 1);
-  // print('initScreen $initScreen');
+  await _prefs.setInt('initScreen', 1);
   await Firebase.initializeApp();
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+
+  AwesomeNotifications().initialize(
+      'resource://drawable/notification_logo',
+      [
+        NotificationChannel(
+            defaultRingtoneType: DefaultRingtoneType.Notification,
+            icon: 'resource://drawable/notification_logo',
+            groupAlertBehavior: GroupAlertBehavior.Summary,
+            locked: true,
+            enableLights: true,
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            defaultColor: Color(0xFF9D50DD),
+            ledColor: Colors.white),
+        // NotificationChannel(
+        //     channelKey: 'badge_channel',
+        //     channelName: 'Badge indicator notifications',
+        //     channelDescription:
+        //         'Notification channel to activate badge indicator',
+        //     channelShowBadge: true,
+        //     defaultColor: Color(0xFF9D50DD),
+        //     ledColor: Colors.yellow),
+
+        // NotificationChannel(
+        //     channelKey: 'big_picture',
+        //     channelName: 'Big pictures',
+        //     channelDescription: 'Notifications with big and beautiful images',
+        //     defaultColor: Color(0xFF9D50DD),
+        //     ledColor: Color(0xFF9D50DD),
+        //     vibrationPattern: lowVibrationPattern),
+      ],
+      debug: true);
+
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
+
   setupLocator();
   runApp(MyApp());
 }
