@@ -175,7 +175,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           checkColor: Colors.blue,
           buttonText: Text(
             "Müzik Alt Kategorileri",
-            style: TextStyle(fontSize: 20, color: Colors.white),
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           selectedColor: Colors.black26,
           barrierColor: Colors.transparent,
@@ -218,7 +219,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           checkColor: Colors.blue,
           buttonText: Text(
             "Tiyatro Alt Kategorileri",
-            style: TextStyle(fontSize: 20, color: Colors.white),
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           selectedColor: Colors.black26,
           // decoration: BoxDecoration(color: Colors.white),
@@ -261,7 +263,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           checkColor: Colors.blue,
           buttonText: Text(
             "Dans Alt Kategorileri",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           selectedColor: Colors.black26,
           barrierColor: Colors.transparent,
@@ -305,7 +307,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           checkColor: Colors.white,
           buttonText: Text(
             "Görsel Sanatlar Alt Kategorileri",
-            style: TextStyle(fontSize: 20, color: Colors.white),
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           selectedColor: Colors.black26,
           barrierColor: Colors.transparent,

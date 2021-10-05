@@ -128,6 +128,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_ABOUT_DODACT);
             },
           ),
+
           ListTile(
             leading: Icon(Icons.logout),
             title: Text("Çıkış Yap", style: TextStyle(fontSize: 18)),

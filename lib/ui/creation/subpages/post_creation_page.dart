@@ -19,6 +19,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:youtube_metadata/youtube_metadata.dart';
 
 enum Content { Goruntu, Video, Ses }
 enum Category { Tiyatro, Resim, Muzik, Dans }
@@ -48,6 +49,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   bool isAdWatched = false;
   bool isRewardedAdReady = false;
+  bool isAvailableYoutubeLink = false;
 
   String chosenCompany;
 
@@ -164,6 +166,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           height: dynamicHeight(1),
           decoration: BoxDecoration(
             image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
               image: AssetImage(kBackgroundImage),
               fit: BoxFit.cover,
             ),
@@ -301,6 +305,12 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                               onEditingComplete: () async {
                                 FocusScope.of(context).unfocus();
                               },
+                              onChanged: (value) {
+                                setState(() {
+                                  isAvailableYoutubeLink = false;
+                                  checkYoutubeLink(value);
+                                });
+                              },
                               decoration: InputDecoration(
                                   icon: Icon(
                                     FontAwesome5Brands.youtube,
@@ -325,8 +335,15 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                               ),
                             ),
                           ),
-                          IconButton(
-                              onPressed: () async {}, icon: Icon(Icons.check))
+                          isAvailableYoutubeLink
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.check),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.close),
+                                ),
                         ],
                       ),
                     ],
@@ -664,25 +681,42 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Future<void> formSubmit() async {
-    if (_formKey.currentState.saveAndValidate()) {
-      print("form submitted");
-      try {
-        if (widget.contentType == "Görüntü") {
-          var hasImage = checkPostHasImages();
-          if (hasImage) {
-            await uploadPost();
+    await checkYoutubeLink(_formKey.currentState.value["youtubeLink"]);
+    if (isAvailableYoutubeLink) {
+      if (_formKey.currentState.saveAndValidate()) {
+        print("form submitted");
+        try {
+          if (widget.contentType == "Görüntü") {
+            var hasImage = checkPostHasImages();
+            if (hasImage) {
+              await uploadPost();
+            } else {
+              await CommonMethods()
+                  .showErrorDialog(context, "Bir görüntü seçmelisin");
+            }
           } else {
-            await CommonMethods()
-                .showErrorDialog(context, "Bir görüntü seçmelisin");
+            await uploadPost();
           }
-        } else {
-          await uploadPost();
+        } catch (e) {
+          logger.e("Form submit edilirken hata oluştu: " + e.toString());
         }
-      } catch (e) {
-        logger.e("Form submit edilirken hata oluştu: " + e.toString());
+      } else {
+        print("form not submitted");
       }
-    } else {
-      print("form not submitted");
+    }
+  }
+
+  Future<bool> checkYoutubeLink(String link) async {
+    try {
+      MetaDataModel metaData = await YoutubeMetaData.getData(link);
+      print(metaData.title);
+      setState(() {
+        isAvailableYoutubeLink = true;
+      });
+    } catch (e) {
+      _formKey.currentState.invalidateField(
+          name: "youtubeLink", errorText: "Geçersiz youtube linki");
+      print(e);
     }
   }
 

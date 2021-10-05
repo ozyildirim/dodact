@@ -25,10 +25,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 title: Text(user.education),
               )
             : Container(),
-        ListTile(
-          leading: Icon(Icons.category),
-          title: Text(user.mainInterest),
-        ),
+
         user.profession != null && user.profession.isNotEmpty
             ? ListTile(
                 leading: Icon(Icons.work),
