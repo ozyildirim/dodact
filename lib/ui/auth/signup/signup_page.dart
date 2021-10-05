@@ -268,7 +268,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void googleSignIn() async {
-    var status = await authProvider.signInWithGoogle();
+    var status = await authProvider.signInWithGoogle(context);
     CommonMethods().showLoaderDialog(context, "Google ile giriş yapılıyor");
     if (status != AuthResultStatus.successful) {
       NavigationService.instance.pop();

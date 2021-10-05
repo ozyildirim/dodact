@@ -3,6 +3,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
+import 'package:flutter/material.dart';
 
 enum AppMode { DEBUG, RELEASE }
 
@@ -38,11 +39,11 @@ class AuthRepository {
     }
   }
 
-  Future<UserObject> signInWithGoogle() async {
+  Future<UserObject> signInWithGoogle(BuildContext context) async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInWithGoogle();
     } else {
-      UserObject _user = await _firebaseAuthService.signInWithGoogle();
+      UserObject _user = await _firebaseAuthService.signInWithGoogle(context);
       bool _result = await _firebaseUserService.save(_user);
       if (_result) {
         return await _firebaseUserService.readUser(_user.uid);

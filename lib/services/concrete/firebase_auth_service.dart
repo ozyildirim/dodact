@@ -1,6 +1,9 @@
+import 'package:dodact_v1/common/methods.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
@@ -45,10 +48,12 @@ class FirebaseAuthService {
   }
 
   @override
-  Future<UserObject> signInWithGoogle() async {
+  Future<UserObject> signInWithGoogle(BuildContext context) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+
+    CommonMethods().showLoaderDialog(context, "Lütfen Bekleyin");
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -64,6 +69,7 @@ class FirebaseAuthService {
             await _firebaseAuth.signInWithCredential(credential);
 
         var user = userCredential.user;
+        NavigationService.instance.pop();
         return _userFromFirebase(user);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
@@ -71,10 +77,12 @@ class FirebaseAuthService {
         } else if (e.code == 'invalid-credential') {
           // handle the error here
         }
+        NavigationService.instance.pop();
       } catch (e) {
         // handle the error here
       }
     } else {
+      NavigationService.instance.pop();
       return null;
     }
   }

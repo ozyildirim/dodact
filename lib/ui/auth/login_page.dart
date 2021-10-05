@@ -38,8 +38,9 @@ class _LogInPageState extends BaseState<LogInPage> {
   // }
 
   void _signInWithGoogle() async {
-    var status = await authProvider.signInWithGoogle();
     CommonMethods().showLoaderDialog(context, "Google ile giriş yapılıyor");
+    var status = await authProvider.signInWithGoogle(context);
+
     if (status != AuthResultStatus.successful) {
       NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {

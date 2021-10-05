@@ -41,19 +41,19 @@ class UserRepository {
     }
   }
 
-  Future<UserObject> signInWithGoogle() async {
-    if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInWithGoogle();
-    } else {
-      UserObject _user = await _firebaseAuthService.signInWithGoogle();
-      bool _result = await _firestoreUserService.save(_user);
-      if (_result) {
-        return await _firestoreUserService.readUser(_user.uid);
-      } else {
-        return null;
-      }
-    }
-  }
+  // Future<UserObject> signInWithGoogle() async {
+  //   if (appMode == AppMode.DEBUG) {
+  //     return await _fakeAuthService.signInWithGoogle();
+  //   } else {
+  //     UserObject _user = await _firebaseAuthService.signInWithGoogle();
+  //     bool _result = await _firestoreUserService.save(_user);
+  //     if (_result) {
+  //       return await _firestoreUserService.readUser(_user.uid);
+  //     } else {
+  //       return null;
+  //     }
+  //   }
+  // }
 
   // @override
   // Future<UserObject> signInWithFacebook() async {

@@ -284,7 +284,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                     children: [
                       Container(
                         color: Colors.white60,
-                        child: Text("İçerik Açıklaması",
+                        child: Text("Youtube Linki",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
