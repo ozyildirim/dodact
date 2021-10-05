@@ -24,12 +24,12 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
     return Column(
       children: [
         Container(
+          padding: EdgeInsets.all(18),
           color: Colors.white54,
           width: double.infinity,
           height: 60,
           child: TabBar(
             labelPadding: EdgeInsets.all(2),
-            padding: EdgeInsets.all(18),
             labelColor: Colors.black,
             labelStyle: TextStyle(fontSize: 16),
             controller: _controller,

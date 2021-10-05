@@ -25,11 +25,11 @@ class _UserProfileBodyState extends State<UserProfileBody>
     return Column(
       children: [
         Container(
+          padding: EdgeInsets.all(18),
           width: size.width,
           height: 60,
           child: TabBar(
             labelPadding: EdgeInsets.all(2),
-            padding: EdgeInsets.all(18),
             labelColor: Colors.black,
             // labelStyle: TextStyle(fontSize: 10),
             controller: _controller,
