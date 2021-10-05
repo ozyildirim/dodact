@@ -1,15 +1,19 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-class InterestsPage extends StatefulWidget {
+class InterestRegistrationPage extends StatefulWidget {
   @override
-  _InterestsPageState createState() => _InterestsPageState();
+  _InterestRegistrationPageState createState() =>
+      _InterestRegistrationPageState();
 }
 
-class _InterestsPageState extends BaseState<InterestsPage> {
-  bool isUpdated = false;
+class _InterestRegistrationPageState
+    extends BaseState<InterestRegistrationPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -64,39 +68,38 @@ class _InterestsPageState extends BaseState<InterestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery.of(context);
-    return Scaffold(
-      floatingActionButton: isUpdated
-          ? FloatingActionButton(
-              onPressed: updateUserInterests,
-              child: Icon(Icons.cloud_upload_rounded),
-            )
-          : Container(),
-      appBar: AppBar(
-        title: Text('İlgi Alanları'),
-      ),
-      body: Container(
-        width: dynamicWidth(1),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          key: _scaffoldKey,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              submitInterests();
+            },
+            child: Icon(Icons.save),
           ),
-        ),
-        // child: choiceWidget(),
-        child: ListView(
-          // scrollDirection: Axis.horizontal,
-          children: [
-            musicSelector(),
-            danceSelector(),
-            theaterSelector(),
-            visualArtSelector()
-          ],
-        ),
-      ),
-    );
+          body: Container(
+            width: dynamicWidth(1),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                image: AssetImage(kBackgroundImage),
+                fit: BoxFit.cover,
+              ),
+            ),
+            // child: choiceWidget(),
+            child: ListView(
+              // scrollDirection: Axis.horizontal,
+              children: [
+                musicSelector(),
+                danceSelector(),
+                theaterSelector(),
+                visualArtSelector()
+              ],
+            ),
+          ),
+        ));
   }
 
   List<String> musicCategories = [
@@ -188,9 +191,6 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           searchHint: "Ara",
           onConfirm: (values) {
             selectedMusicValues = values;
-            setState(() {
-              isUpdated = true;
-            });
           },
         ),
       ),
@@ -231,9 +231,6 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           searchHint: "Ara",
           onConfirm: (values) {
             selectedTheaterValues = values;
-            setState(() {
-              isUpdated = true;
-            });
           },
         ),
       ),
@@ -274,9 +271,6 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           searchHint: "Ara",
           onConfirm: (values) {
             selectedDanceValues = values;
-            setState(() {
-              isUpdated = true;
-            });
           },
         ),
       ),
@@ -318,9 +312,6 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           searchHint: "Ara",
           onConfirm: (values) {
             selectedVisualArtValues = values;
-            setState(() {
-              isUpdated = true;
-            });
           },
         ),
       ),
@@ -339,8 +330,55 @@ class _InterestsPageState extends BaseState<InterestsPage> {
     ];
 
     await authProvider.updateUserInterests(interests);
-    setState(() {
-      isUpdated = false;
-    });
+  }
+
+  void submitInterests() async {
+    try {
+      await updateUserInterests();
+      Future.delayed(Duration(seconds: 2), () {
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: new Duration(seconds: 2),
+          content: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // new CircularProgressIndicator(),
+              Expanded(
+                child: new Text(
+                  "Bir hata meydana geldi.",
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            ],
+          ),
+        ));
+      });
+      navigateLanding();
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        duration: new Duration(seconds: 2),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                "Bir hata meydana geldi.",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ));
+    }
+  }
+
+  void navigateLanding() {
+    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
   }
 }

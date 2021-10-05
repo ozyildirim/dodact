@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:dodact_v1/locator.dart';
-import 'package:dodact_v1/model/interest_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
-import 'package:dodact_v1/services/concrete/firebase_interest_service.dart';
+
 import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
@@ -45,7 +44,6 @@ class AuthProvider extends ChangeNotifier {
     try {
       currentUser = await _authRepository.currentUser();
       getUserFavoritePosts();
-      getUserInterests();
       notifyListeners();
 
       return currentUser;
@@ -215,22 +213,23 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getUserInterests() async {
-    try {
-      currentUser.interests =
-          await FirebaseInterestService().getUserInterests(currentUser.uid);
-      notifyListeners();
-    } catch (e) {
-      logger.e("AuthProvider getUserInterests error: " + e.toString());
-    }
-  }
+  // Future<void> getUserInterests() async {
+  //   try {
+  //     currentUser.interests =
+  //         await FirebaseInterestService().getUserInterests(currentUser.uid);
+  //     notifyListeners();
+  //   } catch (e) {
+  //     logger.e("AuthProvider getUserInterests error: " + e.toString());
+  //   }
+  // }
 
-  Future<void> updateUserInterests(List<InterestModel> interests) async {
+  Future<void> updateUserInterests(List<Map<String, dynamic>> interests) async {
     try {
-      await FirebaseInterestService()
-          .updateUserInterests(currentUser.uid, interests);
+      var newData = {'interests': interests};
+      await _authRepository.updateCurrentUser(newData, currentUser.uid);
       currentUser.interests = interests;
       notifyListeners();
+      logger.i("Bilgiler güncellendi");
     } catch (e) {
       logger.e("AuthProvider updateUserInterests error: " + e.toString());
     }

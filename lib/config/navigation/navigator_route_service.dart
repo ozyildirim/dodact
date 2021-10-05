@@ -16,6 +16,7 @@ import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/general/subpages/contributed_post_list_page.dart';
 import 'package:dodact_v1/ui/general/subpages/contributions_page.dart';
+import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
 import 'package:dodact_v1/ui/group/screens/group_detail_page.dart';
 import 'package:dodact_v1/ui/group/screens/groups_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_add_member_page.dart';
@@ -26,8 +27,7 @@ import 'package:dodact_v1/ui/group/subpages/group_member_management_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_post_management_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/insterests_page.dart';
-import 'package:dodact_v1/ui/interest/temporary_interests_page.dart';
-import 'package:dodact_v1/ui/interest/temporary_registration_interests_page.dart';
+import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/applications_page.dart';
@@ -43,11 +43,10 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/social_accoun
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_contributions_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/notifications/user_invitations_page.dart';
+import 'package:dodact_v1/ui/profile/screens/notifications/user_notifications_page.dart';
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
-import 'package:dodact_v1/ui/profile/screens/notifications/user_notifications_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
-import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -68,16 +67,11 @@ class NavigationRouteManager {
       case k_ROUTE_REGISTER:
         return _navigateToDefault(SignUpPage(), settings);
 
+      case k_ROUTE_INTEREST_REGISTRATION:
+        return _navigateToDefault(InterestRegistrationPage(), settings);
+
       case k_ROUTE_INTERESTS_CHOICE:
-        return _navigateToDefault(
-            InterestsPage(navigatedFromRegistration: args), settings);
-
-      case k_ROUTE_TEMPORARY_INTERESTS_CHOICE:
-        return _navigateToDefault(TemporaryInterestsPage(), settings);
-
-      case k_ROUTE_TEMPORARY_REGISTRATION_INTERESTS_CHOICE:
-        return _navigateToDefault(
-            TemporaryRegistrationInterestsPage(), settings);
+        return _navigateToDefault(InterestsPage(), settings);
 
       case k_ROUTE_HOME:
         return _navigateToDefault(HomePage(), settings);

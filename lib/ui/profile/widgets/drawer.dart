@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -97,15 +99,15 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                   .navigate(k_ROUTE_INTERESTS_CHOICE, args: false);
             },
           ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title:
-                Text("Geçici İlgi Alanlarım", style: TextStyle(fontSize: 18)),
-            onTap: () {
-              NavigationService.instance
-                  .navigate(k_ROUTE_TEMPORARY_INTERESTS_CHOICE);
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.settings),
+          //   title:
+          //       Text("Geçici İlgi Alanlarım", style: TextStyle(fontSize: 18)),
+          //   onTap: () {
+          //     NavigationService.instance
+          //         .navigate(k_ROUTE_TEMPORARY_INTERESTS_CHOICE);
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.report),
             title:
@@ -149,18 +151,19 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
   }
 
   setBackgroundImage() {
-    switch (authProvider.currentUser.mainInterest) {
-      case "Tiyatro":
+    var randomNumber = Random().nextInt(3);
+    switch (randomNumber) {
+      case 0:
         return "assets/images/app/interests/tiyatro.jpeg";
         break;
-      case "Müzik":
+      case 1:
         return "assets/images/app/interests/muzik.jpeg";
         break;
-      case "Dans":
+      case 2:
         return "assets/images/app/interests/dans.jpeg";
         break;
-      case "Görsel Sanatlar":
-        return "assets/images/app/interests/resim.jpeg";
+      case 3:
+        return "assets/images/app/interests/gorsel_sanatlar.jpeg";
         break;
       default:
         return "assets/images/app/interests/tiyatro.jpeg";

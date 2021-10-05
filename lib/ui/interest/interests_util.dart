@@ -47,7 +47,7 @@ List<InterestType> categoryList = [
   new InterestType(
       id: "3",
       name: "Görsel Sanatlar",
-      coverPhotoUrl: "assets/images/app/interests/resim.jpeg",
+      coverPhotoUrl: "assets/images/app/interests/gorsel_sanatlar.jpeg",
       subCategories: [
         "Graffiti",
         "Illustrasyon",

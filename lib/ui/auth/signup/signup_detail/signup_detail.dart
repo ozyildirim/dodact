@@ -34,7 +34,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
 
   String name;
-  String city;
+  String location;
 
   int _currentStep = 0;
 
@@ -51,6 +51,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     if (formKey.currentState.saveAndValidate()) {
       _currentStep < 1
           ? setState(() {
+              location = formKey.currentState.value['location'];
+              name = formKey.currentState.value['name'];
               _currentStep++;
             })
           : null;
@@ -350,10 +352,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void submitForm() async {
     if (formKey.currentState.saveAndValidate()) {
-      CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
-
-      var name = formKey.currentState.value['name'].toString().trim();
-      var location = formKey.currentState.value['location'].toString().trim();
+      // CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
 
       var username = formKey.currentState.value['username'].toString().trim();
 
@@ -366,8 +365,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           location: location,
         );
         CommonMethods().hideDialog();
-        NavigationService.instance
-            .navigate(k_ROUTE_TEMPORARY_REGISTRATION_INTERESTS_CHOICE);
+        navigateInterestSelectionPage();
       } catch (e) {
         showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
       }
@@ -423,6 +421,11 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   List<String> createSearchKeywords(String username) {
     List<String> searchKeywords = [];
+
+    var splittedUsername = username.split(" ");
+    splittedUsername.forEach((word) {
+      searchKeywords.add(word.toLowerCase());
+    });
 
     for (int i = 1; i < username.length; i++) {
       searchKeywords.add(username.substring(0, i).toLowerCase());
@@ -488,7 +491,6 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void navigateInterestSelectionPage() async {
-    NavigationService.instance
-        .navigateReplacement(k_ROUTE_INTERESTS_CHOICE, args: true);
+    NavigationService.instance.navigate(k_ROUTE_INTEREST_REGISTRATION);
   }
 }

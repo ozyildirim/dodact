@@ -4,10 +4,9 @@ const k_ROUTE_WELCOME = "/welcome";
 const k_ROUTE_ABOUT_DODACT = "/about";
 const k_ROUTE_LOGIN = '/login';
 const k_ROUTE_REGISTER = '/signup';
+const k_ROUTE_INTEREST_REGISTRATION = '/interest-registration';
 const k_ROUTE_INTERESTS_CHOICE = '/interest_choice';
-const k_ROUTE_TEMPORARY_REGISTRATION_INTERESTS_CHOICE =
-    '/temporary_registration_interest_choice';
-const k_ROUTE_TEMPORARY_INTERESTS_CHOICE = '/temporary_interest_choice';
+
 const k_ROUTE_HOME = "/home";
 const k_ROUTE_CREATION = "/creation";
 const k_ROUTE_SEARCH = '/search';

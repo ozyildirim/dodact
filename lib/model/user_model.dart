@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/model/interest_model.dart';
 
 class UserObject {
   String uid;
@@ -27,7 +26,7 @@ class UserObject {
   bool isVerified;
 
   List<String> favoritedPosts = [];
-  List<InterestModel> interests;
+  List<Map<String, dynamic>> interests;
   List<String> followers = [];
   List<String> following = [];
 
@@ -63,6 +62,7 @@ class UserObject {
     this.hiddenLocation,
     this.newUser,
     this.userDescription,
+    this.interests,
     this.education,
     this.profession,
     this.searchKeywords,
@@ -91,6 +91,8 @@ class UserObject {
     userData['linkedInLink'] = this.linkedInLink;
     userData['soundcloudLink'] = this.soundcloudLink;
     userData['pinterestLink'] = this.pinterestLink;
+    userData['interests'] = this.interests;
+
     userData['hiddenMail'] = this.hiddenMail;
     userData['hiddenLocation'] = this.hiddenLocation;
     userData['newUser'] = this.newUser ?? true;
@@ -128,6 +130,7 @@ class UserObject {
         hiddenMail = map['hiddenMail'],
         hiddenLocation = map['hiddenLocation'],
         newUser = map['newUser'] ?? true,
+        interests = map['interests'],
         education = map['education'] ?? '',
         userDescription = map['userDescription'] ?? '',
         profession = map['profession'] ?? '',
@@ -152,6 +155,7 @@ class UserObject {
     instagramUsername = doc.data()['instagramUsername'];
     youtubeLink = doc.data()['youtubeLink'];
     dribbbleLink = doc.data()['dribbbleLink'];
+    interests = doc.data()['interests']?.cast<Map<String, dynamic>>();
     linkedInLink = doc.data()['linkedInLink'];
     soundcloudLink = doc.data()['soundcloudLink'];
     pinterestLink = doc.data()['pinterestLink'];
