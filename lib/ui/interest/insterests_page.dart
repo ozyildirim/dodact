@@ -129,8 +129,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
     'Samba',
     'Zumba',
     'Zeybek',
-    'Oryantal'
-        'Roman',
+    'Oryantal',
+    'Roman',
     'Tango'
   ];
   List<String> visualArtCategories = [

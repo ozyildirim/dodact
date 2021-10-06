@@ -63,14 +63,10 @@ class _GroupsPageState extends State<GroupsPage> {
           ),
         ),
         height: mediaQuery.size.height - 56,
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: FilteredGroupView(),
-              ),
-            )
-          ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: FilteredGroupView(),
+          ),
         ),
       ),
     );

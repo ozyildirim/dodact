@@ -34,7 +34,7 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
         return Center(
           child: Text(
             "Herhangi bir etkinlik oluşturulmamış.",
-            style: TextStyle(fontSize: 22),
+            style: TextStyle(fontSize: kPageCenteredTextSize),
           ),
         );
       }
@@ -49,7 +49,7 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
                 Center(
                   child: Text(
                     "Herhangi bir etkinlik oluşturulmamış.",
-                    style: TextStyle(fontSize: 22),
+                    style: TextStyle(fontSize: kPageCenteredTextSize),
                   ),
                 )
               ],
@@ -62,81 +62,82 @@ class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
   }
 
   Widget _buildUserEventCard(EventModel event) {
+    var size = MediaQuery.of(context).size;
     bool isEnded = isEventEnded(event);
 
     return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InkWell(
-          onTap: () {
-            NavigationService.instance
-                .navigate(k_ROUTE_EVENT_DETAIL, args: event);
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Stack(children: [
-              CachedNetworkImage(
-                imageUrl: event.eventImages[0],
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    height: 320,
-                    width: 250,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          event.eventImages[0],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              Positioned(
-                bottom: 10,
-                child: Container(
-                  width: 250,
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          NavigationService.instance
+              .navigate(k_ROUTE_EVENT_DETAIL, args: event);
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(children: [
+            CachedNetworkImage(
+              imageUrl: event.eventImages[0],
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  height: size.height * 0.4,
+                  width: size.width * 0.5,
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey[50].withOpacity(0.8),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      event.eventTitle,
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        event.eventImages[0],
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    subtitle: Text(
-                        DateFormat("dd/MM/yyyy")
-                            .format(event.eventStartDate)
-                            .toString(),
-                        style: TextStyle(fontSize: 18)),
                   ),
-                ),
-              ),
-              Positioned(
-                top: 1,
-                right: 1,
-                child: isEnded
-                    ? Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.white,
-                            child:
-                                Icon(Icons.hourglass_full, color: Colors.grey),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey[50].withOpacity(0.8),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          event.eventTitle,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      )
-                    : Container(),
-              )
-            ]),
-          ),
-        ));
+                        subtitle: Text(
+                            DateFormat("dd/MM/yyyy")
+                                .format(event.eventStartDate)
+                                .toString(),
+                            style: TextStyle(fontSize: 18)),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            Positioned(
+              top: 1,
+              right: 1,
+              child: isEnded
+                  ? Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.hourglass_full, color: Colors.grey),
+                        ),
+                      ),
+                    )
+                  : Container(),
+            )
+          ]),
+        ),
+      ),
+    );
   }
 
   bool isEventEnded(EventModel event) {

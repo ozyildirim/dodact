@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_event_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_group_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_info_part.dart';
@@ -21,67 +22,63 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(
           padding: EdgeInsets.all(18),
-          color: Colors.white54,
-          width: double.infinity,
-          height: 60,
+          width: size.width,
+          height: size.height * 0.1,
           child: TabBar(
             labelPadding: EdgeInsets.all(2),
             labelColor: Colors.black,
-            labelStyle: TextStyle(fontSize: 16),
             controller: _controller,
             indicatorSize: TabBarIndicatorSize.label,
             tabs: const [
               const Tab(
                 child: Text(
                   "Hakkında",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Paylaşımlar",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Gruplar",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Etkinlikler",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
             ],
           ),
         ),
         Expanded(
-          child: Container(
-            height: 320,
-            child: TabBarView(
-              controller: _controller,
-              children: [
-                Container(
-                  child: OthersProfileInfoTab(),
-                ),
-                Container(
-                  child: OthersProfilePostsTab(),
-                ),
-                Container(
-                  child: OthersProfileGroupsTab(),
-                ),
-                Container(
-                  child: OthersProfileEventsTab(),
-                ),
-              ],
-            ),
+          child: TabBarView(
+            controller: _controller,
+            children: [
+              Container(
+                child: OthersProfileInfoTab(),
+              ),
+              Container(
+                child: OthersProfilePostsTab(),
+              ),
+              Container(
+                child: OthersProfileGroupsTab(),
+              ),
+              Container(
+                child: OthersProfileEventsTab(),
+              ),
+            ],
           ),
         )
       ],

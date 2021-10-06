@@ -56,36 +56,14 @@ class _EventsPageState extends BaseState<EventsPage> {
         child: RefreshIndicator(
           onRefresh: () => _refreshEvents(),
           child: Container(
-              height: dynamicHeight(1),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: filterCardContainer(
-                  //     Container(
-                  //       child: Text(
-                  //         "selam",
-                  //         overflow: TextOverflow.ellipsis,
-                  //       ),
-                  //     ),
-                  //     IconButton(
-                  //       onPressed: () {
-                  //         showFilterDialog();
-                  //       },
-                  //       icon: Icon(Icons.filter_list),
-                  //     ),
-                  //     width: dynamicWidth(0.9),
-                  //   ),
-                  // ),
-
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: FilteredEventView(),
-                    ),
-                  ),
-                ],
-              )),
+            height: dynamicHeight(1),
+            width: double.infinity,
+            child: Center(
+              child: SingleChildScrollView(
+                child: FilteredEventView(),
+              ),
+            ),
+          ),
         ),
       ),
     );

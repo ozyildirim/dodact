@@ -68,21 +68,13 @@ class _UserContributionsPageState extends BaseState<UserContributionsPage> {
         );
       } else {
         if (provider.contributions.isEmpty) {
-          return Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Henüz bir yardım bulunmamakta.",
-                    style: TextStyle(fontSize: 24)),
-                SizedBox(
-                  height: 40,
-                ),
-                Text(
-                  "Sen de içerik ve etkinlik oluşturarak kurumlara/topluluklara yardım edebilirsin!",
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                )
-              ],
+          return Center(
+            child: Container(
+              child: Text(
+                "Henüz bir yardım bulunmamakta. \n\nSen de içerik ve etkinlik oluşturarak kurumlara/topluluklara yardım edebilirsin!",
+                style: TextStyle(fontSize: kPageCenteredTextSize),
+                textAlign: TextAlign.center,
+              ),
             ),
           );
         } else {

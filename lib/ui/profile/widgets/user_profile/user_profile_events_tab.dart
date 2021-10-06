@@ -45,7 +45,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
           return Center(
             child: Text(
               "Herhangi bir etkinlik oluşturulmamış.",
-              style: TextStyle(fontSize: 22),
+              style: TextStyle(fontSize: kPageCenteredTextSize),
             ),
           );
         }

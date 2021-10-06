@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_events_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_groups_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_info_tab.dart';
@@ -27,7 +28,7 @@ class _UserProfileBodyState extends State<UserProfileBody>
         Container(
           padding: EdgeInsets.all(18),
           width: size.width,
-          height: 60,
+          height: size.height * 0.1,
           child: TabBar(
             labelPadding: EdgeInsets.all(2),
             labelColor: Colors.black,
@@ -38,25 +39,25 @@ class _UserProfileBodyState extends State<UserProfileBody>
               const Tab(
                 child: Text(
                   "Hakkında",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Paylaşımlar",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Gruplar",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
                 child: Text(
                   "Etkinlikler",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
             ],

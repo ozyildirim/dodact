@@ -154,7 +154,6 @@ class _OtherUserProfileSubpageState extends State<OtherUserProfileSubpage> {
           Expanded(
             child: OthersProfileBody(),
           ),
-          SizedBox(height: kToolbarHeight)
         ],
       ),
     );

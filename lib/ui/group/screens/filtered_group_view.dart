@@ -22,35 +22,32 @@ class FilteredGroupView extends StatelessWidget {
         if (provider.groupList != null) {
           if (provider.groupList.isNotEmpty) {
             List<GroupModel> groups = provider.groupList;
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        primary: false,
-                        scrollDirection: Axis.vertical,
-                        itemCount: provider.groupList.length,
-                        itemBuilder: (context, index) {
-                          var groupItem = provider.groupList[index];
-                          return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: buildCustomListTile(context, groupItem));
-                        }),
-                  ),
-                ),
-              ],
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    scrollDirection: Axis.vertical,
+                    itemCount: provider.groupList.length,
+                    itemBuilder: (context, index) {
+                      var groupItem = provider.groupList[index];
+                      // return Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: buildCustomListTile(context, groupItem));
+                      return buildGroupCard(size, groupItem);
+                    }),
+              ),
             );
           } else {
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Center(
                 child: Container(
-                  color: Colors.white60,
                   child: Text(
-                    "Bu girdilerle eşleşen bir grup bulunmuyor.",
-                    style: TextStyle(fontSize: 22),
+                    "Eşleşen bir grup bulunmuyor.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: kPageCenteredTextSize),
                   ),
                 ),
               ),
@@ -65,6 +62,75 @@ class FilteredGroupView extends StatelessWidget {
           );
         }
       },
+    );
+  }
+
+  buildGroupCard(Size size, GroupModel group) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          NavigationService.instance
+              .navigate(k_ROUTE_GROUP_DETAIL, args: group);
+        },
+        child: Container(
+          height: size.height * 0.15,
+          child: Card(
+            color: Colors.grey[100],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: size.width * 0.1,
+                ),
+                Container(
+                  height: size.height * 0.10,
+                  width: size.width * 0.25,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: CachedNetworkImageProvider(
+                            group.groupProfilePicture),
+                      )),
+                ),
+                SizedBox(
+                  width: size.width * 0.08,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: Text(
+                        group.groupName,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: Text(
+                        group.groupSubtitle,
+                        style: TextStyle(fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 

@@ -132,8 +132,8 @@ class _InterestRegistrationPageState
     'Samba',
     'Zumba',
     'Zeybek',
-    'Oryantal'
-        'Roman',
+    'Oryantal',
+    'Roman',
     'Tango'
   ];
   List<String> visualArtCategories = [

@@ -26,6 +26,7 @@ const kButtonFontSize = 20;
 const kDrawerTileTitleSize = 20.0;
 const kSettingsTitleSize = 18.0;
 const kPageCenteredTextSize = 20.0;
+const kUserProfileTabLabelSize = 16.0;
 
 const kFontFamily = "Raleway";
 
