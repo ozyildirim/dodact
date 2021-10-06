@@ -84,12 +84,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           children: <Widget>[
             Row(
               children: [
-                Container(
-                  color: Colors.white70,
-                  child: Text(
-                    "Adın Soyadın",
-                    style: TextStyle(fontSize: 18),
-                  ),
+                Text(
+                  "Adın Soyadın",
+                  style: TextStyle(fontSize: 18),
                 ),
                 SizedBox(
                   width: 6,
@@ -127,12 +124,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             SizedBox(
               height: 8,
             ),
-            Container(
-              color: Colors.white70,
-              child: Text(
-                "Lokasyon",
-                style: TextStyle(fontSize: 18),
-              ),
+            Text(
+              "Lokasyon",
+              style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 4),
             TextFieldContainer(
@@ -203,12 +197,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                 ]),
               ),
             ),
-            Container(
-              color: Colors.white70,
-              child: Text(
-                "Kullanıcı Adın",
-                style: TextStyle(fontSize: 18),
-              ),
+            Text(
+              "Kullanıcı Adın",
+              style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 4),
             TextFieldContainer(
@@ -298,14 +289,11 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                               await submitForm();
                             },
                           ),
-                    Container(
-                      color: Colors.white70,
-                      child: TextButton(
-                        onPressed: back,
-                        child: const Text(
-                          'Geri',
-                          style: TextStyle(fontSize: 18),
-                        ),
+                    TextButton(
+                      onPressed: back,
+                      child: const Text(
+                        'Geri',
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
                   ],

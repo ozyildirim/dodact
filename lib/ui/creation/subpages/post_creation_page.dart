@@ -194,11 +194,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         key: _formKey,
         child: ListView(
           children: [
-            Container(
-              color: Colors.white70,
-              child: Text("İçerik Başlığı",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            ),
+            Text("İçerik Başlığı",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             SizedBox(height: 4),
             TextFieldContainer(
               child: FormBuilderTextField(

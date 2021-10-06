@@ -14,6 +14,7 @@ class GroupModel {
   DateTime creationDate;
   String groupLocation;
   InvitationModel invitations;
+  bool visible;
   //TODO: bunu servisten çek
 
   GroupModel({
@@ -28,6 +29,7 @@ class GroupModel {
     this.groupMemberList,
     this.creationDate,
     this.groupLocation,
+    this.visible,
   });
 
   GroupModel.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class GroupModel {
     groupMemberList = json['groupMemberList']?.cast<String>();
     creationDate = (json['creationDate'] as Timestamp).toDate();
     groupLocation = json['groupLocation'];
+    visible = json['visible'];
   }
 
   Map<String, dynamic> toJson() {
@@ -57,6 +60,7 @@ class GroupModel {
     data['groupMemberList'] = this.groupMemberList;
     data['creationDate'] = FieldValue.serverTimestamp();
     data['groupLocation'] = this.groupLocation;
+    data['visible'] = this.visible;
 
     return data;
   }

@@ -48,9 +48,8 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
               var groupItem = provider.userGroupList[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    color: Colors.white70,
-                    child: buildCustomListTile(context, groupItem)),
+                child:
+                    Container(child: buildCustomListTile(context, groupItem)),
               );
             });
       }

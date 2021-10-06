@@ -112,12 +112,9 @@ class _UserSocialAccountsSettingsState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Youtube",
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Text(
+                    "Youtube",
+                    style: TextStyle(fontSize: 18),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -148,12 +145,9 @@ class _UserSocialAccountsSettingsState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "LinkedIn",
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Text(
+                    "LinkedIn",
+                    style: TextStyle(fontSize: 18),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -184,12 +178,9 @@ class _UserSocialAccountsSettingsState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Dribbble",
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Text(
+                    "Dribbble",
+                    style: TextStyle(fontSize: 18),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -220,12 +211,9 @@ class _UserSocialAccountsSettingsState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Pinterest",
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Text(
+                    "Pinterest",
+                    style: TextStyle(fontSize: 18),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -257,12 +245,9 @@ class _UserSocialAccountsSettingsState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "SoundCloud",
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Text(
+                    "SoundCloud",
+                    style: TextStyle(fontSize: 18),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -294,12 +279,9 @@ class _UserSocialAccountsSettingsState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Instagram Kullanıcı Adı",
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Text(
+                    "Instagram Kullanıcı Adı",
+                    style: TextStyle(fontSize: 18),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,

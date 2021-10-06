@@ -47,7 +47,6 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
     var provider = Provider.of<CommentProvider>(context);
     return Slidable(
       child: Container(
-          color: Colors.white70,
           child: authorUser != null
               ? ListTile(
                   onLongPress: () {

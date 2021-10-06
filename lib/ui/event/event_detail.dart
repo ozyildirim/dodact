@@ -145,7 +145,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   Widget _buildEventDetailBody() {
     return Container(
-      color: Colors.white70,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -261,7 +260,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   Widget buildDetailTab() {
     return Container(
-      color: Colors.white70,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Text(

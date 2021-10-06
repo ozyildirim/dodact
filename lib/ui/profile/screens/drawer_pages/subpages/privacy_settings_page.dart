@@ -60,7 +60,6 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
           child: Column(
             children: [
               Container(
-                color: Colors.white70,
                 child: SwitchListTile(
                   title: Text(
                     'E-Posta Adresimi Gizle',
@@ -78,7 +77,6 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
                 ),
               ),
               Container(
-                color: Colors.white70,
                 child: SwitchListTile(
                   title: Text(
                     'Lokasyonumu Gizle',

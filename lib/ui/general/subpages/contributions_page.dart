@@ -92,18 +92,6 @@ class _ContributionsPageState extends State<ContributionsPage> {
                     : spinkit),
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.all(16.0),
-        //   child: Container(
-        //     color: Colors.white70,
-        //     height: size.height * 0.2,
-        //     child: Text(
-        //       "Yukarıdaki grafikte uygulamamız araclığıyla, sizlerin sayesinde yapılan yardımları görüntülemektesin.",
-        //       style: TextStyle(fontSize: 20),
-        //       textAlign: TextAlign.center,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

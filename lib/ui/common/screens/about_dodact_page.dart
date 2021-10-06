@@ -31,12 +31,9 @@ class AboutDodactPage extends StatelessWidget {
                     image: AssetImage(kDodactLogo),
                   ),
                 ),
-                Container(
-                  color: Colors.white70,
-                  child: Text(
-                    aboutString,
-                    style: TextStyle(fontSize: 18),
-                  ),
+                Text(
+                  aboutString,
+                  style: TextStyle(fontSize: 18),
                 ),
               ],
             ),

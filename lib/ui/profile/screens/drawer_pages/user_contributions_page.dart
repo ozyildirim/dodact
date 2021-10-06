@@ -69,7 +69,6 @@ class _UserContributionsPageState extends BaseState<UserContributionsPage> {
       } else {
         if (provider.contributions.isEmpty) {
           return Container(
-            color: Colors.white70,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

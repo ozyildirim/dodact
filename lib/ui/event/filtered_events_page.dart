@@ -21,7 +21,6 @@ class FilteredEventView extends StatelessWidget {
             return ParallaxEvents(events: sortedEvents);
           } else {
             return Container(
-              color: Colors.white70,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

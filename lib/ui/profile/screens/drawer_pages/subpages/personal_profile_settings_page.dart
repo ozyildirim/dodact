@@ -126,12 +126,9 @@ class _UserPersonalProfileSettingsPageState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   profilePicturePart(),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "E-posta Adresi",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
+                  Text(
+                    "E-posta Adresi",
+                    style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -145,12 +142,9 @@ class _UserPersonalProfileSettingsPageState
                       ),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Ad - Soyad",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
+                  Text(
+                    "Ad - Soyad",
+                    style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -182,12 +176,9 @@ class _UserPersonalProfileSettingsPageState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Kullanıcı Adı",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
+                  Text(
+                    "Kullanıcı Adı",
+                    style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -221,12 +212,9 @@ class _UserPersonalProfileSettingsPageState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Lokasyon",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
+                  Text(
+                    "Lokasyon",
+                    style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -263,12 +251,9 @@ class _UserPersonalProfileSettingsPageState
                       ),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Hakkımda",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
+                  Text(
+                    "Hakkımda",
+                    style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -299,12 +284,9 @@ class _UserPersonalProfileSettingsPageState
                       ]),
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Okul/Eğitim Kurumu",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
+                  Text(
+                    "Okul/Eğitim Kurumu",
+                    style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
@@ -335,12 +317,9 @@ class _UserPersonalProfileSettingsPageState
                       },
                     ),
                   ),
-                  Container(
-                    color: Colors.white70,
-                    child: Text(
-                      "Meslek",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
+                  Text(
+                    "Meslek",
+                    style: TextStyle(fontSize: kSettingsTitleSize),
                   ),
                   TextFieldContainer(
                     width: mediaQuery.size.width * 0.9,
