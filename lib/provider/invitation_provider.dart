@@ -24,6 +24,7 @@ class InvitationProvider with ChangeNotifier {
       return usersInvitations;
     } catch (e) {
       logger.e(e.toString());
+      return null;
     }
   }
 
@@ -80,6 +81,19 @@ class InvitationProvider with ChangeNotifier {
       return result;
     } catch (e) {
       logger.e("AcceptGroupInvitation Provider Error: " + e);
+    }
+  }
+
+  Future<void> rejectGroupInvitation(String invitationId) async {
+    try {
+      await invitationRepository.rejectGroupInvitation(invitationId);
+
+      usersInvitations
+          .removeWhere((element) => element.invitationId == invitationId);
+
+      notifyListeners();
+    } catch (e) {
+      logger.e("RejectGroupInvitation Provider Error: " + e);
     }
   }
 

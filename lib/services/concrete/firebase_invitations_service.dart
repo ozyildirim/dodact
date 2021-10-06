@@ -100,4 +100,8 @@ class FirebaseInvitationService {
       invitationsRef.doc(doc.id).delete();
     }
   }
+
+  Future rejectGroupInvitation(String invitationId) async {
+    await invitationsRef.doc(invitationId).delete();
+  }
 }

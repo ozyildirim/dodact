@@ -63,4 +63,12 @@ class InvitationRepository {
       await firebaseInvitationService.rollbackGroupInvitation(userId, groupId);
     }
   }
+
+  Future rejectGroupInvitation(String invitationId) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await firebaseInvitationService.rejectGroupInvitation(invitationId);
+    }
+  }
 }

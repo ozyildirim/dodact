@@ -77,10 +77,13 @@ class _GroupMemberSentInvitationsPageState
                       );
                     })
                 : userList.isEmpty
-                    ? Center(child: Text('Davet yok'))
+                    ? Center(
+                        child: Text('Davet yok',
+                            style: TextStyle(fontSize: kPageCenteredTextSize)))
                     : Center(child: spinkit)
             : Center(
-                child: Text('Davet yok'),
+                child: Text('Davet yok',
+                    style: TextStyle(fontSize: kPageCenteredTextSize)),
               ),
       ),
     );

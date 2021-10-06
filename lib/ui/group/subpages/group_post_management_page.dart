@@ -46,8 +46,10 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
             } else {
               if (asyncSnapshot.data.length == 0) {
                 return Center(
-                  child: Text("Grup Paylaşımı Bulunmamakta."),
-                );
+                    child: Text(
+                  "Gruba ait paylaşım bulunmuyor.",
+                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                ));
               } else {
                 return GridView.builder(
                     itemCount: asyncSnapshot.data.length,
@@ -110,8 +112,8 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                                               actions: <Widget>[
                                                 FlatButton(
                                                   child: Text("Evet"),
-                                                  onPressed: () {
-                                                    deleteGroupPost(
+                                                  onPressed: () async {
+                                                    await showDeletePostDialog(
                                                         post.postId);
                                                     Navigator.pop(context);
                                                   },
@@ -187,7 +189,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
   }
 
   showDeletePostDialog(String postId) async {
-    CoolAlert.show(
+    await CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
         text: "Bu içeriği silmek istediğinden emin misin?",

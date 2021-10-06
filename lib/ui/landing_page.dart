@@ -1,9 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/event_provider.dart';
-import 'package:dodact_v1/provider/podcast_provider.dart';
-import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';

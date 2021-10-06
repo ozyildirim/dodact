@@ -102,28 +102,25 @@ class _GroupMemberManagementPageState
           var user = groupProvider.groupMembers[index];
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Container(
-              color: Colors.white60,
-              child: ListTile(
-                leading: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(
-                      user.profilePictureURL,
-                    )),
-                title: Text(
-                  user.nameSurname != null ? user.nameSurname : user.username,
-                  style: TextStyle(fontSize: 20),
-                ),
-                subtitle: Text(user.email),
-                trailing: user.uid != groupProvider.group.founderId
-                    ? IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () async {
-                          await deleteMember(user.uid);
-                        },
-                      )
-                    : null,
+            child: ListTile(
+              leading: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                    user.profilePictureURL,
+                  )),
+              title: Text(
+                user.nameSurname,
+                style: TextStyle(fontSize: 20),
               ),
+              subtitle: Text(user.email),
+              trailing: user.uid != groupProvider.group.founderId
+                  ? IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () async {
+                        await deleteMember(user.uid);
+                      },
+                    )
+                  : null,
             ),
           );
         },
@@ -136,7 +133,6 @@ class _GroupMemberManagementPageState
 //TODO: Sayfa içerisinde güncellemiyor.
   Future<void> deleteMember(String userID) async {
     await groupProvider.removeGroupMember(userID, groupProvider.group.groupId);
-    setState(() {});
   }
 
   refreshGroup() async {

@@ -70,6 +70,36 @@ firestore.document('posts/{postId}/dodders/{dodderId}')
         });
     });
 
+
+exports.sendInvitationNotificationToUser = functions.firestore.document('invitations/{invitationId}')
+    .onCreate(async (snapshot, context) => {
+        const invitationId = context.params.invitationId;
+        const invitation = snapshot.data();
+        const invitedUserId = invitation.receiverId;
+
+
+        if (invitation.type == "InvitationType.GroupMembership") {
+            //get sender group info
+            const groupRef = groupsRef.doc(invitation.senderId);
+            const groupSnapshot = await groupRef.get();
+            const groupData = groupSnapshot.data();
+
+            const payload = {
+                notification: {
+                    title: 'Grup Katılım Daveti',
+                    body: groupData.groupName + ' tarafından davet edildin.'
+                }
+            };
+
+            //send notification to receiver user
+            var tokenRef = await tokensRef.doc(invitedUserId).get();
+            const tokenObject = tokenRef.data();
+            admin.messaging().sendToDevice(tokenObject.token, payload)
+
+        }
+    });
+
+
 exports.addUserToGroup = functions.https.onCall(async (data, context) => {
     const groupId = data.groupId;
     console.log(groupId);

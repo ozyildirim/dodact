@@ -221,7 +221,10 @@ class GroupProvider extends ChangeNotifier {
   Future<void> removeGroupMember(String userID, String groupID) async {
     try {
       await _groupRepository.removeGroupMember(userID, groupID);
-      group.groupMemberList.remove(userID);
+      var user = groupMembers.firstWhere((element) => element.uid == userID);
+      groupMembers.remove(user);
+      group.groupMemberList.remove(user.uid);
+
       notifyListeners();
     } catch (e) {
       logger.e("GroupProvider removeGroupMember error: " + e.toString());

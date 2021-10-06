@@ -30,7 +30,7 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
         return Center(
           child: Text(
             "Herhangi bir gruba dahil değilsin.",
-            style: TextStyle(fontSize: 22),
+            style: TextStyle(fontSize: kPageCenteredTextSize),
           ),
         );
       } else {
