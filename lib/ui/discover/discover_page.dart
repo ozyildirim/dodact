@@ -37,20 +37,24 @@ class _DiscoverPageState extends State<DiscoverPage>
         centerTitle: true,
         title: GFSegmentTabs(
           labelStyle: Theme.of(context).textTheme.copyWith().bodyText1,
-          unselectedLabelStyle:
-              Theme.of(context).textTheme.copyWith().bodyText1,
+          unselectedLabelStyle: Theme.of(context)
+              .textTheme
+              .copyWith(
+                  bodyText1: TextStyle(fontSize: 14, fontFamily: "Raleway"))
+              .bodyText1,
           borderRadius: BorderRadius.circular(15),
           height: GFAppBar().preferredSize.height * 0.75,
           width: mediaQuery.size.width * 0.8,
           tabController: tabController,
           tabBarColor: GFColors.LIGHT,
-          labelColor: GFColors.WHITE,
           unselectedLabelColor: GFColors.DARK,
           indicator: BoxDecoration(
-            color: GFColors.DARK,
+            // color: Colors.orange[700],
+            color: Color(0xff194d25),
             borderRadius: BorderRadius.circular(15),
           ),
-          indicatorPadding: EdgeInsets.all(8.0),
+          // indicatorPadding: EdgeInsets.all(8.0),
+
           indicatorWeight: 2.0,
           border: Border.all(color: Colors.white, width: 1.0),
           length: 3,

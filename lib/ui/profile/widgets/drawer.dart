@@ -76,7 +76,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
           ListTile(
-            enabled: false,
+            // enabled: false,
             leading: Icon(Icons.help),
             title: Text("Başvurularım", style: TextStyle(fontSize: 18)),
             onTap: () {

@@ -1,4 +1,3 @@
-import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:flutter/material.dart';
 
 class ApplicationsPage extends StatefulWidget {
@@ -17,7 +16,6 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
             Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.only(right: 6, left: 6),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: Image(
@@ -25,6 +23,7 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                             "https://ae01.alicdn.com/kf/HTB1U7dDX6LuK1Rjy0Fhq6xpdFXad.jpg")),
                   ),
                 ),
+                //TODO: Positioned ile yap
                 Column(
                   children: [
                     Container(

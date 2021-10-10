@@ -75,29 +75,29 @@ class _HomePageState extends BaseState<HomePage> {
         body: _children[selectedIndex],
         bottomNavigationBar: CurvedNavigationBar(
           animationDuration: Duration(milliseconds: 400),
-          color: Colors.orange[700],
+          color: Color(0xff194d25),
           backgroundColor: Colors.transparent,
           height: 60,
           items: [
             Icon(
               FontAwesome5Solid.home,
-              // color: Colors.white,
+              color: Colors.white,
             ),
             Icon(
               FontAwesome5Solid.globe,
-              // color: Colors.white,
+              color: Colors.white,
             ),
             Icon(
               FontAwesome5Solid.plus,
-              // color: Colors.white,
+              color: Colors.white,
             ),
             Icon(
               FontAwesome5Solid.search,
-              // color: Colors.white,
+              color: Colors.white,
             ),
             Icon(
               FontAwesome5Solid.user,
-              // color: Colors.white,
+              color: Colors.white,
             ),
           ],
           onTap: (value) {

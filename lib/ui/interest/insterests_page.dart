@@ -157,42 +157,47 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   musicSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: dynamicWidth(0.7),
-        height: dynamicHeight(0.3),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage('assets/images/app/interests/muzik.jpeg'),
-            fit: BoxFit.cover,
+      child: Card(
+        color: Colors.transparent,
+        child: Container(
+          width: dynamicWidth(0.7),
+          height: dynamicHeight(0.3),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage('assets/images/app/interests/muzik.jpeg'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: MultiSelectDialogField(
-          items: musicCategories.map((e) => MultiSelectItem(e, e)).toList(),
-          listType: MultiSelectListType.CHIP,
-          initialValue: selectedMusicValues,
-          checkColor: Colors.blue,
-          buttonText: Text(
-            "Müzik Alt Kategorileri",
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          child: MultiSelectDialogField(
+            items: musicCategories.map((e) => MultiSelectItem(e, e)).toList(),
+            listType: MultiSelectListType.CHIP,
+            initialValue: selectedMusicValues,
+            checkColor: Colors.blue,
+            buttonText: Text(
+              "Müzik Alt Kategorileri",
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            selectedColor: Colors.black26,
+            barrierColor: Colors.transparent,
+            selectedItemsTextStyle: TextStyle(color: Colors.black),
+            itemsTextStyle: TextStyle(color: Colors.black),
+            cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
+            confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
+            title: Text("Müzik"),
+            searchable: true,
+            searchHint: "Ara",
+            onConfirm: (values) {
+              selectedMusicValues = values;
+              setState(() {
+                isUpdated = true;
+              });
+            },
           ),
-          selectedColor: Colors.black26,
-          barrierColor: Colors.transparent,
-          selectedItemsTextStyle: TextStyle(color: Colors.black),
-          itemsTextStyle: TextStyle(color: Colors.black),
-          cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
-          confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
-          title: Text("Müzik"),
-          searchable: true,
-          searchHint: "Ara",
-          onConfirm: (values) {
-            selectedMusicValues = values;
-            setState(() {
-              isUpdated = true;
-            });
-          },
         ),
       ),
     );
@@ -201,42 +206,47 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   theaterSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: dynamicWidth(0.7),
-        height: dynamicHeight(0.3),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
-            fit: BoxFit.cover,
+      child: Card(
+        color: Colors.transparent,
+        child: Container(
+          width: dynamicWidth(0.7),
+          height: dynamicHeight(0.3),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: MultiSelectDialogField(
-          items: theaterCategories.map((e) => MultiSelectItem(e, e)).toList(),
-          listType: MultiSelectListType.CHIP,
-          initialValue: selectedTheaterValues,
-          checkColor: Colors.blue,
-          buttonText: Text(
-            "Tiyatro Alt Kategorileri",
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          child: MultiSelectDialogField(
+            items: theaterCategories.map((e) => MultiSelectItem(e, e)).toList(),
+            listType: MultiSelectListType.CHIP,
+            initialValue: selectedTheaterValues,
+            checkColor: Colors.blue,
+            buttonText: Text(
+              "Tiyatro Alt Kategorileri",
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            selectedColor: Colors.black26,
+            // decoration: BoxDecoration(color: Colors.white),
+            selectedItemsTextStyle: TextStyle(color: Colors.black),
+            itemsTextStyle: TextStyle(color: Colors.black),
+            cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
+            confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
+            title: Text("Tiyatro", style: TextStyle(color: Colors.black)),
+            searchable: true,
+            searchHint: "Ara",
+            onConfirm: (values) {
+              selectedTheaterValues = values;
+              setState(() {
+                isUpdated = true;
+              });
+            },
           ),
-          selectedColor: Colors.black26,
-          // decoration: BoxDecoration(color: Colors.white),
-          selectedItemsTextStyle: TextStyle(color: Colors.black),
-          itemsTextStyle: TextStyle(color: Colors.black),
-          cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
-          confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
-          title: Text("Tiyatro", style: TextStyle(color: Colors.black)),
-          searchable: true,
-          searchHint: "Ara",
-          onConfirm: (values) {
-            selectedTheaterValues = values;
-            setState(() {
-              isUpdated = true;
-            });
-          },
         ),
       ),
     );
@@ -245,41 +255,44 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   danceSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: dynamicHeight(0.3),
-        width: dynamicWidth(0.7),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage('assets/images/app/interests/dans.jpeg'),
-            fit: BoxFit.cover,
+      child: Card(
+        color: Colors.transparent,
+        child: Container(
+          height: dynamicHeight(0.3),
+          width: dynamicWidth(0.7),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage('assets/images/app/interests/dans.jpeg'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: MultiSelectDialogField(
-          items: danceCategories.map((e) => MultiSelectItem(e, e)).toList(),
-          listType: MultiSelectListType.CHIP,
-          initialValue: selectedDanceValues,
-          checkColor: Colors.blue,
-          buttonText: Text(
-            "Dans Alt Kategorileri",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          child: MultiSelectDialogField(
+            items: danceCategories.map((e) => MultiSelectItem(e, e)).toList(),
+            listType: MultiSelectListType.CHIP,
+            initialValue: selectedDanceValues,
+            checkColor: Colors.blue,
+            buttonText: Text(
+              "Dans Alt Kategorileri",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            selectedColor: Colors.black26,
+            barrierColor: Colors.transparent,
+            selectedItemsTextStyle: TextStyle(color: Colors.black),
+            itemsTextStyle: TextStyle(color: Colors.black),
+            cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
+            confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
+            title: Text("Dans"),
+            searchable: true,
+            searchHint: "Ara",
+            onConfirm: (values) {
+              selectedDanceValues = values;
+              setState(() {
+                isUpdated = true;
+              });
+            },
           ),
-          selectedColor: Colors.black26,
-          barrierColor: Colors.transparent,
-          selectedItemsTextStyle: TextStyle(color: Colors.black),
-          itemsTextStyle: TextStyle(color: Colors.black),
-          cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
-          confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
-          title: Text("Dans"),
-          searchable: true,
-          searchHint: "Ara",
-          onConfirm: (values) {
-            selectedDanceValues = values;
-            setState(() {
-              isUpdated = true;
-            });
-          },
         ),
       ),
     );
@@ -288,43 +301,49 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   visualArtSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: dynamicHeight(0.3),
-        width: dynamicWidth(0.7),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image:
-                AssetImage('assets/images/app/interests/gorsel_sanatlar.jpeg'),
-            fit: BoxFit.cover,
+      child: Card(
+        color: Colors.transparent,
+        child: Container(
+          height: dynamicHeight(0.3),
+          width: dynamicWidth(0.7),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage(
+                  'assets/images/app/interests/gorsel_sanatlar.jpeg'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: MultiSelectDialogField(
-          items: visualArtCategories.map((e) => MultiSelectItem(e, e)).toList(),
-          listType: MultiSelectListType.CHIP,
-          initialValue: selectedVisualArtValues,
-          checkColor: Colors.white,
-          buttonText: Text(
-            "Görsel Sanatlar Alt Kategorileri",
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          child: MultiSelectDialogField(
+            items:
+                visualArtCategories.map((e) => MultiSelectItem(e, e)).toList(),
+            listType: MultiSelectListType.CHIP,
+            initialValue: selectedVisualArtValues,
+            checkColor: Colors.white,
+            buttonText: Text(
+              "Görsel Sanatlar Alt Kategorileri",
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            selectedColor: Colors.black26,
+            barrierColor: Colors.transparent,
+            selectedItemsTextStyle: TextStyle(color: Colors.black),
+            itemsTextStyle: TextStyle(color: Colors.black),
+            cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
+            confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
+            title: Text("Görsel Sanatlar"),
+            searchable: true,
+            searchHint: "Ara",
+            onConfirm: (values) {
+              selectedVisualArtValues = values;
+              setState(() {
+                isUpdated = true;
+              });
+            },
           ),
-          selectedColor: Colors.black26,
-          barrierColor: Colors.transparent,
-          selectedItemsTextStyle: TextStyle(color: Colors.black),
-          itemsTextStyle: TextStyle(color: Colors.black),
-          cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
-          confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
-          title: Text("Görsel Sanatlar"),
-          searchable: true,
-          searchHint: "Ara",
-          onConfirm: (values) {
-            selectedVisualArtValues = values;
-            setState(() {
-              isUpdated = true;
-            });
-          },
         ),
       ),
     );
