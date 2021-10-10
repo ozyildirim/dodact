@@ -28,7 +28,6 @@ class UserOptionsPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
-                enabled: false,
                 leading: CircleAvatar(
                   child: Icon(Icons.notifications),
                 ),

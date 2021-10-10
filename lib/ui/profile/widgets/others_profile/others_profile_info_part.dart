@@ -58,10 +58,17 @@ class OthersProfileInfoTab extends StatelessWidget {
   }
 
   buildSocialIcons(UserObject user) {
+    var linkedin = user.socialMediaLinks['linkedin'];
+    var youtube = user.socialMediaLinks['youtube'];
+    var instagram = user.socialMediaLinks['instagram'];
+    var pinterest = user.socialMediaLinks['pinterest'];
+    var dribbble = user.socialMediaLinks['dribbbleLink'];
+    var soundcloud = user.socialMediaLinks['soundcloud'];
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        user.linkedInLink != null && user.linkedInLink.isNotEmpty
+        linkedin != null && linkedin.isNotEmpty
             ? IconButton(
                 onPressed: () {},
                 icon: Icon(
@@ -70,31 +77,31 @@ class OthersProfileInfoTab extends StatelessWidget {
                 ),
               )
             : Container(),
-        user.instagramUsername != null && user.instagramUsername.isNotEmpty
+        instagram != null && instagram.isNotEmpty
             ? IconButton(
                 onPressed: () {},
                 icon: Icon(FontAwesome5Brands.instagram, size: 30),
               )
             : Container(),
-        user.dribbbleLink != null && user.dribbbleLink.isNotEmpty
+        dribbble != null && dribbble.isNotEmpty
             ? IconButton(
                 onPressed: () {},
                 icon: Icon(FontAwesome5Brands.dribbble, size: 30),
               )
             : Container(),
-        user.soundcloudLink != null && user.soundcloudLink.isNotEmpty
+        soundcloud != null && soundcloud.isNotEmpty
             ? IconButton(
                 onPressed: () {},
                 icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
               )
             : Container(),
-        user.youtubeLink != null && user.youtubeLink.isNotEmpty
+        youtube != null && youtube.isNotEmpty
             ? IconButton(
                 onPressed: () {},
                 icon: Icon(FontAwesome5Brands.youtube, size: 30),
               )
             : Container(),
-        user.pinterestLink != null && user.pinterestLink.isNotEmpty
+        pinterest != null && pinterest.isNotEmpty
             ? IconButton(
                 onPressed: () {},
                 icon: Icon(FontAwesome5Brands.pinterest, size: 30),

@@ -13,13 +13,6 @@ class UserObject {
   String location;
   List<dynamic> rosettes;
   String mainInterest;
-  String twitterUsername;
-  String instagramUsername;
-  String youtubeLink;
-  String dribbbleLink;
-  String linkedInLink;
-  String soundcloudLink;
-  String pinterestLink;
   String userDescription;
   String education;
   String profession;
@@ -30,12 +23,17 @@ class UserObject {
   List<String> followers = [];
   List<String> following = [];
 
-  //PrivacySettings
-  bool hiddenMail;
-  bool hiddenLocation;
+  //Permissions
+  Map<String, dynamic> permissions = {};
 
-  //NotificationSettings
-  bool allowCommentNotifications;
+  //Privacy Settings
+  Map<String, dynamic> privacySettings = {};
+
+  //Social Media Links
+  Map<String, dynamic> socialMediaLinks = {};
+
+  //Notification Settings
+  Map<String, dynamic> notificationSettings = {};
 
   List<String> searchKeywords;
 
@@ -51,23 +49,17 @@ class UserObject {
     this.location,
     this.rosettes,
     this.mainInterest,
-    this.twitterUsername,
-    this.instagramUsername,
-    this.youtubeLink,
-    this.dribbbleLink,
-    this.linkedInLink,
-    this.soundcloudLink,
-    this.pinterestLink,
-    this.hiddenMail,
-    this.hiddenLocation,
     this.newUser,
     this.userDescription,
     this.interests,
+    this.permissions,
+    this.privacySettings,
+    this.socialMediaLinks,
+    this.notificationSettings,
     this.education,
     this.profession,
     this.searchKeywords,
     this.isVerified,
-    this.allowCommentNotifications,
   });
 
   Map<String, dynamic> toMap() {
@@ -84,59 +76,21 @@ class UserObject {
     userData['location'] = this.location;
     userData['mainInterest'] = this.mainInterest;
     userData['rosettes'] = this.rosettes;
-    userData['twitterUsername'] = this.twitterUsername;
-    userData['instagramUsername'] = this.instagramUsername;
-    userData['youtubeLink'] = this.youtubeLink;
-    userData['dribbbleLink'] = this.dribbbleLink;
-    userData['linkedInLink'] = this.linkedInLink;
-    userData['soundcloudLink'] = this.soundcloudLink;
-    userData['pinterestLink'] = this.pinterestLink;
-    userData['interests'] = this.interests;
 
-    userData['hiddenMail'] = this.hiddenMail;
-    userData['hiddenLocation'] = this.hiddenLocation;
+    userData['interests'] = this.interests;
+    userData['permissions'] = this.permissions;
+    userData['privacySettings'] = this.privacySettings;
+    userData['socialMediaLinks'] = this.socialMediaLinks;
+    userData['notificationSettings'] = this.notificationSettings;
     userData['newUser'] = this.newUser ?? true;
     userData['userDescription'] = this.userDescription ?? '';
     userData['education'] = this.education ?? '';
     userData['profession'] = this.profession ?? '';
     userData['searchKeywords'] = this.searchKeywords ?? [];
     userData['isVerified'] = this.isVerified ?? false;
-    userData['allowCommentNotifications'] =
-        this.allowCommentNotifications ?? true;
 
     return userData;
   }
-
-  UserObject.fromMap(Map<String, dynamic> map)
-      : uid = map['uid'],
-        email = map['email'],
-        username = map['username'],
-        nameSurname = map['nameSurname'],
-        userRegistrationDate =
-            (map['userRegistrationDate'] as Timestamp).toDate(),
-        telephoneNumber = map['telephoneNumber'],
-        profilePictureURL = map['profilePictureURL'],
-        experiencePoint = map['experiencePoint'],
-        location = map['location'],
-        rosettes = map['rosettes'],
-        mainInterest = map['mainInterest'] ?? "",
-        twitterUsername = map['twitterUsername'],
-        instagramUsername = map['instagramUsername'],
-        youtubeLink = map['youtubeLink'],
-        dribbbleLink = map['dribbbleLink'],
-        linkedInLink = map['linkedInLink'],
-        soundcloudLink = map['soundcloudLink'],
-        pinterestLink = map['pinterestLink'],
-        hiddenMail = map['hiddenMail'],
-        hiddenLocation = map['hiddenLocation'],
-        newUser = map['newUser'] ?? true,
-        interests = map['interests'],
-        education = map['education'] ?? '',
-        userDescription = map['userDescription'] ?? '',
-        profession = map['profession'] ?? '',
-        searchKeywords = map['searchKeywords'] ?? [],
-        isVerified = map['isVerified'] ?? false,
-        allowCommentNotifications = map['allowCommentNotifications'] ?? true;
 
   UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     uid = doc.data()['uid'] ?? '';
@@ -151,26 +105,54 @@ class UserObject {
     location = doc.data()['location'];
     rosettes = doc.data()['rosettes'];
     mainInterest = doc.data()['mainInterest'] ?? "";
-    twitterUsername = doc.data()['twitterUsername'];
-    instagramUsername = doc.data()['instagramUsername'];
-    youtubeLink = doc.data()['youtubeLink'];
-    dribbbleLink = doc.data()['dribbbleLink'];
     interests = doc.data()['interests']?.cast<Map<String, dynamic>>();
-    linkedInLink = doc.data()['linkedInLink'];
-    soundcloudLink = doc.data()['soundcloudLink'];
-    pinterestLink = doc.data()['pinterestLink'];
-    hiddenMail = doc.data()['hiddenMail'];
-    hiddenLocation = doc.data()['hiddenLocation'];
+
+    permissions = doc.data()['permissions'] ??
+        {
+          'create_post': true,
+          'create_event': true,
+          'create_group': false,
+          'create_room': false,
+          'create_stream': false,
+          'create_comment': true,
+        };
+
+    privacySettings = doc.data()['privacySettings'] ??
+        {
+          'hide_mail': false,
+          'hide_phone': false,
+          'hide_location': false,
+        };
+
+    socialMediaLinks = doc.data()['socialMediaLinks'] ??
+        {
+          'instagram': '',
+          'youtube': '',
+          'dribbble': '',
+          'linkedin': '',
+          'soundcloud': '',
+          'pinterest': '',
+        };
+
+    notificationSettings = doc.data()['notificationSettings'] ??
+        {
+          'allow_comment_notifications': true,
+          'allow_post_like_notifications': true,
+          'allow_group_comment_notifications': true,
+          'allow_group_invitation_notifications': true,
+          'allow_group_announcement_notifications': true,
+          'allow_group_post_notifications': true,
+        };
+
     userDescription = doc.data()['userDescription'] ?? '';
     newUser = doc.data()['newUser'] ?? true;
     education = doc.data()['education'] ?? '';
     profession = doc.data()['profession'] ?? '';
     searchKeywords = doc.data()['searchKeywords']?.cast<String>() ?? [];
     isVerified = doc.data()['isVerified'] ?? false;
-    allowCommentNotifications = doc.data()['allowCommentNotifications'] ?? true;
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email, newUser: $newUser, mainInterest: $mainInterest, verified: $isVerified, username: $username, userDescription: $userDescription, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail, hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
+    return 'UserObject{uid: $uid, email: $email, newUser: $newUser, mainInterest: $mainInterest, verified: $isVerified, username: $username, userDescription: $userDescription, nameSurname: $nameSurname,location:$location,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
   }
 }

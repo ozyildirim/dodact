@@ -14,16 +14,14 @@ class PrivacySettingsPage extends StatefulWidget {
 class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
   bool hiddenMail;
   bool hiddenLocation;
-  bool hiddenNameSurname;
 
   bool _isChanged = false;
 
   @override
   void initState() {
     super.initState();
-    hiddenMail = authProvider.currentUser.hiddenMail;
-    hiddenLocation = authProvider.currentUser.hiddenLocation;
-    ;
+    hiddenMail = authProvider.currentUser.privacySettings['hide_mail'];
+    hiddenLocation = authProvider.currentUser.privacySettings['hide_location'];
   }
 
   @override
@@ -114,12 +112,14 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
     try {
       CommonMethods().showLoaderDialog(context, "Değişiklikler kaydediliyor.");
       await authProvider.updateCurrentUser({
-        'hiddenMail': hiddenMail,
-        'hiddenLocation': hiddenLocation,
-        'hiddenNameSurname': hiddenNameSurname,
+        'privacySettings': {
+          'hide_mail': hiddenMail,
+          'hide_location': hiddenLocation,
+        }
       });
-      authProvider.currentUser.hiddenMail = hiddenMail;
-      authProvider.currentUser.hiddenLocation = hiddenLocation;
+      authProvider.currentUser.privacySettings['hide_mail'] = hiddenMail;
+      authProvider.currentUser.privacySettings['hide_location'] =
+          hiddenLocation;
 
       NavigationService.instance.pop();
       setState(() {

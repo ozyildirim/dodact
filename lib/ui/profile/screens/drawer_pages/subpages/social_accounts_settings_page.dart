@@ -22,12 +22,12 @@ class _UserSocialAccountsSettingsState
 
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
 
-  String instagramUsername;
+  String instagram;
   String linkedIn;
-  String twitter;
   String dribbble;
   String soundCloud;
   String pinterest;
+  String youtube;
 
   FocusNode youtubeFocus = new FocusNode();
   FocusNode linkedInFocus = new FocusNode();
@@ -50,29 +50,16 @@ class _UserSocialAccountsSettingsState
   void initState() {
     super.initState();
 
-    instagramUsername = authProvider.currentUser.instagramUsername != null
-        ? authProvider.currentUser.instagramUsername
-        : "";
-    linkedIn = authProvider.currentUser.linkedInLink != null
-        ? authProvider.currentUser.linkedInLink
-        : "";
-    twitter = authProvider.currentUser.twitterUsername != null
-        ? authProvider.currentUser.twitterUsername
-        : "";
-    dribbble = authProvider.currentUser.dribbbleLink != null
-        ? authProvider.currentUser.dribbbleLink
-        : "";
-    soundCloud = authProvider.currentUser.soundcloudLink != null
-        ? authProvider.currentUser.soundcloudLink
-        : "";
-    pinterest = authProvider.currentUser.pinterestLink != null
-        ? authProvider.currentUser.pinterestLink
-        : "";
+    instagram = authProvider.currentUser.socialMediaLinks['instagram'];
+    linkedIn = linkedIn = authProvider.currentUser.socialMediaLinks['linkedin'];
+    youtube = authProvider.currentUser.socialMediaLinks['youtube'];
+    dribbble = authProvider.currentUser.socialMediaLinks['dribbble'];
+    soundCloud = authProvider.currentUser.socialMediaLinks['soundcloud'];
+    pinterest = authProvider.currentUser.socialMediaLinks['pinterest'];
   }
 
   @override
   Widget build(BuildContext context) {
-    Logger().i("Instagram: ${authProvider.currentUser.instagramUsername}");
     var mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
@@ -121,13 +108,13 @@ class _UserSocialAccountsSettingsState
                     child: FormBuilderTextField(
                       name: "youtube",
                       focusNode: youtubeFocus,
-                      initialValue: authProvider.currentUser.youtubeLink ?? "",
+                      initialValue: youtube,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(FontAwesome5Brands.youtube),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.youtubeLink != value) {
+                        if (youtube != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -154,13 +141,13 @@ class _UserSocialAccountsSettingsState
                     child: FormBuilderTextField(
                       name: "linkedin",
                       focusNode: linkedInFocus,
-                      initialValue: authProvider.currentUser.linkedInLink ?? "",
+                      initialValue: linkedIn,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(FontAwesome5Brands.linkedin),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.linkedInLink != value) {
+                        if (linkedIn != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -186,14 +173,14 @@ class _UserSocialAccountsSettingsState
                     width: mediaQuery.size.width * 0.9,
                     child: FormBuilderTextField(
                       name: "dribbble",
-                      initialValue: authProvider.currentUser.dribbbleLink ?? "",
+                      initialValue: dribbble,
                       focusNode: dribbbleFocus,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(FontAwesome5Brands.dribbble),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.dribbbleLink != value) {
+                        if (dribbble != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -219,15 +206,14 @@ class _UserSocialAccountsSettingsState
                     width: mediaQuery.size.width * 0.9,
                     child: FormBuilderTextField(
                       name: "pinterest",
-                      initialValue:
-                          authProvider.currentUser.pinterestLink ?? "",
+                      initialValue: pinterest,
                       focusNode: pinterestFocus,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(FontAwesome5Brands.pinterest),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.pinterestLink != value) {
+                        if (pinterest != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -254,14 +240,13 @@ class _UserSocialAccountsSettingsState
                     child: FormBuilderTextField(
                       name: "soundcloud",
                       focusNode: soundCloudFocus,
-                      initialValue:
-                          authProvider.currentUser.soundcloudLink ?? "",
+                      initialValue: soundCloud,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(FontAwesome5Brands.soundcloud),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.soundcloudLink != value) {
+                        if (soundCloud != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -288,14 +273,13 @@ class _UserSocialAccountsSettingsState
                     child: FormBuilderTextField(
                       name: "instagram",
                       focusNode: instagramFocus,
-                      initialValue: instagramUsername,
+                      initialValue: instagram,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(FontAwesome5Brands.instagram),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.instagramUsername !=
-                            value) {
+                        if (instagram != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -341,19 +325,23 @@ class _UserSocialAccountsSettingsState
         CommonMethods()
             .showLoaderDialog(context, "Değişiklikler kaydediliyor.");
         await authProvider.updateCurrentUser({
-          'youtubeLink': youtubeLink,
-          'dribbbleLink': dribbbleLink,
-          'linkedInLink': linkedInLink,
-          'soundcloudLink': soundCloudLink,
-          'instagramUsername': instagramUsername,
-          'pinterestLink': pinterestLink,
+          'socialMediaLinks': {
+            'youtube': youtubeLink,
+            'linkedin': linkedInLink,
+            'dribbble': dribbbleLink,
+            'soundcloud': soundCloudLink,
+            'instagram': instagramUsername,
+            'pinterest': pinterestLink,
+          }
         }).then((value) {
-          authProvider.currentUser.youtubeLink = youtubeLink;
-          authProvider.currentUser.dribbbleLink = dribbbleLink;
-          authProvider.currentUser.linkedInLink = linkedInLink;
-          authProvider.currentUser.soundcloudLink = soundCloudLink;
-          authProvider.currentUser.instagramUsername = instagramUsername;
-          authProvider.currentUser.pinterestLink = pinterestLink;
+          authProvider.currentUser.socialMediaLinks = {
+            'youtube': youtubeLink,
+            'linkedin': linkedInLink,
+            'dribbble': dribbbleLink,
+            'soundcloud': soundCloudLink,
+            'instagram': instagramUsername,
+            'pinterest': pinterestLink,
+          };
         });
         NavigationService.instance.pop();
         setState(() {

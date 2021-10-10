@@ -32,6 +32,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
   @override
   Widget build(BuildContext context) {
     var authProvider = Provider.of<AuthProvider>(context);
+    print(authProvider.currentUser.permissions);
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(

@@ -311,7 +311,7 @@ exports.commentNotificationToCreator = functions.firestore.document('posts/{post
         const userSnapshot = await userRef.get();
         const userData = userSnapshot.data();
 
-        if (userData.allowCommentNotifications) {
+        if (userData.notificationSettings['allow_comment_notifications'] == true) {
             const payload = {
                 notification: {
                     title: `İçeriğine yorum yapıldı.`,
@@ -334,7 +334,7 @@ exports.commentNotificationToCreator = functions.firestore.document('posts/{post
         const founderUserSnapshot = await founderUserRef.get();
         const founderUserData = founderUserSnapshot.data();
 
-        if (founderUserData.allowCommentNotifications) {
+        if (founderUserData.notificationSettings['allow_group_comment_notifications'] == true) {
             const payload = {
                 notification: {
                     title: `Grubunun içeriğine yorum yapıldı.`,
