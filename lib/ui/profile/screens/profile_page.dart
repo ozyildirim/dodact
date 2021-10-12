@@ -48,7 +48,19 @@ class _ProfilePageState extends BaseState<ProfilePage>
                 color: Colors.deepOrange,
               ),
             ),
-          )
+          ),
+          GFIconBadge(
+            counterChild: Container(),
+            child: IconButton(
+              onPressed: () {
+                NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
+              },
+              icon: Icon(
+                FontAwesome5Solid.envelope,
+                color: Colors.deepOrange,
+              ),
+            ),
+          ),
         ],
         // centerTitle: true,
         // title: Text(

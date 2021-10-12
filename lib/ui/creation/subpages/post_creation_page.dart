@@ -703,6 +703,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     }
   }
 
+  String createBlurHashCode() {}
+
   Future<bool> checkYoutubeLink(String link) async {
     try {
       MetaDataModel metaData = await YoutubeMetaData.getData(link);

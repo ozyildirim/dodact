@@ -9,6 +9,7 @@ import 'package:dodact_v1/repository/user_repository.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_announcement_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
+import 'package:dodact_v1/services/concrete/firebase_chatroom_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_event_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_group_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_invitations_service.dart';
@@ -50,4 +51,6 @@ void setupLocator() {
 
   locator.registerLazySingleton(() => FirebaseInvitationService());
   locator.registerLazySingleton(() => InvitationRepository());
+
+  locator.registerLazySingleton(() => FirebaseChatroomService());
 }

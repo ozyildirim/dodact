@@ -1,7 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 
@@ -51,9 +56,30 @@ class OthersProfileHeader extends StatelessWidget {
                   )
                 : SizedBox(),
           ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        GFButton(
+          onPressed: () async {
+            createChatroom(context, provider.otherUser.uid);
+          },
+          child: Icon(Icons.message),
+          shape: GFButtonShape.pills,
+          color: Colors.deepOrangeAccent,
         )
       ],
     );
+  }
+
+  createChatroom(BuildContext context, String userId) async {
+    var chatroomProvider =
+        Provider.of<ChatroomProvider>(context, listen: false);
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    var chatroomId = await chatroomProvider.createChatRoom(
+        authProvider.currentUser.uid, userId);
+    NavigationService.instance
+        .navigate(k_ROUTE_CHATROOM_PAGE, args: chatroomId);
   }
 
   showProfilePictureContainer(BuildContext context, String url) {

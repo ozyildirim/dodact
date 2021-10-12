@@ -30,6 +30,8 @@ import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
+import 'package:dodact_v1/ui/profile/screens/chatrooms/chatroom_page.dart';
+import 'package:dodact_v1/ui/profile/screens/chatrooms/user_chatrooms_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/applications_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/dod_card_page.dart';
@@ -171,6 +173,12 @@ class NavigationRouteManager {
 
       case k_ROUTE_USER_NOTIFICATIONS:
         return _navigateToDefault(UserNotificationsPage(), settings);
+
+      case k_ROUTE_USER_CHATROOMS:
+        return _navigateToDefault(UserChatroomsPage(), settings);
+
+      case k_ROUTE_CHATROOM_PAGE:
+        return _navigateToDefault(ChatroomPage(chatroomId: args), settings);
 
       case k_ROUTE_USER_INVITATIONS_PAGE:
         return _navigateToDefault(UserInvitationsPage(), settings);

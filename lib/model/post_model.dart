@@ -19,28 +19,29 @@ class PostModel {
   bool isLocatedInYoutube;
   String postContentType;
   bool visible;
+  String blurHash;
 
   List<String> searchKeywords;
 
-  PostModel({
-    this.postId,
-    this.ownerType,
-    this.ownerId,
-    this.postCategory,
-    this.postDate,
-    this.postTitle,
-    this.postDescription,
-    this.postContentURL,
-    this.isVideo,
-    this.dodCounter,
-    this.reportCounter,
-    this.isUsedForHelp,
-    this.chosenCompany,
-    this.isLocatedInYoutube,
-    this.postContentType,
-    this.searchKeywords,
-    this.visible,
-  });
+  PostModel(
+      {this.postId,
+      this.ownerType,
+      this.ownerId,
+      this.postCategory,
+      this.postDate,
+      this.postTitle,
+      this.postDescription,
+      this.postContentURL,
+      this.isVideo,
+      this.dodCounter,
+      this.reportCounter,
+      this.isUsedForHelp,
+      this.chosenCompany,
+      this.isLocatedInYoutube,
+      this.postContentType,
+      this.searchKeywords,
+      this.visible,
+      this.blurHash});
 
   PostModel.fromJson(Map<String, dynamic> json)
       : postId = json['postId'],
@@ -59,7 +60,8 @@ class PostModel {
         isLocatedInYoutube = json['isLocatedInYoutube'],
         postContentType = json['postContentType'],
         visible = json['visible'],
-        searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
+        searchKeywords = json['searchKeywords']?.cast<String>() ?? [],
+        blurHash = json['blurHash'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -80,6 +82,7 @@ class PostModel {
     data['postContentType'] = this.postContentType;
     data['visible'] = this.visible;
     data['searchKeywords'] = this.searchKeywords;
+    data['blurHash'] = this.blurHash;
     return data;
   }
 

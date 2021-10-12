@@ -1,5 +1,6 @@
 import 'package:dodact_v1/provider/announcement_provider.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/comment_provider.dart';
 import 'package:dodact_v1/provider/contribution_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
@@ -25,4 +26,5 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => UserFavoritesProvider()),
   ChangeNotifierProvider(create: (_) => ContributionProvider()),
   ChangeNotifierProvider(create: (_) => InvitationProvider()),
+  ChangeNotifierProvider(create: (_) => ChatroomProvider()),
 ];

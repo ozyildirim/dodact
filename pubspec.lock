@@ -457,7 +457,7 @@ packages:
     source: hosted
     version: "7.1.0"
   flutter_blurhash:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_blurhash
       url: "https://pub.dartlang.org"

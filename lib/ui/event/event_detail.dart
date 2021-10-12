@@ -96,10 +96,13 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       ),
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(kBackgroundImage),
-        )),
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
+        ),
         width: dynamicWidth(1),
         height: dynamicHeight(1),
         child: SingleChildScrollView(
