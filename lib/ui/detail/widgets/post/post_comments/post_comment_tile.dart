@@ -164,6 +164,6 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
 
   navigateAuthorProfile() {
     NavigationService.instance
-        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: authorUser.uid);
+        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: authorUser);
   }
 }

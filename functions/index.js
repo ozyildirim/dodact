@@ -381,7 +381,7 @@ exports.messageReceiverNotification = functions.firestore.document('chatrooms/{u
 
         const payload = {
             notification: {
-                title: `${senderUserData.nameSurname}.`,
+                title: `${senderUserData.nameSurname}`,
                 body: `${message.message}`,
                 sound: "default",
             }

@@ -8,6 +8,7 @@ import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
 class ChatroomPage extends StatefulWidget {
@@ -53,86 +54,66 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                 onTap: () {
                   FocusScope.of(context).unfocus();
                 },
-                child: StreamBuilder(
-                  builder: (context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data.docs.length > 0) {
-                        var messages = snapshot.data.docs;
-
-                        Timer(
-                            Duration(seconds: 1),
-                            () => scrollController.animateTo(
-                                  scrollController.position.maxScrollExtent,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.fastOutSlowIn,
-                                ));
-
-                        return ListView.builder(
-                          controller: scrollController,
-                          itemCount: messages.length,
-                          shrinkWrap: true,
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onLongPress: () {
-                                showMessageDialog(messages[index]["senderId"],
-                                    messages[index]["messageId"]);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                    left: 14, right: 14, top: 10, bottom: 10),
-                                child: Align(
-                                  alignment: (messages[index]["senderId"] !=
+                child: PaginateFirestore(
+                  scrollController: scrollController,
+                  itemsPerPage: 5,
+                  // Use SliverAppBar in header to make it sticky
+                  // item builder type is compulsory.
+                  itemBuilderType:
+                      PaginateBuilderType.listView, //Change types accordingly
+                  itemBuilder: (index, context, documentSnapshot) {
+                    final message =
+                        MessageModel.fromJson(documentSnapshot.data());
+                    return GestureDetector(
+                      onLongPress: () {
+                        showMessageDialog(message.senderId, message.messageId);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            left: 14, right: 14, top: 10, bottom: 10),
+                        child: Align(
+                          alignment:
+                              (message.senderId != authProvider.currentUser.uid
+                                  ? Alignment.topLeft
+                                  : Alignment.topRight),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: (message.senderId !=
+                                      authProvider.currentUser.uid
+                                  ? Colors.grey.shade200
+                                  : Color(0xff194d25)),
+                            ),
+                            padding: EdgeInsets.all(16),
+                            child: SelectableText(
+                              message.message,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: message.senderId !=
                                           authProvider.currentUser.uid
-                                      ? Alignment.topLeft
-                                      : Alignment.topRight),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: (messages[index]["senderId"] !=
-                                              authProvider.currentUser.uid
-                                          ? Colors.grey.shade200
-                                          : Color(0xff194d25)),
-                                    ),
-                                    padding: EdgeInsets.all(16),
-                                    child: SelectableText(
-                                      messages[index]["message"],
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: messages[index]["senderId"] !=
-                                                  authProvider.currentUser.uid
-                                              ? Colors.black
-                                              : Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return Container(
-                          child: Center(
-                            child: Text(
-                              "Mesaj geçmişi yok.",
-                              style: TextStyle(fontSize: kPageCenteredTextSize),
+                                      ? Colors.black
+                                      : Colors.white),
                             ),
                           ),
-                        );
-                      }
-                    } else {
-                      return Container(
-                        child: Center(
-                          child: CircularProgressIndicator(),
                         ),
-                      );
-                    }
+                      ),
+                    );
                   },
-                  stream: chatroomsRef
+
+                  // orderBy is compulsory to enable pagination
+                  query: chatroomsRef
                       .doc(roomId)
                       .collection('messages')
-                      .orderBy('messageCreationDate', descending: false)
-                      .snapshots(),
+                      .orderBy('messageCreationDate', descending: true),
+                  // to fetch real-time data
+                  isLive: true,
+                  reverse: true,
+                  bottomLoader: Container(
+                    height: 50,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -177,7 +158,8 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                               hintStyle: TextStyle(color: Colors.black),
                               border: InputBorder.none),
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(context,
+                                errorText: "Bu alanı boş bırakmamalısın."),
                             (value) {
                               return ProfanityChecker.profanityValidator(value);
                             }
