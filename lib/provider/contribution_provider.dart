@@ -62,6 +62,7 @@ class ContributionProvider extends ChangeNotifier {
       return allContributions;
     } catch (e) {
       logger.e("Contribution Provider -> getContributions error: $e");
+      return null;
     }
   }
 }

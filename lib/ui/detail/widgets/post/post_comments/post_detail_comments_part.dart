@@ -115,18 +115,19 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
     return Container(
       alignment: Alignment(0.0, -1.0),
       height: 70,
-      //TODO: Form builder ekle
       child: Form(
         key: _formKey,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            //TODO: Form builder ekle
             TextFieldContainer(
               child: TextFormField(
                 focusNode: focusNode,
                 controller: commentController,
                 maxLines: 3,
                 keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
                 cursorColor: kPrimaryColor,
                 decoration: InputDecoration(
                   icon: Icon(

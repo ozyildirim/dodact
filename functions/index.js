@@ -353,6 +353,48 @@ exports.commentNotificationToCreator = functions.firestore.document('posts/{post
 });
 
 
+exports.messageReceiverNotification = functions.firestore.document('chatrooms/{user_ids}/messages/{messageId}').onCreate(async (snapshot, context) => {
+
+    const userIDs = context.params.user_ids.split("_");
+
+    const message = snapshot.data();
+
+    const firstUserId = userIDs[0];
+    const secondUserId = userIDs[1];
+
+
+    const receiverId = message.senderId != firstUserId ? firstUserId : secondUserId;
+    const senderId = message.senderId;
+
+    console.log("receiver:" + receiverId + " senderId:" + senderId);
+
+    const receiverIdRef = usersRef.doc(receiverId);
+    const receiverUserSnapshot = await receiverIdRef.get();
+    const receiverUserData = receiverUserSnapshot.data();
+
+
+
+    if (receiverUserData.notificationSettings['allow_private_message_notifications'] == true) {
+        const senderUserRef = usersRef.doc(senderId);
+        const senderUserSnapshot = await senderUserRef.get();
+        const senderUserData = senderUserSnapshot.data();
+
+        const payload = {
+            notification: {
+                title: `${senderUserData.nameSurname}.`,
+                body: `${message.message}`,
+                sound: "default",
+            }
+        }
+
+        //send notification to receiver
+        var tokenRef = await tokensRef.doc(receiverId).get();
+        const tokenObject = tokenRef.data();
+        admin.messaging().sendToDevice(tokenObject.token, payload)
+    }
+});
+
+
 
 
 

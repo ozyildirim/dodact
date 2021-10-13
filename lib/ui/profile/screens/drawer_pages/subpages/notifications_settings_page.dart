@@ -93,6 +93,27 @@ class _NotificationsSettingsPageState
               Container(
                 child: SwitchListTile(
                   title: Text(
+                    'Özel Mesaj Bildirimleri',
+                    style: TextStyle(fontSize: kSettingsTitleSize),
+                  ),
+                  subtitle: Text(
+                      'Sana gelen özel mesajlar için bildirim almayı önlemek için aktive edebilirsin.'),
+                  value: notificationSettings[
+                      'allow_private_message_notifications'],
+                  onChanged: (value) {
+                    setState(() {
+                      notificationSettings[
+                              'allow_private_message_notifications'] =
+                          !notificationSettings[
+                              'allow_private_message_notifications'];
+                      _isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                child: SwitchListTile(
+                  title: Text(
                     'Grup İçerikleri Yorum Bildirimleri',
                     style: TextStyle(fontSize: kSettingsTitleSize),
                   ),

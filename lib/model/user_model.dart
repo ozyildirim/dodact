@@ -142,6 +142,7 @@ class UserObject {
           'allow_group_invitation_notifications': true,
           'allow_group_announcement_notifications': true,
           'allow_group_post_notifications': true,
+          'allow_private_message_notifications': true,
         };
 
     userDescription = doc.data()['userDescription'] ?? '';

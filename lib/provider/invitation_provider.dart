@@ -81,6 +81,7 @@ class InvitationProvider with ChangeNotifier {
       return result;
     } catch (e) {
       logger.e("AcceptGroupInvitation Provider Error: " + e);
+      return null;
     }
   }
 

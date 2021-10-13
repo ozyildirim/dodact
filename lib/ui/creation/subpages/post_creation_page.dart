@@ -206,6 +206,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 autofocus: false,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
                 cursorColor: kPrimaryColor,
                 decoration: InputDecoration(
                     icon: Icon(
@@ -248,6 +249,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 maxLines: 3,
                 autofocus: false,
                 keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
                 cursorColor: kPrimaryColor,
                 decoration: InputDecoration(
                     icon: Icon(

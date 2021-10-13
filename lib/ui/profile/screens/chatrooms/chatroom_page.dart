@@ -63,7 +63,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                             Duration(seconds: 1),
                             () => scrollController.animateTo(
                                   scrollController.position.maxScrollExtent,
-                                  duration: Duration(seconds: 1),
+                                  duration: Duration(milliseconds: 300),
                                   curve: Curves.fastOutSlowIn,
                                 ));
 
@@ -168,6 +168,9 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                       ),
                       Expanded(
                         child: FormBuilderTextField(
+                          enableSuggestions: true,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.sentences,
                           name: "message",
                           decoration: InputDecoration(
                               hintText: "Mesaj yaz",
@@ -222,11 +225,9 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
             .sendMessage(roomId, authProvider.currentUser.uid, message);
 
         formKey.currentState.reset();
-        FocusScope.of(context).unfocus();
       } catch (e) {
         print(e);
         formKey.currentState.reset();
-        FocusScope.of(context).unfocus();
       }
     }
   }

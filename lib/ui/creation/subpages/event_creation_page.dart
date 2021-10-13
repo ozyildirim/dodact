@@ -208,10 +208,11 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: FormBuilderTextField(
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.sentences,
                   textInputAction: TextInputAction.next,
                   focusNode: eventTitleFocus,
                   name: "eventTitle",
-                  keyboardType: TextInputType.text,
                   cursorColor: kPrimaryColor,
                   decoration: InputDecoration(
                       icon: Icon(
@@ -264,6 +265,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   focusNode: eventDescriptionFocus,
                   name: "eventDescription",
                   keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.sentences,
                   cursorColor: kPrimaryColor,
                   decoration: InputDecoration(
                       icon: Icon(

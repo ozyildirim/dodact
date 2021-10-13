@@ -82,22 +82,27 @@ class _HomePageState extends BaseState<HomePage> {
             Icon(
               FontAwesome5Solid.home,
               color: Colors.white,
+              size: 22,
             ),
             Icon(
               FontAwesome5Solid.globe,
               color: Colors.white,
+              size: 22,
             ),
             Icon(
               FontAwesome5Solid.plus,
               color: Colors.white,
+              size: 22,
             ),
             Icon(
               FontAwesome5Solid.search,
               color: Colors.white,
+              size: 22,
             ),
             Icon(
               FontAwesome5Solid.user,
               color: Colors.white,
+              size: 22,
             ),
           ],
           onTap: (value) {

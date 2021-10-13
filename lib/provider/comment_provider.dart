@@ -17,6 +17,7 @@ class CommentProvider extends ChangeNotifier {
       return comments;
     } catch (e) {
       print("CommentProvider getPostComments error: $e");
+      return null;
     }
   }
 
@@ -29,6 +30,7 @@ class CommentProvider extends ChangeNotifier {
       });
     } catch (e) {
       print("CommentProvider saveComment error: $e");
+      return null;
     }
   }
 

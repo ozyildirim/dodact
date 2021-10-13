@@ -105,19 +105,20 @@ class _ChatroomListElementsState extends State<ChatroomListElements> {
   buildSubtitle(MessageModel message) {
     if (message.senderId == widget.currentUserId) {
       return RichText(
+          maxLines: 2,
           text: TextSpan(children: [
-        TextSpan(
-            text: 'Sen:',
-            style: TextStyle(
-                color: Colors.black54,
-                // color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold)),
-        TextSpan(text: ': '),
-        TextSpan(
-            text: message.message.substring(
-                0, message.message.length < 10 ? message.message.length : 10),
-            style: TextStyle(color: Colors.black)),
-      ]));
+            TextSpan(
+                text: 'Sen:',
+                style: TextStyle(
+                    color: Colors.black54,
+                    // color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold)),
+            TextSpan(text: ': '),
+            TextSpan(
+              text: message.message,
+              style: TextStyle(color: Colors.black),
+            ),
+          ]));
     } else {
       return Text('${user.nameSurname}: ${message.message}');
     }
