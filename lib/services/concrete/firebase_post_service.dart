@@ -1,18 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:logger/logger.dart';
 
-class FirebasePostService extends BaseService<PostModel> {
-  @override
+class FirebasePostService {
   Future<void> delete(String id) async {
     return await postsRef.doc(id).delete();
   }
 
-  @override
   Future<PostModel> getDetail(String id) async {
     DocumentSnapshot documentSnapshot = await postsRef.doc(id).get();
     PostModel postModel = PostModel.fromJson(documentSnapshot.data());
@@ -20,12 +17,13 @@ class FirebasePostService extends BaseService<PostModel> {
   }
 
   // Get all posts
-  @override
+
   Future<List<PostModel>> getList() async {
     List<PostModel> allposts = [];
 
     QuerySnapshot querySnapshot =
         await postsRef.where('visible', isEqualTo: true).get();
+
     for (DocumentSnapshot post in querySnapshot.docs) {
       PostModel _convertedPost = PostModel.fromJson(post.data());
       allposts.add(_convertedPost);
@@ -48,18 +46,6 @@ class FirebasePostService extends BaseService<PostModel> {
       userPosts.add(_convertedPost);
     }
 
-    // print("Post IDs from object:" + postIDs.toString());
-    // await Future.forEach(postIDs, (post) async {
-    //   DocumentSnapshot documentSnapshot = await postsRef.doc(post).get();
-    //   PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
-    //   userPosts.add(singlePost);
-    // });
-    // for (String post in postIDs) {
-    //   DocumentSnapshot documentSnapshot =
-    //       await postsRef.doc(post).get();
-    //   PostModel singlePost = PostModel.fromJson(documentSnapshot.data());
-    //   allUserPosts.add(singlePost);
-    // }
     return userPosts;
   }
 
@@ -84,14 +70,13 @@ class FirebasePostService extends BaseService<PostModel> {
   }
 
   //fetch events by query
-  @override
+
   Query getListQuery() {
     throw UnimplementedError();
   }
 
   Future<void> addPost() async {}
 
-  @override
   Future<String> save(PostModel model) async {
     if (model.postId == null || model.postId.isEmpty) {
       String documentID;
@@ -110,7 +95,6 @@ class FirebasePostService extends BaseService<PostModel> {
     }
   }
 
-  @override
   Future<void> update(String id, Map<String, dynamic> changes) async {
     return await postsRef.doc(id).update(changes);
   }

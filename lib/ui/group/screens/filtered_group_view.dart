@@ -82,19 +82,23 @@ class FilteredGroupView extends StatelessWidget {
             ),
             child: Row(
               children: [
-                SizedBox(
-                  width: size.width * 0.1,
-                ),
-                Container(
-                  height: size.height * 0.10,
-                  width: size.width * 0.25,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: CachedNetworkImageProvider(
-                            group.groupProfilePicture),
-                      )),
+                // SizedBox(
+                //   width: size.width * 0.1,
+                // ),
+                Expanded(
+                  child: Container(
+                    // height: size.height * 0.10,
+                    width: size.width * 0.25,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: CachedNetworkImageProvider(
+                              group.groupProfilePicture),
+                        )),
+                  ),
                 ),
                 SizedBox(
                   width: size.width * 0.08,

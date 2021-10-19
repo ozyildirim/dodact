@@ -41,6 +41,8 @@ class _GeneralPageState extends BaseState<GeneralPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -113,55 +115,21 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                     SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              color: Colors.white60,
-                              child: Text(
-                                "Çark",
-                                textAlign: TextAlign.start,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    .copyWith(
-                                        color: Colors.black,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            SpinnerPart(),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              color: Colors.white60,
-                              child: Text(
-                                "Yardımlar",
-                                textAlign: TextAlign.start,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    .copyWith(
-                                        color: Colors.black,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            ContributionsPart()
-                          ],
-                        )
-                      ],
+                    Container(
+                      color: Colors.white60,
+                      child: Text(
+                        "Çark",
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.headline1.copyWith(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SpinnerPart(),
                     SizedBox(
                       height: 20,
                     ),

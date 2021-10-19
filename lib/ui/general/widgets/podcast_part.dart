@@ -35,7 +35,7 @@ class PodcastPart extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         image: DecorationImage(
-                          image: NetworkImage(podcast.podcastImageUrl),
+                          image: imageProvider,
                         ),
                       ),
                     );

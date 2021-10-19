@@ -15,14 +15,12 @@ class PostProvider extends ChangeNotifier {
   var logger = new Logger();
 
   PostModel post;
-
   List<PostModel> postList;
   List<PostModel> userPosts;
   List<PostModel> otherUsersPosts;
   List<DodderModel> postDodders;
 
   List<PostModel> topPosts;
-
   bool isLoading = false;
 
   changeState(bool _isLoading, {bool isNotify}) {
@@ -107,7 +105,7 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<PostModel>> getList({bool isNotify}) async {
+  Future<List<PostModel>> getList() async {
     try {
       var fetchedList = await postRepository.getList();
       postList = fetchedList;

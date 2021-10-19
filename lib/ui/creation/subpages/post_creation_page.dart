@@ -545,7 +545,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   //TODO: Thumbnail package ekle
   Future<bool> uploadPost() async {
-    CommonMethods().showLoaderDialog(context, "İçerik yükleniyor.");
+    CommonMethods().showLoaderDialog(context, "İçerik Yükleniyor");
     //Implement new post features into variable.
     try {
       //TODO: GRUPLAR İÇİN DE EKLEME YAPISI OLUŞTUR.

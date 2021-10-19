@@ -10,7 +10,7 @@ class SpinnerPart extends StatelessWidget {
         NavigationService.instance.navigate(k_ROUTE_SPINNER_PAGE);
       },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
         child: Card(
           elevation: 2,
           child: Container(

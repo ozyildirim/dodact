@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
@@ -12,7 +11,7 @@ enum AppMode { DEBUG, RELEASE }
 
 // class that make us decide for which service provider we want to use
 
-class PostRepository implements BaseService {
+class PostRepository {
   FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
   FakeAuthService _fakeAuthService = locator<FakeAuthService>();
 
@@ -38,7 +37,6 @@ class PostRepository implements BaseService {
     }
   }
 
-  @override
   Future<List<PostModel>> getList() async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(List<PostModel>.empty());
