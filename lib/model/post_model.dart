@@ -10,8 +10,7 @@ class PostModel {
   String postDescription;
   String postContentURL;
   DateTime postDate;
-  bool isUsedForHelp;
-  String chosenCompany;
+
   int dodCounter;
   int reportCounter;
   List<DodderModel> dodders;
@@ -35,8 +34,6 @@ class PostModel {
       this.isVideo,
       this.dodCounter,
       this.reportCounter,
-      this.isUsedForHelp,
-      this.chosenCompany,
       this.isLocatedInYoutube,
       this.postContentType,
       this.searchKeywords,
@@ -55,8 +52,6 @@ class PostModel {
         isVideo = json['isVideo'],
         dodCounter = json['dodCounter'] ?? 0,
         reportCounter = json['reportCounter'] ?? 0,
-        isUsedForHelp = json['isUsedForHelp'] ?? false,
-        chosenCompany = json['chosenCompany'] ?? "",
         isLocatedInYoutube = json['isLocatedInYoutube'],
         postContentType = json['postContentType'],
         visible = json['visible'],
@@ -74,8 +69,7 @@ class PostModel {
     data['postDescription'] = this.postDescription;
     data['postContentURL'] = this.postContentURL;
     data['isVideo'] = this.isVideo;
-    data['isUsedForHelp'] = this.isUsedForHelp ?? false;
-    data['chosenCompany'] = this.chosenCompany ?? "";
+
     data['dodCounter'] = this.dodCounter ?? 0;
     data['reportCounter'] = this.reportCounter ?? 0;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;

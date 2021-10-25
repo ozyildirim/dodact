@@ -9,13 +9,11 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
-import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:dodact_v1/utilities/profanity_checker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -45,15 +43,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   bool isSelected = false;
   bool isLoading = false;
   bool isUploaded = false;
-  bool isHelpChecked = false;
 
-  bool isAdWatched = false;
-  bool isRewardedAdReady = false;
   bool isAvailableYoutubeLink = false;
-
-  String chosenCompany;
-
-  RewardedAd rewardedAd;
 
   List<CreatorDialogItem> creatorList;
 
@@ -64,7 +55,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   FocusNode postTitleFocus = new FocusNode();
   FocusNode postDescriptionFocus = new FocusNode();
   FocusNode postContentUrlFocus = new FocusNode();
-  FocusNode checkboxFocus = new FocusNode();
 
   File postFile;
   FileImage imageThumbnail;
@@ -88,7 +78,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   @override
   void initState() {
-    prepareAd();
     print("İçerik Türü: " + widget.contentType);
     print("İçerik Kategorisi: " + widget.postCategory);
 
@@ -348,34 +337,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                     ],
                   )
                 : Container(),
-            TextFieldContainer(
-              child: FormBuilderCheckbox(
-                focusNode: checkboxFocus,
-                activeColor: Colors.white,
-                checkColor: Colors.blue,
-                name: "donation",
-                initialValue: isHelpChecked,
-                title: Text(
-                  "Bu paylaşımım ile kurumlara yardım etmek istiyorum",
-                  style: TextStyle(fontSize: 16),
-                ),
-                onChanged: (value) async {
-                  if (value == true) {
-                    await makeContribution();
-
-                    if (chosenCompany != null) {
-                      setState(() {
-                        isHelpChecked = value;
-                      });
-                    }
-                  } else {
-                    setState(() {
-                      isHelpChecked = value;
-                    });
-                  }
-                },
-              ),
-            )
           ],
         ),
       ),
@@ -385,34 +346,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   Widget buildPrevivewPart() {
     if (widget.contentType == "Video") {
       return Container();
-      // return Expanded(
-      //   child: ClipRRect(
-      //     borderRadius: BorderRadius.circular(15),
-      //     child: Container(
-      //       height: 250,
-      //       width: 250,
-      //       decoration: BoxDecoration(
-      //           image: youtubeThumbnail != null
-      //               ? DecorationImage(
-      //                   image: NetworkImage(
-      //                     CommonMethods.createThumbnailURL(
-      //                         true, youtubeThumbnail),
-      //                   ),
-      //                   fit: BoxFit.cover,
-      //                 )
-      //               : null),
-      //       // child: youtubeThumbnail != null
-      //       //     ? Padding(
-      //       //         padding: const EdgeInsets.all(8.0),
-      //       //         child: Align(
-      //       //           alignment: Alignment.bottomLeft,
-      //       //           child: Icon(FontAwesome5Brands.youtube, color: red),
-      //       //         ),
-      //       //       )
-      //       //     : null,
-      //     ),
-      //   ),
-      // );
     } else if (widget.contentType == "Görüntü") {
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
@@ -464,18 +397,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     }
   }
 
-  // checkThumbnailAvailable() async {
-  //   var image = await NetworkImage(postContentUrlController.text);
-
-  //   if (image != null) {
-  //     setState(() {
-  //       youtubeThumbnail = postContentUrlController.text;
-  //     });
-  //   } else {
-  //     showSnackBar("Geçersiz youtube linki!");
-  //   }
-  // }
-
   void showSnackBar(String message) {
     _scaffoldKey.currentState.showSnackBar(
       new SnackBar(
@@ -499,50 +420,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     );
   }
 
-  Future<void> makeContribution() async {
-    var contributionDialog = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => contributionCategoryDialog(context),
-    );
-
-    if (contributionDialog != null) {
-      print(contributionDialog);
-      chosenCompany = contributionDialog;
-    }
-  }
-
-  Future prepareAd() async {
-    RewardedAd.load(
-      adUnitId: 'ca-app-pub-3940256099942544/5224354917',
-      request: AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          rewardedAd = ad;
-
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              setState(() {
-                isRewardedAdReady = false;
-              });
-              prepareAd();
-            },
-          );
-
-          setState(() {
-            isRewardedAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (err) {
-          print('Failed to load a rewarded ad: ${err.message}');
-          setState(() {
-            isRewardedAdReady = false;
-          });
-        },
-      ),
-    );
-  }
-
   //TODO: Thumbnail package ekle
   Future<bool> uploadPost() async {
     CommonMethods().showLoaderDialog(context, "İçerik Yükleniyor");
@@ -550,85 +427,37 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     try {
       //TODO: GRUPLAR İÇİN DE EKLEME YAPISI OLUŞTUR.
 
-      //Bağış yapılacak ise
-      if (chosenCompany != null) {
-        Logger().i("Şirket seçildi");
-        await rewardedAd.show(
-            onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
-          isAdWatched = true;
-          Logger().i("Reklam ödülü verildi");
-        }).then((value) async {
-          Logger().i("Reklam izlendi");
-          PostModel newPost = new PostModel(
-            visible: true,
-            isLocatedInYoutube: widget.contentType == "Video" ? true : false,
-            isVideo: widget.contentType == "Video" ? true : false,
-            postContentType: widget.contentType,
-            ownerType: widget.groupId != null ? "Group" : "User",
-            postId: "",
-            ownerId: widget.groupId != null
-                ? widget.groupId
-                : authProvider.currentUser.uid,
-            postCategory: widget.postCategory,
-            postTitle: postTitleController.text,
-            postDate: DateTime.now(),
-            postDescription: postDescriptionController.text,
-            postContentURL: postContentUrlController.text ?? null,
-            dodCounter: 0,
-            chosenCompany: chosenCompany,
-            isUsedForHelp: true,
-          );
+      PostModel newPost = new PostModel(
+        visible: true,
+        isLocatedInYoutube: widget.contentType == "Video" ? true : false,
+        isVideo: widget.contentType == "Video" ? true : false,
+        postContentType: widget.contentType,
+        ownerType: widget.groupId != null ? "Group" : "User",
+        postId: "",
+        ownerId: widget.groupId != null
+            ? widget.groupId
+            : authProvider.currentUser.uid,
+        postCategory: widget.postCategory,
+        postTitle: postTitleController.text,
+        postDate: DateTime.now(),
+        postDescription: postDescriptionController.text,
+        postContentURL: postContentUrlController.text ?? null,
+        dodCounter: 0,
+      );
 
-          newPost.searchKeywords = createSearchKeywords(newPost);
+      newPost.searchKeywords = createSearchKeywords(newPost);
 
-          await Provider.of<PostProvider>(context, listen: false)
-              .addPost(postFile: postFile, post: newPost)
-              .then(
-            (_) async {
-              //loaderDialog kapansın diye pop yapıyoruz.
+      await Provider.of<PostProvider>(context, listen: false)
+          .addPost(postFile: postFile, post: newPost)
+          .then(
+        (_) async {
+          //loaderDialog kapansın diye pop yapıyoruz.
 
-              await showPostShareSuccessDialog(context,
-                  "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
-              NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-            },
-          );
-        });
-      } else {
-        //Bağış yapılmayacak ise
-        PostModel newPost = new PostModel(
-          visible: true,
-          isLocatedInYoutube: widget.contentType == "Video" ? true : false,
-          isVideo: widget.contentType == "Video" ? true : false,
-          postContentType: widget.contentType,
-          ownerType: widget.groupId != null ? "Group" : "User",
-          postId: "",
-          ownerId: widget.groupId != null
-              ? widget.groupId
-              : authProvider.currentUser.uid,
-          postCategory: widget.postCategory,
-          postTitle: postTitleController.text,
-          postDate: DateTime.now(),
-          postDescription: postDescriptionController.text,
-          postContentURL: postContentUrlController.text ?? null,
-          dodCounter: 0,
-          chosenCompany: "",
-          isUsedForHelp: false,
-        );
-
-        newPost.searchKeywords = createSearchKeywords(newPost);
-
-        await Provider.of<PostProvider>(context, listen: false)
-            .addPost(postFile: postFile, post: newPost)
-            .then(
-          (_) async {
-            //loaderDialog kapansın diye pop yapıyoruz.
-            NavigationService.instance.pop();
-            await showPostShareSuccessDialog(
-                context, "Tebrikler! İçeriğin başarıyla paylaşıldı.");
-            NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-          },
-        );
-      }
+          await showPostShareSuccessDialog(context,
+              "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
+          NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+        },
+      );
     } catch (e) {
       NavigationService.instance.pop();
       CommonMethods()
@@ -680,8 +509,31 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Future<void> formSubmit() async {
-    await checkYoutubeLink(_formKey.currentState.value["youtubeLink"]);
-    if (isAvailableYoutubeLink) {
+    if (widget.contentType == "Video") {
+      await checkYoutubeLink(_formKey.currentState.value["youtubeLink"]);
+      if (isAvailableYoutubeLink) {
+        if (_formKey.currentState.saveAndValidate()) {
+          print("form submitted");
+          try {
+            if (widget.contentType == "Görüntü") {
+              var hasImage = checkPostHasImages();
+              if (hasImage) {
+                await uploadPost();
+              } else {
+                await CommonMethods()
+                    .showErrorDialog(context, "Bir görüntü seçmelisin");
+              }
+            } else {
+              await uploadPost();
+            }
+          } catch (e) {
+            logger.e("Form submit edilirken hata oluştu: " + e.toString());
+          }
+        } else {
+          print("form not submitted");
+        }
+      }
+    } else {
       if (_formKey.currentState.saveAndValidate()) {
         print("form submitted");
         try {
@@ -704,8 +556,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       }
     }
   }
-
-  String createBlurHashCode() {}
 
   Future<bool> checkYoutubeLink(String link) async {
     try {
@@ -746,13 +596,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Future sharePostStatusCard() async {
-    if (chosenCompany != null && chosenCompany != '') {
-      await Share.share(
-          'Hey! Ben Dodact ile sanatımı yeniden keşfederken aynı zamanda ${chosenCompany} için maddi bir değer yaratmış oldum! Sen de bu platforma katılmak istemez misin? https://www.dodact.com');
-    } else {
-      await Share.share(
-          'Hey! Ben Dodact ile sanatımı ve kendimi yeniden keşfediyorum! Sen de bu platforma katılmak istemez misin? https://www.dodact.com');
-    }
+    await Share.share(
+        'Hey! Ben Dodact ile sanatımı ve kendimi yeniden keşfediyorum! Sen de bu platforma katılmak istemez misin? https://www.dodact.com');
   }
 }
 

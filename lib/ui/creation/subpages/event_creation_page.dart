@@ -53,12 +53,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   FocusNode checkboxFocus = new FocusNode();
   FocusNode dropdownFocus = FocusNode();
 
-  bool isHelpChecked = false;
-  bool isAdWatched = false;
-  bool isRewardedAdReady = false;
-  String chosenCompany;
-  RewardedAd rewardedAd;
-
   DateTime _eventStartDate = new DateTime.now();
   DateTime _eventEndDate = new DateTime.now().add(Duration(days: 1));
   bool isOnline;
@@ -79,7 +73,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   @override
   void initState() {
     super.initState();
-    prepareAd();
     eventProvider = Provider.of<EventProvider>(context, listen: false);
     eventProvider.clearNewEvent();
     isOnline = widget.eventPlatform == 'Online Etkinlik' ? true : false;
@@ -482,38 +475,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                         ),
                       ],
                     ),
-              TextFieldContainer(
-                child: FormBuilderCheckbox(
-                  focusNode: checkboxFocus,
-                  name: "donation",
-                  initialValue: isHelpChecked,
-                  title: Text(
-                    "Bu paylaşımım ile kurumlara yardım etmek istiyorum",
-                  ),
-                  onChanged: (value) async {
-                    if (value == true) {
-                      print(chosenCompany);
-                      await makeContribution();
-
-                      if (chosenCompany != null) {
-                        setState(() {
-                          isHelpChecked = value;
-                        });
-                      } else {
-                        setState(() {
-                          isHelpChecked = !value;
-                        });
-                      }
-                    } else {
-                      chosenCompany = null;
-
-                      setState(() {
-                        isHelpChecked = value;
-                      });
-                    }
-                  },
-                ),
-              )
             ],
           ),
         ),
@@ -617,20 +578,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           await CommonMethods()
               .showErrorDialog(context, "En az 1 fotoğraf seçmelisin");
         } else {
-          if (chosenCompany != null) {
-            Logger().i("Şirket seçildi");
-            await rewardedAd.show(
-                onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
-              isAdWatched = true;
-              Logger().i("Reklam ödülü verildi");
-            }).then((value) async {
-              Logger().i("Reklam izlendi");
-              await createEvent(isUsedForHelp: true);
-            });
-          } else {
-            Logger().i("Şirket seçilmedi");
-            await createEvent(isUsedForHelp: false);
-          }
+          await createEvent();
         }
       } catch (e) {
         Logger().e("Form submit edilirken hata oluştu: " + e.toString());
@@ -638,10 +586,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     }
   }
 
-  Future<void> createEvent({bool isUsedForHelp}) async {
+  Future<void> createEvent() async {
     try {
       CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuluyor.");
-      setNewEventValues(isUsedForHelp: isUsedForHelp);
+      setNewEventValues();
 
       await eventProvider.addEvent(_eventImages).then((_) async {
         NavigationService.instance.pop();
@@ -673,7 +621,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     return searchKeywords;
   }
 
-  void setNewEventValues({bool isUsedForHelp}) {
+  void setNewEventValues() {
     eventProvider.newEvent.visible = true;
     eventProvider.newEvent.eventId = "";
     eventProvider.newEvent.eventTitle =
@@ -711,56 +659,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
         _formKey.currentState.value['location'].toString().trim();
     eventProvider.newEvent.eventCategory = widget.eventCategory;
     eventProvider.newEvent.eventType = widget.eventType;
-
-    if (isUsedForHelp) {
-      eventProvider.newEvent.isUsedForHelp = true;
-    } else {
-      eventProvider.newEvent.isUsedForHelp = false;
-    }
-  }
-
-  Future<void> makeContribution() async {
-    var contributionDialog = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => contributionCategoryDialog(context),
-    );
-
-    if (contributionDialog != null) {
-      print(contributionDialog);
-      chosenCompany = contributionDialog;
-    }
-  }
-
-  Future prepareAd() async {
-    RewardedAd.load(
-      adUnitId: 'ca-app-pub-3940256099942544/5224354917',
-      request: AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          rewardedAd = ad;
-
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              setState(() {
-                isRewardedAdReady = false;
-              });
-              prepareAd();
-            },
-          );
-
-          setState(() {
-            isRewardedAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (err) {
-          print('Failed to load a rewarded ad: ${err.message}');
-          setState(() {
-            isRewardedAdReady = false;
-          });
-        },
-      ),
-    );
   }
 
   bool checkEventHasImages() {

@@ -18,8 +18,6 @@ class EventModel {
   String eventType;
   bool isDone;
   String ownerType;
-  bool isUsedForHelp;
-  String chosenCompanyForHelp;
   bool visible;
 
   List<String> searchKeywords;
@@ -42,8 +40,6 @@ class EventModel {
       this.eventType,
       this.isDone,
       this.ownerType,
-      this.isUsedForHelp,
-      this.chosenCompanyForHelp,
       this.searchKeywords,
       this.visible});
 
@@ -65,8 +61,7 @@ class EventModel {
     eventType = json['eventType'];
     isDone = json['isDone'];
     ownerType = json['ownerType'];
-    isUsedForHelp = json['isUsedForHelp'] ?? false;
-    chosenCompanyForHelp = json['chosenCompanyForHelp'] ?? "";
+
     searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
     visible = json['visible'] ?? true;
   }
@@ -92,8 +87,6 @@ class EventModel {
     data['eventType'] = this.eventType;
     data['isDone'] = this.isDone;
     data['ownerType'] = this.ownerType;
-    data['isUsedForHelp'] = this.isUsedForHelp;
-    data['chosenCompanyForHelp'] = this.chosenCompanyForHelp;
     data['searchKeywords'] = this.searchKeywords;
     data['visible'] = this.visible;
     return data;
