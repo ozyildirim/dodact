@@ -63,20 +63,18 @@ class _GroupsPageState extends State<GroupsPage> {
           ),
         ),
         height: mediaQuery.size.height - 56,
-        child: Center(
-          child: SingleChildScrollView(
-            child: FilteredGroupView(),
-          ),
+        child: SingleChildScrollView(
+          child: FilteredGroupView(),
         ),
       ),
     );
   }
 
   Future<void> showFilterDialog() async {
-    showDialog(context: context, builder: (ctx) => FilterDialog());
+    showDialog(context: context, builder: (ctx) => filterDialog());
   }
 
-  Dialog FilterDialog() {
+  Dialog filterDialog() {
     var size = MediaQuery.of(context).size;
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -106,8 +104,9 @@ class _GroupsPageState extends State<GroupsPage> {
                           initialValue: selectedCity ?? null,
                           name: "city",
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                           ),
                           items: cities.map((e) {
@@ -179,47 +178,21 @@ class _GroupsPageState extends State<GroupsPage> {
     );
   }
 
-  Container filterCardContainer(String interest, Icon icon) {
-    return Container(
-      width: 140,
-      height: 60,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              icon,
-              Text(interest),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   submitFilterDialog() {
     if (_formKey.currentState.saveAndValidate()) {
       setState(() {
         selectedCity = _formKey.currentState.value["city"];
         selectedCategory = _formKey.currentState.value["category"];
+        print(selectedCategory);
+        print(selectedCity);
       });
       updateGroupsByFilter(selectedCategory, selectedCity);
       NavigationService.instance.pop();
     }
   }
 
-  //TODO: kategori ile birlikte şehir bilgisini de sorgulatarak gruplar getirilmeli, bunu servise ekle.
-
   void updateGroupsByFilter(String category, String city) async {
     await Provider.of<GroupProvider>(context, listen: false)
         .getFilteredGroupList(category: category, city: city);
-  }
-
-  Future<void> _refreshGroups() async {
-    await Provider.of<GroupProvider>(context, listen: false)
-        .getFilteredGroupList(category: selectedCategory, city: selectedCity);
   }
 }

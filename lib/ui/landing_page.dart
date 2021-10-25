@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
@@ -20,6 +23,7 @@ class _LandingPageState extends BaseState<LandingPage> {
   bool isLoading = true;
   RemoteConfigService _remoteConfigService;
   PackageInfo packageInfo;
+  FirebaseMessaging messaging;
 
   initializeRemoteConfig() async {
     _remoteConfigService = await RemoteConfigService.getInstance();
@@ -51,6 +55,7 @@ class _LandingPageState extends BaseState<LandingPage> {
   @override
   void initState() {
     initializeRemoteConfig();
+    messaging = FirebaseMessaging.instance;
     super.initState();
   }
 
@@ -60,7 +65,7 @@ class _LandingPageState extends BaseState<LandingPage> {
   Widget build(BuildContext context) {
     if (!isLoading) {
       if (_remoteConfigService.getUnderConstructionValue) {
-        return buildUnderConstructionPage(context);
+        return UnderConstructionScreen();
       } else {
         return FutureBuilder(
           future: checkEnforcedVersion(),
@@ -93,7 +98,7 @@ class _LandingPageState extends BaseState<LandingPage> {
                       if (model.currentUser.newUser) {
                         return SignUpDetail();
                       }
-
+                      updateToken();
                       return HomePage();
                     }
                     //If state is "Busy"
@@ -128,7 +133,20 @@ class _LandingPageState extends BaseState<LandingPage> {
     }
   }
 
-  buildUnderConstructionPage(BuildContext context) {
+  void updateToken() {
+    messaging.getToken().then((value) async {
+      print("istek atıldı");
+      await tokensRef.doc(authProvider.currentUser.uid).set({
+        'token': value,
+        'lastTokenUpdate': FieldValue.serverTimestamp(),
+      });
+    });
+  }
+}
+
+class UnderConstructionScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       extendBody: false,

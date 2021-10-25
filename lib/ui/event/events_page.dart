@@ -58,10 +58,8 @@ class _EventsPageState extends BaseState<EventsPage> {
           child: Container(
             height: dynamicHeight(1),
             width: double.infinity,
-            child: Center(
-              child: SingleChildScrollView(
-                child: FilteredEventView(),
-              ),
+            child: SingleChildScrollView(
+              child: FilteredEventView(),
             ),
           ),
         ),
@@ -121,12 +119,12 @@ class _EventsPageState extends BaseState<EventsPage> {
   }
 
   Future<void> showFilterDialog() async {
-    showDialog(context: context, builder: (ctx) => FilterDialog());
+    showDialog(context: context, builder: (ctx) => filterDialog());
   }
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  Dialog FilterDialog() {
+  Dialog filterDialog() {
     var size = MediaQuery.of(context).size;
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

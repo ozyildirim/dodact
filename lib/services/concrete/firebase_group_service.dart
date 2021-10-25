@@ -89,18 +89,18 @@ class FirebaseGroupService extends BaseService<GroupModel> {
 
     if (category != null && city != null) {
       querySnapshot = await groupsRef
-          .where("groupCategory", isEqualTo: category)
-          .where("groupCity", isEqualTo: city)
+          // .where("groupCategory", isEqualTo: category)
+          .where("groupLocation", isEqualTo: city)
           .where('visible', isEqualTo: true)
           .get();
     } else if (category != null) {
       querySnapshot = await groupsRef
-          .where("groupCategory", isEqualTo: category)
+          // .where("groupCategory", isEqualTo: category)
           .where('visible', isEqualTo: true)
           .get();
     } else if (city != null) {
       querySnapshot = await groupsRef
-          .where("groupCity", isEqualTo: city)
+          .where("groupLocation", isEqualTo: city)
           .where('visible', isEqualTo: true)
           .get();
     } else {

@@ -32,23 +32,28 @@ class FilteredGroupView extends StatelessWidget {
                     itemCount: provider.groupList.length,
                     itemBuilder: (context, index) {
                       var groupItem = provider.groupList[index];
-                      // return Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: buildCustomListTile(context, groupItem));
+
                       return buildGroupCard(size, groupItem);
                     }),
               ),
             );
           } else {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: Container(
-                  child: Text(
-                    "Eşleşen bir grup bulunmuyor.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: kPageCenteredTextSize),
-                  ),
+            return Center(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/app/situations/not_found.png"),
+                    Text(
+                      "Bu kriterlere uyan bir topluluk bulunamadı.",
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: kToolbarHeight,
+                    )
+                  ],
                 ),
               ),
             );

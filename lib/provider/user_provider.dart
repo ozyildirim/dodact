@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 class UserProvider with ChangeNotifier {
   UserRepository userRepository = locator<UserRepository>();
   FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
-  UserObject user;
+  UserObject currentUser;
   UserObject otherUser;
 
   List<UserObject> userList;
@@ -31,7 +31,7 @@ class UserProvider with ChangeNotifier {
   }
 
   void removeUser() {
-    user = null;
+    currentUser = null;
     notifyListeners();
   }
 
@@ -63,16 +63,16 @@ class UserProvider with ChangeNotifier {
     try {
       UserObject _user = await _firebaseAuthService.currentUser();
       if (_user != null) {
-        if (user != null) return user;
+        if (currentUser != null) return currentUser;
         DocumentSnapshot documentSnapshot = await usersRef.doc(_user.uid).get();
         if (documentSnapshot.exists) {
-          user = UserObject.fromDoc(documentSnapshot);
+          currentUser = UserObject.fromDoc(documentSnapshot);
           notifyListeners();
-          return user;
+          return currentUser;
         }
-        return user;
+        return currentUser;
       } else {
-        user = null;
+        currentUser = null;
         notifyListeners();
         return null;
       }

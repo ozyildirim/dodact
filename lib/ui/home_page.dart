@@ -34,9 +34,9 @@ class _HomePageState extends BaseState<HomePage> {
   void initState() {
     super.initState();
     messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value) {
-      updateToken(value);
-    });
+    // messaging.getToken().then((value) {
+    //   updateToken(value);
+    // });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
@@ -107,18 +107,19 @@ class _HomePageState extends BaseState<HomePage> {
           ],
           onTap: (value) {
             setState(() {
-              this.selectedIndex = value;
+              selectedIndex = value;
             });
           },
         ));
   }
 
-  updateToken(String token) async {
-    await tokensRef.doc(authProvider.currentUser.uid).set({
-      'token': token,
-      'lastTokenUpdate': FieldValue.serverTimestamp(),
-    });
-  }
+  // updateToken(String token) async {
+  //   print("istek atıldı");
+  //   await tokensRef.doc(authProvider.currentUser.uid).set({
+  //     'token': token,
+  //     'lastTokenUpdate': FieldValue.serverTimestamp(),
+  //   });
+  // }
 
   checkUserSearchKeywords() async {
     if (authProvider.currentUser.searchKeywords == null ||
