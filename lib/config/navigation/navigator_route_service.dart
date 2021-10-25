@@ -21,10 +21,12 @@ import 'package:dodact_v1/ui/group/screens/group_detail_page.dart';
 import 'package:dodact_v1/ui/group/screens/groups_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_add_member_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_event_management_page.dart';
+import 'package:dodact_v1/ui/group/subpages/group_interest_managment_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_invitations_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_management_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_member_management_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_post_management_page.dart';
+import 'package:dodact_v1/ui/group/subpages/group_profile_management_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
@@ -209,6 +211,9 @@ class NavigationRouteManager {
       case k_ROUTE_GROUP_MANAGEMENT_PAGE:
         return _navigateToDefault(GroupManagementPage(), settings);
 
+      case k_ROUTE_GROUP_PROFILE_MANAGEMENT_PAGE:
+        return _navigateToDefault(GroupProfileManagementPage(), settings);
+
       case k_ROUTE_GROUP_MEMBER_MANAGEMENT_PAGE:
         return _navigateToDefault(GroupMemberManagementPage(), settings);
 
@@ -223,6 +228,9 @@ class NavigationRouteManager {
 
       case k_ROUTE_GROUP_POST_MANAGEMENT_PAGE:
         return _navigateToDefault(GroupPostManagementPage(), settings);
+
+      case k_ROUTE_GROUP_INTEREST_MANAGEMENT_PAGE:
+        return _navigateToDefault(GroupInterestManagementPage(), settings);
 
       case k_ROUTE_CREATE_POST_PAGE:
         List<dynamic> args = settings.arguments;

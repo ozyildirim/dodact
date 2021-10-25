@@ -57,11 +57,13 @@ const k_ROUTE_OTHERS_PROFILE_PAGE = '/others_profile';
 
 //Group Settings Routes
 const k_ROUTE_GROUP_MANAGEMENT_PAGE = '/group_management_page';
+const k_ROUTE_GROUP_PROFILE_MANAGEMENT_PAGE = '/group_profile_management';
 const k_ROUTE_GROUP_MEMBER_MANAGEMENT_PAGE = '/group_member_management';
 const k_ROUTE_GROUP_INVITATIONS_PAGE = '/group_invitations';
 const k_ROUTE_GROUP_ADD_MEMBER_PAGE = '/group_add_member';
 const k_ROUTE_GROUP_EVENT_MANAGEMENT_PAGE = '/group_event_management';
 const k_ROUTE_GROUP_POST_MANAGEMENT_PAGE = '/group_post_management';
+const k_ROUTE_GROUP_INTEREST_MANAGEMENT_PAGE = '/group_interest_management';
 
 //Creation Routes
 const k_ROUTE_CREATE_POST_PAGE = '/add_post';

@@ -454,7 +454,7 @@ class _UserPersonalProfileSettingsPageState
   }
 
   void updateProfilePhoto() async {
-    CommonMethods().showLoaderDialog(context, "Fotoğrafınız değiştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "Fotoğrafın değiştiriliyor.");
     await authProvider
         .updateCurrentUserProfilePicture(File(picture.path))
         .then((url) {

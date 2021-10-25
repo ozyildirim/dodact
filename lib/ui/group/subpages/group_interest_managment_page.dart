@@ -1,50 +1,52 @@
-import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/model/group_model.dart';
+import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:provider/provider.dart';
 
-class InterestsPage extends StatefulWidget {
+class GroupInterestManagementPage extends StatefulWidget {
   @override
-  _InterestsPageState createState() => _InterestsPageState();
+  _GroupInterestManagementPageState createState() =>
+      _GroupInterestManagementPageState();
 }
 
-class _InterestsPageState extends BaseState<InterestsPage> {
+class _GroupInterestManagementPageState
+    extends State<GroupInterestManagementPage> {
+  GroupProvider groupProvider;
+  GroupModel group;
   bool isUpdated = false;
+
   @override
   void initState() {
     super.initState();
 
+    groupProvider = Provider.of<GroupProvider>(context, listen: false);
+    group = groupProvider.group;
     getSelectedValues();
-
-    // print(authProvider.currentUser.interests);
-
-    print("müzik seçilenler: " + selectedMusicValues.toString());
-    print("görsel seçilenler: " + selectedVisualArtValues.toString());
-    print("tiyatro seçilenler: " + selectedTheaterValues.toString());
-    print("dans seçilenler: " + selectedDanceValues.toString());
   }
 
   getSelectedValues() {
     setState(() {
-      if (authProvider.currentUser.interests != null) {
-        if (authProvider.currentUser.interests.isNotEmpty) {
-          selectedVisualArtValues = authProvider.currentUser.interests
+      if (group.interests != null) {
+        if (group.interests.isNotEmpty) {
+          selectedVisualArtValues = group.interests
               .where((element) => element['title'] == "Görsel Sanatlar")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
 
-          selectedDanceValues = authProvider.currentUser.interests
+          selectedDanceValues = group.interests
               .where((element) => element['title'] == "Dans")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
 
-          selectedMusicValues = authProvider.currentUser.interests
+          selectedMusicValues = group.interests
               .where((element) => element['title'] == "Müzik")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
 
-          selectedTheaterValues = authProvider.currentUser.interests
+          selectedTheaterValues = group.interests
               .where((element) => element['title'] == "Tiyatro")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
@@ -61,43 +63,6 @@ class _InterestsPageState extends BaseState<InterestsPage> {
         selectedTheaterValues = [];
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery.of(context);
-    return Scaffold(
-      floatingActionButton: isUpdated
-          ? FloatingActionButton(
-              onPressed: updateUserInterests,
-              child: Icon(Icons.cloud_upload_rounded),
-            )
-          : Container(),
-      appBar: AppBar(
-        title: Text('İlgi Alanları'),
-      ),
-      body: Container(
-        width: dynamicWidth(1),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
-          ),
-        ),
-        // child: choiceWidget(),
-        child: ListView(
-          // scrollDirection: Axis.horizontal,
-          children: [
-            musicSelector(),
-            danceSelector(),
-            theaterSelector(),
-            visualArtSelector()
-          ],
-        ),
-      ),
-    );
   }
 
   List<String> musicCategories = categoryList
@@ -129,14 +94,51 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   List<String> selectedTheaterValues = [];
   List<String> selectedDanceValues = [];
 
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Scaffold(
+      floatingActionButton: isUpdated
+          ? FloatingActionButton(
+              onPressed: updateGroupInterests,
+              child: Icon(Icons.cloud_upload_rounded),
+            )
+          : Container(),
+      appBar: AppBar(
+        title: Text('Topluluk İlgi Alanları'),
+      ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
+        ),
+        // child: choiceWidget(),
+        child: ListView(
+          // scrollDirection: Axis.horizontal,
+          children: [
+            musicSelector(),
+            danceSelector(),
+            theaterSelector(),
+            visualArtSelector()
+          ],
+        ),
+      ),
+    );
+  }
+
   musicSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
         color: Colors.transparent,
         child: Container(
-          width: dynamicWidth(0.7),
-          height: dynamicHeight(0.3),
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -184,8 +186,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
       child: Card(
         color: Colors.transparent,
         child: Container(
-          width: dynamicWidth(0.7),
-          height: dynamicHeight(0.3),
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -233,8 +235,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
       child: Card(
         color: Colors.transparent,
         child: Container(
-          height: dynamicHeight(0.3),
-          width: dynamicWidth(0.7),
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -279,8 +281,8 @@ class _InterestsPageState extends BaseState<InterestsPage> {
       child: Card(
         color: Colors.transparent,
         child: Container(
-          height: dynamicHeight(0.3),
-          width: dynamicWidth(0.7),
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -324,7 +326,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
     );
   }
 
-  updateUserInterests() async {
+  void updateGroupInterests() async {
     List<Map<String, dynamic>> interests = [
       {'title': 'Müzik', 'selectedSubcategories': selectedMusicValues},
       {'title': 'Tiyatro', 'selectedSubcategories': selectedTheaterValues},
@@ -335,7 +337,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
       }
     ];
 
-    await authProvider.updateUserInterests(interests);
+    await groupProvider.updateGroup(group.groupId, {'interests': interests});
     setState(() {
       isUpdated = false;
     });

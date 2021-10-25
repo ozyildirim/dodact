@@ -45,21 +45,26 @@ class UploadService {
     return url;
   }
 
-  /// Örnek kullanım
-  /// * uploadGroupPhoto(group.groupID,"profile_picture",File(example__file);
-  /// * uploadGroupPhoto(group.groupID,"extra_picture1",File(example__file);
-  // Future<String> uploadGroupPhoto({String groupID, File fileToUpload}) async {
-  //   _storageReference = _firebaseStorage
-  //       .ref()
-  //       .child("groups")
-  //       .child(groupID)
-  //       .child('$fileType.png');
-  //
-  //   var uploadTask = _storageReference.putFile(fileToUpload);
-  //
-  //   var url = await (await uploadTask).ref.getDownloadURL();
-  //   return url;
-  // }
+  // / Örnek kullanım
+  // / * uploadGroupPhoto(group.groupID,"profile_picture",File(example__file);
+  // / * uploadGroupPhoto(group.groupID,"extra_picture1",File(example__file);
+  Future<String> uploadGroupProfilePhoto({
+    String groupID,
+    File fileToUpload,
+  }) async {
+    var compressedImage = await compressImage(fileToUpload);
+    _storageReference = _firebaseStorage
+        .ref()
+        .child("groups")
+        .child(groupID)
+        .child("profile_picture")
+        .child('profile_picture.png');
+
+    var uploadTask = _storageReference.putFile(compressedImage);
+
+    var url = await (await uploadTask).ref.getDownloadURL();
+    return url;
+  }
 
   /// Örnek kullanım
   /// * uploadGroupVideo(group.groupID,"group_video",File(example__file);

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class GroupManagementPage extends StatelessWidget {
   final double tileTitleSize = 20;
   AppBar appBar = new AppBar(
-    title: Text("Grup Yönetim"),
+    title: Text("Topluluk Yönetim"),
   );
 
   @override
@@ -31,12 +31,12 @@ class GroupManagementPage extends StatelessWidget {
                   child: Icon(Icons.privacy_tip),
                 ),
                 title: Text(
-                  "Grup Profil Yönetimi",
+                  "Profil Yönetimi",
                   style: TextStyle(fontSize: tileTitleSize),
                 ),
                 onTap: () {
                   NavigationService.instance
-                      .navigate(k_ROUTE_USER_PRIVACY_SETTINGS);
+                      .navigate(k_ROUTE_GROUP_PROFILE_MANAGEMENT_PAGE);
                 },
               ),
             ),
@@ -85,6 +85,22 @@ class GroupManagementPage extends StatelessWidget {
                 onTap: () {
                   NavigationService.instance
                       .navigate(k_ROUTE_GROUP_POST_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  "Topluluk İlgi Alanları",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_INTEREST_MANAGEMENT_PAGE);
                 },
               ),
             ),

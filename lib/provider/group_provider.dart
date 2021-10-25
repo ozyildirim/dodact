@@ -66,18 +66,13 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateGroup(String groupId, Map<String, dynamic> changes,
-      {bool isNotify}) async {
+  Future updateGroup(String groupId, Map<String, dynamic> changes) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository
-          .update(groupId, changes)
-          .then((value) => true);
+      await _groupRepository.update(groupId, changes);
+      await getGroupDetail(groupId);
     } catch (e) {
       print("GroupProvider updateGroup error: " + e.toString());
       return false;
-    } finally {
-      changeState(false);
     }
   }
 

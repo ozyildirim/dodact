@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
@@ -15,10 +16,6 @@ class GroupEventManagementPage extends StatefulWidget {
 class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
   GroupProvider groupProvider;
 
-  String get kBackgroundImage => null;
-
-  get spinkit => null;
-
   @override
   Widget build(BuildContext context) {
     groupProvider = Provider.of<GroupProvider>(context, listen: false);
@@ -29,6 +26,14 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
         title: Text("Grup Etkinlik Yönetimi"),
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: FutureBuilder(
           future: getGroupEvents(),
           builder: (context, AsyncSnapshot<List<EventModel>> asyncSnapshot) {
@@ -39,8 +44,10 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
             } else {
               if (asyncSnapshot.data.length == 0) {
                 return Center(
-                  child: Text("Grup Etkinliği Bulunmamakta."),
-                );
+                    child: Text(
+                  "Gruba ait etkinlik bulunmuyor.",
+                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                ));
               } else {
                 return GridView.builder(
                     itemCount: asyncSnapshot.data.length,
