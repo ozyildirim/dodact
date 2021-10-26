@@ -67,12 +67,14 @@ class OnBoardingPage extends StatelessWidget {
       onDone: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("initScreen", 1);
-        NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
+        NavigationService.instance
+            .navigateReplacement(k_ROUTE_VERSION_CONTROL_PAGE);
       },
       onSkip: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("initScreen", 1);
-        NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
+        NavigationService.instance
+            .navigateReplacement(k_ROUTE_VERSION_CONTROL_PAGE);
       },
       showSkipButton: true,
       skip: Text(

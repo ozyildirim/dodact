@@ -18,7 +18,7 @@ class _NotificationsSettingsPageState
   @override
   void initState() {
     super.initState();
-    notificationSettings = authProvider.currentUser.notificationSettings;
+    notificationSettings = userProvider.currentUser.notificationSettings;
   }
 
   @override
@@ -203,9 +203,9 @@ class _NotificationsSettingsPageState
   Future<void> updateUser() async {
     try {
       CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
-      await authProvider
+      await userProvider
           .updateCurrentUser({'notificationSettings': notificationSettings});
-      authProvider.currentUser.notificationSettings = notificationSettings;
+      userProvider.currentUser.notificationSettings = notificationSettings;
 
       NavigationService.instance.pop();
       setState(() {

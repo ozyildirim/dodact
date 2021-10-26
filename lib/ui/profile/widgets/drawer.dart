@@ -41,17 +41,17 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                 child: ListTile(
                   leading: CircleAvatar(
                     backgroundImage:
-                        authProvider.currentUser.profilePictureURL != null
+                        userProvider.currentUser.profilePictureURL != null
                             ? NetworkImage(
-                                authProvider.currentUser.profilePictureURL)
+                                userProvider.currentUser.profilePictureURL)
                             : null,
                     radius: 30,
                   ),
                   title: Text(
-                    authProvider.currentUser.nameSurname != null &&
-                            authProvider.currentUser.nameSurname.isNotEmpty
-                        ? authProvider.currentUser.nameSurname
-                        : "@${authProvider.currentUser.username}",
+                    userProvider.currentUser.nameSurname != null &&
+                            userProvider.currentUser.nameSurname.isNotEmpty
+                        ? userProvider.currentUser.nameSurname
+                        : "@${userProvider.currentUser.username}",
                     style: TextStyle(color: Colors.black, fontSize: 22),
                   ),
                   subtitle: Text(authProvider.currentUser.email,

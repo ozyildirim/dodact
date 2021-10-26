@@ -5,7 +5,6 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/post_card_for_grids.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class UserProfilePostsTab extends StatefulWidget {
@@ -19,7 +18,7 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
   void initState() {
     super.initState();
     Provider.of<PostProvider>(context, listen: false)
-        .getUserPosts(authProvider.currentUser);
+        .getUserPosts(userProvider.currentUser);
   }
 
   @override

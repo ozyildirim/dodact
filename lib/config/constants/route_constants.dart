@@ -1,4 +1,5 @@
 const k_ROUTE_ONBOARDING = "/onboarding";
+const k_ROUTE_VERSION_CONTROL_PAGE = '/version_control';
 const k_ROUTE_LANDING = "/landing";
 const k_ROUTE_WELCOME = "/welcome";
 const k_ROUTE_ABOUT_DODACT = "/about";

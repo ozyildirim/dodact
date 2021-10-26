@@ -29,8 +29,8 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
   Future<void> getPosts() async {
     //TODO: Favorilerdeki postlardan herhangi birisi silindiğinde bunun favorilerden de silinmesi lazım.
     List<PostModel> fetchedPosts = [];
-    if (authProvider.currentUser.favoritedPosts.length > 0) {
-      var favoritedPostIDs = authProvider.currentUser.favoritedPosts;
+    if (userProvider.currentUser.favoritedPosts.length > 0) {
+      var favoritedPostIDs = userProvider.currentUser.favoritedPosts;
 
       for (var postID in favoritedPostIDs) {
         var post = await Provider.of<PostProvider>(context, listen: false)
@@ -133,7 +133,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
   }
 
   Future<void> _removeFavorite(String postId) async {
-    await authProvider.removeFavoritePost(postId);
+    await userProvider.removeFavoritePost(postId);
     setState(() {});
   }
 }

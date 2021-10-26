@@ -389,7 +389,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       var url = await updateProfilePhoto(context);
       var searchKeywords = createSearchKeywords(username);
 
-      var result = await authProvider.updateCurrentUser({
+      var result = await userProvider.updateCurrentUser({
         'username': username,
         'nameSurname': name,
         'location': location,
@@ -399,9 +399,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         'newUser': false,
         'searchKeywords': searchKeywords,
       });
-      authProvider.currentUser.username = username;
-      authProvider.currentUser.nameSurname = name;
-      authProvider.currentUser.location = location;
+      userProvider.currentUser.username = username;
+      userProvider.currentUser.nameSurname = name;
+      userProvider.currentUser.location = location;
     } catch (e) {
       showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
     }
@@ -446,11 +446,11 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   Future<String> updateProfilePhoto(BuildContext context) async {
     if (profilePicture != null) {
       CommonMethods().showLoaderDialog(context, "Fotoğraf yükleniyor");
-      await authProvider
+      await userProvider
           .updateCurrentUserProfilePicture(File(profilePicture.path))
           .then((url) {
         NavigationService.instance.pop();
-        authProvider.currentUser.profilePictureURL = url;
+        userProvider.currentUser.profilePictureURL = url;
         return url;
       }).catchError((error) {
         //TODO: TRY CATCH BLOĞU EKLE - DÜZENLE
@@ -466,11 +466,11 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void uploadDefaultPicture() async {
     try {
-      await authProvider.updateCurrentUser({
+      await userProvider.updateCurrentUser({
         'profilePictureURL':
             'https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png'
       });
-      authProvider.currentUser.profilePictureURL =
+      userProvider.currentUser.profilePictureURL =
           "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png";
       debugPrint("userPicture default olarak ayarlandı.");
     } catch (e) {

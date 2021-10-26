@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseUserService {
-  @override
   Future<void> delete(String id) {
     throw UnimplementedError();
   }
 
-  @override
   Future<UserObject> getDetail(String id) async {
     DocumentSnapshot documentSnapshot = await usersRef.doc(id).get();
     if (documentSnapshot.exists) {
@@ -17,33 +16,31 @@ class FirebaseUserService {
     }
   }
 
-  @override
   Future<List<UserObject>> getList() async {
     List<UserObject> models = await usersRef.get().then((value) =>
         value.docs.map((e) => UserObject.fromDoc(e.data())).toList());
     return models;
   }
 
-  @override
   Query getListQuery() {
     throw UnimplementedError();
   }
 
-  @override
-  Future<bool> save(UserObject user) async {
+  Future<bool> save(User user) async {
     DocumentSnapshot fetchedUser = await usersRef.doc(user.uid).get();
 
     if (fetchedUser.exists) {
       //do nothing..
       return true;
     } else {
-      await usersRef.doc(user.uid).set(user.toMap());
+      //Creates new user in DB if there is not
+      UserObject userObject = UserObject(uid: user.uid, email: user.email);
+      await usersRef.doc(user.uid).set(userObject.toMap());
       return true;
     }
   }
 
-  @override
-  Future<UserObject> readUser(String userID) async {
+  Future<UserObject> getUserFromDb(String userID) async {
     DocumentSnapshot fetchedUser = await usersRef.doc(userID).get();
     UserObject user = UserObject.fromDoc(fetchedUser);
 
@@ -62,5 +59,10 @@ class FirebaseUserService {
       allGroupMembers.add(singleMember);
     }
     return allGroupMembers;
+  }
+
+  Future<void> updateCurrentUser(
+      Map<String, dynamic> newData, String uid) async {
+    await usersRef.doc(uid).update(newData);
   }
 }

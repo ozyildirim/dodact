@@ -20,7 +20,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
   void initState() {
     super.initState();
     Provider.of<EventProvider>(context, listen: false)
-        .getUserEvents(authProvider.currentUser);
+        .getUserEvents(userProvider.currentUser);
   }
 
   @override

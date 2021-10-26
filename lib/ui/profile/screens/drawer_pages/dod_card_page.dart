@@ -35,7 +35,7 @@ class _DodCardPageState extends BaseState<DodCardPage> {
           GFAvatar(
             radius: 60,
             backgroundImage:
-                NetworkImage(authProvider.currentUser.profilePictureURL),
+                NetworkImage(userProvider.currentUser.profilePictureURL),
           ),
           SizedBox(
             height: 10,
@@ -43,10 +43,10 @@ class _DodCardPageState extends BaseState<DodCardPage> {
           Container(
             color: Colors.white60,
             child: Text(
-                ((authProvider.currentUser.nameSurname != null) &&
-                        (authProvider.currentUser.nameSurname != ""))
-                    ? authProvider.currentUser.nameSurname
-                    : authProvider.currentUser.username,
+                ((userProvider.currentUser.nameSurname != null) &&
+                        (userProvider.currentUser.nameSurname != ""))
+                    ? userProvider.currentUser.nameSurname
+                    : userProvider.currentUser.username,
                 style: TextStyle(
                   fontSize: 24,
                 )),

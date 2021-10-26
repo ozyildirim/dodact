@@ -41,7 +41,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   // ignore: missing_return
   bool canUserManagePostMethod() {
     if (post.ownerType == 'User') {
-      if (post.ownerId == authProvider.currentUser.uid) {
+      if (post.ownerId == userProvider.currentUser.uid) {
         return true;
       }
       return false;
@@ -49,7 +49,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   bool isPostFavorited() {
-    if (authProvider.currentUser.favoritedPosts.contains(post.postId)) {
+    if (userProvider.currentUser.favoritedPosts.contains(post.postId)) {
       return true;
     }
     return false;
@@ -62,7 +62,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     Provider.of<PostProvider>(context, listen: false).setPost(post);
     canUserManagePost = canUserManagePostMethod();
 
-    isFavorite = authProvider.currentUser.favoritedPosts.contains(post.postId);
+    isFavorite = userProvider.currentUser.favoritedPosts.contains(post.postId);
     Provider.of<PostProvider>(context, listen: false).getDodders(post.postId);
   }
 
@@ -251,10 +251,9 @@ class _PostDetailState extends BaseState<PostDetail> {
     );
 
     if (reportReason != null) {
-      CommonMethods()
-          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+      CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
       await FirebaseReportService()
-          .reportPost(authProvider.currentUser.uid, postId, reportReason)
+          .reportPost(userProvider.currentUser.uid, postId, reportReason)
           .then((value) async {
         await CommonMethods().showSuccessDialog(context,
             "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
@@ -271,7 +270,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> _deletePost() async {
-    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
 
     await Provider.of<PostProvider>(context, listen: false)
         .deletePost(post.postId);
@@ -281,7 +280,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> addFavorite() async {
-    await authProvider.addFavoritePost(post.postId).then((value) {
+    await userProvider.addFavoritePost(post.postId).then((value) {
       setState(() {
         isFavorite = true;
       });
@@ -290,7 +289,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> removeFavorite() async {
-    await authProvider.removeFavoritePost(post.postId).then((value) {
+    await userProvider.removeFavoritePost(post.postId).then((value) {
       setState(() {
         isFavorite = false;
       });

@@ -3,6 +3,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 enum AppMode { DEBUG, RELEASE }
@@ -14,20 +15,11 @@ class AuthRepository {
 
   AppMode appMode = AppMode.RELEASE;
 
-  Future<UserObject> currentUser() async {
+  Future<User> currentUser() async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.currentUser();
     } else {
-      UserObject _user = await _firebaseAuthService.currentUser();
-      return await _firebaseUserService.readUser(_user.uid);
-    }
-  }
-
-  Future<UserObject> signInAnonymously() async {
-    if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInAnonymously();
-    } else {
-      return await _firebaseAuthService.signInAnonymously();
+      User user = await _firebaseAuthService.currentUser();
+      return user;
     }
   }
 
@@ -39,14 +31,13 @@ class AuthRepository {
     }
   }
 
-  Future<UserObject> signInWithGoogle(BuildContext context) async {
+  Future<User> signInWithGoogle(BuildContext context) async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInWithGoogle();
     } else {
-      UserObject _user = await _firebaseAuthService.signInWithGoogle(context);
-      bool _result = await _firebaseUserService.save(_user);
-      if (_result) {
-        return await _firebaseUserService.readUser(_user.uid);
+      User user = await _firebaseAuthService.signInWithGoogle(context);
+      bool result = await _firebaseUserService.save(user);
+      if (result) {
+        return user;
       } else {
         return null;
       }
@@ -70,15 +61,13 @@ class AuthRepository {
     }
   }
 
-  Future<UserObject> signInWithEmail(String email, String password) async {
+  Future<User> signInWithEmail(String email, String password) async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInWithEmail(email, password);
     } else {
-      UserObject _user =
-          await _firebaseAuthService.signInWithEmail(email, password);
+      User user = await _firebaseAuthService.signInWithEmail(email, password);
 
-      if (_user != null) {
-        return _firebaseUserService.readUser(_user.uid);
+      if (user != null) {
+        return user;
       } else {
         return null;
       }

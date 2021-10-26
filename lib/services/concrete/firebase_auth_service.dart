@@ -9,35 +9,16 @@ import 'package:google_sign_in/google_sign_in.dart';
 class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  @override
-  Future<UserObject> currentUser() async {
+  User currentUser() {
     try {
-      User user = await _firebaseAuth.currentUser;
-      return _userFromFirebase(user);
+      User user = _firebaseAuth.currentUser;
+      return user;
     } catch (e) {
       print("FirebaseAuthService currentUser error: " + e.toString());
-    }
-  }
-
-  UserObject _userFromFirebase(User user) {
-    if (user == null) {
-      return null;
-    }
-    return UserObject(uid: user.uid, email: user.email);
-  }
-
-  @override
-  Future<UserObject> signInAnonymously() async {
-    try {
-      UserCredential result = await _firebaseAuth.signInAnonymously();
-      return _userFromFirebase(result.user);
-    } catch (e) {
-      print("FirebaseAuthService signInAnonymously error:" + e.toString());
       return null;
     }
   }
 
-  @override
   Future<bool> signOut() async {
     //user must sign out from all these providers(google,facebook etc.)
     await _firebaseAuth.signOut();
@@ -47,8 +28,7 @@ class FirebaseAuthService {
     return true;
   }
 
-  @override
-  Future<UserObject> signInWithGoogle(BuildContext context) async {
+  Future<User> signInWithGoogle(BuildContext context) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -70,7 +50,7 @@ class FirebaseAuthService {
 
         var user = userCredential.user;
         NavigationService.instance.pop();
-        return _userFromFirebase(user);
+        return user;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           // handle the error here
@@ -87,31 +67,32 @@ class FirebaseAuthService {
     }
   }
 
-  @override
-  Future<UserObject> createAccountWithEmailAndPassword(
+  Future<User> createAccountWithEmailAndPassword(
       String email, String password) async {
     UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
 
-    UserObject user = _userFromFirebase(result.user);
+    User user = result.user;
 
-    if (user != null) {
-      await result.user.sendEmailVerification();
-      return user;
-      ;
-    } else {
-      return null;
+    try {
+      if (user != null) {
+        await result.user.sendEmailVerification();
+        print("verif maili gönderildi");
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("hata: $e");
     }
   }
 
-  @override
-  Future<UserObject> signInWithEmail(String email, String password) async {
+  Future<User> signInWithEmail(String email, String password) async {
     UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 
     if (result.user.emailVerified) {
-      var user = _userFromFirebase(result.user);
-      return user;
+      return result.user;
     } else {
       _firebaseAuth.signOut();
       throw FirebaseAuthException(code: 'email-not-verified');

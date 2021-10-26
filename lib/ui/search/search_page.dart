@@ -70,50 +70,47 @@ class _SearchPageState extends State<SearchPage> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextFieldContainer(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: TextField(
-                          decoration: InputDecoration(
-                              hintText: 'Ara',
-                              border: InputBorder.none,
-                              suffixIcon: Icon(Icons.search)),
-                          onChanged: (value) {
-                            setState(() {
-                              name = value;
-                            });
-                          },
-                        ),
-                      ),
-                      TextFieldContainer(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        child: FormBuilderDropdown(
-                          name: "searchCategory",
-                          initialValue: category,
-                          items: categoryItems,
-                          hint:
-                              Text("Kategori", style: TextStyle(fontSize: 10)),
-                          decoration: InputDecoration(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextFieldContainer(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: 'Ara',
                             border: InputBorder.none,
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              category = value;
-                              Logger().i("onchanged value: category");
-                            });
-                          },
-                        ),
+                            suffixIcon: Icon(Icons.search)),
+                        onChanged: (value) {
+                          setState(() {
+                            name = value;
+                          });
+                        },
                       ),
-                    ],
-                  ),
-                  buildStreamer(context, name, category),
-                ],
-              ),
+                    ),
+                    TextFieldContainer(
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: FormBuilderDropdown(
+                        name: "searchCategory",
+                        initialValue: category,
+                        items: categoryItems,
+                        hint: Text("Kategori", style: TextStyle(fontSize: 10)),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            category = value;
+                            Logger().i("onchanged value: category");
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                buildStreamer(context, name, category)
+              ],
             ),
           ),
         ),
@@ -128,10 +125,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   buildStreamer(
-      //TODO: Pagination eklemen lazım
-      BuildContext context,
-      String input,
-      SearchCategory searchCategory) {
+      BuildContext context, String input, SearchCategory searchCategory) {
     var size = MediaQuery.of(context).size;
 
     switch (searchCategory) {
@@ -209,7 +203,6 @@ class _SearchPageState extends State<SearchPage> {
                       .limit(5)
                       .snapshots(),
               builder: (context, snapshot) {
-                Logger().d(snapshot.data.docs.length);
                 return (snapshot.connectionState == ConnectionState.waiting)
                     ? Center(child: spinkit)
                     : ListView.builder(
@@ -242,6 +235,8 @@ class _SearchPageState extends State<SearchPage> {
                               subtitle: Text(user.profession),
                             ),
                           );
+                          print(snapshot.data.docs[index]);
+                          return Container();
                         },
                       );
               },

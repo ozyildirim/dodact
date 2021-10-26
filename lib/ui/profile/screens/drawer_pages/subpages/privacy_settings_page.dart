@@ -20,8 +20,8 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
   @override
   void initState() {
     super.initState();
-    hiddenMail = authProvider.currentUser.privacySettings['hide_mail'];
-    hiddenLocation = authProvider.currentUser.privacySettings['hide_location'];
+    hiddenMail = userProvider.currentUser.privacySettings['hide_mail'];
+    hiddenLocation = userProvider.currentUser.privacySettings['hide_location'];
   }
 
   @override
@@ -111,14 +111,14 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
   Future<void> updateUser() async {
     try {
       CommonMethods().showLoaderDialog(context, "Değişiklikler kaydediliyor.");
-      await authProvider.updateCurrentUser({
+      await userProvider.updateCurrentUser({
         'privacySettings': {
           'hide_mail': hiddenMail,
           'hide_location': hiddenLocation,
         }
       });
-      authProvider.currentUser.privacySettings['hide_mail'] = hiddenMail;
-      authProvider.currentUser.privacySettings['hide_location'] =
+      userProvider.currentUser.privacySettings['hide_mail'] = hiddenMail;
+      userProvider.currentUser.privacySettings['hide_location'] =
           hiddenLocation;
 
       NavigationService.instance.pop();

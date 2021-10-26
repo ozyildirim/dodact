@@ -48,12 +48,12 @@ class _UserPersonalProfileSettingsPageState
   void initState() {
     super.initState();
 
-    location = authProvider.currentUser.location != null
-        ? authProvider.currentUser.location
+    location = userProvider.currentUser.location != null
+        ? userProvider.currentUser.location
         : "Belirtilmemiş";
 
     emailController =
-        TextEditingController(text: authProvider.currentUser.email);
+        TextEditingController(text: userProvider.currentUser.email);
 
     nameSurnameFocus = FocusNode();
     usernameFocus = FocusNode();
@@ -151,13 +151,13 @@ class _UserPersonalProfileSettingsPageState
                     child: FormBuilderTextField(
                       name: "nameSurname",
                       focusNode: nameSurnameFocus,
-                      initialValue: authProvider.currentUser.nameSurname ?? "",
+                      initialValue: userProvider.currentUser.nameSurname ?? "",
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.person),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.nameSurname != value) {
+                        if (userProvider.currentUser.nameSurname != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -185,13 +185,13 @@ class _UserPersonalProfileSettingsPageState
                     child: FormBuilderTextField(
                       name: "username",
                       focusNode: usernameFocus,
-                      initialValue: authProvider.currentUser.username,
+                      initialValue: userProvider.currentUser.username,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.person),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.username != value) {
+                        if (userProvider.currentUser.username != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -261,13 +261,13 @@ class _UserPersonalProfileSettingsPageState
                       name: "userDescription",
                       maxLines: 3,
                       focusNode: descriptionFocus,
-                      initialValue: authProvider.currentUser.userDescription,
+                      initialValue: userProvider.currentUser.userDescription,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.person),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.userDescription != value) {
+                        if (userProvider.currentUser.userDescription != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -294,7 +294,7 @@ class _UserPersonalProfileSettingsPageState
                       name: "education",
                       maxLines: 1,
                       focusNode: educationFocus,
-                      initialValue: authProvider.currentUser.education,
+                      initialValue: userProvider.currentUser.education,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.school),
@@ -305,7 +305,7 @@ class _UserPersonalProfileSettingsPageState
                         }
                       ]),
                       onChanged: (value) {
-                        if (authProvider.currentUser.education != value) {
+                        if (userProvider.currentUser.education != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -327,13 +327,13 @@ class _UserPersonalProfileSettingsPageState
                       name: "profession",
                       maxLines: 1,
                       focusNode: professionFocus,
-                      initialValue: authProvider.currentUser.profession,
+                      initialValue: userProvider.currentUser.profession,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.work),
                       ),
                       onChanged: (value) {
-                        if (authProvider.currentUser.profession != value) {
+                        if (userProvider.currentUser.profession != value) {
                           setState(() {
                             isChanged = true;
                           });
@@ -372,7 +372,7 @@ class _UserPersonalProfileSettingsPageState
               width: 200,
               height: 200,
               child: Image.network(
-                authProvider.currentUser.profilePictureURL,
+                userProvider.currentUser.profilePictureURL,
                 fit: BoxFit.cover,
               ),
             ),
@@ -455,7 +455,7 @@ class _UserPersonalProfileSettingsPageState
 
   void updateProfilePhoto() async {
     CommonMethods().showLoaderDialog(context, "Fotoğrafın değiştiriliyor.");
-    await authProvider
+    await userProvider
         .updateCurrentUserProfilePicture(File(picture.path))
         .then((url) {
       NavigationService.instance.pop();
@@ -470,7 +470,7 @@ class _UserPersonalProfileSettingsPageState
     if (formKey.currentState.saveAndValidate()) {
       try {
         CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
-        await authProvider.updateCurrentUser({
+        await userProvider.updateCurrentUser({
           'location': formKey.currentState.value['location'].toString().trim(),
           'username': formKey.currentState.value['username'].toString().trim(),
           'nameSurname': formKey.currentState.value['nameSurname'].toString(),

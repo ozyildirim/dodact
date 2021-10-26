@@ -20,7 +20,7 @@ class _InterestRegistrationPageState
 
     arrangeSelectedValues();
 
-    // print(authProvider.currentUser.interests);
+    // print(userProvider.currentUser.interests);
 
     print("müzik seçilenler: " + selectedMusicValues.toString());
     print("görsel seçilenler: " + selectedVisualArtValues.toString());
@@ -30,24 +30,24 @@ class _InterestRegistrationPageState
 
   arrangeSelectedValues() {
     setState(() {
-      if (authProvider.currentUser.interests != null) {
-        if (authProvider.currentUser.interests.isNotEmpty) {
-          selectedVisualArtValues = authProvider.currentUser.interests
+      if (userProvider.currentUser.interests != null) {
+        if (userProvider.currentUser.interests.isNotEmpty) {
+          selectedVisualArtValues = userProvider.currentUser.interests
               .where((element) => element['title'] == "Görsel Sanatlar")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
 
-          selectedDanceValues = authProvider.currentUser.interests
+          selectedDanceValues = userProvider.currentUser.interests
               .where((element) => element['title'] == "Dans")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
 
-          selectedMusicValues = authProvider.currentUser.interests
+          selectedMusicValues = userProvider.currentUser.interests
               .where((element) => element['title'] == "Müzik")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
 
-          selectedTheaterValues = authProvider.currentUser.interests
+          selectedTheaterValues = userProvider.currentUser.interests
               .where((element) => element['title'] == "Tiyatro")
               .toList()[0]['selectedSubcategories']
               .cast<String>();
@@ -329,32 +329,13 @@ class _InterestRegistrationPageState
       }
     ];
 
-    await authProvider.updateUserInterests(interests);
+    await userProvider.updateCurrentUserInterests(interests);
   }
 
   void submitInterests() async {
     try {
       await updateUserInterests();
-      Future.delayed(Duration(seconds: 2), () {
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  "Bir hata meydana geldi.",
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
-          ),
-        ));
-      });
+
       navigateLanding();
     } catch (e) {
       _scaffoldKey.currentState.showSnackBar(new SnackBar(

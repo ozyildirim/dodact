@@ -378,7 +378,7 @@ class _ChangeEmailPageState extends BaseState<ChangeEmailPage> {
       var email = _formKey.currentState.value['email'];
       CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor");
       await authProvider.updateEmail(email);
-      await authProvider.updateCurrentUser(
+      await userProvider.updateCurrentUser(
         {'email': email},
       );
       _scaffoldKey.currentState.showSnackBar(new SnackBar(

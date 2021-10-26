@@ -51,6 +51,7 @@ import 'package:dodact_v1/ui/profile/screens/notifications/user_notifications_pa
 import 'package:dodact_v1/ui/profile/screens/others_profile_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
+import 'package:dodact_v1/ui/version_control_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -60,6 +61,8 @@ class NavigationRouteManager {
     switch (settings.name) {
       case k_ROUTE_ONBOARDING:
         return _navigateToDefault(OnBoardingPage(), settings);
+      case k_ROUTE_VERSION_CONTROL_PAGE:
+        return _navigateToDefault(VersionControlPage(), settings);
       case k_ROUTE_LANDING:
         return _navigateToDefault(LandingPage(), settings);
       case k_ROUTE_WELCOME:

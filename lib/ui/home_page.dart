@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
@@ -65,6 +63,7 @@ class _HomePageState extends BaseState<HomePage> {
       print('Message clicked!');
     });
     checkUserSearchKeywords();
+    userProvider.getCurrentUserFavoritePosts();
   }
 
   @override
@@ -113,18 +112,10 @@ class _HomePageState extends BaseState<HomePage> {
         ));
   }
 
-  // updateToken(String token) async {
-  //   print("istek atıldı");
-  //   await tokensRef.doc(authProvider.currentUser.uid).set({
-  //     'token': token,
-  //     'lastTokenUpdate': FieldValue.serverTimestamp(),
-  //   });
-  // }
-
   checkUserSearchKeywords() async {
-    if (authProvider.currentUser.searchKeywords == null ||
-        authProvider.currentUser.searchKeywords.length < 1) {
-      await authProvider.updateUserSearchKeywords();
+    if (userProvider.currentUser.searchKeywords == null ||
+        userProvider.currentUser.searchKeywords.length < 1) {
+      await userProvider.updateUserSearchKeywords();
     }
   }
 }

@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -56,84 +56,6 @@ class _LandingPageState extends BaseState<LandingPage> {
   void initState() {
     initializeRemoteConfig();
     messaging = FirebaseMessaging.instance;
-    super.initState();
-  }
-
-  // Fetching, caching, and activating remote config
-
-  @override
-  Widget build(BuildContext context) {
-    if (!isLoading) {
-      if (_remoteConfigService.getUnderConstructionValue) {
-        return UnderConstructionScreen();
-      } else {
-        return FutureBuilder(
-          future: checkEnforcedVersion(),
-          builder: (_, AsyncSnapshot<bool> asyncSnapshot) {
-            if (asyncSnapshot.connectionState != ConnectionState.done)
-              return Scaffold(
-                body: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(kAuthBackgroundImage),
-                  )),
-                  child: Center(child: spinkit),
-                ),
-              );
-            //
-            else {
-              // return enforcedUpdateScreen();
-              bool data = asyncSnapshot.data;
-              if (data) {
-                return EnforcedUpdateScreen();
-              } else {
-                return Consumer<AuthProvider>(
-                  // ignore: missing_return
-                  builder: (_, model, child) {
-                    if (model.isLoading == false) {
-                      if (model.currentUser == null) {
-                        return WelcomePage();
-                      }
-                      if (model.currentUser.newUser) {
-                        return SignUpDetail();
-                      }
-                      updateToken();
-                      return HomePage();
-                    }
-                    //If state is "Busy"
-                  },
-                );
-              }
-            }
-            // return main screen here
-          },
-        );
-      }
-    } else {
-      return Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(kAuthBackgroundImage),
-          )),
-          child: Center(child: spinkit),
-        ),
-      );
-    }
-  }
-
-  bool isNewUser() {
-    if (authProvider.currentUser.username == null ||
-        authProvider.currentUser.profilePictureURL == null) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void updateToken() {
     messaging.getToken().then((value) async {
       print("istek atıldı");
       await tokensRef.doc(authProvider.currentUser.uid).set({
@@ -141,77 +63,49 @@ class _LandingPageState extends BaseState<LandingPage> {
         'lastTokenUpdate': FieldValue.serverTimestamp(),
       });
     });
+    super.initState();
   }
-}
 
-class UnderConstructionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Scaffold(
-      extendBody: false,
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/app/under_construction.png'),
-              fit: BoxFit.cover),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: size.width * 0.4,
-              height: size.height * 0.4,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/app/logo.png'),
-              )),
-            ),
-            Text(
-              "Bakımdayız",
-              style: TextStyle(fontSize: 22),
-            ),
-            SizedBox(height: 10),
-            GFIconButton(
-                shape: GFIconButtonShape.circle,
-                icon: Icon(FontAwesome5Brands.twitter),
-                onPressed: () {})
-          ],
-        ),
-      ),
+    return Consumer<AuthProvider>(
+      // ignore: missing_return
+      builder: (_, model, child) {
+        if (model.currentUser == null) {
+          return WelcomePage();
+        } else {
+          print("çalıştı");
+          userProvider.getCurrentUser();
+
+          return Consumer<UserProvider>(
+            builder: (_, model, child) {
+              if (model.currentUser != null) {
+                if (model.currentUser.newUser) {
+                  return SignUpDetail();
+                }
+
+                return HomePage();
+              } else {
+                return Scaffold(
+                  body: Container(
+                    child: Center(
+                      child: spinkit,
+                    ),
+                  ),
+                );
+              }
+            },
+          );
+        }
+      },
     );
   }
-}
 
-class EnforcedUpdateScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(kAuthBackgroundImage),
-          ),
-        ),
-        child: Center(
-          child: Card(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: Center(
-                child: Text(
-                  "Lütfen uygulamayı güncelleyin.",
-                  style: TextStyle(fontSize: 22),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+  bool isNewUser(UserObject user) {
+    if (user.username == null || user.profilePictureURL == null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

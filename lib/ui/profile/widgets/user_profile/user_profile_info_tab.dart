@@ -11,7 +11,7 @@ class UserProfileInfoTab extends StatefulWidget {
 class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
   @override
   Widget build(BuildContext context) {
-    var user = authProvider.currentUser;
+    var user = userProvider.currentUser;
     var size = MediaQuery.of(context).size;
     return ListView(
       children: [

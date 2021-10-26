@@ -18,7 +18,7 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
   void initState() {
     super.initState();
     Provider.of<GroupProvider>(context, listen: false)
-        .getUserGroups(authProvider.currentUser.uid);
+        .getUserGroups(userProvider.currentUser.uid);
   }
 
   @override

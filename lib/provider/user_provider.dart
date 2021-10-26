@@ -1,15 +1,21 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/user_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
+import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
+import 'package:dodact_v1/services/concrete/upload_service.dart';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class UserProvider with ChangeNotifier {
+  Logger logger = Logger();
   UserRepository userRepository = locator<UserRepository>();
-  FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
+  FirebaseAuthService firebaseAuthService = locator<FirebaseAuthService>();
   UserObject currentUser;
   UserObject otherUser;
 
@@ -61,23 +67,17 @@ class UserProvider with ChangeNotifier {
 
   Future<UserObject> getCurrentUser() async {
     try {
-      UserObject _user = await _firebaseAuthService.currentUser();
-      if (_user != null) {
-        if (currentUser != null) return currentUser;
-        DocumentSnapshot documentSnapshot = await usersRef.doc(_user.uid).get();
-        if (documentSnapshot.exists) {
-          currentUser = UserObject.fromDoc(documentSnapshot);
-          notifyListeners();
-          return currentUser;
-        }
-        return currentUser;
-      } else {
-        currentUser = null;
+      var user = firebaseAuthService.currentUser();
+
+      DocumentSnapshot documentSnapshot = await usersRef.doc(user.uid).get();
+      if (documentSnapshot.exists) {
+        currentUser = UserObject.fromDoc(documentSnapshot);
         notifyListeners();
-        return null;
+        return currentUser;
       }
     } catch (e) {
       print("UserProvider getCurrentUser error: $e");
+      currentUser = null;
       return null;
     }
   }
@@ -112,5 +112,88 @@ class UserProvider with ChangeNotifier {
       emailErrorMessage = null;
     }
     return result;
+  }
+
+  Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
+    try {
+      await userRepository.updateCurrentUser(newData, currentUser.uid);
+      // getUser();
+    } catch (e) {
+      logger.e("authProvider updateCurrentUser error: $e");
+    }
+  }
+
+  Future<String> updateCurrentUserProfilePicture(File image) async {
+    //First: upload users photo to firestorage
+    try {
+      var url = await UploadService().uploadUserProfilePhoto(
+          userID: currentUser.uid,
+          fileType: 'profile_picture',
+          fileToUpload: image);
+      await updateCurrentUser({'profilePictureURL': url});
+      return url;
+    } catch (e) {
+      logger.e("UserProvider updateCurrentUserProfilePicture error. " +
+          e.toString());
+      notifyListeners();
+    }
+  }
+
+  Future<void> getCurrentUserFavoritePosts() async {
+    try {
+      currentUser.favoritedPosts = await FirebaseUserFavoritesService()
+          .getUserFavoritePosts(currentUser.uid);
+      notifyListeners();
+    } catch (e) {
+      logger.e("UserProvider getUserFavoritePosts error: " + e.toString());
+    }
+  }
+
+  Future<void> updateCurrentUserInterests(
+      List<Map<String, dynamic>> interests) async {
+    try {
+      var newData = {'interests': interests};
+      await userRepository.updateCurrentUser(newData, currentUser.uid);
+      currentUser.interests = interests;
+      notifyListeners();
+      logger.i("Bilgiler güncellendi");
+    } catch (e) {
+      logger.e("UserProvider updateUserInterests error: " + e.toString());
+    }
+  }
+
+  Future<void> addFavoritePost(String postId) async {
+    try {
+      await FirebaseUserFavoritesService()
+          .addFavoritePost(currentUser.uid, postId);
+      currentUser.favoritedPosts.add(postId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("UserProvider addFavoritePost error: " + e.toString());
+    }
+  }
+
+  Future<void> removeFavoritePost(String postId) async {
+    try {
+      await FirebaseUserFavoritesService()
+          .removeFavoritePost(currentUser.uid, postId);
+      currentUser.favoritedPosts.remove(postId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("UserProvider removeFavoritePost error: " + e.toString());
+    }
+  }
+
+  Future<void> updateUserSearchKeywords() async {
+    try {
+      List<String> searchKeywords = [];
+
+      for (int i = 1; i <= currentUser.username.length; i++) {
+        searchKeywords.add(currentUser.username.substring(0, i).toLowerCase());
+      }
+      await updateCurrentUser({'searchKeywords': searchKeywords});
+    } catch (e) {
+      logger.e("UserProvider updateUserSearchKeywords error: " + e.toString());
+    }
   }
 }

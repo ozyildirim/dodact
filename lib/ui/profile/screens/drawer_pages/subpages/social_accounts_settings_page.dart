@@ -50,12 +50,12 @@ class _UserSocialAccountsSettingsState
   void initState() {
     super.initState();
 
-    instagram = authProvider.currentUser.socialMediaLinks['instagram'];
-    linkedIn = linkedIn = authProvider.currentUser.socialMediaLinks['linkedin'];
-    youtube = authProvider.currentUser.socialMediaLinks['youtube'];
-    dribbble = authProvider.currentUser.socialMediaLinks['dribbble'];
-    soundCloud = authProvider.currentUser.socialMediaLinks['soundcloud'];
-    pinterest = authProvider.currentUser.socialMediaLinks['pinterest'];
+    instagram = userProvider.currentUser.socialMediaLinks['instagram'];
+    linkedIn = userProvider.currentUser.socialMediaLinks['linkedin'];
+    youtube = userProvider.currentUser.socialMediaLinks['youtube'];
+    dribbble = userProvider.currentUser.socialMediaLinks['dribbble'];
+    soundCloud = userProvider.currentUser.socialMediaLinks['soundcloud'];
+    pinterest = userProvider.currentUser.socialMediaLinks['pinterest'];
   }
 
   @override
@@ -324,7 +324,7 @@ class _UserSocialAccountsSettingsState
 
         CommonMethods()
             .showLoaderDialog(context, "Değişiklikler kaydediliyor.");
-        await authProvider.updateCurrentUser({
+        await userProvider.updateCurrentUser({
           'socialMediaLinks': {
             'youtube': youtubeLink,
             'linkedin': linkedInLink,
@@ -334,7 +334,7 @@ class _UserSocialAccountsSettingsState
             'pinterest': pinterestLink,
           }
         }).then((value) {
-          authProvider.currentUser.socialMediaLinks = {
+          userProvider.currentUser.socialMediaLinks = {
             'youtube': youtubeLink,
             'linkedin': linkedInLink,
             'dribbble': dribbbleLink,
