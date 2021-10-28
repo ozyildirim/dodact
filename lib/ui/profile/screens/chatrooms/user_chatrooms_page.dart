@@ -47,7 +47,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
               var chatroom = snapshot.data[index];
-              return ChatroomListElements(
+              return ChatroomListElement(
                   chatroom, authProvider.currentUser.uid);
             },
           );
@@ -61,17 +61,17 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
   }
 }
 
-class ChatroomListElements extends StatefulWidget {
+class ChatroomListElement extends StatefulWidget {
   final ChatroomModel chatroom;
   final String currentUserId;
 
-  ChatroomListElements(this.chatroom, this.currentUserId);
+  ChatroomListElement(this.chatroom, this.currentUserId);
 
   @override
-  State<ChatroomListElements> createState() => _ChatroomListElementsState();
+  State<ChatroomListElement> createState() => _ChatroomListElementState();
 }
 
-class _ChatroomListElementsState extends State<ChatroomListElements> {
+class _ChatroomListElementState extends State<ChatroomListElement> {
   UserObject user;
   MessageModel lastMessage;
 

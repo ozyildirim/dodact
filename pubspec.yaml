@@ -3,7 +3,7 @@ description: Sanatçı ruhların buluşma noktası.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.1
+version: 0.0.2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -163,4 +163,11 @@ flutter:
         - asset: assets/fonts/Poppins-Light.ttf
           weight: 300
         - asset: assets/fonts/Poppins-Medium.ttf
+
+    - family: PulpDisplay
+      fonts:
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Regular.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Bold.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Light.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Medium.ttf
 

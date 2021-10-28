@@ -60,14 +60,16 @@ class OthersProfileHeader extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        GFButton(
-          onPressed: () async {
-            createChatroom(context, provider.otherUser.uid);
-          },
-          child: Icon(Icons.message),
-          shape: GFButtonShape.pills,
-          color: Colors.deepOrangeAccent,
-        )
+        provider.currentUser.uid != provider.otherUser.uid
+            ? GFButton(
+                onPressed: () async {
+                  createChatroom(context, provider.otherUser.uid);
+                },
+                child: Icon(Icons.message),
+                shape: GFButtonShape.pills,
+                color: Colors.deepOrangeAccent,
+              )
+            : Container()
       ],
     );
   }

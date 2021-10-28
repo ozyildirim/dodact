@@ -40,7 +40,8 @@ class _DiscoverPageState extends State<DiscoverPage>
           unselectedLabelStyle: Theme.of(context)
               .textTheme
               .copyWith(
-                  bodyText1: TextStyle(fontSize: 14, fontFamily: "Raleway"))
+                  bodyText1:
+                      TextStyle(fontSize: 14, fontFamily: "RobotoCondensed"))
               .bodyText1,
           borderRadius: BorderRadius.circular(15),
           height: GFAppBar().preferredSize.height * 0.75,

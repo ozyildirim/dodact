@@ -28,7 +28,7 @@ const kSettingsTitleSize = 18.0;
 const kPageCenteredTextSize = 20.0;
 const kUserProfileTabLabelSize = 16.0;
 
-const kFontFamily = "Raleway";
+const kFontFamily = "PulpDisplay";
 
 const guzel = Color(0xFF162A49);
 
@@ -50,10 +50,10 @@ ThemeData appTheme = new ThemeData(
       elevation: 8,
       textTheme: TextTheme(
         headline1: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontFamily: "Raleway",
-            fontWeight: FontWeight.w600),
+          color: Colors.black,
+          fontSize: 20,
+          fontFamily: "RobotoCondensed",
+        ),
       ),
       backgroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.black),
@@ -71,10 +71,10 @@ ThemeData appTheme = new ThemeData(
 
   textTheme: TextTheme(
     headline2: TextStyle(
-        color: Colors.black,
-        fontFamily: 'Raleway',
-        fontWeight: FontWeight.w700),
+      color: Colors.black,
+      fontFamily: 'RobotoCondensed',
+    ),
   ),
 
-  fontFamily: "Raleway",
+  fontFamily: "RobotoCondensed",
 );

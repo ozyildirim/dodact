@@ -14,8 +14,10 @@ class GroupMembersTab extends StatelessWidget {
     return Container(
       child: provider.groupMembers != null
           ? provider.groupMembers.isNotEmpty
-              ? ListView.builder(
-                  scrollDirection: Axis.horizontal,
+              ? GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, childAspectRatio: 0.5),
+                  itemCount: provider.groupMembers.length,
                   itemBuilder: (context, index) {
                     var user = provider.groupMembers[index];
                     return InkWell(
@@ -28,22 +30,21 @@ class GroupMembersTab extends StatelessWidget {
                               imageUrl: user.profilePictureURL,
                               imageBuilder: (context, imageProvider) {
                                 return CircleAvatar(
-                                  radius: 80,
+                                  radius: 60,
                                   backgroundImage:
                                       NetworkImage(user.profilePictureURL),
                                 );
                               },
                             ),
-                            Text("@" + user.username,
+                            Text(user.nameSurname,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold))
+                                    fontSize: 15, fontWeight: FontWeight.bold))
                           ],
                         ),
                       ),
                     );
-                  },
-                  itemCount: provider.groupMembers.length,
-                )
+                  })
               : Container(
                   child: Text("Boş"),
                 )

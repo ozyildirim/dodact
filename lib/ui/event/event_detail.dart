@@ -53,13 +53,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   @override
   void initState() {
     event = widget.event;
-    tabController = new TabController(length: 1, vsync: this);
+    tabController = new TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         actions: canUserControlEvent()
             ? [
@@ -88,11 +89,11 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           ),
                         ])
               ],
-        elevation: 8,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         backwardsCompatibility: true,
         iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true,
-        title: Text("Detay", style: TextStyle(color: Colors.black)),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -108,7 +109,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _buildEventImageCarousel(),
+              _buildEventHeader(),
               _buildEventDetailBody(),
               _buildEventDetailTabs()
               // _buildMap()
@@ -119,31 +120,17 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     );
   }
 
-  Widget _buildEventImageCarousel() {
-    if (event.eventImages.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GFCarousel(
-          passiveIndicator: Colors.white,
-          enlargeMainPage: true,
-          autoPlay: true,
-          activeIndicator: Colors.white,
-          items: event.eventImages.map((image) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
-                ),
-              ),
-            );
-          }).toList(),
+  Widget _buildEventHeader() {
+    return Container(
+      width: dynamicWidth(1),
+      height: dynamicHeight(0.4),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(event.eventImages[0]),
+          fit: BoxFit.cover,
         ),
-      );
-    } else {
-      return Container();
-    }
+      ),
+    );
   }
 
   Widget _buildEventDetailBody() {
@@ -161,7 +148,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
                       event.eventTitle,
-                      style: GoogleFonts.poppins(fontSize: 24),
+                      style: TextStyle(fontSize: 28),
                     ),
                   ),
                 ),
@@ -185,16 +172,16 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                 DateFormat('dd,MM,yyyy hh:mm').format(event.eventStartDate),
                 style: TextStyle(fontSize: 18),
               ),
-              subtitle: Text("Etkinlik Başlangıç Tarihi"),
+              subtitle: Text("Etkinlik Başlangıcı"),
             ),
-            ListTile(
-              leading: Icon(Icons.view_day),
-              title: Text(
-                DateFormat('dd,MM,yyyy hh:mm').format(event.eventEndDate),
-                style: TextStyle(fontSize: 18),
-              ),
-              subtitle: Text("Etkinlik Bitiş Tarihi"),
-            ),
+            // Column(
+            //   children: [
+            //     Text("Etkinlik Başlangıcı", style: TextStyle(fontSize: 18)),
+            //     Text(
+            //       DateFormat('dd,MM,yyyy hh:mm').format(event.eventStartDate),
+            //     ),
+            //   ],
+            // ),
             ListTile(
                 leading: Icon(Icons.view_day),
                 title: Text(
@@ -245,6 +232,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             controller: tabController,
             tabs: const [
               const Tab(text: "Detaylar"),
+              const Tab(text: "Medya"),
             ],
           ),
         ),
@@ -254,6 +242,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             padding: const EdgeInsets.all(8.0),
             child: TabBarView(controller: tabController, children: [
               buildDetailTab(),
+              buildEventMediaTab(),
             ]),
           ),
         ),
@@ -271,6 +260,33 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         ),
       ),
     );
+  }
+
+  Widget buildEventMediaTab() {
+    if (event.eventImages.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GFCarousel(
+          passiveIndicator: Colors.white,
+          enlargeMainPage: true,
+          autoPlay: true,
+          activeIndicator: Colors.white,
+          items: event.eventImages.map((image) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _getCreatorInfo() {
@@ -347,29 +363,63 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               }
               GroupModel fetchedGroup = snapshot.data;
 
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        NavigationService.instance
-                            .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
-                      },
-                      child: GFImageOverlay(
-                        width: 100,
-                        height: 100,
-                        shape: BoxShape.circle,
-                        image: NetworkImage(fetchedGroup.groupProfilePicture),
-                        boxFit: BoxFit.cover,
+              // return Column(
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.all(8.0),
+              //       child: InkWell(
+              //         onTap: () {
+              //           NavigationService.instance
+              //               .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
+              //         },
+              //         child: GFImageOverlay(
+              //           width: 100,
+              //           height: 100,
+              //           shape: BoxShape.circle,
+              //           image: NetworkImage(fetchedGroup.groupProfilePicture),
+              //           boxFit: BoxFit.cover,
+              //         ),
+              //       ),
+              //     ),
+              //     Text(
+              //       fetchedGroup.groupName.toUpperCase(),
+              //       style: TextStyle(fontWeight: FontWeight.w700),
+              //     )
+              //   ],
+              // );
+              return ListTile(
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
+                },
+                leading: CircleAvatar(
+                  radius: 15,
+                  backgroundImage:
+                      NetworkImage(fetchedGroup.groupProfilePicture),
+                ),
+                title: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: "Oluşturan: ",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
+                      TextSpan(
+                        text: fetchedGroup.groupName.toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: "Raleway",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    fetchedGroup.groupName.toUpperCase(),
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  )
-                ],
+                ),
               );
           }
         },
