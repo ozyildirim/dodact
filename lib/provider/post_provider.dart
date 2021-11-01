@@ -179,22 +179,9 @@ class PostProvider extends ChangeNotifier {
 
   Future<List<PostModel>> getUserPosts(UserObject user) async {
     try {
-      userPosts = await postRepository.getUserPosts(user);
-      notifyListeners();
-      return userPosts;
+      return await postRepository.getUserPosts(user);
     } catch (e) {
       print("PostProvider getUserPosts error: " + e.toString());
-      return null;
-    }
-  }
-
-  Future<List<PostModel>> getOtherUserPosts(UserObject user) async {
-    try {
-      otherUsersPosts = await postRepository.getUserPosts(user);
-      notifyListeners();
-      return otherUsersPosts;
-    } catch (e) {
-      print("PostProvider getOtherUserPosts error: " + e.toString());
       return null;
     }
   }

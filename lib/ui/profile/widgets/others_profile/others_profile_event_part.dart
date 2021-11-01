@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
+import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -10,55 +11,57 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfileEventsTab extends StatefulWidget {
+  final UserObject user;
+
+  OthersProfileEventsTab({this.user});
+
   @override
   _OthersProfileEventsTabState createState() => _OthersProfileEventsTabState();
 }
 
 class _OthersProfileEventsTabState extends State<OthersProfileEventsTab> {
-  UserProvider userProvider;
-
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    Provider.of<EventProvider>(context, listen: false)
-        .getUserEvents(userProvider.otherUser);
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<EventProvider>(context);
-
-    if (provider.userEventList != null) {
-      if (provider.userEventList.isEmpty) {
-        return Center(
-          child: Text(
-            "Herhangi bir etkinlik oluşturulmamış.",
-            style: TextStyle(fontSize: kPageCenteredTextSize),
-          ),
-        );
-      }
-
-      var events = provider.userEventList;
-
-      return ListView(
-        scrollDirection: Axis.horizontal,
-        children: events != null
-            ? events.map((e) => _buildUserEventCard(e)).toList()
-            : [
-                Center(
-                  child: Text(
-                    "Herhangi bir etkinlik oluşturulmamış.",
-                    style: TextStyle(fontSize: kPageCenteredTextSize),
-                  ),
-                )
-              ],
-      );
-    } else {
-      return Center(
-        child: spinkit,
-      );
-    }
+    final provider = Provider.of<EventProvider>(context, listen: false);
+    return FutureBuilder(
+      future: provider.getUserEvents(widget.user),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: spinkit,
+          );
+        } else {
+          if (snapshot.hasData) {
+            if (snapshot.data.isNotEmpty) {
+              List<EventModel> userEvents = snapshot.data;
+              return ListView(
+                  scrollDirection: Axis.horizontal,
+                  children:
+                      userEvents.map((e) => _buildUserEventCard(e)).toList());
+            } else {
+              return Center(
+                child: Text(
+                  "Herhangi bir etkinlik oluşturulmamış.",
+                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                ),
+              );
+            }
+          } else {
+            return Center(
+              child: Text(
+                "Herhangi bir etkinlik oluşturulmamış.",
+                style: TextStyle(fontSize: kPageCenteredTextSize),
+              ),
+            );
+          }
+        }
+      },
+    );
   }
 
   Widget _buildUserEventCard(EventModel event) {

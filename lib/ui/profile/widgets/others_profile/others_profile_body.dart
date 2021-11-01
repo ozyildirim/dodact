@@ -1,4 +1,5 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_event_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_group_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_info_part.dart';
@@ -6,6 +7,10 @@ import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_posts
 import 'package:flutter/material.dart';
 
 class OthersProfileBody extends StatefulWidget {
+  final UserObject user;
+
+  OthersProfileBody({this.user});
+
   @override
   _OthersProfileBodyState createState() => _OthersProfileBodyState();
 }
@@ -67,16 +72,16 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
             controller: _controller,
             children: [
               Container(
-                child: OthersProfileInfoTab(),
+                child: OthersProfileInfoTab(user: widget.user),
               ),
               Container(
-                child: OthersProfilePostsTab(),
+                child: OthersProfilePostsTab(user: widget.user),
               ),
               Container(
-                child: OthersProfileGroupsTab(),
+                child: OthersProfileGroupsTab(user: widget.user),
               ),
               Container(
-                child: OthersProfileEventsTab(),
+                child: OthersProfileEventsTab(user: widget.user),
               ),
             ],
           ),

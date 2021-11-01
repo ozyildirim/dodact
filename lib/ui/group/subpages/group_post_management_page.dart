@@ -47,7 +47,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
               if (asyncSnapshot.data.length == 0) {
                 return Center(
                     child: Text(
-                  "Gruba ait paylaşım bulunmuyor.",
+                  "Topluluğa ait paylaşım bulunmuyor.",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ));
               } else {
@@ -101,7 +101,6 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                                     trailing: IconButton(
                                       icon: Icon(Icons.delete),
                                       onPressed: () {
-                                        //TODO: BU kısmı düzenle
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -140,45 +139,6 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                         ),
                       );
                     });
-                // return ListView.builder(
-                //     itemCount: asyncSnapshot.data.length,
-                //     itemBuilder: (context, index) {
-                //       var post = asyncSnapshot.data[index];
-                //       var postCoverPhoto = CommonMethods.createThumbnailURL(
-                //           post.isLocatedInYoutube, post.postContentURL,
-                //           isAudio:
-                //               post.postContentType == "Ses" ? true : false);
-                //       print(postCoverPhoto);
-
-                //       return Container(
-                //         child: ListTile(
-                //           leading: CircleAvatar(
-                //             child: Container(
-                //               // height: mediaQuery.size.height * 0.5,
-                //               width: mediaQuery.size.width * 0.3,
-                //               decoration: BoxDecoration(
-                //                   shape: BoxShape.circle,
-                //                   image: DecorationImage(
-                //                     image: NetworkImage(postCoverPhoto),
-                //                   )),
-                //             ),
-                //             radius: 60,
-                //           ),
-                //           title: Text(
-                //             post.postTitle,
-                //             style: TextStyle(fontSize: 22),
-                //           ),
-                //           subtitle: Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             children: [
-                //               Text(post.postCategory),
-                //               Text(DateFormat("dd/MM/yyyy")
-                //                   .format(post.postDate))
-                //             ],
-                //           ),
-                //         ),
-                //       );
-                //     });
               }
             }
             // return main screen here
@@ -215,6 +175,6 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
   }
 
   bool canUserManage() {
-    return groupProvider.group.founderId == authProvider.currentUser.uid;
+    return groupProvider.group.founderId == userProvider.currentUser.uid;
   }
 }

@@ -39,21 +39,17 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
 
     tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
-
-    groupProvider.setGroup(group);
-    groupProvider.getGroupPosts(group.groupId);
-    groupProvider.getGroupMembers(group);
-    groupProvider.getGroupEvents(group.groupId);
   }
 
   bool isUserGroupFounder() {
-    if (group.founderId == authProvider.currentUser.uid) {
+    if (group.founderId == userProvider.currentUser.uid) {
       return true;
     }
     return false;
   }
 
   navigateGroupManagementPage() {
+    groupProvider.setGroup(group);
     NavigationService.instance.navigate(k_ROUTE_GROUP_MANAGEMENT_PAGE);
   }
 
@@ -61,7 +57,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
     var size = MediaQuery.of(context).size;
-    Logger().i(provider.group);
 
     return Scaffold(
       appBar: AppBar(
@@ -191,9 +186,10 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
       child: TabBar(
         isScrollable: true,
         labelColor: Colors.black,
-        labelStyle: GoogleFonts.poppins(
-          fontSize: 18,
-        ),
+        // labelStyle: GoogleFonts.poppins(
+        //   fontSize: 18,
+        // ),
+        labelStyle: TextStyle(fontSize: 18),
         controller: tabController,
         tabs: [
           Tab(text: "Grup Açıklaması"),
@@ -233,26 +229,26 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   buildMembersTabView() {
-    return GroupMembersTab();
+    return GroupMembersTab(group: group);
   }
 
   buildPostsTabView() {
-    return GroupPostsTab();
+    return GroupPostsTab(groupId: group.groupId);
   }
 
   buildEventsTabView() {
-    return GroupEventsTab();
+    return GroupEventsTab(groupId: group.groupId);
   }
 
   buildAnnouncementsTabView() {
     return Container();
   }
 
-  void navigateCreationPage(String groupId) {
-    NavigationService.instance.navigate(k_ROUTE_CREATION, args: group.groupId);
-  }
-
   buildPhotosTabView() {
     return GroupPhotosTabView();
+  }
+
+  void navigateCreationPage(String groupId) {
+    NavigationService.instance.navigate(k_ROUTE_CREATION, args: group.groupId);
   }
 }

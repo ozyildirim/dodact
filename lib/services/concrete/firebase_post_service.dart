@@ -6,6 +6,8 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:logger/logger.dart';
 
 class FirebasePostService {
+  var logger = new Logger();
+
   Future<void> delete(String id) async {
     return await postsRef.doc(id).delete();
   }
@@ -65,7 +67,7 @@ class FirebasePostService {
 
       return allGroupPosts;
     } catch (e) {
-      Logger().e(e);
+      logger.e(e);
     }
   }
 

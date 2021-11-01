@@ -2,7 +2,6 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
@@ -26,14 +25,12 @@ class _ProfilePageState extends BaseState<ProfilePage>
   void initState() {
     super.initState();
     userProvider.getCurrentUser();
-    Provider.of<EventProvider>(context, listen: false)
-        .getUserEvents(userProvider.currentUser);
   }
 
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
-    print(userProvider.currentUser.permissions);
+    // print(userProvider.currentUser.permissions);
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(

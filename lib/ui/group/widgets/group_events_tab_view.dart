@@ -5,27 +5,67 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GroupEventsTab extends StatelessWidget {
+  final String groupId;
+
+  GroupEventsTab({this.groupId});
+
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<GroupProvider>(context);
-    return Container(
-      child: provider.groupEvents != null
-          ? provider.groupEvents.isNotEmpty
-              ? SingleChildScrollView(
+    print("çalıştı");
+    var provider = Provider.of<GroupProvider>(context, listen: false);
+    // return Container(
+    //   child: provider.groupEvents != null
+    //       ? provider.groupEvents.isNotEmpty
+    //           ? SingleChildScrollView(
+    //               child: ParallaxEvents(
+    //                 events: provider.groupEvents,
+    //               ),
+    //             )
+    //           : Center(
+    //               child: Container(
+    //                 color: Colors.white60,
+    //                 child: Text("Bu grup henüz bir etkinlik paylaşmadı.",
+    //                     style: TextStyle(fontSize: 22)),
+    //               ),
+    //             )
+    //       : Center(
+    //           child: spinkit,
+    //         ),
+    // );
+
+    return FutureBuilder(
+        future: provider.getGroupEvents(groupId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              if (snapshot.data.isNotEmpty) {
+                return SingleChildScrollView(
                   child: ParallaxEvents(
-                    events: provider.groupEvents,
+                    events: snapshot.data,
                   ),
-                )
-              : Center(
+                );
+              } else {
+                return Center(
                   child: Container(
                     color: Colors.white60,
                     child: Text("Bu grup henüz bir etkinlik paylaşmadı.",
-                        style: TextStyle(fontSize: 22)),
+                        style: TextStyle(fontSize: kPageCenteredTextSize)),
                   ),
-                )
-          : Center(
+                );
+              }
+            } else {
+              return Center(
+                child: Text(
+                  "Bir hata oluştu.",
+                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                ),
+              );
+            }
+          } else {
+            return Center(
               child: spinkit,
-            ),
-    );
+            );
+          }
+        });
   }
 }

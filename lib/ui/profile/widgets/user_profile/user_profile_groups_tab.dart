@@ -17,43 +17,45 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
   @override
   void initState() {
     super.initState();
-    Provider.of<GroupProvider>(context, listen: false)
-        .getUserGroups(userProvider.currentUser.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var provider = Provider.of<GroupProvider>(context);
+    var provider = Provider.of<GroupProvider>(context, listen: false);
 
-    if (provider.userGroupList != null) {
-      if (provider.userGroupList.isEmpty) {
-        return Center(
-          child: Text(
-            "Herhangi bir gruba dahil değilsin.",
-            style: TextStyle(fontSize: kPageCenteredTextSize),
-          ),
-        );
-      } else {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-              shrinkWrap: true,
-              primary: false,
-              scrollDirection: Axis.vertical,
-              itemCount: provider.userGroupList.length,
-              itemBuilder: (context, index) {
-                var groupItem = provider.userGroupList[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: buildGroupCard(size, groupItem),
-                );
-              }),
-        );
-      }
-    } else {
-      return Center(child: spinkit);
-    }
+    return FutureBuilder(
+      future: provider.getUserGroups(userProvider.currentUser.uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data.isEmpty) {
+            return Center(
+              child: Text(
+                "Herhangi bir gruba dahil değil.",
+                style: TextStyle(fontSize: kPageCenteredTextSize),
+              ),
+            );
+          } else {
+            List<GroupModel> groups = snapshot.data;
+
+            return ListView.builder(
+                shrinkWrap: true,
+                primary: false,
+                scrollDirection: Axis.vertical,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  var groupItem = groups[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(child: buildGroupCard(size, groupItem)),
+                  );
+                });
+          }
+        } else {
+          return Center(child: spinkit);
+        }
+      },
+    );
   }
 
   buildGroupCard(Size size, GroupModel group) {

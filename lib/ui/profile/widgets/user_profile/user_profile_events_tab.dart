@@ -7,7 +7,6 @@ import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileEventsTab extends StatefulWidget {
@@ -29,39 +28,40 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
     var size = MediaQuery.of(context).size;
     print("ekran boyutları width: ${size.width}, height: ${size.height}");
 
-    if (provider.userEventList != null) {
-      if (provider.userEventList.isNotEmpty) {
-        Logger().i("EventList boş değil");
-        List<EventModel> events = provider.userEventList;
-
-        if (events != null && events.isNotEmpty) {
-          Logger().i("onaylanan listeler boş değil");
-          Logger().i("onaylanan listeler: ${events.length}");
-          return ListView(
-              scrollDirection: Axis.horizontal,
-              children: events.map((e) => _buildUserEventCard(e)).toList());
-        } else {
-          Logger().i("onaylanan listeler boş");
+    return FutureBuilder(
+      future: provider.getUserEvents(userProvider.currentUser),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: Text(
-              "Herhangi bir etkinlik oluşturulmamış.",
-              style: TextStyle(fontSize: kPageCenteredTextSize),
-            ),
+            child: spinkit,
           );
+        } else {
+          if (snapshot.hasData) {
+            if (snapshot.data.isNotEmpty) {
+              List<EventModel> userEvents = snapshot.data;
+              return ListView(
+                  scrollDirection: Axis.horizontal,
+                  children:
+                      userEvents.map((e) => _buildUserEventCard(e)).toList());
+            } else {
+              return Center(
+                child: Text(
+                  "Herhangi bir etkinlik oluşturulmamış.",
+                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                ),
+              );
+            }
+          } else {
+            return Center(
+              child: Text(
+                "Herhangi bir etkinlik oluşturulmamış.",
+                style: TextStyle(fontSize: kPageCenteredTextSize),
+              ),
+            );
+          }
         }
-      } else {
-        Logger().i("EventList boş");
-        return Center(
-          child: Text(
-            "Herhangi bir etkinlik oluşturulmamış.",
-            style: TextStyle(fontSize: 22),
-          ),
-        );
-      }
-    } else {
-      Logger().i("EventList null");
-      return Center(child: spinkit);
-    }
+      },
+    );
   }
 
   Widget _buildUserEventCard(EventModel event) {

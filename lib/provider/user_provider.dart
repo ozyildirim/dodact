@@ -65,10 +65,10 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  // ignore: missing_return
   Future<UserObject> getCurrentUser() async {
     try {
       var user = firebaseAuthService.currentUser();
-
       DocumentSnapshot documentSnapshot = await usersRef.doc(user.uid).get();
       if (documentSnapshot.exists) {
         currentUser = UserObject.fromDoc(documentSnapshot);

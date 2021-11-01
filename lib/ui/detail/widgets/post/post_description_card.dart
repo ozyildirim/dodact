@@ -8,6 +8,7 @@ class PostDescriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     // return Card(
     //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     //   color: Colors.cyan[200],
@@ -37,7 +38,7 @@ class PostDescriptionCard extends StatelessWidget {
     // );
 
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

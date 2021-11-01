@@ -15,8 +15,6 @@ class GroupProvider extends ChangeNotifier {
 
   List<PostModel> groupPosts;
   List<UserObject> groupMembers;
-  List<EventModel> groupEvents;
-  List<GroupModel> userGroupList;
 
   List<GroupModel> groupList;
   bool isLoading = false;
@@ -70,6 +68,7 @@ class GroupProvider extends ChangeNotifier {
     try {
       await _groupRepository.update(groupId, changes);
       var updatedGroupModel = await getGroupDetail(groupId);
+      group = updatedGroupModel;
       groupList[groupList.indexOf(group)] = updatedGroupModel;
     } catch (e) {
       print("GroupProvider updateGroup error: " + e.toString());
@@ -123,10 +122,7 @@ class GroupProvider extends ChangeNotifier {
 
   Future<List<GroupModel>> getUserGroups(String userId) async {
     try {
-      userGroupList = await _groupRepository.getUserGroups(userId);
-      notifyListeners();
-      Logger().d(userGroupList);
-      return userGroupList;
+      return await _groupRepository.getUserGroups(userId);
     } catch (e) {
       logger.e("GroupProvider getUserGroups error: " + e.toString());
       return null;
@@ -149,9 +145,7 @@ class GroupProvider extends ChangeNotifier {
 
   Future<List<PostModel>> getGroupPosts(String groupId) async {
     try {
-      groupPosts = await _groupRepository.getGroupPosts(groupId);
-      notifyListeners();
-      return groupPosts;
+      return await _groupRepository.getGroupPosts(groupId);
     } catch (e) {
       logger.e("GroupProvider getGroupPosts error: " + e.toString());
       return null;
@@ -160,9 +154,9 @@ class GroupProvider extends ChangeNotifier {
 
   Future<List<EventModel>> getGroupEvents(String groupId) async {
     try {
-      groupEvents = await _groupRepository.getGroupEvents(groupId);
-      notifyListeners();
-      return groupEvents;
+      return await _groupRepository.getGroupEvents(groupId);
+      // notifyListeners();
+
     } catch (e) {
       logger.e("GroupProvider getGroupEvents error: " + e.toString());
       return null;
@@ -171,8 +165,7 @@ class GroupProvider extends ChangeNotifier {
 
   Future<void> getGroupMembers(GroupModel group) async {
     try {
-      groupMembers = await _groupRepository.getGroupMembers(group);
-      notifyListeners();
+      return await _groupRepository.getGroupMembers(group);
     } catch (e) {
       logger.e("GroupProvider getGroupMembers error: " + e.toString());
       return null;
@@ -241,8 +234,6 @@ class GroupProvider extends ChangeNotifier {
   Future<void> deleteGroupEvent(String eventId) async {
     try {
       await _groupRepository.deleteGroupEvent(eventId);
-      groupEvents.removeWhere((event) => event.eventId == eventId);
-      notifyListeners();
     } catch (e) {
       logger.e("GroupProvider deleteGroupPost error: " + e.toString());
     }

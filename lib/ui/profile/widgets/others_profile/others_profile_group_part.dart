@@ -3,12 +3,17 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
+import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfileGroupsTab extends StatefulWidget {
+  final UserObject user;
+
+  const OthersProfileGroupsTab({this.user});
+
   @override
   _OthersProfileGroupsTabState createState() => _OthersProfileGroupsTabState();
 }
@@ -19,43 +24,45 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    Provider.of<GroupProvider>(context, listen: false)
-        .getUserGroups(userProvider.otherUser.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var provider = Provider.of<GroupProvider>(context);
+    var provider = Provider.of<GroupProvider>(context, listen: false);
 
-    // provider.getUserGroups(userProvider.otherUser.uid);
+    return FutureBuilder(
+      future: provider.getUserGroups(widget.user.uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data.isEmpty) {
+            return Center(
+              child: Text(
+                "Herhangi bir gruba dahil değil.",
+                style: TextStyle(fontSize: kPageCenteredTextSize),
+              ),
+            );
+          } else {
+            List<GroupModel> groups = snapshot.data;
 
-    if (provider.userGroupList != null) {
-      if (provider.userGroupList.isEmpty) {
-        return Center(
-          child: Text(
-            "Herhangi bir gruba dahil değil.",
-            style: TextStyle(fontSize: kPageCenteredTextSize),
-          ),
-        );
-      } else {
-        return ListView.builder(
-            shrinkWrap: true,
-            primary: false,
-            scrollDirection: Axis.vertical,
-            itemCount: provider.userGroupList.length,
-            itemBuilder: (context, index) {
-              var groupItem = provider.userGroupList[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(child: buildGroupCard(size, groupItem)),
-              );
-            });
-      }
-    } else {
-      return Center(child: spinkit);
-    }
+            return ListView.builder(
+                shrinkWrap: true,
+                primary: false,
+                scrollDirection: Axis.vertical,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  var groupItem = groups[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(child: buildGroupCard(size, groupItem)),
+                  );
+                });
+          }
+        } else {
+          return Center(child: spinkit);
+        }
+      },
+    );
   }
 
   buildGroupCard(Size size, GroupModel group) {
@@ -105,7 +112,7 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          fontFamily: "Poppins",
+                          // fontFamily: "Poppins",
                         ),
                       ),
                     ),

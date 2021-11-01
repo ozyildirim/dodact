@@ -17,57 +17,68 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
   @override
   void initState() {
     super.initState();
-    Provider.of<PostProvider>(context, listen: false)
-        .getUserPosts(userProvider.currentUser);
   }
 
   @override
   Widget build(BuildContext context) {
-    final postProvider = Provider.of<PostProvider>(context);
+    final postProvider = Provider.of<PostProvider>(context, listen: false);
 
-    if (postProvider.userPosts != null) {
-      if (postProvider.userPosts.isNotEmpty) {
-        List<PostModel> posts = postProvider.userPosts;
-
-        if (posts.isNotEmpty && posts != null) {
-          return StaggeredGridView.countBuilder(
-            crossAxisCount: 4,
-            itemCount: posts.length,
-            itemBuilder: (BuildContext context, int index) {
-              var postItem = posts[index];
-              return Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Container(
-                  height: 200,
-                  child: PostCardForGrid(
-                    post: postItem,
-                  ),
-                ),
-              );
-            },
-            staggeredTileBuilder: (int index) =>
-                new StaggeredTile.count(2, index.isEven ? 2 : 1),
-            mainAxisSpacing: 8.0,
-            crossAxisSpacing: 4.0,
+    return FutureBuilder(
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: spinkit,
           );
         } else {
-          return Center(
-            child: Text(
-              "Herhangi bir içerik oluşturulmamış.",
-              style: TextStyle(fontSize: 22),
-            ),
-          );
+          if (snapshot.hasData) {
+            if (snapshot.data.isNotEmpty) {
+              List<PostModel> posts = snapshot.data;
+
+              if (posts.isNotEmpty && posts != null) {
+                return StaggeredGridView.countBuilder(
+                  crossAxisCount: 4,
+                  itemCount: posts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var postItem = posts[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Container(
+                        height: 200,
+                        child: PostCardForGrid(
+                          post: postItem,
+                        ),
+                      ),
+                    );
+                  },
+                  staggeredTileBuilder: (int index) =>
+                      new StaggeredTile.count(2, index.isEven ? 2 : 1),
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 4.0,
+                );
+              } else {
+                return Center(
+                  child: Text(
+                    "Herhangi bir içerik oluşturulmamış.",
+                    style: TextStyle(fontSize: 22),
+                  ),
+                );
+              }
+            } else {
+              return Center(
+                child: Text(
+                  "Herhangi bir içerik oluşturulmamış.",
+                  style: TextStyle(fontSize: 22),
+                ),
+              );
+            }
+          } else {
+            return Center(
+              child: spinkit,
+            );
+          }
         }
-      } else {
-        return Center(
-          child: Text(
-            "Herhangi bir içerik oluşturulmamış.",
-            style: TextStyle(fontSize: 22),
-          ),
-        );
-      }
-    } else {
-      return Center(child: spinkit);
-    }
+      },
+      future: postProvider.getUserPosts(userProvider.currentUser),
+    );
   }
 }

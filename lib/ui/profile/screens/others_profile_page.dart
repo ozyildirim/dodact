@@ -127,14 +127,10 @@ class _OtherUserProfileSubpageState extends State<OtherUserProfileSubpage> {
   void initState() {
     super.initState();
     user = widget.user;
-    Provider.of<PostProvider>(context, listen: false).getOtherUserPosts(user);
-    Provider.of<EventProvider>(context, listen: false).getOtherUserEvents(user);
   }
 
   @override
   Widget build(BuildContext context) {
-    Logger().i(user.toString());
-    var provider = Provider.of<UserProvider>(context, listen: false);
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -152,7 +148,7 @@ class _OtherUserProfileSubpageState extends State<OtherUserProfileSubpage> {
             child: OthersProfileHeader(),
           ),
           Expanded(
-            child: OthersProfileBody(),
+            child: OthersProfileBody(user: user),
           ),
         ],
       ),

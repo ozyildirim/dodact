@@ -1,15 +1,15 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:provider/provider.dart';
 
 class OthersProfileInfoTab extends StatelessWidget {
+  final UserObject user;
+
+  const OthersProfileInfoTab({this.user});
+
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<UserProvider>(context);
-    var user = provider.otherUser;
     if (user == null) {
       return Center(child: spinkit);
     }
