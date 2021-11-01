@@ -30,12 +30,12 @@ class PostDetail extends StatefulWidget {
 class _PostDetailState extends BaseState<PostDetail> {
   String videoId;
   PostModel post;
+  PostProvider postProvider;
 
   bool isFavorite = false;
   bool canUserManagePost = false;
 
   final formKey = GlobalKey<FormBuilderState>();
-
   FocusNode focusNode = new FocusNode();
 
   // ignore: missing_return
@@ -59,16 +59,16 @@ class _PostDetailState extends BaseState<PostDetail> {
   void initState() {
     super.initState();
     post = widget.post;
+    postProvider = getProvider<PostProvider>();
     Provider.of<PostProvider>(context, listen: false).setPost(post);
     canUserManagePost = canUserManagePostMethod();
 
-    isFavorite = userProvider.currentUser.favoritedPosts.contains(post.postId);
+    isFavorite = isPostFavorited();
     Provider.of<PostProvider>(context, listen: false).getDodders(post.postId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
     var mediaQuery = MediaQuery.of(context);
 
     var appBar = AppBar(
@@ -99,7 +99,7 @@ class _PostDetailState extends BaseState<PostDetail> {
           ),
           child: Column(
             children: [
-              buildHeaderPart(),
+              HeaderPart(post: post),
               PostDetailInfoPart(post: post),
               SizedBox(height: 10),
               PostDescriptionCard(post: post),
@@ -127,19 +127,19 @@ class _PostDetailState extends BaseState<PostDetail> {
                             leading: Icon(FontAwesome5Regular.trash_alt),
                             title: Text("Sil"),
                             onTap: () async {
-                              await _showDeletePostDialog();
+                              await showDeletePostDialog();
                             }),
                       ),
-                      PopupMenuItem(
-                        child: ListTile(
-                          enabled: false,
-                          leading: Icon(FontAwesome5Solid.cogs),
-                          title: Text("Düzenle"),
-                          onTap: () async {
-                            await _showEditPostDialog();
-                          },
-                        ),
-                      ),
+                      // PopupMenuItem(
+                      //   child: ListTile(
+                      //     enabled: false,
+                      //     leading: Icon(FontAwesome5Solid.cogs),
+                      //     title: Text("Düzenle"),
+                      //     onTap: () async {
+                      //       await showEditPostDialog();
+                      //     },
+                      //   ),
+                      // ),
                     ])
           ]
         : [
@@ -180,7 +180,7 @@ class _PostDetailState extends BaseState<PostDetail> {
           ];
   }
 
-  buildHeaderPart() {
+  Widget HeaderPart({PostModel post}) {
     switch (post.postContentType) {
       case "Video":
         return VideoPostHeader(post: post);
@@ -196,7 +196,7 @@ class _PostDetailState extends BaseState<PostDetail> {
 
   //Fonksiyonlar
 
-  Future<void> _showDeletePostDialog() async {
+  Future<void> showDeletePostDialog() async {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
@@ -208,11 +208,11 @@ class _PostDetailState extends BaseState<PostDetail> {
           NavigationService.instance.pop();
         },
         onConfirmBtnTap: () async {
-          await _deletePost();
+          await deletePost();
         });
   }
 
-  Future<void> _showEditPostDialog() async {
+  Future<void> showEditPostDialog() async {
     CoolAlert.show(
       context: context,
       type: CoolAlertType.info,
@@ -269,7 +269,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     }
   }
 
-  Future<void> _deletePost() async {
+  Future<void> deletePost() async {
     CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
 
     await Provider.of<PostProvider>(context, listen: false)

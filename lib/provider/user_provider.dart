@@ -54,13 +54,13 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<UserObject> getOtherUser(String userId, {bool isNotify}) async {
+  Future<UserObject> getOtherUser(String userId) async {
     try {
       otherUser = await userRepository.getUserByID(userId);
       notifyListeners();
       return otherUser;
     } catch (e) {
-      debugPrint("UserProvider getOtherUser function error: " + e.toString());
+      logger.e("UserProvider getOtherUser function error: " + e.toString());
       return null;
     }
   }

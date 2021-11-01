@@ -107,9 +107,4 @@ class AuthRepository {
       await _firebaseAuthService.updatePassword(pass);
     }
   }
-
-  Future<void> updateCurrentUser(
-      Map<String, dynamic> newData, String uid) async {
-    await _firebaseAuthService.updateCurrentUser(newData, uid);
-  }
 }

@@ -69,7 +69,8 @@ class GroupProvider extends ChangeNotifier {
   Future updateGroup(String groupId, Map<String, dynamic> changes) async {
     try {
       await _groupRepository.update(groupId, changes);
-      await getGroupDetail(groupId);
+      var updatedGroupModel = await getGroupDetail(groupId);
+      groupList[groupList.indexOf(group)] = updatedGroupModel;
     } catch (e) {
       print("GroupProvider updateGroup error: " + e.toString());
       return false;
@@ -136,6 +137,7 @@ class GroupProvider extends ChangeNotifier {
     try {
       var fetchedGroup = await _groupRepository.getDetail(groupId);
       group = fetchedGroup;
+      //TODO: grup güncellemelerini düzenle
       notifyListeners();
       return fetchedGroup;
     } catch (e) {

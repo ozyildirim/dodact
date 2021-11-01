@@ -5,7 +5,6 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
@@ -25,30 +24,28 @@ class PostDetailInfoPart extends StatefulWidget {
 }
 
 class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
-  AuthProvider authProvider;
   UserObject creator;
   bool isDodded;
+  PostModel post;
 
   @override
   void initState() {
     super.initState();
-    authProvider = Provider.of(context, listen: false);
-    getCreatorData(context, widget.post.ownerType, widget.post.ownerId);
+    post = widget.post;
   }
 
   @override
   Widget build(BuildContext context) {
-    final postProvider = Provider.of<PostProvider>(context);
-    var post = postProvider.post;
-
     return buildInfoPart(post);
   }
 
-  Widget buildInfoPart(PostModel post) {
+  buildInfoPart(PostModel post) {
     if (post.ownerType == 'User') {
-      return Consumer<UserProvider>(
-        builder: (context, provider, child) {
-          if (provider.otherUser != null) {
+      return FutureBuilder(
+        future: userProvider.getOtherUser(post.ownerId),
+        builder: (context, snapshot) {
+          UserObject user = snapshot.data;
+          if (snapshot.hasData) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -63,8 +60,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                         showOwnerProfile(post);
                       },
                       child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(provider.otherUser.profilePictureURL),
+                        backgroundImage: NetworkImage(user.profilePictureURL),
                         radius: 30,
                       ),
                     ),
@@ -73,61 +69,70 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                 ),
               ),
             );
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
           }
-          return Center(child: spinkit);
+          return spinkit;
         },
       );
-    } else {
-      return Consumer<GroupProvider>(builder: (context, provider, child) {
-        if (provider.group != null) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: Colors.white60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                // crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  buildTrailingPart(post),
-                  GestureDetector(
-                    onTap: () {
-                      showOwnerProfile(post, group: provider.group);
-                    },
-                    child: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(provider.group.groupProfilePicture),
-                      radius: 30,
+    } else if (post.ownerType == 'Group') {
+      return FutureBuilder(
+        future: Provider.of<GroupProvider>(context, listen: false)
+            .getGroupDetail(post.ownerId),
+        builder: (context, snapshot) {
+          GroupModel group = snapshot.data;
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.white60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  // crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    buildTrailingPart(post),
+                    GestureDetector(
+                      onTap: () {
+                        showOwnerProfile(post, group: group);
+                      },
+                      child: CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(group.groupProfilePicture),
+                        radius: 30,
+                      ),
                     ),
-                  ),
-                  buildShareButton()
-                ],
+                    buildShareButton()
+                  ],
+                ),
               ),
-            ),
-          );
-        }
-        return Center(child: spinkit);
-      });
+            );
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
+          return spinkit;
+        },
+      );
     }
   }
 
   Widget buildTrailingPart(PostModel post) {
     return Consumer<PostProvider>(
       builder: (context, provider, child) {
-        if (post.ownerId == authProvider.currentUser.uid) {
+        if (post.ownerId == userProvider.currentUser.uid) {
           return Center(child: Text("${provider.post.dodCounter} Dod"));
         } else if (provider.postDodders != null) {
           bool liked = provider.postDodders.any(
-              (element) => element.dodderId == authProvider.currentUser.uid);
+              (element) => element.dodderId == userProvider.currentUser.uid);
 
           return Bounce(
             duration: Duration(milliseconds: 220),
             onPressed: () async {
               if (liked) {
                 await provider.undodPost(
-                    post.postId, authProvider.currentUser.uid);
+                    post.postId, userProvider.currentUser.uid);
               } else {
                 await provider.dodPost(
-                    post.postId, authProvider.currentUser.uid);
+                    post.postId, userProvider.currentUser.uid);
               }
             },
             child: liked
