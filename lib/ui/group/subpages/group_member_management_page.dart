@@ -100,9 +100,8 @@ class _GroupMemberManagementPageState
                       if (index == 0) {
                         return InkWell(
                           onTap: () {
-                            NavigationService.instance.navigate(
-                                k_ROUTE_GROUP_ADD_MEMBER_PAGE,
-                                args: members);
+                            NavigationService.instance
+                                .navigate(k_ROUTE_GROUP_ADD_MEMBER_PAGE);
                           },
                           child: Padding(
                               padding: const EdgeInsets.all(12.0),

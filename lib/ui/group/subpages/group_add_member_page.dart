@@ -11,10 +11,6 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class GroupAddMemberPage extends StatefulWidget {
-  List<UserObject> userList;
-
-  GroupAddMemberPage({this.userList});
-
   @override
   _GroupAddMemberPageState createState() => _GroupAddMemberPageState();
 }
@@ -31,7 +27,6 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
     groupProvider = Provider.of<GroupProvider>(context, listen: false);
     invitationProvider =
         Provider.of<InvitationProvider>(context, listen: false);
-    memberList = widget.userList;
   }
 
   bool checkIfInvitationSent(String userId) {
@@ -50,72 +45,61 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
     }
   }
 
-  // bool checkGroupMember(String userId) {
-  //   if (groupProvider.groupMembers != null &&
-  //       groupProvider.groupMembers.length > 0) {
-  //     // var result = groupProvider.group.groupMemberList
-  //     //     .where((element) => element == userId);
-  //     return groupProvider.group.groupMemberList.contains(userId);
-  //   }
-  // }
+  bool checkGroupMember(String userId) {
+    return groupProvider.group.groupMemberList.contains(userId);
+  }
 
   String username;
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<InvitationProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Ara'),
       ),
       body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Consumer<InvitationProvider>(
-            builder: (context, invitationProvider, child) {
-          if (invitationProvider.sentGroupInvitations != null) {
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                  image: AssetImage(kBackgroundImage),
-                  fit: BoxFit.cover,
-                ),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                image: AssetImage(kBackgroundImage),
+                fit: BoxFit.cover,
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    TextFieldContainer(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Ara',
-                            border: InputBorder.none,
-                            suffixIcon: Icon(Icons.search)),
-                        onChanged: (value) {
-                          setState(() {
-                            username = value;
-                          });
-                        },
-                      ),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextFieldContainer(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: TextField(
+                      decoration: InputDecoration(
+                          hintText: 'Ara',
+                          border: InputBorder.none,
+                          suffixIcon: Icon(Icons.search)),
+                      onChanged: (value) {
+                        setState(() {
+                          username = value;
+                        });
+                      },
                     ),
-                    buildStreamer(context, username),
-                  ],
-                ),
+                  ),
+                  invitationProvider.sentGroupInvitations != null
+                      ? buildStreamer(context, username)
+                      : Center(child: spinkit),
+                ],
               ),
-            );
-          } else {
-            return Center(child: spinkit);
-          }
-        }),
-      ),
+            ),
+          )),
     );
   }
 
   buildStreamer(BuildContext context, String input) {
-    Logger().d(groupProvider.group.groupMemberList);
     return Container(
       height: MediaQuery.of(context).size.height * 0.8 - kToolbarHeight,
       child: StreamBuilder<QuerySnapshot>(
@@ -134,42 +118,43 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
                     DocumentSnapshot data = snapshot.data.docs[index];
                     UserObject user = UserObject.fromDoc(data);
 
-                    // if (checkGroupMember(user.uid)) {
-                    //   return Container();
-                    // } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        onTap: () {},
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(user.profilePictureURL),
-                          radius: 40,
-                        ),
-                        title: Text(
-                          user.username,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 20,
+                    if (checkGroupMember(user.uid)) {
+                      return Container();
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          onTap: () {},
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(user.profilePictureURL),
+                            radius: 40,
                           ),
+                          title: Text(
+                            user.username,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 20,
+                            ),
+                          ),
+                          subtitle: Text(user.email),
+                          trailing: user.uid != groupProvider.group.founderId
+                              ? checkIfInvitationSent(user.uid) == false
+                                  ? IconButton(
+                                      icon: Icon(Icons.person_add),
+                                      onPressed: () async {
+                                        await sendGroupInvitation(user.uid,
+                                            groupProvider.group.groupId);
+                                      },
+                                    )
+                                  : null
+                              : null,
                         ),
-                        subtitle: Text(user.email),
-                        trailing: user.uid != groupProvider.group.founderId
-                            ? checkIfInvitationSent(user.uid) == false
-                                ? IconButton(
-                                    icon: Icon(Icons.person_add),
-                                    onPressed: () async {
-                                      await sendGroupInvitation(user.uid,
-                                          groupProvider.group.groupId);
-                                    },
-                                  )
-                                : null
-                            : null,
-                      ),
-                    );
-                  }
-                  // },
-                  );
+                      );
+                    }
+                  },
+                );
         },
       ),
     );

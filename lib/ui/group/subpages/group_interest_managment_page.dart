@@ -121,9 +121,9 @@ class _GroupInterestManagementPageState
         child: ListView(
           // scrollDirection: Axis.horizontal,
           children: [
+            theaterSelector(),
             musicSelector(),
             danceSelector(),
-            theaterSelector(),
             visualArtSelector()
           ],
         ),
@@ -134,38 +134,53 @@ class _GroupInterestManagementPageState
   musicSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Card(
-        color: Colors.transparent,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: MediaQuery.of(context).size.height * 0.3,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage('assets/images/app/interests/muzik.jpeg'),
-              fit: BoxFit.cover,
+      child: InkWell(
+        child: Card(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.3,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage('assets/images/app/interests/muzik.jpeg'),
+                fit: BoxFit.cover,
+              ),
             ),
+            child: Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Müzik Alt Kategorileri",
+                      style: TextStyle(
+                          fontSize: 23,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
+                )),
           ),
-          child: MultiSelectDialogField(
+        ),
+        onTap: musicSelectorDialog,
+      ),
+    );
+  }
+
+  musicSelectorDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return MultiSelectDialog(
             items: musicCategories.map((e) => MultiSelectItem(e, e)).toList(),
             listType: MultiSelectListType.CHIP,
             initialValue: selectedMusicValues,
             checkColor: Colors.blue,
-            buttonText: Text(
-              "Müzik Alt Kategorileri",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
+            // chipDisplay: MultiSelectChipDisplay.none(),
             selectedColor: Colors.black26,
-            barrierColor: Colors.transparent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
             confirmText: Text("Onayla", style: TextStyle(fontSize: 20)),
-            title: Text("Müzik"),
+            title: Text("Müzik Alt Kategorileri"),
             searchable: true,
             searchHint: "Ara",
             onConfirm: (values) {
@@ -174,40 +189,44 @@ class _GroupInterestManagementPageState
                 isUpdated = true;
               });
             },
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 
   theaterSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Card(
-        color: Colors.transparent,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: MediaQuery.of(context).size.height * 0.3,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
-              fit: BoxFit.cover,
+      child: InkWell(
+        child: Card(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.3,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          child: MultiSelectDialogField(
+        ),
+        onTap: theaterSelectorDialog,
+      ),
+    );
+  }
+
+  theaterSelectorDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return MultiSelectDialog(
             items: theaterCategories.map((e) => MultiSelectItem(e, e)).toList(),
             listType: MultiSelectListType.CHIP,
             initialValue: selectedTheaterValues,
             checkColor: Colors.blue,
-            buttonText: Text(
-              "Tiyatro Alt Kategorileri",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
+
             selectedColor: Colors.black26,
             // decoration: BoxDecoration(color: Colors.white),
             selectedItemsTextStyle: TextStyle(color: Colors.black),
@@ -223,39 +242,44 @@ class _GroupInterestManagementPageState
                 isUpdated = true;
               });
             },
+          );
+        });
+  }
+
+  danceSelector() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: danceSelectorDialog,
+        child: Card(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.3,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage('assets/images/app/interests/dans.jpeg'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  danceSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        color: Colors.transparent,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: MediaQuery.of(context).size.height * 0.3,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage('assets/images/app/interests/dans.jpeg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: MultiSelectDialogField(
+  danceSelectorDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return MultiSelectDialog(
             items: danceCategories.map((e) => MultiSelectItem(e, e)).toList(),
             listType: MultiSelectListType.CHIP,
             initialValue: selectedDanceValues,
             checkColor: Colors.blue,
-            buttonText: Text(
-              "Dans Alt Kategorileri",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
             selectedColor: Colors.black26,
-            barrierColor: Colors.transparent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
@@ -269,44 +293,46 @@ class _GroupInterestManagementPageState
                 isUpdated = true;
               });
             },
+          );
+        });
+  }
+
+  visualArtSelector() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: visualArtSelectorDialog,
+        child: Card(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.3,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage(
+                    'assets/images/app/interests/gorsel_sanatlar.jpeg'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  visualArtSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        color: Colors.transparent,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: MediaQuery.of(context).size.height * 0.3,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/app/interests/gorsel_sanatlar.jpeg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: MultiSelectDialogField(
+  visualArtSelectorDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return MultiSelectDialog(
             items:
                 visualArtCategories.map((e) => MultiSelectItem(e, e)).toList(),
             listType: MultiSelectListType.CHIP,
             initialValue: selectedVisualArtValues,
             checkColor: Colors.white,
-            buttonText: Text(
-              "Görsel Sanatlar Alt Kategorileri",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
             selectedColor: Colors.black26,
-            barrierColor: Colors.transparent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
@@ -320,10 +346,8 @@ class _GroupInterestManagementPageState
                 isUpdated = true;
               });
             },
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 
   void updateGroupInterests() async {
