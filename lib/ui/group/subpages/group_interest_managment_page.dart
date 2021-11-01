@@ -103,53 +103,79 @@ class _GroupInterestManagementPageState
               onPressed: updateGroupInterests,
               child: Icon(Icons.cloud_upload_rounded),
             )
-          : Container(),
+          : null,
       appBar: AppBar(
         title: Text('Topluluk İlgi Alanları'),
       ),
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+          height: size.height,
+          width: size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
+          // child: choiceWidget(),
+          child: buildStack()
+          // ListView(
+          //   // scrollDirection: Axis.horizontal,
+          //   children: [
+          //     theaterSelector(),
+          //     musicSelector(),
+          //     danceSelector(),
+          //     visualArtSelector()
+          //   ],
+          // ),
+          ),
+    );
+  }
+
+  buildStack() {
+    var size = MediaQuery.of(context).size;
+    return Stack(
+      children: [
+        Positioned(
+          top: size.height * 0.55,
+          child: musicSelector(),
         ),
-        // child: choiceWidget(),
-        child: ListView(
-          // scrollDirection: Axis.horizontal,
-          children: [
-            theaterSelector(),
-            musicSelector(),
-            danceSelector(),
-            visualArtSelector()
-          ],
+        Positioned(
+          top: size.height * 0.35,
+          child: danceSelector(),
         ),
-      ),
+        Positioned(
+          top: size.height * 0.15,
+          child: visualArtSelector(),
+        ),
+        Positioned(
+          child: theaterSelector(),
+        ),
+      ],
     );
   }
 
   musicSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
+    return InkWell(
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(100),
+        ),
         child: Card(
+          margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
                 image: AssetImage('assets/images/app/interests/muzik.jpeg'),
                 fit: BoxFit.cover,
               ),
             ),
             child: Align(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text("Müzik Alt Kategorileri",
@@ -160,8 +186,8 @@ class _GroupInterestManagementPageState
                 )),
           ),
         ),
-        onTap: musicSelectorDialog,
       ),
+      onTap: musicSelectorDialog,
     );
   }
 
@@ -194,26 +220,37 @@ class _GroupInterestManagementPageState
   }
 
   theaterSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
+    return InkWell(
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(100),
+        ),
         child: Card(
+          margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: MediaQuery.of(context).size.height * 0.3,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.25,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
                 image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
                 fit: BoxFit.cover,
               ),
             ),
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Tiyatro Alt Kategorileri",
+                      style: TextStyle(
+                          fontSize: 23,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
+                )),
           ),
         ),
-        onTap: theaterSelectorDialog,
       ),
+      onTap: theaterSelectorDialog,
     );
   }
 
@@ -247,23 +284,34 @@ class _GroupInterestManagementPageState
   }
 
   danceSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: danceSelectorDialog,
+    return InkWell(
+      onTap: danceSelectorDialog,
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(100),
+        ),
         child: Card(
+          margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
                 image: AssetImage('assets/images/app/interests/dans.jpeg'),
                 fit: BoxFit.cover,
               ),
             ),
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Dans Alt Kategorileri",
+                      style: TextStyle(
+                          fontSize: 23,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
+                )),
           ),
         ),
       ),
@@ -298,24 +346,35 @@ class _GroupInterestManagementPageState
   }
 
   visualArtSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: visualArtSelectorDialog,
+    return InkWell(
+      onTap: visualArtSelectorDialog,
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(100),
+        ),
         child: Card(
+          margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
                 image: AssetImage(
                     'assets/images/app/interests/gorsel_sanatlar.jpeg'),
                 fit: BoxFit.cover,
               ),
             ),
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Görsel Sanatlar Alt Kategorileri",
+                      style: TextStyle(
+                          fontSize: 23,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold)),
+                )),
           ),
         ),
       ),
