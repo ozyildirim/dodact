@@ -15,48 +15,7 @@ class GroupMembersTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<GroupProvider>(context);
-    // return Container(
-    //   child: provider.groupMembers != null
-    //       ? provider.groupMembers.isNotEmpty
-    //           ? GridView.builder(
-    //               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //                   crossAxisCount: 3, childAspectRatio: 0.5),
-    //               itemCount: provider.groupMembers.length,
-    //               itemBuilder: (context, index) {
-    //                 var user = provider.groupMembers[index];
-    //                 return InkWell(
-    //                   onTap: () => navigateUserProfile(user),
-    //                   child: Padding(
-    //                     padding: const EdgeInsets.all(12.0),
-    //                     child: Column(
-    //                       children: [
-    //                         CachedNetworkImage(
-    //                           imageUrl: user.profilePictureURL,
-    //                           imageBuilder: (context, imageProvider) {
-    //                             return CircleAvatar(
-    //                               radius: 60,
-    //                               backgroundImage:
-    //                                   NetworkImage(user.profilePictureURL),
-    //                             );
-    //                           },
-    //                         ),
-    //                         Text(user.nameSurname,
-    //                             textAlign: TextAlign.center,
-    //                             style: TextStyle(
-    //                                 fontSize: 15, fontWeight: FontWeight.bold))
-    //                       ],
-    //                     ),
-    //                   ),
-    //                 );
-    //               })
-    //           : Container(
-    //               child: Text("Boş"),
-    //             )
-    //       : Center(
-    //           child: spinkit,
-    //         ),
-    // );
+    var provider = Provider.of<GroupProvider>(context, listen: false);
 
     return FutureBuilder(
         future: provider.getGroupMembers(group),
@@ -64,12 +23,13 @@ class GroupMembersTab extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               if (snapshot.data.isNotEmpty) {
+                List<UserObject> members = snapshot.data;
                 return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, childAspectRatio: 0.5),
-                    itemCount: provider.groupMembers.length,
+                    itemCount: members.length,
                     itemBuilder: (context, index) {
-                      var user = provider.groupMembers[index];
+                      var user = members[index];
                       return InkWell(
                         onTap: () => navigateUserProfile(user),
                         child: Padding(

@@ -161,6 +161,65 @@ exports.addUserToGroup = functions.https.onCall(async (data, context) => {
     }
 })
 
+
+exports.deleteUserData = functions.firestore.document('users/{userId}')
+    .onDelete(async (snapshot, context) => {
+        const userId = context.params.userId;
+        const userData = snapshot.data();
+
+        //1. delete user posts
+
+        const userPosts = await postsRef.where('ownerId', '==', userId).get();
+        userPosts.forEach(async (doc) => {
+            await postsRef.doc(doc.id).delete();
+        });
+
+        //2. delete users group memberships
+
+        //3. delete user invitations
+
+        
+
+        //4. delete user tokens
+
+        //5. delete user reports
+
+        //6. delete user storage files(profile picture)
+
+        //7. delete user events
+
+        //8. delete user messages
+
+        //9. delete user spinner results
+
+        //10. delete user favorites
+
+
+
+
+        if (invitation.type == "InvitationType.GroupMembership") {
+            //get sender group info
+            const groupRef = groupsRef.doc(invitation.senderId);
+            const groupSnapshot = await groupRef.get();
+            const groupData = groupSnapshot.data();
+
+            const payload = {
+                notification: {
+                    title: 'Grup Katılım Daveti',
+                    body: groupData.groupName + ' tarafından davet edildin.'
+                }
+            };
+
+            //send notification to receiver user
+            var tokenRef = await tokensRef.doc(invitedUserId).get();
+            const tokenObject = tokenRef.data();
+            admin.messaging().sendToDevice(tokenObject.token, payload)
+
+        }
+    });
+
+
+
 exports.sendNotificationToUser = functions.https.onCall(async (data, context) => {
     const userId = data.userId;
     const tokenRef = await tokensRef.doc(userId).get();
@@ -186,8 +245,7 @@ exports.sendNotificationToUser = functions.https.onCall(async (data, context) =>
 
 
 
-exports.incrementPostDodders = functions.
-firestore.document('posts/{postId}/dodders/{dodderId}')
+exports.incrementPostDodders = functions.firestore.document('posts/{postId}/dodders/{dodderId}')
     .onCreate((snapshot, context) => {
         const userId = context.params.dodderId;
         const postId = context.params.postId;
@@ -199,8 +257,7 @@ firestore.document('posts/{postId}/dodders/{dodderId}')
 
 
 
-exports.deletePostFiles = functions.
-firestore.document('posts/{postId}').onDelete(async (snapshot, context) => {
+exports.deletePostFiles = functions.firestore.document('posts/{postId}').onDelete(async (snapshot, context) => {
     const postId = context.params.postId;
     const postData = snapshot.data();
     var hasFile = !postData.isLocatedInYoutube;
@@ -220,8 +277,7 @@ firestore.document('posts/{postId}').onDelete(async (snapshot, context) => {
     }
 });
 
-exports.deleteEventFiles = functions.
-firestore.document('events/{eventId}').onDelete(async (snapshot, context) => {
+exports.deleteEventFiles = functions.firestore.document('events/{eventId}').onDelete(async (snapshot, context) => {
     const eventId = context.params.eventId;
     try {
         var bucket = admin.storage().bucket();
@@ -234,8 +290,7 @@ firestore.document('events/{eventId}').onDelete(async (snapshot, context) => {
     }
 });
 
-exports.checkPostReports = functions.
-firestore.document('reports/{reportId}')
+exports.checkPostReports = functions.firestore.document('reports/{reportId}')
     .onCreate(async (snapshot, context) => {
         const report = snapshot.data();
 

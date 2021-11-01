@@ -459,7 +459,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       });
       debugPrint("Picture uploaded.");
     } else {
-      await uploadDefaultPicture();
+      uploadDefaultPicture();
       navigateInterestSelectionPage();
     }
   }

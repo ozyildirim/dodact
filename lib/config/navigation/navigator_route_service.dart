@@ -222,7 +222,7 @@ class NavigationRouteManager {
         return _navigateToDefault(GroupMemberInvitationsPage(), settings);
 
       case k_ROUTE_GROUP_ADD_MEMBER_PAGE:
-        return _navigateToDefault(GroupAddMemberPage(), settings);
+        return _navigateToDefault(GroupAddMemberPage(userList: args), settings);
 
       case k_ROUTE_GROUP_EVENT_MANAGEMENT_PAGE:
         return _navigateToDefault(GroupEventManagementPage(), settings);

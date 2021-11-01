@@ -18,9 +18,6 @@ class InvitationProvider with ChangeNotifier {
   Future<List<InvitationModel>> getInvitations() async {
     try {
       usersInvitations = await invitationRepository.getInvitations();
-      usersInvitations.forEach((element) {
-        logger.d(element.toJson());
-      });
       return usersInvitations;
     } catch (e) {
       logger.e(e.toString());

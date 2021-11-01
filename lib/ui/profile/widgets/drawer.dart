@@ -35,30 +35,24 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                 image: AssetImage(chosenFieldImage ?? setBackgroundImage()),
               ),
             ),
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              child: Card(
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage:
-                        userProvider.currentUser.profilePictureURL != null
-                            ? NetworkImage(
-                                userProvider.currentUser.profilePictureURL)
-                            : null,
-                    radius: 30,
-                  ),
-                  title: Text(
-                    userProvider.currentUser.nameSurname != null &&
-                            userProvider.currentUser.nameSurname.isNotEmpty
-                        ? userProvider.currentUser.nameSurname
-                        : "@${userProvider.currentUser.username}",
-                    style: TextStyle(color: Colors.black, fontSize: 22),
-                  ),
-                  subtitle: Text(authProvider.currentUser.email,
-                      style: TextStyle(color: Colors.black, fontSize: 13)),
-                ),
-              ),
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              backgroundImage:
+                  userProvider.currentUser.profilePictureURL != null
+                      ? NetworkImage(userProvider.currentUser.profilePictureURL)
+                      : null,
+              radius: 30,
             ),
+            title: Text(
+              userProvider.currentUser.nameSurname != null &&
+                      userProvider.currentUser.nameSurname.isNotEmpty
+                  ? userProvider.currentUser.nameSurname
+                  : "@${userProvider.currentUser.username}",
+              style: TextStyle(color: Colors.black, fontSize: 22),
+            ),
+            subtitle: Text(authProvider.currentUser.email,
+                style: TextStyle(color: Colors.black, fontSize: 13)),
           ),
           ListTile(
             leading: Icon(Icons.star),
@@ -91,15 +85,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                   .navigate(k_ROUTE_INTERESTS_CHOICE, args: false);
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.settings),
-          //   title:
-          //       Text("Geçici İlgi Alanlarım", style: TextStyle(fontSize: 18)),
-          //   onTap: () {
-          //     NavigationService.instance
-          //         .navigate(k_ROUTE_TEMPORARY_INTERESTS_CHOICE);
-          //   },
-          // ),
           ListTile(
             leading: Icon(Icons.report),
             title:
@@ -108,7 +93,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.star),
-            title: Text("DodKartım", style: TextStyle(fontSize: 18)),
+            title: Text("Dod Kartım", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
             },
@@ -120,7 +105,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_ABOUT_DODACT);
             },
           ),
-
           ListTile(
             leading: Icon(Icons.logout),
             title: Text("Çıkış Yap", style: TextStyle(fontSize: 18)),
@@ -136,8 +120,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
 
   void signOut(BuildContext context) async {
     await authProvider.signOut();
-    print(
-        "AFTER DRAWER SIGNOUT, USER INFO\n: ${authProvider.currentUser.toString()}");
+
     Provider.of<UserProvider>(context, listen: false).removeUser();
     NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
     //TODO: Problem var, burayı düzelt.

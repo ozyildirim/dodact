@@ -11,6 +11,10 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class GroupAddMemberPage extends StatefulWidget {
+  List<UserObject> userList;
+
+  GroupAddMemberPage({this.userList});
+
   @override
   _GroupAddMemberPageState createState() => _GroupAddMemberPageState();
 }
@@ -18,7 +22,7 @@ class GroupAddMemberPage extends StatefulWidget {
 class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
   GroupProvider groupProvider;
   InvitationProvider invitationProvider;
-  List<String> memberList;
+  List<UserObject> memberList;
   bool isLoading = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -27,7 +31,7 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
     groupProvider = Provider.of<GroupProvider>(context, listen: false);
     invitationProvider =
         Provider.of<InvitationProvider>(context, listen: false);
-    memberList = groupProvider.group.groupMemberList;
+    memberList = widget.userList;
   }
 
   bool checkIfInvitationSent(String userId) {
@@ -46,14 +50,14 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
     }
   }
 
-  bool checkGroupMember(String userId) {
-    if (groupProvider.groupMembers != null &&
-        groupProvider.groupMembers.length > 0) {
-      // var result = groupProvider.group.groupMemberList
-      //     .where((element) => element == userId);
-      return groupProvider.group.groupMemberList.contains(userId);
-    }
-  }
+  // bool checkGroupMember(String userId) {
+  //   if (groupProvider.groupMembers != null &&
+  //       groupProvider.groupMembers.length > 0) {
+  //     // var result = groupProvider.group.groupMemberList
+  //     //     .where((element) => element == userId);
+  //     return groupProvider.group.groupMemberList.contains(userId);
+  //   }
+  // }
 
   String username;
 
@@ -71,9 +75,6 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
         child: Consumer<InvitationProvider>(
             builder: (context, invitationProvider, child) {
           if (invitationProvider.sentGroupInvitations != null) {
-            invitationProvider.sentGroupInvitations.forEach((element) {
-              Logger().d("member Id: ${element.receiverId}");
-            });
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -133,52 +134,42 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
                     DocumentSnapshot data = snapshot.data.docs[index];
                     UserObject user = UserObject.fromDoc(data);
 
-                    if (checkGroupMember(user.uid)) {
-                      return Container();
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          onTap: () {},
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(user.profilePictureURL),
-                            radius: 40,
-                          ),
-                          title: Text(
-                            user.username,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 20,
-                            ),
-                          ),
-                          subtitle: Text(user.email),
-                          trailing: user.uid != groupProvider.group.founderId
-                              ? checkIfInvitationSent(user.uid) == false
-                                  ? IconButton(
-                                      icon: Icon(Icons.person_add),
-                                      onPressed: () async {
-                                        await sendGroupInvitation(user.uid,
-                                            groupProvider.group.groupId);
-                                      },
-                                    )
-                                  : null
-                              : null,
-                          // trailing: user.uid != groupProvider.group.founderId
-                          //     ? IconButton(
-                          //         icon: Icon(Icons.person_add),
-                          //         onPressed: () async {
-                          //           await sendGroupInvitation(
-                          //               user.uid, groupProvider.group.groupId);
-                          //         },
-                          //       )
-                          //     : null,
+                    // if (checkGroupMember(user.uid)) {
+                    //   return Container();
+                    // } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        onTap: () {},
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(user.profilePictureURL),
+                          radius: 40,
                         ),
-                      );
-                    }
-                  },
-                );
+                        title: Text(
+                          user.username,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 20,
+                          ),
+                        ),
+                        subtitle: Text(user.email),
+                        trailing: user.uid != groupProvider.group.founderId
+                            ? checkIfInvitationSent(user.uid) == false
+                                ? IconButton(
+                                    icon: Icon(Icons.person_add),
+                                    onPressed: () async {
+                                      await sendGroupInvitation(user.uid,
+                                          groupProvider.group.groupId);
+                                    },
+                                  )
+                                : null
+                            : null,
+                      ),
+                    );
+                  }
+                  // },
+                  );
         },
       ),
     );
