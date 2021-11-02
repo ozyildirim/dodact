@@ -6,33 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
-class ParallaxEvents extends StatelessWidget {
-  List<EventModel> events;
+class ParallaxEvent extends StatelessWidget {
+  EventModel event;
 
-  ParallaxEvents({this.events});
+  ParallaxEvent({this.event});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (final event in events)
-          InkWell(
-            onTap: () => navigateEventDetail(event),
-            child: EventListItem(
-              imageUrl: event.eventImages[0] != null
-                  ? event.eventImages[0]
-                  : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
-              name: event.eventTitle,
-              country: event.isOnline
-                  ? "Online - ${DateFormat('hh.MM.yyyy').format(event.eventStartDate)}"
-                  : "${event.city} - ${DateFormat('hh.MM.yyyy').format(event.eventStartDate)}",
-              isEventEnded: isEventEnded(event),
-            ),
-          ),
-        SizedBox(
-          height: kToolbarHeight,
-        )
-      ],
+    return InkWell(
+      onTap: () => navigateEventDetail(event),
+      child: EventListItem(
+        imageUrl: event.eventImages[0] != null
+            ? event.eventImages[0]
+            : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
+        name: event.eventTitle,
+        country: event.isOnline
+            ? "Online - ${DateFormat('hh.MM.yyyy').format(event.eventStartDate)}"
+            : "${event.city} - ${DateFormat('hh.MM.yyyy').format(event.eventStartDate)}",
+        isEventEnded: isEventEnded(event),
+      ),
     );
   }
 

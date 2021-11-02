@@ -11,6 +11,7 @@ class GroupEventsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     print("çalıştı");
     var provider = Provider.of<GroupProvider>(context, listen: false);
     // return Container(
@@ -39,10 +40,17 @@ class GroupEventsTab extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               if (snapshot.data.isNotEmpty) {
-                return SingleChildScrollView(
-                  child: ParallaxEvents(
-                    events: snapshot.data,
-                  ),
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    var event = snapshot.data[index];
+                    return Container(
+                      height: size.height * 0.2,
+                      child: ParallaxEvent(
+                        event: event,
+                      ),
+                    );
+                  },
                 );
               } else {
                 return Center(

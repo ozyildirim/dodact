@@ -2,8 +2,10 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/event/filtered_events_page.dart';
+import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:getwidget/components/button/gf_button.dart';
@@ -16,6 +18,9 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends BaseState<EventsPage> {
+  ScrollController scrollController;
+  EventProvider eventProvider;
+
   bool isFiltered = false;
   String selectedCategory;
   String selectedCity;
@@ -23,12 +28,38 @@ class _EventsPageState extends BaseState<EventsPage> {
 
   @override
   void initState() {
-    Provider.of<EventProvider>(context, listen: false).getAllEventsList();
     super.initState();
+    eventProvider = Provider.of<EventProvider>(context, listen: false);
+    scrollController = ScrollController();
+
+    scrollController.addListener(scrollListener);
+    eventProvider.getEventList();
+  }
+
+  dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent / 2 &&
+        !scrollController.position.outOfRange) {
+      if (!isFiltered) {
+        eventProvider.getEventList();
+      } else {
+        eventProvider.getFilteredEventList(
+            reset: false,
+            category: selectedCategory,
+            city: selectedCity,
+            type: selectedType);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: kToolbarHeight),
@@ -53,69 +84,98 @@ class _EventsPageState extends BaseState<EventsPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: RefreshIndicator(
-          onRefresh: () => _refreshEvents(),
-          child: Container(
-            height: dynamicHeight(1),
-            width: double.infinity,
-            child: SingleChildScrollView(
-              child: FilteredEventView(),
-            ),
-          ),
+        child: Consumer<EventProvider>(
+          builder: (_, provider, child) {
+            if (isFiltered) {
+              if (provider.filteredEventsSnapshot.isNotEmpty) {
+                return ListView.builder(
+                    controller: scrollController,
+                    itemCount: provider.filteredEvents.length,
+                    itemBuilder: (context, index) {
+                      var event = provider.filteredEvents[index];
+                      return Container(
+                          height: size.height * 0.3,
+                          child: ParallaxEvent(event: event));
+                    });
+              } else {
+                return Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/app/situations/not_found.png"),
+                      Text(
+                        "Bu kriterlere uyan bir etkinlik bulunamadı.",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: kToolbarHeight,
+                      )
+                    ],
+                  ),
+                );
+              }
+            } else {
+              if (provider.eventsSnapshot.isNotEmpty) {
+                return ListView.builder(
+                    controller: scrollController,
+                    itemCount: provider.events.length,
+                    itemBuilder: (context, index) {
+                      var event = provider.events[index];
+                      return Container(
+                          height: size.height * 0.3,
+                          child: ParallaxEvent(event: event));
+                      ;
+                    });
+              } else {
+                return Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/app/situations/not_found.png"),
+                      Text(
+                        "Bu kriterlere uyan bir etkinlik bulunamadı.",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: kToolbarHeight,
+                      )
+                    ],
+                  ),
+                );
+              }
+            }
+          },
         ),
       ),
     );
   }
 
-  Container filterCardContainer(Widget text, Widget icon,
-      {double width, double height}) {
-    return Container(
-      width: width,
-      height: height,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(child: text),
-              Container(
-                width: dynamicWidth(0.1),
-                child: icon,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  List<EventModel> _sortEvents(List<EventModel> events) {
+    events.sort((a, b) {
+      var firstEventDate = a.eventStartDate;
+      var secondEventDate = b.eventStartDate;
+      return firstEventDate.compareTo(secondEventDate);
+    });
+
+    return events;
   }
 
-  void updateEventsByFilter(String category, String city, String type) async {
-    await Provider.of<EventProvider>(context, listen: false)
-        .getFilteredEventList(category: category, city: city, type: type);
-  }
-
-  List<FormBuilderFieldOption<dynamic>> categoryOptions = [
-    FormBuilderFieldOption(value: "Müzik", child: Text("Müzik")),
-    FormBuilderFieldOption(value: "Tiyatro", child: Text("Tiyatro")),
-    FormBuilderFieldOption(
-        value: "Görsel Sanatlar", child: Text("Görsel Sanatlar")),
-    FormBuilderFieldOption(value: "Dans", child: Text("Dans")),
-  ];
-
-  List<FormBuilderFieldOption<dynamic>> typeOptions = [
-    FormBuilderFieldOption(
-        value: "Açık Hava Etkinliği", child: Text("Açık Hava Etkinliği")),
-    FormBuilderFieldOption(
-        value: "Kapalı Mekan Etkinliği", child: Text("Kapalı Mekan Etkinliği")),
-    FormBuilderFieldOption(value: "Workshop", child: Text("Workshop")),
-    FormBuilderFieldOption(value: "Online", child: Text("Online")),
-  ];
-
-  Future<void> _refreshEvents() async {
-    updateEventsByFilter(selectedCategory, selectedCity, selectedType);
+  void updateEvents(String category, String city, String type) async {
+    try {
+      await Provider.of<EventProvider>(context, listen: false)
+          .getFilteredEventList(
+        reset: true,
+        category: category,
+        city: city,
+        type: type,
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> showFilterDialog() async {
@@ -236,9 +296,19 @@ class _EventsPageState extends BaseState<EventsPage> {
                     color: Colors.orange[700],
                     shape: GFButtonShape.pills,
                     onPressed: () {
+                      if (isFiltered) {
+                        setState(() {
+                          isFiltered = false;
+                          eventProvider.getEventList();
+                          _formKey.currentState.reset();
+                          selectedCategory = null;
+                          selectedCity = null;
+                          selectedType = null;
+                        });
+                      }
                       NavigationService.instance.pop();
                     },
-                    text: "Vazgeç",
+                    text: "Temizle",
                     textStyle: Theme.of(context).textTheme.button.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -256,12 +326,31 @@ class _EventsPageState extends BaseState<EventsPage> {
   submitFilterDialog() {
     if (_formKey.currentState.saveAndValidate()) {
       setState(() {
+        isFiltered = true;
         selectedCity = _formKey.currentState.value["city"];
         selectedCategory = _formKey.currentState.value["category"];
         selectedType = _formKey.currentState.value["type"];
       });
-      updateEventsByFilter(selectedCategory, selectedCity, selectedType);
+      print("$selectedCity  $selectedCategory $selectedType");
+      updateEvents(selectedCategory, selectedCity, selectedType);
       NavigationService.instance.pop();
     }
   }
+
+  List<FormBuilderFieldOption<dynamic>> categoryOptions = [
+    FormBuilderFieldOption(value: "Müzik", child: Text("Müzik")),
+    FormBuilderFieldOption(value: "Tiyatro", child: Text("Tiyatro")),
+    FormBuilderFieldOption(
+        value: "Görsel Sanatlar", child: Text("Görsel Sanatlar")),
+    FormBuilderFieldOption(value: "Dans", child: Text("Dans")),
+  ];
+
+  List<FormBuilderFieldOption<dynamic>> typeOptions = [
+    FormBuilderFieldOption(
+        value: "Açık Hava Etkinliği", child: Text("Açık Hava Etkinliği")),
+    FormBuilderFieldOption(
+        value: "Kapalı Mekan Etkinliği", child: Text("Kapalı Mekan Etkinliği")),
+    FormBuilderFieldOption(value: "Workshop", child: Text("Workshop")),
+    FormBuilderFieldOption(value: "Online", child: Text("Online")),
+  ];
 }
