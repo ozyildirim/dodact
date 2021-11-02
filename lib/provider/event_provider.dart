@@ -22,8 +22,6 @@ class EventProvider extends ChangeNotifier {
   EventModel newEvent = new EventModel();
   List<EventModel> eventList;
 
-  List<EventModel> otherUserEventList;
-
   //Events that showed in general page
   List<EventModel> specialEvents;
 
@@ -126,18 +124,6 @@ class EventProvider extends ChangeNotifier {
       return await eventRepository.getUserEvents(user);
     } catch (e) {
       print("EventProvider getUserEvents error: " + e.toString());
-      return null;
-    }
-  }
-
-  Future<List<EventModel>> getOtherUserEvents(UserObject user) async {
-    try {
-      var fetchedList = await eventRepository.getUserEvents(user);
-      otherUserEventList = fetchedList;
-      notifyListeners();
-      return otherUserEventList;
-    } catch (e) {
-      print("EventProvider getOtherUserEvents error: " + e.toString());
       return null;
     }
   }

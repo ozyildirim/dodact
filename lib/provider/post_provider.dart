@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
@@ -11,35 +12,30 @@ import 'package:logger/logger.dart';
 
 class PostProvider extends ChangeNotifier {
   PostRepository postRepository = locator<PostRepository>();
-
   var logger = new Logger();
 
   PostModel post;
-  List<PostModel> postList;
+
   List<DodderModel> postDodders;
 
   List<PostModel> topPosts;
   bool isLoading = false;
 
-  changeState(bool _isLoading, {bool isNotify}) {
-    isLoading = _isLoading;
-    if (isNotify != null) {
-      if (isNotify) {
-        notifyListeners();
-      }
-    } else {
-      notifyListeners();
-    }
-  }
+  final postsSnapshot = <DocumentSnapshot>[];
+  String errorMessage = '';
+  int documentLimit = 10;
+  bool _hasNext = true;
+  bool _isFetchingPosts = false;
 
   clear() {
     post = null;
-    postList.clear();
   }
 
   setPost(PostModel post) {
     this.post = post;
   }
+
+  bool get hasNext => _hasNext;
 
   // If the content is not video, provider will upload it to firestorage,
   // Otherwise youtube link will be added to firestore.
@@ -82,9 +78,7 @@ class PostProvider extends ChangeNotifier {
   Future<void> deletePost(String postId) async {
     try {
       await postRepository.delete(postId);
-      PostModel selectedPost =
-          postList.firstWhere((element) => element.postId == postId);
-      postList.remove(selectedPost);
+
       notifyListeners();
     } catch (e) {
       print("PostProvider delete error:  " + e.toString());
@@ -103,19 +97,46 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<PostModel>> getList() async {
+  // Future<List<PostModel>> getList() async {
+  //   try {
+  //     var fetchedList = await postRepository.getList();
+  //     postList = fetchedList;
+  //     notifyListeners();
+  //     return postList;
+  //   } catch (e) {
+  //     print("PostProvider getList error: " + e.toString());
+  //     return null;
+  //   }
+  // }
+
+  List<PostModel> get posts =>
+      postsSnapshot.map((e) => PostModel.fromJson(e.data())).toList();
+
+  Future fetchNextPosts() async {
+    if (_isFetchingPosts) return;
+
+    errorMessage = '';
+    _isFetchingPosts = true;
+
     try {
-      var fetchedList = await postRepository.getList();
-      postList = fetchedList;
+      final snap = await postRepository.getListQuery(
+        documentLimit,
+        postsSnapshot.isNotEmpty ? postsSnapshot.last : null,
+      );
+      postsSnapshot.addAll(snap.docs);
+
+      if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
-      return postList;
-    } catch (e) {
-      print("PostProvider getList error: " + e.toString());
-      return null;
+    } catch (error) {
+      errorMessage = error.toString();
+      notifyListeners();
     }
+
+    _isFetchingPosts = false;
+    print("çekildi");
   }
 
-  Future<List<PostModel>> getTopPosts({bool isNotify}) async {
+  Future<List<PostModel>> getTopPosts() async {
     try {
       var fetchedList = await postRepository.getTopPosts();
       topPosts = fetchedList;
@@ -126,8 +147,10 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> update(String postId, Map<String, dynamic> changes,
-      {bool isNotify}) async {
+  Future<bool> update(
+    String postId,
+    Map<String, dynamic> changes,
+  ) async {
     try {
       return await postRepository.update(postId, changes).then((value) async {
         await getDetail(postId);
@@ -187,22 +210,12 @@ class PostProvider extends ChangeNotifier {
   Future<List<PostModel>> getAllPostsWithCategory(String category,
       {bool isNotify}) async {
     try {
-      changeState(true, isNotify: isNotify);
       return await postRepository.getAllPostsWithCategory(category);
     } catch (e) {
       print("PostProvider getUserPosts error: " + e.toString());
       return null;
     } finally {
-      changeState(false);
-    }
-  }
-
-  Future<void> getContributedPosts(String organizationName) async {
-    try {
-      postList = await postRepository.getContributedPosts(organizationName);
       notifyListeners();
-    } catch (e) {
-      logger.e("PostProvider getContributedPosts error: $e");
     }
   }
 }

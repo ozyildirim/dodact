@@ -1,104 +1,148 @@
-import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/discover/widgets/post_card_for_grids.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
-class PostsPart extends StatefulWidget {
+class PostsPart extends StatelessWidget {
   @override
-  _PostsPartState createState() => _PostsPartState();
+  Widget build(BuildContext context) => StaggeredGridViewWidget();
 }
 
-class _PostsPartState extends State<PostsPart> {
-  Future<void> _refreshPosts(BuildContext context) async {
-    await Provider.of<PostProvider>(context, listen: false).getList();
-  }
+class StaggeredGridViewWidget extends StatefulWidget {
+  @override
+  _StaggeredGridViewWidgetState createState() =>
+      _StaggeredGridViewWidgetState();
+}
+
+class _StaggeredGridViewWidgetState extends State<StaggeredGridViewWidget> {
+  ScrollController scrollController;
+  var postProvider;
 
   @override
   void initState() {
     super.initState();
+    postProvider = Provider.of<PostProvider>(context, listen: false);
+    scrollController = ScrollController();
+
+    scrollController.addListener(scrollListener);
+    postProvider.fetchNextPosts();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent / 2 &&
+        !scrollController.position.outOfRange) {
+      postProvider.fetchNextPosts();
+      // if (widget.provider.hasNext) {}
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
-
-    return RefreshIndicator(
-      onRefresh: () => _refreshPosts(context),
-      child: FutureBuilder(
-        future: postProvider.getList(),
-        // ignore: missing_return
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return Center(
-                child: spinkit,
-              );
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              }
-              List<PostModel> posts = snapshot.data;
-
-              return Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: StaggeredGridView.countBuilder(
-                  crossAxisCount: 4,
-                  itemCount: posts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var postItem = posts[index];
-                    return Container(
-                      height: 400,
-                      child: PostCardForGrid(
-                        post: postItem,
-                      ),
-                    );
-                  },
-                  staggeredTileBuilder: (int index) =>
-                      new StaggeredTile.count(2, index.isEven ? 2 : 1),
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                ),
-              );
-          }
+    var provider = Provider.of<PostProvider>(context);
+    // return StaggeredGridView(
+    //     controller: scrollController,
+    //     padding: EdgeInsets.all(8),
+    //     shrinkWrap: true,
+    //     addAutomaticKeepAlives: true,
+    //     addRepaintBoundaries: true,
+    //     gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+    //       crossAxisCount: 4,
+    //       // staggeredTileCount: 4,
+    //       staggeredTileBuilder: (int index) =>
+    //           StaggeredTile.count(2, index.isEven ? 2 : 1),
+    //       mainAxisSpacing: 4.0,
+    //       crossAxisSpacing: 4.0,
+    //     ),
+    //     children: [
+    //       ...widget.provider.posts
+    //           .map((post) => PostCardForGrid(post: post))
+    //           .toList(),
+    //       if (widget.provider.hasNext)
+    //         Container(
+    //           child: Center(
+    //             child: GestureDetector(
+    //               onTap: widget.provider.fetchNextPosts,
+    //               child: Container(
+    //                 child: CircularProgressIndicator(),
+    //                 width: 25,
+    //                 height: 25,
+    //               ),
+    //             ),
+    //           ),
+    //         )
+    //     ]);
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: StaggeredGridView.countBuilder(
+        controller: scrollController,
+        crossAxisCount: 4,
+        itemCount: postProvider.posts.length,
+        itemBuilder: (BuildContext context, int index) {
+          var postItem = postProvider.posts[index];
+          return Container(
+            height: 400,
+            child: PostCardForGrid(
+              post: postItem,
+            ),
+          );
         },
+        staggeredTileBuilder: (int index) =>
+            new StaggeredTile.count(2, index.isEven ? 2 : 1),
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
       ),
     );
 
-    // return Column(
-    //   children: [
-    //     Expanded(
-    //       child: PaginateFirestore(
-    //         //item builder type is compulsory.
-    //         itemBuilder: (index, context, documentSnapshot) {
-    //           final post = PostModel.fromJson(documentSnapshot.data());
-    //           return Padding(
-    //             padding: const EdgeInsets.all(8.0),
-    //             child: GridTile(
-    //               child: PostCardForGrid(
-    //                 post: post,
+    //   return ListView(
+    //     controller: scrollController,
+    //     children: [
+    //       ...widget.provider.posts.map((e) => Text(e.postTitle)).toList(),
+    //       if (widget.provider.hasNext)
+    //         Center(
+    //           child: GestureDetector(
+    //             onTap: widget.provider.fetchNextPosts,
+    //             child: Container(
+    //               child: CircularProgressIndicator(),
+    //               width: 25,
+    //               height: 25,
+    //             ),
+    //           ),
+    //         )
+    //     ],
+    //   );
+    // }
+    //
+    // @override
+    //   Widget build(BuildContext context) => ListView(
+    //         controller: scrollController,
+    //         padding: EdgeInsets.all(12),
+    //         children: [
+    //           ...widget.provider.posts
+    //               .map((post) => ListTile(
+    //                     title: Text(post.postTitle),
+    //                   ))
+    //               .toList(),
+    //           if (widget.provider.hasNext)
+    //             Center(
+    //               child: GestureDetector(
+    //                 onTap: widget.provider.fetchNextPosts,
+    //                 child: Container(
+    //                   height: 25,
+    //                   width: 25,
+    //                   child: CircularProgressIndicator(),
+    //                 ),
     //               ),
     //             ),
-    //           );
-    //         },
-    //         // orderBy is compulsory to enable pagination
-    //         query:
-    //             postsRef.where('approved', isEqualTo: true).orderBy('postDate'),
-    //         //Change types accordingly
-    //         itemBuilderType: PaginateBuilderType.gridView,
-    //         // to fetch real-time data
-    //         isLive: true,
-    //         itemsPerPage: 3,
-    //       ),
-    //     ),
-    //     SizedBox(
-    //       height: kToolbarHeight,
-    //     )
-    //   ],
-    // );
+    //         ],
+    //       );
+    // }
   }
 }

@@ -46,8 +46,12 @@ class PostRepository {
   }
 
   @override
-  Query getListQuery() {
-    throw UnimplementedError();
+  Future<QuerySnapshot> getListQuery(
+      int documentLimit, DocumentSnapshot startAfter) async {
+    if (appMode == AppMode.DEBUG) {
+    } else {
+      return await _firebasePostService.getListQuery(documentLimit, startAfter);
+    }
   }
 
   @override
@@ -93,14 +97,6 @@ class PostRepository {
       return Future.value(List<PostModel>.empty());
     } else {
       return await _firebasePostService.getTopPosts();
-    }
-  }
-
-  Future<List<PostModel>> getContributedPosts(String organizationName) async {
-    if (appMode == AppMode.DEBUG) {
-      return Future.value(List<PostModel>.empty());
-    } else {
-      return await _firebasePostService.getContributedPosts(organizationName);
     }
   }
 

@@ -73,8 +73,15 @@ class FirebasePostService {
 
   //fetch events by query
 
-  Query getListQuery() {
-    throw UnimplementedError();
+  Future<QuerySnapshot> getListQuery(
+      int documentLimit, DocumentSnapshot startAfter) async {
+    final refPosts = postsRef.limit(documentLimit);
+
+    if (startAfter == null) {
+      return refPosts.get();
+    } else {
+      return refPosts.startAfterDocument(startAfter).get();
+    }
   }
 
   Future<void> addPost() async {}
