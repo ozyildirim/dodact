@@ -65,6 +65,7 @@ const k_ROUTE_GROUP_ADD_MEMBER_PAGE = '/group_add_member';
 const k_ROUTE_GROUP_EVENT_MANAGEMENT_PAGE = '/group_event_management';
 const k_ROUTE_GROUP_POST_MANAGEMENT_PAGE = '/group_post_management';
 const k_ROUTE_GROUP_INTEREST_MANAGEMENT_PAGE = '/group_interest_management';
+const k_ROUTE_GROUP_MEDIA_MANAGEMENT_PAGE = '/group_media_management';
 
 //Creation Routes
 const k_ROUTE_CREATE_POST_PAGE = '/add_post';

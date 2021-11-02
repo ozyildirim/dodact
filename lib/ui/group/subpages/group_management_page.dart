@@ -104,6 +104,22 @@ class GroupManagementPage extends StatelessWidget {
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.perm_media),
+                ),
+                title: Text(
+                  "Topluluk Medya Yönetimi",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_MEDIA_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
           ],
         ),
       ),

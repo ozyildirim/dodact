@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/group_repository.dart';
+import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
 class GroupProvider extends ChangeNotifier {
@@ -172,23 +178,6 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> setGroupProfilePicture(
-      {PlatformFile file, GroupModel group, bool isNotify}) async {
-    try {
-      changeState(true, isNotify: isNotify);
-      // var pictureDownloadURL = await UploadService.uploadImage(
-      //     category: 'profile_picture',
-      //     file: file,
-      //     name: '${group.groupName}_profilePicture');
-      // await _groupRepository
-      //     .update(group.groupId, {'groupProfilePicture': pictureDownloadURL});
-    } catch (e) {
-      logger.e("GroupProvider setGroupProfilePicture error: " + e.toString());
-    } finally {
-      changeState(false);
-    }
-  }
-
   Future<bool> addGroupMember(
     String userID,
     String groupID,
@@ -240,6 +229,38 @@ class GroupProvider extends ChangeNotifier {
     } catch (e) {
       logger.e("GroupProvider setGroupManager error: " + e.toString());
       return null;
+    }
+  }
+
+  Future removeGroupMedia(String url, String groupId) async {
+    try {
+      HttpsCallable callable =
+          FirebaseFunctions.instance.httpsCallable('deleteGroupMedia');
+      HttpsCallableResult result =
+          await callable.call(<String, dynamic>{'url': url});
+
+      if (result.data['result'] == true) {
+        await updateGroup(groupId, {
+          'groupMedia': FieldValue.arrayRemove([url]),
+        });
+        group.groupMedia.remove(url);
+      } else {
+        logger.e("GroupProvider removeGroupMedia error: " + result.toString());
+      }
+    } catch (e) {
+      logger.e("GroupProvider removeGroupMedia error: " + e.toString());
+    }
+  }
+
+  Future addGroupMedia(PickedFile file, String groupId) async {
+    try {
+      var url = await UploadService()
+          .uploadGroupMedia(groupId: groupId, fileToUpload: File(file.path));
+      await updateGroup(groupId, {
+        'groupMedia': FieldValue.arrayUnion([url]),
+      });
+    } catch (e) {
+      logger.e("GroupProvider addGroupMedia error: " + e.toString());
     }
   }
 }

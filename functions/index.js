@@ -1,9 +1,6 @@
 const fs = require('fs');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const {
-    Storage
-} = require("@google-cloud/storage");
 const nodemailer = require('nodemailer');
 
 admin.initializeApp({
@@ -11,6 +8,8 @@ admin.initializeApp({
     credential: admin.credential.applicationDefault()
 });
 const db = admin.firestore();
+
+
 
 //REFS
 const postsRef = db.collection('posts');
@@ -274,6 +273,26 @@ exports.sendNotificationToUser = functions.https.onCall(async (data, context) =>
             console.log(error);
         });
 })
+
+exports.deleteGroupMedia = functions.https.onCall(async (data, context) => {
+    var result;
+    const mediaUrl = data.url;
+
+    const bucket = admin.storage().bucket();
+    await bucket.deleteFiles({
+        prefix: mediaUrl
+    }).then(() => {
+        console.log('Group media deleted successfully: ' + mediaUrl);
+        result = true;
+        return result;
+
+
+    }).catch((error) => {
+        console.log(error);
+        result = false;
+        return result;
+    });
+});
 
 
 

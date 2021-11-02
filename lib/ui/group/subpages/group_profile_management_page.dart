@@ -296,15 +296,6 @@ class _GroupProfileManagementPageState
 
   void updateProfilePhoto(PickedFile file) async {
     CommonMethods().showLoaderDialog(context, "Fotoğrafın değiştiriliyor.");
-    // await authProvider
-    //     .updateCurrentUserProfilePicture(File(picture.path))
-    //     .then((url) {
-    //   NavigationService.instance.pop();
-    //   debugPrint("Picture uploaded.");
-    // }).catchError((error) {
-    //   CommonMethods()
-    //       .showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
-    // });
 
     try {
       var url = await UploadService().uploadGroupProfilePhoto(

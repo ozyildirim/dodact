@@ -9,7 +9,7 @@ class GroupModel {
   String managerId;
   String groupDescription;
   String groupProfilePicture;
-  List<String> groupPhotos;
+  List<String> groupMedia;
   List<String> groupMemberList;
   DateTime creationDate;
   String groupLocation;
@@ -27,7 +27,7 @@ class GroupModel {
     this.managerId,
     this.groupDescription,
     this.groupProfilePicture,
-    this.groupPhotos,
+    this.groupMedia,
     this.groupMemberList,
     this.interests,
     this.mainInterest,
@@ -44,7 +44,7 @@ class GroupModel {
     managerId = json['managerId'];
     groupDescription = json['groupDescription'];
     groupProfilePicture = json['groupProfilePicture'];
-    groupPhotos = json['groupPhotos']?.cast<String>();
+    groupMedia = json['groupMedia']?.cast<String>();
     groupMemberList = json['groupMemberList']?.cast<String>();
     interests = json['interests']?.cast<Map<String, dynamic>>();
     mainInterest = json['mainInterest'] ?? "";
@@ -62,7 +62,7 @@ class GroupModel {
     data['managerId'] = this.managerId;
     data['groupDescription'] = this.groupDescription;
     data['groupProfilePicture'] = this.groupProfilePicture;
-    data['groupPhotos'] = this.groupPhotos;
+    data['groupMedia'] = this.groupMedia;
     data['groupMemberList'] = this.groupMemberList;
     data['interests'] = this.interests;
     data['mainInterest'] = this.mainInterest;
@@ -75,6 +75,6 @@ class GroupModel {
 
   @override
   String toString() {
-    return 'GroupModel{groupId: $groupId, groupName: $groupName,interests: $interests, groupLocation: $groupLocation, groupCategory: $groupCategory, founderId: $managerId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupMemberList: $groupMemberList, creationDate: $creationDate}';
+    return 'GroupModel{groupId: $groupId, groupName: $groupName,interests: $interests, groupLocation: $groupLocation, groupCategory: $groupCategory, founderId: $managerId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupMedia: $groupMedia, groupMemberList: $groupMemberList, creationDate: $creationDate}';
   }
 }

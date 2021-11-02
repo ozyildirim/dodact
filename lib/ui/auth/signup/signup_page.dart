@@ -67,6 +67,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   image: AssetImage('assets/images/loginBG.jpg'),
                   fit: BoxFit.cover)),
           height: dynamicHeight(1),
+          width: dynamicWidth(1),
           child: FormBuilder(
             key: _formKey,
             child: SingleChildScrollView(
@@ -78,12 +79,12 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   Hero(
                     tag: "logo",
                     child: Image(
-                      height: 150,
-                      width: 150,
+                      height: dynamicHeight(0.20),
+                      width: dynamicHeight(0.20),
                       image: AssetImage('assets/images/logo.png'),
                     ),
                   ),
-                  SizedBox(height: dynamicHeight(0.03)),
+                  SizedBox(height: dynamicHeight(0.02)),
                   TextFieldContainer(
                     child: FormBuilderTextField(
                       keyboardType: TextInputType.emailAddress,
@@ -239,25 +240,25 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomButton(
-                        icon: Icon(
-                          Icons.info,
-                          color: Colors.white,
-                        ),
-                        titleText: Text(
-                          "Dodact Nedir?",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          NavigationService.instance
-                              .navigate(k_ROUTE_ABOUT_DODACT);
-                        },
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     CustomButton(
+                  //       icon: Icon(
+                  //         Icons.info,
+                  //         color: Colors.white,
+                  //       ),
+                  //       titleText: Text(
+                  //         "Dodact Nedir?",
+                  //         style: TextStyle(color: Colors.white),
+                  //       ),
+                  //       onPressed: () {
+                  //         NavigationService.instance
+                  //             .navigate(k_ROUTE_ABOUT_DODACT);
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -268,8 +269,9 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void googleSignIn() async {
-    var status = await authProvider.signInWithGoogle(context);
     CommonMethods().showLoaderDialog(context, "Google ile giriş yapılıyor");
+    var status = await authProvider.signInWithGoogle(context);
+
     if (status != AuthResultStatus.successful) {
       NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {

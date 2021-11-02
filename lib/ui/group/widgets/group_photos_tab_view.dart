@@ -10,8 +10,8 @@ class GroupPhotosTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
 
-    if (provider.group.groupPhotos.length == 0 ||
-        provider.group.groupPhotos == null) {
+    if (provider.group.groupMedia.length == 0 ||
+        provider.group.groupMedia == null) {
       return Padding(
         padding: const EdgeInsets.all(36.0),
         child: Container(
@@ -25,7 +25,7 @@ class GroupPhotosTabView extends StatelessWidget {
     }
     return GFItemsCarousel(
       rowCount: 3,
-      children: provider.group.groupPhotos.map(
+      children: provider.group.groupMedia.map(
         (url) {
           return CachedNetworkImage(
               imageUrl: url,

@@ -145,6 +145,7 @@ class _GroupMemberManagementPageState
                                 },
                               ),
                               Text(user.nameSurname,
+                                  overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15,

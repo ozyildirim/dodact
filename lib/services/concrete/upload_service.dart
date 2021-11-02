@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path/path.dart';
 
 class UploadService {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
@@ -93,6 +94,25 @@ class UploadService {
         .child('events')
         .child(eventID)
         .child(fileNameAndExtension);
+
+    var uploadTask = _storageReference.putFile(compressedImage);
+
+    var url = await (await uploadTask).ref.getDownloadURL();
+    return url;
+  }
+
+  Future<String> uploadGroupMedia({
+    @required String groupId,
+    @required File fileToUpload,
+  }) async {
+    var compressedImage = await compressImage(fileToUpload);
+
+    _storageReference = _firebaseStorage
+        .ref()
+        .child('groups')
+        .child(groupId)
+        .child('media')
+        .child(compressedImage.path.split('/').last);
 
     var uploadTask = _storageReference.putFile(compressedImage);
 
