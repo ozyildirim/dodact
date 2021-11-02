@@ -92,6 +92,7 @@ dependencies:
   youtube_metadata: ^1.0.1
   flutter_blurhash: ^0.6.0
   infinite_scroll_pagination: ^3.1.0
+  easy_localization: any
 
   
   
@@ -115,6 +116,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/lang/
     - assets/images/
     - assets/images/creation/
     - assets/images/app/

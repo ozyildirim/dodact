@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 
 class PostCard extends StatelessWidget {
@@ -14,8 +14,9 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var contentURL =
-        post.postContentType == "Ses" ? kAudioCardImage : post.postContentURL;
+    var contentURL = post.postContentType == "Ses"
+        ? AppConstant.kAudioCardImage
+        : post.postContentURL;
 
     coverPhotoURL = CommonMethods.createThumbnailURL(
         post.isLocatedInYoutube, contentURL,

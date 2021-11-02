@@ -16,8 +16,6 @@ class PostProvider extends ChangeNotifier {
 
   PostModel post;
   List<PostModel> postList;
-  List<PostModel> userPosts;
-  List<PostModel> otherUsersPosts;
   List<DodderModel> postDodders;
 
   List<PostModel> topPosts;

@@ -1,10 +1,12 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/config/navigation/navigator_route_service.dart';
 import 'package:dodact_v1/locator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ Future<void> _messageHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   MobileAds.instance.initialize();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   initScreen = _prefs.getInt("initScreen");
@@ -95,7 +98,16 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
 
   setupLocator();
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+    // EasyLocalization(
+    //   supportedLocales: AppConstant.SUPPORTED_LOCALE,
+    //   path: AppConstant.LANG_PATH,
+    //   startLocale: Locale('en', 'US'),
+    //   fallbackLocale: Locale('tr', 'TR'),
+    //   child: MyApp(),
+    // ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -109,6 +121,9 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
+        // localizationsDelegates: context.localizationDelegates,
+        // supportedLocales: context.supportedLocales,
+        // locale: context.locale,
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,
         onUnknownRoute: NavigationRouteManager.onUnknownRoute,
         navigatorKey: NavigationService.instance.navigatorKey,

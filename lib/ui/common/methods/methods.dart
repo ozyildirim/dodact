@@ -12,7 +12,7 @@ class CommonMethods {
       String thumbnailURL;
 
       if (isAudio != null && isAudio == true) {
-        return kAudioCardImage;
+        return AppConstant.kAudioCardImage;
       }
 
       if (isLocatedInYoutube) {
