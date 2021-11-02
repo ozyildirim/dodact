@@ -86,11 +86,11 @@ class GroupRepository implements BaseService {
     }
   }
 
-  Future<List<UserObject>> getGroupMembers(GroupModel group) async {
+  Future<List<UserObject>> getGroupMembers(String groupId) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     }
-    return await _firebaseUserService.getGroupMembers(group);
+    return await _firebaseUserService.getGroupMembers(groupId);
   }
 
   Future<bool> addGroupMember(String userID, String groupID) async {
@@ -148,6 +148,14 @@ class GroupRepository implements BaseService {
       return Future.value(null);
     } else {
       await _firebaseEventService.delete(eventId);
+    }
+  }
+
+  Future setGroupManager(String userId, String groupId) {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      return _firebaseGroupService.setGroupManager(userId, groupId);
     }
   }
 }

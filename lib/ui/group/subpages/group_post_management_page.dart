@@ -175,6 +175,6 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
   }
 
   bool canUserManage() {
-    return groupProvider.group.founderId == userProvider.currentUser.uid;
+    return groupProvider.group.managerId == userProvider.currentUser.uid;
   }
 }

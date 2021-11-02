@@ -37,10 +37,11 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
 
     tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
+    groupProvider.setGroup(group);
   }
 
   bool isUserGroupFounder() {
-    if (group.founderId == userProvider.currentUser.uid) {
+    if (group.managerId == userProvider.currentUser.uid) {
       return true;
     }
     return false;

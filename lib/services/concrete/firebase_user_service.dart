@@ -47,8 +47,11 @@ class FirebaseUserService {
     return user;
   }
 
-  Future<List<UserObject>> getGroupMembers(GroupModel group) async {
+  Future<List<UserObject>> getGroupMembers(String groupId) async {
     //Get post IDs from user object
+    var snapshot = await groupsRef.doc(groupId).get();
+    GroupModel group = GroupModel.fromJson(snapshot.data());
+
     List<String> memberIDs = group.groupMemberList;
     List<UserObject> allGroupMembers = [];
 

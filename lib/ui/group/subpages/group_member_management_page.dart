@@ -7,7 +7,6 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 enum InvitationType { GroupMembership }
@@ -22,6 +21,7 @@ class _GroupMemberManagementPageState
     extends BaseState<GroupMemberManagementPage> {
   GroupProvider groupProvider;
   InvitationProvider invitationProvider;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -59,29 +59,27 @@ class _GroupMemberManagementPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         actions: actions,
         title: Text("Üye Yönetimi"),
       ),
-      body: RefreshIndicator(
-        onRefresh: () => refreshGroup(),
-        child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                image: AssetImage(kBackgroundImage),
-                fit: BoxFit.cover,
-              ),
+      body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
             ),
-            child: buildMemberList()),
-      ),
+          ),
+          child: buildMemberList()),
     );
   }
 
   Widget buildMemberList() {
     return FutureBuilder(
-        future: groupProvider.getGroupMembers(groupProvider.group),
+        future: groupProvider.getGroupMembers(groupProvider.group.groupId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
@@ -127,6 +125,9 @@ class _GroupMemberManagementPageState
                       }
                       var user = members[index - 1];
                       return InkWell(
+                        onLongPress: () {
+                          showMemberOptions(user.uid);
+                        },
                         onTap: () => navigateUserProfile(user),
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -185,12 +186,124 @@ class _GroupMemberManagementPageState
     }
   }
 
-//TODO: Sayfa içerisinde güncellemiyor.
   Future<void> deleteMember(String userID) async {
     await groupProvider.removeGroupMember(userID, groupProvider.group.groupId);
   }
 
-  refreshGroup() async {
-    await groupProvider.getGroupDetail(groupProvider.group.groupId);
+  Future setGroupManager(String userId, String groupId) async {
+    await groupProvider.setGroupManager(userId, groupId);
+  }
+
+  void showMemberOptions(String userId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text("Üye Seçenekleri", textAlign: TextAlign.center),
+            children: [
+              userId != userProvider.currentUser.uid
+                  ? SimpleDialogOption(
+                      child: Text("Üyeyi Topluluktan Çıkar"),
+                      onPressed: () {
+                        NavigationService.instance.pop();
+                        removeMemberDialog(userId);
+                      },
+                    )
+                  : Container(),
+              groupProvider.group.managerId != userId
+                  ? SimpleDialogOption(
+                      child: Text("Yönetici Yap"),
+                      onPressed: () {
+                        NavigationService.instance.pop();
+                        setManagerDialog(userId);
+                      },
+                    )
+                  : Container()
+            ],
+          );
+        });
+  }
+
+  removeMemberDialog(String userId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Üye Çıkar"),
+            content:
+                Text("Üyeyi topluluğundan çıkarmak istediğine emin misin?"),
+            actions: [
+              FlatButton(
+                child: Text("Evet"),
+                onPressed: () {
+                  deleteMember(userId);
+                  setState(() {});
+                  NavigationService.instance.pop();
+                },
+              ),
+              FlatButton(
+                child: Text("Hayır"),
+                onPressed: () {
+                  NavigationService.instance.pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  setManagerDialog(String userId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Yönetici Yap"),
+            content:
+                Text("Bu kullanıcıyı yönetici yapmak istediğine emin misin?"),
+            actions: [
+              FlatButton(
+                child: Text("Evet"),
+                onPressed: () async {
+                  try {
+                    await setGroupManager(userId, groupProvider.group.groupId);
+                    NavigationService.instance.popUntil(k_ROUTE_GROUPS_PAGE);
+                  } catch (e) {
+                    showSnackBar("Bir hata oluştu.");
+                    NavigationService.instance.pop();
+                  }
+                },
+              ),
+              FlatButton(
+                child: Text("Hayır"),
+                onPressed: () {
+                  NavigationService.instance.pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void showSnackBar(String message, {int duration = 2}) {
+    scaffoldKey.currentState.showSnackBar(
+      new SnackBar(
+        duration: new Duration(seconds: duration),
+        content: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // new CircularProgressIndicator(),
+            Expanded(
+              child: new Text(
+                message,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

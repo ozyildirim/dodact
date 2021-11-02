@@ -6,7 +6,7 @@ class GroupModel {
   String groupName;
   String groupCategory;
   String groupSubtitle;
-  String founderId;
+  String managerId;
   String groupDescription;
   String groupProfilePicture;
   List<String> groupPhotos;
@@ -24,7 +24,7 @@ class GroupModel {
     this.groupName,
     this.groupCategory,
     this.groupSubtitle,
-    this.founderId,
+    this.managerId,
     this.groupDescription,
     this.groupProfilePicture,
     this.groupPhotos,
@@ -41,7 +41,7 @@ class GroupModel {
     groupName = json['groupName'];
     groupCategory = json['groupCategory'];
     groupSubtitle = json['groupSubtitle'];
-    founderId = json['founderId'];
+    managerId = json['managerId'];
     groupDescription = json['groupDescription'];
     groupProfilePicture = json['groupProfilePicture'];
     groupPhotos = json['groupPhotos']?.cast<String>();
@@ -59,7 +59,7 @@ class GroupModel {
     data['groupName'] = this.groupName;
     data['groupCategory'] = this.groupCategory;
     data['groupSubtitle'] = this.groupSubtitle;
-    data['founderId'] = this.founderId;
+    data['managerId'] = this.managerId;
     data['groupDescription'] = this.groupDescription;
     data['groupProfilePicture'] = this.groupProfilePicture;
     data['groupPhotos'] = this.groupPhotos;
@@ -75,6 +75,6 @@ class GroupModel {
 
   @override
   String toString() {
-    return 'GroupModel{groupId: $groupId, groupName: $groupName,interests: $interests, groupLocation: $groupLocation, groupCategory: $groupCategory, founderId: $founderId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupMemberList: $groupMemberList, creationDate: $creationDate}';
+    return 'GroupModel{groupId: $groupId, groupName: $groupName,interests: $interests, groupLocation: $groupLocation, groupCategory: $groupCategory, founderId: $managerId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupMemberList: $groupMemberList, creationDate: $creationDate}';
   }
 }

@@ -44,33 +44,6 @@ SimpleDialog categoryDialog(BuildContext context) {
   );
 }
 
-SimpleDialog contributionCategoryDialog(BuildContext context) {
-  return SimpleDialog(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-    title: Text('Hangi kuruma yardım etmek istiyorsunuz?'),
-    children: [
-      SimpleDialogItem(
-        icon: FontAwesome5Solid.image,
-        color: Colors.orange,
-        text: 'TEMA',
-        onPressed: () {
-          Navigator.pop(context, "TEMA");
-        },
-      ),
-      SimpleDialogItem(
-        icon: FontAwesome5Solid.video,
-        color: Colors.green,
-        text: 'DODACT',
-        onPressed: () {
-          Navigator.pop(context, "DODACT");
-        },
-      ),
-    ],
-  );
-}
-
 SimpleDialog eventPlatformDialog(BuildContext context) {
   return SimpleDialog(
     shape: RoundedRectangleBorder(

@@ -18,7 +18,7 @@ class GroupMembersTab extends StatelessWidget {
     var provider = Provider.of<GroupProvider>(context, listen: false);
 
     return FutureBuilder(
-        future: provider.getGroupMembers(group),
+        future: provider.getGroupMembers(group.groupId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {

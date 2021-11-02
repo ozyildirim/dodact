@@ -163,9 +163,9 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getGroupMembers(GroupModel group) async {
+  Future<void> getGroupMembers(String groupId) async {
     try {
-      return await _groupRepository.getGroupMembers(group);
+      return await _groupRepository.getGroupMembers(groupId);
     } catch (e) {
       logger.e("GroupProvider getGroupMembers error: " + e.toString());
       return null;
@@ -211,11 +211,6 @@ class GroupProvider extends ChangeNotifier {
   Future<void> removeGroupMember(String userID, String groupID) async {
     try {
       await _groupRepository.removeGroupMember(userID, groupID);
-      var user = groupMembers.firstWhere((element) => element.uid == userID);
-      groupMembers.remove(user);
-      group.groupMemberList.remove(user.uid);
-
-      notifyListeners();
     } catch (e) {
       logger.e("GroupProvider removeGroupMember error: " + e.toString());
     }
@@ -236,6 +231,15 @@ class GroupProvider extends ChangeNotifier {
       await _groupRepository.deleteGroupEvent(eventId);
     } catch (e) {
       logger.e("GroupProvider deleteGroupPost error: " + e.toString());
+    }
+  }
+
+  Future setGroupManager(String userId, String groupId) {
+    try {
+      return _groupRepository.setGroupManager(userId, groupId);
+    } catch (e) {
+      logger.e("GroupProvider setGroupManager error: " + e.toString());
+      return null;
     }
   }
 }

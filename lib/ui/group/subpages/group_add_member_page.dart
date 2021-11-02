@@ -139,7 +139,7 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
                             ),
                           ),
                           subtitle: Text(user.email),
-                          trailing: user.uid != groupProvider.group.founderId
+                          trailing: user.uid != groupProvider.group.managerId
                               ? checkIfInvitationSent(user.uid) == false
                                   ? IconButton(
                                       icon: Icon(Icons.person_add),

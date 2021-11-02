@@ -64,9 +64,9 @@ class FirebaseGroupService extends BaseService<GroupModel> {
   }
 
   Future<void> removeGroupMember(String userID, String groupID) async {
-    GroupModel group = await getDetail(groupID);
-    group.groupMemberList.remove(userID);
-    await update(groupID, group.toJson());
+    await groupsRef.doc(groupID).update({
+      'groupMemberList': FieldValue.arrayRemove([userID])
+    });
     Logger().d("Grup üyesi silindi");
   }
 
@@ -125,5 +125,11 @@ class FirebaseGroupService extends BaseService<GroupModel> {
       userGroups.add(groupObject);
     }
     return userGroups;
+  }
+
+  Future setGroupManager(String userId, String groupId) {
+    return groupsRef.doc(groupId).update({
+      'managerId': userId,
+    });
   }
 }

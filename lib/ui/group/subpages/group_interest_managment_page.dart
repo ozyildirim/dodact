@@ -17,6 +17,7 @@ class _GroupInterestManagementPageState
   GroupProvider groupProvider;
   GroupModel group;
   bool isUpdated = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -98,12 +99,16 @@ class _GroupInterestManagementPageState
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: isUpdated
+      floatingActionButton: isLoading
+          // ignore: missing_required_param
           ? FloatingActionButton(
-              onPressed: updateGroupInterests,
-              child: Icon(Icons.cloud_upload_rounded),
-            )
-          : null,
+              child: CircularProgressIndicator(color: Colors.white))
+          : isUpdated
+              ? FloatingActionButton(
+                  onPressed: updateGroupInterests,
+                  child: Icon(Icons.cloud_upload_rounded),
+                )
+              : null,
       appBar: AppBar(
         title: Text('Topluluk İlgi Alanları'),
       ),
@@ -372,7 +377,7 @@ class _GroupInterestManagementPageState
                   child: Text("Görsel Sanatlar Alt Kategorileri",
                       style: TextStyle(
                           fontSize: 23,
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold)),
                 )),
           ),
@@ -410,6 +415,9 @@ class _GroupInterestManagementPageState
   }
 
   void updateGroupInterests() async {
+    setState(() {
+      isLoading = true;
+    });
     List<Map<String, dynamic>> interests = [
       {'title': 'Müzik', 'selectedSubcategories': selectedMusicValues},
       {'title': 'Tiyatro', 'selectedSubcategories': selectedTheaterValues},
@@ -422,6 +430,7 @@ class _GroupInterestManagementPageState
 
     await groupProvider.updateGroup(group.groupId, {'interests': interests});
     setState(() {
+      isLoading = false;
       isUpdated = false;
     });
   }
