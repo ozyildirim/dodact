@@ -56,14 +56,17 @@ class _LandingPageState extends BaseState<LandingPage> {
   void initState() {
     initializeRemoteConfig();
     messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value) async {
-      print("istek atıldı");
-      await tokensRef.doc(authProvider.currentUser.uid).set({
-        'token': value,
-        'lastTokenUpdate': FieldValue.serverTimestamp(),
-      });
-    });
     super.initState();
+    messaging.getToken().then((value) {
+      updateToken(value);
+    });
+  }
+
+  void updateToken(String value) async {
+    await tokensRef.doc(authProvider.currentUser.uid).set({
+      'token': value,
+      'lastTokenUpdate': FieldValue.serverTimestamp(),
+    });
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
@@ -32,33 +33,7 @@ class _HomePageState extends BaseState<HomePage> {
   void initState() {
     super.initState();
     messaging = FirebaseMessaging.instance;
-    // messaging.getToken().then((value) {
-    //   updateToken(value);
-    // });
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification.body);
-      //TODO: Awesome notif ekle
-
-      // Bildirim ile diyalog gösterimi
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Notification"),
-              content: Text(event.notification.body),
-              actions: [
-                TextButton(
-                  child: Text("Ok"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });

@@ -49,34 +49,48 @@ void main() async {
       'resource://drawable/notification_logo',
       [
         NotificationChannel(
-            defaultRingtoneType: DefaultRingtoneType.Notification,
-            icon: 'resource://drawable/notification_logo',
-            groupAlertBehavior: GroupAlertBehavior.Summary,
-            locked: true,
-            enableLights: true,
-            channelKey: 'basic_channel',
-            channelName: 'Basic notifications',
-            channelDescription: 'Notification channel for basic tests',
-            defaultColor: Color(0xFF9D50DD),
-            ledColor: Colors.white),
-        // NotificationChannel(
-        //     channelKey: 'badge_channel',
-        //     channelName: 'Badge indicator notifications',
-        //     channelDescription:
-        //         'Notification channel to activate badge indicator',
-        //     channelShowBadge: true,
-        //     defaultColor: Color(0xFF9D50DD),
-        //     ledColor: Colors.yellow),
+          // icon: 'resource://drawable/notification_logo',
+          enableLights: true, onlyAlertOnce: true,
 
-        // NotificationChannel(
-        //     channelKey: 'big_picture',
-        //     channelName: 'Big pictures',
-        //     channelDescription: 'Notifications with big and beautiful images',
-        //     defaultColor: Color(0xFF9D50DD),
-        //     ledColor: Color(0xFF9D50DD),
-        //     vibrationPattern: lowVibrationPattern),
+          channelKey: 'basic_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          // defaultColor: Color(0xFF9D50DD),
+          // ledColor: Colors.white,
+        ),
       ],
       debug: true);
+
+  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    if (!isAllowed) {
+      AlertDialog(
+        title: Text("Bildirimler İçin İzin ?"),
+        actions: [
+          FlatButton(
+            child: Text("Evet"),
+            onPressed: () {
+              AwesomeNotifications().requestPermissionToSendNotifications();
+            },
+          ),
+          FlatButton(
+            child: Text("Hayır"),
+            onPressed: () {},
+          ),
+        ],
+      );
+    }
+  });
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 10,
+      icon: 'resource://drawable/notification_logo',
+      channelKey: 'basic_channel',
+      title: message.notification.title,
+      body: message.notification.body,
+    ));
+  });
 
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
 

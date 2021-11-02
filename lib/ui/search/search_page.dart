@@ -70,53 +70,51 @@ class _SearchPageState extends State<SearchPage> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextFieldContainer(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText: 'Ara',
-                                border: InputBorder.none,
-                                suffixIcon: Icon(Icons.search)),
-                            onChanged: (value) {
-                              setState(() {
-                                name = value;
-                              });
-                            },
-                          ),
-                        ),
-                        TextFieldContainer(
-                          width: MediaQuery.of(context).size.width * 0.30,
-                          child: FormBuilderDropdown(
-                            name: "searchCategory",
-                            initialValue: category,
-                            items: categoryItems,
-                            hint: Text("Kategori",
-                                style: TextStyle(fontSize: 10)),
-                            decoration: InputDecoration(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextFieldContainer(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: TextField(
+                          decoration: InputDecoration(
+                              hintText: 'Ara',
                               border: InputBorder.none,
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                category = value;
-                                Logger().i("onchanged value: category");
-                              });
-                            },
-                          ),
+                              suffixIcon: Icon(Icons.search)),
+                          onChanged: (value) {
+                            setState(() {
+                              name = value;
+                            });
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                      TextFieldContainer(
+                        width: MediaQuery.of(context).size.width * 0.30,
+                        child: FormBuilderDropdown(
+                          name: "searchCategory",
+                          initialValue: category,
+                          items: categoryItems,
+                          hint:
+                              Text("Kategori", style: TextStyle(fontSize: 10)),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              category = value;
+                              Logger().i("onchanged value: category");
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  buildStreamer(context, name, category)
-                ],
-              ),
+                ),
+                buildStreamer(context, name, category)
+              ],
             ),
           ),
         ),
@@ -187,6 +185,8 @@ class _SearchPageState extends State<SearchPage> {
                           subtitle: Text(post.postCategory),
                         ),
                       );
+                      print(snapshot.data.docs[index]);
+                      return Container();
                     },
                   );
           },
@@ -299,6 +299,8 @@ class _SearchPageState extends State<SearchPage> {
                               subtitle: Text(event.eventCategory),
                             ),
                           );
+                          print(snapshot.data.docs[index]);
+                          return Container();
                         },
                       );
               },
@@ -353,6 +355,8 @@ class _SearchPageState extends State<SearchPage> {
                               subtitle: Text(group.groupCategory),
                             ),
                           );
+                          print(snapshot.data.docs[index]);
+                          return Container();
                         },
                       );
               },

@@ -15,10 +15,13 @@ const db = admin.firestore();
 //REFS
 const postsRef = db.collection('posts');
 const usersRef = db.collection('users');
+const eventsRef = db.collection('events');
 const groupsRef = db.collection('groups');
 const invitationsRef = db.collection('invitations');
 const tokensRef = db.collection('tokens');
 const reportsRef = db.collection('reports');
+const spinnerResultsRef = db.collection('spinner_results');
+const favoritesRef = db.collection('user_favorites');
 
 
 //Mail
@@ -162,60 +165,89 @@ exports.addUserToGroup = functions.https.onCall(async (data, context) => {
 })
 
 
-exports.deleteUserData = functions.firestore.document('users/{userId}')
-    .onDelete(async (snapshot, context) => {
-        const userId = context.params.userId;
-        const userData = snapshot.data();
-
-        //1. delete user posts
-
-        const userPosts = await postsRef.where('ownerId', '==', userId).get();
-        userPosts.forEach(async (doc) => {
-            await postsRef.doc(doc.id).delete();
-        });
-
-        //2. delete users group memberships
-
-        //3. delete user invitations
-
-        
-
-        //4. delete user tokens
-
-        //5. delete user reports
-
-        //6. delete user storage files(profile picture)
-
-        //7. delete user events
-
-        //8. delete user messages
-
-        //9. delete user spinner results
-
-        //10. delete user favorites
+exports.deleteUserData = functions.auth.user()
+    .onDelete(async (user) => {
+        const userId = user.uid;
 
 
+        try {
+            //0. delete user database entities
+            await usersRef.doc(userId).delete().then(() => {
+                console.log('user firestore data deleted successfuly');
+            });
 
 
-        if (invitation.type == "InvitationType.GroupMembership") {
-            //get sender group info
-            const groupRef = groupsRef.doc(invitation.senderId);
-            const groupSnapshot = await groupRef.get();
-            const groupData = groupSnapshot.data();
+            //1. delete user posts
+            const userPosts = await postsRef.where('ownerId', '==', userId).get();
+            userPosts.forEach(async (doc) => {
+                await postsRef.doc(doc.id).delete();
+            });
+            console.log("User posts deleted from database");
 
-            const payload = {
-                notification: {
-                    title: 'Grup Katılım Daveti',
-                    body: groupData.groupName + ' tarafından davet edildin.'
-                }
-            };
 
-            //send notification to receiver user
-            var tokenRef = await tokensRef.doc(invitedUserId).get();
-            const tokenObject = tokenRef.data();
-            admin.messaging().sendToDevice(tokenObject.token, payload)
+            //2. delete users group memberships
 
+            //3. delete user invitations
+
+            const userInvitations = await invitationsRef.where('receiverId', '==', userId).get();
+            userInvitations.forEach(async (doc) => {
+                await invitationsRef.doc(doc.id).delete();
+            });
+            console.log("User invitations deleted from database");
+
+            //4. delete user token
+            await tokensRef.doc(userId).delete().then(() => {
+                console.log('user token deleted successfuly');
+            });
+
+
+            //5. delete user reports
+            const userReports = await reportsRef.where('reporterId', '==', userId).get();
+            userReports.forEach(async (doc) => {
+                await reportsRef.doc(doc.id).delete();
+            });
+            console.log("User reports deleted from database");
+
+            //6. delete user storage files(profile picture)
+            try {
+                const bucket = admin.storage().bucket();
+                await bucket.deleteFiles({
+                    prefix: `users/${userId}`
+                });
+                console.log('User files deleted successfully: ' + userId);
+            } catch (e) {
+                console.log("Error occured while deleting user files: " + userId + e);
+            }
+            console.log("User storage files deleted from database");
+
+            //7. delete user events
+
+            const userEvents = await eventsRef.where('ownerId', '==', userId).get();
+            userEvents.forEach(async (doc) => {
+                await eventsRef.doc(doc.id).delete();
+            });
+            console.log("User events deleted from database");
+
+            //8. delete user messages
+            // const userMessages = await messagesRef.where('senderId', '==', userId).get();
+
+            //9. delete user spinner results
+            const userSpinnerResults = await spinnerResultsRef.where('userId', '==', userId).get();
+            userSpinnerResults.forEach(async (doc) => {
+                await spinnerResultsRef.doc(doc.id).delete();
+            });
+            console.log("User spinner results deleted from database");
+
+            //10. delete user favorites
+
+            await favoritesRef.doc(userId).delete().then(() => {
+                console.log('user favorites deleted successfuly');
+            });
+
+        } catch (err) {
+            console.log(err);
         }
+
     });
 
 

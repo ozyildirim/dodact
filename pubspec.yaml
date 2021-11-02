@@ -84,7 +84,7 @@ dependencies:
   flutter_svg: ^0.22.0
   profanity_filter: ^2.0.0
   circular_menu: ^1.2.3
-  awesome_notifications: ^0.0.6+10
+  awesome_notifications: any
   paginate_firestore: ^1.0.2
   connectivity_plus: ^1.1.0
   package_info_plus: ^1.0.6

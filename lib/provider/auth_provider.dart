@@ -46,8 +46,9 @@ class AuthProvider extends BaseModel {
   Future<bool> signOut() async {
     try {
       setUser(null);
-      //TODO: Burayı düzelt
+
       bool result = await authRepository.signOut();
+
       notifyListeners();
 
       return result;

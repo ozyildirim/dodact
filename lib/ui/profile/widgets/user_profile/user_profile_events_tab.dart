@@ -26,7 +26,6 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
   Widget build(BuildContext context) {
     final provider = Provider.of<EventProvider>(context);
     var size = MediaQuery.of(context).size;
-    print("ekran boyutları width: ${size.width}, height: ${size.height}");
 
     return FutureBuilder(
       future: provider.getUserEvents(userProvider.currentUser),
