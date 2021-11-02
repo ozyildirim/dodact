@@ -1,13 +1,14 @@
 import 'dart:io';
 
-import 'package:dodact_v1/common/methods.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/ui/common/validators/validators.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
-import 'package:dodact_v1/utilities/profanity_checker.dart';
+import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -42,6 +43,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   String errorMessage;
   bool isUploaded = false;
   bool inProgress = false;
+  bool isAvailableUsername;
 
   void initState() {
     super.initState();
@@ -210,6 +212,11 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                 autofocus: false,
                 decoration: InputDecoration(border: InputBorder.none),
                 focusNode: _usernameFocus,
+                onChanged: (value) {
+                  setState(() {
+                    checkUsername(value);
+                  });
+                },
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(
                     context,
@@ -339,26 +346,29 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void submitForm() async {
-    if (formKey.currentState.saveAndValidate()) {
-      // CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
+    await checkUsername(formKey.currentState.value["username"]);
+    if (isAvailableUsername) {
+      if (formKey.currentState.saveAndValidate()) {
+        // CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
 
-      var username = formKey.currentState.value['username'].toString().trim();
+        var username = formKey.currentState.value['username'].toString().trim();
 
-      Logger().e("name: $name, location: $location, username: $username");
+        Logger().e("name: $name, location: $location, username: $username");
 
-      try {
-        await updateDetails(
-          username: username,
-          name: name ?? "Dodact Kullanıcısı",
-          location: location,
-        );
-        CommonMethods().hideDialog();
-        navigateInterestSelectionPage();
-      } catch (e) {
-        showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
+        try {
+          await updateDetails(
+            username: username,
+            name: name ?? "Dodact Kullanıcısı",
+            location: location,
+          );
+          CommonMethods().hideDialog();
+          navigateInterestSelectionPage();
+        } catch (e) {
+          showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
+        }
+      } else {
+        showErrorSnackBar("Formu doldururken bir hata oldu");
       }
-    } else {
-      showErrorSnackBar("Formu doldururken bir hata oldu");
     }
   }
 
@@ -404,6 +414,22 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       userProvider.currentUser.location = location;
     } catch (e) {
       showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
+    }
+  }
+
+  Future<bool> checkUsername(String value) async {
+    try {
+      var result = await CustomValidators.isUsernameAvailable(value);
+      if (result) {
+        setState(() {
+          isAvailableUsername = true;
+        });
+      } else {
+        formKey.currentState.invalidateField(
+            name: "username", errorText: "Bu kullanıcı adı kullanılıyor");
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

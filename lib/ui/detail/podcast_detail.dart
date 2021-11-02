@@ -1,4 +1,4 @@
-import 'package:dodact_v1/common/methods.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/podcast_model.dart';
 import 'package:flutter/material.dart';
