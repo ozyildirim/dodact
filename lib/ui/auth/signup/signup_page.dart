@@ -280,7 +280,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
       }
     } else {
       NavigationService.instance.pop();
-      NavigationService.instance.popUntil(k_ROUTE_LANDING);
+      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
     }
   }
 

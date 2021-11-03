@@ -65,29 +65,25 @@ class _LandingPageState extends BaseState<LandingPage> {
       builder: (_, model, child) {
         if (model.currentUser == null) {
           return WelcomePage();
-        } else {
-          print("çalıştı");
-          userProvider.getCurrentUser();
-
-          return Consumer<UserProvider>(
-            builder: (_, model, child) {
-              if (model.currentUser != null) {
-                if (model.currentUser.newUser) {
-                  return SignUpDetail();
-                }
-                return HomePage();
-              } else {
-                return Scaffold(
-                  body: Container(
-                    child: Center(
-                      child: spinkit,
-                    ),
-                  ),
-                );
-              }
-            },
-          );
         }
+        return Consumer<UserProvider>(
+          builder: (_, model, child) {
+            if (model.currentUser != null) {
+              if (model.currentUser.newUser) return SignUpDetail();
+
+              return HomePage();
+            } else {
+              userProvider.getCurrentUser();
+              return Scaffold(
+                body: Container(
+                  child: Center(
+                    child: spinkit,
+                  ),
+                ),
+              );
+            }
+          },
+        );
       },
     );
   }

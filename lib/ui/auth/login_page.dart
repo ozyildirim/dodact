@@ -45,31 +45,33 @@ class _LogInPageState extends BaseState<LogInPage> {
       NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        _scaffoldKey.currentState.showSnackBar(
-          new SnackBar(
-            duration: new Duration(seconds: 2),
-            content: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // new CircularProgressIndicator(),
-                Expanded(
-                  child: new Text(
-                    errorMsg,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    maxLines: 1,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
+        showSnackbar(errorMsg);
       }
     } else {
       NavigationService.instance.pop();
-      NavigationService.instance.popUntil(k_ROUTE_LANDING);
+      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
     }
+  }
+
+  showSnackbar(String errorMsg) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 2),
+      content: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          // new CircularProgressIndicator(),
+          Expanded(
+            child: new Text(
+              errorMsg,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+              maxLines: 1,
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    ));
   }
 
   @override
@@ -246,28 +248,29 @@ class _LogInPageState extends BaseState<LogInPage> {
         NavigationService.instance.pop();
         final errorMessage =
             AuthExceptionHandler.generateExceptionMessage(status);
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 2),
-          content: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // new CircularProgressIndicator(),
-              Expanded(
-                child: new Text(
-                  errorMessage,
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
-          ),
-        ));
+        // _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        //   duration: new Duration(seconds: 2),
+        //   content: new Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: <Widget>[
+        //       // new CircularProgressIndicator(),
+        //       Expanded(
+        //         child: new Text(
+        //           errorMessage,
+        //           overflow: TextOverflow.fade,
+        //           softWrap: false,
+        //           maxLines: 1,
+        //           style: TextStyle(fontSize: 16),
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ));
+        showSnackbar(errorMessage);
         debugPrint(errorMessage);
       } else {
         NavigationService.instance.pop();
-        NavigationService.instance.popUntil(k_ROUTE_LANDING);
+        NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
       }
     } else {
       setState(() {

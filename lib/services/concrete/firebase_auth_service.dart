@@ -49,7 +49,7 @@ class FirebaseAuthService {
             await _firebaseAuth.signInWithCredential(credential);
 
         var user = userCredential.user;
-        NavigationService.instance.pop();
+        // NavigationService.instance.pop();
         return user;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {

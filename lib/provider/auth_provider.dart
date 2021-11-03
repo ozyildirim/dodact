@@ -1,17 +1,20 @@
 import 'package:dodact_v1/config/base/base_model.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 enum ViewState { Ideal, Busy }
 enum AuthState { SignIn, SignUp }
 
 class AuthProvider extends BaseModel {
   AuthRepository authRepository = locator<AuthRepository>();
+  FirebaseAuth _auth = FirebaseAuth.instance;
   Logger logger = Logger();
 
   AuthProvider() {
