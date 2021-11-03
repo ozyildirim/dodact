@@ -5,6 +5,7 @@ const k_ROUTE_WELCOME = "/welcome";
 const k_ROUTE_ABOUT_DODACT = "/about";
 const k_ROUTE_LOGIN = '/login';
 const k_ROUTE_REGISTER = '/signup';
+const k_ROUTE_REGISTER_DETAIL = '/signup_detail';
 const k_ROUTE_INTEREST_REGISTRATION = '/interest-registration';
 const k_ROUTE_INTERESTS_CHOICE = '/interest_choice';
 

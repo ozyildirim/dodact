@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -8,17 +7,16 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
-import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
-import 'package:dodact_v1/utilities/dialogs.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
+import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/components/carousel/gf_items_carousel.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';

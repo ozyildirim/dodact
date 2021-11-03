@@ -266,7 +266,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           child: FormBuilder(
             key: formKey,
             child: Stepper(
-              controlsBuilder: (BuildContext context, ControlsDetails details) {
+              controlsBuilder: (BuildContext context,
+                  {void Function() onStepCancel,
+                  void Function() onStepContinue}) {
                 return Row(
                   children: <Widget>[
                     _currentStep != steps.length - 1

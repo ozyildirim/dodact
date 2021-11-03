@@ -1,5 +1,7 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
@@ -88,6 +90,18 @@ class _LandingPageState extends BaseState<LandingPage> {
         }
       },
     );
+  }
+
+  navigateSignupDetail() {
+    NavigationService.instance.navigateReplacement(k_ROUTE_REGISTER_DETAIL);
+  }
+
+  navigateHomePage() {
+    NavigationService.instance.navigateReplacement(k_ROUTE_HOME);
+  }
+
+  navigateWelcomePage() {
+    NavigationService.instance.navigateReplacement(k_ROUTE_WELCOME);
   }
 
   bool isNewUser(UserObject user) {
