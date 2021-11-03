@@ -45,9 +45,8 @@ class AuthProvider extends BaseModel {
 
   Future<bool> signOut() async {
     try {
-      setUser(null);
-
       bool result = await authRepository.signOut();
+      setUser(null);
       notifyListeners();
       return result;
     } catch (e) {
@@ -112,6 +111,7 @@ class AuthProvider extends BaseModel {
         logger.i("User ${user.email} logged in.");
         authStatus = AuthResultStatus.successful;
         setUser(user);
+        notifyListeners();
       } else {
         logger.e("E-posta onayı gerekmekte.");
       }

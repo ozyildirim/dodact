@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
@@ -55,18 +53,7 @@ class _LandingPageState extends BaseState<LandingPage> {
   @override
   void initState() {
     initializeRemoteConfig();
-    messaging = FirebaseMessaging.instance;
     super.initState();
-    messaging.getToken().then((value) {
-      updateToken(value);
-    });
-  }
-
-  void updateToken(String value) async {
-    await tokensRef.doc(authProvider.currentUser.uid).set({
-      'token': value,
-      'lastTokenUpdate': FieldValue.serverTimestamp(),
-    });
   }
 
   @override
@@ -86,7 +73,6 @@ class _LandingPageState extends BaseState<LandingPage> {
                 if (model.currentUser.newUser) {
                   return SignUpDetail();
                 }
-
                 return HomePage();
               } else {
                 return Scaffold(

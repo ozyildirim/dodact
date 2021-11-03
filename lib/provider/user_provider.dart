@@ -45,6 +45,11 @@ class UserProvider with ChangeNotifier {
     otherUser = user;
   }
 
+  setCurrentUser(UserObject user) {
+    currentUser = user;
+    notifyListeners();
+  }
+
   Future<UserObject> getUserByID(String userId) async {
     try {
       return await userRepository.getUserByID(userId);
@@ -71,8 +76,7 @@ class UserProvider with ChangeNotifier {
       var user = firebaseAuthService.currentUser();
       DocumentSnapshot documentSnapshot = await usersRef.doc(user.uid).get();
       if (documentSnapshot.exists) {
-        currentUser = UserObject.fromDoc(documentSnapshot);
-        notifyListeners();
+        setCurrentUser(UserObject.fromDoc(documentSnapshot));
         return currentUser;
       }
     } catch (e) {

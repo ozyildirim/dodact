@@ -4,7 +4,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
-import 'package:dodact_v1/ui/event/filtered_events_page.dart';
+
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
