@@ -48,9 +48,7 @@ class AuthProvider extends BaseModel {
       setUser(null);
 
       bool result = await authRepository.signOut();
-
       notifyListeners();
-
       return result;
     } catch (e) {
       debugPrint("AuthProvider signOut error: " + e.toString());

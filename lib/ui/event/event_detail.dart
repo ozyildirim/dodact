@@ -61,77 +61,100 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        actions: canUserControlEvent()
-            ? [
-                PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(FontAwesome5Regular.trash_alt),
-                                title: Text("Sil"),
-                                onTap: () async {
-                                  await _showDeleteEventDialog(event.eventId);
-                                }),
-                          )
-                        ])
-              ]
-            : [
-                PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(FontAwesome5Regular.bell),
-                                title: Text("Bildir"),
-                                onTap: () async {
-                                  await _showReportEventDialog(event.eventId);
-                                }),
-                          ),
-                        ])
-              ],
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        backwardsCompatibility: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+      //appBar: AppBar(
+      //  elevation: 0,
+      //  backgroundColor: Colors.transparent,
+      //  backwardsCompatibility: true,
+      //  iconTheme: IconThemeData(color: Colors.black),
+      //  centerTitle: true,
+      //),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            actions: canUserControlEvent()
+                ? [
+                    PopupMenuButton(
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                    leading:
+                                        Icon(FontAwesome5Regular.trash_alt),
+                                    title: Text("Sil"),
+                                    onTap: () async {
+                                      await _showDeleteEventDialog(
+                                          event.eventId);
+                                    }),
+                              )
+                            ])
+                  ]
+                : [
+                    PopupMenuButton(
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                    leading: Icon(FontAwesome5Regular.bell),
+                                    title: Text("Bildir"),
+                                    onTap: () async {
+                                      await _showReportEventDialog(
+                                          event.eventId);
+                                    }),
+                              ),
+                            ])
+                  ],
+            expandedHeight: dynamicHeight(0.4),
+            pinned: true,
+            snap: false,
+            floating: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.network(
+                event.eventImages[0],
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        width: dynamicWidth(1),
-        height: dynamicHeight(1),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildEventHeader(),
-              _buildEventDetailBody(),
-              _buildEventDetailTabs()
-              // _buildMap()
-            ],
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                    image: AssetImage(kBackgroundImage),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                width: dynamicWidth(1),
+                height: dynamicHeight(1),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      //_buildEventHeader(),
+                      _buildEventDetailBody(),
+                      _buildEventDetailTabs()
+                      // _buildMap()
+                    ],
+                  ),
+                ),
+              ),
+            ]),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildEventHeader() {
-    return Container(
-      width: dynamicWidth(1),
-      height: dynamicHeight(0.4),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(event.eventImages[0]),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
+  //Widget _buildEventHeader() {
+  //  return Container(
+  //    width: dynamicWidth(1),
+  //    height: dynamicHeight(0.4),
+  //    decoration: BoxDecoration(
+  //      image: DecorationImage(
+  //        image: NetworkImage(event.eventImages[0]),
+  //        fit: BoxFit.cover,
+  //      ),
+  //    ),
+  //  );
+  //}
 
   Widget _buildEventDetailBody() {
     return Container(

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
@@ -123,9 +122,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
   }
 
   void signOut(BuildContext context) async {
-    messaging.deleteToken();
-    await tokensRef.doc(authProvider.currentUser.uid).delete();
-
     await authProvider.signOut();
 
     Provider.of<UserProvider>(context, listen: false).removeUser();
