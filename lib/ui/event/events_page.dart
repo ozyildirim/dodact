@@ -66,7 +66,8 @@ class _EventsPageState extends BaseState<EventsPage> {
         child: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () {
-            showFilterDialog();
+            // showFilterDialog();
+            showBottomSheet();
           },
           child: Icon(
             Icons.filter_list_rounded,
@@ -183,6 +184,141 @@ class _EventsPageState extends BaseState<EventsPage> {
   }
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+
+  showBottomSheet() {
+    var size = MediaQuery.of(context).size;
+
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return new Container(
+          padding: EdgeInsets.only(
+            left: 5.0,
+            right: 5.0,
+            top: 5.0,
+            bottom: 5.0,
+          ),
+          decoration: new BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(10.0),
+                  topRight: const Radius.circular(10.0))),
+          child: new Wrap(
+            children: <Widget>[
+              new ListTile(
+                title: const Text(
+                  'Filtre',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              new ListTile(
+                leading: Text(
+                  "Şehir",
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                // new Container(
+                //   width: 4.0,
+                //   child:
+                //   Icon(
+                //     Icons.favorite,
+                //     color: Colors.pink,
+                //     size: 24.0,
+                //   ),
+                // ),
+                title: const Text(
+                  'Favourites',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              new ListTile(
+                leading: new Container(
+                  width: 4.0,
+                  child: Icon(
+                    Icons.settings,
+                    color: Colors.black,
+                    size: 24.0,
+                  ),
+                ),
+                title: const Text(
+                  'Settings',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              new ListTile(
+                leading: new Container(
+                  width: 4.0,
+                  child: Icon(
+                    Icons.account_box,
+                    color: Colors.blue,
+                    size: 24.0,
+                  ),
+                ),
+                title: const Text(
+                  'Profile',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              new Divider(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: size.width * 0.4,
+                    child: new ListTile(
+                      title: const Text(
+                        'Uygula',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      onTap: () async {
+                        // Add Here
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: size.width * 0.4,
+                    child: new ListTile(
+                      title: const Text(
+                        'Temizle',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      onTap: () async {
+                        // Add Here
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Dialog filterDialog() {
     var size = MediaQuery.of(context).size;
