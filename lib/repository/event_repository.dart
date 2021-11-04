@@ -99,7 +99,6 @@ class EventRepository {
         startAfter: startAfter,
       );
       print(snapshot);
-
       return snapshot;
     }
   }

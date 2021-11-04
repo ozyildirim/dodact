@@ -9,7 +9,6 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/group_repository.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -24,6 +23,25 @@ class GroupProvider extends ChangeNotifier {
 
   List<GroupModel> groupList;
   bool isLoading = false;
+
+  final groupsSnapshot = <DocumentSnapshot>[];
+  final filteredGroupsSnapshot = <DocumentSnapshot>[];
+  String errorMessage = '';
+  int documentLimit = 10;
+  bool _hasNext = true;
+  bool _hasNextFiltered = true;
+  bool _isFetchingGroups = false;
+  bool _isFetchingFilteredGroups = false;
+
+  bool get hasNext => _hasNext;
+
+  bool get hasNextFiltered => _hasNextFiltered;
+
+  List<GroupModel> get groups =>
+      groupsSnapshot.map((e) => GroupModel.fromJson(e.data())).toList();
+
+  List<GroupModel> get filteredGroups =>
+      filteredGroupsSnapshot.map((e) => GroupModel.fromJson(e.data())).toList();
 
   var logger = new Logger();
 
@@ -82,48 +100,63 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<GroupModel>> getGroupList({bool isNotify}) async {
+  Future getGroupList() async {
+    if (_isFetchingGroups) return;
+    errorMessage = '';
+    _isFetchingGroups = true;
     try {
-      changeState(true, isNotify: isNotify);
-      var fetchedList = await _groupRepository.getList();
-      groupList = fetchedList;
-      return groupList;
+      var snap = await _groupRepository.getGroupList(
+          limit: documentLimit,
+          startAfter: groupsSnapshot.isNotEmpty ? groupsSnapshot.last : null);
+
+      groupsSnapshot.addAll(snap.docs);
+
+      if (snap.docs.length < documentLimit) _hasNext = false;
+      notifyListeners();
     } catch (e) {
-      print("GroupProvider getList error: " + e.toString());
+      logger.e("GroupProvider getGroupList error: " + e.toString());
+      notifyListeners();
       return null;
-    } finally {
-      changeState(false);
     }
+    _isFetchingGroups = false;
   }
 
-  Future<List<GroupModel>> getGroupListByCategory(
+  Future getFilteredGroupList({
+    bool reset,
     String category,
-  ) async {
-    try {
-      var fetchedGroup = await _groupRepository.getGroupsByCategory(category);
-      groupList = fetchedGroup;
-      notifyListeners();
-      return groupList;
-    } catch (e) {
-      print("GroupProvider getGroupsByCategory error: " + e.toString());
-      notifyListeners();
-      return null;
+    String city,
+  }) async {
+    if (reset) {
+      print("reset");
+      filteredGroupsSnapshot.clear();
+      _hasNextFiltered = true;
     }
-  }
 
-  Future<List<GroupModel>> getFilteredGroupList(
-      {String category, String city}) async {
+    if (_isFetchingFilteredGroups) return;
+    errorMessage = '';
+    _isFetchingFilteredGroups = true;
+
     try {
-      var fetchedGroup = await _groupRepository.getFilteredGroupList(
-          category: category, city: city);
-      groupList = fetchedGroup;
+      print("reset yok");
+      var snap = await _groupRepository.getFilteredGroupList(
+        category: category,
+        city: city,
+        limit: documentLimit,
+        startAfter: filteredGroupsSnapshot.isNotEmpty
+            ? filteredGroupsSnapshot.last
+            : null,
+      );
+
+      filteredGroupsSnapshot.addAll(snap.docs);
+      print(snap.docs);
+      if (snap.docs.length < documentLimit) _hasNextFiltered = false;
       notifyListeners();
-      return groupList;
     } catch (e) {
-      print("GroupProvider getGroupsByCategory error: " + e.toString());
+      logger.e("GroupProvider getFilteredGroupList error: " + e.toString());
       notifyListeners();
       return null;
     }
+    _isFetchingFilteredGroups = false;
   }
 
   Future<List<GroupModel>> getUserGroups(String userId) async {

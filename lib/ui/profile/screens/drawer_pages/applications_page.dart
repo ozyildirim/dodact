@@ -13,9 +13,6 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: showBottomSheet,
-        ),
         backgroundColor: Color(0xff483D8B),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,10 +78,4 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
           ],
         ));
   }
-
-  String selectedCategory;
-  String selectedCity;
-  String selectedType;
-
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 }

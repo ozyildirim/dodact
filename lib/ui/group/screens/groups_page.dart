@@ -1,12 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
-import 'package:dodact_v1/ui/group/screens/filtered_group_view.dart';
+import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class GroupsPage extends StatefulWidget {
@@ -16,36 +18,53 @@ class GroupsPage extends StatefulWidget {
 
 class _GroupsPageState extends State<GroupsPage> {
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  GroupProvider groupProvider;
+  ScrollController scrollController;
   String selectedCategory;
   String selectedCity;
+  bool isFiltered = false;
 
   @override
   void initState() {
     super.initState();
-    Provider.of<GroupProvider>(context, listen: false).getFilteredGroupList();
+    groupProvider = Provider.of<GroupProvider>(context, listen: false);
+    scrollController = ScrollController();
+
+    scrollController.addListener(scrollListener);
+    groupProvider.getGroupList();
   }
 
-  List<FormBuilderFieldOption<dynamic>> categoryOptions = [
-    FormBuilderFieldOption(value: "Müzik", child: Text("Müzik")),
-    FormBuilderFieldOption(value: "Tiyatro", child: Text("Tiyatro")),
-    FormBuilderFieldOption(
-        value: "Görsel Sanatlar", child: Text("Görsel Sanatlar")),
-    FormBuilderFieldOption(value: "Dans", child: Text("Dans")),
-  ];
+  dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent / 2 &&
+        !scrollController.position.outOfRange) {
+      if (!isFiltered) {
+        groupProvider.getGroupList();
+      } else {
+        groupProvider.getFilteredGroupList(
+          reset: false,
+          category: selectedCategory,
+          city: selectedCity,
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    final groupProvider = Provider.of<GroupProvider>(context);
-
-    final mediaQuery = MediaQuery.of(context);
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: kToolbarHeight),
         child: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () {
-            showFilterDialog();
+            showFilterBottomSheet();
           },
           child: Icon(
             Icons.filter_list_rounded,
@@ -62,116 +81,141 @@ class _GroupsPageState extends State<GroupsPage> {
             fit: BoxFit.cover,
           ),
         ),
-        height: mediaQuery.size.height - 56,
-        child: SingleChildScrollView(
-          child: FilteredGroupView(),
+        height: size.height - 56,
+        child: Consumer<GroupProvider>(
+          builder: (_, provider, child) {
+            if (isFiltered) {
+              if (provider.filteredGroupsSnapshot.isNotEmpty) {
+                return ListView.builder(
+                  controller: scrollController,
+                  itemCount: provider.filteredGroups.length,
+                  itemBuilder: (context, index) {
+                    var group = provider.filteredGroups[index];
+                    return buildGroupCard(group);
+                  },
+                );
+              } else {
+                return Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/app/situations/not_found.png"),
+                      Text(
+                        "Bu kriterlere uyan bir topluluk bulunamadı.",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: kToolbarHeight,
+                      )
+                    ],
+                  ),
+                );
+              }
+            } else {
+              if (provider.groupsSnapshot.isNotEmpty) {
+                return ListView.builder(
+                    controller: scrollController,
+                    itemCount: provider.groups.length,
+                    itemBuilder: (context, index) {
+                      var group = provider.groups[index];
+                      return buildGroupCard(group);
+                    });
+              } else {
+                return Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/app/situations/not_found.png"),
+                      Text(
+                        "Bu kriterlere uyan bir etkinlik bulunamadı.",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: kToolbarHeight,
+                      )
+                    ],
+                  ),
+                );
+              }
+            }
+          },
         ),
       ),
     );
   }
 
-  Future<void> showFilterDialog() async {
-    showDialog(context: context, builder: (ctx) => filterDialog());
-  }
-
-  Dialog filterDialog() {
+  buildGroupCard(GroupModel group) {
     var size = MediaQuery.of(context).size;
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Container(
-        width: size.width * 0.9,
-        height: size.height * 0.4,
-        child: FormBuilder(
-          key: _formKey,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Filtre",
-                  style: TextStyle(fontSize: 22),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          NavigationService.instance
+              .navigate(k_ROUTE_GROUP_DETAIL, args: group);
+        },
+        child: Container(
+          height: size.height * 0.15,
+          child: Card(
+            color: Colors.grey[100],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Row(
+              children: [
+                // SizedBox(
+                //   width: size.width * 0.1,
+                // ),
+                Expanded(
+                  child: Container(
+                    // height: size.height * 0.10,
+                    width: size.width * 0.25,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: CachedNetworkImageProvider(
+                              group.groupProfilePicture),
+                        )),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Şehir"),
-                    Container(
-                      width: size.width * 0.6,
-                      child: FormBuilderDropdown(
-                          initialValue: selectedCity ?? null,
-                          name: "city",
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          items: cities.map((e) {
-                            return DropdownMenuItem(
-                              value: e,
-                              child: Text(e),
-                            );
-                          }).toList()),
-                    )
-                  ],
+                SizedBox(
+                  width: size.width * 0.08,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Kategori"),
-                    Container(
-                      width: size.width * 0.6,
-                      child: FormBuilderChoiceChip(
-                        initialValue: selectedCategory ?? null,
-                        name: "category",
-                        options: categoryOptions,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: Text(
+                        group.groupName,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: Text(
+                        group.groupSubtitle,
+                        style: TextStyle(fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GFButton(
-                    color: Colors.orange[700],
-                    shape: GFButtonShape.pills,
-                    onPressed: () {
-                      submitFilterDialog();
-                    },
-                    text: "Tamam",
-                    textStyle: Theme.of(context).textTheme.button.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Raleway"),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  GFButton(
-                    color: Colors.orange[700],
-                    shape: GFButtonShape.pills,
-                    onPressed: () {
-                      NavigationService.instance.pop();
-                    },
-                    text: "Vazgeç",
-                    textStyle: Theme.of(context).textTheme.button.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Raleway"),
-                  )
-                ],
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -180,19 +224,234 @@ class _GroupsPageState extends State<GroupsPage> {
 
   submitFilterDialog() {
     if (_formKey.currentState.saveAndValidate()) {
-      setState(() {
-        selectedCity = _formKey.currentState.value["city"];
-        selectedCategory = _formKey.currentState.value["category"];
-        print(selectedCategory);
+      if (_formKey.currentState.value['city'] != null)
+      // ||
+      //     _formKey.currentState.value['category'] != null
+      {
+        setState(() {
+          isFiltered = true;
+          selectedCity = _formKey.currentState.value["city"];
+          // selectedCategory = _formKey.currentState.value["category"];
+        });
+        updateGroups(null, selectedCity);
         print(selectedCity);
-      });
-      updateGroupsByFilter(selectedCategory, selectedCity);
-      NavigationService.instance.pop();
+        NavigationService.instance.pop();
+      } else {
+        NavigationService.instance.pop();
+      }
     }
   }
 
-  void updateGroupsByFilter(String category, String city) async {
-    await Provider.of<GroupProvider>(context, listen: false)
-        .getFilteredGroupList(category: category, city: city);
+  void updateGroups(String category, String city) async {
+    try {
+      await Provider.of<GroupProvider>(context, listen: false)
+          .getFilteredGroupList(reset: true, category: category, city: city);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  showFilterBottomSheet() {
+    var size = MediaQuery.of(context).size;
+
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return FormBuilder(
+          key: _formKey,
+          child: new Container(
+            padding: EdgeInsets.only(
+              left: 5.0,
+              right: 5.0,
+              top: 5.0,
+              bottom: 5.0,
+            ),
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0))),
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                  title: const Text(
+                    'Filtre',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Şehir",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderDropdown(
+                                  isExpanded: true,
+                                  initialValue: selectedCity ?? null,
+                                  name: "city",
+                                  decoration: InputDecoration(
+                                    hintText: "Şehir Seçin",
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  items: buildCityDropdownItems()),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //     children: [
+                //       Container(
+                //         width: size.width * 0.4,
+                //         child: Text(
+                //           "Kategori",
+                //           style: TextStyle(
+                //             fontSize: 20.0,
+                //             fontWeight: FontWeight.w700,
+                //           ),
+                //         ),
+                //       ),
+                //       Center(
+                //         child: ClipRRect(
+                //           borderRadius: BorderRadius.circular(24),
+                //           child: Container(
+                //             color: Colors.grey[200],
+                //             width: size.width * 0.4,
+                //             child: Padding(
+                //               padding: const EdgeInsets.all(4.0),
+                //               child: FormBuilderDropdown(
+                //                 initialValue: selectedCategory ?? null,
+                //                 name: "category",
+                //                 decoration: InputDecoration(
+                //                   hintText: "Kategori Seçin",
+                //                   contentPadding: EdgeInsets.zero,
+                //                   border: OutlineInputBorder(
+                //                     borderSide: BorderSide.none,
+                //                     borderRadius: BorderRadius.circular(15),
+                //                   ),
+                //                 ),
+                //                 items: buildArtCategoryDropdownItems(),
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                new Divider(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Uygula',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          submitFilterDialog();
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Temizle',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          if (isFiltered) {
+                            setState(() {
+                              isFiltered = false;
+                              groupProvider.getGroupList();
+                              _formKey.currentState.reset();
+                              selectedCategory = null;
+                              selectedCity = null;
+                            });
+                          }
+                          NavigationService.instance.pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  buildCityDropdownItems() {
+    return cities
+        .map((e) => DropdownMenuItem(
+              alignment: AlignmentDirectional.centerStart,
+              value: e,
+              child: Center(
+                  child: Text(
+                e,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              )),
+            ))
+        .toList();
+  }
+
+  buildArtCategoryDropdownItems() {
+    return artCategories
+        .map((category) => DropdownMenuItem(
+              value: category,
+              child: Center(
+                child: Text(
+                  category,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ))
+        .toList();
   }
 }

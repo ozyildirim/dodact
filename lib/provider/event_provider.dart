@@ -179,7 +179,7 @@ class EventProvider extends ChangeNotifier {
       );
 
       filteredEventsSnapshot.addAll(snap.docs);
-      print("snap.docs");
+      // print("snap.docs");
 
       if (snap.docs.length < documentLimit) _hasNextFiltered = false;
       notifyListeners();

@@ -4,13 +4,10 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
-
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:getwidget/components/button/gf_button.dart';
-import 'package:getwidget/shape/gf_button_shape.dart';
 import 'package:provider/provider.dart';
 
 class EventsPage extends StatefulWidget {
@@ -69,7 +66,7 @@ class _EventsPageState extends BaseState<EventsPage> {
           backgroundColor: Colors.white,
           onPressed: () {
             // showFilterDialog();
-            showBottomSheet();
+            showFilterBottomSheet();
           },
           child: Icon(
             Icons.filter_list_rounded,
@@ -129,7 +126,6 @@ class _EventsPageState extends BaseState<EventsPage> {
                       return Container(
                           height: size.height * 0.3,
                           child: ParallaxEvent(event: event));
-                      ;
                     });
               } else {
                 return Container(
@@ -183,19 +179,25 @@ class _EventsPageState extends BaseState<EventsPage> {
 
   submitFilterDialog() {
     if (_formKey.currentState.saveAndValidate()) {
-      setState(() {
-        isFiltered = true;
-        selectedCity = _formKey.currentState.value["city"];
-        selectedCategory = _formKey.currentState.value["category"];
-        selectedType = _formKey.currentState.value["type"];
-      });
-      print("$selectedCity  $selectedCategory $selectedType");
-      updateEvents(selectedCategory, selectedCity, selectedType);
-      NavigationService.instance.pop();
+      if (_formKey.currentState.value["city"] != null ||
+          _formKey.currentState.value["category"] != null ||
+          _formKey.currentState.value["type"] != null) {
+        setState(() {
+          isFiltered = true;
+          selectedCity = _formKey.currentState.value["city"];
+          selectedCategory = _formKey.currentState.value["category"];
+          selectedType = _formKey.currentState.value["type"];
+        });
+        print("$selectedCity  $selectedCategory $selectedType");
+        updateEvents(selectedCategory, selectedCity, selectedType);
+        NavigationService.instance.pop();
+      } else {
+        NavigationService.instance.pop();
+      }
     }
   }
 
-  showBottomSheet() {
+  showFilterBottomSheet() {
     var size = MediaQuery.of(context).size;
 
     showModalBottomSheet(
@@ -374,13 +376,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                           ),
                         ),
                         onTap: () async {
-                          if (selectedCategory != null ||
-                              selectedCity != null ||
-                              selectedType != null) {
-                            submitFilterDialog();
-                          } else {
-                            NavigationService.instance.pop();
-                          }
+                          submitFilterDialog();
                         },
                       ),
                     ),

@@ -12,7 +12,7 @@ import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
 
 enum AppMode { DEBUG, RELEASE }
 
-class GroupRepository implements BaseService {
+class GroupRepository {
   FirebasePostService _firebasePostService = locator<FirebasePostService>();
   FirebaseGroupService _firebaseGroupService = locator<FirebaseGroupService>();
   FirebaseEventService _firebaseEventService = locator<FirebaseEventService>();
@@ -38,12 +38,12 @@ class GroupRepository implements BaseService {
     }
   }
 
-  @override
-  Future<List> getList() async {
+  Future getGroupList({int limit, DocumentSnapshot startAfter}) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
-      return await _firebaseGroupService.getList();
+      return await _firebaseGroupService.getGroupList(
+          limit: limit, startAfter: startAfter);
     }
   }
 
@@ -109,21 +109,16 @@ class GroupRepository implements BaseService {
     }
   }
 
-  Future<List<GroupModel>> getGroupsByCategory(String category) async {
-    if (appMode == AppMode.DEBUG) {
-      return Future.value(null);
-    } else {
-      return await _firebaseGroupService.getGroupsByCategory(category);
-    }
-  }
-
-  Future<List<GroupModel>> getFilteredGroupList(
-      {String category, String city}) async {
+  Future getFilteredGroupList(
+      {String category,
+      String city,
+      int limit,
+      DocumentSnapshot startAfter}) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
       return await _firebaseGroupService.getFilteredGroupList(
-          category: category, city: city);
+          category: category, city: city, limit: limit, startAfter: startAfter);
     }
   }
 

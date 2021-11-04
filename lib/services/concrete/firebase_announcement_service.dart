@@ -3,7 +3,7 @@ import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/announcement_model.dart';
 
-class FirebaseAnnouncementService extends BaseService<AnnouncementModel> {
+class FirebaseAnnouncementService {
   @override
   Future<AnnouncementModel> getDetail(String id) async {
     DocumentSnapshot documentSnapshot = await announcementsRef.doc(id).get();
