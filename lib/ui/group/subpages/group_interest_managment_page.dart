@@ -66,25 +66,25 @@ class _GroupInterestManagementPageState
     });
   }
 
-  List<String> musicCategories = categoryList
+  List<String> musicCategories = interestCategoryList
       .where((element) => element.name == "Müzik")
       .toList()[0]
       .subCategories
       .toList();
 
-  List<String> theaterCategories = categoryList
+  List<String> theaterCategories = interestCategoryList
       .where((element) => element.name == "Tiyatro")
       .toList()[0]
       .subCategories
       .toList();
 
-  List<String> visualArtCategories = categoryList
+  List<String> visualArtCategories = interestCategoryList
       .where((element) => element.name == "Görsel Sanatlar")
       .toList()[0]
       .subCategories
       .toList();
 
-  List<String> danceCategories = categoryList
+  List<String> danceCategories = interestCategoryList
       .where((element) => element.name == "Dans")
       .toList()[0]
       .subCategories

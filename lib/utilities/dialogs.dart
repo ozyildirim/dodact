@@ -1,3 +1,4 @@
+import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
@@ -143,37 +144,18 @@ SimpleDialog eventTypeDialog(BuildContext context) {
 
 SimpleDialog reportReasonDialog(BuildContext context) {
   return SimpleDialog(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-    title: Text('Bildirim Sebebin'),
-    children: [
-      SimpleDialogItem(
-        text: 'Telif İhlali İçeriyor ',
-        onPressed: () {
-          Navigator.pop(context, "Telif");
-        },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
       ),
-      SimpleDialogItem(
-        text: 'Nefret Söylemi',
-        onPressed: () {
-          Navigator.pop(context, "Nefret Söylemi");
-        },
-      ),
-      SimpleDialogItem(
-        text: 'Çalıntı Paylaşım',
-        onPressed: () {
-          Navigator.pop(context, "Çalıntı");
-        },
-      ),
-      SimpleDialogItem(
-        text: 'Uygunsuz',
-        onPressed: () {
-          Navigator.pop(context, "Uygunsuz");
-        },
-      ),
-    ],
-  );
+      title: Text('Bildirim Sebebin'),
+      children: reportReasons
+          .map((reason) => SimpleDialogItem(
+                text: reason,
+                onPressed: () {
+                  Navigator.pop(context, reason);
+                },
+              ))
+          .toList());
 }
 
 class SimpleDialogItem extends StatelessWidget {

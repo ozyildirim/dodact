@@ -16,7 +16,7 @@ class InterestType {
   }
 }
 
-List<InterestType> categoryList = [
+List<InterestType> interestCategoryList = [
   new InterestType(
       id: "0",
       name: "Tiyatro",

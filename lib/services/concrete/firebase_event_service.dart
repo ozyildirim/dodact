@@ -138,6 +138,8 @@ class FirebaseEventService {
       query = eventsRef
           .where('city', isEqualTo: city)
           .where('visible', isEqualTo: true);
+    } else {
+      query = eventsRef.where('visible', isEqualTo: true);
     }
 
     if (startAfter == null) {

@@ -1,4 +1,7 @@
+import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class ApplicationsPage extends StatefulWidget {
   @override
@@ -10,6 +13,9 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: showBottomSheet,
+        ),
         backgroundColor: Color(0xff483D8B),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,4 +81,10 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
           ],
         ));
   }
+
+  String selectedCategory;
+  String selectedCity;
+  String selectedType;
+
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 }

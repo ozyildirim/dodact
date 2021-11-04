@@ -6,6 +6,7 @@ import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
+import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:getwidget/components/button/gf_button.dart';
@@ -18,6 +19,7 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends BaseState<EventsPage> {
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   ScrollController scrollController;
   EventProvider eventProvider;
 
@@ -179,286 +181,6 @@ class _EventsPageState extends BaseState<EventsPage> {
     }
   }
 
-  Future<void> showFilterDialog() async {
-    showDialog(context: context, builder: (ctx) => filterDialog());
-  }
-
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-
-  showBottomSheet() {
-    var size = MediaQuery.of(context).size;
-
-    showModalBottomSheet(
-      context: context,
-      builder: (builder) {
-        return new Container(
-          padding: EdgeInsets.only(
-            left: 5.0,
-            right: 5.0,
-            top: 5.0,
-            bottom: 5.0,
-          ),
-          decoration: new BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(10.0),
-                  topRight: const Radius.circular(10.0))),
-          child: new Wrap(
-            children: <Widget>[
-              new ListTile(
-                title: const Text(
-                  'Filtre',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              new ListTile(
-                leading: Text(
-                  "Şehir",
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                // new Container(
-                //   width: 4.0,
-                //   child:
-                //   Icon(
-                //     Icons.favorite,
-                //     color: Colors.pink,
-                //     size: 24.0,
-                //   ),
-                // ),
-                title: const Text(
-                  'Favourites',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              new ListTile(
-                leading: new Container(
-                  width: 4.0,
-                  child: Icon(
-                    Icons.settings,
-                    color: Colors.black,
-                    size: 24.0,
-                  ),
-                ),
-                title: const Text(
-                  'Settings',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              new ListTile(
-                leading: new Container(
-                  width: 4.0,
-                  child: Icon(
-                    Icons.account_box,
-                    color: Colors.blue,
-                    size: 24.0,
-                  ),
-                ),
-                title: const Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              new Divider(
-                height: 10.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: size.width * 0.4,
-                    child: new ListTile(
-                      title: const Text(
-                        'Uygula',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      onTap: () async {
-                        // Add Here
-                      },
-                    ),
-                  ),
-                  Container(
-                    width: size.width * 0.4,
-                    child: new ListTile(
-                      title: const Text(
-                        'Temizle',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      onTap: () async {
-                        // Add Here
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Dialog filterDialog() {
-    var size = MediaQuery.of(context).size;
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Container(
-        width: size.width * 0.9,
-        height: size.height * 0.6,
-        child: FormBuilder(
-          key: _formKey,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Filtre",
-                  style: TextStyle(fontSize: 22),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Şehir"),
-                    Container(
-                      width: size.width * 0.6,
-                      child: FormBuilderDropdown(
-                          initialValue: selectedCity ?? null,
-                          name: "city",
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
-                          items: cities.map((e) {
-                            return DropdownMenuItem(
-                              value: e,
-                              child: Text(e),
-                            );
-                          }).toList()),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Kategori"),
-                    Container(
-                      width: size.width * 0.6,
-                      child: FormBuilderChoiceChip(
-                        padding: EdgeInsets.all(5),
-                        initialValue: selectedCategory ?? null,
-                        name: "category",
-                        options: categoryOptions,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Center(
-                      child: Text(
-                        "Tür",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Container(
-                      width: size.width * 0.6,
-                      child: FormBuilderChoiceChip(
-                        initialValue: selectedType ?? null,
-                        name: "type",
-                        options: typeOptions,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GFButton(
-                    color: Colors.orange[700],
-                    shape: GFButtonShape.pills,
-                    onPressed: () {
-                      submitFilterDialog();
-                    },
-                    text: "Tamam",
-                    textStyle: Theme.of(context).textTheme.button.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Raleway"),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  GFButton(
-                    color: Colors.orange[700],
-                    shape: GFButtonShape.pills,
-                    onPressed: () {
-                      if (isFiltered) {
-                        setState(() {
-                          isFiltered = false;
-                          eventProvider.getEventList();
-                          _formKey.currentState.reset();
-                          selectedCategory = null;
-                          selectedCity = null;
-                          selectedType = null;
-                        });
-                      }
-                      NavigationService.instance.pop();
-                    },
-                    text: "Temizle",
-                    textStyle: Theme.of(context).textTheme.button.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Raleway"),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   submitFilterDialog() {
     if (_formKey.currentState.saveAndValidate()) {
       setState(() {
@@ -473,20 +195,271 @@ class _EventsPageState extends BaseState<EventsPage> {
     }
   }
 
-  List<FormBuilderFieldOption<dynamic>> categoryOptions = [
-    FormBuilderFieldOption(value: "Müzik", child: Text("Müzik")),
-    FormBuilderFieldOption(value: "Tiyatro", child: Text("Tiyatro")),
-    FormBuilderFieldOption(
-        value: "Görsel Sanatlar", child: Text("Görsel Sanatlar")),
-    FormBuilderFieldOption(value: "Dans", child: Text("Dans")),
-  ];
+  showBottomSheet() {
+    var size = MediaQuery.of(context).size;
 
-  List<FormBuilderFieldOption<dynamic>> typeOptions = [
-    FormBuilderFieldOption(
-        value: "Açık Hava Etkinliği", child: Text("Açık Hava Etkinliği")),
-    FormBuilderFieldOption(
-        value: "Kapalı Mekan Etkinliği", child: Text("Kapalı Mekan Etkinliği")),
-    FormBuilderFieldOption(value: "Workshop", child: Text("Workshop")),
-    FormBuilderFieldOption(value: "Online", child: Text("Online")),
-  ];
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return FormBuilder(
+          key: _formKey,
+          child: new Container(
+            padding: EdgeInsets.only(
+              left: 5.0,
+              right: 5.0,
+              top: 5.0,
+              bottom: 5.0,
+            ),
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0))),
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                  title: const Text(
+                    'Filtre',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Şehir",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderDropdown(
+                                  isExpanded: true,
+                                  initialValue: selectedCity ?? null,
+                                  name: "city",
+                                  decoration: InputDecoration(
+                                    hintText: "Şehir Seçin",
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  items: buildCityDropdownItems()),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Kategori",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderDropdown(
+                                initialValue: selectedCategory ?? null,
+                                name: "category",
+                                decoration: InputDecoration(
+                                  hintText: "Kategori Seçin",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                items: buildArtCategoryDropdownItems(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Tür",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderDropdown(
+                                initialValue: selectedType ?? null,
+                                name: "eventType",
+                                decoration: InputDecoration(
+                                  hintText: "Tür Seçin",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                items: buildEventTypeDropdownItems(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                new Divider(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Uygula',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          if (selectedCategory != null ||
+                              selectedCity != null ||
+                              selectedType != null) {
+                            submitFilterDialog();
+                          } else {
+                            NavigationService.instance.pop();
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Temizle',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          if (isFiltered) {
+                            setState(() {
+                              isFiltered = false;
+                              eventProvider.getEventList();
+                              _formKey.currentState.reset();
+                              selectedCategory = null;
+                              selectedCity = null;
+                              selectedType = null;
+                            });
+                          }
+                          NavigationService.instance.pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  buildCityDropdownItems() {
+    return cities
+        .map((e) => DropdownMenuItem(
+              alignment: AlignmentDirectional.centerStart,
+              value: e,
+              child: Center(
+                  child: Text(
+                e,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              )),
+            ))
+        .toList();
+  }
+
+  buildArtCategoryDropdownItems() {
+    return artCategories
+        .map((category) => DropdownMenuItem(
+              value: category,
+              child: Center(
+                child: Text(
+                  category,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ))
+        .toList();
+  }
+
+  buildEventTypeDropdownItems() {
+    return eventTypes
+        .map((type) => DropdownMenuItem(
+              value: type,
+              child: Center(
+                child: Text(
+                  type,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ))
+        .toList();
+  }
 }
