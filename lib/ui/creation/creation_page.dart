@@ -55,14 +55,6 @@ class _CreationPageState extends State<CreationPage> {
           Stack(
             children: [
               CurvedListItem(
-                textPos: 180,
-                boxSize: 240,
-                spaceValue: 285,
-                title: 'Ekip',
-                onTap: () => NavigationService.instance.navigate('/add_group'),
-                conImage: AssetImage('assets/images/creation/grup_olustur.jpg'),
-              ),
-              CurvedListItem(
                 textPos: 150,
                 boxSize: 246,
                 spaceValue: 110,
@@ -116,7 +108,7 @@ class _CreationPageState extends State<CreationPage> {
               children: <Widget>[
                 new ListTile(
                   title: const Text(
-                    'Filtre',
+                    'İçerik Oluştur',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22.0,
@@ -292,7 +284,7 @@ class _CreationPageState extends State<CreationPage> {
               children: <Widget>[
                 new ListTile(
                   title: const Text(
-                    'Filtre',
+                    'Etkinlik Oluştur',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22.0,

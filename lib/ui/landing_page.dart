@@ -20,7 +20,6 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends BaseState<LandingPage> {
-  bool isLoading = true;
   RemoteConfigService _remoteConfigService;
   PackageInfo packageInfo;
   FirebaseMessaging messaging;
@@ -28,9 +27,6 @@ class _LandingPageState extends BaseState<LandingPage> {
   initializeRemoteConfig() async {
     _remoteConfigService = await RemoteConfigService.getInstance();
     await _remoteConfigService.initialize();
-    setState(() {
-      isLoading = false;
-    });
   }
 
   Future<bool> checkEnforcedVersion() async {
