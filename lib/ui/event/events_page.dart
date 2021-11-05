@@ -97,7 +97,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                           height: size.height * 0.3,
                           child: ParallaxEvent(event: event));
                     });
-              } else {
+              } else if (provider.filteredEventsSnapshot.isEmpty) {
                 return Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,6 +114,10 @@ class _EventsPageState extends BaseState<EventsPage> {
                       )
                     ],
                   ),
+                );
+              } else {
+                return Center(
+                  child: spinkit,
                 );
               }
             } else {
@@ -213,10 +217,12 @@ class _EventsPageState extends BaseState<EventsPage> {
               bottom: 5.0,
             ),
             decoration: new BoxDecoration(
-                color: Colors.white,
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(10.0),
-                    topRight: const Radius.circular(10.0))),
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                topLeft: const Radius.circular(10.0),
+                topRight: const Radius.circular(10.0),
+              ),
+            ),
             child: new Wrap(
               children: <Widget>[
                 new ListTile(
@@ -340,7 +346,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                               padding: const EdgeInsets.all(4.0),
                               child: FormBuilderDropdown(
                                 initialValue: selectedType ?? null,
-                                name: "eventType",
+                                name: "type",
                                 decoration: InputDecoration(
                                   hintText: "Tür Seçin",
                                   contentPadding: EdgeInsets.zero,

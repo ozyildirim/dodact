@@ -7,20 +7,24 @@ class VideoPostHeader extends StatelessWidget {
 
   VideoPostHeader({this.post});
 
+  buildYoutubeController() {
+    return YoutubePlayerController(
+      initialVideoId:
+          YoutubePlayer.convertUrlToId(post.postContentURL), //Add videoID.
+      flags: YoutubePlayerFlags(
+        hideControls: false,
+        controlsVisibleAtStart: true,
+        autoPlay: false,
+        mute: false,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: YoutubePlayer(
-        controller: YoutubePlayerController(
-          initialVideoId:
-              YoutubePlayer.convertUrlToId(post.postContentURL), //Add videoID.
-          flags: YoutubePlayerFlags(
-            hideControls: false,
-            controlsVisibleAtStart: true,
-            autoPlay: false,
-            mute: false,
-          ),
-        ),
+        controller: buildYoutubeController(),
         showVideoProgressIndicator: true,
         progressIndicatorColor: Colors.blueAccent,
       ),

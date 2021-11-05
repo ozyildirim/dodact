@@ -234,7 +234,7 @@ class NavigationRouteManager {
         List<dynamic> args = settings.arguments;
         return _navigateToDefault(
             PostCreationPage(
-              contentType: args[0],
+              postType: args[0],
               postCategory: args[1],
               groupId: args[2],
             ),

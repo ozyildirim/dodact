@@ -24,18 +24,19 @@ enum Category { Tiyatro, Resim, Muzik, Dans }
 enum Source { Telefon, Youtube }
 
 class PostCreationPage extends StatefulWidget {
-  final String contentType;
+  final String postType;
   final String postCategory;
   final String groupId;
 
-  PostCreationPage({this.contentType, this.postCategory, this.groupId});
+  PostCreationPage({this.postType, this.postCategory, this.groupId});
 
   @override
   _PostCreationPageState createState() => _PostCreationPageState();
 }
 
 class _PostCreationPageState extends BaseState<PostCreationPage> {
-  GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> postCreationFormKey =
+      new GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PostProvider postProvider;
   var logger = Logger();
@@ -78,7 +79,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   @override
   void initState() {
-    print("İçerik Türü: " + widget.contentType);
+    print("İçerik Türü: " + widget.postType);
     print("İçerik Kategorisi: " + widget.postCategory);
 
     widget.groupId != null
@@ -180,7 +181,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     return Expanded(
       flex: 3,
       child: FormBuilder(
-        key: _formKey,
+        key: postCreationFormKey,
         child: ListView(
           children: [
             Text("İçerik Başlığı",
@@ -266,7 +267,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 ),
               ),
             ),
-            widget.contentType == "Video"
+            widget.postType == "Video"
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -344,9 +345,9 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Widget buildPrevivewPart() {
-    if (widget.contentType == "Video") {
+    if (widget.postType == "Video") {
       return Container();
-    } else if (widget.contentType == "Görüntü") {
+    } else if (widget.postType == "Görüntü") {
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Container(
@@ -370,7 +371,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                   }),
         ),
       );
-    } else if (widget.contentType == "Ses") {
+    } else if (widget.postType == "Ses") {
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Container(
@@ -429,9 +430,9 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
       PostModel newPost = new PostModel(
         visible: true,
-        isLocatedInYoutube: widget.contentType == "Video" ? true : false,
-        isVideo: widget.contentType == "Video" ? true : false,
-        postContentType: widget.contentType,
+        isLocatedInYoutube: widget.postType == "Video" ? true : false,
+        isVideo: widget.postType == "Video" ? true : false,
+        postContentType: widget.postType,
         ownerType: widget.groupId != null ? "Group" : "User",
         postId: "",
         ownerId: widget.groupId != null
@@ -509,13 +510,14 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Future<void> formSubmit() async {
-    if (widget.contentType == "Video") {
-      await checkYoutubeLink(_formKey.currentState.value["youtubeLink"]);
+    if (widget.postType == "Video") {
+      await checkYoutubeLink(
+          postCreationFormKey.currentState.value["youtubeLink"]);
       if (isAvailableYoutubeLink) {
-        if (_formKey.currentState.saveAndValidate()) {
+        if (postCreationFormKey.currentState.saveAndValidate()) {
           print("form submitted");
           try {
-            if (widget.contentType == "Görüntü") {
+            if (widget.postType == "Görüntü") {
               var hasImage = checkPostHasImages();
               if (hasImage) {
                 await uploadPost();
@@ -534,10 +536,10 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         }
       }
     } else {
-      if (_formKey.currentState.saveAndValidate()) {
+      if (postCreationFormKey.currentState.saveAndValidate()) {
         print("form submitted");
         try {
-          if (widget.contentType == "Görüntü") {
+          if (widget.postType == "Görüntü") {
             var hasImage = checkPostHasImages();
             if (hasImage) {
               await uploadPost();
@@ -565,7 +567,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         isAvailableYoutubeLink = true;
       });
     } catch (e) {
-      _formKey.currentState.invalidateField(
+      postCreationFormKey.currentState.invalidateField(
           name: "youtubeLink", errorText: "Geçersiz youtube linki");
       print(e);
     }

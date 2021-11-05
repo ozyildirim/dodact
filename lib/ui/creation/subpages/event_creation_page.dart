@@ -24,7 +24,7 @@ import 'package:provider/provider.dart';
 class EventCreationPage extends StatefulWidget {
   final String eventCategory;
   final String eventType;
-  final String eventPlatform;
+  final bool eventPlatform;
   final String groupId;
 
   EventCreationPage(
@@ -41,7 +41,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
   EventProvider eventProvider;
 
-  GlobalKey<FormBuilderState> _formKey = new GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> _eventFormKey = new GlobalKey<FormBuilderState>();
 
   TextEditingController _eventLocationController = new TextEditingController();
 
@@ -71,9 +71,12 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   @override
   void initState() {
     super.initState();
+    print("category" + widget.eventCategory);
+    print(widget.eventPlatform);
+    print(widget.eventType);
     eventProvider = Provider.of<EventProvider>(context, listen: false);
     eventProvider.clearNewEvent();
-    isOnline = widget.eventPlatform == 'Online Etkinlik' ? true : false;
+    isOnline = widget.eventPlatform;
 
     widget.groupId != null
         ? Logger().i(
@@ -95,22 +98,27 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
         centerTitle: true,
         title: Text('Etkinlik Oluştur'),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              _buildEventImagePart(),
-              _buildEventFormPart(),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                _buildEventImagePart(),
+                _buildEventFormPart(),
+              ],
+            ),
           ),
         ),
       ),
@@ -173,7 +181,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       flex: 4,
       child: SingleChildScrollView(
         child: FormBuilder(
-          key: _formKey,
+          key: _eventFormKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -569,7 +577,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   }
 
   Future<void> _formSubmit() async {
-    if (_formKey.currentState.saveAndValidate()) {
+    if (_eventFormKey.currentState.saveAndValidate()) {
       try {
         var imageCheck = checkEventHasImages();
         if (imageCheck == false) {
@@ -623,13 +631,13 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     eventProvider.newEvent.visible = true;
     eventProvider.newEvent.eventId = "";
     eventProvider.newEvent.eventTitle =
-        _formKey.currentState.value['eventTitle'].toString().trim();
+        _eventFormKey.currentState.value['eventTitle'].toString().trim();
 
     eventProvider.newEvent.searchKeywords =
         createSearchKeywords(eventProvider.newEvent);
 
     eventProvider.newEvent.eventDescription =
-        _formKey.currentState.value['eventDescription'].toString().trim();
+        _eventFormKey.currentState.value['eventDescription'].toString().trim();
 
     //TODO: Start Date ve End Date farkını ayarla
 
@@ -639,7 +647,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     eventProvider.newEvent.isDone = false;
     eventProvider.newEvent.isOnline = isOnline;
     eventProvider.newEvent.eventURL = isOnline
-        ? _formKey.currentState.value['eventURL'].toString().trim()
+        ? _eventFormKey.currentState.value['eventURL'].toString().trim()
         : "";
 
     eventProvider.newEvent.eventLocationCoordinates =
@@ -654,7 +662,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     }
 
     eventProvider.newEvent.city =
-        _formKey.currentState.value['location'].toString().trim();
+        _eventFormKey.currentState.value['location'].toString().trim();
     eventProvider.newEvent.eventCategory = widget.eventCategory;
     eventProvider.newEvent.eventType = widget.eventType;
   }

@@ -21,8 +21,8 @@ class EventProvider extends ChangeNotifier {
 
   List<EventModel> groupEvents;
 
-  final eventsSnapshot = <DocumentSnapshot>[];
-  final filteredEventsSnapshot = <DocumentSnapshot>[];
+  var eventsSnapshot = <DocumentSnapshot>[];
+  var filteredEventsSnapshot = <DocumentSnapshot>[];
   String errorMessage = '';
   int documentLimit = 3;
   bool _hasNext = true;
