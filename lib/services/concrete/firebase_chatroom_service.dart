@@ -61,6 +61,21 @@ class FirebaseChatroomService {
     }
   }
 
+  Future<MessageModel> getLastMessage(String chatroomId) async {
+    var querySnapshot = await chatroomsRef
+        .doc(chatroomId)
+        .collection("messages")
+        .orderBy('messageCreationDate', descending: true)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return MessageModel.fromJson(querySnapshot.docs.first.data());
+    } else {
+      return null;
+    }
+  }
+
   Future sendMessage(String chatroomId, String userId, String message) async {
     MessageModel messageModel = MessageModel(
         message: message,

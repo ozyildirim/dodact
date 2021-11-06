@@ -58,6 +58,15 @@ class ChatroomProvider extends ChangeNotifier {
     }
   }
 
+  Future<MessageModel> getLastMessage(String chatroomId) async {
+    try {
+      return await chatroomService.getLastMessage(chatroomId);
+    } catch (e) {
+      logger.e("GetLastMessage error: $e");
+      return null;
+    }
+  }
+
   Future<void> sendMessage(
       String chatroomId, String userId, String message) async {
     try {

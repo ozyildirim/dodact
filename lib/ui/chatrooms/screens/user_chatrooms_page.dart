@@ -94,12 +94,12 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
   }
 
   getLastMessage() async {
-    var messages = await Provider.of<ChatroomProvider>(context, listen: false)
-        .getChatroomMessages(widget.chatroom.roomId);
+    var message = await Provider.of<ChatroomProvider>(context, listen: false)
+        .getLastMessage(widget.chatroom.roomId);
 
-    if (messages.length > 0) {
+    if (message != null) {
       setState(() {
-        lastMessage = messages[messages.length - 1];
+        lastMessage = message;
       });
     }
   }
@@ -134,11 +134,15 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
         child: ListTile(
           onTap: () {
             NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
-                args: [userProvider.currentUser.uid, otherUserId]);
+                args: [userProvider.currentUser.uid, user]);
           },
-          leading: CircleAvatar(
-            radius: 40,
-            backgroundImage: CachedNetworkImageProvider(user.profilePictureURL),
+          leading: Hero(
+            tag: "avatar",
+            child: CircleAvatar(
+              radius: 40,
+              backgroundImage:
+                  CachedNetworkImageProvider(user.profilePictureURL),
+            ),
           ),
           title: Text(
             user.nameSurname,

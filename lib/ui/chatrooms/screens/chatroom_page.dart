@@ -4,8 +4,10 @@ import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/message_model.dart';
+import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/ui/chatrooms/widgets/chatroom_page_appbar.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +15,14 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:logger/logger.dart';
 import 'package:paginate_firestore/bloc/pagination_cubit.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-import 'package:paginate_firestore/widgets/empty_display.dart';
 import 'package:provider/provider.dart';
 
 class ChatroomPage extends StatefulWidget {
   final String currentUserId;
-  final String otherUserId;
 
-  ChatroomPage({this.currentUserId, this.otherUserId});
+  final UserObject otherUserObject;
+
+  ChatroomPage({this.currentUserId, this.otherUserObject});
 
   @override
   _ChatroomPageState createState() => _ChatroomPageState();
@@ -44,17 +46,10 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   void initState() {
     chatroomProvider = Provider.of<ChatroomProvider>(context, listen: false);
     currentUserId = widget.currentUserId;
-    otherUserId = widget.otherUserId;
+    otherUserId = widget.otherUserObject.uid;
     roomId = generateRoomId(currentUserId, otherUserId);
     checkChatroom();
     super.initState();
-  }
-
-  initializeChatroom() async {
-    try {
-      var chatroomId = await chatroomProvider.createChatRoom(
-          currentUserId, widget.otherUserId);
-    } catch (e) {}
   }
 
   checkChatroom() async {
@@ -83,9 +78,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   Widget build(BuildContext context) {
     var provider = Provider.of<ChatroomProvider>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sohbet'),
-      ),
+      appBar: ChatroomPageAppBar(user: widget.otherUserObject),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
