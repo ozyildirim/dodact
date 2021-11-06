@@ -11,7 +11,7 @@ class ChatroomPageAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 0,
+      elevation: 4,
       automaticallyImplyLeading: false,
       backgroundColor: Colors.white,
       flexibleSpace: SafeArea(
