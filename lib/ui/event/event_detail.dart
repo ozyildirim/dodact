@@ -81,8 +81,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                                         Icon(FontAwesome5Regular.trash_alt),
                                     title: Text("Sil"),
                                     onTap: () async {
-                                      await _showDeleteEventDialog(
-                                          event.eventId);
+                                      await _showDeleteEventDialog(event.id);
                                     }),
                               )
                             ])
@@ -95,8 +94,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                                     leading: Icon(FontAwesome5Regular.bell),
                                     title: Text("Bildir"),
                                     onTap: () async {
-                                      await _showReportEventDialog(
-                                          event.eventId);
+                                      await _showReportEventDialog(event.id);
                                     }),
                               ),
                             ])
@@ -170,7 +168,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
-                      event.eventTitle,
+                      event.title,
                       style: TextStyle(fontSize: 28),
                     ),
                   ),
@@ -192,7 +190,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             ListTile(
               leading: Icon(Icons.calendar_today),
               title: Text(
-                DateFormat('dd,MM,yyyy hh:mm').format(event.eventStartDate),
+                DateFormat('dd,MM,yyyy hh:mm').format(event.startDate),
                 style: TextStyle(fontSize: 18),
               ),
               subtitle: Text("Etkinlik Başlangıcı"),
@@ -278,7 +276,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Text(
-          event.eventDescription,
+          event.description,
           style: TextStyle(fontSize: 18),
         ),
       ),
@@ -494,7 +492,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
 
     await Provider.of<EventProvider>(context, listen: false)
-        .deleteEvent(event.eventId, isLocatedInStorage);
+        .deleteEvent(event.id, isLocatedInStorage);
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //}
@@ -503,9 +501,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   _showEditEventDialog() {}
 
   _buildMap() {
-    if (event.eventLocationCoordinates != null) {
-      var lat = event.eventLocationCoordinates.split(",")[0];
-      var lng = event.eventLocationCoordinates.split(",")[1];
+    if (event.locationCoordinates != null) {
+      var lat = event.locationCoordinates.split(",")[0];
+      var lng = event.locationCoordinates.split(",")[1];
 
       final CameraPosition _kGooglePlex = CameraPosition(
         target: LatLng(double.parse(lat), double.parse(lng)),
@@ -536,8 +534,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       CommonMethods()
           .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
       await FirebaseReportService()
-          .reportEvent(
-              authProvider.currentUser.uid, event.eventId, reportReason)
+          .reportEvent(authProvider.currentUser.uid, event.id, reportReason)
           .then((value) async {
         await CommonMethods().showSuccessDialog(context,
             "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");

@@ -32,6 +32,8 @@ class _EventsPageState extends BaseState<EventsPage> {
     scrollController = ScrollController();
 
     scrollController.addListener(scrollListener);
+    eventProvider.eventsSnapshot.clear();
+    eventProvider.filteredEventsSnapshot.clear();
     eventProvider.getEventList();
   }
 
@@ -159,8 +161,8 @@ class _EventsPageState extends BaseState<EventsPage> {
 
   List<EventModel> _sortEvents(List<EventModel> events) {
     events.sort((a, b) {
-      var firstEventDate = a.eventStartDate;
-      var secondEventDate = b.eventStartDate;
+      var firstEventDate = a.startDate;
+      var secondEventDate = b.startDate;
       return firstEventDate.compareTo(secondEventDate);
     });
 

@@ -289,14 +289,14 @@ class _SearchPageState extends State<SearchPage> {
                                 radius: 40,
                               ),
                               title: Text(
-                                event.eventTitle,
+                                event.title,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w300,
                                   fontSize: 20,
                                 ),
                               ),
-                              subtitle: Text(event.eventCategory),
+                              subtitle: Text(event.category),
                             ),
                           );
                           print(snapshot.data.docs[index]);

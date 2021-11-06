@@ -28,11 +28,11 @@ class _GeneralPageState extends BaseState<GeneralPage> {
   fetchAppContent() {
     // var userProvider = Provider.of<UserProvider>(context, listen: false);
     var postProvider = Provider.of<PostProvider>(context, listen: false);
-    var eventProvider = Provider.of<EventProvider>(context, listen: false);
+    // var eventProvider = Provider.of<EventProvider>(context, listen: false);
     var podcastProvider = Provider.of<PodcastProvider>(context, listen: false);
 
     postProvider.getTopPosts();
-    eventProvider.getSpecialEvents();
+    // eventProvider.getSpecialEvents();
     podcastProvider.getPodcastList();
   }
 
@@ -120,18 +120,18 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      "Kaçırılmaması Gereken Etkinlikler",
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.headline1.copyWith(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    EventPart(),
+                    // Text(
+                    //   "Kaçırılmaması Gereken Etkinlikler",
+                    //   textAlign: TextAlign.start,
+                    //   style: Theme.of(context).textTheme.headline1.copyWith(
+                    //       color: Colors.black,
+                    //       fontSize: 22,
+                    //       fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: 15,
+                    // ),
+                    // EventPart(),
                     SizedBox(
                       height: kToolbarHeight,
                     )
