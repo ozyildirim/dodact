@@ -1,59 +1,53 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
+import 'package:dodact_v1/ui/creation/widgets/curved_list_item.dart';
+import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 // ignore: must_be_immutable
 class CreationPage extends StatefulWidget {
+  final String groupId;
+
+  CreationPage({this.groupId});
+
   @override
   _CreationPageState createState() => _CreationPageState();
 }
 
 class _CreationPageState extends State<CreationPage> {
+  GlobalKey<FormBuilderState> _postDialogKey = GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> _eventDialogKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int space = 100;
+
+  FocusNode eventCategoryDropdownFocus = new FocusNode();
+  FocusNode eventTypeDropdownFocus = new FocusNode();
+  // FocusNode radioButtonFocus = new FocusNode();
+
+  FocusNode postCategoryDropdownFocus = new FocusNode();
+  FocusNode postTypeDropdownFocus = new FocusNode();
+
+  @override
+  void dispose() {
+    super.dispose();
+    eventCategoryDropdownFocus.dispose();
+    eventTypeDropdownFocus.dispose();
+    postCategoryDropdownFocus.dispose();
+    postTypeDropdownFocus.dispose();
+    // radioButtonFocus.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final SimpleDialog dialog = SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Text('İçerik Türü'),
-      children: [
-        SimpleDialogItem(
-          icon: Icons.image,
-          color: Colors.orange,
-          text: 'Görüntü',
-          onPressed: () {
-            Navigator.pop(context, "Görüntü");
-          },
-        ),
-        SimpleDialogItem(
-          icon: Icons.video_call,
-          color: Colors.green,
-          text: 'Video',
-          onPressed: () {
-            Navigator.pop(context, "Video");
-          },
-        ),
-        SimpleDialogItem(
-          icon: Icons.audiotrack,
-          color: Colors.grey,
-          text: 'Ses',
-          onPressed: () {
-            Navigator.pop(context, "Ses");
-          },
-        ),
-      ],
-    );
-
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        backwardsCompatibility: false,
-        title: Text("Oluştur"),
-        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 8,
+        title: Text(
+          "Oluştur",
+          style: TextStyle(fontWeight: FontWeight.normal),
+        ),
       ),
       extendBodyBehindAppBar: false,
       body: ListView(
@@ -61,29 +55,13 @@ class _CreationPageState extends State<CreationPage> {
           Stack(
             children: [
               CurvedListItem(
-                textPos: 180,
-                boxSize: 240,
-                spaceValue: 440,
-                title: 'Topluluk Olustur',
-                onTap: () =>
-                    NavigationService.instance.navigate('/add_community'),
-                conImage:
-                    AssetImage('assets/images/creation/icerik_olustur.jpg'),
-              ),
-              CurvedListItem(
-                textPos: 180,
-                boxSize: 240,
-                spaceValue: 285,
-                title: 'Ekip Olustur',
-                onTap: () => NavigationService.instance.navigate('/add_group'),
-                conImage: AssetImage('assets/images/creation/grup_olustur.jpg'),
-              ),
-              CurvedListItem(
                 textPos: 150,
                 boxSize: 246,
                 spaceValue: 110,
-                title: 'Etkinlik Oluştur',
-                onTap: () => NavigationService.instance.navigate('/add_event'),
+                title: 'Etkinlik',
+                onTap: () async {
+                  showCreateEventBottomSheet();
+                },
                 conImage:
                     AssetImage('assets/images/creation/etkinlik_olustur.jpg'),
               ),
@@ -91,16 +69,9 @@ class _CreationPageState extends State<CreationPage> {
                 textPos: 120,
                 boxSize: 180,
                 spaceValue: 0,
-                title: 'İçerik Oluştur',
+                title: 'İçerik',
                 onTap: () async {
-                  var data = await showDialog(
-                      barrierDismissible: true,
-                      context: context,
-                      builder: (context) => dialog);
-                  if (data != null) {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_CREATE_POST_PAGE, args: data);
-                  }
+                  showCreateContentBottomSheet();
                 },
                 conImage:
                     AssetImage('assets/images/creation/icerik_olustur.jpg'),
@@ -112,102 +83,465 @@ class _CreationPageState extends State<CreationPage> {
     );
   }
 
-  void _buildDialog() async {}
-}
-
-class SimpleDialogItem extends StatelessWidget {
-  const SimpleDialogItem(
-      {Key key, this.icon, this.color, this.text, this.onPressed})
-      : super(key: key);
-
-  final IconData icon;
-  final Color color;
-  final String text;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialogOption(
-      onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, size: 36.0, color: color),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 16.0),
-            child: Text(text),
+  showCreateContentBottomSheet() {
+    var size = MediaQuery.of(context).size;
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return FormBuilder(
+          key: _postDialogKey,
+          child: new Container(
+            padding: EdgeInsets.only(
+              left: 5.0,
+              right: 5.0,
+              top: 5.0,
+              bottom: 5.0,
+            ),
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                topLeft: const Radius.circular(10.0),
+                topRight: const Radius.circular(10.0),
+              ),
+            ),
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                  title: const Text(
+                    'İçerik Oluştur',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Kategori",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderDropdown(
+                                name: "postCategory",
+                                focusNode: postCategoryDropdownFocus,
+                                decoration: InputDecoration(
+                                  hintText: "Kategori Seçin",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                items: buildArtCategoryDropdownItems(),
+                                validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Tür",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderChoiceChip(
+                                name: "postType",
+                                // focusNode: postTypeDropdownFocus,
+                                direction: Axis.horizontal,
+                                padding: EdgeInsets.all(12),
+                                spacing: 4,
+                                decoration: InputDecoration(
+                                  hintText: "Tür Seçin",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                options: buildPostTypeChips(),
+                                validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                new Divider(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Uygula',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          submitPostDialog();
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Temizle',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          NavigationService.instance.pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
-}
 
-class CurvedListItem extends StatelessWidget {
-  const CurvedListItem(
-      {this.title,
-      this.conImage,
-      this.spaceValue,
-      this.boxSize,
-      this.textPos,
-      this.onTap});
+  showCreateEventBottomSheet() {
+    var size = MediaQuery.of(context).size;
 
-  final String title;
-  final AssetImage conImage;
-  final int spaceValue;
-  final int boxSize;
-  final double textPos;
-  final Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Stack(children: <Widget>[
-        Container(
-          child: Column(
-            children: [
-              Container(
-                height: spaceValue.toDouble(),
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return FormBuilder(
+          key: _eventDialogKey,
+          child: new Container(
+            padding: EdgeInsets.only(
+              left: 5.0,
+              right: 5.0,
+              top: 5.0,
+              bottom: 5.0,
+            ),
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                topLeft: const Radius.circular(10.0),
+                topRight: const Radius.circular(10.0),
               ),
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: onTap,
-                    child: Container(
-                      height: boxSize.toDouble(),
-                      width: 500,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(80.0),
-                        ),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: conImage,
-                        ),
-                      ),
-                      padding: const EdgeInsets.only(
-                        left: 32,
-                      ),
+            ),
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                  title: const Text(
+                    'Etkinlik Oluştur',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Positioned(
-                    left: 40,
-                    bottom: textPos * 0.25.toDouble(),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Kategori",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderDropdown(
+                                name: "eventCategory",
+                                focusNode: eventCategoryDropdownFocus,
+                                decoration: InputDecoration(
+                                  hintText: "Kategori Seçin",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                items: buildArtCategoryDropdownItems(),
+                                validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Tür",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderDropdown(
+                                name: "eventType",
+                                focusNode: eventTypeDropdownFocus,
+                                decoration: InputDecoration(
+                                  hintText: "Tür Seçin",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                items: buildEventTypeDropdownItems(),
+                                validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Online Etkinlik",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FormBuilderRadioGroup(
+                                // focusNode: radioButtonFocus,
+                                decoration:
+                                    InputDecoration(border: InputBorder.none),
+                                name: "online_status",
+                                options: [
+                                  FormBuilderFieldOption(
+                                    value: true,
+                                    child: Text("Online"),
+                                  ),
+                                  FormBuilderFieldOption(
+                                    value: false,
+                                    child: Text("Offline"),
+                                  ),
+                                ],
+                                validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                new Divider(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Uygula',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          submitEventDialog();
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: size.width * 0.4,
+                      child: new ListTile(
+                        title: const Text(
+                          'Temizle',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onTap: () async {
+                          NavigationService.instance.pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ]),
+        );
+      },
     );
+  }
+
+  buildArtCategoryDropdownItems() {
+    return artCategories
+        .map((category) => DropdownMenuItem(
+              value: category,
+              child: Center(
+                child: Text(
+                  category,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ))
+        .toList();
+  }
+
+  buildEventTypeDropdownItems() {
+    return eventTypes
+        .map((type) => DropdownMenuItem(
+              value: type,
+              child: Center(
+                child: Text(
+                  type,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ))
+        .toList();
+  }
+
+  buildPostTypeChips() {
+    return postTypes
+        .map((e) => FormBuilderFieldOption(value: e, child: Text(e)))
+        .toList();
+  }
+
+  void submitEventDialog() {
+    if (_eventDialogKey.currentState.saveAndValidate()) {
+      var eventCategory = _eventDialogKey.currentState.value['eventCategory'];
+      var eventType = _eventDialogKey.currentState.value['eventType'];
+      bool onlineStatus = _eventDialogKey.currentState.value['online_status'];
+
+      NavigationService.instance.pop();
+      NavigationService.instance.navigate(k_ROUTE_CREATE_EVENT_PAGE, args: [
+        eventCategory,
+        eventType,
+        onlineStatus,
+        widget.groupId ?? null
+      ]);
+    }
+  }
+
+  void submitPostDialog() {
+    if (_postDialogKey.currentState.saveAndValidate()) {
+      var postCategory = _postDialogKey.currentState.value['postCategory'];
+      var postType = _postDialogKey.currentState.value['postType'];
+
+      print(postCategory);
+      print(postType);
+
+      NavigationService.instance.pop();
+      NavigationService.instance.navigate(k_ROUTE_CREATE_POST_PAGE,
+          args: [postType, postCategory, widget.groupId ?? null]);
+    }
   }
 }

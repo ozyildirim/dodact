@@ -58,7 +58,7 @@ class FakeAuthService implements AuthBase {
   }
 
   @override
-  Future<void> changeEmail(String newEmail) {
+  Future<void> updateEmail(String newEmail) {
     throw UnimplementedError();
   }
 

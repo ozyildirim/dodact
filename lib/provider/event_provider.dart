@@ -1,26 +1,46 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/event_model.dart';
-import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/event_repository.dart';
-import 'package:dodact_v1/services/concrete/firebase_event_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class EventProvider extends ChangeNotifier {
+  var logger = new Logger();
   EventRepository eventRepository = locator<EventRepository>();
   bool isLoading = false;
-
   EventModel event;
-  List<EventModel> eventList;
-  List<EventModel> userEventList;
-  List<EventModel> otherUserEventList;
+  EventModel newEvent = new EventModel();
+
+  //Events that showed in general page
+  List<EventModel> specialEvents;
 
   List<EventModel> groupEvents;
+
+  var eventsSnapshot = <DocumentSnapshot>[];
+  var filteredEventsSnapshot = <DocumentSnapshot>[];
+  String errorMessage = '';
+  int documentLimit = 3;
+  bool _hasNext = true;
+  bool _hasNextFiltered = true;
+  bool _isFetchingEvents = false;
+  bool _isFetchingFilteredEvents = false;
+
+  bool get hasNext => _hasNext;
+
+  bool get hasNextFiltered => _hasNextFiltered;
+  List<EventModel> get events =>
+      eventsSnapshot.map((e) => EventModel.fromJson(e.data())).toList();
+
+  List<EventModel> get filteredEvents =>
+      filteredEventsSnapshot.map((e) => EventModel.fromJson(e.data())).toList();
+
   clear() {
     event = null;
-    eventList.clear();
   }
 
   changeState(bool _isLoading, {bool isNotify}) {
@@ -34,106 +54,142 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future save(
-      {EventModel model,
-      PlatformFile image,
-      String name,
-      bool isNotify}) async {
+  Future addEvent(List<File> eventImages) async {
     try {
-      changeState(true, isNotify: isNotify);
-      // if (image != null) {
-      //   String imageURL = await UploadService.uploadImage(
-      //       category: "event_picture", file: image, name: name);
-      //   model.eventImages.add(imageURL);
+      //EVENT MODELİ FİRESTOREYE EKLENİYOR ve EVENT ID GERİ DÖNDÜRÜLÜYOR(içerik url olmadan)
+      var eventId = await eventRepository.save(newEvent);
+      newEvent.eventId = eventId;
 
-      // return await FirebaseEventService().save(model);
+      List<String> uploadedContents = [];
+      //Event resimleri upload ediliyor.
+      if (eventImages != null) {
+        await Future.wait(eventImages.map((file) async {
+          await UploadService()
+              .uploadEventMedia(
+                  eventID: eventId,
+                  fileNameAndExtension: file.path.split('/').last,
+                  fileToUpload: file)
+              .then((url) {
+            uploadedContents.add(url);
+          });
+        }));
+        print(
+            "eventImageesss null deeğğil ve  içeriiği: ${uploadedContents.toString()}");
+        newEvent.eventImages = uploadedContents;
+      } else {
+        print("eventImageesss null");
+        //Eğer yüklenen bir fotoğraf yoksa, default bir fotoğraf belirlenir.
+        newEvent.eventImages[0] =
+            "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/app%2Fornek-etkinlik%20(2).jpg?alt=media&token=ef38b635-305d-4e44-828d-5e70f3cf355c";
+      }
+
+      //Event linkleri event modeline dahil ediliyor.
+      await eventRepository.save(newEvent);
     } catch (e) {
-      print("EventProvider save error: " + e.toString());
-    } finally {
-      changeState(false);
+      print("EventProvider addEvent error: $e");
     }
   }
 
-  Future<bool> deleteEvent(String eventId, {bool isNotify}) async {
+  Future<void> deleteEvent(String eventId, bool isLocatedInStorage) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await eventRepository.delete(eventId).then((value) => true);
+      await eventRepository.delete(eventId);
+      notifyListeners();
     } catch (e) {
       print("EventProvider delete error:  " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
   Future<EventModel> getDetail(String eventId, {bool isNotify}) async {
     try {
-      changeState(true, isNotify: isNotify);
       var fetchedEvent = await eventRepository.getDetail(eventId);
       event = fetchedEvent;
+
       return event;
     } catch (e) {
       print("EventProvider getDetail error: " + e.toString());
       return null;
     } finally {
-      changeState(false);
-    }
-  }
-
-  Future<List<EventModel>> getAllEventsList() async {
-    try {
-      var fetchedList = await eventRepository.getList();
-      eventList = fetchedList;
       notifyListeners();
-      return eventList;
-    } catch (e) {
-      print("EventProvider getList error: " + e.toString());
-      notifyListeners();
-      return null;
     }
   }
 
   Future<List<EventModel>> getUserEvents(UserObject user) async {
     try {
-      var fetchedList = await eventRepository.getUserEvents(user);
-      userEventList = fetchedList;
-      notifyListeners();
-      return userEventList;
+      return await eventRepository.getUserEvents(user);
     } catch (e) {
       print("EventProvider getUserEvents error: " + e.toString());
       return null;
     }
   }
 
-  Future<List<EventModel>> getOtherUserEvents(UserObject user,
-      {bool isNotify}) async {
+  Future<void> getSpecialEvents() async {
     try {
-      changeState(true, isNotify: isNotify);
-      var fetchedList = await eventRepository.getUserEvents(user);
-      otherUserEventList = fetchedList;
+      specialEvents = await eventRepository.getSpecialEvents();
       notifyListeners();
-      return otherUserEventList;
     } catch (e) {
-      print("EventProvider getOtherUserEvents error: " + e.toString());
-      return null;
-    } finally {
-      changeState(false);
+      logger.e("EventProvider getSpecialEvents error: " + e.toString());
     }
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group,
-      {bool isNotify}) async {
+  Future getEventList() async {
+    if (_isFetchingEvents) return;
+    errorMessage = '';
+    _isFetchingEvents = true;
+
     try {
-      changeState(true, isNotify: isNotify);
-      var fetchedList = await eventRepository.getGroupEvents(group);
-      eventList = fetchedList;
-      return eventList;
+      var snap = await eventRepository.getEventList(
+        limit: documentLimit,
+        startAfter: eventsSnapshot.isNotEmpty ? eventsSnapshot.last : null,
+      );
+
+      eventsSnapshot.addAll(snap.docs);
+
+      if (snap.docs.length < documentLimit) _hasNext = false;
+      notifyListeners();
     } catch (e) {
-      print("EventProvider getGroupEvents error: " + e.toString());
+      logger.e("EventProvider getEventList error: " + e.toString());
+      notifyListeners();
       return null;
-    } finally {
-      changeState(false);
     }
+
+    _isFetchingEvents = false;
+  }
+
+  Future getFilteredEventList(
+      {bool reset, String category, String city, String type}) async {
+    if (reset) {
+      filteredEventsSnapshot.clear();
+      _hasNextFiltered = true;
+    }
+
+    if (_isFetchingFilteredEvents) return;
+    errorMessage = '';
+    _isFetchingFilteredEvents = true;
+
+    try {
+      var snap = await eventRepository.getFilteredEventList(
+        category: category,
+        city: city,
+        type: type,
+        limit: documentLimit,
+        startAfter: filteredEventsSnapshot.isNotEmpty
+            ? filteredEventsSnapshot.last
+            : null,
+      );
+
+      filteredEventsSnapshot.addAll(snap.docs);
+      // print("snap.docs");
+
+      if (snap.docs.length < documentLimit) _hasNextFiltered = false;
+      notifyListeners();
+    } catch (e) {
+      logger.e("EventProvider getFilteredEventList error: " + e.toString());
+      notifyListeners();
+      return null;
+    }
+
+    _isFetchingFilteredEvents = false;
   }
 
   Future<bool> update(String eventId, Map<String, dynamic> changes,
@@ -149,5 +205,9 @@ class EventProvider extends ChangeNotifier {
     } finally {
       changeState(false);
     }
+  }
+
+  void clearNewEvent() {
+    newEvent = new EventModel();
   }
 }

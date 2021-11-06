@@ -1,4 +1,5 @@
 import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,10 +23,12 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
       EdgeInsets.symmetric(horizontal: dynamicHeight(val));
 
   AuthProvider authProvider;
+  UserProvider userProvider;
 
   @override
   void initState() {
     authProvider = Provider.of<AuthProvider>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     super.initState();
   }
 

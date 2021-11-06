@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/locator.dart';
+import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
@@ -11,7 +11,7 @@ enum AppMode { DEBUG, RELEASE }
 
 // class that make us decide for which service provider we want to use
 
-class PostRepository implements BaseService {
+class PostRepository {
   FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
   FakeAuthService _fakeAuthService = locator<FakeAuthService>();
 
@@ -37,7 +37,6 @@ class PostRepository implements BaseService {
     }
   }
 
-  @override
   Future<List<PostModel>> getList() async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(List<PostModel>.empty());
@@ -47,12 +46,16 @@ class PostRepository implements BaseService {
   }
 
   @override
-  Query getListQuery() {
-    throw UnimplementedError();
+  Future<QuerySnapshot> getListQuery(
+      int documentLimit, DocumentSnapshot startAfter) async {
+    if (appMode == AppMode.DEBUG) {
+    } else {
+      return await _firebasePostService.getListQuery(documentLimit, startAfter);
+    }
   }
 
   @override
-  Future<void> save(model) async {
+  Future<String> save(model) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
@@ -94,6 +97,30 @@ class PostRepository implements BaseService {
       return Future.value(List<PostModel>.empty());
     } else {
       return await _firebasePostService.getTopPosts();
+    }
+  }
+
+  Future<List<DodderModel>> getDodders(String postId) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(List<DodderModel>.empty());
+    } else {
+      return await _firebasePostService.getDodders(postId);
+    }
+  }
+
+  Future<void> dodPost(String postId, String userId) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await _firebasePostService.dodPost(postId, userId);
+    }
+  }
+
+  Future<void> undodPost(String postId, String userId) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      await _firebasePostService.undodPost(postId, userId);
     }
   }
 }

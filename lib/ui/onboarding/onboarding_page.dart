@@ -5,9 +5,59 @@ import 'package:flutter/services.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class OnBoardingPage extends StatelessWidget {
+  var listPages;
   @override
   Widget build(BuildContext context) {
+    listPages = [
+      PageViewModel(
+        image: Image.asset('assets/images/onboarding/onboarding_6.png'),
+        titleWidget: Text(
+          "Sanatçı Kimliğini Yarat",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Sanatçı ruhunu ortaya çıkar, yeteneklerini binlerce kişiye sergile.",
+      ),
+      PageViewModel(
+        image: Image.asset('assets/images/onboarding/onboarding_6.png'),
+        titleWidget: Text(
+          "Katkı Sağla",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Sanatçı ruhunu ortaya çıkar, yeteneklerini binlerce kişiye sergile.",
+      ),
+      PageViewModel(
+        image: Image.asset('assets/images/onboarding/onboarding_1.png'),
+        titleWidget: Text(
+          "Ekibini Oluştur",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Yeni ekip arkadaşları bul ya da mevcut ekiplere katılarak gücünü birleştir.",
+      ),
+      PageViewModel(
+        image: Image.asset('assets/images/onboarding/onboarding_7.png'),
+        titleWidget: Text(
+          "Etkinlikler Bir Tık Uzağında",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Çevrende olup biten sanatsal aktivitelerden haberdar ol, kendi etkinliklerini de başkalarına ulaştır!",
+      ),
+      PageViewModel(
+        image: Image.asset('assets/images/onboarding/onboarding_8.png'),
+        titleWidget: Text(
+          "Sanatınla Değer Yarat",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        //TODO: Buraya metin yazısı yazılacak
+        body: "YAZI BUL",
+      )
+    ];
+
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
     );
@@ -17,12 +67,14 @@ class OnBoardingPage extends StatelessWidget {
       onDone: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("initScreen", 1);
-        NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
+        NavigationService.instance
+            .navigateReplacement(k_ROUTE_VERSION_CONTROL_PAGE);
       },
       onSkip: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("initScreen", 1);
-        NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
+        NavigationService.instance
+            .navigateReplacement(k_ROUTE_VERSION_CONTROL_PAGE);
       },
       showSkipButton: true,
       skip: Text(
@@ -47,82 +99,4 @@ class OnBoardingPage extends StatelessWidget {
       ),
     );
   }
-
-  final listPages = [
-    PageViewModel(
-      titleWidget: Column(
-        children: [
-          SizedBox(
-            height: 500,
-          ),
-          Text(
-            "Sanatçı Kimliğini Yarat",
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-      body:
-          "Here you can write the description of the page, to explain someting...",
-    ),
-    PageViewModel(
-      titleWidget: Column(
-        children: [
-          SizedBox(
-            height: 500,
-          ),
-          Text(
-            "Ekibini Oluştur",
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-      body:
-          "Here you can write the description of the page, to explain someting...",
-    ),
-    PageViewModel(
-      titleWidget: Column(
-        children: [
-          SizedBox(
-            height: 500,
-          ),
-          Text(
-            "Etkinliklerden Haberdar Ol",
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-      body:
-          "Here you can write the description of the page, to explain someting...",
-    ),
-    PageViewModel(
-      titleWidget: Column(
-        children: [
-          SizedBox(
-            height: 500,
-          ),
-          Text(
-            "Sanatçı Kimliğini Yarat",
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-      body:
-          "Here you can write the description of the page, to explain someting...",
-    ),
-    PageViewModel(
-      titleWidget: Column(
-        children: [
-          SizedBox(
-            height: 500,
-          ),
-          Text(
-            "Sanatçı Kimliğini Yarat",
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-      body:
-          "Here you can write the description of the page, to explain someting...",
-    )
-  ];
 }

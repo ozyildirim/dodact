@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
@@ -5,15 +9,41 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/group_repository.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 
 class GroupProvider extends ChangeNotifier {
   GroupRepository _groupRepository = locator<GroupRepository>();
 
   GroupModel group;
+
+  List<PostModel> groupPosts;
+  List<UserObject> groupMembers;
+
   List<GroupModel> groupList;
   bool isLoading = false;
+
+  final groupsSnapshot = <DocumentSnapshot>[];
+  final filteredGroupsSnapshot = <DocumentSnapshot>[];
+  String errorMessage = '';
+  int documentLimit = 10;
+  bool _hasNext = true;
+  bool _hasNextFiltered = true;
+  bool _isFetchingGroups = false;
+  bool _isFetchingFilteredGroups = false;
+
+  bool get hasNext => _hasNext;
+
+  bool get hasNextFiltered => _hasNextFiltered;
+
+  List<GroupModel> get groups =>
+      groupsSnapshot.map((e) => GroupModel.fromJson(e.data())).toList();
+
+  List<GroupModel> get filteredGroups =>
+      filteredGroupsSnapshot.map((e) => GroupModel.fromJson(e.data())).toList();
+
+  var logger = new Logger();
 
   changeState(bool _isLoading, {bool isNotify}) {
     isLoading = _isLoading;
@@ -29,6 +59,10 @@ class GroupProvider extends ChangeNotifier {
   clear() {
     group = null;
     groupList.clear();
+  }
+
+  setGroup(GroupModel group) {
+    this.group = group;
   }
 
   Future addGroup({GroupModel model, bool isNotify}) async {
@@ -54,67 +88,82 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateGroup(String groupId, Map<String, dynamic> changes,
-      {bool isNotify}) async {
+  Future updateGroup(String groupId, Map<String, dynamic> changes) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository
-          .update(groupId, changes)
-          .then((value) => true);
+      await _groupRepository.update(groupId, changes);
+      var updatedGroupModel = await getGroupDetail(groupId);
+      group = updatedGroupModel;
+      groupList[groupList.indexOf(group)] = updatedGroupModel;
     } catch (e) {
       print("GroupProvider updateGroup error: " + e.toString());
       return false;
-    } finally {
-      changeState(false);
     }
   }
 
-  Future<List<GroupModel>> getGroupList({bool isNotify}) async {
+  Future getGroupList() async {
+    if (_isFetchingGroups) return;
+    errorMessage = '';
+    _isFetchingGroups = true;
     try {
-      changeState(true, isNotify: isNotify);
-      var fetchedList = await _groupRepository.getList();
-      groupList = fetchedList;
-      return groupList;
+      var snap = await _groupRepository.getGroupList(
+          limit: documentLimit,
+          startAfter: groupsSnapshot.isNotEmpty ? groupsSnapshot.last : null);
+
+      groupsSnapshot.addAll(snap.docs);
+
+      if (snap.docs.length < documentLimit) _hasNext = false;
+      notifyListeners();
     } catch (e) {
-      print("GroupProvider getList error: " + e.toString());
+      logger.e("GroupProvider getGroupList error: " + e.toString());
+      notifyListeners();
       return null;
-    } finally {
-      changeState(false);
     }
+    _isFetchingGroups = false;
   }
 
-  Future<List<GroupModel>> getGroupListByCategory(
+  Future getFilteredGroupList({
+    bool reset,
     String category,
-  ) async {
+    String city,
+  }) async {
+    if (reset) {
+      print("reset");
+      filteredGroupsSnapshot.clear();
+      _hasNextFiltered = true;
+    }
+
+    if (_isFetchingFilteredGroups) return;
+    errorMessage = '';
+    _isFetchingFilteredGroups = true;
+
     try {
-      var fetchedGroup = await _groupRepository.getGroupsByCategory(category);
-      groupList = fetchedGroup;
+      print("reset yok");
+      var snap = await _groupRepository.getFilteredGroupList(
+        category: category,
+        city: city,
+        limit: documentLimit,
+        startAfter: filteredGroupsSnapshot.isNotEmpty
+            ? filteredGroupsSnapshot.last
+            : null,
+      );
+
+      filteredGroupsSnapshot.addAll(snap.docs);
+      print(snap.docs);
+      if (snap.docs.length < documentLimit) _hasNextFiltered = false;
       notifyListeners();
-      return groupList;
     } catch (e) {
-      print("GroupProvider getGroupsByCategory error: " + e.toString());
+      logger.e("GroupProvider getFilteredGroupList error: " + e.toString());
       notifyListeners();
       return null;
     }
+    _isFetchingFilteredGroups = false;
   }
 
-  Future<List<GroupModel>> getFilteredGroupList(
-      {String category = "Tümü",
-      String city = "İstanbul",
-      bool showAllCategories = true,
-      bool wholeCountry = false}) async {
+  Future<List<GroupModel>> getUserGroups(String userId) async {
     try {
-      var fetchedGroup = await _groupRepository.getFilteredGroupList(
-          category: category,
-          city: city,
-          showAllCategories: showAllCategories,
-          wholeCountry: wholeCountry);
-      groupList = fetchedGroup;
-      notifyListeners();
-      return groupList;
+      return await _groupRepository.getUserGroups(userId);
     } catch (e) {
-      print("GroupProvider getGroupsByCategory error: " + e.toString());
-      notifyListeners();
+      logger.e("GroupProvider getUserGroups error: " + e.toString());
       return null;
     }
   }
@@ -123,8 +172,9 @@ class GroupProvider extends ChangeNotifier {
     try {
       var fetchedGroup = await _groupRepository.getDetail(groupId);
       group = fetchedGroup;
+      //TODO: grup güncellemelerini düzenle
       notifyListeners();
-      return group;
+      return fetchedGroup;
     } catch (e) {
       print("GroupProvider getDetail error: " + e.toString());
       notifyListeners();
@@ -132,77 +182,118 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<PostModel>> getGroupPosts(GroupModel group,
-      {bool isNotify}) async {
+  Future<List<PostModel>> getGroupPosts(String groupId) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository.getGroupPosts(group);
+      return await _groupRepository.getGroupPosts(groupId);
     } catch (e) {
-      print("GroupProvider getGroupPosts error: " + e.toString());
+      logger.e("GroupProvider getGroupPosts error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group,
-      {bool isNotify}) async {
+  Future<List<EventModel>> getGroupEvents(String groupId) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository.getGroupEvents(group);
+      return await _groupRepository.getGroupEvents(groupId);
+      // notifyListeners();
+
     } catch (e) {
-      print("GroupProvider getGroupEvents error: " + e.toString());
+      logger.e("GroupProvider getGroupEvents error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
-  Future<List<UserObject>> getGroupMembers(GroupModel group,
-      {bool isNotify}) async {
+  Future<void> getGroupMembers(String groupId) async {
     try {
-      changeState(true, isNotify: isNotify);
-      return await _groupRepository.getGroupMembers(group);
+      return await _groupRepository.getGroupMembers(groupId);
     } catch (e) {
-      print("GroupProvider getGroupMembers error: " + e.toString());
+      logger.e("GroupProvider getGroupMembers error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
-  Future<void> setGroupProfilePicture(
-      {PlatformFile file, GroupModel group, bool isNotify}) async {
+  Future<bool> addGroupMember(
+    String userID,
+    String groupID,
+  ) async {
     try {
-      changeState(true, isNotify: isNotify);
-      // var pictureDownloadURL = await UploadService.uploadImage(
-      //     category: 'profile_picture',
-      //     file: file,
-      //     name: '${group.groupName}_profilePicture');
-      // await _groupRepository
-      //     .update(group.groupId, {'groupProfilePicture': pictureDownloadURL});
-    } catch (e) {
-      print("GroupProvider setGroupProfilePicture error: " + e.toString());
-    } finally {
-      changeState(false);
-    }
-  }
-
-  Future<bool> addGroupMember(String userID, String groupID,
-      {bool isNotify}) async {
-    try {
-      changeState(true, isNotify: isNotify);
-      var result = await _groupRepository.addGroupMember(userID, groupID);
-      if (result != false) {
-        return true;
-      } else {
+      if (group.groupMemberList.contains(userID)) {
         return false;
+      } else {
+        await _groupRepository.addGroupMember(userID, groupID);
+        group.groupMemberList.add(userID);
+        notifyListeners();
+        return true;
       }
     } catch (e) {
-      print("GroupProvider addGroupMember error: " + e.toString());
+      logger.e("GroupProvider addGroupMember error: " + e.toString());
       return false;
-    } finally {
-      changeState(false);
+    }
+  }
+
+  Future<void> removeGroupMember(String userID, String groupID) async {
+    try {
+      await _groupRepository.removeGroupMember(userID, groupID);
+    } catch (e) {
+      logger.e("GroupProvider removeGroupMember error: " + e.toString());
+    }
+  }
+
+  Future<void> deleteGroupPost(String postId) async {
+    try {
+      await _groupRepository.deleteGroupPost(postId);
+      groupPosts.removeWhere((post) => post.postId == postId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("GroupProvider deleteGroupPost error: " + e.toString());
+    }
+  }
+
+  Future<void> deleteGroupEvent(String eventId) async {
+    try {
+      await _groupRepository.deleteGroupEvent(eventId);
+    } catch (e) {
+      logger.e("GroupProvider deleteGroupPost error: " + e.toString());
+    }
+  }
+
+  Future setGroupManager(String userId, String groupId) {
+    try {
+      return _groupRepository.setGroupManager(userId, groupId);
+    } catch (e) {
+      logger.e("GroupProvider setGroupManager error: " + e.toString());
+      return null;
+    }
+  }
+
+  Future removeGroupMedia(String url, String groupId) async {
+    try {
+      HttpsCallable callable =
+          FirebaseFunctions.instance.httpsCallable('deleteGroupMedia');
+      HttpsCallableResult result =
+          await callable.call(<String, dynamic>{'url': url});
+
+      if (result.data['result'] == true) {
+        await updateGroup(groupId, {
+          'groupMedia': FieldValue.arrayRemove([url]),
+        });
+        group.groupMedia.remove(url);
+      } else {
+        logger.e("GroupProvider removeGroupMedia error: " + result.toString());
+      }
+    } catch (e) {
+      logger.e("GroupProvider removeGroupMedia error: " + e.toString());
+    }
+  }
+
+  Future addGroupMedia(PickedFile file, String groupId) async {
+    try {
+      var url = await UploadService()
+          .uploadGroupMedia(groupId: groupId, fileToUpload: File(file.path));
+      await updateGroup(groupId, {
+        'groupMedia': FieldValue.arrayUnion([url]),
+      });
+    } catch (e) {
+      logger.e("GroupProvider addGroupMedia error: " + e.toString());
     }
   }
 }

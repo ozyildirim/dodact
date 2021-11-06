@@ -16,9 +16,19 @@ const kBackgroundColorDarker = Color(0xFF929292);
 const kDetailTextColor = Color(0xFF998FA2);
 const kCustomAppBarColor = Color(0xFF1C1B22);
 
-const kButtonFontSize = 20;
+const kAuthBackgroundImage = "assets/images/loginBG.jpg";
+const kBackgroundImage = "assets/images/appBG.jpg";
+const kDodactLogo = "assets/images/logo.png";
 
-const kFontFamily = "Roboto";
+const kTemaLogo = "assets/images/companies/tema.jpeg";
+
+const kButtonFontSize = 20;
+const kDrawerTileTitleSize = 20.0;
+const kSettingsTitleSize = 18.0;
+const kPageCenteredTextSize = 20.0;
+const kUserProfileTabLabelSize = 16.0;
+
+const kFontFamily = "PulpDisplay";
 
 const guzel = Color(0xFF162A49);
 
@@ -35,25 +45,36 @@ final spinkit = SpinKitChasingDots(
 //  ThemeData(primaryColor: kPrimaryColor, fontFamily: kFontFamily)
 
 ThemeData appTheme = new ThemeData(
-    appBarTheme: AppBarTheme(
-        elevation: 8,
-        textTheme: TextTheme(
-          title: TextStyle(
-              color: Colors.black, fontSize: 20, fontFamily: "Raleway"),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        centerTitle: true),
-    primarySwatch: Colors.amber,
-    accentColor: Colors.deepOrange,
-    // backgroundColor: Color(0xFF1c2227),
-
-    // scaffoldBackgroundColor: Color(0xFF20262D),
-    // scaffoldBackgroundColor: Colors.black,
-    textTheme: TextTheme(
-      title: TextStyle(
+  unselectedWidgetColor: Colors.white,
+  appBarTheme: const AppBarTheme(
+      elevation: 8,
+      textTheme: TextTheme(
+        headline1: TextStyle(
           color: Colors.black,
-          fontFamily: 'Raleway',
-          fontWeight: FontWeight.w700),
+          fontSize: 20,
+          fontFamily: "RobotoCondensed",
+        ),
+      ),
+      backgroundColor: Colors.white,
+      iconTheme: const IconThemeData(color: Colors.black),
+      centerTitle: true),
+  inputDecorationTheme: const InputDecorationTheme(
+    errorStyle: TextStyle(fontSize: 14),
+  ),
+
+  primarySwatch: Colors.amber,
+  accentColor: Colors.deepOrange,
+  // backgroundColor: Color(0xFF1c2227),
+
+  // scaffoldBackgroundColor: Color(0xFF20262D),
+  // scaffoldBackgroundColor: Colors.black,
+
+  textTheme: TextTheme(
+    headline2: TextStyle(
+      color: Colors.black,
+      fontFamily: 'RobotoCondensed',
     ),
-    fontFamily: "Raleway");
+  ),
+
+  fontFamily: "RobotoCondensed",
+);

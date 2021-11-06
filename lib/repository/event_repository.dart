@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/event_model.dart';
-import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/firebase_event_service.dart';
 
@@ -10,7 +8,7 @@ enum AppMode { DEBUG, RELEASE }
 
 // class that make us decide for which service provider we want to use
 
-class EventRepository implements BaseService {
+class EventRepository {
   FirebaseEventService _firebaseEventService = locator<FirebaseEventService>();
 
   AppMode appMode = AppMode.RELEASE;
@@ -33,12 +31,11 @@ class EventRepository implements BaseService {
     }
   }
 
-  @override
-  Future<List<EventModel>> getList() async {
+  Future getList(int limit, DocumentSnapshot startAfter) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(List<EventModel>.empty());
     } else {
-      return await _firebaseEventService.getList();
+      return await _firebaseEventService.getList(limit, startAfter);
     }
   }
 
@@ -50,22 +47,13 @@ class EventRepository implements BaseService {
     }
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group) async {
-    if (appMode == AppMode.DEBUG) {
-      return Future.value(List<EventModel>.empty());
-    } else {
-      return await _firebaseEventService.getGroupEvents(group);
-    }
-  }
-
   @override
   Query getListQuery() {
-
     throw UnimplementedError();
   }
 
   @override
-  Future<void> save(model) async {
+  Future<String> save(model) async {
     if (appMode == AppMode.DEBUG) {
       return Future.value(null);
     } else {
@@ -80,5 +68,45 @@ class EventRepository implements BaseService {
     } else {
       return await _firebaseEventService.update(id, changes);
     }
+  }
+
+  Future<QuerySnapshot> getEventList(
+      {int limit, DocumentSnapshot startAfter}) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      return await _firebaseEventService.getEventList(
+        limit: limit,
+        startAfter: startAfter,
+      );
+    }
+  }
+
+  Future<QuerySnapshot> getFilteredEventList(
+      {String category,
+      String city,
+      String type,
+      int limit,
+      DocumentSnapshot startAfter}) async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    } else {
+      var snapshot = await _firebaseEventService.getFilteredEventList(
+        category: category,
+        city: city,
+        type: type,
+        limit: limit,
+        startAfter: startAfter,
+      );
+      print(snapshot);
+      return snapshot;
+    }
+  }
+
+  Future<List<EventModel>> getSpecialEvents() async {
+    if (appMode == AppMode.DEBUG) {
+      return Future.value(null);
+    }
+    return await _firebaseEventService.getSpecialEvents();
   }
 }

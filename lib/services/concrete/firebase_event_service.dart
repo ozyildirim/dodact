@@ -1,83 +1,164 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/event_model.dart';
-import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 
-class FirebaseEventService extends BaseService<EventModel> {
-  @override
+class FirebaseEventService {
   Future<void> delete(String id) async {
     return eventsRef.doc(id).delete();
   }
 
-  @override
   Future<EventModel> getDetail(String id) async {
     DocumentSnapshot documentSnapshot = await eventsRef.doc(id).get();
     EventModel eventModel = EventModel.fromJson(documentSnapshot.data());
     return eventModel;
   }
 
-  @override
-  Future<List<EventModel>> getList() async {
-    List<EventModel> allEvents = [];
+  Future getList(int limit, DocumentSnapshot startAfter) async {
+    final refEvents = eventsRef.limit(limit);
 
-    QuerySnapshot querySnapshot = await eventsRef.get();
-    for (DocumentSnapshot event in querySnapshot.docs) {
-      EventModel _convertedEvent = EventModel.fromJson(event.data());
-      allEvents.add(_convertedEvent);
+    if (startAfter == null) {
+      return refEvents.get();
+    } else {
+      return refEvents.startAfterDocument(startAfter).get();
     }
-    print(allEvents.toString());
-    return allEvents;
   }
 
   Future<List<EventModel>> getUserEvents(UserObject user) async {
     //Get post IDs from user object
-    List<dynamic> eventIDs = user.eventIDs;
-    List<EventModel> allUserEvents = [];
+    QuerySnapshot querySnapshot = await eventsRef
+        .where('ownerId', isEqualTo: user.uid)
+        .where('visible', isEqualTo: true)
+        .get();
 
-    print("Event IDs from user object:" + eventIDs.toString());
-    for (dynamic event in eventIDs) {
-      DocumentSnapshot documentSnapshot =
-          await eventsRef.doc(event.toString()).get();
-      EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
-      allUserEvents.add(singleEvent);
+    List<EventModel> allUserEvents = [];
+    for (DocumentSnapshot event in querySnapshot.docs) {
+      EventModel _convertedEvent = EventModel.fromJson(event.data());
+      allUserEvents.add(_convertedEvent);
     }
     return allUserEvents;
   }
 
-  Future<List<EventModel>> getGroupEvents(GroupModel group) async {
+  Future<List<EventModel>> getGroupEvents(String groupId) async {
     //Get post IDs from user object
-    List<dynamic> eventIDs = group.eventIDs;
-    List<EventModel> allGroupEvents = [];
 
-    print("Event IDs from group object:" + eventIDs.toString());
-    for (dynamic event in eventIDs) {
-      DocumentSnapshot documentSnapshot =
-          await eventsRef.doc(event.toString()).get();
-      EventModel singleEvent = EventModel.fromJson(documentSnapshot.data());
-      allGroupEvents.add(singleEvent);
+    List<EventModel> groupEvents = [];
+
+    QuerySnapshot querySnapshot = await eventsRef
+        .where("ownerId", isEqualTo: groupId)
+        .where("visible", isEqualTo: true)
+        .get();
+
+    for (DocumentSnapshot event in querySnapshot.docs) {
+      EventModel singleEvent = EventModel.fromJson(event.data());
+      groupEvents.add(singleEvent);
     }
-    return allGroupEvents;
+    return groupEvents;
   }
 
   //fetch events by query
-  @override
+
   Query getListQuery() {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> save(EventModel model) async {
+  Future<String> save(EventModel model) async {
     if (model.eventId == null || model.eventId.isEmpty) {
-      return await eventsRef.add(model.toJson()).then((value) async =>
-          await eventsRef.doc(value.id).update({'eventId': value.id}));
+      String documentID;
+      return await eventsRef.add(model.toJson()).then((eventReference) async {
+        return await eventsRef
+            .doc(eventReference.id)
+            .update({'eventId': eventReference.id}).then((_) {
+          documentID = eventReference.id;
+          return documentID;
+        });
+      });
+    } else {
+      await eventsRef.doc(model.eventId).set(model.toJson());
     }
-    return await eventsRef.doc(model.eventId).set(model.toJson());
   }
 
   @override
   Future<void> update(String id, Map<String, dynamic> changes) async {
     return await eventsRef.doc(id).update(changes);
+  }
+
+  Future<QuerySnapshot> getEventList(
+      {int limit, DocumentSnapshot startAfter}) async {
+    Query query = eventsRef.where('visible', isEqualTo: true).limit(limit);
+
+    if (startAfter == null) {
+      return query.get();
+    } else {
+      return query.startAfterDocument(startAfter).get();
+    }
+  }
+
+  Future<QuerySnapshot> getFilteredEventList({
+    String category,
+    String city,
+    String type,
+    int limit,
+    DocumentSnapshot startAfter,
+  }) async {
+    Query query;
+
+    if (category != null && type != null && city != null) {
+      query = eventsRef
+          .where('eventCategory', isEqualTo: category)
+          .where('eventType', isEqualTo: type)
+          .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true);
+    } else if (category != null && type != null) {
+      query = eventsRef
+          .where('eventCategory', isEqualTo: category)
+          .where('eventType', isEqualTo: type)
+          .where('visible', isEqualTo: true);
+    } else if (category != null && city != null) {
+      query = eventsRef
+          .where('eventCategory', isEqualTo: category)
+          .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true);
+    } else if (type != null && city != null) {
+      query = eventsRef
+          .where('eventType', isEqualTo: type)
+          .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true);
+    } else if (category != null) {
+      query = eventsRef
+          .where('eventCategory', isEqualTo: category)
+          .where('visible', isEqualTo: true);
+    } else if (type != null) {
+      query = eventsRef
+          .where('eventType', isEqualTo: type)
+          .where('visible', isEqualTo: true);
+    } else if (city != null) {
+      query = eventsRef
+          .where('city', isEqualTo: city)
+          .where('visible', isEqualTo: true);
+    } else {
+      query = eventsRef.where('visible', isEqualTo: true);
+    }
+
+    if (startAfter == null) {
+      return query.limit(limit).get();
+    } else {
+      return query.limit(limit).startAfterDocument(startAfter).get();
+    }
+  }
+
+  Future<List<EventModel>> getSpecialEvents() async {
+    List<EventModel> specialEvents = [];
+
+    QuerySnapshot querySnapshot =
+        await eventsRef.where('visible', isEqualTo: true).limit(3).get();
+
+    for (DocumentSnapshot event in querySnapshot.docs) {
+      EventModel _convertedEvent = EventModel.fromJson(event.data());
+      specialEvents.add(_convertedEvent);
+    }
+
+    return specialEvents;
   }
 }

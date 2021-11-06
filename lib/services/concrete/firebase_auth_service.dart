@@ -1,42 +1,24 @@
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/services/abstract/auth_base.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FirebaseAuthService implements AuthBase {
+class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  @override
-  Future<UserObject> currentUser() async {
+  User currentUser() {
     try {
-      User user = await _firebaseAuth.currentUser;
-      return _userFromFirebase(user);
+      User user = _firebaseAuth.currentUser;
+      return user;
     } catch (e) {
       print("FirebaseAuthService currentUser error: " + e.toString());
-    }
-  }
-
-  UserObject _userFromFirebase(User user) {
-    if (user == null) {
-      return null;
-    }
-    return UserObject(uid: user.uid, email: user.email);
-  }
-
-  @override
-  Future<UserObject> signInAnonymously() async {
-    try {
-      UserCredential result = await _firebaseAuth.signInAnonymously();
-      return _userFromFirebase(result.user);
-    } catch (e) {
-      print("FirebaseAuthService signInAnonymously error:" + e.toString());
       return null;
     }
   }
 
-  @override
   Future<bool> signOut() async {
     //user must sign out from all these providers(google,facebook etc.)
     await _firebaseAuth.signOut();
@@ -46,78 +28,74 @@ class FirebaseAuthService implements AuthBase {
     return true;
   }
 
-  @override
-  Future<UserObject> signInWithGoogle() async {
-    GoogleSignIn _google = GoogleSignIn();
-    GoogleSignInAccount _gUser = await _google.signIn();
+  Future<User> signInWithGoogle(BuildContext context) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    if (_gUser != null) {
-      GoogleSignInAuthentication _googleAuth = await _gUser.authentication;
-      if (_googleAuth.idToken != null && _googleAuth.accessToken != null) {
-        UserCredential result = await _firebaseAuth.signInWithCredential(
-            GoogleAuthProvider.credential(
-                idToken: _googleAuth.idToken,
-                accessToken: _googleAuth.accessToken));
-        User _user = result.user;
-        print("User logged in by Google account.");
-        return _userFromFirebase(_user);
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+
+    CommonMethods().showLoaderDialog(context, "Lütfen Bekleyin");
+
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      try {
+        final UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+
+        var user = userCredential.user;
+        // NavigationService.instance.pop();
+        return user;
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          // handle the error here
+        } else if (e.code == 'invalid-credential') {
+          // handle the error here
+        }
+        NavigationService.instance.pop();
+      } catch (e) {
+        // handle the error here
       }
     } else {
+      NavigationService.instance.pop();
       return null;
     }
   }
 
-  // @override
-  // Future<UserObject> signInWithFacebook() async {
-  //   final _facebookLogin = FacebookLogin();
-  //
-  //   FacebookLoginResult _facebookResult =
-  //       await _facebookLogin.logIn(["public_profile", "email"]);
-  //
-  //   switch (_facebookResult.status) {
-  //     case FacebookLoginStatus.loggedIn:
-  //       if (_facebookResult.accessToken != null) {
-  //         UserCredential _firebaseResult = await _firebaseAuth
-  //             .signInWithCredential(FacebookAuthProvider.credential(
-  //                 _facebookResult.accessToken.token));
-  //
-  //         User _user = _firebaseResult.user;
-  //         return _userFromFirebase(_user);
-  //       }
-  //
-  //       break;
-  //
-  //     case FacebookLoginStatus.cancelledByUser:
-  //       print("User cancelled login by Facebook.");
-  //       break;
-  //     case FacebookLoginStatus.error:
-  //       print("Error: " + _facebookResult.errorMessage);
-  //       break;
-  //   }
-  // }
-
-  @override
-  Future<UserObject> createAccountWithEmailAndPassword(
+  Future<User> createAccountWithEmailAndPassword(
       String email, String password) async {
     UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
-    UserObject user = _userFromFirebase(result.user);
-    if (user != null) {
-      return user;
-    } else {
-      return null;
+
+    User user = result.user;
+
+    try {
+      if (user != null) {
+        await result.user.sendEmailVerification();
+        print("verif maili gönderildi");
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("hata: $e");
     }
   }
 
-  @override
-  Future<UserObject> signInWithEmail(String email, String password) async {
+  Future<User> signInWithEmail(String email, String password) async {
     UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
-    UserObject user = _userFromFirebase(result.user);
-    if (user != null) {
-      return user;
+
+    if (result.user.emailVerified) {
+      return result.user;
     } else {
-      return null;
+      _firebaseAuth.signOut();
+      throw FirebaseAuthException(code: 'email-not-verified');
     }
   }
 
@@ -130,7 +108,7 @@ class FirebaseAuthService implements AuthBase {
     return UserObject.fromDoc(userObjectDoc);
   }
 
-  Future<void> changeEmail(String newEmail) async {
+  Future<void> updateEmail(String newEmail) async {
     try {
       if (_firebaseAuth.currentUser != null) {
         await _firebaseAuth.currentUser.updateEmail(newEmail);

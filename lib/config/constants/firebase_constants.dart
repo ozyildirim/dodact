@@ -12,3 +12,13 @@ final CollectionReference announcementsRef =
 final CollectionReference groupsRef = firestore.collection('groups');
 final CollectionReference storiesRef = firestore.collection('stories');
 final CollectionReference reportsRef = firestore.collection('reports');
+final CollectionReference userFavsRef = firestore.collection('user_favorites');
+final CollectionReference podcastsRef = firestore.collection('podcasts');
+final CollectionReference contributionsRef =
+    firestore.collection('contributions');
+final CollectionReference tokensRef = firestore.collection('tokens');
+final CollectionReference invitationsRef = firestore.collection('invitations');
+final CollectionReference spinnerResultsRef =
+    firestore.collection('spinner_results');
+final CollectionReference chatroomsRef = firestore.collection('chatrooms');
+final CollectionReference dodcoinsRef = firestore.collection('dodcoins');

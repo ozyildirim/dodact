@@ -1,104 +1,85 @@
-import 'dart:io';
-
+import 'package:dodact_v1/config/base/base_model.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
-import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
-import 'package:dodact_v1/services/concrete/upload_service.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
-enum VerifyState { WAITING_FOR_VERIFY, VERIFIED }
+enum ViewState { Ideal, Busy }
+enum AuthState { SignIn, SignUp }
 
-class AuthProvider extends ChangeNotifier {
-  AuthRepository _authRepository = locator<AuthRepository>();
+class AuthProvider extends BaseModel {
+  AuthRepository authRepository = locator<AuthRepository>();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  Logger logger = Logger();
 
   AuthProvider() {
-    getUser();
+    getCurrentUser();
     notifyListeners();
   }
 
   AuthResultStatus authStatus;
   AuthResultStatus accountAuthStatus;
-  VerifyState verifyState = VerifyState.WAITING_FOR_VERIFY;
 
-  UserObject currentUser;
+  User currentUser;
   bool isLoading = false;
 
-  setUser(UserObject _user) {
+  setUser(User _user) {
     currentUser = _user;
-    notifyListeners();
-  }
-
-  changeState(bool _isLoading) {
-    isLoading = _isLoading;
-    notifyListeners();
-  }
-
-  Future<UserObject> getUser() async {
-    try {
-      currentUser = await _authRepository.currentUser();
-      notifyListeners();
-      return currentUser;
-    } catch (e) {
-      debugPrint("AuthProvider getUser function error: " + e.toString());
-      notifyListeners();
-      return null;
-    }
   }
 
   getCurrentUser() async {
-    if (currentUser == null) {
-      setUser(await FirebaseAuthService().currentUser());
-      notifyListeners();
-    }
+    setUser(await authRepository.currentUser());
+    notifyListeners();
   }
 
   Future<UserObject> getUserByID(String userId) async {
     try {
-      changeState(true);
-      return await _authRepository.getUserByID(userId);
+      return await authRepository.getUserByID(userId);
     } catch (e) {
       debugPrint("AuthProvider getUserByID function error: " + e.toString());
       return null;
-    } finally {
-      changeState(false);
     }
   }
 
   Future<bool> signOut() async {
     try {
-      currentUser = null;
-      bool result = await _authRepository.signOut();
+      bool result = await authRepository.signOut();
+      setUser(null);
       notifyListeners();
       return result;
     } catch (e) {
       debugPrint("AuthProvider signOut error: " + e.toString());
+      notifyListeners();
+
       return false;
     }
   }
 
-  Future<AuthResultStatus> signInWithGoogle() async {
+  Future<AuthResultStatus> signInWithGoogle(BuildContext context) async {
     try {
       authStatus = null;
-      changeState(true);
-      var user = await _authRepository.signInWithGoogle();
+      var user = await authRepository.signInWithGoogle(context);
       if (user != null) {
         print("AuthProvider user logged with google");
         authStatus = AuthResultStatus.successful;
-        currentUser = user;
-        changeState(false);
+        setUser(user);
+        notifyListeners();
       } else {
         print("AuthProvider google user null");
         authStatus = AuthResultStatus.abortedByUser;
-        changeState(false);
+        notifyListeners();
       }
     } catch (e) {
-      debugPrint("AuthProvider signInWithGoogle error: " + e.toString());
+      logger.e("AuthProvider signInWithGoogle error:" + e.toString());
       authStatus = AuthResultStatus.abortedByUser;
-      changeState(false);
+      notifyListeners();
     }
+
     return authStatus;
   }
 
@@ -106,83 +87,73 @@ class AuthProvider extends ChangeNotifier {
       String email, String password) async {
     try {
       authStatus = null;
-      changeState(true);
-      var user = await _authRepository.createAccountWithEmailAndPassword(
+
+      var user = await authRepository.createAccountWithEmailAndPassword(
           email, password);
-      if (user != null) {
-        debugPrint("AuthProvider user signed up: " + user.uid + user.email);
+      if (user == true) {
+        logger.i("AuthProvider user signed up: ");
         authStatus = AuthResultStatus.successful;
-        currentUser = user;
-        changeState(false);
       } else {
-        print('AuthStore signUp user null');
-        changeState(false);
+        logger.i('AuthProvider signUp user null');
       }
     } on FirebaseAuthException catch (e) {
-      print("AuthProvider login create account error: $e");
+      logger.e("AuthProvider login create account error: $e");
       authStatus = AuthExceptionHandler.handleException(e);
-      changeState(false);
     }
-    changeState(false);
+    notifyListeners();
+
     return authStatus;
   }
 
   Future<AuthResultStatus> signInWithEmail(
       String email, String password) async {
-    changeState(true);
     authStatus = null;
     try {
-      var user = await _authRepository.signInWithEmail(email, password);
+      var user = await authRepository.signInWithEmail(email, password);
       if (user != null) {
-        print("User ${user.email} logged in.");
+        logger.i("User ${user.email} logged in.");
         authStatus = AuthResultStatus.successful;
-        currentUser = user;
-        changeState(false);
+        setUser(user);
+        notifyListeners();
       } else {
-        print("Auth Login failed.");
-        changeState(false);
+        logger.e("E-posta onayı gerekmekte.");
       }
     } on FirebaseAuthException catch (e) {
-      debugPrint("AuthProvider signInWithEmail error: " + e.toString());
+      logger.e("AuthProvider signInWithEmail error: " + e.toString());
       authStatus = AuthExceptionHandler.handleException(e);
-      changeState(false);
     }
+    notifyListeners();
+
     return authStatus;
+  }
+
+  bool isEmailVerified(User user) {
+    return user.emailVerified;
   }
 
   Future<void> forgotPassword(String email) async {
     try {
-      changeState(true);
-      await _authRepository.forgotPassword(email);
+      await authRepository.forgotPassword(email);
     } catch (e) {
-      debugPrint("AuthProvider ViewModel error." + e.toString());
-    } finally {
-      changeState(false);
+      logger.e("AuthProvider forgotPassword error." + e.toString());
     }
   }
 
-  Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
+  Future<dynamic> updatePassword(String password) async {
     try {
-      await _authRepository.updateCurrentUser(newData, currentUser.uid);
-      getUser();
+      await authRepository.updatePassword(password);
+      return true;
     } catch (e) {
-      print("authProvider updateCurrentUser error: $e");
+      logger.e("AuthProvider updatePassword error." + e.toString());
+      return e;
     }
   }
 
-  Future<String> updateCurrentUserProfilePicture(File image) async {
-    //First: upload users photo to firestorage
+  Future<void> updateEmail(String email) async {
     try {
-      var url = await UploadService().uploadUserProfilePhoto(
-          userID: currentUser.uid,
-          fileType: 'profile_picture',
-          fileToUpload: image);
-      await updateCurrentUser({'profilePictureURL': url});
-      return url;
+      await authRepository.updateEmail(email);
     } catch (e) {
-      debugPrint("AuthProvider updateCurrentUserProfilePicture error. " +
-          e.toString());
-      notifyListeners();
+      logger.e("AuthProvider updateEmail error." + e.toString());
     }
   }
 }

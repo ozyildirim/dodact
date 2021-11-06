@@ -3,6 +3,8 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/services/concrete/fake_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 enum AppMode { DEBUG, RELEASE }
 
@@ -13,26 +15,14 @@ class AuthRepository {
 
   AppMode appMode = AppMode.RELEASE;
 
-  @override
-  Future<UserObject> currentUser() async {
+  Future<User> currentUser() async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.currentUser();
     } else {
-      UserObject _user = await _firebaseAuthService.currentUser();
-      return await _firebaseUserService.readUser(_user.uid);
+      User user = await _firebaseAuthService.currentUser();
+      return user;
     }
   }
 
-  @override
-  Future<UserObject> signInAnonymously() async {
-    if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInAnonymously();
-    } else {
-      return await _firebaseAuthService.signInAnonymously();
-    }
-  }
-
-  @override
   Future<bool> signOut() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signOut();
@@ -41,68 +31,52 @@ class AuthRepository {
     }
   }
 
-  @override
-  Future<UserObject> signInWithGoogle() async {
+  Future<User> signInWithGoogle(BuildContext context) async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInWithGoogle();
     } else {
-      UserObject _user = await _firebaseAuthService.signInWithGoogle();
-      bool _result = await _firebaseUserService.save(_user);
-      if (_result) {
-        return await _firebaseUserService.readUser(_user.uid);
+      User user = await _firebaseAuthService.signInWithGoogle(context);
+      bool result = await _firebaseUserService.save(user);
+      if (result) {
+        return user;
       } else {
         return null;
       }
     }
   }
-  //
-  // @override
-  // Future<UserObject> signInWithFacebook() async {
-  //   if (appMode == AppMode.DEBUG) {
-  //     return await _fakeAuthService.signInWithFacebook();
-  //   } else {
-  //     UserObject _user = await _firebaseAuthService.signInWithFacebook();
-  //     bool _result = await _firebaseUserService.save(_user);
-  //     if (_result) {
-  //       return await _firebaseUserService.readUser(_user.uid);
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // }
 
-  @override
-  Future<UserObject> createAccountWithEmailAndPassword(
+  Future<bool> createAccountWithEmailAndPassword(
       String email, String password) async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.createAccountWithEmailAndPassword(
-          email, password);
+      // return true;
     } else {
-      UserObject _user = await _firebaseAuthService
-          .createAccountWithEmailAndPassword(email, password);
-      bool result = await _firebaseUserService.save(_user);
+      var user = await _firebaseAuthService.createAccountWithEmailAndPassword(
+          email, password);
+
+      bool result = await _firebaseUserService.save(user);
       if (result) {
-        return await _firebaseUserService.readUser(_user.uid);
+        return true;
       } else {
-        return null;
+        return false;
       }
     }
   }
 
-  @override
-  Future<UserObject> signInWithEmail(String email, String password) async {
+  Future<User> signInWithEmail(String email, String password) async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signInWithEmail(email, password);
     } else {
-      UserObject _user =
-          await _firebaseAuthService.signInWithEmail(email, password);
-      return _firebaseUserService.readUser(_user.uid);
+      User user = await _firebaseAuthService.signInWithEmail(email, password);
+
+      if (user != null) {
+        return user;
+      } else {
+        return null;
+      }
     }
   }
 
   Future<void> forgotPassword(String email) async {
     if (appMode == AppMode.DEBUG) {
-      return true;
+      // return true;
     } else {
       await _firebaseAuthService.forgotPassword(email);
     }
@@ -117,28 +91,20 @@ class AuthRepository {
     }
   }
 
-  @override
-  Future<void> changeEmail(String newEmail) async {
+  Future<void> updateEmail(String newEmail) async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.currentUser();
     } else {
-      var result = await _firebaseAuthService.changeEmail(newEmail);
+      var result = await _firebaseAuthService.updateEmail(newEmail);
       return result;
     }
   }
 
-  @override
   Future<void> updatePassword(String pass) async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.updatePassword(pass);
     } else {
-      var result = await _firebaseAuthService.updatePassword(pass);
-      return result;
+      await _firebaseAuthService.updatePassword(pass);
     }
-  }
-
-  Future<void> updateCurrentUser(
-      Map<String, dynamic> newData, String uid) async {
-    await _firebaseAuthService.updateCurrentUser(newData, uid);
   }
 }

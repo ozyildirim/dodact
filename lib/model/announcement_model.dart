@@ -21,7 +21,6 @@ class AnnouncementModel {
     expirationDate = json['expirationDate'];
   }
 
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['announcementID'] = this.announcementID;
@@ -31,5 +30,4 @@ class AnnouncementModel {
     data['expirationDate'] = this.expirationDate;
     return data;
   }
-
 }

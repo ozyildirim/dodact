@@ -1,47 +1,69 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 class EventModel {
   String eventId;
   String ownerId;
   String eventTitle;
   String eventDescription;
-  String location;
   String eventURL;
-  DateTime eventDate;
+  DateTime eventCreationDate;
+  DateTime eventStartDate;
+  DateTime eventEndDate;
   String eventCategory;
   List<String> eventImages;
+  String eventLocationCoordinates;
+  String eventAddress;
+  String city;
   bool isOnline;
+  String eventType;
   bool isDone;
   String ownerType;
+  bool visible;
+
+  List<String> searchKeywords;
 
   EventModel(
-      {@required this.eventId,
-      @required this.ownerId,
+      {this.eventId,
+      this.ownerId,
       this.eventTitle,
       this.eventDescription,
-      this.location,
+      this.city,
       this.eventURL,
-      this.eventDate,
+      this.eventCreationDate,
+      this.eventStartDate,
+      this.eventEndDate,
       this.eventCategory,
       this.eventImages,
       this.isOnline,
+      this.eventLocationCoordinates,
+      this.eventAddress,
+      this.eventType,
       this.isDone,
-      this.ownerType});
+      this.ownerType,
+      this.searchKeywords,
+      this.visible});
 
   EventModel.fromJson(Map<String, dynamic> json) {
     eventId = json['eventId'];
     ownerId = json['ownerId'];
     eventTitle = json['eventTitle'];
     eventDescription = json['eventDescription'];
-    location = json['location'];
+    city = json['city'];
     eventURL = json['eventURL'];
-    eventDate = (json['eventDate'] as Timestamp).toDate();
+    eventCreationDate = (json['eventCreationDate'] as Timestamp).toDate();
+    eventStartDate = (json['eventStartDate'] as Timestamp).toDate();
+    eventEndDate = (json['eventEndDate'] as Timestamp).toDate();
     eventCategory = json['eventCategory'];
-    eventImages = json['eventImages'].cast<String>();
+    eventImages = json['eventImages']?.cast<String>() ?? [];
     isOnline = json['isOnline'];
+    eventLocationCoordinates = json['eventLocationCoordinates'];
+    eventAddress = json['eventAddress'];
+    eventType = json['eventType'];
     isDone = json['isDone'];
     ownerType = json['ownerType'];
+
+    searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
+    visible = json['visible'] ?? true;
   }
 
   Map<String, dynamic> toJson() {
@@ -50,19 +72,28 @@ class EventModel {
     data['ownerId'] = this.ownerId;
     data['eventTitle'] = this.eventTitle;
     data['eventDescription'] = this.eventDescription;
-    data['location'] = this.location;
+    data['city'] = this.city;
     data['eventURL'] = this.eventURL;
-    data['eventDate'] = this.eventDate ?? FieldValue.serverTimestamp();
+    data['eventCreationDate'] =
+        this.eventCreationDate ?? FieldValue.serverTimestamp();
+    data['eventStartDate'] =
+        this.eventStartDate ?? FieldValue.serverTimestamp();
+    data['eventEndDate'] = this.eventEndDate ?? FieldValue.serverTimestamp();
     data['eventCategory'] = this.eventCategory;
+    data['eventLocationCoordinates'] = this.eventLocationCoordinates;
+    data['eventAddress'] = this.eventAddress ?? "";
     data['eventImages'] = this.eventImages;
     data['isOnline'] = this.isOnline;
+    data['eventType'] = this.eventType;
     data['isDone'] = this.isDone;
     data['ownerType'] = this.ownerType;
+    data['searchKeywords'] = this.searchKeywords;
+    data['visible'] = this.visible;
     return data;
   }
 
   @override
   String toString() {
-    return 'EventModel{eventId: $eventId, ownerId: $ownerId, eventTitle: $eventTitle, eventDescription: $eventDescription, location: $location, eventURL: $eventURL, eventDate: $eventDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType}';
+    return 'EventModel{eventId: $eventId,eventType: $eventType, eventLocationCoordinates: $eventLocationCoordinates, eventCreationDate: $eventCreationDate, ownerId: $ownerId, eventAddress: $eventAddress, eventTitle: $eventTitle, eventDescription: $eventDescription, city: $city, eventURL: $eventURL,eventStartDate: $eventStartDate, eventEndDate: $eventEndDate, eventCategory: $eventCategory, eventImages: $eventImages, isOnline: $isOnline, isDone: $isDone, ownerType: $ownerType, searchKeywords: $searchKeywords}';
   }
 }

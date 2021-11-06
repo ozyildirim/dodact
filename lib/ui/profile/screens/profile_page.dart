@@ -1,11 +1,17 @@
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/provider/event_provider.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
-import 'package:dodact_v1/ui/profile/widgets/profile_info_part.dart'
-    as ProfileInfo;
-import 'package:dodact_v1/ui/profile/widgets/profile_posts_part.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_body.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/components/badge/gf_icon_badge.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,116 +21,75 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends BaseState<ProfilePage>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
-
   @override
   void initState() {
-    _controller = new TabController(length: 3, vsync: this);
     super.initState();
-    authProvider.getUser();
+    userProvider.getCurrentUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AuthProvider>(context);
-    // EventRepository()
-    //     .getUserEvents(authProvider.currentUser)
-    //     .then((value) => print(value));
-    return SafeArea(
-      child: Scaffold(
-        drawer: ProfileDrawer(),
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            "Profil",
-            style: Theme.of(context).appBarTheme.textTheme.title,
+    var userProvider = Provider.of<UserProvider>(context);
+    // print(userProvider.currentUser.permissions);
+    return Scaffold(
+      drawer: ProfileDrawer(),
+      appBar: AppBar(
+        actions: [
+          GFIconBadge(
+            counterChild: Container(),
+            child: IconButton(
+              onPressed: () {
+                NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
+              },
+              icon: Icon(
+                FontAwesome5Solid.bell,
+                color: Colors.deepOrange,
+              ),
+            ),
           ),
-          elevation: 0,
+          GFIconBadge(
+            counterChild: Container(),
+            child: IconButton(
+              onPressed: () {
+                NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
+              },
+              icon: Icon(
+                FontAwesome5Solid.envelope,
+                color: Colors.deepOrange,
+              ),
+            ),
+          ),
+        ],
+        // centerTitle: true,
+        // title: Text(
+        //   "@" + authProvider.currentUser.username,
+        //   style: Theme.of(context).appBarTheme.textTheme.headline1,
+        // ),
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ProfileInfo.ProfileInfoPart(),
-              Divider(),
-
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "Paylaşımların",
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context)
-                      .textTheme
-                      .title
-                      .copyWith(color: Colors.black),
-                ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    child: TabBar(
-                      labelColor: Colors.black,
-                      labelStyle: TextStyle(fontSize: 16),
-                      controller: _controller,
-                      tabs: const [
-                        const Tab(text: "Müzik"),
-                        const Tab(text: "Resim"),
-                        const Tab(text: "Tiyatro"),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 250,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TabBarView(controller: _controller, children: [
-                        ProfilePostsPart(),
-                        ProfilePostsPart(),
-                        ProfilePostsPart(),
-                      ]),
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: 15,
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(12.0),
-              //   child: Text(
-              //     "Katıldığı Etkinlikler",
-              //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              //     textAlign: TextAlign.start,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 15),
-              //   child: Container(
-              //     height: 1,
-              //     color: Colors.grey.shade300,
-              //     width: dynamicWidth(0.90),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: Container(
-              //     height: 250,
-              //     child: ProfileEventsPart(),
-              //   ),
-              // ),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: UserProfileHeader(),
+            ),
+            Expanded(child: UserProfileBody()),
+            SizedBox(
+              height: kToolbarHeight,
+            )
+          ],
         ),
       ),
     );

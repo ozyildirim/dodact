@@ -12,6 +12,8 @@ enum AuthResultStatus {
   abortedByUser,
   accountAlreadyExist,
   credentialAlreadyInUse,
+  requiresRecentLogin,
+  emailNotVerified
 }
 
 class AuthExceptionHandler {
@@ -50,6 +52,9 @@ class AuthExceptionHandler {
       case "emaıl-already-ın-use":
         status = AuthResultStatus.emailAlreadyExists;
         break;
+      case "email-not-verified":
+        status = AuthResultStatus.emailNotVerified;
+        break;
       case "invalid-credential":
         status = AuthResultStatus.invalidCredential;
         break;
@@ -73,6 +78,12 @@ class AuthExceptionHandler {
         break;
       case "account-exısts-wıth-dıfferent-credentıal":
         status = AuthResultStatus.accountAlreadyExist;
+        break;
+      case "ERROR_REQUIRES_RECENT_LOGIN":
+        status = AuthResultStatus.requiresRecentLogin;
+        break;
+      case "requires-recent-login":
+        status = AuthResultStatus.requiresRecentLogin;
         break;
       default:
         status = AuthResultStatus.undefined;
@@ -117,13 +128,22 @@ class AuthExceptionHandler {
         errorMessage =
             "Bu giriş kimliği başka bir hesapla ilişkilendirilmiş. Lütfen başka bir hesapla giriş yapmayı deneyin";
         break;
+
+      case AuthResultStatus.emailNotVerified:
+        errorMessage =
+            "E-posta adresinizi doğrulamak için gönderilen e-posta adresinize gönderilen linke tıklayın.";
+        break;
       case AuthResultStatus.invalidCredential:
         errorMessage =
-            "Bu giriş yönteminde bir sorun var. Lütfen farklı bir giriş yöntemi seçiniz.";
+            "Bu giriş yönteminde bir sorun var. Lütfen farklı bir giriş yöntemi seçin.";
         break;
       case AuthResultStatus.abortedByUser:
         errorMessage = "Giriş kullanıcı tarafından iptal edildi.";
         break;
+      case AuthResultStatus.requiresRecentLogin:
+        errorMessage = "Yeniden giriş yapman gerekiyor.";
+        break;
+
       default:
         errorMessage = "Tanımsız bir hata oluştu.";
     }

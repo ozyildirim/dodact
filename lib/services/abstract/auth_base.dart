@@ -11,6 +11,6 @@ abstract class AuthBase {
       String email, String password);
   Future<void> forgotPassword(String email);
   Future<UserObject> getUserByID(String userId);
-  Future<void> changeEmail(String newEmail);
+  Future<void> updateEmail(String newEmail);
   Future<void> updatePassword(String pass);
 }

@@ -3,7 +3,7 @@ description: Sanatçı ruhların buluşma noktası.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 0.0.1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -18,44 +18,91 @@ dependencies:
 
   provider: ^5.0.0
   intl: ^0.17.0
-  firebase_auth: ^1.0.1
+
+
+  #FIREBASE
+  firebase_auth: ^3.0.1
   firebase_core: ^1.0.2
-  cloud_firestore: ^1.0.0
-  google_sign_in: ^5.0.1
-  get_it: ^6.0.0
-  firebase_storage: ^8.0.1
-  file_picker: ^3.0.1
-  curved_navigation_bar: ^0.3.7
+  firebase_storage: ^10.0.1
+  firebase_crashlytics: ^2.1.1
+  cloud_firestore: ^2.4.0
+  firebase_messaging: ^10.0.3
+  google_mobile_ads: ^0.13.0
+  cloud_functions: ^3.0.3
+  firebase_remote_config: ^0.11.0
+  
+  google_sign_in: ^5.0.7
+  get_it: ^7.2.0
+
+  file_picker: ^3.0.4
+  curved_navigation_bar: ^1.0.1
   flutter_spinkit: ^5.0.0
-  image_picker: ^0.7.4
-  multi_image_picker: ^4.8.0
+  image_picker: ^0.8.3
   introduction_screen: ^2.1.0
   youtube_player_flutter: ^8.0.0
-  #TODO: buradan diğer navbarı sil
+  faker: ^2.0.0
+  #TODO: buradan diğer navbarı sil,
 
   flutter_vector_icons: ^1.0.0
   cool_alert: ^1.0.3
-  horizontal_card_pager: ^1.1.1
   flutter_form_builder: "^6.0.0-nullsafety.1"
-  getwidget: ^1.2.4
+  getwidget: ^2.0.3
   url_launcher: ^6.0.9
-  story_view: ^0.12.8
-  path_provider: ^2.0.1
-  firebase_messaging: ^10.0.3
+  geolocator: 7.6.2
+
   flutter_native_splash: ^1.2.0
   shared_preferences: ^2.0.6
-  flutter_material_pickers: ^3.1.0
-  ff_navigation_bar:
-    git:
-      url: https://github.com/ozyildirim/Flutter-FFNavigationBar
   flutter_staggered_grid_view: ^0.4.0
-  video_thumbnail: ^0.3.3
+  video_thumbnail: ^0.4.3
+  flutter_image_compress: ^1.0.0-nullsafety
+  path_provider: ^2.0.2
+  flutter_linkify: ^5.0.2
+  flutter_slidable: ^0.6.0
+  photo_view: ^0.12.0
+  pinch_zoom: ^1.0.0
+  cached_network_image: ^3.1.0
+  flutter_fortune_wheel:
+    git:
+      url: https://github.com/ozyildirim/flutter_fortune_wheel
+  logger: ^1.0.0
+  google_fonts: ^2.1.0
+  flutter_bounce: ^1.1.0
+  # google_maps_place_picker: ^2.0.0-nullsafety.0
+  
+  google_maps_flutter: ^2.0.6
+  table_calendar: ^3.0.2
+  share_plus: ^2.1.4
+  just_audio: ^0.9.5
+  search_choices: ^2.0.7
+  expansion_card: ^0.1.0
+  qr_flutter: ^4.0.0
+  flutter_svg: ^0.22.0
+  profanity_filter: ^2.0.0
+  circular_menu: ^1.2.3
+  awesome_notifications: any
+  paginate_firestore: ^1.0.2
+  connectivity_plus: ^1.1.0
+  package_info_plus: ^1.0.6
+  multi_select_flutter: ^4.0.0
+  youtube_metadata: ^1.0.1
+  flutter_blurhash: ^0.6.0
+  permission_handler: any
+  google_maps_place_picker_mb: ^2.0.0-mb.10
+
+  
   
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.1"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app/logo.png"
+
 
 dependency_overrides:
   intl: ^0.17.0-nullsafety.2
@@ -64,8 +111,14 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/lang/
     - assets/images/
     - assets/images/creation/
+    - assets/images/app/
+    - assets/images/app/interests/
+    - assets/images/app/situations/
+    - assets/images/onboarding/
+    - assets/images/companies/
 
   fonts:
     - family: Roboto
@@ -97,3 +150,21 @@ flutter:
           weight: 300
         - asset: assets/fonts/RobotoCondensed-Italic.ttf
           style: italic
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Black.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-Medium.ttf
+
+    - family: PulpDisplay
+      fonts:
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Regular.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Bold.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Light.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Medium.ttf
+

@@ -1,25 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/model/comment_model.dart';
+import 'package:dodact_v1/model/dodder_model.dart';
 
 class PostModel {
   String postId;
-  bool userOrGroup;
+  String ownerType;
   String ownerId;
   String postCategory;
   String postTitle;
   String postDescription;
   String postContentURL;
   DateTime postDate;
-  int claps;
+
+  int dodCounter;
+  int reportCounter;
+  List<DodderModel> dodders;
   bool isVideo;
   bool isLocatedInYoutube;
-  List<CommentModel> comments;
-  List<dynamic> supportersId;
   String postContentType;
+  bool visible;
+  String blurHash;
+
+  List<String> searchKeywords;
 
   PostModel(
       {this.postId,
-      this.userOrGroup,
+      this.ownerType,
       this.ownerId,
       this.postCategory,
       this.postDate,
@@ -27,15 +32,17 @@ class PostModel {
       this.postDescription,
       this.postContentURL,
       this.isVideo,
-      this.claps,
-      this.comments,
-      this.supportersId,
+      this.dodCounter,
+      this.reportCounter,
       this.isLocatedInYoutube,
-      this.postContentType});
+      this.postContentType,
+      this.searchKeywords,
+      this.visible,
+      this.blurHash});
 
   PostModel.fromJson(Map<String, dynamic> json)
       : postId = json['postId'],
-        userOrGroup = json['userOrGroup'],
+        ownerType = json['ownerType'],
         ownerId = json['ownerId'],
         postCategory = json['postCategory'],
         postDate = (json['postDate'] as Timestamp).toDate(),
@@ -43,16 +50,18 @@ class PostModel {
         postDescription = json['postDescription'],
         postContentURL = json['postContentURL'],
         isVideo = json['isVideo'],
-        claps = json['claps'],
-        comments = json['comments'],
+        dodCounter = json['dodCounter'] ?? 0,
+        reportCounter = json['reportCounter'] ?? 0,
         isLocatedInYoutube = json['isLocatedInYoutube'],
-        supportersId = json['supportersId'],
-        postContentType = json['postContentType'];
+        postContentType = json['postContentType'],
+        visible = json['visible'],
+        searchKeywords = json['searchKeywords']?.cast<String>() ?? [],
+        blurHash = json['blurHash'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['postId'] = this.postId;
-    data['userOrGroup'] = this.userOrGroup;
+    data['ownerType'] = this.ownerType;
     data['ownerId'] = this.ownerId;
     data['postCategory'] = this.postCategory;
     data['postDate'] = this.postDate ?? FieldValue.serverTimestamp();
@@ -60,16 +69,19 @@ class PostModel {
     data['postDescription'] = this.postDescription;
     data['postContentURL'] = this.postContentURL;
     data['isVideo'] = this.isVideo;
-    data['claps'] = this.claps;
-    data['comments'] = this.comments;
-    data['supportersId'] = this.supportersId;
+
+    data['dodCounter'] = this.dodCounter ?? 0;
+    data['reportCounter'] = this.reportCounter ?? 0;
     data['isLocatedInYoutube'] = this.isLocatedInYoutube;
     data['postContentType'] = this.postContentType;
+    data['visible'] = this.visible;
+    data['searchKeywords'] = this.searchKeywords;
+    data['blurHash'] = this.blurHash;
     return data;
   }
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, userOrGroup: $userOrGroup, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, claps: $claps, isVideo: $isVideo}';
+    return 'PostModel{postId: $postId, ownerType: $ownerType, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo,searchKeywords: $searchKeywords, reportCounter: $reportCounter}';
   }
 }

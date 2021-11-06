@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -5,13 +8,18 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
-import 'package:dodact_v1/ui/common_widgets/custom_button.dart';
+import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class EventDetailPage extends StatefulWidget {
@@ -23,78 +31,292 @@ class EventDetailPage extends StatefulWidget {
   _EventDetailPageState createState() => _EventDetailPageState();
 }
 
-class _EventDetailPageState extends BaseState<EventDetailPage> {
-  EventModel _event;
+class _EventDetailPageState extends BaseState<EventDetailPage>
+    with SingleTickerProviderStateMixin {
+  EventModel event;
+  Completer<GoogleMapController> controller = Completer();
+  TabController tabController;
+  var logger = new Logger();
+
+  bool canUserControlEvent() {
+    if (event.ownerType == "User") {
+      if (authProvider.currentUser.uid == event.ownerId) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   @override
   void initState() {
-    _event = widget.event;
-
+    event = widget.event;
+    tabController = new TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          backwardsCompatibility: true,
-          iconTheme: IconThemeData(color: Colors.black),
-          centerTitle: true,
-          title: Text(_event.eventTitle, style: TextStyle(color: Colors.black)),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      //appBar: AppBar(
+      //  elevation: 0,
+      //  backgroundColor: Colors.transparent,
+      //  backwardsCompatibility: true,
+      //  iconTheme: IconThemeData(color: Colors.black),
+      //  centerTitle: true,
+      //),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            actions: canUserControlEvent()
+                ? [
+                    PopupMenuButton(
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                    leading:
+                                        Icon(FontAwesome5Regular.trash_alt),
+                                    title: Text("Sil"),
+                                    onTap: () async {
+                                      await _showDeleteEventDialog(
+                                          event.eventId);
+                                    }),
+                              )
+                            ])
+                  ]
+                : [
+                    PopupMenuButton(
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                    leading: Icon(FontAwesome5Regular.bell),
+                                    title: Text("Bildir"),
+                                    onTap: () async {
+                                      await _showReportEventDialog(
+                                          event.eventId);
+                                    }),
+                              ),
+                            ])
+                  ],
+            expandedHeight: dynamicHeight(0.4),
+            pinned: true,
+            snap: false,
+            floating: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.network(
+                event.eventImages[0],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                    image: AssetImage(kBackgroundImage),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                width: dynamicWidth(1),
+                height: dynamicHeight(1),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      //_buildEventHeader(),
+                      _buildEventDetailBody(),
+                      _buildEventDetailTabs()
+                      // _buildMap()
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //Widget _buildEventHeader() {
+  //  return Container(
+  //    width: dynamicWidth(1),
+  //    height: dynamicHeight(0.4),
+  //    decoration: BoxDecoration(
+  //      image: DecorationImage(
+  //        image: NetworkImage(event.eventImages[0]),
+  //        fit: BoxFit.cover,
+  //      ),
+  //    ),
+  //  );
+  //}
+
+  Widget _buildEventDetailBody() {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      event.eventTitle,
+                      style: TextStyle(fontSize: 28),
+                    ),
+                  ),
+                ),
+                !event.isOnline
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: FloatingActionButton(
+                          onPressed: () async {
+                            await _buildMap();
+                          },
+                          child: Icon(Icons.navigation),
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
+            _getCreatorInfo(),
+            ListTile(
+              leading: Icon(Icons.calendar_today),
+              title: Text(
+                DateFormat('dd,MM,yyyy hh:mm').format(event.eventStartDate),
+                style: TextStyle(fontSize: 18),
+              ),
+              subtitle: Text("Etkinlik Başlangıcı"),
+            ),
+            // Column(
+            //   children: [
+            //     Text("Etkinlik Başlangıcı", style: TextStyle(fontSize: 18)),
+            //     Text(
+            //       DateFormat('dd,MM,yyyy hh:mm').format(event.eventStartDate),
+            //     ),
+            //   ],
+            // ),
+            ListTile(
+                leading: Icon(Icons.view_day),
+                title: Text(
+                  event.isOnline ? "Online Etkinlik" : "Fiziksel Etkinlik",
+                  style: TextStyle(fontSize: 18),
+                )),
+            !event.isOnline
+                ? ListTile(
+                    leading: Icon(Icons.location_city),
+                    title: Text(
+                      event.city,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
+                : ListTile(
+                    leading: Icon(Icons.web),
+                    title: Text(
+                      event.eventURL,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    onTap: () {
+                      CommonMethods.launchURL(event.eventURL);
+                    },
+                  ),
+            ListTile(
+                leading: Icon(Icons.category),
+                title: Text(
+                  event.eventType,
+                  style: TextStyle(fontSize: 18),
+                ))
+          ],
         ),
-        body: Container(
-          width: dynamicWidth(1),
-          child: Column(
-            children: [_buildEventImageCarousel(), _buildEventHeaderPart()],
+      ),
+    );
+  }
+
+  Widget _buildEventDetailTabs() {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 50,
+          child: TabBar(
+            labelColor: Colors.black,
+            labelStyle: GoogleFonts.poppins(
+              fontSize: 18,
+            ),
+            controller: tabController,
+            tabs: const [
+              const Tab(text: "Detaylar"),
+              const Tab(text: "Medya"),
+            ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildEventImageCarousel() {
-    return Container(
-      color: Colors.amberAccent,
-      height: 250,
-      width: double.infinity,
-      child: GFCarousel(
-        autoPlay: true,
-        items: _event.eventImages.map((image) {
-          return Container(
-            margin: EdgeInsets.all(8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildEventHeaderPart() {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: _buildCreatorInfo(),
+        Container(
+          height: 300,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TabBarView(controller: tabController, children: [
+              buildDetailTab(),
+              buildEventMediaTab(),
+            ]),
+          ),
         ),
-        Expanded(
-          flex: 3,
-          child: _buildEventInfo(),
-        )
       ],
     );
   }
 
-  Widget _buildCreatorInfo() {
-    if (_event.ownerType == "Bireysel") {
+  Widget buildDetailTab() {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Text(
+          event.eventDescription,
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget buildEventMediaTab() {
+    if (event.eventImages.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GFCarousel(
+          passiveIndicator: Colors.white,
+          enlargeMainPage: true,
+          autoPlay: true,
+          activeIndicator: Colors.white,
+          items: event.eventImages.map((image) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _getCreatorInfo() {
+    if (event.ownerType == "User") {
       final provider = Provider.of<UserProvider>(context, listen: false);
       return FutureBuilder(
-        future: provider.getOtherUser(_event.ownerId),
+        future: provider.getOtherUser(event.ownerId),
         // ignore: missing_return
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
@@ -109,38 +331,47 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
               }
               UserObject fetchedUser = snapshot.data;
 
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        NavigationService.instance.navigate(
-                            k_ROUTE_OTHERS_PROFILE_PAGE,
-                            args: fetchedUser.uid);
-                      },
-                      child: GFImageOverlay(
-                        width: 100,
-                        height: 100,
-                        shape: BoxShape.circle,
-                        image: NetworkImage(fetchedUser.profilePictureURL),
-                        boxFit: BoxFit.cover,
+              var nameToShow = fetchedUser.nameSurname == null ||
+                      fetchedUser.nameSurname == ""
+                  ? fetchedUser.username
+                  : fetchedUser.nameSurname;
+
+              return ListTile(
+                leading: CircleAvatar(
+                  radius: 15,
+                  backgroundImage: NetworkImage(fetchedUser.profilePictureURL),
+                ),
+                title: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: "Oluşturan: ",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
+                      TextSpan(
+                        text: nameToShow,
+                        style: TextStyle(
+                          fontFamily: "Raleway",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    fetchedUser.nameSurname.toUpperCase(),
-                    textAlign: TextAlign.center,
-                  )
-                ],
+                ),
               );
           }
         },
       );
-    } else if (_event.ownerType == "Grup") {
+    } else if (event.ownerType == "Group") {
       final provider = Provider.of<GroupProvider>(context, listen: false);
       return FutureBuilder(
-        future: provider.getGroupDetail(_event.ownerId),
+        future: provider.getGroupDetail(event.ownerId),
         // ignore: missing_return
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
@@ -155,29 +386,63 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
               }
               GroupModel fetchedGroup = snapshot.data;
 
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        NavigationService.instance
-                            .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
-                      },
-                      child: GFImageOverlay(
-                        width: 100,
-                        height: 100,
-                        shape: BoxShape.circle,
-                        image: NetworkImage(fetchedGroup.groupProfilePicture),
-                        boxFit: BoxFit.cover,
+              // return Column(
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.all(8.0),
+              //       child: InkWell(
+              //         onTap: () {
+              //           NavigationService.instance
+              //               .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
+              //         },
+              //         child: GFImageOverlay(
+              //           width: 100,
+              //           height: 100,
+              //           shape: BoxShape.circle,
+              //           image: NetworkImage(fetchedGroup.groupProfilePicture),
+              //           boxFit: BoxFit.cover,
+              //         ),
+              //       ),
+              //     ),
+              //     Text(
+              //       fetchedGroup.groupName.toUpperCase(),
+              //       style: TextStyle(fontWeight: FontWeight.w700),
+              //     )
+              //   ],
+              // );
+              return ListTile(
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
+                },
+                leading: CircleAvatar(
+                  radius: 15,
+                  backgroundImage:
+                      NetworkImage(fetchedGroup.groupProfilePicture),
+                ),
+                title: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: "Oluşturan: ",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
+                      TextSpan(
+                        text: fetchedGroup.groupName.toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: "Raleway",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    fetchedGroup.groupName.toUpperCase(),
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  )
-                ],
+                ),
               );
           }
         },
@@ -187,55 +452,140 @@ class _EventDetailPageState extends BaseState<EventDetailPage> {
     }
   }
 
-  Widget _buildEventInfo() {
-    return Container(
-      height: 200,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+  Future<void> _showDeleteEventDialog(String eventId) async {
+    //TODO: burayı düzelt
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu içeriği silmek istediğinden emin misin?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await _deleteEvent(eventId);
+        });
+  }
+
+  Future<void> _showReportEventDialog(String eventId) async {
+    //TODO: burayı düzelt
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu içeriği bildirmek istediğinden emin misin?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await reportEvent(eventId);
+          NavigationService.instance.pop();
+        });
+  }
+
+  Future<void> _deleteEvent(String eventId) async {
+    bool isLocatedInStorage = event.eventImages != [] ? true : false;
+
+    //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
+    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+
+    await Provider.of<EventProvider>(context, listen: false)
+        .deleteEvent(event.eventId, isLocatedInStorage);
+
+    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+    //}
+  }
+
+  _showEditEventDialog() {}
+
+  _buildMap() {
+    if (event.eventLocationCoordinates != null) {
+      var lat = event.eventLocationCoordinates.split(",")[0];
+      var lng = event.eventLocationCoordinates.split(",")[1];
+
+      final CameraPosition _kGooglePlex = CameraPosition(
+        target: LatLng(double.parse(lat), double.parse(lng)),
+        zoom: 8,
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return MapPage(_kGooglePlex);
+          },
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(FontAwesome5Solid.adjust),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(_event.eventTitle)
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(FontAwesome5Solid.calendar),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      DateFormat('dd/MM/yyyy hh:mm').format(_event.eventDate),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GFButton(
-                  onPressed: () {},
-                  color: Colors.cyan,
-                  text: "Takvime Ekle",
-                  shape: GFButtonShape.pills,
-                ),
-              ),
-            ],
-          ),
+      );
+    } else {
+      logger.i("Bilinmeyen Konum");
+    }
+  }
+
+  Future<void> reportEvent(String eventId) async {
+    var reportReason = await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => reportReasonDialog(context),
+    );
+
+    if (reportReason != null) {
+      CommonMethods()
+          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+      await FirebaseReportService()
+          .reportEvent(
+              authProvider.currentUser.uid, event.eventId, reportReason)
+          .then((value) async {
+        await CommonMethods().showSuccessDialog(context,
+            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        NavigationService.instance.pop();
+        NavigationService.instance.pop();
+      }).catchError((value) async {
+        await CommonMethods()
+            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+        NavigationService.instance.pop();
+      });
+    } else {
+      NavigationService.instance.pop();
+    }
+  }
+}
+
+class MapPage extends StatefulWidget {
+  final CameraPosition googlePlex;
+
+  MapPage(this.googlePlex);
+
+  @override
+  _MapPageState createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Etkinlik Konum Bilgileri"),
+      ),
+      body: Container(
+        child: GoogleMap(
+          initialCameraPosition: widget.googlePlex,
+          compassEnabled: true,
+          mapToolbarEnabled: true,
+          myLocationButtonEnabled: true,
+          myLocationEnabled: true,
+          buildingsEnabled: false,
+          markers: {
+            Marker(
+              infoWindow: InfoWindow(title: "Etkinlik Lokasyonu"),
+              markerId: MarkerId("1"),
+              position: LatLng(widget.googlePlex.target.latitude,
+                  widget.googlePlex.target.longitude),
+            )
+          },
         ),
       ),
     );

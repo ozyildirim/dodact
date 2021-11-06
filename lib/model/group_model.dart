@@ -1,49 +1,56 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dodact_v1/model/invitation_model.dart';
 
 class GroupModel {
   String groupId;
   String groupName;
   String groupCategory;
-  String founderId;
-  int numOfMembers;
+  String groupSubtitle;
+  String managerId;
   String groupDescription;
   String groupProfilePicture;
-  List<String> groupPhotos;
-  List<String> groupPostIDs;
+  List<String> groupMedia;
   List<String> groupMemberList;
   DateTime creationDate;
-  List<String> eventIDs;
   String groupLocation;
+  InvitationModel invitations;
+  List<Map<String, dynamic>> interests;
+  String mainInterest;
+  bool visible;
+  //TODO: bunu servisten çek
 
-  GroupModel(
-      {this.groupId,
-      this.groupName,
-      this.groupCategory,
-      this.founderId,
-      this.numOfMembers,
-      this.groupDescription,
-      this.groupProfilePicture,
-      this.groupPhotos,
-      this.groupPostIDs,
-      this.groupMemberList,
-      this.creationDate,
-      this.eventIDs,
-      this.groupLocation});
+  GroupModel({
+    this.groupId,
+    this.groupName,
+    this.groupCategory,
+    this.groupSubtitle,
+    this.managerId,
+    this.groupDescription,
+    this.groupProfilePicture,
+    this.groupMedia,
+    this.groupMemberList,
+    this.interests,
+    this.mainInterest,
+    this.creationDate,
+    this.groupLocation,
+    this.visible,
+  });
 
   GroupModel.fromJson(Map<String, dynamic> json) {
     groupId = json['groupId'];
     groupName = json['groupName'];
     groupCategory = json['groupCategory'];
-    founderId = json['founderId'];
-    numOfMembers = json['numOfMembers'];
+    groupSubtitle = json['groupSubtitle'];
+    managerId = json['managerId'];
     groupDescription = json['groupDescription'];
     groupProfilePicture = json['groupProfilePicture'];
-    groupPhotos = json['groupPhotos']?.cast<String>();
-    groupPostIDs = json['groupPostIDs']?.cast<String>();
+    groupMedia = json['groupMedia']?.cast<String>();
     groupMemberList = json['groupMemberList']?.cast<String>();
+    interests = json['interests']?.cast<Map<String, dynamic>>();
+    mainInterest = json['mainInterest'] ?? "";
     creationDate = (json['creationDate'] as Timestamp).toDate();
-    eventIDs = json['eventIDs'];
     groupLocation = json['groupLocation'];
+    visible = json['visible'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,21 +58,23 @@ class GroupModel {
     data['groupId'] = this.groupId;
     data['groupName'] = this.groupName;
     data['groupCategory'] = this.groupCategory;
-    data['founderId'] = this.founderId;
-    data['numOfMembers'] = this.numOfMembers;
+    data['groupSubtitle'] = this.groupSubtitle;
+    data['managerId'] = this.managerId;
     data['groupDescription'] = this.groupDescription;
     data['groupProfilePicture'] = this.groupProfilePicture;
-    data['groupPhotos'] = this.groupPhotos;
-    data['groupPostIDs'] = this.groupPostIDs;
+    data['groupMedia'] = this.groupMedia;
     data['groupMemberList'] = this.groupMemberList;
+    data['interests'] = this.interests;
+    data['mainInterest'] = this.mainInterest;
     data['creationDate'] = FieldValue.serverTimestamp();
-    data['eventIDs'] = this.eventIDs;
     data['groupLocation'] = this.groupLocation;
+    data['visible'] = this.visible;
+
     return data;
   }
 
   @override
   String toString() {
-    return 'GroupModel{groupId: $groupId, groupName: $groupName, groupCategory: $groupCategory, founderId: $founderId, numOfMembers: $numOfMembers, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupPhotos: $groupPhotos, groupPostIDs: $groupPostIDs, groupMemberList: $groupMemberList, creationDate: $creationDate, eventIDs: $eventIDs}';
+    return 'GroupModel{groupId: $groupId, groupName: $groupName,interests: $interests, groupLocation: $groupLocation, groupCategory: $groupCategory, founderId: $managerId, groupDescription: $groupDescription, groupProfilePicture: $groupProfilePicture, groupMedia: $groupMedia, groupMemberList: $groupMemberList, creationDate: $creationDate}';
   }
 }

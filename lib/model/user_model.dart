@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/model/interest_model.dart';
-import 'package:flutter/cupertino.dart';
 
 class UserObject {
   String uid;
@@ -11,48 +9,58 @@ class UserObject {
   String telephoneNumber;
   String profilePictureURL;
   int experiencePoint;
-  List<Interest> interests;
-  List<String> groupIDs;
-  List<String> postIDs;
-  List<String> eventIDs;
+  bool newUser;
   String location;
   List<dynamic> rosettes;
-  String twitterUsername;
-  String instagramUsername;
-  String youtubeLink;
-  String dribbbleLink;
-  String linkedInLink;
-  String soundcloudLink;
+  String mainInterest;
+  String userDescription;
+  String education;
+  String profession;
+  bool isVerified;
 
-  //PrivacySettings
-  bool hiddenMail;
-  bool hiddenLocation;
-  bool hiddenNameSurname;
+  List<String> favoritedPosts = [];
+  List<Map<String, dynamic>> interests;
+  List<String> followers = [];
+  List<String> following = [];
 
-  UserObject(
-      {@required this.uid,
-      @required this.email,
-      this.username,
-      this.nameSurname,
-      this.userRegistrationDate,
-      this.telephoneNumber,
-      this.profilePictureURL,
-      this.experiencePoint,
-      this.groupIDs,
-      this.interests,
-      this.postIDs,
-      this.eventIDs,
-      this.location,
-      this.rosettes,
-      this.twitterUsername,
-      this.instagramUsername,
-      this.youtubeLink,
-      this.dribbbleLink,
-      this.linkedInLink,
-      this.soundcloudLink,
-      this.hiddenMail,
-      this.hiddenLocation,
-      this.hiddenNameSurname});
+  //Permissions
+  Map<String, dynamic> permissions = {};
+
+  //Privacy Settings
+  Map<String, dynamic> privacySettings = {};
+
+  //Social Media Links
+  Map<String, dynamic> socialMediaLinks = {};
+
+  //Notification Settings
+  Map<String, dynamic> notificationSettings = {};
+
+  List<String> searchKeywords;
+
+  UserObject({
+    this.uid,
+    this.email,
+    this.username,
+    this.nameSurname,
+    this.userRegistrationDate,
+    this.telephoneNumber,
+    this.profilePictureURL,
+    this.experiencePoint,
+    this.location,
+    this.rosettes,
+    this.mainInterest,
+    this.newUser,
+    this.userDescription,
+    this.interests,
+    this.permissions,
+    this.privacySettings,
+    this.socialMediaLinks,
+    this.notificationSettings,
+    this.education,
+    this.profession,
+    this.searchKeywords,
+    this.isVerified,
+  });
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
@@ -64,81 +72,88 @@ class UserObject {
     userData['telephoneNumber'] = this.telephoneNumber ?? '';
     userData['profilePictureURL'] = this.profilePictureURL;
     userData['experiencePoint'] = this.experiencePoint ?? 0;
-    userData['groupIDs'] = this.groupIDs;
-    if (this.interests != null) {
-      userData['interests'] = this.interests.map((v) => v.toMap()).toList();
-    }
-    userData['postIDs'] = this.postIDs;
-    userData['eventIDs'] = this.eventIDs;
+
     userData['location'] = this.location;
+    userData['mainInterest'] = this.mainInterest;
     userData['rosettes'] = this.rosettes;
-    userData['twitterUsername'] = this.twitterUsername;
-    userData['instagramUsername'] = this.instagramUsername;
-    userData['youtubeLink'] = this.youtubeLink;
-    userData['dribbbleLink'] = this.dribbbleLink;
-    userData['linkedInLink'] = this.linkedInLink;
-    userData['soundcloudLink'] = this.soundcloudLink;
-    userData['hiddenMail'] = this.hiddenMail;
-    userData['hiddenLocation'] = this.hiddenLocation;
-    userData['hiddenNameSurname'] = this.hiddenNameSurname;
+
+    userData['interests'] = this.interests;
+    userData['permissions'] = this.permissions;
+    userData['privacySettings'] = this.privacySettings;
+    userData['socialMediaLinks'] = this.socialMediaLinks;
+    userData['notificationSettings'] = this.notificationSettings;
+    userData['newUser'] = this.newUser ?? true;
+    userData['userDescription'] = this.userDescription ?? '';
+    userData['education'] = this.education ?? '';
+    userData['profession'] = this.profession ?? '';
+    userData['searchKeywords'] = this.searchKeywords ?? [];
+    userData['isVerified'] = this.isVerified ?? false;
 
     return userData;
   }
 
-  UserObject.fromMap(Map<String, dynamic> map)
-      : uid = map['uid'],
-        email = map['email'],
-        username = map['username'],
-        nameSurname = map['nameSurname'],
-        userRegistrationDate =
-            (map['userRegistrationDate'] as Timestamp).toDate(),
-        telephoneNumber = map['telephoneNumber'],
-        profilePictureURL = map['profilePictureURL'],
-        experiencePoint = map['experiencePoint'],
-        groupIDs = map['groupIDs'],
-        interests = map['interests'],
-        postIDs = map['postIDs'],
-        eventIDs = map['eventIDs'],
-        location = map['location'],
-        rosettes = map['rosettes'],
-        twitterUsername = map['twitterUsername'],
-        instagramUsername = map['instagramUsername'],
-        youtubeLink = map['youtubeLink'],
-        dribbbleLink = map['dribbbleLink'],
-        linkedInLink = map['linkedInLink'],
-        soundcloudLink = map['soundcloudLink'],
-        hiddenMail = map['hiddenMail'],
-        hiddenLocation = map['hiddenLocation'],
-        hiddenNameSurname = map['hiddenNameSurname'];
-
-  UserObject.fromDoc(DocumentSnapshot doc) {
-    uid = doc.data()['uid'];
-    email = doc.data()['email'];
-    username = doc.data()['username'];
-    nameSurname = doc.data()['nameSurname'];
+  UserObject.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    uid = doc.data()['uid'] ?? '';
+    email = doc.data()['email'] ?? '';
+    username = doc.data()['username'] ?? '';
+    nameSurname = doc.data()['nameSurname'] ?? '';
     userRegistrationDate =
-        (doc.data()['userRegistrationDate'] as Timestamp).toDate();
-    telephoneNumber = doc.data()['telephoneNumber'];
-    profilePictureURL = doc.data()['profilePictureURL'];
-    experiencePoint = doc.data()['experiencePoint'];
-    groupIDs = doc.data()['groupIDs'];
-    interests = doc.data()['interests'];
-    postIDs = doc.data()['postIDs']?.cast<String>();
-    eventIDs = doc.data()['eventIDs']?.cast<String>();
+        (doc.data()['userRegistrationDate'] as Timestamp).toDate() ?? '';
+    telephoneNumber = doc.data()['telephoneNumber'] ?? '';
+    profilePictureURL = doc.data()['profilePictureURL'] ?? '';
+    experiencePoint = doc.data()['experiencePoint'] ?? '';
     location = doc.data()['location'];
     rosettes = doc.data()['rosettes'];
-    twitterUsername = doc.data()['twitterUsername'];
-    instagramUsername = doc.data()['instagramUsername'];
-    youtubeLink = doc.data()['youtubeLink'];
-    dribbbleLink = doc.data()['dribbbleLink'];
-    linkedInLink = doc.data()['linkedInLink'];
-    soundcloudLink = doc.data()['soundcloudLink'];
-    hiddenMail = doc.data()['hiddenMail'];
-    hiddenLocation = doc.data()['hiddenLocation'];
-    hiddenNameSurname = doc.data()['hiddenNameSurname'];
+    mainInterest = doc.data()['mainInterest'] ?? "";
+    interests = doc.data()['interests']?.cast<Map<String, dynamic>>();
+
+    permissions = doc.data()['permissions'] ??
+        {
+          'create_post': true,
+          'create_event': true,
+          'create_group': false,
+          'create_room': false,
+          'create_stream': false,
+          'create_comment': true,
+        };
+
+    privacySettings = doc.data()['privacySettings'] ??
+        {
+          'hide_mail': false,
+          'hide_phone': false,
+          'hide_location': false,
+        };
+
+    socialMediaLinks = doc.data()['socialMediaLinks'] ??
+        {
+          'instagram': '',
+          'youtube': '',
+          'dribbble': '',
+          'linkedin': '',
+          'soundcloud': '',
+          'pinterest': '',
+        };
+
+    notificationSettings = doc.data()['notificationSettings'] ??
+        {
+          'allow_comment_notifications': true,
+          'allow_post_like_notifications': true,
+          'allow_group_comment_notifications': true,
+          'allow_group_invitation_notifications': true,
+          'allow_group_announcement_notifications': true,
+          'allow_group_post_notifications': true,
+          'allow_private_message_notifications': true,
+        };
+
+    userDescription = doc.data()['userDescription'] ?? '';
+    newUser = doc.data()['newUser'] ?? true;
+    education = doc.data()['education'] ?? '';
+    profession = doc.data()['profession'] ?? '';
+    searchKeywords = doc.data()['searchKeywords']?.cast<String>() ?? [];
+    isVerified = doc.data()['isVerified'] ?? false;
   }
 
   String toString() {
-    return 'UserObject{uid: $uid, email: $email, username: $username, nameSurname: $nameSurname,location:$location,hiddenMail: $hiddenMail,hiddenNameSurname: $hiddenNameSurname,hiddenLocation: $hiddenLocation, linkedinLink: $linkedInLink,dribbbleLink: $dribbbleLink,soundcloudLink: $soundcloudLink,twitterUsername: $twitterUsername,instagramUsername: $instagramUsername,youtubeLink: $youtubeLink,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint, groupIDs: $groupIDs, interests: $interests, postIDs: $postIDs, eventIDs: $eventIDs},';
+    return 'UserObject{uid: $uid, email: $email, newUser: $newUser, mainInterest: $mainInterest, verified: $isVerified, username: $username, userDescription: $userDescription, nameSurname: $nameSurname,location:$location,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
   }
 }
