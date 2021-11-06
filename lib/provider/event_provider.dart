@@ -14,7 +14,6 @@ class EventProvider extends ChangeNotifier {
   EventRepository eventRepository = locator<EventRepository>();
   bool isLoading = false;
   EventModel event;
-  EventModel newEvent = new EventModel();
 
   //Events that showed in general page
   List<EventModel> specialEvents;
@@ -54,11 +53,10 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future addEvent(List<File> eventImages) async {
+  Future addEvent(EventModel event, List<File> eventImages) async {
     try {
       //EVENT MODELİ FİRESTOREYE EKLENİYOR ve EVENT ID GERİ DÖNDÜRÜLÜYOR(içerik url olmadan)
-      var eventId = await eventRepository.save(newEvent);
-      newEvent.eventId = eventId;
+      var eventId = await eventRepository.save(event);
 
       List<String> uploadedContents = [];
       //Event resimleri upload ediliyor.
@@ -73,18 +71,11 @@ class EventProvider extends ChangeNotifier {
             uploadedContents.add(url);
           });
         }));
-        print(
-            "eventImageesss null deeğğil ve  içeriiği: ${uploadedContents.toString()}");
-        newEvent.eventImages = uploadedContents;
-      } else {
-        print("eventImageesss null");
-        //Eğer yüklenen bir fotoğraf yoksa, default bir fotoğraf belirlenir.
-        newEvent.eventImages[0] =
-            "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/app%2Fornek-etkinlik%20(2).jpg?alt=media&token=ef38b635-305d-4e44-828d-5e70f3cf355c";
       }
 
-      //Event linkleri event modeline dahil ediliyor.
-      await eventRepository.save(newEvent);
+      //Event linkleri ve eventID event modeline dahil ediliyor.
+      await eventRepository
+          .update(eventId, {'id': eventId, 'eventImages': uploadedContents});
     } catch (e) {
       print("EventProvider addEvent error: $e");
     }
@@ -205,9 +196,5 @@ class EventProvider extends ChangeNotifier {
     } finally {
       changeState(false);
     }
-  }
-
-  void clearNewEvent() {
-    newEvent = new EventModel();
   }
 }

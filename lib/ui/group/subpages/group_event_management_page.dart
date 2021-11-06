@@ -78,7 +78,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
                                   color: Colors.orange,
                                   child: ListTile(
                                     title: Text(
-                                      event.eventTitle,
+                                      event.title,
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
                                     ),
                                     subtitle: Text(
                                       DateFormat("dd/MM/yyyy")
-                                          .format(event.eventCreationDate),
+                                          .format(event.creationDate),
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -107,8 +107,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
                                                 FlatButton(
                                                   child: Text("Evet"),
                                                   onPressed: () {
-                                                    deleteGroupEvent(
-                                                        event.eventId);
+                                                    deleteGroupEvent(event.id);
                                                     Navigator.pop(context);
                                                   },
                                                 ),

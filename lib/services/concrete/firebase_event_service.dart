@@ -64,19 +64,15 @@ class FirebaseEventService {
 
   @override
   Future<String> save(EventModel model) async {
-    if (model.eventId == null || model.eventId.isEmpty) {
-      String documentID;
-      return await eventsRef.add(model.toJson()).then((eventReference) async {
-        return await eventsRef
-            .doc(eventReference.id)
-            .update({'eventId': eventReference.id}).then((_) {
-          documentID = eventReference.id;
-          return documentID;
-        });
+    String documentID;
+    return await eventsRef.add(model.toJson()).then((eventReference) async {
+      return await eventsRef
+          .doc(eventReference.id)
+          .update({'eventId': eventReference.id}).then((_) {
+        documentID = eventReference.id;
+        return documentID;
       });
-    } else {
-      await eventsRef.doc(model.eventId).set(model.toJson());
-    }
+    });
   }
 
   @override

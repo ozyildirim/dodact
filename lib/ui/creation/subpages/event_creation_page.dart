@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
@@ -9,12 +10,10 @@ import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
-import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:getwidget/components/carousel/gf_items_carousel.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:intl/intl.dart';
@@ -35,13 +34,14 @@ class EventCreationPage extends StatefulWidget {
 }
 
 class _EventCreationPageState extends BaseState<EventCreationPage> {
+  GlobalKey<FormBuilderState> _eventFormKey = new GlobalKey<FormBuilderState>();
+  GlobalKey<ScaffoldState> _eventScaffoldKey = GlobalKey<ScaffoldState>();
+  EventProvider eventProvider;
+
+  var logger = Logger();
   List<File> _eventImages = [];
   String eventCoordinates;
   String eventCity;
-
-  EventProvider eventProvider;
-
-  GlobalKey<FormBuilderState> _eventFormKey = new GlobalKey<FormBuilderState>();
 
   TextEditingController _eventLocationController = new TextEditingController();
 
@@ -51,15 +51,18 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   FocusNode checkboxFocus = new FocusNode();
   FocusNode dropdownFocus = FocusNode();
 
-  DateTime _eventStartDate = new DateTime.now();
-  DateTime _eventEndDate = new DateTime.now().add(Duration(days: 1));
+  DateTime currentDate = new DateTime.now();
+  DateTime nextPossibleDate = new DateTime.now().add(Duration(minutes: 1));
+
+  DateTime startDate;
+
   bool isOnline;
-  String postOwnerType;
-  String ownerGroupId;
+  String ownerType;
+  String ownerId;
 
   PickResult selectedPlace;
 
-  var logger = Logger();
+  String eventHint;
 
   @override
   void dispose() {
@@ -71,32 +74,30 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   @override
   void initState() {
     super.initState();
-    print("category" + widget.eventCategory);
-    print(widget.eventPlatform);
-    print(widget.eventType);
     eventProvider = Provider.of<EventProvider>(context, listen: false);
-    eventProvider.clearNewEvent();
     isOnline = widget.eventPlatform;
+    eventHint = getRandomEventTitle();
 
-    widget.groupId != null
-        ? Logger().i(
-            "Grup için etkinlik oluşturma aşaması başladı: ${widget.groupId}")
-        : null;
-    postOwnerType = widget.groupId == null ? "User" : "Group";
+    if (widget.groupId != null) {
+      ownerType = "Group";
+      ownerId = widget.groupId;
+    } else {
+      ownerType = "User";
+      ownerId = authProvider.currentUser.uid;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _formSubmit();
-        },
+        onPressed: _formSubmit,
         child: Icon(Icons.add),
       ),
       appBar: AppBar(
-        centerTitle: true,
-        title: Text('Etkinlik Oluştur'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
       body: GestureDetector(
         onTap: () {
@@ -113,379 +114,561 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                _buildEventImagePart(),
-                _buildEventFormPart(),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  _buildEventFormPart(),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildEventImagePart() {
-    if (_eventImages.length == 0) {
-      return Expanded(
-        child: Container(
-          height: 250,
-          width: 250,
-          child: IconButton(
-            onPressed: () async {
-              await _selectFiles();
-            },
-            icon: Icon(FontAwesome5Solid.camera),
-          ),
-        ),
-      );
-    } else {
-      return Expanded(
-        child: Stack(
-          children: [
-            GFItemsCarousel(
-              rowCount: 2,
-              children: _eventImages.map((file) {
-                return Container(
-                  margin: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    image: FileImage(file),
-                  )),
-                );
-              }).toList(),
-            ),
-            Positioned(
-              bottom: 1,
-              right: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  child: IconButton(
-                      onPressed: () async {
-                        _selectFiles();
-                      },
-                      icon: Icon(FontAwesome5Solid.plus)),
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    }
   }
 
   Widget _buildEventFormPart() {
     var size = MediaQuery.of(context).size;
-    return Expanded(
-      flex: 4,
-      child: SingleChildScrollView(
-        child: FormBuilder(
-          key: _eventFormKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Etkinlik Adı",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        1.0,
-                        1.0,
-                      ),
-                      blurRadius: 5.0,
-                      spreadRadius: 0.5,
-                    ),
-                  ],
-                  color: kPrimaryLightColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: FormBuilderTextField(
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.sentences,
-                  textInputAction: TextInputAction.next,
-                  focusNode: eventTitleFocus,
-                  name: "eventTitle",
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.people_alt_sharp,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "Etkinlik Adı",
-                      border: InputBorder.none,
-                      errorStyle:
-                          Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(
-                        context,
-                        errorText: "Bu alan boş bırakılamaz.",
-                      ),
-                      (value) {
-                        return ProfanityChecker.profanityValidator(value);
-                      },
-                      FormBuilderValidators.minLength(context, 20,
-                          errorText: "Etkinlik başlığı en az 10 harf olmalı.",
-                          allowEmpty: false)
-                    ],
-                  ),
-                ),
-              ),
-              Text("Etkinlik Açıklaması",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        1.0,
-                        1.0,
-                      ),
-                      blurRadius: 5.0,
-                      spreadRadius: 0.5,
-                    ),
-                  ],
-                  color: kPrimaryLightColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: FormBuilderTextField(
-                  textInputAction: TextInputAction.next,
-                  focusNode: eventDescriptionFocus,
-                  name: "eventDescription",
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.sentences,
-                  cursorColor: kPrimaryColor,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.people_alt_sharp,
-                        color: kPrimaryColor,
-                      ),
-                      hintText: "Etkinlik Açıklaması",
-                      border: InputBorder.none,
-                      errorStyle:
-                          Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(
-                        context,
-                        errorText: "Bu alan boş bırakılamaz.",
-                      ),
-                      (value) {
-                        return ProfanityChecker.profanityValidator(value);
-                      },
-                      FormBuilderValidators.minLength(context, 20,
-                          errorText:
-                              "Biraz daha detay verilmeli (En az 50 harf).",
-                          allowEmpty: false)
-                    ],
-                  ),
-                ),
-              ),
-              Text("Etkinlik Başlangıç Tarihi",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              TextFieldContainer(
-                key: Key(DateFormat("dd/mm/yyyy").format(_eventStartDate)),
-                width: size.width * 0.6,
-                child: FormBuilderDateTimePicker(
-                  format: DateFormat("dd/MM/yyyy hh:mm"),
-                  onChanged: (date) {
-                    if (date != null) {
-                      setState(() {
-                        _eventStartDate = date;
-                      });
-                    }
-                  },
-                  initialDate: _eventEndDate ?? null,
-                  alwaysUse24HourFormat: true,
-                  name: "eventStartDate",
-                  decoration: InputDecoration(
-                    hintText:
-                        DateFormat("dd/MM/yyyy hh:mm").format(_eventStartDate),
-                    icon: Icon(
-                      FontAwesome5Solid.calendar,
-                      color: Colors.black,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                  confirmText: "Tamam",
-                  cancelText: "İptal",
-                  fieldLabelText: "Etkinlik Başlangıç Tarihi",
-                  helpText: "Bir başlangıç tarihi seç",
-                  fieldHintText: "Gün/Ay/Yıl",
-                  // validator: FormBuilderValidators.compose([
-                  //   FormBuilderValidators.required(context,
-                  //       errorText: "Bir başlangıç tarihi seçmelisin"),
-                  // ]),
-                  firstDate: DateTime.now(),
-                ),
-              ),
-              Text("Etkinlik Bitiş Tarihi",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              TextFieldContainer(
-                key: Key(DateFormat("dd/mm/yyyy").format(_eventEndDate)),
-                width: size.width * 0.6,
-                child: FormBuilderDateTimePicker(
-                  helpText: "Bir bitiş tarihi seç",
-                  format: DateFormat("dd/MM/yyyy hh:mm"),
-                  onChanged: (date) {
-                    if (date != null) {
-                      setState(() {
-                        _eventEndDate = date;
-                      });
-                    }
-                  },
-                  initialDate: _eventEndDate ?? null,
-                  alwaysUse24HourFormat: true,
-                  name: "eventEndDate",
-                  firstDate: _eventStartDate,
-                  decoration: InputDecoration(
-                    hintText:
-                        DateFormat("dd/MM/yyyy hh:mm").format(_eventEndDate),
-                    icon: Icon(
-                      FontAwesome5Solid.calendar,
-                      color: Colors.black,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                  // validator: FormBuilderValidators.compose([
-                  //   FormBuilderValidators.required(context,
-                  //       errorText: "Bir tarih seçmelisin.")
-                  // ]),
-                ),
-              ),
-              isOnline
-                  ? Column(
-                      children: [
-                        Text("Etkinlik Adresi",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                        TextFieldContainer(
-                          width: size.width * 0.6,
-                          child: FormBuilderTextField(
-                            textInputAction: TextInputAction.next,
-                            focusNode: eventURLFocus,
-                            name: "eventURL",
-                            autofocus: false,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            keyboardType: TextInputType.text,
-                            cursorColor: kPrimaryColor,
-                            decoration: InputDecoration(
-                                icon: Icon(
-                                  Icons.play_lesson_outlined,
-                                  color: kPrimaryColor,
-                                ),
-                                hintText: "Etkinlik İnternet Adresi",
-                                border: InputBorder.none,
-                                errorStyle: Theme.of(context)
-                                    .inputDecorationTheme
-                                    .errorStyle),
-                            validator: FormBuilderValidators.compose(
-                              [
-                                FormBuilderValidators.required(
-                                  context,
-                                  errorText: "Bu alan boş bırakılamaz.",
-                                ),
-                                (value) {
-                                  return ProfanityChecker.profanityValidator(
-                                      value);
-                                },
-                                FormBuilderValidators.url(context),
-                              ],
-                            ),
-                          ),
+    return SingleChildScrollView(
+      child: FormBuilder(
+        key: _eventFormKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Etkinlik Başlığı",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                SizedBox(height: 4),
+                Container(
+                  width: size.width * 0.8,
+                  child: FormBuilderTextField(
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.next,
+                    focusNode: eventTitleFocus,
+                    name: "eventTitle",
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                        hintText: eventHint,
+                        errorStyle:
+                            Theme.of(context).inputDecorationTheme.errorStyle),
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(
+                          context,
+                          errorText: "Bu alan boş bırakılamaz.",
                         ),
+                        (value) {
+                          return ProfanityChecker.profanityValidator(value);
+                        },
+                        FormBuilderValidators.minLength(context, 20,
+                            errorText:
+                                "Etkinlik başlığı en az 10 karakter olmalı.",
+                            allowEmpty: false)
                       ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Etkinlik Yapılacak Şehir",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 4),
-                        TextFieldContainer(
-                          width: size.width * 0.6,
-                          child: FormBuilderDropdown(
-                            focusNode: dropdownFocus,
-                            hint: Text("Şehir Seçin"),
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
-                            name: "location",
-                            items: cities
-                                .map((city) => DropdownMenuItem(
-                                      value: city,
-                                      child: Text('$city'),
-                                    ))
-                                .toList(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Başlangıç",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    SizedBox(height: 4),
+                    Container(
+                      width: size.width * 0.35,
+                      child: FormBuilderDateTimePicker(
+                        // textAlign: TextAlign.center,
+                        format: DateFormat("dd/MM/yyyy hh:mm"),
+                        alwaysUse24HourFormat: true,
+
+                        name: "eventStartDate",
+                        decoration: InputDecoration(
+                          hintText: DateFormat("dd/MM/yyyy hh:mm")
+                              .format(currentDate)
+                              .toString(),
+                          // border: InputBorder.none,
+                        ),
+                        onChanged: (value) {
+                          startDate = value;
+                        },
+                        confirmText: "Tamam",
+                        initialDate: currentDate,
+                        firstDate: currentDate,
+                        cancelText: "İptal",
+                        fieldLabelText: "Etkinlik Başlangıç Tarihi",
+                        helpText: "Bir başlangıç tarihi seç",
+                        fieldHintText: "Gün/Ay/Yıl",
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: "Bir başlangıç tarihi seçmelisin"),
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(width: size.width * 0.1),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Bitiş",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    SizedBox(height: 4),
+                    Container(
+                      width: size.width * 0.35,
+                      child: FormBuilderDateTimePicker(
+                        // textAlign: TextAlign.center,
+                        helpText: "Bir bitiş tarihi seç",
+                        format: DateFormat("dd/MM/yyyy hh:mm"),
+                        alwaysUse24HourFormat: true,
+                        name: "eventEndDate",
+
+                        initialDate: nextPossibleDate,
+                        firstDate: nextPossibleDate,
+                        decoration: InputDecoration(
+                          hintText: DateFormat("dd/MM/yyyy hh:mm")
+                              .format(nextPossibleDate)
+                              .toString(),
+                          // border: InputBorder.none,
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: "Bir tarih seçmelisin."),
+                          (value) {
+                            return checkDateRange(value);
+                          }
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Açıklama",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                SizedBox(height: 4),
+                Container(
+                  width: size.width * 0.8,
+                  child: FormBuilderTextField(
+                    textInputAction: TextInputAction.next,
+                    focusNode: eventDescriptionFocus,
+                    name: "eventDescription",
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.sentences,
+                    cursorColor: kPrimaryColor,
+                    maxLines: 2,
+                    decoration: InputDecoration(
+                        hintText: "Etkinlik Açıklaması",
+
+                        // border: InputBorder.none,
+                        errorStyle:
+                            Theme.of(context).inputDecorationTheme.errorStyle),
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(
+                          context,
+                          errorText: "Bu alan boş bırakılamaz.",
+                        ),
+                        (value) {
+                          return ProfanityChecker.profanityValidator(value);
+                        },
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            isOnline
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Web Adresi",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      Container(
+                        width: size.width * 0.8,
+                        child: FormBuilderTextField(
+                          textInputAction: TextInputAction.next,
+                          focusNode: eventURLFocus,
+                          name: "eventURL",
+                          autofocus: false,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          keyboardType: TextInputType.text,
+                          cursorColor: kPrimaryColor,
+                          decoration: InputDecoration(
+                              // icon: Icon(
+                              //   Icons.play_lesson_outlined,
+                              //   color: kPrimaryColor,
+                              // ),
+                              hintText: "dodact.com",
+                              // border: InputBorder.none,
+                              errorStyle: Theme.of(context)
+                                  .inputDecorationTheme
+                                  .errorStyle),
+                          validator: FormBuilderValidators.compose(
+                            [
+                              FormBuilderValidators.required(
+                                context,
+                                errorText: "Bu alan boş bırakılamaz.",
+                              ),
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value);
+                              },
+                              FormBuilderValidators.url(context),
+                            ],
                           ),
                         ),
-                        Text("Etkinlik Lokasyonu",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 4),
-                        //TODO: Picker ı değiştir.
-                        Row(
-                          children: [
-                            TextFieldContainer(
-                              width: size.width * 0.6,
-                              child: FormBuilderTextField(
-                                key: selectedPlace != null
-                                    ? Key(selectedPlace.formattedAddress)
-                                    : null,
-                                readOnly: true,
-                                name: "eventLocation",
-                                autofocus: false,
-                                keyboardType: TextInputType.text,
-                                cursorColor: kPrimaryColor,
-                                initialValue: selectedPlace != null
-                                    ? selectedPlace.formattedAddress
-                                    : "",
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Lokasyon",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 4),
+                          Container(
+                            width: size.width * 0.35,
+                            child: FormBuilderDropdown(
+                                focusNode: dropdownFocus,
+                                hint: Text("Şehir Seçin"),
                                 decoration: InputDecoration(
-                                    icon: Icon(
-                                      FontAwesome5Regular.map,
-                                      color: kPrimaryColor,
+                                    // border: InputBorder.none,
                                     ),
-                                    hintText: "Etkinlik Lokasyonu",
-                                    border: InputBorder.none,
-                                    errorStyle: Theme.of(context)
-                                        .inputDecorationTheme
-                                        .errorStyle),
-                                validator: FormBuilderValidators.compose(
-                                  [
-                                    FormBuilderValidators.required(context,
-                                        errorText: "Bu alan boş bırakılamaz.")
-                                  ],
+                                name: "location",
+                                items: cities
+                                    .map((city) => DropdownMenuItem(
+                                          value: city,
+                                          child: Text('$city'),
+                                        ))
+                                    .toList(),
+                                validator: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(context,
+                                      errorText: "Bir şehir seçmelisin.")
+                                ])),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: size.width * 0.1),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Konum",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Container(
+                                width: size.width * 0.35,
+                                child: FormBuilderTextField(
+                                  onTap: _showMapPicker,
+                                  key: selectedPlace != null
+                                      ? Key(selectedPlace.formattedAddress)
+                                      : null,
+                                  readOnly: true,
+                                  name: "mapLocation",
+                                  autofocus: false,
+                                  keyboardType: TextInputType.text,
+                                  cursorColor: kPrimaryColor,
+                                  initialValue: selectedPlace != null
+                                      ? selectedPlace.formattedAddress
+                                      : "",
+                                  decoration: InputDecoration(
+                                      hintText: "Etkinlik Konumu",
+                                      suffixIcon: Icon(Icons.location_on),
+                                      errorStyle: Theme.of(context)
+                                          .inputDecorationTheme
+                                          .errorStyle),
+                                  validator: (value) {
+                                    if (selectedPlace == null) {
+                                      return "Bir konum belirtmelisin";
+                                    } else {}
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+            SizedBox(height: 30),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Fotoğraflar",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                SizedBox(height: 4),
+                Container(
+                  width: size.width * 0.8,
+                  height: 100,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _eventImages.length + 1,
+                    padding: EdgeInsets.only(right: 8),
+                    itemBuilder: (context, index) {
+                      if (_eventImages.length == 0) {
+                        return GestureDetector(
+                          onTap: _selectFiles,
+                          child: Container(
+                            height: size.height * 0.1,
+                            width: size.width * 0.25,
+                            child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child:
+                                    Icon(Icons.camera_alt, color: Colors.grey)),
+                          ),
+                        );
+                      } else {
+                        if (index == 0) {
+                          return GestureDetector(
+                            onTap: _selectFiles,
+                            child: Container(
+                                height: size.height * 0.1,
+                                width: size.width * 0.25,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Icon(Icons.camera_alt,
+                                        color: Colors.grey))),
+                          );
+                        }
+                        var image = _eventImages[index - 1];
+                        return Stack(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: size.width * 0.25,
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                clipBehavior: Clip.antiAlias,
+                                child: Image.file(
+                                  image,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            IconButton(
-                                onPressed: () async {
-                                  await _showMapPicker();
-                                },
-                                icon: Icon(Icons.location_on)),
+                            Positioned(
+                              right: 1,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 13,
+                                child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      removePickedFile(image);
+                                    },
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: Colors.grey,
+                                      size: 20,
+                                    )),
+                              ),
+                            )
                           ],
-                        ),
-                      ],
-                    ),
-            ],
-          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  checkDateRange(DateTime endDate) {
+    if (startDate != null) {
+      if (startDate.isAfter(endDate)) {
+        showSnackbar("Etkinlik başlangıç tarihi bitiş tarihinden önce olmalı.");
+        return "";
+      }
+    }
+  }
+
+  Future<void> _formSubmit() async {
+    if (_eventFormKey.currentState.saveAndValidate()) {
+      try {
+        if (!checkEventHasImages()) {
+          showSnackbar("En az 1 etkinlik fotoğrafı seçmelisin.");
+        } else {
+          var title =
+              _eventFormKey.currentState.value['eventTitle'].toString().trim();
+          DateTime startDate =
+              _eventFormKey.currentState.value['eventStartDate'];
+          DateTime endDate = _eventFormKey.currentState.value['eventEndDate'];
+          var description = _eventFormKey.currentState.value['eventDescription']
+              .toString()
+              .trim();
+
+          var location =
+              isOnline ? null : _eventFormKey.currentState.value['location'];
+
+          var mapLocation =
+              isOnline ? "" : selectedPlace.geometry.location.toString();
+          var url = isOnline
+              ? _eventFormKey.currentState.value['eventURL'].toString().trim()
+              : null;
+          var searchKeywords = createSearchKeywords(title);
+          var category = widget.eventCategory;
+          var eventType = widget.eventType;
+
+          await createEvent(title, startDate, endDate, description, location,
+              mapLocation, url, searchKeywords, category, eventType);
+        }
+      } catch (e) {
+        logger.e("Form submit edilirken hata oluştu: $e ");
+      }
+    }
+  }
+
+  Future<void> createEvent(
+      String title,
+      DateTime startDate,
+      DateTime endDate,
+      String description,
+      String location,
+      String mapLocation,
+      String url,
+      List<String> searchKeywords,
+      String category,
+      String eventType) async {
+    try {
+      CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuluyor.");
+      EventModel newEvent = createEventModel(
+          title,
+          startDate,
+          endDate,
+          description,
+          location,
+          mapLocation,
+          url,
+          searchKeywords,
+          category,
+          eventType);
+
+      await eventProvider.addEvent(newEvent, _eventImages).then((_) async {
+        NavigationService.instance.pop();
+        await CommonMethods().showSuccessDialog(
+            context, "Tebrikler! Etkinliğin başarıyla yayınlandı.");
+        NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+      });
+    } catch (e) {
+      print("EventCreationPage error $e ");
+      print(e.toString());
+      NavigationService.instance.pop();
+      CommonMethods().showErrorDialog(context, "Etkinlik oluşturulamadı.");
+    }
+  }
+
+  EventModel createEventModel(
+      String title,
+      DateTime startDate,
+      DateTime endDate,
+      String description,
+      String location,
+      String mapLocation,
+      String url,
+      List<String> searchKeywords,
+      String category,
+      String eventType) {
+    EventModel newEvent = EventModel(
+      id: null,
+      visible: true,
+      title: title,
+      description: description,
+      city: location,
+      isOnline: isOnline,
+      creationDate: DateTime.now(),
+      startDate: startDate,
+      endDate: endDate,
+      category: category,
+      eventType: eventType,
+      eventURL: url,
+      isDone: false,
+      ownerType: ownerType,
+      ownerId: ownerId,
+      locationCoordinates: mapLocation,
+      searchKeywords: searchKeywords,
+    );
+
+    return newEvent;
+  }
+
+  bool checkEventHasImages() {
+    if (_eventImages.length == 0) {
+      return false;
+    }
+    return true;
+  }
+
+  showSnackbar(String message) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
+  List<String> createSearchKeywords(String title) {
+    List<String> searchKeywords = [];
+
+    var splittedTitle = title.split(" ");
+    splittedTitle.forEach((word) {
+      searchKeywords.add(word.toLowerCase());
+    });
+
+    for (int i = 1; i <= title.length; i++) {
+      searchKeywords.add(title.substring(0, i).toLowerCase());
+    }
+    return searchKeywords;
+  }
+
+  String getRandomEventTitle() {
+    int randomNumber = Random().nextInt(2);
+
+    List<String> titles = [
+      "Beşiktaş Türkü Gecesi",
+      "Eskişehir Dans Topluluğu Organizasyonu",
+      "Kocaeli Heykel Sergisi"
+    ];
+
+    return titles[randomNumber];
   }
 
   Future<void> _selectFiles() async {
@@ -494,17 +677,22 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
     if (result != null) {
       //Seçilen fotoğrafları listeye ekliyoruz.
-      _eventImages = result.paths.map((path) {
+      var files = result.paths.map((path) {
         return File(path);
       }).toList();
 
-      //UI yenilenmesi için setState yapıyoruz.
-
+      _eventImages.addAll(files);
       print("Fotoğraflar seçildi");
       setState(() {});
     } else {
       print("Fotoğraflar seçilmedi");
     }
+  }
+
+  removePickedFile(File file) {
+    setState(() {
+      _eventImages.remove(file);
+    });
   }
 
   Future _showMapPicker() async {
@@ -544,9 +732,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                         child: Text(
                           "Seç",
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontFamily: "Raleway"),
+                            color: Colors.black,
+                            fontSize: 20,
+                            // fontFamily: "Raleway",
+                          ),
                         ),
                       ),
                     ),
@@ -575,103 +764,4 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       logger.e("PlacePicker result is null");
     }
   }
-
-  Future<void> _formSubmit() async {
-    if (_eventFormKey.currentState.saveAndValidate()) {
-      try {
-        var imageCheck = checkEventHasImages();
-        if (imageCheck == false) {
-          await CommonMethods()
-              .showErrorDialog(context, "En az 1 fotoğraf seçmelisin");
-        } else {
-          await createEvent();
-        }
-      } catch (e) {
-        Logger().e("Form submit edilirken hata oluştu: " + e.toString());
-      }
-    }
-  }
-
-  Future<void> createEvent() async {
-    try {
-      CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuluyor.");
-      setNewEventValues();
-
-      await eventProvider.addEvent(_eventImages).then((_) async {
-        NavigationService.instance.pop();
-        await CommonMethods().showSuccessDialog(
-            context, "Tebrikler! Etkinliğin başarıyla yayınlandı.");
-        NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-      });
-    } catch (e) {
-      print("EventCreationPage error $e ");
-      print(e.toString());
-      NavigationService.instance.pop();
-      CommonMethods().showErrorDialog(context, "Etkinlik oluşturulamadı.");
-    }
-  }
-
-  List<String> createSearchKeywords(EventModel event) {
-    List<String> searchKeywords = [];
-
-    var title = event.eventTitle;
-
-    var splittedTitle = title.split(" ");
-    splittedTitle.forEach((word) {
-      searchKeywords.add(word.toLowerCase());
-    });
-
-    for (int i = 1; i <= title.length; i++) {
-      searchKeywords.add(title.substring(0, i).toLowerCase());
-    }
-    return searchKeywords;
-  }
-
-  void setNewEventValues() {
-    eventProvider.newEvent.visible = true;
-    eventProvider.newEvent.eventId = "";
-    eventProvider.newEvent.eventTitle =
-        _eventFormKey.currentState.value['eventTitle'].toString().trim();
-
-    eventProvider.newEvent.searchKeywords =
-        createSearchKeywords(eventProvider.newEvent);
-
-    eventProvider.newEvent.eventDescription =
-        _eventFormKey.currentState.value['eventDescription'].toString().trim();
-
-    //TODO: Start Date ve End Date farkını ayarla
-
-    eventProvider.newEvent.eventCreationDate = DateTime.now();
-    eventProvider.newEvent.eventStartDate = _eventStartDate;
-    eventProvider.newEvent.eventEndDate = _eventEndDate;
-    eventProvider.newEvent.isDone = false;
-    eventProvider.newEvent.isOnline = isOnline;
-    eventProvider.newEvent.eventURL = isOnline
-        ? _eventFormKey.currentState.value['eventURL'].toString().trim()
-        : "";
-
-    eventProvider.newEvent.eventLocationCoordinates =
-        isOnline ? "" : selectedPlace.geometry.location.toString();
-
-    if (postOwnerType == "User") {
-      eventProvider.newEvent.ownerId = authProvider.currentUser.uid;
-      eventProvider.newEvent.ownerType = "User";
-    } else if (postOwnerType == "Group") {
-      eventProvider.newEvent.ownerId = widget.groupId;
-      eventProvider.newEvent.ownerType = "Group";
-    }
-
-    eventProvider.newEvent.city =
-        _eventFormKey.currentState.value['location'].toString().trim();
-    eventProvider.newEvent.eventCategory = widget.eventCategory;
-    eventProvider.newEvent.eventType = widget.eventType;
-  }
-
-  bool checkEventHasImages() {
-    if (_eventImages.length == 0) {
-      return false;
-    }
-    return true;
-  }
-  //TODO: UPLOAD EDİLDİKTEN SONRA GEÇİCİ DOSYALAR SİLİNMELİ
 }

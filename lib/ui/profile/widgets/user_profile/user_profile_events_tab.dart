@@ -99,7 +99,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
                       ),
                       child: ListTile(
                         title: Text(
-                          event.eventTitle,
+                          event.title,
                           style: TextStyle(
                             fontSize: 22,
                             color: Colors.black,
@@ -109,7 +109,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
                         ),
                         subtitle: Text(
                             DateFormat("dd/MM/yyyy")
-                                .format(event.eventStartDate)
+                                .format(event.startDate)
                                 .toString(),
                             style: TextStyle(fontSize: 18)),
                       ),
@@ -143,7 +143,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
 
   bool isEventEnded(EventModel event) {
     var now = DateTime.now();
-    var eventEndDate = event.eventEndDate;
+    var eventEndDate = event.endDate;
     return now.isAfter(eventEndDate);
   }
 
