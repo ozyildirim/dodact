@@ -27,6 +27,17 @@ class ChatroomProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> checkChatroom(String firstUserId, String secondUserId) async {
+    try {
+      bool result =
+          await chatroomService.checkChatroom(firstUserId, secondUserId);
+      return result;
+    } catch (e) {
+      logger.e("CheckChatroom error: $e");
+      return null;
+    }
+  }
+
   Future<List<ChatroomModel>> getUserChatrooms(String userId) async {
     try {
       userChatrooms = await chatroomService.getUserChatrooms(userId);
@@ -43,6 +54,15 @@ class ChatroomProvider extends ChangeNotifier {
       return await chatroomService.getChatroomMessages(chatroomId);
     } catch (e) {
       logger.e("GetChatroomMessages error: $e");
+      return null;
+    }
+  }
+
+  Future<MessageModel> getLastMessage(String chatroomId) async {
+    try {
+      return await chatroomService.getLastMessage(chatroomId);
+    } catch (e) {
+      logger.e("GetLastMessage error: $e");
       return null;
     }
   }

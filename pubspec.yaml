@@ -48,7 +48,7 @@ dependencies:
   flutter_form_builder: "^6.0.0-nullsafety.1"
   getwidget: ^2.0.3
   url_launcher: ^6.0.9
-  geolocator: 7.6.2
+  # geolocator: 7.6.2
 
   flutter_native_splash: ^1.2.0
   shared_preferences: ^2.0.6
@@ -86,8 +86,9 @@ dependencies:
   multi_select_flutter: ^4.0.0
   youtube_metadata: ^1.0.1
   flutter_blurhash: ^0.6.0
-  permission_handler: any
+  permission_handler: ^8.2.6
   google_maps_place_picker_mb: ^2.0.0-mb.10
+  geolocator: ^7.7.1
 
   
   

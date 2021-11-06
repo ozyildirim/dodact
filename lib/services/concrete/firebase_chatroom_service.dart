@@ -61,6 +61,21 @@ class FirebaseChatroomService {
     }
   }
 
+  Future<MessageModel> getLastMessage(String chatroomId) async {
+    var querySnapshot = await chatroomsRef
+        .doc(chatroomId)
+        .collection("messages")
+        .orderBy('messageCreationDate', descending: true)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return MessageModel.fromJson(querySnapshot.docs.first.data());
+    } else {
+      return null;
+    }
+  }
+
   Future sendMessage(String chatroomId, String userId, String message) async {
     MessageModel messageModel = MessageModel(
         message: message,
@@ -93,5 +108,26 @@ class FirebaseChatroomService {
         .collection("messages")
         .doc(messageId)
         .delete();
+  }
+
+  Future<bool> checkChatroom(String firstUserId, String secondUserId) async {
+    String roomId;
+    int result = firstUserId.compareTo(secondUserId);
+
+    if (result < 0) {
+      roomId = firstUserId + "_" + secondUserId;
+    } else {
+      roomId = secondUserId + "_" + firstUserId;
+    }
+
+    print(roomId);
+
+    return await chatroomsRef.doc(roomId).get().then((value) {
+      if (value.exists) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 }

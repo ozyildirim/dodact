@@ -47,6 +47,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
               var chatroom = snapshot.data[index];
+
               return ChatroomListElement(
                   chatroom, authProvider.currentUser.uid);
             },
@@ -71,12 +72,13 @@ class ChatroomListElement extends StatefulWidget {
   State<ChatroomListElement> createState() => _ChatroomListElementState();
 }
 
-class _ChatroomListElementState extends State<ChatroomListElement> {
+class _ChatroomListElementState extends BaseState<ChatroomListElement> {
   UserObject user;
   MessageModel lastMessage;
+  String otherUserId;
 
   getUserProfile() async {
-    var otherUserId = widget.chatroom.users
+    otherUserId = widget.chatroom.users
         .firstWhere((element) => element != widget.currentUserId);
 
     user = await Provider.of<UserProvider>(context, listen: false)
@@ -92,12 +94,12 @@ class _ChatroomListElementState extends State<ChatroomListElement> {
   }
 
   getLastMessage() async {
-    var messages = await Provider.of<ChatroomProvider>(context, listen: false)
-        .getChatroomMessages(widget.chatroom.roomId);
+    var message = await Provider.of<ChatroomProvider>(context, listen: false)
+        .getLastMessage(widget.chatroom.roomId);
 
-    if (messages.length > 0) {
+    if (message != null) {
       setState(() {
-        lastMessage = messages[messages.length - 1];
+        lastMessage = message;
       });
     }
   }
@@ -131,12 +133,16 @@ class _ChatroomListElementState extends State<ChatroomListElement> {
         padding: const EdgeInsets.all(16.0),
         child: ListTile(
           onTap: () {
-            NavigationService.instance
-                .navigate(k_ROUTE_CHATROOM_PAGE, args: widget.chatroom.roomId);
+            NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
+                args: [userProvider.currentUser.uid, user]);
           },
-          leading: CircleAvatar(
-            radius: 40,
-            backgroundImage: CachedNetworkImageProvider(user.profilePictureURL),
+          leading: Hero(
+            tag: "avatar",
+            child: CircleAvatar(
+              radius: 40,
+              backgroundImage:
+                  CachedNetworkImageProvider(user.profilePictureURL),
+            ),
           ),
           title: Text(
             user.nameSurname,
