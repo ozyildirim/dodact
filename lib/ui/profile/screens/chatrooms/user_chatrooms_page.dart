@@ -47,6 +47,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
               var chatroom = snapshot.data[index];
+
               return ChatroomListElement(
                   chatroom, authProvider.currentUser.uid);
             },

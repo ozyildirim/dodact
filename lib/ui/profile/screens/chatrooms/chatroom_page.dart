@@ -11,6 +11,7 @@ import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:logger/logger.dart';
+import 'package:paginate_firestore/bloc/pagination_cubit.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:paginate_firestore/widgets/empty_display.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class ChatroomPage extends StatefulWidget {
 
 class _ChatroomPageState extends BaseState<ChatroomPage> {
   var logger = Logger();
-  GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final ScrollController scrollController = ScrollController();
   bool doesRoomExist;
   bool isLoading;
@@ -35,6 +36,9 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   String currentUserId;
   String otherUserId;
   ChatroomProvider chatroomProvider;
+
+  //Son mesaj silindiğinde buildEmptyRoomAction fonksiyonu 2 kere çalışıyor ve 2 kere pop yapıyor. Bunu önlemek için böyle ilkel bir çözüm buldum.
+  int exitCounter = 0;
 
   @override
   void initState() {
@@ -110,7 +114,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                 width: double.infinity,
                 color: Colors.white,
                 child: FormBuilder(
-                  key: formKey,
+                  key: _formKey,
                   child: Row(
                     children: <Widget>[
                       GestureDetector(
@@ -183,19 +187,24 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         FocusScope.of(context).unfocus();
       },
       child: PaginateFirestore(
-        emptyDisplay: EmptyDisplay(),
-
+        // emptyDisplay: buildEmptyRoomAction(),
         scrollController: scrollController,
         itemsPerPage: 5,
         // Use SliverAppBar in header to make it sticky
         // item builder type is compulsory.
         itemBuilderType:
             PaginateBuilderType.listView, //Change types accordingly
+        onReachedEnd: (PaginationLoaded loaded) {
+          if (loaded.documentSnapshots.isEmpty) {
+            buildEmptyRoomAction();
+          }
+        },
         itemBuilder: (index, context, documentSnapshot) {
           final message = MessageModel.fromJson(documentSnapshot.data());
           return GestureDetector(
             onLongPress: () {
-              showMessageDialog(message.senderId, message.messageId);
+              showMessageDialog(
+                  message.senderId, message.messageId, message.message);
             },
             child: Container(
               padding:
@@ -244,14 +253,30 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
     );
   }
 
+  buildEmptyRoomAction() {
+    if (exitCounter == 0) {
+      if (doesRoomExist == true) {
+        chatroomProvider.deleteChatroom(roomId).then((value) {
+          print("buildEmptyRoomAction");
+          exitCounter++;
+          NavigationService.instance.pop();
+        });
+      }
+    }
+  }
+
   submitMessage() async {
-    if (formKey.currentState.saveAndValidate()) {
+    if (_formKey.currentState.saveAndValidate()) {
       try {
         if (doesRoomExist != null) {
           if (doesRoomExist == false) {
             await chatroomProvider.createChatRoom(currentUserId, otherUserId);
+            setState(() {
+              doesRoomExist = true;
+            });
           }
-          var message = formKey.currentState.value['message'].toString().trim();
+          var message =
+              _formKey.currentState.value['message'].toString().trim();
 
           var messageModel = MessageModel(
             message: message,
@@ -262,16 +287,17 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           await Provider.of<ChatroomProvider>(context, listen: false)
               .sendMessage(roomId, authProvider.currentUser.uid, message);
 
-          formKey.currentState.reset();
+          _formKey.currentState.reset();
         }
       } catch (e) {
         print(e);
-        formKey.currentState.reset();
+        _formKey.currentState.reset();
       }
     }
   }
 
-  void showMessageDialog(String authorId, String messageId) async {
+  void showMessageDialog(
+      String authorId, String messageId, String message) async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -294,7 +320,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                     child: Text("Mesajı Şikayet Et"),
                     onPressed: () {
                       Navigator.pop(context);
-                      showReportMessageDialog(messageId);
+                      showReportMessageDialog(messageId, message);
                     },
                   ),
           ],
@@ -303,7 +329,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
     );
   }
 
-  Future<void> showReportMessageDialog(String messageId) async {
+  Future<void> showReportMessageDialog(String messageId, String message) async {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
@@ -315,7 +341,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           NavigationService.instance.pop();
         },
         onConfirmBtnTap: () async {
-          await reportMessage(roomId, messageId);
+          await reportMessage(roomId, messageId, message);
           NavigationService.instance.pop();
         });
   }
@@ -328,13 +354,10 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
     );
   }
 
-  reportMessage(String roomId, String messageId) async {
-    await FirebaseReportService()
-        .reporMessage(currentUserId, roomId, messageId);
-
+  reportMessage(String roomId, String messageId, String message) async {
     CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
     await FirebaseReportService()
-        .reporMessage(currentUserId, roomId, messageId)
+        .reporMessage(currentUserId, roomId, messageId, message)
         .then((value) async {
       showSnackbar("Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
 
