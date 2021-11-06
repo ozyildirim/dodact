@@ -1,34 +1,78 @@
-import 'dart:async';
-
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/message_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
+import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:logger/logger.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+import 'package:paginate_firestore/widgets/empty_display.dart';
 import 'package:provider/provider.dart';
 
 class ChatroomPage extends StatefulWidget {
-  final String chatroomId;
+  final String currentUserId;
+  final String otherUserId;
 
-  ChatroomPage({this.chatroomId});
+  ChatroomPage({this.currentUserId, this.otherUserId});
 
   @override
   _ChatroomPageState createState() => _ChatroomPageState();
 }
 
 class _ChatroomPageState extends BaseState<ChatroomPage> {
-  String roomId;
+  var logger = Logger();
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final ScrollController scrollController = ScrollController();
+  bool doesRoomExist;
+  bool isLoading;
+  String roomId;
+  String currentUserId;
+  String otherUserId;
+  ChatroomProvider chatroomProvider;
 
   @override
   void initState() {
-    roomId = widget.chatroomId;
+    chatroomProvider = Provider.of<ChatroomProvider>(context, listen: false);
+    currentUserId = widget.currentUserId;
+    otherUserId = widget.otherUserId;
+    roomId = generateRoomId(currentUserId, otherUserId);
+    checkChatroom();
     super.initState();
+  }
+
+  initializeChatroom() async {
+    try {
+      var chatroomId = await chatroomProvider.createChatRoom(
+          currentUserId, widget.otherUserId);
+    } catch (e) {}
+  }
+
+  checkChatroom() async {
+    try {
+      await chatroomProvider
+          .checkChatroom(currentUserId, otherUserId)
+          .then((result) {
+        if (result == true) {
+          setState(() {
+            doesRoomExist = true;
+            print("oda mevcut");
+          });
+        } else {
+          setState(() {
+            doesRoomExist = false;
+            print("oda mevcut değil");
+          });
+        }
+      });
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
@@ -50,72 +94,13 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         child: Column(
           children: [
             Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: PaginateFirestore(
-                  scrollController: scrollController,
-                  itemsPerPage: 5,
-                  // Use SliverAppBar in header to make it sticky
-                  // item builder type is compulsory.
-                  itemBuilderType:
-                      PaginateBuilderType.listView, //Change types accordingly
-                  itemBuilder: (index, context, documentSnapshot) {
-                    final message =
-                        MessageModel.fromJson(documentSnapshot.data());
-                    return GestureDetector(
-                      onLongPress: () {
-                        showMessageDialog(message.senderId, message.messageId);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left: 14, right: 14, top: 10, bottom: 10),
-                        child: Align(
-                          alignment:
-                              (message.senderId != authProvider.currentUser.uid
-                                  ? Alignment.topLeft
-                                  : Alignment.topRight),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: (message.senderId !=
-                                      authProvider.currentUser.uid
-                                  ? Colors.grey.shade200
-                                  : Color(0xff194d25)),
-                            ),
-                            padding: EdgeInsets.all(16),
-                            child: SelectableText(
-                              message.message,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: message.senderId !=
-                                          authProvider.currentUser.uid
-                                      ? Colors.black
-                                      : Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-
-                  // orderBy is compulsory to enable pagination
-                  query: chatroomsRef
-                      .doc(roomId)
-                      .collection('messages')
-                      .orderBy('messageCreationDate', descending: true),
-                  // to fetch real-time data
-                  isLive: true,
-                  reverse: true,
-                  bottomLoader: Container(
-                    height: 50,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-              ),
+              child: doesRoomExist == true
+                  ? buildMessageStream(roomId)
+                  : doesRoomExist == false
+                      ? Container()
+                      : doesRoomExist == null
+                          ? Center(child: spinkit)
+                          : Container(),
             ),
             Align(
               alignment: Alignment.bottomLeft,
@@ -192,21 +177,93 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
     );
   }
 
+  buildMessageStream(String chatroomId) {
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: PaginateFirestore(
+        emptyDisplay: EmptyDisplay(),
+
+        scrollController: scrollController,
+        itemsPerPage: 5,
+        // Use SliverAppBar in header to make it sticky
+        // item builder type is compulsory.
+        itemBuilderType:
+            PaginateBuilderType.listView, //Change types accordingly
+        itemBuilder: (index, context, documentSnapshot) {
+          final message = MessageModel.fromJson(documentSnapshot.data());
+          return GestureDetector(
+            onLongPress: () {
+              showMessageDialog(message.senderId, message.messageId);
+            },
+            child: Container(
+              padding:
+                  EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+              child: Align(
+                alignment: (message.senderId != authProvider.currentUser.uid
+                    ? Alignment.topLeft
+                    : Alignment.topRight),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: (message.senderId != authProvider.currentUser.uid
+                        ? Colors.grey.shade200
+                        : Color(0xff194d25)),
+                  ),
+                  padding: EdgeInsets.all(16),
+                  child: SelectableText(
+                    message.message,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: message.senderId != authProvider.currentUser.uid
+                            ? Colors.black
+                            : Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+
+        // orderBy is compulsory to enable pagination
+        query: chatroomsRef
+            .doc(chatroomId)
+            .collection('messages')
+            .orderBy('messageCreationDate', descending: true),
+        // to fetch real-time data
+        isLive: true,
+        reverse: true,
+        bottomLoader: Container(
+          height: 50,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
+  }
+
   submitMessage() async {
     if (formKey.currentState.saveAndValidate()) {
       try {
-        var message = formKey.currentState.value['message'].toString().trim();
+        if (doesRoomExist != null) {
+          if (doesRoomExist == false) {
+            await chatroomProvider.createChatRoom(currentUserId, otherUserId);
+          }
+          var message = formKey.currentState.value['message'].toString().trim();
 
-        var messageModel = MessageModel(
-          message: message,
-          isRead: false,
-          senderId: authProvider.currentUser.uid,
-          messageCreationDate: DateTime.now(),
-        );
-        await Provider.of<ChatroomProvider>(context, listen: false)
-            .sendMessage(roomId, authProvider.currentUser.uid, message);
+          var messageModel = MessageModel(
+            message: message,
+            isRead: false,
+            senderId: authProvider.currentUser.uid,
+            messageCreationDate: DateTime.now(),
+          );
+          await Provider.of<ChatroomProvider>(context, listen: false)
+              .sendMessage(roomId, authProvider.currentUser.uid, message);
 
-        formKey.currentState.reset();
+          formKey.currentState.reset();
+        }
       } catch (e) {
         print(e);
         formKey.currentState.reset();
@@ -235,11 +292,69 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                   )
                 : SimpleDialogOption(
                     child: Text("Mesajı Şikayet Et"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showReportMessageDialog(messageId);
+                    },
                   ),
           ],
         );
       },
     );
+  }
+
+  Future<void> showReportMessageDialog(String messageId) async {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu mesajı bildirmek istediğinden emin misin?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await reportMessage(roomId, messageId);
+          NavigationService.instance.pop();
+        });
+  }
+
+  showSnackbar(String message) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
+  reportMessage(String roomId, String messageId) async {
+    await FirebaseReportService()
+        .reporMessage(currentUserId, roomId, messageId);
+
+    CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
+    await FirebaseReportService()
+        .reporMessage(currentUserId, roomId, messageId)
+        .then((value) async {
+      showSnackbar("Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+
+      NavigationService.instance.pop();
+    }).catchError((value) async {
+      showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+      NavigationService.instance.pop();
+    });
+  }
+
+  generateRoomId(String firstUserId, String secondUserId) {
+    String roomId;
+    int result = firstUserId.compareTo(secondUserId);
+
+    if (result < 0) {
+      roomId = firstUserId + "_" + secondUserId;
+    } else {
+      roomId = secondUserId + "_" + firstUserId;
+    }
+    return roomId;
   }
 
   void deleteMessage(String messageId) async {

@@ -75,13 +75,10 @@ class OthersProfileHeader extends StatelessWidget {
   }
 
   createChatroom(BuildContext context, String userId) async {
-    var chatroomProvider =
-        Provider.of<ChatroomProvider>(context, listen: false);
-    var authProvider = Provider.of<AuthProvider>(context, listen: false);
-    var chatroomId = await chatroomProvider.createChatRoom(
-        authProvider.currentUser.uid, userId);
-    NavigationService.instance
-        .navigate(k_ROUTE_CHATROOM_PAGE, args: chatroomId);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
+        args: [userProvider.currentUser.uid, userProvider.otherUser.uid]);
   }
 
   showProfilePictureContainer(BuildContext context, String url) {

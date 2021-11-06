@@ -175,7 +175,10 @@ class NavigationRouteManager {
         return _navigateToDefault(UserChatroomsPage(), settings);
 
       case k_ROUTE_CHATROOM_PAGE:
-        return _navigateToDefault(ChatroomPage(chatroomId: args), settings);
+        List<dynamic> args = settings.arguments;
+        return _navigateToDefault(
+            ChatroomPage(currentUserId: args[0], otherUserId: args[1]),
+            settings);
 
       case k_ROUTE_USER_INVITATIONS_PAGE:
         return _navigateToDefault(UserInvitationsPage(), settings);

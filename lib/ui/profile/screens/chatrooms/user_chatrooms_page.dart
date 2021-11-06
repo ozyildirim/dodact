@@ -71,12 +71,13 @@ class ChatroomListElement extends StatefulWidget {
   State<ChatroomListElement> createState() => _ChatroomListElementState();
 }
 
-class _ChatroomListElementState extends State<ChatroomListElement> {
+class _ChatroomListElementState extends BaseState<ChatroomListElement> {
   UserObject user;
   MessageModel lastMessage;
+  String otherUserId;
 
   getUserProfile() async {
-    var otherUserId = widget.chatroom.users
+    otherUserId = widget.chatroom.users
         .firstWhere((element) => element != widget.currentUserId);
 
     user = await Provider.of<UserProvider>(context, listen: false)
@@ -131,8 +132,8 @@ class _ChatroomListElementState extends State<ChatroomListElement> {
         padding: const EdgeInsets.all(16.0),
         child: ListTile(
           onTap: () {
-            NavigationService.instance
-                .navigate(k_ROUTE_CHATROOM_PAGE, args: widget.chatroom.roomId);
+            NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
+                args: [userProvider.currentUser.uid, otherUserId]);
           },
           leading: CircleAvatar(
             radius: 40,

@@ -27,6 +27,17 @@ class ChatroomProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> checkChatroom(String firstUserId, String secondUserId) async {
+    try {
+      bool result =
+          await chatroomService.checkChatroom(firstUserId, secondUserId);
+      return result;
+    } catch (e) {
+      logger.e("CheckChatroom error: $e");
+      return null;
+    }
+  }
+
   Future<List<ChatroomModel>> getUserChatrooms(String userId) async {
     try {
       userChatrooms = await chatroomService.getUserChatrooms(userId);

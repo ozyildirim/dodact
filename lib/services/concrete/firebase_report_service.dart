@@ -56,4 +56,15 @@ class FirebaseReportService {
       'reportedTime': new DateTime.now()
     });
   }
+
+  Future<void> reporMessage(
+      String reporterId, String roomId, String messageId) async {
+    DocumentReference reference = await reportsRef.add({
+      'reportedObjectType': "Message",
+      'reporterId': roomId,
+      'reportedObjectId': messageId,
+      'parentObjectId': roomId,
+      'reportedTime': new DateTime.now()
+    });
+  }
 }

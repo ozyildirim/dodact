@@ -94,4 +94,25 @@ class FirebaseChatroomService {
         .doc(messageId)
         .delete();
   }
+
+  Future<bool> checkChatroom(String firstUserId, String secondUserId) async {
+    String roomId;
+    int result = firstUserId.compareTo(secondUserId);
+
+    if (result < 0) {
+      roomId = firstUserId + "_" + secondUserId;
+    } else {
+      roomId = secondUserId + "_" + firstUserId;
+    }
+
+    print(roomId);
+
+    return await chatroomsRef.doc(roomId).get().then((value) {
+      if (value.exists) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
 }
