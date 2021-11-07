@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
