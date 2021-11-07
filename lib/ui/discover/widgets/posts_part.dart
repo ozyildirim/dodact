@@ -17,14 +17,14 @@ class StaggeredGridViewWidget extends StatefulWidget {
 
 class _StaggeredGridViewWidgetState extends State<StaggeredGridViewWidget> {
   ScrollController scrollController;
-  var postProvider;
+  PostProvider postProvider;
 
   @override
   void initState() {
     super.initState();
     postProvider = Provider.of<PostProvider>(context, listen: false);
     scrollController = ScrollController();
-
+    postProvider.postsSnapshot.clear();
     scrollController.addListener(scrollListener);
     postProvider.fetchNextPosts();
   }

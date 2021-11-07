@@ -78,7 +78,7 @@ class OthersProfileHeader extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
-        args: [userProvider.currentUser.uid, userProvider.otherUser.uid]);
+        args: [userProvider.currentUser.uid, userProvider.otherUser]);
   }
 
   showProfilePictureContainer(BuildContext context, String url) {

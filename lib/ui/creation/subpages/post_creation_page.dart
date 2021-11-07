@@ -1,19 +1,20 @@
 import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
-import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
+import 'package:dodact_v1/ui/creation/widgets/audio_player_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -47,8 +48,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   bool isAvailableYoutubeLink = false;
 
-  List<CreatorDialogItem> creatorList;
-
   TextEditingController postTitleController;
   TextEditingController postDescriptionController;
   TextEditingController postContentUrlController;
@@ -59,65 +58,21 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   File postFile;
   FileImage imageThumbnail;
-  String youtubeThumbnail;
 
-  List<Map<String, dynamic>> categoryMap;
-
-  // buildCreatorList() async {
-  //   GroupProvider groupProvider =
-  //       Provider.of<GroupProvider>(context, listen: false);
-  //   List<CreatorDialogItem> creators = [];
-
-  //   creators = groups
-  //       .map((group) => CreatorDialogItem(
-  //           accountType: "Group",
-  //           id: group.groupId,
-  //           name: group.groupName,
-  //           profilePicture: group.groupProfilePicture))
-  //       .toList();
-  // }
+  String youtubeLink;
 
   @override
   void initState() {
     print("İçerik Türü: " + widget.postType);
     print("İçerik Kategorisi: " + widget.postCategory);
 
-    widget.groupId != null
-        ? logger
-            .i("Grup için post oluşturma aşaması başladı: ${widget.groupId}")
-        : null;
-
     super.initState();
-    // buildCreatorList();
 
     postProvider = Provider.of<PostProvider>(context, listen: false);
 
     postTitleController = new TextEditingController();
     postDescriptionController = new TextEditingController();
     postContentUrlController = new TextEditingController();
-
-    categoryMap = [
-      {
-        'category': Category.Tiyatro,
-        'text': "Tiyatro",
-        'icon': Icon(FontAwesome5Solid.theater_masks)
-      },
-      {
-        'category': Category.Resim,
-        'text': "Resim",
-        'icon': Icon(FontAwesome5Solid.image)
-      },
-      {
-        'category': Category.Muzik,
-        'text': "Müzik",
-        'icon': Icon(FontAwesome5Solid.music)
-      },
-      {
-        'category': Category.Dans,
-        'text': "Dans",
-        'icon': Icon(FontAwesome5Solid.skating)
-      }
-    ];
   }
 
   @override
@@ -142,9 +97,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
             formSubmit();
           }),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 8,
-        title: Text("İçerik Oluştur"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: GestureDetector(
@@ -153,7 +107,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           FocusScope.of(context).unfocus();
         },
         child: Container(
-          height: dynamicHeight(1),
+          height: size.height,
+          width: size.width,
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
@@ -164,258 +119,379 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                buildPrevivewPart(),
-                buildFormPart(size, context, provider),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  buildPrevivewPart(),
+                  SizedBox(height: size.height * 0.05),
+                  buildFormPart(size, context, provider),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Expanded buildFormPart(
-      Size size, BuildContext context, PostProvider provider) {
-    return Expanded(
-      flex: 3,
-      child: FormBuilder(
-        key: postCreationFormKey,
-        child: ListView(
-          children: [
-            Text("İçerik Başlığı",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            SizedBox(height: 4),
-            TextFieldContainer(
-              child: FormBuilderTextField(
-                textInputAction: TextInputAction.next,
-                focusNode: postTitleFocus,
-                controller: postTitleController,
-                name: "postTitle",
-                autofocus: false,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                cursorColor: kPrimaryColor,
-                decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.people_alt_sharp,
-                      color: kPrimaryColor,
-                    ),
-                    hintText: "İçerik Başlığı",
-                    border: InputBorder.none,
-                    errorStyle:
-                        Theme.of(context).inputDecorationTheme.errorStyle),
-                validator: FormBuilderValidators.compose(
-                  [
-                    FormBuilderValidators.required(
-                      context,
-                      errorText: "Bu alan boş bırakılamaz.",
-                    ),
-                    (value) {
-                      return ProfanityChecker.profanityValidator(value);
-                    },
-                    FormBuilderValidators.minLength(context, 10,
-                        errorText: "İçerik adı en az 10 harften oluşmalı.",
-                        allowEmpty: false)
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 6),
-            Container(
-              color: Colors.white60,
-              child: Text("İçerik Açıklaması",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            ),
-            SizedBox(height: 4),
-            TextFieldContainer(
-              child: FormBuilderTextField(
-                textInputAction: TextInputAction.next,
-                focusNode: postDescriptionFocus,
-                controller: postDescriptionController,
-                name: "postDescription",
-                maxLines: 3,
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                cursorColor: kPrimaryColor,
-                decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.people_alt_sharp,
-                      color: kPrimaryColor,
-                    ),
-                    hintText: "İçerik Açıklaması",
-                    border: InputBorder.none,
-                    errorStyle:
-                        Theme.of(context).inputDecorationTheme.errorStyle),
-                validator: FormBuilderValidators.compose(
-                  [
-                    FormBuilderValidators.required(
-                      context,
-                      errorText: "Bu alan boş bırakılamaz.",
-                    ),
-                    (value) {
-                      return ProfanityChecker.profanityValidator(value);
-                    },
-                    FormBuilderValidators.minLength(context, 20,
-                        errorText:
-                            "Biraz daha detay verilmeli (En az 20 harf).",
-                        allowEmpty: false)
-                  ],
-                ),
-              ),
-            ),
-            widget.postType == "Video"
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        color: Colors.white60,
-                        child: Text("Youtube Linki",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      ),
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          TextFieldContainer(
-                            width: size.width * 0.8,
-                            child: FormBuilderTextField(
-                              textInputAction: TextInputAction.done,
-                              focusNode: postContentUrlFocus,
-                              name: "youtubeLink",
-                              maxLines: 1,
-                              autofocus: false,
-                              keyboardType: TextInputType.text,
-                              cursorColor: kPrimaryColor,
-                              controller: postContentUrlController,
-                              onEditingComplete: () async {
-                                FocusScope.of(context).unfocus();
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  isAvailableYoutubeLink = false;
-                                  checkYoutubeLink(value);
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  icon: Icon(
-                                    FontAwesome5Brands.youtube,
-                                    color: kPrimaryColor,
-                                  ),
-                                  hintText: "Youtube Linki",
-                                  border: InputBorder.none,
-                                  errorStyle: Theme.of(context)
-                                      .inputDecorationTheme
-                                      .errorStyle),
-                              validator: FormBuilderValidators.compose(
-                                [
-                                  FormBuilderValidators.required(
-                                    context,
-                                    errorText: "Bu alan boş bırakılamaz.",
-                                  ),
-                                  (value) {
-                                    return ProfanityChecker.profanityValidator(
-                                        value);
-                                  },
-                                ],
-                              ),
-                            ),
-                          ),
-                          isAvailableYoutubeLink
-                              ? Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(Icons.check),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(Icons.close),
-                                ),
-                        ],
-                      ),
-                    ],
-                  )
-                : Container(),
-          ],
         ),
       ),
     );
   }
 
   Widget buildPrevivewPart() {
+    var size = MediaQuery.of(context).size;
+    var child;
+
     if (widget.postType == "Video") {
+      // if (isAvailableYoutubeLink) {
+      //   return Container(
+      //     height: size.height * 0.25,
+      //     width: size.width * 0.6,
+      //     child: buildVideoPreviewPart(),
+      //   );
+      // } else {
+      //   return Container();
+      // }
       return Container();
-    } else if (widget.postType == "Görüntü") {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          height: 250,
-          width: 250,
-          decoration: postFile != null
-              ? BoxDecoration(
-                  image: DecorationImage(
-                  image: FileImage(postFile),
-                ))
-              : null,
-          child: postFile != null
-              ? null
-              : IconButton(
-                  icon: Icon(
-                    FontAwesome5Solid.camera,
-                    color: Colors.black,
-                  ),
-                  onPressed: () async {
-                    await _selectFile(FileType.image);
-                  }),
-        ),
-      );
     } else if (widget.postType == "Ses") {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          height: 250,
-          width: 250,
-          child: Center(
-            child: postFile == null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(FontAwesome5Regular.file_audio),
-                        onPressed: () async {
-                          await _selectFile(FileType.audio);
-                        },
-                      ),
-                      Text("Ses dosyası seçin")
-                    ],
-                  )
-                : Text(postFile.path),
+      child = buildSoundPreviewPart();
+      return Container(
+        height: size.height * 0.25,
+        width: size.width * 0.8,
+        child: child,
+      );
+    } else if (widget.postType == "Görüntü") {
+      child = buildImagePreviewPart();
+    }
+
+    return Container(
+      height: size.height * 0.25,
+      width: size.width * 0.6,
+      child: child,
+    );
+  }
+
+  buildImagePreviewPart() {
+    var size = MediaQuery.of(context).size;
+
+    if (postFile != null) {
+      return Stack(children: [
+        Center(
+          child: InkWell(
+            onTap: imagePreviewDialog,
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
+              child: SizedBox(
+                height: size.height * 0.25,
+                width: size.width * 0.5,
+                child: Image(
+                  image: FileImage(postFile),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
         ),
-      );
+        Positioned(
+          bottom: 5,
+          right: 5,
+          child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: IconButton(
+                iconSize: 20,
+                onPressed: () async {
+                  await _selectFile(FileType.image);
+                },
+                icon: Icon(
+                  FontAwesome5Solid.images,
+                  color: Colors.grey,
+                ),
+              )),
+        ),
+      ]);
+    } else {
+      return Container(
+          height: size.height * 0.25,
+          width: size.width * 0.5,
+          child: Center(
+            child: InkWell(
+              onTap: () async {
+                await _selectFile(FileType.image);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.add_a_photo, color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Fotoğraf seç")
+                ],
+              ),
+            ),
+          ));
     }
   }
 
-  void showSnackBar(String message) {
-    _scaffoldKey.currentState.showSnackBar(
-      new SnackBar(
-        duration: new Duration(seconds: 2),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                message,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
+  buildSoundPreviewPart() {
+    var size = MediaQuery.of(context).size;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        height: size.height * 0.25,
+        width: size.width * 0.6,
+        child: Center(
+          child: postFile == null
+              ? InkWell(
+                  onTap: () async {
+                    await _selectFile(FileType.audio);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          child: Icon(
+                            Icons.multitrack_audio_sharp,
+                            color: Colors.white,
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("Ses dosyası seç")
+                    ],
+                  ),
+                )
+              : AudioPlayerWidget(
+                  contentURL: postFile.path,
+                ),
+        ),
+      ),
+    );
+  }
+
+  buildVideoPreviewPart() {
+    var size = MediaQuery.of(context).size;
+
+    if (isAvailableYoutubeLink == true) {
+      var thumbnailUrl = CommonMethods.createThumbnailURL(true, youtubeLink);
+
+      return Center(
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          child: InkWell(
+            onTap: imagePreviewDialog,
+            child: SizedBox(
+              height: size.height * 0.25,
+              width: size.width * 0.5,
+              child: Image(
+                image: NetworkImage(thumbnailUrl),
+                fit: BoxFit.cover,
               ),
-            )
-          ],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
+
+    // return Container();
+  }
+
+  imagePreviewDialog() {
+    var size = MediaQuery.of(context).size;
+    return showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              width: size.width * 0.8,
+              // height: size.height * 0.5,
+              child: Image.file(postFile),
+            ),
+          );
+        });
+  }
+
+  buildFormPart(Size size, BuildContext context, PostProvider provider) {
+    return Container(
+      width: size.width * 0.8,
+      child: FormBuilder(
+        key: postCreationFormKey,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text("İçerik Başlığı",
+                    textAlign: TextAlign.start,
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(height: 4),
+              Container(
+                width: size.width * 0.8,
+                child: FormBuilderTextField(
+                  textInputAction: TextInputAction.next,
+                  focusNode: postTitleFocus,
+                  controller: postTitleController,
+                  name: "postTitle",
+                  autofocus: false,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.sentences,
+                  cursorColor: kPrimaryColor,
+                  decoration: InputDecoration(
+                      hintText: "İçerik Başlığı",
+                      // border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      ),
+                      (value) {
+                        return ProfanityChecker.profanityValidator(value);
+                      },
+                      FormBuilderValidators.minLength(context, 10,
+                          errorText: "İçerik adı en az 10 harften oluşmalı.",
+                          allowEmpty: false)
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("İçerik Açıklaması",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 4),
+                  Container(
+                    width: size.width * 0.8,
+                    child: FormBuilderTextField(
+                      textInputAction: TextInputAction.next,
+                      focusNode: postDescriptionFocus,
+                      controller: postDescriptionController,
+                      name: "postDescription",
+                      maxLines: 3,
+                      autofocus: false,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      cursorColor: kPrimaryColor,
+                      decoration: InputDecoration(
+                          hintText: "İçerik Açıklaması",
+                          // border: InputBorder.none,
+                          errorStyle: Theme.of(context)
+                              .inputDecorationTheme
+                              .errorStyle),
+                      validator: FormBuilderValidators.compose(
+                        [
+                          FormBuilderValidators.required(
+                            context,
+                            errorText: "Bu alan boş bırakılamaz.",
+                          ),
+                          (value) {
+                            return ProfanityChecker.profanityValidator(value);
+                          },
+                          FormBuilderValidators.minLength(context, 20,
+                              errorText:
+                                  "Biraz daha detay verilmeli (En az 20 harf).",
+                              allowEmpty: false)
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              widget.postType == "Video"
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Youtube Video Linki",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Container(
+                              width: size.width * 0.8,
+                              child: FormBuilderTextField(
+                                textInputAction: TextInputAction.done,
+                                focusNode: postContentUrlFocus,
+                                name: "youtubeLink",
+                                maxLines: 1,
+                                autofocus: false,
+                                keyboardType: TextInputType.text,
+                                cursorColor: kPrimaryColor,
+                                controller: postContentUrlController,
+                                onEditingComplete: () async {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    isAvailableYoutubeLink = false;
+                                    checkYoutubeLink(value);
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                    hintText: "www.youtube.com/dodactcom",
+                                    // border: InputBorder.none,
+                                    errorStyle: Theme.of(context)
+                                        .inputDecorationTheme
+                                        .errorStyle),
+                                validator: FormBuilderValidators.compose(
+                                  [
+                                    FormBuilderValidators.required(
+                                      context,
+                                      errorText: "Bu alan boş bırakılamaz.",
+                                    ),
+                                    (value) {
+                                      return ProfanityChecker
+                                          .profanityValidator(value);
+                                    },
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // isAvailableYoutubeLink
+                            //     ? Padding(
+                            //         padding: const EdgeInsets.all(8.0),
+                            //         child: Icon(Icons.check),
+                            //       )
+                            //     : Padding(
+                            //         padding: const EdgeInsets.all(8.0),
+                            //         child: Icon(Icons.close),
+                            //       ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Container(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  showSnackBar(String message) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text(
+          message,
+          overflow: TextOverflow.fade,
         ),
       ),
     );
@@ -454,8 +530,8 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         (_) async {
           //loaderDialog kapansın diye pop yapıyoruz.
 
-          await showPostShareSuccessDialog(context,
-              "Tebrikler! İçeriğin bize ulaştı, en kısa zamanda yayınlayacağız.");
+          await showPostShareSuccessDialog(
+              context, "Tebrikler! İçeriğin başarıyla yayınlandı.");
           NavigationService.instance.navigateToReset(k_ROUTE_HOME);
         },
       );
@@ -499,10 +575,15 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
     if (result != null) {
       File file = File(result.files.single.path);
-      setState(() {
-        isSelected = true;
-        postFile = file;
-      });
+      if (selectedType == FileType.image) {
+        cropImage(file);
+      } else {
+        setState(() {
+          postFile = file;
+          isLoading = false;
+        });
+      }
+
       print("Content picked");
     } else {
       print("User closed the picker");
@@ -515,46 +596,38 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           postCreationFormKey.currentState.value["youtubeLink"]);
       if (isAvailableYoutubeLink) {
         if (postCreationFormKey.currentState.saveAndValidate()) {
-          print("form submitted");
           try {
-            if (widget.postType == "Görüntü") {
-              var hasImage = checkPostHasImages();
-              if (hasImage) {
-                await uploadPost();
-              } else {
-                await CommonMethods()
-                    .showErrorDialog(context, "Bir görüntü seçmelisin");
-              }
-            } else {
-              await uploadPost();
-            }
+            await uploadPost();
           } catch (e) {
             logger.e("Form submit edilirken hata oluştu: " + e.toString());
           }
         } else {
-          print("form not submitted");
+          print("Geçersiz youtube linki.");
         }
       }
-    } else {
+    } else if (widget.postType == "Görüntü") {
       if (postCreationFormKey.currentState.saveAndValidate()) {
-        print("form submitted");
         try {
-          if (widget.postType == "Görüntü") {
-            var hasImage = checkPostHasImages();
-            if (hasImage) {
-              await uploadPost();
-            } else {
-              await CommonMethods()
-                  .showErrorDialog(context, "Bir görüntü seçmelisin");
-            }
-          } else {
+          if (checkPostHasImages()) {
             await uploadPost();
+          } else {
+            showSnackBar("Bir görüntü seçmelisin");
           }
         } catch (e) {
           logger.e("Form submit edilirken hata oluştu: " + e.toString());
         }
-      } else {
-        print("form not submitted");
+      }
+    } else if (widget.postType == "Ses") {
+      if (postCreationFormKey.currentState.saveAndValidate()) {
+        try {
+          if (checkPostHasSoundFile()) {
+            await uploadPost();
+          } else {
+            showSnackBar("Bir ses dosyası seçmelisin");
+          }
+        } catch (e) {
+          logger.e("Form submit edilirken hata oluştu: " + e.toString());
+        }
       }
     }
   }
@@ -565,16 +638,27 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       print(metaData.title);
       setState(() {
         isAvailableYoutubeLink = true;
+        youtubeLink = link;
       });
     } catch (e) {
       postCreationFormKey.currentState.invalidateField(
           name: "youtubeLink", errorText: "Geçersiz youtube linki");
+      setState(() {
+        youtubeLink = null;
+      });
       print(e);
     }
   }
 
   bool checkPostHasImages() {
-    if (isSelected) {
+    if (postFile != null) {
+      return true;
+    }
+    return false;
+  }
+
+  bool checkPostHasSoundFile() {
+    if (postFile != null) {
       return true;
     }
     return false;
@@ -601,14 +685,41 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     await Share.share(
         'Hey! Ben Dodact ile sanatımı ve kendimi yeniden keşfediyorum! Sen de bu platforma katılmak istemez misin? https://www.dodact.com');
   }
-}
 
-class CreatorDialogItem {
-  String name;
-  String id;
-  String accountType;
-  String profilePicture;
-
-  CreatorDialogItem(
-      {String name, String id, String accountType, String profilePicture});
+  Future<Null> cropImage(File file) async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: file.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Özelleştir',
+            toolbarColor: Color(0xff194d25),
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Özelleştir',
+        ));
+    if (croppedFile != null) {
+      setState(() {
+        postFile = croppedFile;
+      });
+    }
+  }
 }
