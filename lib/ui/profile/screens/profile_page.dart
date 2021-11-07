@@ -42,7 +42,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.bell,
-                color: Colors.deepOrange,
+                color: Color(0xff194d25),
               ),
             ),
           ),
@@ -54,7 +54,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.envelope,
-                color: Colors.deepOrange,
+                color: Color(0xff194d25),
               ),
             ),
           ),
