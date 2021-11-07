@@ -6,6 +6,7 @@ import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/ui/common/widgets/group_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,9 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
                   var groupItem = groups[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(child: buildGroupCard(size, groupItem)),
+                    child: Container(
+                      child: GroupCard(group: groupItem),
+                    ),
                   );
                 });
           }
@@ -130,47 +133,6 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  buildCustomListTile(BuildContext context, GroupModel group) {
-    return GestureDetector(
-      onTap: () {
-        NavigationService.instance.navigate(k_ROUTE_GROUP_DETAIL, args: group);
-      },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          CachedNetworkImage(
-            imageUrl: group.groupProfilePicture,
-            placeholder: (context, url) => Center(
-              child: spinkit,
-            ),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            imageBuilder: (context, imageBuilder) {
-              return CircleAvatar(
-                radius: 50,
-                backgroundImage: imageBuilder,
-              );
-            },
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(left: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(group.groupName, style: TextStyle(fontSize: 24)),
-                  SizedBox(height: 5),
-                  Text(group.groupSubtitle, style: TextStyle(fontSize: 16))
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

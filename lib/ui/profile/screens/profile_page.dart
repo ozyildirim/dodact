@@ -2,7 +2,6 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_body.dart';
@@ -43,7 +42,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.bell,
-                color: Colors.deepOrange,
+                color: Color(0xff194d25),
               ),
             ),
           ),
@@ -55,7 +54,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.envelope,
-                color: Colors.deepOrange,
+                color: Color(0xff194d25),
               ),
             ),
           ),

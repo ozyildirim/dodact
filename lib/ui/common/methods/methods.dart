@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -70,6 +71,23 @@ class CommonMethods {
       text: message,
       title: title,
     );
+  }
+
+  static showImagePreviewDialog(BuildContext context,
+      {ImageProvider imageProvider, String url}) {
+    var size = MediaQuery.of(context).size;
+    return showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              width: size.width * 0.8,
+              // height: size.height * 0.5,
+              child: Image(image: imageProvider ?? NetworkImage(url)),
+            ),
+          );
+        });
   }
 
   void hideDialog() {

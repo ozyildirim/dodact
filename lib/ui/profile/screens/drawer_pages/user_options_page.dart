@@ -29,11 +29,24 @@ class UserOptionsPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.notifications),
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    Icons.notifications,
+                    color: Colors.black,
+                  ),
                 ),
-                title: Text(
-                  "Bildirimler",
-                  style: TextStyle(fontSize: tileTitleSize),
+                title: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Bildirimler",
+                      style: TextStyle(fontSize: tileTitleSize),
+                    ),
+                  ),
                 ),
                 onTap: () {
                   NavigationService.instance
@@ -45,11 +58,24 @@ class UserOptionsPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.person),
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  ),
                 ),
-                title: Text(
-                  "Profil",
-                  style: TextStyle(fontSize: tileTitleSize),
+                title: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Profil",
+                      style: TextStyle(fontSize: tileTitleSize),
+                    ),
+                  ),
                 ),
                 onTap: () {
                   NavigationService.instance
@@ -61,11 +87,24 @@ class UserOptionsPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.privacy_tip),
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    Icons.privacy_tip,
+                    color: Colors.black,
+                  ),
                 ),
-                title: Text(
-                  "Gizlilik",
-                  style: TextStyle(fontSize: tileTitleSize),
+                title: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Gizlilik",
+                      style: TextStyle(fontSize: tileTitleSize),
+                    ),
+                  ),
                 ),
                 onTap: () {
                   NavigationService.instance
@@ -77,11 +116,24 @@ class UserOptionsPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.security),
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    Icons.security,
+                    color: Colors.black,
+                  ),
                 ),
-                title: Text(
-                  "Güvenlik",
-                  style: TextStyle(fontSize: tileTitleSize),
+                title: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Güvenlik",
+                      style: TextStyle(fontSize: tileTitleSize),
+                    ),
+                  ),
                 ),
                 onTap: () {
                   NavigationService.instance

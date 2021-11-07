@@ -132,6 +132,7 @@ class UserObject {
           'linkedin': '',
           'soundcloud': '',
           'pinterest': '',
+          'opensea': '',
         };
 
     notificationSettings = doc.data()['notificationSettings'] ??

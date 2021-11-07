@@ -9,12 +9,14 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
+import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/creation/widgets/audio_player_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_cropper/image_cropper.dart';
+
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -335,7 +337,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               ),
               SizedBox(height: 4),
-              Container(
+              TextFieldContainer(
                 width: size.width * 0.8,
                 child: FormBuilderTextField(
                   textInputAction: TextInputAction.next,
@@ -349,7 +351,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                   cursorColor: kPrimaryColor,
                   decoration: InputDecoration(
                       hintText: "İçerik Başlığı",
-                      // border: InputBorder.none,
+                      border: InputBorder.none,
                       errorStyle:
                           Theme.of(context).inputDecorationTheme.errorStyle),
                   validator: FormBuilderValidators.compose(
@@ -376,7 +378,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
-                  Container(
+                  TextFieldContainer(
                     width: size.width * 0.8,
                     child: FormBuilderTextField(
                       textInputAction: TextInputAction.next,
@@ -390,7 +392,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       cursorColor: kPrimaryColor,
                       decoration: InputDecoration(
                           hintText: "İçerik Açıklaması",
-                          // border: InputBorder.none,
+                          border: InputBorder.none,
                           errorStyle: Theme.of(context)
                               .inputDecorationTheme
                               .errorStyle),

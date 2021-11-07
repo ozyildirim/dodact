@@ -10,6 +10,7 @@ import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
+import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -143,8 +144,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               Text("Etkinlik Başlığı",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
-              Container(
-                width: size.width * 0.8,
+              TextFieldContainer(
+                width: size.width * 0.9,
                 child: FormBuilderTextField(
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
@@ -153,6 +154,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   name: "eventTitle",
                   cursorColor: kPrimaryColor,
                   decoration: InputDecoration(
+                      border: InputBorder.none,
                       hintText: eventHint,
                       errorStyle:
                           Theme.of(context).inputDecorationTheme.errorStyle),
@@ -175,7 +177,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               ),
             ],
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -186,8 +188,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
-                  Container(
-                    width: size.width * 0.35,
+                  TextFieldContainer(
+                    width: size.width * 0.4,
                     child: FormBuilderDateTimePicker(
                       // textAlign: TextAlign.center,
                       format: DateFormat("dd/MM/yyyy hh:mm"),
@@ -195,6 +197,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
                       name: "eventStartDate",
                       decoration: InputDecoration(
+                        border: InputBorder.none,
                         hintText: DateFormat("dd/MM/yyyy hh:mm")
                             .format(currentDate)
                             .toString(),
@@ -227,8 +230,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
-                  Container(
-                    width: size.width * 0.35,
+                  TextFieldContainer(
+                    width: size.width * 0.4,
                     child: FormBuilderDateTimePicker(
                       // textAlign: TextAlign.center,
                       helpText: "Bir bitiş tarihi seç",
@@ -239,6 +242,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                       initialDate: nextPossibleDate,
                       firstDate: nextPossibleDate,
                       decoration: InputDecoration(
+                        border: InputBorder.none,
                         hintText: DateFormat("dd/MM/yyyy hh:mm")
                             .format(nextPossibleDate)
                             .toString(),
@@ -257,15 +261,15 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               ),
             ],
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Açıklama",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
-              Container(
-                width: size.width * 0.8,
+              TextFieldContainer(
+                width: size.width * 0.9,
                 child: FormBuilderTextField(
                   textInputAction: TextInputAction.next,
                   focusNode: eventDescriptionFocus,
@@ -276,6 +280,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   maxLines: 2,
                   decoration: InputDecoration(
                       hintText: "Etkinlik Açıklaması",
+                      border: InputBorder.none,
 
                       // border: InputBorder.none,
                       errorStyle:
@@ -295,7 +300,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               ),
             ],
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           isOnline
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,8 +308,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     Text("Web Adresi",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
-                    Container(
-                      width: size.width * 0.8,
+                    TextFieldContainer(
+                      width: size.width * 0.9,
                       child: FormBuilderTextField(
                         textInputAction: TextInputAction.next,
                         focusNode: eventURLFocus,
@@ -318,6 +323,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             //   Icons.play_lesson_outlined,
                             //   color: kPrimaryColor,
                             // ),
+                            border: InputBorder.none,
                             hintText: "dodact.com",
                             // border: InputBorder.none,
                             errorStyle: Theme.of(context)
@@ -415,7 +421,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     ),
                   ],
                 ),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -423,7 +429,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
               Container(
-                width: size.width * 0.8,
+                width: size.width * 0.9,
                 height: 100,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,

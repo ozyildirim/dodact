@@ -2,9 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
@@ -25,12 +24,18 @@ class OthersProfileHeader extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: provider.otherUser.profilePictureURL,
             imageBuilder: (context, imageProvider) {
-              return CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: mediaQuery.size.width * 0.2,
+              return InkWell(
+                onTap: () {
+                  CommonMethods.showImagePreviewDialog(context,
+                      imageProvider: imageProvider);
+                },
                 child: CircleAvatar(
-                  radius: mediaQuery.size.width * 0.19,
-                  backgroundImage: imageProvider,
+                  backgroundColor: Colors.black,
+                  radius: mediaQuery.size.width * 0.2,
+                  child: CircleAvatar(
+                    radius: mediaQuery.size.width * 0.19,
+                    backgroundImage: imageProvider,
+                  ),
                 ),
               );
             },

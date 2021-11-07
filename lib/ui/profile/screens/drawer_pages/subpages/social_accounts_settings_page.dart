@@ -79,225 +79,230 @@ class _UserSocialAccountsSettingsState
       appBar: AppBar(
         title: Text("Sosyal Medya Hesapları"),
       ),
-      body: Container(
-        height: dynamicHeight(1),
-        width: dynamicWidth(1),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          height: dynamicHeight(1),
+          width: dynamicWidth(1),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FormBuilder(
-              autovalidateMode: autoValidateMode,
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Youtube",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: FormBuilderTextField(
-                      name: "youtube",
-                      focusNode: youtubeFocus,
-                      initialValue: youtube,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesome5Brands.youtube),
-                      ),
-                      onChanged: (value) {
-                        if (youtube != value) {
-                          setState(() {
-                            isChanged = true;
-                          });
-                        } else {
-                          setState(() {
-                            isChanged = false;
-                          });
-                        }
-                      },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          return ProfanityChecker.profanityValidator(
-                              value.trim());
-                        },
-                      ]),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FormBuilder(
+                autovalidateMode: autoValidateMode,
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Youtube",
+                      style: TextStyle(fontSize: 18),
                     ),
-                  ),
-                  Text(
-                    "LinkedIn",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: FormBuilderTextField(
-                      name: "linkedin",
-                      focusNode: linkedInFocus,
-                      initialValue: linkedIn,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesome5Brands.linkedin),
-                      ),
-                      onChanged: (value) {
-                        if (linkedIn != value) {
-                          setState(() {
-                            isChanged = true;
-                          });
-                        } else {
-                          setState(() {
-                            isChanged = false;
-                          });
-                        }
-                      },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          return ProfanityChecker.profanityValidator(
-                              value.trim());
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "youtube",
+                        focusNode: youtubeFocus,
+                        initialValue: youtube,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(FontAwesome5Brands.youtube),
+                        ),
+                        onChanged: (value) {
+                          if (youtube != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
                         },
-                      ]),
-                    ),
-                  ),
-                  Text(
-                    "Dribbble",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: FormBuilderTextField(
-                      name: "dribbble",
-                      initialValue: dribbble,
-                      focusNode: dribbbleFocus,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesome5Brands.dribbble),
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(
+                                value.trim());
+                          },
+                        ]),
                       ),
-                      onChanged: (value) {
-                        if (dribbble != value) {
-                          setState(() {
-                            isChanged = true;
-                          });
-                        } else {
-                          setState(() {
-                            isChanged = false;
-                          });
-                        }
-                      },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          return ProfanityChecker.profanityValidator(
-                              value.trim());
-                        },
-                      ]),
                     ),
-                  ),
-                  Text(
-                    "Pinterest",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: FormBuilderTextField(
-                      name: "pinterest",
-                      initialValue: pinterest,
-                      focusNode: pinterestFocus,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesome5Brands.pinterest),
+                    Text(
+                      "LinkedIn",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "linkedin",
+                        focusNode: linkedInFocus,
+                        initialValue: linkedIn,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(FontAwesome5Brands.linkedin),
+                        ),
+                        onChanged: (value) {
+                          if (linkedIn != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
+                        },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(
+                                value.trim());
+                          },
+                        ]),
                       ),
-                      onChanged: (value) {
-                        if (pinterest != value) {
-                          setState(() {
-                            isChanged = true;
-                          });
-                        } else {
-                          setState(() {
-                            isChanged = false;
-                          });
-                        }
-                      },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          return ProfanityChecker.profanityValidator(
-                              value.trim());
-                        },
-                      ]),
                     ),
-                  ),
-                  Text(
-                    "SoundCloud",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: FormBuilderTextField(
-                      name: "soundcloud",
-                      focusNode: soundCloudFocus,
-                      initialValue: soundCloud,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesome5Brands.soundcloud),
+                    Text(
+                      "Dribbble",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "dribbble",
+                        initialValue: dribbble,
+                        focusNode: dribbbleFocus,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(FontAwesome5Brands.dribbble),
+                        ),
+                        onChanged: (value) {
+                          if (dribbble != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
+                        },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(
+                                value.trim());
+                          },
+                        ]),
                       ),
-                      onChanged: (value) {
-                        if (soundCloud != value) {
-                          setState(() {
-                            isChanged = true;
-                          });
-                        } else {
-                          setState(() {
-                            isChanged = false;
-                          });
-                        }
-                      },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          return ProfanityChecker.profanityValidator(
-                              value.trim());
-                        },
-                      ]),
                     ),
-                  ),
-                  Text(
-                    "Instagram Kullanıcı Adı",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  TextFieldContainer(
-                    width: mediaQuery.size.width * 0.9,
-                    child: FormBuilderTextField(
-                      name: "instagram",
-                      focusNode: instagramFocus,
-                      initialValue: instagram,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesome5Brands.instagram),
+                    Text(
+                      "Pinterest",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "pinterest",
+                        initialValue: pinterest,
+                        focusNode: pinterestFocus,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(FontAwesome5Brands.pinterest),
+                        ),
+                        onChanged: (value) {
+                          if (pinterest != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
+                        },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(
+                                value.trim());
+                          },
+                        ]),
                       ),
-                      onChanged: (value) {
-                        if (instagram != value) {
-                          setState(() {
-                            isChanged = true;
-                          });
-                        } else {
-                          setState(() {
-                            isChanged = false;
-                          });
-                        }
-                      },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          return ProfanityChecker.profanityValidator(
-                              value.trim());
-                        },
-                      ]),
                     ),
-                  ),
-                ],
+                    Text(
+                      "SoundCloud",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "soundcloud",
+                        focusNode: soundCloudFocus,
+                        initialValue: soundCloud,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(FontAwesome5Brands.soundcloud),
+                        ),
+                        onChanged: (value) {
+                          if (soundCloud != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
+                        },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(
+                                value.trim());
+                          },
+                        ]),
+                      ),
+                    ),
+                    Text(
+                      "Instagram Kullanıcı Adı",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    TextFieldContainer(
+                      width: mediaQuery.size.width * 0.9,
+                      child: FormBuilderTextField(
+                        name: "instagram",
+                        focusNode: instagramFocus,
+                        initialValue: instagram,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(FontAwesome5Brands.instagram),
+                        ),
+                        onChanged: (value) {
+                          if (instagram != value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          } else {
+                            setState(() {
+                              isChanged = false;
+                            });
+                          }
+                        },
+                        validator: FormBuilderValidators.compose([
+                          (value) {
+                            return ProfanityChecker.profanityValidator(
+                                value.trim());
+                          },
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
