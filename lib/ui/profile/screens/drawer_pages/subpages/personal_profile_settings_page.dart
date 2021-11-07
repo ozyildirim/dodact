@@ -53,9 +53,7 @@ class _UserPersonalProfileSettingsPageState
   void initState() {
     super.initState();
 
-    location = userProvider.currentUser.location != null
-        ? userProvider.currentUser.location
-        : "Belirtilmemiş";
+    location = userProvider.currentUser.location;
 
     emailController =
         TextEditingController(text: userProvider.currentUser.email);
@@ -135,63 +133,81 @@ class _UserPersonalProfileSettingsPageState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     profilePicturePart(),
-                    Text(
-                      "E-posta Adresi",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                    TextFieldContainer(
-                      width: mediaQuery.size.width * 0.9,
-                      child: FormBuilderTextField(
-                        name: "email",
-                        controller: emailController,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.email),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "Ad - Soyad",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                    TextFieldContainer(
-                      width: mediaQuery.size.width * 0.9,
-                      child: FormBuilderTextField(
-                        name: "nameSurname",
-                        focusNode: nameSurnameFocus,
-                        initialValue:
-                            userProvider.currentUser.nameSurname ?? "",
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.person),
-                        ),
-                        onChanged: (value) {
-                          if (userProvider.currentUser.nameSurname != value) {
-                            setState(() {
-                              isChanged = true;
-                            });
-                          } else {
-                            setState(() {
-                              isChanged = false;
-                            });
-                          }
-                        },
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context,
-                              errorText: "Bu alan boş bırakılamaz"),
-                          (value) {
-                            return ProfanityChecker.profanityValidator(value);
-                          }
-                        ]),
-                      ),
-                    ),
-                    Text(
-                      "Kullanıcı Adı",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          "E-posta Adresi",
+                          style: TextStyle(fontSize: kSettingsTitleSize),
+                        ),
+                        SizedBox(height: 4),
+                        TextFieldContainer(
+                          width: mediaQuery.size.width * 0.9,
+                          child: FormBuilderTextField(
+                            name: "email",
+                            controller: emailController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.email),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Ad - Soyad",
+                          style: TextStyle(fontSize: kSettingsTitleSize),
+                        ),
+                        SizedBox(height: 4),
+                        TextFieldContainer(
+                          width: mediaQuery.size.width * 0.9,
+                          child: FormBuilderTextField(
+                            name: "nameSurname",
+                            focusNode: nameSurnameFocus,
+                            initialValue:
+                                userProvider.currentUser.nameSurname ?? "",
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                            onChanged: (value) {
+                              if (userProvider.currentUser.nameSurname !=
+                                  value) {
+                                setState(() {
+                                  isChanged = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isChanged = false;
+                                });
+                              }
+                            },
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: "Bu alan boş bırakılamaz"),
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value);
+                              }
+                            ]),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Kullanıcı Adı",
+                          style: TextStyle(fontSize: kSettingsTitleSize),
+                        ),
+                        SizedBox(height: 4),
                         TextFieldContainer(
                           width: mediaQuery.size.width * 0.9,
                           child: FormBuilderTextField(
@@ -227,158 +243,182 @@ class _UserPersonalProfileSettingsPageState
                             ]),
                           ),
                         ),
-                        // isAvailableUsername == true
-                        //     ? Padding(
-                        //         padding: const EdgeInsets.all(8.0),
-                        //         child: Icon(Icons.check),
-                        //       )
-                        //     : isAvailableUsername == false
-                        //         ? Padding(
-                        //             padding: const EdgeInsets.all(8.0),
-                        //             child: Icon(Icons.close),
-                        //           )
-                        //         : Container(),
                       ],
                     ),
-                    Text(
-                      "Lokasyon",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                    TextFieldContainer(
-                      width: mediaQuery.size.width * 0.9,
-                      child: FormBuilderDropdown(
-                        name: "location",
-                        initialValue: location,
-                        items: cities
-                            .map((city) => DropdownMenuItem(
-                                  value: city,
-                                  child: Text('$city'),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          if (location != value) {
-                            setState(() {
-                              isChanged = true;
-                            });
-                          } else {
-                            setState(() {
-                              isChanged = false;
-                            });
-                          }
-                        },
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context,
-                              errorText: "Bu alan boş bırakılamaz"),
-                          (value) {
-                            return ProfanityChecker.profanityValidator(value);
-                          }
-                        ]),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.location_city),
+                    SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Lokasyon",
+                          style: TextStyle(fontSize: kSettingsTitleSize),
                         ),
-                      ),
-                    ),
-                    Text(
-                      "Hakkımda",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                    TextFieldContainer(
-                      width: mediaQuery.size.width * 0.9,
-                      child: FormBuilderTextField(
-                        name: "userDescription",
-                        maxLines: 3,
-                        focusNode: descriptionFocus,
-                        initialValue: userProvider.currentUser.userDescription,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.person),
+                        SizedBox(height: 4),
+                        TextFieldContainer(
+                          width: mediaQuery.size.width * 0.9,
+                          child: FormBuilderDropdown(
+                            name: "location",
+                            initialValue: location,
+                            items: cities
+                                .map((city) => DropdownMenuItem(
+                                      value: city,
+                                      child: Text('$city'),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              if (location != value) {
+                                setState(() {
+                                  isChanged = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isChanged = false;
+                                });
+                              }
+                            },
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: "Bu alan boş bırakılamaz"),
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value);
+                              }
+                            ]),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.location_city),
+                            ),
+                          ),
                         ),
-                        onChanged: (value) {
-                          if (userProvider.currentUser.userDescription !=
-                              value) {
-                            setState(() {
-                              isChanged = true;
-                            });
-                          } else {
-                            setState(() {
-                              isChanged = false;
-                            });
-                          }
-                        },
-                        validator: FormBuilderValidators.compose([
-                          (value) {
-                            return ProfanityChecker.profanityValidator(value);
-                          }
-                        ]),
-                      ),
+                      ],
                     ),
-                    Text(
-                      "Okul/Eğitim Kurumu",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                    TextFieldContainer(
-                      width: mediaQuery.size.width * 0.9,
-                      child: FormBuilderTextField(
-                        name: "education",
-                        maxLines: 1,
-                        focusNode: educationFocus,
-                        initialValue: userProvider.currentUser.education,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.school),
+                    SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hakkımda",
+                          style: TextStyle(fontSize: kSettingsTitleSize),
                         ),
-                        validator: FormBuilderValidators.compose([
-                          (value) {
-                            return ProfanityChecker.profanityValidator(value);
-                          }
-                        ]),
-                        onChanged: (value) {
-                          if (userProvider.currentUser.education != value) {
-                            setState(() {
-                              isChanged = true;
-                            });
-                          } else {
-                            setState(() {
-                              isChanged = false;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    Text(
-                      "Meslek",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
-                    ),
-                    TextFieldContainer(
-                      width: mediaQuery.size.width * 0.9,
-                      child: FormBuilderTextField(
-                        name: "profession",
-                        maxLines: 1,
-                        focusNode: professionFocus,
-                        initialValue: userProvider.currentUser.profession,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.work),
+                        SizedBox(height: 4),
+                        TextFieldContainer(
+                          // padding: EdgeInsets.all(6),
+                          width: mediaQuery.size.width * 0.9,
+                          child: FormBuilderTextField(
+                            name: "userDescription",
+                            maxLines: 3,
+                            focusNode: descriptionFocus,
+                            initialValue:
+                                userProvider.currentUser.userDescription,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                            onChanged: (value) {
+                              if (userProvider.currentUser.userDescription !=
+                                  value) {
+                                setState(() {
+                                  isChanged = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isChanged = false;
+                                });
+                              }
+                            },
+                            validator: FormBuilderValidators.compose([
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value);
+                              }
+                            ]),
+                          ),
                         ),
-                        onChanged: (value) {
-                          if (userProvider.currentUser.profession != value) {
-                            setState(() {
-                              isChanged = true;
-                            });
-                          } else {
-                            setState(() {
-                              isChanged = false;
-                            });
-                          }
-                        },
-                        validator: FormBuilderValidators.compose([
-                          (value) {
-                            return ProfanityChecker.profanityValidator(
-                                value.trim());
-                          }
-                        ]),
-                      ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Okul/Eğitim Kurumu",
+                          style: TextStyle(fontSize: kSettingsTitleSize),
+                        ),
+                        SizedBox(height: 4),
+                        TextFieldContainer(
+                          width: mediaQuery.size.width * 0.9,
+                          child: FormBuilderTextField(
+                            name: "education",
+                            maxLines: 1,
+                            focusNode: educationFocus,
+                            initialValue: userProvider.currentUser.education,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.school),
+                            ),
+                            validator: FormBuilderValidators.compose([
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value);
+                              }
+                            ]),
+                            onChanged: (value) {
+                              if (userProvider.currentUser.education != value) {
+                                setState(() {
+                                  isChanged = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isChanged = false;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Meslek",
+                          style: TextStyle(fontSize: kSettingsTitleSize),
+                        ),
+                        SizedBox(height: 4),
+                        TextFieldContainer(
+                          width: mediaQuery.size.width * 0.9,
+                          child: FormBuilderTextField(
+                            name: "profession",
+                            maxLines: 1,
+                            focusNode: professionFocus,
+                            initialValue: userProvider.currentUser.profession,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.work),
+                            ),
+                            onChanged: (value) {
+                              if (userProvider.currentUser.profession !=
+                                  value) {
+                                setState(() {
+                                  isChanged = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isChanged = false;
+                                });
+                              }
+                            },
+                            validator: FormBuilderValidators.compose([
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value.trim());
+                              }
+                            ]),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -398,12 +438,17 @@ class _UserPersonalProfileSettingsPageState
         child: Stack(children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: Container(
-              width: 200,
-              height: 200,
-              child: Image.network(
-                userProvider.currentUser.profilePictureURL,
-                fit: BoxFit.cover,
+            child: InkWell(
+              onTap: () {
+                imagePreviewDialog(userProvider.currentUser.profilePictureURL);
+              },
+              child: Container(
+                width: 200,
+                height: 200,
+                child: Image.network(
+                  userProvider.currentUser.profilePictureURL,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -496,9 +541,24 @@ class _UserPersonalProfileSettingsPageState
     });
   }
 
+  imagePreviewDialog(String imageUrl) {
+    var size = MediaQuery.of(context).size;
+    return showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              width: size.width * 0.8,
+              // height: size.height * 0.5,
+              child: Image.network(imageUrl),
+            ),
+          );
+        });
+  }
+
   Future<void> updateUser() async {
-    await checkUsername(formKey.currentState.value["username"]);
-    if (isAvailableUsername) {
+    if (isAvailableUsername == true || isAvailableUsername == null) {
       if (formKey.currentState.saveAndValidate()) {
         try {
           CommonMethods()

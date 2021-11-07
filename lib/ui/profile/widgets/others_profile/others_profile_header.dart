@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
@@ -25,12 +23,17 @@ class OthersProfileHeader extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: provider.otherUser.profilePictureURL,
             imageBuilder: (context, imageProvider) {
-              return CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: mediaQuery.size.width * 0.2,
+              return InkWell(
+                onTap: () {
+                  imagePreviewDialog(context, imageProvider);
+                },
                 child: CircleAvatar(
-                  radius: mediaQuery.size.width * 0.19,
-                  backgroundImage: imageProvider,
+                  backgroundColor: Colors.black,
+                  radius: mediaQuery.size.width * 0.2,
+                  child: CircleAvatar(
+                    radius: mediaQuery.size.width * 0.19,
+                    backgroundImage: imageProvider,
+                  ),
                 ),
               );
             },
@@ -72,6 +75,22 @@ class OthersProfileHeader extends StatelessWidget {
             : Container()
       ],
     );
+  }
+
+  imagePreviewDialog(BuildContext context, ImageProvider imageProvider) {
+    var size = MediaQuery.of(context).size;
+    return showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              width: size.width * 0.8,
+              // height: size.height * 0.5,
+              child: Image(image: imageProvider),
+            ),
+          );
+        });
   }
 
   createChatroom(BuildContext context, String userId) async {
