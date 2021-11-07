@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/getwidget.dart';
@@ -30,11 +31,18 @@ class GroupPhotosTabView extends StatelessWidget {
           return CachedNetworkImage(
               imageUrl: url,
               imageBuilder: (context, imageProvider) {
-                return Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    child: Image.network(url, fit: BoxFit.cover, width: 1000.0),
+                return InkWell(
+                  onTap: () {
+                    CommonMethods.showImagePreviewDialog(context,
+                        imageProvider: imageProvider);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(5.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      child:
+                          Image.network(url, fit: BoxFit.cover, width: 1000.0),
+                    ),
                   ),
                 );
               });

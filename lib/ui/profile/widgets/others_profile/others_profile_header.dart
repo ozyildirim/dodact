@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
@@ -25,7 +26,8 @@ class OthersProfileHeader extends StatelessWidget {
             imageBuilder: (context, imageProvider) {
               return InkWell(
                 onTap: () {
-                  imagePreviewDialog(context, imageProvider);
+                  CommonMethods.showImagePreviewDialog(context,
+                      imageProvider: imageProvider);
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.black,
@@ -75,22 +77,6 @@ class OthersProfileHeader extends StatelessWidget {
             : Container()
       ],
     );
-  }
-
-  imagePreviewDialog(BuildContext context, ImageProvider imageProvider) {
-    var size = MediaQuery.of(context).size;
-    return showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Container(
-              width: size.width * 0.8,
-              // height: size.height * 0.5,
-              child: Image(image: imageProvider),
-            ),
-          );
-        });
   }
 
   createChatroom(BuildContext context, String userId) async {

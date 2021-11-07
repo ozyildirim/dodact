@@ -66,18 +66,23 @@ class GroupMediaManagementPage extends StatelessWidget {
             var media = groupProvider.group.groupMedia[index - 1];
             return Stack(
               children: [
-                Center(
-                  child: Card(
-                    elevation: 2,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Image.network(
-                      media,
-                      height: size.height * 0.20,
-                      width: size.width * 0.4,
-                      fit: BoxFit.cover,
+                InkWell(
+                  onTap: () {
+                    CommonMethods.showImagePreviewDialog(context, url: media);
+                  },
+                  child: Center(
+                    child: Card(
+                      elevation: 2,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Image.network(
+                        media,
+                        height: size.height * 0.20,
+                        width: size.width * 0.4,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

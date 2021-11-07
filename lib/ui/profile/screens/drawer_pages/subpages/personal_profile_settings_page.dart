@@ -440,7 +440,8 @@ class _UserPersonalProfileSettingsPageState
             borderRadius: BorderRadius.circular(100),
             child: InkWell(
               onTap: () {
-                imagePreviewDialog(userProvider.currentUser.profilePictureURL);
+                CommonMethods.showImagePreviewDialog(context,
+                    url: userProvider.currentUser.profilePictureURL);
               },
               child: Container(
                 width: 200,
@@ -539,22 +540,6 @@ class _UserPersonalProfileSettingsPageState
       CommonMethods()
           .showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
     });
-  }
-
-  imagePreviewDialog(String imageUrl) {
-    var size = MediaQuery.of(context).size;
-    return showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Container(
-              width: size.width * 0.8,
-              // height: size.height * 0.5,
-              child: Image.network(imageUrl),
-            ),
-          );
-        });
   }
 
   Future<void> updateUser() async {

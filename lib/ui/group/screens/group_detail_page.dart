@@ -120,12 +120,12 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         },
         // toggle button appearance properties
         toggleButtonColor: Colors.pink,
-        // toggleButtonBoxShadow: [
-        //   BoxShadow(
-        //     color: Colors.blue,
-        //     blurRadius: 10,
-        //   ),
-        // ],
+        toggleButtonBoxShadow: [
+          // BoxShadow(
+          //   color: Colors.blue,
+          //   blurRadius: 10,
+          // ),
+        ],
         toggleButtonIconColor: Colors.white,
         toggleButtonMargin: 15.0,
         toggleButtonPadding: 15.0,

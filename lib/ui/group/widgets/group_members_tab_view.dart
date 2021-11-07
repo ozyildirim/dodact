@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -8,17 +9,22 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class GroupMembersTab extends StatelessWidget {
+class GroupMembersTab extends StatefulWidget {
   final GroupModel group;
 
   GroupMembersTab({this.group});
 
   @override
+  State<GroupMembersTab> createState() => _GroupMembersTabState();
+}
+
+class _GroupMembersTabState extends BaseState<GroupMembersTab> {
+  @override
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context, listen: false);
 
     return FutureBuilder(
-        future: provider.getGroupMembers(group.groupId),
+        future: provider.getGroupMembers(widget.group.groupId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
@@ -82,7 +88,8 @@ class GroupMembersTab extends StatelessWidget {
   }
 
   navigateUserProfile(UserObject user) {
-    NavigationService.instance
-        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+    if (user.uid != userProvider.currentUser.uid)
+      NavigationService.instance
+          .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
   }
 }
