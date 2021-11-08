@@ -48,21 +48,21 @@ void main() async {
   //   print('User declined or has not accepted permission');
   // }
 
-  // AwesomeNotifications().initialize(
-  //     'resource://drawable/notification_logo',
-  //     [
-  //       NotificationChannel(
-  //         // icon: 'resource://drawable/notification_logo',
-  //         enableLights: true, onlyAlertOnce: true,
+  AwesomeNotifications().initialize(
+      'resource://drawable/notification_logo',
+      [
+        NotificationChannel(
+          // icon: 'resource://drawable/notification_logo',
+          enableLights: true, onlyAlertOnce: true,
 
-  //         channelKey: 'basic_channel',
-  //         channelName: 'Basic notifications',
-  //         channelDescription: 'Notification channel for basic tests',
-  //         // defaultColor: Color(0xFF9D50DD),
-  //         // ledColor: Colors.white,
-  //       ),
-  //     ],
-  //     debug: true);
+          channelKey: 'basic_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          // defaultColor: Color(0xFF9D50DD),
+          // ledColor: Colors.white,
+        ),
+      ],
+      debug: true);
 
   // AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
   //   if (!isAllowed) {

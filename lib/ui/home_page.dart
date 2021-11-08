@@ -31,25 +31,14 @@ class _HomePageState extends BaseState<HomePage> {
   @override
   void initState() {
     super.initState();
-    // messaging = FirebaseMessaging.instance;
 
     // FirebaseMessaging.onMessageOpenedApp.listen((message) {
     //   print('Message clicked!');
     // });
 
-    // messaging.getToken().then((value) {
-    //   updateToken(value);
-    // });
     checkUserSearchKeywords();
     userProvider.getCurrentUserFavoritePosts();
   }
-
-  // void updateToken(String value) async {
-  //   await tokensRef.doc(authProvider.currentUser.uid).set({
-  //     'token': value,
-  //     'lastTokenUpdate': FieldValue.serverTimestamp(),
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

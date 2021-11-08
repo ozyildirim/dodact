@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -9,6 +10,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
 class UserChatroomsPage extends StatefulWidget {
@@ -39,25 +41,38 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
 
   buildChatRooms(BuildContext context) {
     var provider = Provider.of<ChatroomProvider>(context, listen: false);
-    return FutureBuilder(
-      future: provider.getUserChatrooms(authProvider.currentUser.uid),
-      builder: (context, AsyncSnapshot<List<ChatroomModel>> snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              var chatroom = snapshot.data[index];
+    // return FutureBuilder(
+    //   future: provider.getUserChatrooms(authProvider.currentUser.uid),
+    //   builder: (context, AsyncSnapshot<List<ChatroomModel>> snapshot) {
+    //     if (snapshot.hasData) {
+    //       return ListView.builder(
+    //         itemCount: snapshot.data.length,
+    //         itemBuilder: (context, index) {
+    //           var chatroom = snapshot.data[index];
 
-              return ChatroomListElement(
-                  chatroom, authProvider.currentUser.uid);
-            },
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    //           return ChatroomListElement(
+    //               chatroom, authProvider.currentUser.uid);
+    //         },
+    //       );
+    //     } else {
+    //       return Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     }
+    //   },
+    // );
+
+    return PaginateFirestore(
+      isLive: true,
+      itemsPerPage: 10,
+      itemBuilder: (index, context, object) {
+        ChatroomModel model = ChatroomModel.fromJson(object.data());
+
+        return ChatroomListElement(model, authProvider.currentUser.uid);
       },
+      query: chatroomsRef.where("users",
+          arrayContains: authProvider.currentUser.uid),
+      itemBuilderType: PaginateBuilderType.listView,
     );
   }
 }

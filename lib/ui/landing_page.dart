@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -50,8 +52,12 @@ class _LandingPageState extends BaseState<LandingPage> {
 
   @override
   void initState() {
-    initializeRemoteConfig();
     super.initState();
+    messaging = FirebaseMessaging.instance;
+    initializeRemoteConfig();
+    messaging.getToken().then((value) {
+      updateToken(value);
+    });
   }
 
   @override
@@ -82,6 +88,14 @@ class _LandingPageState extends BaseState<LandingPage> {
         );
       },
     );
+  }
+
+  void updateToken(String value) async {
+    await tokensRef.doc(authProvider.currentUser.uid).set({
+      'token': value,
+      'lastTokenUpdate': FieldValue.serverTimestamp(),
+    });
+    print("token güncellendi");
   }
 
   navigateSignupDetail() {
