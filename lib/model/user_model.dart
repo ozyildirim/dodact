@@ -38,6 +38,8 @@ class UserObject {
     'hide_mail': false,
     'hide_phone': false,
     'hide_location': false,
+    'hide_education': false,
+    'hide_profession': false,
   };
 
   //Social Media Links

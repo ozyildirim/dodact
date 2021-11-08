@@ -20,13 +20,17 @@ class OthersProfileInfoTab extends StatelessWidget {
           leading: Icon(Icons.person),
           title: Text(user.nameSurname),
         ),
-        user.education != null && user.education.isNotEmpty
+        !user.privacySettings['hide_education'] &&
+                user.education != null &&
+                user.education.isNotEmpty
             ? ListTile(
                 leading: Icon(Icons.school),
                 title: Text(user.education),
               )
             : Container(),
-        user.profession != null && user.profession.isNotEmpty
+        !user.privacySettings['hide_profession'] &&
+                user.profession != null &&
+                user.profession.isNotEmpty
             ? ListTile(
                 leading: Icon(Icons.work),
                 title: Text(user.profession),
