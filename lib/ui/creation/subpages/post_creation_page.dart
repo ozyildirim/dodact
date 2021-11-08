@@ -424,58 +424,45 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Container(
-                              width: size.width * 0.8,
-                              child: FormBuilderTextField(
-                                textInputAction: TextInputAction.done,
-                                focusNode: postContentUrlFocus,
-                                name: "youtubeLink",
-                                maxLines: 1,
-                                autofocus: false,
-                                keyboardType: TextInputType.text,
-                                cursorColor: kPrimaryColor,
-                                controller: postContentUrlController,
-                                onEditingComplete: () async {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onChanged: (value) {
-                                  setState(() {
-                                    isAvailableYoutubeLink = false;
-                                    checkYoutubeLink(value);
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    hintText: "www.youtube.com/dodactcom",
-                                    // border: InputBorder.none,
-                                    errorStyle: Theme.of(context)
-                                        .inputDecorationTheme
-                                        .errorStyle),
-                                validator: FormBuilderValidators.compose(
-                                  [
-                                    FormBuilderValidators.required(
-                                      context,
-                                      errorText: "Bu alan boş bırakılamaz.",
-                                    ),
-                                    (value) {
-                                      return ProfanityChecker
-                                          .profanityValidator(value);
-                                    },
-                                  ],
+                        Container(
+                          width: size.width * 0.8,
+                          child: FormBuilderTextField(
+                            textInputAction: TextInputAction.done,
+                            focusNode: postContentUrlFocus,
+                            name: "youtubeLink",
+                            maxLines: 1,
+                            autofocus: false,
+                            keyboardType: TextInputType.text,
+                            cursorColor: kPrimaryColor,
+                            controller: postContentUrlController,
+                            onEditingComplete: () async {
+                              FocusScope.of(context).unfocus();
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                isAvailableYoutubeLink = false;
+                                checkYoutubeLink(value);
+                              });
+                            },
+                            decoration: InputDecoration(
+                                hintText: "www.youtube.com/dodactcom",
+                                // border: InputBorder.none,
+                                errorStyle: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .errorStyle),
+                            validator: FormBuilderValidators.compose(
+                              [
+                                FormBuilderValidators.required(
+                                  context,
+                                  errorText: "Bu alan boş bırakılamaz.",
                                 ),
-                              ),
+                                (value) {
+                                  return ProfanityChecker.profanityValidator(
+                                      value);
+                                },
+                              ],
                             ),
-                            // isAvailableYoutubeLink
-                            //     ? Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: Icon(Icons.check),
-                            //       )
-                            //     : Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: Icon(Icons.close),
-                            //       ),
-                          ],
+                          ),
                         ),
                       ],
                     )

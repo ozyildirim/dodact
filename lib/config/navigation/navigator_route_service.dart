@@ -45,6 +45,7 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_setti
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/social_accounts_settings_page.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_form_page.dart';
 
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/notifications/user_invitations_page.dart';
@@ -166,6 +167,9 @@ class NavigationRouteManager {
 
       case k_ROUTE_USER_APPLICATIONS_PAGE:
         return _navigateToDefault(ApplicationsPage(), settings);
+
+      case k_ROUTE_USER_FORM_PAGE:
+        return _navigateToDefault(UserFormPage(), settings);
 
       //
 
