@@ -93,13 +93,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           ),
 
           ListTile(
-            leading: Icon(Icons.report),
-            title:
-                Text("Şikayet/Bildiri/Öneri", style: TextStyle(fontSize: 18)),
-            onTap: () {},
-          ),
-
-          ListTile(
             leading: Icon(Icons.star),
             title: Text("Dod Kartım", style: TextStyle(fontSize: 18)),
             onTap: () {
@@ -112,6 +105,14 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_ABOUT_DODACT);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.report),
+            title:
+                Text("Şikayet/Bildiri/Öneri", style: TextStyle(fontSize: 18)),
+            onTap: () {
+              NavigationService.instance.navigate(k_ROUTE_USER_FORM_PAGE);
             },
           ),
 
