@@ -74,6 +74,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
                   },
                 ),
               ),
+              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(

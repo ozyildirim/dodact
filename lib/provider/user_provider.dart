@@ -134,6 +134,8 @@ class UserProvider with ChangeNotifier {
           userID: currentUser.uid,
           fileType: 'profile_picture',
           fileToUpload: image);
+      currentUser.profilePictureURL = url;
+      notifyListeners();
       await updateCurrentUser({'profilePictureURL': url});
       return url;
     } catch (e) {

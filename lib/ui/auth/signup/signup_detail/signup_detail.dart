@@ -278,11 +278,11 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .button
-                                .copyWith(fontSize: 18),
+                                .copyWith(fontSize: 18, color: Colors.white),
                             text: "İleri",
                             onPressed: forward,
                             child: const Text('İleri'),
-                            color: Theme.of(context).primaryColor,
+                            color: kNavbarColor,
                           )
                         : GFButton(
                             size: GFSize.LARGE,
@@ -290,8 +290,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .button
-                                .copyWith(fontSize: 18),
-                            color: Theme.of(context).primaryColor,
+                                .copyWith(fontSize: 18, color: Colors.white),
+                            color: kNavbarColor,
                             child: Text('Tamamla'),
                             onPressed: () async {
                               await submitForm();
@@ -299,10 +299,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                           ),
                     TextButton(
                       onPressed: back,
-                      child: const Text(
-                        'Geri',
-                        style: TextStyle(fontSize: 18),
-                      ),
+                      child: const Text('Geri',
+                          style: TextStyle(fontSize: 18, color: Colors.black)),
                     ),
                   ],
                 );

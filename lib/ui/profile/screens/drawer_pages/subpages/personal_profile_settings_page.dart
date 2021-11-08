@@ -100,13 +100,7 @@ class _UserPersonalProfileSettingsPageState
             )
           : null,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Kişisel Bilgiler",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
+        title: Text("Kişisel Bilgiler"),
       ),
       body: GestureDetector(
         onTap: () {
@@ -530,16 +524,30 @@ class _UserPersonalProfileSettingsPageState
   }
 
   void updateProfilePhoto() async {
-    CommonMethods().showLoaderDialog(context, "Fotoğrafın değiştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "Fotoğrafın Güncelleniyor");
     await userProvider
         .updateCurrentUserProfilePicture(File(picture.path))
         .then((url) {
       NavigationService.instance.pop();
+      setState(() {});
+      showSnackBar("Fotoğrafın güncellendi");
       debugPrint("Picture uploaded.");
     }).catchError((error) {
       CommonMethods()
           .showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
     });
+  }
+
+  showSnackBar(String message) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text(
+          message,
+          overflow: TextOverflow.fade,
+        ),
+      ),
+    );
   }
 
   Future<void> updateUser() async {
@@ -562,12 +570,12 @@ class _UserPersonalProfileSettingsPageState
                 formKey.currentState.value['profession'].toString().trim(),
           });
           NavigationService.instance.pop();
+          showSnackBar("Profil bilgilerin güncellendi.");
           setState(() {
             isChanged = false;
           });
         } catch (e) {
-          CommonMethods().showErrorDialog(
-              context, "Değişiklikler kaydedilirken bir hata oluştu");
+          showSnackBar("Değişiklikler kaydedilirken bir hata oluştu.");
         }
       } else {}
     }
@@ -583,6 +591,9 @@ class _UserPersonalProfileSettingsPageState
       } else {
         formKey.currentState.invalidateField(
             name: "username", errorText: "Bu kullanıcı adı kullanılıyor");
+        setState(() {
+          isAvailableUsername = false;
+        });
       }
     } catch (e) {
       print(e);

@@ -29,6 +29,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
+    print(userProvider.currentUser.permissions);
     // print(userProvider.currentUser.permissions);
     return Scaffold(
       drawer: ProfileDrawer(),
