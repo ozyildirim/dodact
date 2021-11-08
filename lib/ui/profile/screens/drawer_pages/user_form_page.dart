@@ -168,6 +168,8 @@ class _UserFormPageState extends BaseState<UserFormPage> {
         await CommonMethods()
             .showSuccessDialog(context, "Form başarıyla gönderildi!");
         NavigationService.instance.pop();
+      }).catchError((error) {
+        CommonMethods().showErrorDialog(context, "Bir hata oluştu!");
       });
     }
   }
