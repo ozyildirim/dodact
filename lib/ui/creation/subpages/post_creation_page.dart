@@ -424,7 +424,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         SizedBox(height: 4),
-                        Container(
+                        TextFieldContainer(
                           width: size.width * 0.8,
                           child: FormBuilderTextField(
                             textInputAction: TextInputAction.done,
@@ -446,7 +446,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                             },
                             decoration: InputDecoration(
                                 hintText: "www.youtube.com/dodactcom",
-                                // border: InputBorder.none,
+                                border: InputBorder.none,
                                 errorStyle: Theme.of(context)
                                     .inputDecorationTheme
                                     .errorStyle),
