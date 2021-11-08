@@ -36,107 +36,118 @@ class _GeneralPageState extends BaseState<GeneralPage> {
     podcastProvider.getPodcastList();
   }
 
+  AppBar appBar = AppBar(
+    toolbarHeight: kToolbarHeight,
+    backgroundColor: kCustomAppBarColor,
+    // systemOverlayStyle: ,
+    title: Image(
+      image: AssetImage(kDodactLogo),
+      height: 40,
+      width: 50,
+      fit: BoxFit.cover,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
-              image: AssetImage(kBackgroundImage),
-              fit: BoxFit.cover,
-            ),
+    return Scaffold(
+      appBar: appBar,
+      extendBody: true,
+      // extendBodyBehindAppBar: true,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
           ),
-          child: SingleChildScrollView(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AnnouncementPart(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Haftanın Öne Çıkan Paylaşımları",
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.headline1.copyWith(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    PostPart(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Açık Sahne",
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.headline1.copyWith(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    AcikSahnePart(),
-                    SizedBox(height: 20),
-                    Text(
-                      "Podcast Önerileri",
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.headline1.copyWith(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    PodcastPart(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      "Çark",
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.headline1.copyWith(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    SpinnerPart(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    // Text(
-                    //   "Kaçırılmaması Gereken Etkinlikler",
-                    //   textAlign: TextAlign.start,
-                    //   style: Theme.of(context).textTheme.headline1.copyWith(
-                    //       color: Colors.black,
-                    //       fontSize: 22,
-                    //       fontWeight: FontWeight.bold),
-                    // ),
-                    // SizedBox(
-                    //   height: 15,
-                    // ),
-                    // EventPart(),
-                    SizedBox(
-                      height: kToolbarHeight,
-                    )
-                  ],
-                ),
+        ),
+        child: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AnnouncementPart(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Haftanın Öne Çıkan Paylaşımları",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline1.copyWith(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  PostPart(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Açık Sahne",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline1.copyWith(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  AcikSahnePart(),
+                  SizedBox(height: 20),
+                  Text(
+                    "Podcast Önerileri",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline1.copyWith(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  PodcastPart(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    "Çark",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline1.copyWith(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  SpinnerPart(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // Text(
+                  //   "Kaçırılmaması Gereken Etkinlikler",
+                  //   textAlign: TextAlign.start,
+                  //   style: Theme.of(context).textTheme.headline1.copyWith(
+                  //       color: Colors.black,
+                  //       fontSize: 22,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // EventPart(),
+                  SizedBox(
+                    height: kToolbarHeight,
+                  )
+                ],
               ),
             ),
           ),

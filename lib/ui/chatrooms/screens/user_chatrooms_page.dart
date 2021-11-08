@@ -137,7 +137,7 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
                 args: [userProvider.currentUser.uid, user]);
           },
           leading: Hero(
-            tag: "avatar",
+            tag: user.uid,
             child: CircleAvatar(
               radius: 40,
               backgroundImage:

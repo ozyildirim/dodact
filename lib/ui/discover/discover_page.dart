@@ -33,7 +33,7 @@ class _DiscoverPageState extends State<DiscoverPage>
     final mediaQuery = MediaQuery.of(context);
     return Scaffold(
       appBar: GFAppBar(
-        backgroundColor: GFColors.WHITE,
+        // backgroundColor: GFColors.WHITE,
         centerTitle: true,
         title: GFSegmentTabs(
           labelStyle: Theme.of(context).textTheme.copyWith().bodyText1,

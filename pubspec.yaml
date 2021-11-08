@@ -124,18 +124,6 @@ flutter:
     - assets/images/companies/
 
   fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto-Bold.ttf
-    - family: Montserrat
-      fonts:
-        - asset: assets/fonts/Montserrat-Bold.ttf
-        - asset: assets/fonts/Montserrat-Regular.ttf
-    - family: Rubik
-      fonts:
-        - asset: assets/fonts/Rubik-Bold.ttf
-        - asset: assets/fonts/Rubik-Regular.ttf
     - family: Raleway
       fonts:
         - asset: assets/fonts/Raleway-Regular.ttf
@@ -164,10 +152,9 @@ flutter:
           weight: 300
         - asset: assets/fonts/Poppins-Medium.ttf
 
-    - family: PulpDisplay
+    - family: Helvetica
       fonts:
-        - asset: assets/fonts/PulpDisplay/PulpDisplay-Regular.ttf
-        - asset: assets/fonts/PulpDisplay/PulpDisplay-Bold.ttf
-        - asset: assets/fonts/PulpDisplay/PulpDisplay-Light.ttf
-        - asset: assets/fonts/PulpDisplay/PulpDisplay-Medium.ttf
+        - asset: assets/fonts/Helvetica/Helvetica-Light.ttf
+        - asset: assets/fonts/Helvetica/Helvetica-Regular.ttf
+        - asset: assets/fonts/Helvetica/Helvetica-Bold.ttf
 

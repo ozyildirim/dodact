@@ -82,7 +82,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
     var provider = Provider.of<UserProvider>(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.white),
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           actions: [

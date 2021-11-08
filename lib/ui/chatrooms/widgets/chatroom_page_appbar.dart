@@ -32,7 +32,7 @@ class ChatroomPageAppBar extends StatelessWidget
                 width: 2,
               ),
               Hero(
-                tag: "avatar",
+                tag: user.uid,
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(user.profilePictureURL),
                   maxRadius: 25,

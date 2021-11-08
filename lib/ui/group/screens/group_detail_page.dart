@@ -77,7 +77,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             : null,
         title: Text(group.groupName),
         elevation: 8,
-        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Container(
         width: dynamicWidth(1),
