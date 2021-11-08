@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +14,11 @@ class GroupPhotosTabView extends StatelessWidget {
 
     if (provider.group.groupMedia.length == 0 ||
         provider.group.groupMedia == null) {
-      return Padding(
-        padding: const EdgeInsets.all(36.0),
+      return Center(
         child: Container(
-          height: 30,
-          width: 30,
-          child: SvgPicture.asset(
-              "assets/images/app/situations/undraw_not_found_60pq.svg",
-              semanticsLabel: 'A red up arrow'),
+          color: Colors.white60,
+          child: Text("Bu topluluk henüz bir fotoğraf eklemedi.",
+              style: TextStyle(fontSize: kPageCenteredTextSize)),
         ),
       );
     }

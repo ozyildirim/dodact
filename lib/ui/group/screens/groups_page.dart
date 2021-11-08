@@ -29,6 +29,8 @@ class _GroupsPageState extends State<GroupsPage> {
     scrollController = ScrollController();
 
     scrollController.addListener(scrollListener);
+    groupProvider.groupsSnapshot.clear();
+    groupProvider.filteredGroupsSnapshot.clear();
     groupProvider.getGroupList();
   }
 
