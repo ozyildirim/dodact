@@ -265,8 +265,30 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                     ],
                   ),
                 )
-              : AudioPlayerWidget(
-                  contentURL: postFile.path,
+              : Stack(
+                  children: [
+                    AudioPlayerWidget(
+                      contentURL: postFile.path,
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: IconButton(
+                            iconSize: 20,
+                            onPressed: () {
+                              setState(() {
+                                postFile = null;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.grey,
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
         ),
       ),

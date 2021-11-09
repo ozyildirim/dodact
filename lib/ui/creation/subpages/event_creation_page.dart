@@ -99,6 +99,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: GestureDetector(
         onTap: () {
@@ -355,14 +356,14 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         SizedBox(height: 4),
-                        Container(
-                          width: size.width * 0.35,
+                        TextFieldContainer(
+                          width: size.width * 0.4,
                           child: FormBuilderDropdown(
                               focusNode: dropdownFocus,
                               hint: Text("Şehir Seçin"),
                               decoration: InputDecoration(
-                                  // border: InputBorder.none,
-                                  ),
+                                border: InputBorder.none,
+                              ),
                               name: "location",
                               items: cities
                                   .map((city) => DropdownMenuItem(
@@ -387,8 +388,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                         SizedBox(height: 4),
                         Row(
                           children: [
-                            Container(
-                              width: size.width * 0.35,
+                            TextFieldContainer(
+                              width: size.width * 0.4,
                               child: FormBuilderTextField(
                                 onTap: _showMapPicker,
                                 key: selectedPlace != null
@@ -403,6 +404,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                                     ? selectedPlace.formattedAddress
                                     : "",
                                 decoration: InputDecoration(
+                                    border: InputBorder.none,
                                     hintText: "Etkinlik Konumu",
                                     suffixIcon: Icon(Icons.location_on),
                                     errorStyle: Theme.of(context)
