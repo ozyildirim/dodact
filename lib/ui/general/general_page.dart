@@ -70,19 +70,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Kaçırılmaması Gereken Etkinlikler",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headline1.copyWith(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  EventPart(),
-                  SizedBox(height: 20),
+
                   Text(
                     "Haftanın Öne Çıkan Paylaşımları",
                     textAlign: TextAlign.start,
@@ -98,6 +86,19 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                   SizedBox(
                     height: 20,
                   ),
+                  Text(
+                    "Kaçırılmaması Gereken Etkinlikler",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline1.copyWith(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  EventPart(),
+                  SizedBox(height: 20),
                   Text(
                     "Açık Sahne",
                     textAlign: TextAlign.start,
