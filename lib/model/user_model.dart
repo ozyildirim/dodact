@@ -91,6 +91,33 @@ class UserObject {
     this.isVerified,
   });
 
+  Map<String, dynamic> defaultPermissions = {
+    'create_post': true,
+    'create_event': true,
+    'create_group': false,
+    'create_room': false,
+    'create_stream': false,
+    'create_comment': true,
+  };
+
+  Map<String, dynamic> defaultPrivacySettings = {
+    'hide_mail': false,
+    'hide_phone': false,
+    'hide_location': false,
+    'hide_education': false,
+    'hide_profession': false,
+  };
+
+  Map<String, dynamic> defaultSocialMediaLinks = {
+    'instagram': '',
+    'youtube': '',
+    'dribbble': '',
+    'linkedin': '',
+    'soundcloud': '',
+    'pinterest': '',
+    'opensea': '',
+  };
+
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
     userData['uid'] = this.uid;
@@ -107,9 +134,9 @@ class UserObject {
     userData['rosettes'] = this.rosettes;
 
     userData['interests'] = this.interests;
-    userData['permissions'] = this.permissions;
-    userData['privacySettings'] = this.privacySettings;
-    userData['socialMediaLinks'] = this.socialMediaLinks;
+    userData['permissions'] = defaultPermissions;
+    userData['privacySettings'] = defaultPrivacySettings;
+    userData['socialMediaLinks'] = defaultSocialMediaLinks;
     userData['notificationSettings'] = this.notificationSettings;
     userData['newUser'] = this.newUser ?? true;
     userData['userDescription'] = this.userDescription ?? '';

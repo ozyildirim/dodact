@@ -4,6 +4,7 @@ import 'package:dodact_v1/provider/podcast_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/general/widgets/acik_sahne_part.dart';
 import 'package:dodact_v1/ui/general/widgets/announcement_part.dart';
+import 'package:dodact_v1/ui/general/widgets/event_part.dart';
 import 'package:dodact_v1/ui/general/widgets/podcast_part.dart';
 import 'package:dodact_v1/ui/general/widgets/post_part.dart';
 import 'package:dodact_v1/ui/general/widgets/spinner_part.dart';
@@ -47,21 +48,6 @@ class _GeneralPageState extends BaseState<GeneralPage> {
           width: 50,
           fit: BoxFit.cover,
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 5),
-        //     child: IconButton(
-        //         padding: EdgeInsets.zero,
-        //         onPressed: () {
-        //           NavigationService.instance.navigate(k_ROUTE_USER_PROFILE);
-        //         },
-        //         icon: GFAvatar(
-        //           // radius: 25,
-        //           backgroundImage:
-        //               NetworkImage(userProvider.currentUser.profilePictureURL),
-        //         )),
-        //   )
-        // ],
       ),
       extendBody: true,
       // extendBodyBehindAppBar: true,
@@ -143,18 +129,18 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  // Text(
-                  //   "Kaçırılmaması Gereken Etkinlikler",
-                  //   textAlign: TextAlign.start,
-                  //   style: Theme.of(context).textTheme.headline1.copyWith(
-                  //       color: Colors.black,
-                  //       fontSize: 22,
-                  //       fontWeight: FontWeight.bold),
-                  // ),
-                  // SizedBox(
-                  //   height: 15,
-                  // ),
-                  // EventPart(),
+                  Text(
+                    "Kaçırılmaması Gereken Etkinlikler",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline1.copyWith(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  EventPart(),
                   SizedBox(
                     height: kToolbarHeight,
                   )
