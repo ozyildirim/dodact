@@ -43,8 +43,8 @@ class _GeneralPageState extends BaseState<GeneralPage> {
         // systemOverlayStyle: ,
         title: Image(
           image: AssetImage(kDodactLogo),
-          height: 30,
-          width: 40,
+          height: 40,
+          width: 50,
           fit: BoxFit.cover,
         ),
         // actions: [

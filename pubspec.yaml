@@ -77,7 +77,6 @@ dependencies:
   search_choices: ^2.0.7
   expansion_card: ^0.1.0
   qr_flutter: ^4.0.0
-  flutter_svg: ^0.22.0
   profanity_filter: ^2.0.0
   circular_menu: ^1.2.3
   awesome_notifications: any
@@ -91,6 +90,7 @@ dependencies:
   google_maps_place_picker_mb: ^2.0.0-mb.10
   geolocator: ^7.7.1
   image_cropper: ^1.4.1
+  device_preview: ^0.8.0
 
   
   

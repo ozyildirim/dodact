@@ -30,34 +30,46 @@ class _UserProfileBodyState extends State<UserProfileBody>
           width: size.width,
           height: size.height * 0.1,
           child: TabBar(
-            labelPadding: EdgeInsets.all(2),
+            labelPadding: EdgeInsets.zero,
             labelColor: Colors.black,
             // labelStyle: TextStyle(fontSize: 10),
             controller: _controller,
             indicatorSize: TabBarIndicatorSize.label,
             tabs: [
               const Tab(
-                child: Text(
-                  "Hakkında",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Hakkında",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
               const Tab(
-                child: Text(
-                  "Paylaşımlar",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Paylaşımlar",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
               const Tab(
-                child: Text(
-                  "Gruplar",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Topluluklar",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
               const Tab(
-                child: Text(
-                  "Etkinlikler",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Etkinlikler",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
             ],

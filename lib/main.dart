@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -100,8 +101,17 @@ void main() async {
 
   setupLocator();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(MyApp()));
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+  //     .then((value) => runApp(MyApp()));
+
+  // runApp(
+  //   DevicePreview(
+  //     // enabled: true,
+  //     builder: (context) => MyApp(),
+  //   ),
+  // );
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -115,6 +125,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
+        locale: DevicePreview.locale(context),
+        useInheritedMediaQuery: true,
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,
         onUnknownRoute: NavigationRouteManager.onUnknownRoute,
         navigatorKey: NavigationService.instance.navigatorKey,

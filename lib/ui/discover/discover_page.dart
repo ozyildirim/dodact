@@ -62,14 +62,23 @@ class _DiscoverPageState extends State<DiscoverPage>
           border: Border.all(color: Colors.white, width: 1.0),
           length: 3,
           tabs: <Widget>[
-            Text(
-              "Paylaşımlar",
+            FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text(
+                "Paylaşımlar",
+              ),
             ),
-            Text(
-              "Etkinlikler",
+            FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text(
+                "Etkinlikler",
+              ),
             ),
-            Text(
-              "Topluluklar",
+            FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text(
+                "Topluluklar",
+              ),
             ),
           ],
         ),
