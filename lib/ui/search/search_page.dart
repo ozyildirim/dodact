@@ -79,6 +79,7 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       TextFieldContainer(
                         width: MediaQuery.of(context).size.width * 0.6,
+                        padding: EdgeInsets.all(4),
                         child: TextField(
                           decoration: InputDecoration(
                               hintText: 'Ara',
@@ -93,6 +94,8 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       TextFieldContainer(
                         width: MediaQuery.of(context).size.width * 0.30,
+                        padding: EdgeInsets.only(
+                            left: 8, top: 4, bottom: 4, right: 4),
                         child: FormBuilderDropdown(
                           name: "searchCategory",
                           initialValue: category,
@@ -100,8 +103,8 @@ class _SearchPageState extends State<SearchPage> {
                           hint:
                               Text("Kategori", style: TextStyle(fontSize: 10)),
                           decoration: InputDecoration(
-                            border: InputBorder.none,
-                          ),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(4)),
                           onChanged: (value) {
                             setState(() {
                               category = value;
@@ -185,8 +188,6 @@ class _SearchPageState extends State<SearchPage> {
                           subtitle: Text(post.postCategory),
                         ),
                       );
-                      print(snapshot.data.docs[index]);
-                      return Container();
                     },
                   );
           },
@@ -238,11 +239,11 @@ class _SearchPageState extends State<SearchPage> {
                                   fontSize: 20,
                                 ),
                               ),
-                              subtitle: Text(user.profession),
+                              subtitle: user.privacySettings['hide_profession']
+                                  ? Container()
+                                  : Text(user.profession),
                             ),
                           );
-                          print(snapshot.data.docs[index]);
-                          return Container();
                         },
                       );
               },
@@ -299,8 +300,6 @@ class _SearchPageState extends State<SearchPage> {
                               subtitle: Text(event.category),
                             ),
                           );
-                          print(snapshot.data.docs[index]);
-                          return Container();
                         },
                       );
               },
@@ -310,57 +309,52 @@ class _SearchPageState extends State<SearchPage> {
         break;
       case SearchCategory.Group:
         Logger().d("Grup case seçildi");
-        return Expanded(
-          child: Container(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: (input != "" && input != null)
-                  ? FirebaseFirestore.instance
-                      .collection('groups')
-                      .where("groupName", arrayContains: name)
-                      .snapshots()
-                  : FirebaseFirestore.instance
-                      .collection("groups")
-                      .limit(5)
-                      .snapshots(),
-              builder: (context, snapshot) {
-                return (snapshot.connectionState == ConnectionState.waiting)
-                    ? Center(child: spinkit)
-                    : ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot data = snapshot.data.docs[index];
-                          GroupModel group = GroupModel.fromJson(data.data());
+        return Container(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: (input != "" && input != null)
+                ? FirebaseFirestore.instance
+                    .collection('groups')
+                    .where("groupName", arrayContains: name)
+                    .snapshots()
+                : FirebaseFirestore.instance
+                    .collection("groups")
+                    .limit(5)
+                    .snapshots(),
+            builder: (context, snapshot) {
+              return (snapshot.connectionState == ConnectionState.waiting)
+                  ? Center(child: spinkit)
+                  : ListView.builder(
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot data = snapshot.data.docs[index];
+                        GroupModel group = GroupModel.fromJson(data.data());
 
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_GROUP_DETAIL,
-                                    args: group);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(group.groupProfilePicture),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                group.groupName,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              subtitle: Text(group.groupCategory),
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            onTap: () {
+                              NavigationService.instance
+                                  .navigate(k_ROUTE_GROUP_DETAIL, args: group);
+                            },
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(group.groupProfilePicture),
+                              radius: 40,
                             ),
-                          );
-                          print(snapshot.data.docs[index]);
-                          return Container();
-                        },
-                      );
-              },
-            ),
+                            title: Text(
+                              group.groupName,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 20,
+                              ),
+                            ),
+                            subtitle: Text(group.groupCategory),
+                          ),
+                        );
+                      },
+                    );
+            },
           ),
         );
         break;

@@ -180,7 +180,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     return Container(
       width: double.infinity,
       height: 50,
-      color: Colors.white60,
       child: TabBar(
         isScrollable: true,
         labelColor: Colors.black,

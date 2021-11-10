@@ -42,14 +42,17 @@ class OthersProfileHeader extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 4,
+          height: 10,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "@" + provider.otherUser.username,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(
               width: 5,

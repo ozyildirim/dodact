@@ -40,7 +40,7 @@ class _DiscoverPageState extends State<DiscoverPage>
           unselectedLabelStyle: Theme.of(context)
               .textTheme
               .copyWith(
-                bodyText1: TextStyle(fontSize: 14, fontFamily: "Raleway"),
+                bodyText1: TextStyle(fontSize: 14, fontFamily: "Roboto"),
               )
               .bodyText1,
           borderRadius: BorderRadius.circular(15),

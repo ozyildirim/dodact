@@ -29,7 +29,7 @@ const kSettingsTitleSize = 20.0;
 const kPageCenteredTextSize = 20.0;
 const kUserProfileTabLabelSize = 16.0;
 
-const kFontFamily = "Raleway";
+const kFontFamily = "Roboto";
 
 const guzel = Color(0xFF162A49);
 
@@ -53,18 +53,18 @@ ThemeData appTheme = new ThemeData(
       headline1: TextStyle(
         color: Colors.white,
         fontSize: 20,
-        fontFamily: "Raleway",
+        fontFamily: "Roboto",
       ),
       headline6: TextStyle(
         color: Colors.white,
         fontSize: 20,
-        fontFamily: "Raleway",
+        fontFamily: "Roboto",
       ),
     ),
     titleTextStyle: TextStyle(
       color: Colors.white,
       fontSize: 20,
-      fontFamily: "Raleway",
+      fontFamily: "Roboto",
     ),
     backgroundColor: kCustomAppBarColor,
     iconTheme: const IconThemeData(color: Colors.white),
@@ -83,12 +83,12 @@ ThemeData appTheme = new ThemeData(
   // scaffoldBackgroundColor: Colors.black,
 
   textTheme: TextTheme(
-    headline1: TextStyle(fontFamily: "Raleway"),
+    headline1: TextStyle(fontFamily: "Roboto"),
     headline2: TextStyle(
       color: Colors.black,
-      fontFamily: 'Raleway',
+      fontFamily: 'Roboto',
     ),
   ),
 
-  fontFamily: "Raleway",
+  fontFamily: "Roboto",
 );

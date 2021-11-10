@@ -53,14 +53,17 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
           ),
         ),
         SizedBox(
-          height: 4,
+          height: 10,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "@" + user.username,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             SizedBox(
               width: 5,

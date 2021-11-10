@@ -53,11 +53,8 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   var groupItem = groups[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      child: GroupCard(group: groupItem),
-                    ),
+                  return Container(
+                    child: GroupCard(group: groupItem),
                   );
                 });
           }
