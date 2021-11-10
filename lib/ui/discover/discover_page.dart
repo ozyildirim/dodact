@@ -44,10 +44,12 @@ class _DiscoverPageState extends State<DiscoverPage>
               )
               .bodyText1,
           borderRadius: BorderRadius.circular(15),
-          height: GFAppBar().preferredSize.height * 0.75,
-          width: mediaQuery.size.width * 0.8,
+          height: GFAppBar().preferredSize.height * 0.65,
+          width: mediaQuery.size.width * 0.9,
           tabController: tabController,
           tabBarColor: GFColors.LIGHT,
+          labelPadding: EdgeInsets.zero,
+
           unselectedLabelColor: GFColors.DARK,
           indicator: BoxDecoration(
             // color: Colors.orange[700],

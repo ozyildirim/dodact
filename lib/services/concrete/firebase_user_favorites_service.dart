@@ -14,7 +14,7 @@ class FirebaseUserFavoritesService {
       await userFavsRef.doc(userId).set({'favoritePosts': []});
       print("hellooo");
     }
-    // Get favorites from Firebase
+
     return favorites;
   }
 

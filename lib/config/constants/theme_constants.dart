@@ -69,6 +69,7 @@ ThemeData appTheme = new ThemeData(
     backgroundColor: kCustomAppBarColor,
     iconTheme: const IconThemeData(color: Colors.white),
     centerTitle: true,
+    toolbarHeight: kToolbarHeight * (3 / 4),
   ),
   inputDecorationTheme: const InputDecorationTheme(
     errorStyle: TextStyle(fontSize: 14),

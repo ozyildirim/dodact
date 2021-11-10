@@ -29,8 +29,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
-    print(userProvider.currentUser.permissions);
-    // print(userProvider.currentUser.permissions);
+
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
@@ -44,6 +43,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.bell,
+                size: 18,
               ),
             ),
           ),
@@ -55,16 +55,11 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.envelope,
+                size: 18,
               ),
             ),
           ),
         ],
-        // centerTitle: true,
-        // title: Text(
-        //   "@" + authProvider.currentUser.username,
-        //   style: Theme.of(context).appBarTheme.textTheme.headline1,
-        // ),
-        // backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Container(

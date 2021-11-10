@@ -1,11 +1,9 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/podcast_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/general/widgets/acik_sahne_part.dart';
 import 'package:dodact_v1/ui/general/widgets/announcement_part.dart';
-import 'package:dodact_v1/ui/general/widgets/event_part.dart';
 import 'package:dodact_v1/ui/general/widgets/podcast_part.dart';
 import 'package:dodact_v1/ui/general/widgets/post_part.dart';
 import 'package:dodact_v1/ui/general/widgets/spinner_part.dart';
@@ -36,22 +34,35 @@ class _GeneralPageState extends BaseState<GeneralPage> {
     podcastProvider.getPodcastList();
   }
 
-  AppBar appBar = AppBar(
-    toolbarHeight: kToolbarHeight,
-    backgroundColor: kCustomAppBarColor,
-    // systemOverlayStyle: ,
-    title: Image(
-      image: AssetImage(kDodactLogo),
-      height: 40,
-      width: 50,
-      fit: BoxFit.cover,
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar,
+      appBar: AppBar(
+        // toolbarHeight: kToolbarHeight * (3 / 4),
+        backgroundColor: kCustomAppBarColor,
+        // systemOverlayStyle: ,
+        title: Image(
+          image: AssetImage(kDodactLogo),
+          height: 30,
+          width: 40,
+          fit: BoxFit.cover,
+        ),
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 5),
+        //     child: IconButton(
+        //         padding: EdgeInsets.zero,
+        //         onPressed: () {
+        //           NavigationService.instance.navigate(k_ROUTE_USER_PROFILE);
+        //         },
+        //         icon: GFAvatar(
+        //           // radius: 25,
+        //           backgroundImage:
+        //               NetworkImage(userProvider.currentUser.profilePictureURL),
+        //         )),
+        //   )
+        // ],
+      ),
       extendBody: true,
       // extendBodyBehindAppBar: true,
       body: Container(
