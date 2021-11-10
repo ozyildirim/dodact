@@ -75,9 +75,6 @@ class _HomePageState extends BaseState<HomePage> {
             ),
             IconButton(
                 padding: EdgeInsets.zero,
-                // onPressed: () {
-                //   NavigationService.instance.navigate(k_ROUTE_USER_PROFILE);
-                // },
                 icon: GFAvatar(
                   size: 24,
                   // radius: 25,
