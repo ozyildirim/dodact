@@ -14,7 +14,8 @@ const kPrimaryLightColor = Colors.white;
 const kBackgroundColor = Color(0xFFF1F0F2);
 const kBackgroundColorDarker = Color(0xFF929292);
 const kDetailTextColor = Color(0xFF998FA2);
-const kCustomAppBarColor = Color(0xFF1C1B22);
+const kCustomAppBarColor = Color(0xff194d25);
+const kNavbarColor = Color(0xff194d25);
 
 const kAuthBackgroundImage = "assets/images/loginBG.jpg";
 const kBackgroundImage = "assets/images/appBG.jpg";
@@ -28,7 +29,7 @@ const kSettingsTitleSize = 20.0;
 const kPageCenteredTextSize = 20.0;
 const kUserProfileTabLabelSize = 16.0;
 
-const kFontFamily = "PulpDisplay";
+const kFontFamily = "Roboto";
 
 const guzel = Color(0xFF162A49);
 
@@ -47,17 +48,29 @@ final spinkit = SpinKitChasingDots(
 ThemeData appTheme = new ThemeData(
   unselectedWidgetColor: Colors.white,
   appBarTheme: const AppBarTheme(
-      elevation: 8,
-      textTheme: TextTheme(
-        headline1: TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-          fontFamily: "RobotoCondensed",
-        ),
+    elevation: 8,
+    textTheme: TextTheme(
+      headline1: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontFamily: "Roboto",
       ),
-      backgroundColor: Colors.white,
-      iconTheme: const IconThemeData(color: Colors.black),
-      centerTitle: true),
+      headline6: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontFamily: "Roboto",
+      ),
+    ),
+    titleTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontFamily: "Roboto",
+    ),
+    backgroundColor: kCustomAppBarColor,
+    iconTheme: const IconThemeData(color: Colors.white),
+    centerTitle: true,
+    toolbarHeight: kToolbarHeight,
+  ),
   inputDecorationTheme: const InputDecorationTheme(
     errorStyle: TextStyle(fontSize: 14),
   ),
@@ -70,11 +83,12 @@ ThemeData appTheme = new ThemeData(
   // scaffoldBackgroundColor: Colors.black,
 
   textTheme: TextTheme(
+    headline1: TextStyle(fontFamily: "Roboto"),
     headline2: TextStyle(
       color: Colors.black,
-      fontFamily: 'RobotoCondensed',
+      fontFamily: 'Roboto',
     ),
   ),
 
-  fontFamily: "RobotoCondensed",
+  fontFamily: "Roboto",
 );

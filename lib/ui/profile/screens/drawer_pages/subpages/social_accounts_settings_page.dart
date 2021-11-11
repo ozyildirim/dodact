@@ -133,6 +133,7 @@ class _UserSocialAccountsSettingsState
                             return ProfanityChecker.profanityValidator(
                                 value.trim());
                           },
+                          FormBuilderValidators.url(context)
                         ]),
                       ),
                     ),
@@ -166,6 +167,7 @@ class _UserSocialAccountsSettingsState
                             return ProfanityChecker.profanityValidator(
                                 value.trim());
                           },
+                          FormBuilderValidators.url(context)
                         ]),
                       ),
                     ),
@@ -199,6 +201,7 @@ class _UserSocialAccountsSettingsState
                             return ProfanityChecker.profanityValidator(
                                 value.trim());
                           },
+                          FormBuilderValidators.url(context)
                         ]),
                       ),
                     ),
@@ -232,6 +235,7 @@ class _UserSocialAccountsSettingsState
                             return ProfanityChecker.profanityValidator(
                                 value.trim());
                           },
+                          FormBuilderValidators.url(context)
                         ]),
                       ),
                     ),
@@ -265,6 +269,7 @@ class _UserSocialAccountsSettingsState
                             return ProfanityChecker.profanityValidator(
                                 value.trim());
                           },
+                          FormBuilderValidators.url(context)
                         ]),
                       ),
                     ),

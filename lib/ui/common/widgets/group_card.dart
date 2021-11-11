@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
+import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GroupCard extends StatelessWidget {
   final GroupModel group;
@@ -15,6 +17,7 @@ class GroupCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
+          Provider.of<GroupProvider>(context, listen: false).setGroup(group);
           NavigationService.instance
               .navigate(k_ROUTE_GROUP_DETAIL, args: group);
         },
@@ -61,7 +64,7 @@ class GroupCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          fontFamily: "Poppins",
+                          fontFamily: "Roboto",
                         ),
                       ),
                     ),

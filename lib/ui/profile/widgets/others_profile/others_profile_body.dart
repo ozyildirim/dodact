@@ -41,27 +41,39 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
             indicatorSize: TabBarIndicatorSize.label,
             tabs: const [
               const Tab(
-                child: Text(
-                  "Hakkında",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Hakkında",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
               const Tab(
-                child: Text(
-                  "Paylaşımlar",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Paylaşımlar",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
               const Tab(
-                child: Text(
-                  "Gruplar",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Gruplar",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
               const Tab(
-                child: Text(
-                  "Etkinlikler",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Etkinlikler",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
               ),
             ],

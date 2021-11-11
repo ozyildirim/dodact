@@ -29,10 +29,11 @@ class _ProfilePageState extends BaseState<ProfilePage>
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
-    // print(userProvider.currentUser.permissions);
+
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           GFIconBadge(
             counterChild: Container(),
@@ -42,7 +43,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.bell,
-                color: Color(0xff194d25),
+                size: 18,
               ),
             ),
           ),
@@ -54,19 +55,12 @@ class _ProfilePageState extends BaseState<ProfilePage>
               },
               icon: Icon(
                 FontAwesome5Solid.envelope,
-                color: Color(0xff194d25),
+                size: 18,
               ),
             ),
           ),
         ],
-        // centerTitle: true,
-        // title: Text(
-        //   "@" + authProvider.currentUser.username,
-        //   style: Theme.of(context).appBarTheme.textTheme.headline1,
-        // ),
-        backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        elevation: 0,
       ),
       body: Container(
         decoration: BoxDecoration(

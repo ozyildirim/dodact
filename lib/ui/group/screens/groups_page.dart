@@ -29,6 +29,8 @@ class _GroupsPageState extends State<GroupsPage> {
     scrollController = ScrollController();
 
     scrollController.addListener(scrollListener);
+    groupProvider.groupsSnapshot.clear();
+    groupProvider.filteredGroupsSnapshot.clear();
     groupProvider.getGroupList();
   }
 
@@ -94,20 +96,12 @@ class _GroupsPageState extends State<GroupsPage> {
                 );
               } else {
                 return Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/images/app/situations/not_found.png"),
-                      Text(
-                        "Bu kriterlere uyan bir topluluk bulunamadı.",
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: kToolbarHeight,
-                      )
-                    ],
+                  child: Center(
+                    child: Text(
+                      "Bu kriterlere uyan bir topluluk bulunamadı.",
+                      style: TextStyle(fontSize: kPageCenteredTextSize),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }
@@ -122,20 +116,12 @@ class _GroupsPageState extends State<GroupsPage> {
                     });
               } else {
                 return Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/images/app/situations/not_found.png"),
-                      Text(
-                        "Bu kriterlere uyan bir etkinlik bulunamadı.",
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: kToolbarHeight,
-                      )
-                    ],
+                  child: Center(
+                    child: Text(
+                      "Bu kriterlere uyan bir etkinlik bulunamadı.",
+                      style: TextStyle(fontSize: kPageCenteredTextSize),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }

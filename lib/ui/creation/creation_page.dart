@@ -38,47 +38,122 @@ class _CreationPageState extends State<CreationPage> {
     // radioButtonFocus.dispose();
   }
 
+  var appBar = AppBar(
+    elevation: 8,
+    title: Text(
+      "Oluştur",
+      style: TextStyle(fontWeight: FontWeight.normal),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        elevation: 8,
-        title: Text(
-          "Oluştur",
-          style: TextStyle(fontWeight: FontWeight.normal),
-        ),
-      ),
-      extendBodyBehindAppBar: false,
-      body: ListView(
-        children: <Widget>[
-          Stack(
+        appBar: appBar,
+        key: _scaffoldKey,
+        extendBodyBehindAppBar: false,
+        body: Container(
+          height: size.height,
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CurvedListItem(
-                textPos: 150,
-                boxSize: 246,
-                spaceValue: 110,
-                title: 'Etkinlik',
-                onTap: () async {
-                  showCreateEventBottomSheet();
-                },
-                conImage:
-                    AssetImage('assets/images/creation/etkinlik_olustur.jpg'),
-              ),
-              CurvedListItem(
-                textPos: 120,
-                boxSize: 180,
-                spaceValue: 0,
-                title: 'İçerik',
-                onTap: () async {
-                  showCreateContentBottomSheet();
-                },
-                conImage:
-                    AssetImage('assets/images/creation/icerik_olustur.jpg'),
-              ),
+              _buildCard(
+                  Icons.post_add,
+                  "İçerik Oluştur",
+                  "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
+                  showCreateContentBottomSheet),
+              _buildCard(
+                  Icons.event_available,
+                  "Etkinlik Oluştur",
+                  "Etkinliklerini topluluğa kolayca ulaştır, yeni serüvenlere açıl!",
+                  showCreateEventBottomSheet),
             ],
           ),
-        ],
+        )
+        // ListView(
+        //   children: <Widget>[
+        //     Stack(
+        //       children: [
+        // CurvedListItem(
+        //   textPos: 150,
+        //   boxSize: 246,
+        //   spaceValue: 110,
+        //   title: 'Etkinlik',
+        //   onTap: () async {
+        //     showCreateEventBottomSheet();
+        //   },
+        //   conImage:
+        //       AssetImage('assets/images/creation/etkinlik_olustur.jpg'),
+        // ),
+        //         CurvedListItem(
+        //           textPos: 120,
+        //           boxSize: 180,
+        //           spaceValue: 0,
+        //           title: 'İçerik',
+        //           onTap: () async {
+        //             showCreateContentBottomSheet();
+        //           },
+        //           conImage:
+        //               AssetImage('assets/images/creation/icerik_olustur.jpg'),
+        //         ),
+        //       ],
+        //     ),
+        //   ],
+        // ),
+        );
+  }
+
+  _buildCard(IconData icon, String title, String description, Function onTap,
+      {String groupId}) {
+    var cardBackgroundColor = Color(0xFFF8F9FA);
+    var size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: onTap,
+        child: Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          color: cardBackgroundColor,
+          child: Container(
+            width: size.width * 0.8,
+            height: size.height * 0.25,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  elevation: 8,
+                  child: Container(
+                    height: size.height * 0.06,
+                    width: size.width * 0.12,
+                    child: Icon(icon, size: 30),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(title,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    description,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

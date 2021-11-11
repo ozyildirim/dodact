@@ -8,9 +8,9 @@ class AnnouncementPart extends StatefulWidget {
 
 class _AnnouncementPartState extends State<AnnouncementPart> {
   List<String> imageList = [
-    "assets/images/soylesi3.png",
-    "assets/images/soylesi3.png",
-    "assets/images/soylesi3.png",
+    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/dodact_duyuru%2Fsoylesi.png?alt=media&token=eed28f61-1e52-4c73-986c-eae29a1cd20b",
+    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/dodact_duyuru%2Fsoylesi.png?alt=media&token=eed28f61-1e52-4c73-986c-eae29a1cd20b",
+    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/dodact_duyuru%2Fsoylesi.png?alt=media&token=eed28f61-1e52-4c73-986c-eae29a1cd20b",
   ];
 
   @override
@@ -25,7 +25,7 @@ class _AnnouncementPartState extends State<AnnouncementPart> {
             margin: EdgeInsets.all(8.0),
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Image.asset(url, fit: BoxFit.cover, width: 1000.0),
+              child: Image.network(url, fit: BoxFit.cover, width: 1000.0),
             ),
           );
         },

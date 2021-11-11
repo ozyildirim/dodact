@@ -76,10 +76,7 @@ class _PostDetailState extends BaseState<PostDetail> {
       centerTitle: true,
       title: Text(
         "İçerik Detayı",
-        style: TextStyle(color: Colors.black),
       ),
-      elevation: 8,
-      iconTheme: IconThemeData(color: Colors.black),
     );
 
     return Scaffold(

@@ -72,6 +72,7 @@ class _NotificationsSettingsPageState
                   },
                 ),
               ),
+              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(
@@ -90,6 +91,7 @@ class _NotificationsSettingsPageState
                   },
                 ),
               ),
+              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(
@@ -111,6 +113,7 @@ class _NotificationsSettingsPageState
                   },
                 ),
               ),
+              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(
@@ -132,6 +135,7 @@ class _NotificationsSettingsPageState
                   },
                 ),
               ),
+              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(
@@ -153,6 +157,7 @@ class _NotificationsSettingsPageState
                   },
                 ),
               ),
+              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(
@@ -174,6 +179,7 @@ class _NotificationsSettingsPageState
                   },
                 ),
               ),
+              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(

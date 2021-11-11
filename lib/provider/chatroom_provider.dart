@@ -9,7 +9,6 @@ class ChatroomProvider extends ChangeNotifier {
   var logger = new Logger();
   FirebaseChatroomService chatroomService = locator<FirebaseChatroomService>();
 
-  List<ChatroomModel> userChatrooms = [];
   ChatroomModel selectedChatroom;
 
   List<MessageModel> chatroomMessages = [];
@@ -40,9 +39,7 @@ class ChatroomProvider extends ChangeNotifier {
 
   Future<List<ChatroomModel>> getUserChatrooms(String userId) async {
     try {
-      userChatrooms = await chatroomService.getUserChatrooms(userId);
-      notifyListeners();
-      return userChatrooms;
+      return await chatroomService.getUserChatrooms(userId);
     } catch (e) {
       logger.e("GetUserChatrooms error: $e");
       return null;

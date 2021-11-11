@@ -17,7 +17,11 @@ class AboutDodactPage extends StatelessWidget {
         height: mediaQuery.size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(kBackgroundImage), fit: BoxFit.cover),
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
