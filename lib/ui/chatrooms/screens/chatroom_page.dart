@@ -199,6 +199,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
               message.senderId != userProvider.currentUser.uid) {
             updateMessageRead(documentSnapshot, chatroomId);
           }
+
           return GestureDetector(
             onLongPress: () {
               showMessageDialog(
@@ -276,12 +277,6 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           var message =
               _formKey.currentState.value['message'].toString().trim();
 
-          var messageModel = MessageModel(
-            message: message,
-            isRead: false,
-            senderId: authProvider.currentUser.uid,
-            messageCreationDate: DateTime.now(),
-          );
           await Provider.of<ChatroomProvider>(context, listen: false)
               .sendMessage(roomId, authProvider.currentUser.uid, message)
               .then((value) async {

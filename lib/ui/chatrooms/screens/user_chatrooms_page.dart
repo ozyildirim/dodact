@@ -10,6 +10,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -73,6 +74,9 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
       query: chatroomsRef.where("users",
           arrayContains: authProvider.currentUser.uid),
       itemBuilderType: PaginateBuilderType.listView,
+      initialLoader: Center(
+        child: spinkit,
+      ),
     );
   }
 }
@@ -97,7 +101,14 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
         .firstWhere((element) => element != widget.currentUserId);
 
     user = await Provider.of<UserProvider>(context, listen: false)
-        .getUserByID(otherUserId);
+        .getUserByID(otherUserId)
+        .then((value) => user = value)
+        .catchError((error) {
+      user = UserObject(
+          nameSurname: "Dodact Kullanıcısı",
+          profilePictureURL:
+              "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png");
+    });
     setState(() {});
   }
 
@@ -109,33 +120,20 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
   }
 
   getLastMessage() async {
-    var message = await Provider.of<ChatroomProvider>(context, listen: false)
-        .getLastMessage(widget.chatroom.roomId);
+    var message = MessageModel.fromJson(widget.chatroom.lastMessage);
 
-    if (message != null) {
-      setState(() {
-        lastMessage = message;
-      });
-    }
+    setState(() {
+      lastMessage = message;
+    });
   }
 
   buildSubtitle(MessageModel message) {
     if (message.senderId == widget.currentUserId) {
-      return RichText(
-          maxLines: 2,
-          text: TextSpan(children: [
-            TextSpan(
-                text: 'Sen:',
-                style: TextStyle(
-                    color: Colors.black54,
-                    // color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold)),
-            TextSpan(text: ': '),
-            TextSpan(
-              text: message.message,
-              style: TextStyle(color: Colors.black),
-            ),
-          ]));
+      return Text(
+        message.message,
+        style: TextStyle(
+            fontWeight: message.isRead ? FontWeight.w300 : FontWeight.w600),
+      );
     } else {
       return Text('${user.nameSurname}: ${message.message}');
     }
@@ -148,6 +146,7 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
         padding: const EdgeInsets.all(16.0),
         child: ListTile(
           onTap: () {
+            updateMessageRead(widget.chatroom.roomId);
             NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
                 args: [userProvider.currentUser.uid, user]);
           },
@@ -164,10 +163,25 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
             style: TextStyle(fontSize: 20),
           ),
           subtitle: buildSubtitle(lastMessage),
+          trailing: Text(
+            DateFormat('dd/MM hh:mm').format(lastMessage.messageCreationDate),
+            style: TextStyle(fontSize: 12),
+          ),
         ),
       );
     } else {
       return Container();
+    }
+  }
+
+  void updateMessageRead(String roomId) {
+    if (widget.chatroom.lastMessage['senderId'] !=
+        userProvider.currentUser.uid) {
+      if (widget.chatroom.lastMessage['isRead'] == false) {
+        chatroomsRef.doc(roomId).update({
+          'lastMessage': {'isRead': true},
+        });
+      }
     }
   }
 }
