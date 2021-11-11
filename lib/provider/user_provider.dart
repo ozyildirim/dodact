@@ -47,6 +47,7 @@ class UserProvider with ChangeNotifier {
 
   setCurrentUser(UserObject user) {
     currentUser = user;
+    getCurrentUserFavoritePosts();
     notifyListeners();
   }
 
@@ -151,7 +152,9 @@ class UserProvider with ChangeNotifier {
           .getUserFavoritePosts(currentUser.uid);
       notifyListeners();
     } catch (e) {
-      logger.e("UserProvider getUserFavoritePosts error: " + e.toString());
+      logger.e(
+        "UserProvider getUserFavoritePosts error: " + e.toString(),
+      );
     }
   }
 

@@ -38,7 +38,6 @@ class _HomePageState extends BaseState<HomePage> {
     // });
 
     checkUserSearchKeywords();
-    userProvider.getCurrentUserFavoritePosts();
   }
 
   @override

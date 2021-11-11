@@ -138,59 +138,63 @@ class _SearchPageState extends State<SearchPage> {
     switch (searchCategory) {
       case SearchCategory.Post:
         Logger().d("Post case seçildi");
-        return StreamBuilder<QuerySnapshot>(
-          stream: (input != "" && input != null)
-              ? FirebaseFirestore.instance
-                  .collection('posts')
-                  .where("searchKeywords", arrayContains: name)
-                  .where('visible', isEqualTo: true)
-                  .snapshots()
-              : FirebaseFirestore.instance
-                  .collection("posts")
-                  .where('visible', isEqualTo: true)
-                  .limit(5)
-                  .snapshots(),
-          builder: (context, snapshot) {
-            return (snapshot.connectionState == ConnectionState.waiting)
-                ? Container(
-                    height: size.height * 0.5,
-                    child: Center(child: spinkit),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot data = snapshot.data.docs[index];
-                      PostModel post = PostModel.fromJson(data.data());
+        return Expanded(
+          child: Container(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: (input != "" && input != null)
+                  ? FirebaseFirestore.instance
+                      .collection('posts')
+                      .where("searchKeywords", arrayContains: name)
+                      .where('visible', isEqualTo: true)
+                      .snapshots()
+                  : FirebaseFirestore.instance
+                      .collection("posts")
+                      .where('visible', isEqualTo: true)
+                      .limit(5)
+                      .snapshots(),
+              builder: (context, snapshot) {
+                return (snapshot.connectionState == ConnectionState.waiting)
+                    ? Container(
+                        height: size.height * 0.5,
+                        child: Center(child: spinkit),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot data = snapshot.data.docs[index];
+                          PostModel post = PostModel.fromJson(data.data());
 
-                      var thumbnail = CommonMethods.createThumbnailURL(
-                          post.isLocatedInYoutube, post.postContentURL);
+                          var thumbnail = CommonMethods.createThumbnailURL(
+                              post.isLocatedInYoutube, post.postContentURL);
 
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          onTap: () {
-                            NavigationService.instance
-                                .navigate(k_ROUTE_POST_DETAIL, args: post);
-                          },
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(thumbnail),
-                            radius: 40,
-                          ),
-                          title: Text(
-                            post.postTitle,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 20,
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              onTap: () {
+                                NavigationService.instance
+                                    .navigate(k_ROUTE_POST_DETAIL, args: post);
+                              },
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(thumbnail),
+                                radius: 40,
+                              ),
+                              title: Text(
+                                post.postTitle,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              subtitle: Text(post.postCategory),
                             ),
-                          ),
-                          subtitle: Text(post.postCategory),
-                        ),
+                          );
+                        },
                       );
-                    },
-                  );
-          },
+              },
+            ),
+          ),
         );
         break;
       case SearchCategory.User:
@@ -309,52 +313,55 @@ class _SearchPageState extends State<SearchPage> {
         break;
       case SearchCategory.Group:
         Logger().d("Grup case seçildi");
-        return Container(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: (input != "" && input != null)
-                ? FirebaseFirestore.instance
-                    .collection('groups')
-                    .where("groupName", arrayContains: name)
-                    .snapshots()
-                : FirebaseFirestore.instance
-                    .collection("groups")
-                    .limit(5)
-                    .snapshots(),
-            builder: (context, snapshot) {
-              return (snapshot.connectionState == ConnectionState.waiting)
-                  ? Center(child: spinkit)
-                  : ListView.builder(
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot data = snapshot.data.docs[index];
-                        GroupModel group = GroupModel.fromJson(data.data());
+        return Expanded(
+          child: Container(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: (input != "" && input != null)
+                  ? FirebaseFirestore.instance
+                      .collection('groups')
+                      .where("groupName", arrayContains: name)
+                      .snapshots()
+                  : FirebaseFirestore.instance
+                      .collection("groups")
+                      .limit(5)
+                      .snapshots(),
+              builder: (context, snapshot) {
+                return (snapshot.connectionState == ConnectionState.waiting)
+                    ? Center(child: spinkit)
+                    : ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot data = snapshot.data.docs[index];
+                          GroupModel group = GroupModel.fromJson(data.data());
 
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            onTap: () {
-                              NavigationService.instance
-                                  .navigate(k_ROUTE_GROUP_DETAIL, args: group);
-                            },
-                            leading: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(group.groupProfilePicture),
-                              radius: 40,
-                            ),
-                            title: Text(
-                              group.groupName,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              onTap: () {
+                                NavigationService.instance.navigate(
+                                    k_ROUTE_GROUP_DETAIL,
+                                    args: group);
+                              },
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(group.groupProfilePicture),
+                                radius: 40,
                               ),
+                              title: Text(
+                                group.groupName,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              subtitle: Text(group.groupCategory),
                             ),
-                            subtitle: Text(group.groupCategory),
-                          ),
-                        );
-                      },
-                    );
-            },
+                          );
+                        },
+                      );
+              },
+            ),
           ),
         );
         break;
