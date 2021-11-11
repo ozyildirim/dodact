@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
@@ -194,6 +195,10 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         },
         itemBuilder: (index, context, documentSnapshot) {
           final message = MessageModel.fromJson(documentSnapshot.data());
+          if (!message.isRead &&
+              message.senderId != userProvider.currentUser.uid) {
+            updateMessageRead(documentSnapshot, chatroomId);
+          }
           return GestureDetector(
             onLongPress: () {
               showMessageDialog(
@@ -278,7 +283,23 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
             messageCreationDate: DateTime.now(),
           );
           await Provider.of<ChatroomProvider>(context, listen: false)
-              .sendMessage(roomId, authProvider.currentUser.uid, message);
+              .sendMessage(roomId, authProvider.currentUser.uid, message)
+              .then((value) async {
+            print("asda");
+            final DocumentReference docRef = chatroomsRef.doc(roomId);
+
+            MessageModel messageModel = MessageModel(
+              message: message,
+              isRead: false,
+              senderId: authProvider.currentUser.uid,
+              messageCreationDate: DateTime.now(),
+              messageId: value.id,
+            );
+
+            await docRef.update({
+              'lastMessage': messageModel.toJson(),
+            });
+          });
 
           _formKey.currentState.reset();
         }
@@ -287,6 +308,15 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         _formKey.currentState.reset();
       }
     }
+  }
+
+  updateMessageRead(DocumentSnapshot snapshot, String conversationId) {
+    final DocumentReference docRef = chatroomsRef
+        .doc(conversationId)
+        .collection('messages')
+        .doc(snapshot.id);
+
+    docRef.update({'isRead': true});
   }
 
   void showMessageDialog(
