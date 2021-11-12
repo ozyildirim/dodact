@@ -10,6 +10,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -41,113 +42,63 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
 
   buildChatRooms(BuildContext context) {
     var provider = Provider.of<ChatroomProvider>(context, listen: false);
-    // return FutureBuilder(
-    //   future: provider.getUserChatrooms(authProvider.currentUser.uid),
-    //   builder: (context, AsyncSnapshot<List<ChatroomModel>> snapshot) {
-    //     if (snapshot.hasData) {
-    //       return ListView.builder(
-    //         itemCount: snapshot.data.length,
-    //         itemBuilder: (context, index) {
-    //           var chatroom = snapshot.data[index];
-
-    //           return ChatroomListElement(
-    //               chatroom, authProvider.currentUser.uid);
-    //         },
-    //       );
-    //     } else {
-    //       return Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
 
     return PaginateFirestore(
       isLive: true,
       itemsPerPage: 10,
       itemBuilder: (index, context, object) {
         ChatroomModel model = ChatroomModel.fromJson(object.data());
-
-        return ChatroomListElement(model, authProvider.currentUser.uid);
+        return FutureBuilder(
+            future: getOtherUserProfile(model),
+            builder: (context, object) {
+              if (object.connectionState == ConnectionState.waiting) {
+                // return Center(child: spinkit);
+                return Container();
+              } else {
+                UserObject otherUser = object.data;
+                return buildListTile(model, otherUser);
+              }
+            });
       },
-      query: chatroomsRef.where("users",
-          arrayContains: authProvider.currentUser.uid),
+      query: chatroomsRef
+          .where("users", arrayContains: authProvider.currentUser.uid)
+          .orderBy('lastMessage.messageCreationDate', descending: true),
       itemBuilderType: PaginateBuilderType.listView,
+      initialLoader: Center(
+        child: spinkit,
+      ),
     );
   }
-}
 
-class ChatroomListElement extends StatefulWidget {
-  final ChatroomModel chatroom;
-  final String currentUserId;
+  getOtherUserProfile(ChatroomModel chatroom) async {
+    var otherUserId = chatroom.users
+        .firstWhere((element) => element != authProvider.currentUser.uid);
 
-  ChatroomListElement(this.chatroom, this.currentUserId);
+    var user = await Provider.of<UserProvider>(context, listen: false)
+        .getUserByID(otherUserId)
+        .then((value) => value)
+        .catchError((error) {
+      return UserObject(
+          nameSurname: "Dodact Kullanıcısı",
+          profilePictureURL:
+              "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png");
+    });
 
-  @override
-  State<ChatroomListElement> createState() => _ChatroomListElementState();
-}
+    return user;
 
-class _ChatroomListElementState extends BaseState<ChatroomListElement> {
-  UserObject user;
-  MessageModel lastMessage;
-  String otherUserId;
-
-  getUserProfile() async {
-    otherUserId = widget.chatroom.users
-        .firstWhere((element) => element != widget.currentUserId);
-
-    user = await Provider.of<UserProvider>(context, listen: false)
-        .getUserByID(otherUserId);
-    setState(() {});
+    // return buildListTile(chatroom, user);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getUserProfile();
-    getLastMessage();
-  }
-
-  getLastMessage() async {
-    var message = await Provider.of<ChatroomProvider>(context, listen: false)
-        .getLastMessage(widget.chatroom.roomId);
-
-    if (message != null) {
-      setState(() {
-        lastMessage = message;
-      });
-    }
-  }
-
-  buildSubtitle(MessageModel message) {
-    if (message.senderId == widget.currentUserId) {
-      return RichText(
-          maxLines: 2,
-          text: TextSpan(children: [
-            TextSpan(
-                text: 'Sen:',
-                style: TextStyle(
-                    color: Colors.black54,
-                    // color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold)),
-            TextSpan(text: ': '),
-            TextSpan(
-              text: message.message,
-              style: TextStyle(color: Colors.black),
-            ),
-          ]));
+  buildListTile(ChatroomModel chatroom, UserObject user) {
+    if (chatroom.lastMessage == null) {
     } else {
-      return Text('${user.nameSurname}: ${message.message}');
-    }
-  }
+      var lastMessage = MessageModel.fromJson(chatroom.lastMessage);
 
-  @override
-  Widget build(BuildContext context) {
-    if (user != null && lastMessage != null) {
       return Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0),
         child: ListTile(
           onTap: () {
+            updateMessageRead(chatroom);
             NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
                 args: [userProvider.currentUser.uid, user]);
           },
@@ -161,13 +112,51 @@ class _ChatroomListElementState extends BaseState<ChatroomListElement> {
           ),
           title: Text(
             user.nameSurname,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: lastMessage.senderId == authProvider.currentUser.uid
+                    ? FontWeight.w400
+                    : lastMessage.isRead
+                        ? FontWeight.w400
+                        : FontWeight.w700),
           ),
-          subtitle: buildSubtitle(lastMessage),
+          subtitle: Text(lastMessage.message,
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight:
+                      lastMessage.senderId == authProvider.currentUser.uid
+                          ? FontWeight.w400
+                          : lastMessage.isRead
+                              ? FontWeight.w400
+                              : FontWeight.w700)),
+          trailing: Text(
+            DateFormat('dd/MM HH:mm').format(lastMessage.messageCreationDate),
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: lastMessage.senderId == authProvider.currentUser.uid
+                    ? FontWeight.w400
+                    : lastMessage.isRead
+                        ? FontWeight.w400
+                        : FontWeight.w700),
+          ),
         ),
       );
-    } else {
-      return Container();
+    }
+  }
+
+  void updateMessageRead(ChatroomModel chatroom) {
+    if (chatroom.lastMessage['senderId'] != userProvider.currentUser.uid) {
+      if (chatroom.lastMessage['isRead'] == false) {
+        chatroomsRef.doc(chatroom.roomId).update({
+          'lastMessage': {
+            'isRead': true,
+            'message': chatroom.lastMessage['message'],
+            'messageCreationDate': chatroom.lastMessage['messageCreationDate'],
+            'senderId': chatroom.lastMessage['senderId'],
+            'messageId': chatroom.lastMessage['messageId']
+          },
+        });
+      }
     }
   }
 }

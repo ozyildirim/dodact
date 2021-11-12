@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/chatroom_model.dart';
 import 'package:dodact_v1/model/message_model.dart';
@@ -76,14 +77,15 @@ class FirebaseChatroomService {
     }
   }
 
-  Future sendMessage(String chatroomId, String userId, String message) async {
+  Future<DocumentReference> sendMessage(
+      String chatroomId, String userId, String message) async {
     MessageModel messageModel = MessageModel(
         message: message,
         senderId: userId,
         messageCreationDate: DateTime.now(),
         isRead: false);
 
-    await chatroomsRef
+    return await chatroomsRef
         .doc(chatroomId)
         .collection("messages")
         .add(messageModel.toJson())
@@ -95,6 +97,7 @@ class FirebaseChatroomService {
           .update({
         "messageId": value.id,
       });
+      return value;
     });
   }
 

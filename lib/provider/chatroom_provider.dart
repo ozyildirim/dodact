@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/chatroom_model.dart';
 import 'package:dodact_v1/model/message_model.dart';
@@ -64,13 +65,13 @@ class ChatroomProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> sendMessage(
+  Future<DocumentReference> sendMessage(
       String chatroomId, String userId, String message) async {
     try {
-      await chatroomService.sendMessage(chatroomId, userId, message);
-      logger.i("Mesaj gönderildi");
+      return await chatroomService.sendMessage(chatroomId, userId, message);
     } catch (e) {
       logger.e("SendMessage error: $e");
+      return null;
     }
   }
 
