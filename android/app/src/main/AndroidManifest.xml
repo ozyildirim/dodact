@@ -20,6 +20,11 @@ android:resource="@drawable/notification_logo" />
     android:name="com.google.android.gms.ads.APPLICATION_ID"
     android:value="ca-app-pub-4828991493508897~7865600588"/>
 
+    <activity
+    android:name="com.yalantis.ucrop.UCropActivity"
+    android:screenOrientation="portrait"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

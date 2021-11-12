@@ -46,11 +46,8 @@ class GroupPostsTab extends StatelessWidget {
                 );
               } else {
                 return Center(
-                  child: Container(
-                    color: Colors.white60,
-                    child: Text("Bu grup henüz bir içerik paylaşmadı.",
-                        style: TextStyle(fontSize: 22)),
-                  ),
+                  child: Text("Bu topluluk henüz bir içerik paylaşmadı.",
+                      style: TextStyle(fontSize: kPageCenteredTextSize)),
                 );
               }
             } else {

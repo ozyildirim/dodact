@@ -40,16 +40,11 @@ class _DodCardPageState extends BaseState<DodCardPage> {
           SizedBox(
             height: 10,
           ),
-          Container(
-            color: Colors.white60,
-            child: Text(
-                ((userProvider.currentUser.nameSurname != null) &&
-                        (userProvider.currentUser.nameSurname != ""))
-                    ? userProvider.currentUser.nameSurname
-                    : userProvider.currentUser.username,
-                style: TextStyle(
-                  fontSize: 24,
-                )),
+          Text(
+            userProvider.currentUser.username,
+            style: TextStyle(
+              fontSize: 24,
+            ),
           ),
           SizedBox(
             height: 20,

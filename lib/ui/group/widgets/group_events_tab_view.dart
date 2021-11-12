@@ -54,11 +54,8 @@ class GroupEventsTab extends StatelessWidget {
                 );
               } else {
                 return Center(
-                  child: Container(
-                    color: Colors.white60,
-                    child: Text("Bu grup henüz bir etkinlik paylaşmadı.",
-                        style: TextStyle(fontSize: kPageCenteredTextSize)),
-                  ),
+                  child: Text("Bu grup henüz bir etkinlik paylaşmadı.",
+                      style: TextStyle(fontSize: kPageCenteredTextSize)),
                 );
               }
             } else {

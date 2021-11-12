@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class SecuritySettingsPage extends StatelessWidget {
+  final double tileTitleSize = 20;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +29,24 @@ class SecuritySettingsPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.vpn_key),
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    Icons.vpn_key,
+                    color: Colors.black,
+                  ),
                 ),
-                title: Text(
-                  "Parola Değiştirme",
-                  style: TextStyle(fontSize: kDrawerTileTitleSize),
+                title: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Parola Değişikliği",
+                      style: TextStyle(fontSize: tileTitleSize),
+                    ),
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -48,11 +62,24 @@ class SecuritySettingsPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.mail),
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    Icons.mail,
+                    color: Colors.black,
+                  ),
                 ),
-                title: Text(
-                  "E-posta Adresi Değiştirme",
-                  style: TextStyle(fontSize: kDrawerTileTitleSize),
+                title: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "E-posta Adresi Değişikliği",
+                      style: TextStyle(fontSize: tileTitleSize),
+                    ),
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
