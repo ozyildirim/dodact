@@ -43,7 +43,6 @@ const k_ROUTE_USER_CALENDAR_PAGE = '/user_calendar';
 const k_ROUTE_USER_CONTRIBUTIONS_PAGE = '/user_contributions';
 const k_ROUTE_DOD_CARD = '/dod_card';
 const k_ROUTE_USER_APPLICATIONS_PAGE = "/user_applications";
-const k_ROUTE_USER_FORM_PAGE = '/user_form';
 
 //User Settings Routes
 const k_ROUTE_USER_NOTIFICATON_SETTINGS = '/user_notification_settings';

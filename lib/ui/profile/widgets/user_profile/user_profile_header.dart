@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
@@ -35,35 +35,26 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
             fit: BoxFit.cover,
             errorWidget: (context, url, error) => Icon(Icons.error),
             imageBuilder: (context, imageProvider) {
-              return InkWell(
-                onTap: () {
-                  CommonMethods.showImagePreviewDialog(context,
-                      imageProvider: imageProvider);
-                },
+              return CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: dynamicWidth(0.2),
                 child: CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: dynamicWidth(0.2),
-                  child: CircleAvatar(
-                    radius: dynamicWidth(0.19),
-                    backgroundImage: imageProvider,
-                  ),
+                  radius: dynamicWidth(0.19),
+                  backgroundImage: imageProvider,
                 ),
               );
             },
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 4,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "@" + user.username,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(fontSize: 18),
             ),
             SizedBox(
               width: 5,
@@ -77,6 +68,32 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
           ],
         )
       ],
+    );
+  }
+
+  showProfilePictureContainer(BuildContext context, String url) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Container(
+          height: 350,
+          width: 350,
+          child: PinchZoom(
+            child: CachedNetworkImage(
+              imageUrl: url,
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(url),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

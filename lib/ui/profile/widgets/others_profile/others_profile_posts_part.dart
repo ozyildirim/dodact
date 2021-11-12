@@ -63,7 +63,7 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
                 return Center(
                   child: Text(
                     "Herhangi bir içerik oluşturulmamış.",
-                    style: TextStyle(fontSize: kPageCenteredTextSize),
+                    style: TextStyle(fontSize: 22),
                   ),
                 );
               }
@@ -71,7 +71,7 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
               return Center(
                 child: Text(
                   "Herhangi bir içerik oluşturulmamış.",
-                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                  style: TextStyle(fontSize: 22),
                 ),
               );
             }

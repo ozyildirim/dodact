@@ -14,7 +14,7 @@ class PodcastPart extends StatelessWidget {
 
     if (podcastProvider.podcastList != null) {
       return GFItemsCarousel(
-        itemHeight: 170,
+        itemHeight: 208,
         rowCount: 2,
         children: podcastProvider.podcastList.map((podcast) {
           return Padding(
@@ -26,9 +26,19 @@ class PodcastPart extends StatelessWidget {
               },
               child: CachedNetworkImage(
                   fit: BoxFit.cover,
+                  height: 100,
                   imageUrl: podcast.podcastImageUrl,
                   imageBuilder: (context, imageProvider) {
-                    return buildPodcastCard(imageProvider);
+                    return Container(
+                      height: 120,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: imageProvider,
+                        ),
+                      ),
+                    );
                   }),
             ),
           );
@@ -41,18 +51,5 @@ class PodcastPart extends StatelessWidget {
         ),
       );
     }
-  }
-
-  buildPodcastCard(ImageProvider imageProvider) {
-    return Container(
-      height: 150,
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        image: DecorationImage(
-          image: imageProvider,
-        ),
-      ),
-    );
   }
 }

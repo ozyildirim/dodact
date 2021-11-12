@@ -33,23 +33,21 @@ class _DiscoverPageState extends State<DiscoverPage>
     final mediaQuery = MediaQuery.of(context);
     return Scaffold(
       appBar: GFAppBar(
-        // backgroundColor: GFColors.WHITE,
+        backgroundColor: GFColors.WHITE,
         centerTitle: true,
         title: GFSegmentTabs(
           labelStyle: Theme.of(context).textTheme.copyWith().bodyText1,
           unselectedLabelStyle: Theme.of(context)
               .textTheme
               .copyWith(
-                bodyText1: TextStyle(fontSize: 14, fontFamily: "Roboto"),
-              )
+                  bodyText1:
+                      TextStyle(fontSize: 14, fontFamily: "RobotoCondensed"))
               .bodyText1,
           borderRadius: BorderRadius.circular(15),
-          height: GFAppBar().preferredSize.height * 0.65,
-          width: mediaQuery.size.width * 0.9,
+          height: GFAppBar().preferredSize.height * 0.75,
+          width: mediaQuery.size.width * 0.8,
           tabController: tabController,
           tabBarColor: GFColors.LIGHT,
-          labelPadding: EdgeInsets.zero,
-
           unselectedLabelColor: GFColors.DARK,
           indicator: BoxDecoration(
             // color: Colors.orange[700],
@@ -62,23 +60,14 @@ class _DiscoverPageState extends State<DiscoverPage>
           border: Border.all(color: Colors.white, width: 1.0),
           length: 3,
           tabs: <Widget>[
-            FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text(
-                "Paylaşımlar",
-              ),
+            Text(
+              "Paylaşımlar",
             ),
-            FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text(
-                "Etkinlikler",
-              ),
+            Text(
+              "Etkinlikler",
             ),
-            FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text(
-                "Topluluklar",
-              ),
+            Text(
+              "Topluluklar",
             ),
           ],
         ),

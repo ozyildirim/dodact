@@ -114,9 +114,10 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<EventModel>> getSpecialEvents() async {
+  Future<void> getSpecialEvents() async {
     try {
-      return await eventRepository.getSpecialEvents();
+      specialEvents = await eventRepository.getSpecialEvents();
+      notifyListeners();
     } catch (e) {
       logger.e("EventProvider getSpecialEvents error: " + e.toString());
     }

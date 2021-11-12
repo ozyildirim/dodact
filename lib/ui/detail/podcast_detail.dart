@@ -34,40 +34,52 @@ class PodcastDetail extends StatelessWidget {
               child: Image.network(podcast.podcastImageUrl),
             ),
             Divider(),
-            ListTile(
-              leading: Icon(Icons.list_alt),
-              title: Text(podcast.podcastOwner,
-                  style: TextStyle(fontSize: tileTitleSize)),
-              subtitle: Text("Podcast Yapımcısı"),
-              trailing: CircleAvatar(
-                backgroundImage: NetworkImage(podcast.podcastOwnerPhotoUrl),
-                radius: 30,
-              ),
-              onTap: () async {
-                await launchOwnerUrl("www.dodact.com");
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.list_alt),
-              title: Text(podcast.podcastTitle,
-                  style: TextStyle(fontSize: tileTitleSize)),
-              subtitle: Text("Podcast Başlığı"),
-            ),
-            ListTile(
-              leading: Icon(Icons.calendar_today),
-              title: Text(
-                  DateFormat("dd MM yyyy").format(podcast.podcastReleaseDate),
-                  style: TextStyle(fontSize: tileTitleSize)),
-              subtitle: Text("Yayınlanma Tarihi"),
-            ),
-            ListTile(
-              title: IconButton(
-                onPressed: () async {
-                  await launchPodcastUrl();
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                leading: Icon(Icons.list_alt),
+                title: Text(podcast.podcastOwner,
+                    style: TextStyle(fontSize: tileTitleSize)),
+                subtitle: Text("Podcast Yapımcısı"),
+                trailing: CircleAvatar(
+                  backgroundImage: NetworkImage(podcast.podcastOwnerPhotoUrl),
+                  radius: 30,
+                ),
+                onTap: () async {
+                  await launchOwnerUrl("www.dodact.com");
                 },
-                icon: Icon(FontAwesome5Brands.spotify),
               ),
-              subtitle: Center(child: Text("Yayın Kanalları")),
+            ),
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                leading: Icon(Icons.list_alt),
+                title: Text(podcast.podcastTitle,
+                    style: TextStyle(fontSize: tileTitleSize)),
+                subtitle: Text("Podcast Başlığı"),
+              ),
+            ),
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                leading: Icon(Icons.calendar_today),
+                title: Text(
+                    DateFormat("dd MM yyyy").format(podcast.podcastReleaseDate),
+                    style: TextStyle(fontSize: tileTitleSize)),
+                subtitle: Text("Yayınlanma Tarihi"),
+              ),
+            ),
+            Container(
+              color: Colors.white60,
+              child: ListTile(
+                title: IconButton(
+                  onPressed: () async {
+                    await launchPodcastUrl();
+                  },
+                  icon: Icon(FontAwesome5Brands.spotify),
+                ),
+                subtitle: Center(child: Text("Yayın Kanalları")),
+              ),
             ),
             Expanded(
               child: Padding(

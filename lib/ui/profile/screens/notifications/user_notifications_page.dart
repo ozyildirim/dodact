@@ -16,10 +16,7 @@ class UserNotificationsPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
-              FontAwesome5Regular.check_square,
-              size: 18,
-            ),
+            icon: Icon(FontAwesome5Regular.check_square),
           )
         ],
         title: Text("Bildirimlerim"),

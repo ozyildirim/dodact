@@ -57,7 +57,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             subtitle: Text(authProvider.currentUser.email,
                 style: TextStyle(color: Colors.black, fontSize: 13)),
           ),
-          Divider(height: 10),
           ListTile(
             leading: Icon(Icons.star),
             title: Text("Favorilerim", style: TextStyle(fontSize: 18)),
@@ -65,16 +64,15 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_USER_FAVORITES);
             },
           ),
-
-          // ListTile(
-          //   // enabled: false,
-          //   leading: Icon(Icons.help),
-          //   title: Text("Başvurularım", style: TextStyle(fontSize: 18)),
-          //   onTap: () {
-          //     NavigationService.instance
-          //         .navigate(k_ROUTE_USER_APPLICATIONS_PAGE);
-          //   },
-          // ),
+          ListTile(
+            // enabled: false,
+            leading: Icon(Icons.help),
+            title: Text("Başvurularım", style: TextStyle(fontSize: 18)),
+            onTap: () {
+              NavigationService.instance
+                  .navigate(k_ROUTE_USER_APPLICATIONS_PAGE);
+            },
+          ),
           ListTile(
             leading: Icon(Icons.settings),
             title: Text("Ayarlarım", style: TextStyle(fontSize: 18)),
@@ -82,7 +80,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_USER_OPTIONS);
             },
           ),
-
           ListTile(
             leading: Icon(Icons.settings),
             title: Text("İlgi Alanlarım", style: TextStyle(fontSize: 18)),
@@ -91,7 +88,12 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
                   .navigate(k_ROUTE_INTERESTS_CHOICE, args: false);
             },
           ),
-
+          ListTile(
+            leading: Icon(Icons.report),
+            title:
+                Text("Şikayet/Bildiri/Öneri", style: TextStyle(fontSize: 18)),
+            onTap: () {},
+          ),
           ListTile(
             leading: Icon(Icons.star),
             title: Text("Dod Kartım", style: TextStyle(fontSize: 18)),
@@ -99,7 +101,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
             },
           ),
-
           ListTile(
             leading: Icon(Icons.info),
             title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
@@ -108,20 +109,10 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.report),
-            title:
-                Text("Şikayet/Bildiri/Öneri", style: TextStyle(fontSize: 18)),
-            onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_USER_FORM_PAGE);
-            },
-          ),
-
-          ListTile(
             leading: Icon(Icons.logout),
             title: Text("Çıkış Yap", style: TextStyle(fontSize: 18)),
             onTap: () => signOut(context),
           ),
-
           SizedBox(
             height: kToolbarHeight,
           ),

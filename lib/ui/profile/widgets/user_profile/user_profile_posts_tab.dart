@@ -59,7 +59,7 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
                 return Center(
                   child: Text(
                     "Herhangi bir içerik oluşturulmamış.",
-                    style: TextStyle(fontSize: kPageCenteredTextSize),
+                    style: TextStyle(fontSize: 22),
                   ),
                 );
               }
@@ -67,7 +67,7 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
               return Center(
                 child: Text(
                   "Herhangi bir içerik oluşturulmamış.",
-                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                  style: TextStyle(fontSize: 22),
                 ),
               );
             }

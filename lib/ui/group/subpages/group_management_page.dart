@@ -24,51 +24,104 @@ class GroupManagementPage extends StatelessWidget {
         ),
         child: Column(
           children: [
-            buildListTile("Profil Yönetimi",
-                k_ROUTE_GROUP_PROFILE_MANAGEMENT_PAGE, Icons.privacy_tip),
-            buildListTile("Üye Yönetimi", k_ROUTE_GROUP_MEMBER_MANAGEMENT_PAGE,
-                Icons.person),
-            buildListTile("Etkinlik Yönetimi",
-                k_ROUTE_GROUP_EVENT_MANAGEMENT_PAGE, Icons.event_available),
-            buildListTile("İçerik Yönetimi", k_ROUTE_GROUP_POST_MANAGEMENT_PAGE,
-                Icons.podcasts),
-            buildListTile("Topluluk İlgi Alanları",
-                k_ROUTE_GROUP_INTEREST_MANAGEMENT_PAGE, Icons.content_copy),
-            buildListTile("Topluluk Medya Yönetimi",
-                k_ROUTE_GROUP_MEDIA_MANAGEMENT_PAGE, Icons.perm_media),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.privacy_tip),
+                ),
+                title: Text(
+                  "Profil Yönetimi",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_PROFILE_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  "Üye Yönetimi",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_MEMBER_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.privacy_tip),
+                ),
+                title: Text(
+                  "Etkinlik Yönetimi",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_EVENT_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.privacy_tip),
+                ),
+                title: Text(
+                  "İçerik Yönetimi",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_POST_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  "Topluluk İlgi Alanları",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_INTEREST_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.perm_media),
+                ),
+                title: Text(
+                  "Topluluk Medya Yönetimi",
+                  style: TextStyle(fontSize: tileTitleSize),
+                ),
+                onTap: () {
+                  NavigationService.instance
+                      .navigate(k_ROUTE_GROUP_MEDIA_MANAGEMENT_PAGE);
+                },
+              ),
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  buildListTile(String title, String route, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: Icon(
-            icon,
-            color: Colors.black,
-          ),
-        ),
-        title: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          color: Colors.grey[100],
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: tileTitleSize),
-            ),
-          ),
-        ),
-        onTap: () {
-          NavigationService.instance.navigate(route);
-        },
       ),
     );
   }

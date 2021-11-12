@@ -48,22 +48,25 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
           if (snapshot.hasData) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                // crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  buildTrailingPart(post),
-                  GestureDetector(
-                    onTap: () {
-                      showOwnerProfile(post);
-                    },
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(user.profilePictureURL),
-                      radius: 30,
+              child: Container(
+                color: Colors.white60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  // crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    buildTrailingPart(post),
+                    GestureDetector(
+                      onTap: () {
+                        showOwnerProfile(post);
+                      },
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(user.profilePictureURL),
+                        radius: 30,
+                      ),
                     ),
-                  ),
-                  buildShareButton()
-                ],
+                    buildShareButton()
+                  ],
+                ),
               ),
             );
           } else if (snapshot.hasError) {

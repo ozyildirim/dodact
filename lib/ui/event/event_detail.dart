@@ -61,6 +61,13 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      //appBar: AppBar(
+      //  elevation: 0,
+      //  backgroundColor: Colors.transparent,
+      //  backwardsCompatibility: true,
+      //  iconTheme: IconThemeData(color: Colors.black),
+      //  centerTitle: true,
+      //),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -285,20 +292,13 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           enlargeMainPage: true,
           autoPlay: true,
           activeIndicator: Colors.white,
-          pagination: true,
           items: event.eventImages.map((image) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                onTap: () {
-                  CommonMethods.showImagePreviewDialog(context, url: image);
-                },
-                child: Container(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    child:
-                        Image.network(image, fit: BoxFit.cover, width: 1000.0),
-                  ),
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: Image.network(image, fit: BoxFit.cover, width: 1000.0),
                 ),
               ),
             );

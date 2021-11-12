@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -9,6 +8,7 @@ import 'package:dodact_v1/locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,21 +48,21 @@ void main() async {
   //   print('User declined or has not accepted permission');
   // }
 
-  AwesomeNotifications().initialize(
-      'resource://drawable/notification_logo',
-      [
-        NotificationChannel(
-          // icon: 'resource://drawable/notification_logo',
-          enableLights: true, onlyAlertOnce: true,
+  // AwesomeNotifications().initialize(
+  //     'resource://drawable/notification_logo',
+  //     [
+  //       NotificationChannel(
+  //         // icon: 'resource://drawable/notification_logo',
+  //         enableLights: true, onlyAlertOnce: true,
 
-          channelKey: 'basic_channel',
-          channelName: 'Basic notifications',
-          channelDescription: 'Notification channel for basic tests',
-          // defaultColor: Color(0xFF9D50DD),
-          // ledColor: Colors.white,
-        ),
-      ],
-      debug: true);
+  //         channelKey: 'basic_channel',
+  //         channelName: 'Basic notifications',
+  //         channelDescription: 'Notification channel for basic tests',
+  //         // defaultColor: Color(0xFF9D50DD),
+  //         // ledColor: Colors.white,
+  //       ),
+  //     ],
+  //     debug: true);
 
   // AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
   //   if (!isAllowed) {
@@ -100,17 +100,8 @@ void main() async {
 
   setupLocator();
 
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-  //     .then((value) => runApp(MyApp()));
-
-  // runApp(
-  //   DevicePreview(
-  //     // enabled: true,
-  //     builder: (context) => MyApp(),
-  //   ),
-  // );
-
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -124,8 +115,6 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
-        locale: DevicePreview.locale(context),
-        useInheritedMediaQuery: true,
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,
         onUnknownRoute: NavigationRouteManager.onUnknownRoute,
         navigatorKey: NavigationService.instance.navigatorKey,

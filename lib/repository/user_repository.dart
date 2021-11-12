@@ -37,7 +37,8 @@ class UserRepository {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.currentUser();
     } else {
-      return await firebaseAuthService.getUserByID(userId);
+      var result = await firebaseAuthService.getUserByID(userId);
+      return result;
     }
   }
 

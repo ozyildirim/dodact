@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/provider/auth_provider.dart';
+import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
@@ -24,35 +25,26 @@ class OthersProfileHeader extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: provider.otherUser.profilePictureURL,
             imageBuilder: (context, imageProvider) {
-              return InkWell(
-                onTap: () {
-                  CommonMethods.showImagePreviewDialog(context,
-                      imageProvider: imageProvider);
-                },
+              return CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: mediaQuery.size.width * 0.2,
                 child: CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: mediaQuery.size.width * 0.2,
-                  child: CircleAvatar(
-                    radius: mediaQuery.size.width * 0.19,
-                    backgroundImage: imageProvider,
-                  ),
+                  radius: mediaQuery.size.width * 0.19,
+                  backgroundImage: imageProvider,
                 ),
               );
             },
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 4,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "@" + provider.otherUser.username,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18),
             ),
             SizedBox(
               width: 5,
@@ -69,19 +61,13 @@ class OthersProfileHeader extends StatelessWidget {
           height: 10,
         ),
         provider.currentUser.uid != provider.otherUser.uid
-            ? ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                ),
-                onPressed: () {
+            ? GFButton(
+                onPressed: () async {
                   createChatroom(context, provider.otherUser.uid);
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.message,
-                  ),
-                ),
+                child: Icon(Icons.message),
+                shape: GFButtonShape.pills,
+                color: Colors.deepOrangeAccent,
               )
             : Container()
       ],
@@ -89,10 +75,13 @@ class OthersProfileHeader extends StatelessWidget {
   }
 
   createChatroom(BuildContext context, String userId) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
-        args: [userProvider.currentUser.uid, userProvider.otherUser]);
+    var chatroomProvider =
+        Provider.of<ChatroomProvider>(context, listen: false);
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    var chatroomId = await chatroomProvider.createChatRoom(
+        authProvider.currentUser.uid, userId);
+    NavigationService.instance
+        .navigate(k_ROUTE_CHATROOM_PAGE, args: chatroomId);
   }
 
   showProfilePictureContainer(BuildContext context, String url) {

@@ -24,45 +24,16 @@ class UserObject {
   List<String> following = [];
 
   //Permissions
-  Map<String, dynamic> permissions = {
-    'create_post': true,
-    'create_event': true,
-    'create_group': false,
-    'create_room': false,
-    'create_stream': false,
-    'create_comment': true,
-  };
+  Map<String, dynamic> permissions = {};
 
   //Privacy Settings
-  Map<String, dynamic> privacySettings = {
-    'hide_mail': false,
-    'hide_phone': false,
-    'hide_location': false,
-    'hide_education': false,
-    'hide_profession': false,
-  };
+  Map<String, dynamic> privacySettings = {};
 
   //Social Media Links
-  Map<String, dynamic> socialMediaLinks = {
-    'instagram': '',
-    'youtube': '',
-    'dribbble': '',
-    'linkedin': '',
-    'soundcloud': '',
-    'pinterest': '',
-    'opensea': '',
-  };
+  Map<String, dynamic> socialMediaLinks = {};
 
   //Notification Settings
-  Map<String, dynamic> notificationSettings = {
-    'allow_comment_notifications': true,
-    'allow_post_like_notifications': true,
-    'allow_group_comment_notifications': true,
-    'allow_group_invitation_notifications': true,
-    'allow_group_announcement_notifications': true,
-    'allow_group_post_notifications': true,
-    'allow_private_message_notifications': true,
-  };
+  Map<String, dynamic> notificationSettings = {};
 
   List<String> searchKeywords;
 
@@ -91,33 +62,6 @@ class UserObject {
     this.isVerified,
   });
 
-  Map<String, dynamic> defaultPermissions = {
-    'create_post': true,
-    'create_event': true,
-    'create_group': false,
-    'create_room': false,
-    'create_stream': false,
-    'create_comment': true,
-  };
-
-  Map<String, dynamic> defaultPrivacySettings = {
-    'hide_mail': false,
-    'hide_phone': false,
-    'hide_location': false,
-    'hide_education': false,
-    'hide_profession': false,
-  };
-
-  Map<String, dynamic> defaultSocialMediaLinks = {
-    'instagram': '',
-    'youtube': '',
-    'dribbble': '',
-    'linkedin': '',
-    'soundcloud': '',
-    'pinterest': '',
-    'opensea': '',
-  };
-
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
     userData['uid'] = this.uid;
@@ -134,9 +78,9 @@ class UserObject {
     userData['rosettes'] = this.rosettes;
 
     userData['interests'] = this.interests;
-    userData['permissions'] = defaultPermissions;
-    userData['privacySettings'] = defaultPrivacySettings;
-    userData['socialMediaLinks'] = defaultSocialMediaLinks;
+    userData['permissions'] = this.permissions;
+    userData['privacySettings'] = this.privacySettings;
+    userData['socialMediaLinks'] = this.socialMediaLinks;
     userData['notificationSettings'] = this.notificationSettings;
     userData['newUser'] = this.newUser ?? true;
     userData['userDescription'] = this.userDescription ?? '';
@@ -163,14 +107,43 @@ class UserObject {
     mainInterest = doc.data()['mainInterest'] ?? "";
     interests = doc.data()['interests']?.cast<Map<String, dynamic>>();
 
-    permissions = doc.data()['permissions'] ?? this.permissions;
+    permissions = doc.data()['permissions'] ??
+        {
+          'create_post': true,
+          'create_event': true,
+          'create_group': false,
+          'create_room': false,
+          'create_stream': false,
+          'create_comment': true,
+        };
 
-    privacySettings = doc.data()['privacySettings'] ?? this.privacySettings;
+    privacySettings = doc.data()['privacySettings'] ??
+        {
+          'hide_mail': false,
+          'hide_phone': false,
+          'hide_location': false,
+        };
 
-    socialMediaLinks = doc.data()['socialMediaLinks'] ?? this.socialMediaLinks;
+    socialMediaLinks = doc.data()['socialMediaLinks'] ??
+        {
+          'instagram': '',
+          'youtube': '',
+          'dribbble': '',
+          'linkedin': '',
+          'soundcloud': '',
+          'pinterest': '',
+        };
 
-    notificationSettings =
-        doc.data()['notificationSettings'] ?? this.notificationSettings;
+    notificationSettings = doc.data()['notificationSettings'] ??
+        {
+          'allow_comment_notifications': true,
+          'allow_post_like_notifications': true,
+          'allow_group_comment_notifications': true,
+          'allow_group_invitation_notifications': true,
+          'allow_group_announcement_notifications': true,
+          'allow_group_post_notifications': true,
+          'allow_private_message_notifications': true,
+        };
 
     userDescription = doc.data()['userDescription'] ?? '';
     newUser = doc.data()['newUser'] ?? true;
@@ -181,6 +154,6 @@ class UserObject {
   }
 
   String toString() {
-    return 'UserObject{uid: $uid,permissions: $permissions, email: $email, newUser: $newUser, mainInterest: $mainInterest, verified: $isVerified, username: $username, userDescription: $userDescription, nameSurname: $nameSurname,location:$location,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
+    return 'UserObject{uid: $uid, email: $email, newUser: $newUser, mainInterest: $mainInterest, verified: $isVerified, username: $username, userDescription: $userDescription, nameSurname: $nameSurname,location:$location,userRegistrationDate: $userRegistrationDate, telephoneNumber: $telephoneNumber, profilePictureURL: $profilePictureURL, experiencePoint: $experiencePoint,searchKeywords: $searchKeywords},';
   }
 }

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/chatroom_model.dart';
 import 'package:dodact_v1/model/message_model.dart';
@@ -10,6 +9,7 @@ class ChatroomProvider extends ChangeNotifier {
   var logger = new Logger();
   FirebaseChatroomService chatroomService = locator<FirebaseChatroomService>();
 
+  List<ChatroomModel> userChatrooms = [];
   ChatroomModel selectedChatroom;
 
   List<MessageModel> chatroomMessages = [];
@@ -27,20 +27,11 @@ class ChatroomProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> checkChatroom(String firstUserId, String secondUserId) async {
-    try {
-      bool result =
-          await chatroomService.checkChatroom(firstUserId, secondUserId);
-      return result;
-    } catch (e) {
-      logger.e("CheckChatroom error: $e");
-      return null;
-    }
-  }
-
   Future<List<ChatroomModel>> getUserChatrooms(String userId) async {
     try {
-      return await chatroomService.getUserChatrooms(userId);
+      userChatrooms = await chatroomService.getUserChatrooms(userId);
+      notifyListeners();
+      return userChatrooms;
     } catch (e) {
       logger.e("GetUserChatrooms error: $e");
       return null;
@@ -56,22 +47,13 @@ class ChatroomProvider extends ChangeNotifier {
     }
   }
 
-  Future<MessageModel> getLastMessage(String chatroomId) async {
-    try {
-      return await chatroomService.getLastMessage(chatroomId);
-    } catch (e) {
-      logger.e("GetLastMessage error: $e");
-      return null;
-    }
-  }
-
-  Future<DocumentReference> sendMessage(
+  Future<void> sendMessage(
       String chatroomId, String userId, String message) async {
     try {
-      return await chatroomService.sendMessage(chatroomId, userId, message);
+      await chatroomService.sendMessage(chatroomId, userId, message);
+      logger.i("Mesaj gönderildi");
     } catch (e) {
       logger.e("SendMessage error: $e");
-      return null;
     }
   }
 

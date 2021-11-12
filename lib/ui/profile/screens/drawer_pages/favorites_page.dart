@@ -57,11 +57,6 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("favs" + userProvider.currentUser.favoritedPosts.toString());
-    // return Scaffold(
-    //   appBar: AppBar(),
-    //   body: Container(),
-    // );
     return Scaffold(
       appBar: AppBar(
         backwardsCompatibility: true,
@@ -77,64 +72,62 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: userProvider.currentUser.favoritedPosts == null
+        child: posts == null
             ? Center(
-                child: spinkit,
-              )
-            : (posts == null
+                child: Text(
+                "Henüz bir içeriği favorilere eklemedin",
+                style: TextStyle(fontSize: 20),
+              ))
+            : (posts.isEmpty
                 ? Center(
                     child: Text("Henüz bir içeriği favorilere eklemedin",
                         style: TextStyle(fontSize: 20)),
                   )
-                : posts.isNotEmpty
-                    ? ListView.builder(
-                        itemBuilder: (context, index) {
-                          var postPhoto;
-                          var element = posts[index];
-                          element.isLocatedInYoutube == true
-                              ? postPhoto = CommonMethods.createThumbnailURL(
-                                  true, element.postContentURL)
-                              : postPhoto = element.postContentURL;
+                : ListView.builder(
+                    itemBuilder: (context, index) {
+                      var postPhoto;
+                      var element = posts[index];
+                      element.isLocatedInYoutube == true
+                          ? postPhoto = CommonMethods.createThumbnailURL(
+                              true, element.postContentURL)
+                          : postPhoto = element.postContentURL;
 
-                          return Column(
-                            children: [
-                              Slidable(
-                                child: GFListTile(
-                                  onTap: () {
-                                    NavigationService.instance.navigate(
-                                        k_ROUTE_POST_DETAIL,
-                                        args: element);
-                                  },
-                                  avatar: GFAvatar(
-                                    backgroundImage: NetworkImage(postPhoto),
-                                    radius: 50,
-                                  ),
-                                  titleText: element.postTitle,
-                                  subTitleText: element.postCategory,
-                                ),
-                                actionPane: SlidableDrawerActionPane(),
-                                actionExtentRatio: 0.25,
-                                actions: [
-                                  IconSlideAction(
-                                    caption: 'Kaldır',
-                                    color: Colors.red,
-                                    icon: FontAwesome5Solid.trash,
-                                    onTap: () async =>
-                                        await _removeFavorite(element.postId),
-                                  ),
-                                ],
+                      return Column(
+                        children: [
+                          Slidable(
+                            child: GFListTile(
+                              onTap: () {
+                                NavigationService.instance.navigate(
+                                    k_ROUTE_POST_DETAIL,
+                                    args: element);
+                              },
+                              avatar: GFAvatar(
+                                backgroundImage: NetworkImage(postPhoto),
+                                radius: 50,
                               ),
-                              Divider(
-                                thickness: 0.8,
-                              )
+                              titleText: element.postTitle,
+                              subTitleText: element.postCategory,
+                            ),
+                            actionPane: SlidableDrawerActionPane(),
+                            actionExtentRatio: 0.25,
+                            actions: [
+                              IconSlideAction(
+                                caption: 'Kaldır',
+                                color: Colors.red,
+                                icon: FontAwesome5Solid.trash,
+                                onTap: () async =>
+                                    await _removeFavorite(element.postId),
+                              ),
                             ],
-                          );
-                        },
-                        itemCount: posts.length,
-                      )
-                    : Center(
-                        child: spinkit,
-                      )),
+                          ),
+                          Divider(
+                            thickness: 0.8,
+                          )
+                        ],
+                      );
+                    },
+                    itemCount: posts.length,
+                  )),
       ),
     );
   }

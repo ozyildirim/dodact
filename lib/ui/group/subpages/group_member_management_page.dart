@@ -157,9 +157,10 @@ class _GroupMemberManagementPageState
                     });
               } else {
                 return Center(
-                  child: Text(
-                    "Boş.",
-                    style: TextStyle(fontSize: kPageCenteredTextSize),
+                  child: Container(
+                    color: Colors.white60,
+                    child: Text("Boş.",
+                        style: TextStyle(fontSize: kPageCenteredTextSize)),
                   ),
                 );
               }

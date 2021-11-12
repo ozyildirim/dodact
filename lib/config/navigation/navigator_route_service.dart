@@ -4,8 +4,6 @@ import 'package:dodact_v1/ui/auth/login_page.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
-import 'package:dodact_v1/ui/chatrooms/screens/chatroom_page.dart';
-import 'package:dodact_v1/ui/chatrooms/screens/user_chatrooms_page.dart';
 import 'package:dodact_v1/ui/common/screens/about_dodact_page.dart';
 import 'package:dodact_v1/ui/common/screens/privacy_policy_page.dart';
 import 'package:dodact_v1/ui/creation/creation_page.dart';
@@ -34,7 +32,8 @@ import 'package:dodact_v1/ui/interest/insterests_page.dart';
 import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
-
+import 'package:dodact_v1/ui/profile/screens/chatrooms/chatroom_page.dart';
+import 'package:dodact_v1/ui/profile/screens/chatrooms/user_chatrooms_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/applications_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/dod_card_page.dart';
@@ -45,7 +44,6 @@ import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/privacy_setti
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/profile_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/security_settings_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/subpages/social_accounts_settings_page.dart';
-import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_form_page.dart';
 
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/user_options_page.dart';
 import 'package:dodact_v1/ui/profile/screens/notifications/user_invitations_page.dart';
@@ -168,9 +166,6 @@ class NavigationRouteManager {
       case k_ROUTE_USER_APPLICATIONS_PAGE:
         return _navigateToDefault(ApplicationsPage(), settings);
 
-      case k_ROUTE_USER_FORM_PAGE:
-        return _navigateToDefault(UserFormPage(), settings);
-
       //
 
       case k_ROUTE_USER_NOTIFICATIONS:
@@ -180,10 +175,7 @@ class NavigationRouteManager {
         return _navigateToDefault(UserChatroomsPage(), settings);
 
       case k_ROUTE_CHATROOM_PAGE:
-        List<dynamic> args = settings.arguments;
-        return _navigateToDefault(
-            ChatroomPage(currentUserId: args[0], otherUserObject: args[1]),
-            settings);
+        return _navigateToDefault(ChatroomPage(chatroomId: args), settings);
 
       case k_ROUTE_USER_INVITATIONS_PAGE:
         return _navigateToDefault(UserInvitationsPage(), settings);

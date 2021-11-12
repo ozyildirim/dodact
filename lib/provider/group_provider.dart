@@ -93,7 +93,7 @@ class GroupProvider extends ChangeNotifier {
       await _groupRepository.update(groupId, changes);
       var updatedGroupModel = await getGroupDetail(groupId);
       group = updatedGroupModel;
-      notifyListeners();
+      groupList[groupList.indexOf(group)] = updatedGroupModel;
     } catch (e) {
       print("GroupProvider updateGroup error: " + e.toString());
       return false;

@@ -7,7 +7,6 @@ import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/group/widgets/group_events_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_info_tab_view.dart';
-import 'package:dodact_v1/ui/group/widgets/group_interests_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_members_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_photos_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_posts_tab_view.dart';
@@ -34,10 +33,10 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   @override
   void initState() {
     super.initState();
+    group = widget.group;
 
-    tabController = new TabController(length: 7, vsync: this);
+    tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
-    group = groupProvider.group;
     groupProvider.setGroup(group);
   }
 
@@ -49,6 +48,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   navigateGroupManagementPage() {
+    groupProvider.setGroup(group);
     NavigationService.instance.navigate(k_ROUTE_GROUP_MANAGEMENT_PAGE);
   }
 
@@ -77,6 +77,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             : null,
         title: Text(group.groupName),
         elevation: 8,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Container(
         width: dynamicWidth(1),
@@ -119,12 +120,12 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         },
         // toggle button appearance properties
         toggleButtonColor: Colors.pink,
-        toggleButtonBoxShadow: [
-          // BoxShadow(
-          //   color: Colors.blue,
-          //   blurRadius: 10,
-          // ),
-        ],
+        // toggleButtonBoxShadow: [
+        //   BoxShadow(
+        //     color: Colors.blue,
+        //     blurRadius: 10,
+        //   ),
+        // ],
         toggleButtonIconColor: Colors.white,
         toggleButtonMargin: 15.0,
         toggleButtonPadding: 15.0,
@@ -180,6 +181,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     return Container(
       width: double.infinity,
       height: 50,
+      color: Colors.white60,
       child: TabBar(
         isScrollable: true,
         labelColor: Colors.black,
@@ -189,13 +191,12 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         labelStyle: TextStyle(fontSize: 18),
         controller: tabController,
         tabs: [
-          Tab(text: "Açıklama"),
+          Tab(text: "Grup Açıklaması"),
           Tab(text: "Üyeler"),
           Tab(text: "İçerikler"),
           Tab(text: "Etkinlikler"),
           Tab(text: "Fotoğraflar"),
           Tab(text: "Duyurular"),
-          Tab(text: "İlgi Alanları"),
         ],
       ),
     );
@@ -216,7 +217,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             buildEventsTabView(),
             buildPhotosTabView(),
             buildAnnouncementsTabView(),
-            buildInterestsTabView()
           ],
         ),
       ),
@@ -245,10 +245,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
 
   buildPhotosTabView() {
     return GroupPhotosTabView();
-  }
-
-  buildInterestsTabView() {
-    return GroupInterestsTabView(group: group);
   }
 
   void navigateCreationPage(String groupId) {

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/chatroom_model.dart';
 import 'package:dodact_v1/model/message_model.dart';
@@ -62,30 +61,14 @@ class FirebaseChatroomService {
     }
   }
 
-  Future<MessageModel> getLastMessage(String chatroomId) async {
-    var querySnapshot = await chatroomsRef
-        .doc(chatroomId)
-        .collection("messages")
-        .orderBy('messageCreationDate', descending: true)
-        .limit(1)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      return MessageModel.fromJson(querySnapshot.docs.first.data());
-    } else {
-      return null;
-    }
-  }
-
-  Future<DocumentReference> sendMessage(
-      String chatroomId, String userId, String message) async {
+  Future sendMessage(String chatroomId, String userId, String message) async {
     MessageModel messageModel = MessageModel(
         message: message,
         senderId: userId,
         messageCreationDate: DateTime.now(),
         isRead: false);
 
-    return await chatroomsRef
+    await chatroomsRef
         .doc(chatroomId)
         .collection("messages")
         .add(messageModel.toJson())
@@ -97,7 +80,6 @@ class FirebaseChatroomService {
           .update({
         "messageId": value.id,
       });
-      return value;
     });
   }
 
@@ -111,26 +93,5 @@ class FirebaseChatroomService {
         .collection("messages")
         .doc(messageId)
         .delete();
-  }
-
-  Future<bool> checkChatroom(String firstUserId, String secondUserId) async {
-    String roomId;
-    int result = firstUserId.compareTo(secondUserId);
-
-    if (result < 0) {
-      roomId = firstUserId + "_" + secondUserId;
-    } else {
-      roomId = secondUserId + "_" + firstUserId;
-    }
-
-    print(roomId);
-
-    return await chatroomsRef.doc(roomId).get().then((value) {
-      if (value.exists) {
-        return true;
-      } else {
-        return false;
-      }
-    });
   }
 }

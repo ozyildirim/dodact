@@ -1,6 +1,5 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
@@ -20,17 +19,14 @@ class OthersProfileInfoTab extends StatelessWidget {
           leading: Icon(Icons.person),
           title: Text(user.nameSurname),
         ),
-        !user.privacySettings['hide_education'] &&
-                user.education != null &&
-                user.education.isNotEmpty
+        user.education != null && user.education.isNotEmpty
             ? ListTile(
                 leading: Icon(Icons.school),
                 title: Text(user.education),
               )
             : Container(),
-        !user.privacySettings['hide_profession'] &&
-                user.profession != null &&
-                user.profession.isNotEmpty
+
+        user.profession != null && user.profession.isNotEmpty
             ? ListTile(
                 leading: Icon(Icons.work),
                 title: Text(user.profession),
@@ -49,13 +45,13 @@ class OthersProfileInfoTab extends StatelessWidget {
           padding: const EdgeInsets.only(top: 12, left: 12),
           child: Text("Açıklama", style: TextStyle(fontSize: 16)),
         ),
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            user.userDescription,
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(12.0),
+        //   child: Text(
+        //     user.userDescription,
+        //     style: TextStyle(fontSize: 16),
+        //   ),
+        // ),
         buildSocialIcons(user)
       ],
     );
@@ -74,9 +70,7 @@ class OthersProfileInfoTab extends StatelessWidget {
       children: [
         linkedin != null && linkedin.isNotEmpty
             ? IconButton(
-                onPressed: () {
-                  CommonMethods.launchURL(linkedin);
-                },
+                onPressed: () {},
                 icon: Icon(
                   FontAwesome5Brands.linkedin,
                   size: 30,
@@ -85,41 +79,31 @@ class OthersProfileInfoTab extends StatelessWidget {
             : Container(),
         instagram != null && instagram.isNotEmpty
             ? IconButton(
-                onPressed: () {
-                  CommonMethods.launchURL("www.instagram.com/$instagram");
-                },
+                onPressed: () {},
                 icon: Icon(FontAwesome5Brands.instagram, size: 30),
               )
             : Container(),
         dribbble != null && dribbble.isNotEmpty
             ? IconButton(
-                onPressed: () {
-                  CommonMethods.launchURL(dribbble);
-                },
+                onPressed: () {},
                 icon: Icon(FontAwesome5Brands.dribbble, size: 30),
               )
             : Container(),
         soundcloud != null && soundcloud.isNotEmpty
             ? IconButton(
-                onPressed: () {
-                  CommonMethods.launchURL(soundcloud);
-                },
+                onPressed: () {},
                 icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
               )
             : Container(),
         youtube != null && youtube.isNotEmpty
             ? IconButton(
-                onPressed: () {
-                  CommonMethods.launchURL(youtube);
-                },
+                onPressed: () {},
                 icon: Icon(FontAwesome5Brands.youtube, size: 30),
               )
             : Container(),
         pinterest != null && pinterest.isNotEmpty
             ? IconButton(
-                onPressed: () {
-                  CommonMethods.launchURL(pinterest);
-                },
+                onPressed: () {},
                 icon: Icon(FontAwesome5Brands.pinterest, size: 30),
               )
             : Container(),

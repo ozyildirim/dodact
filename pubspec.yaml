@@ -30,7 +30,6 @@ dependencies:
   google_mobile_ads: ^0.13.0
   cloud_functions: ^3.0.3
   firebase_remote_config: ^0.11.0
-  firebase_dynamic_links: ^3.0.1
   
   google_sign_in: ^5.0.7
   get_it: ^7.2.0
@@ -49,7 +48,7 @@ dependencies:
   flutter_form_builder: "^6.0.0-nullsafety.1"
   getwidget: ^2.0.3
   url_launcher: ^6.0.9
-  # geolocator: 7.6.2
+  geolocator: 7.6.2
 
   flutter_native_splash: ^1.2.0
   shared_preferences: ^2.0.6
@@ -77,6 +76,7 @@ dependencies:
   search_choices: ^2.0.7
   expansion_card: ^0.1.0
   qr_flutter: ^4.0.0
+  flutter_svg: ^0.22.0
   profanity_filter: ^2.0.0
   circular_menu: ^1.2.3
   awesome_notifications: any
@@ -86,11 +86,8 @@ dependencies:
   multi_select_flutter: ^4.0.0
   youtube_metadata: ^1.0.1
   flutter_blurhash: ^0.6.0
-  permission_handler: ^8.2.6
+  permission_handler: any
   google_maps_place_picker_mb: ^2.0.0-mb.10
-  geolocator: ^7.7.1
-  image_cropper: ^1.4.1
-  device_preview: ^0.8.0
 
   
   
@@ -124,6 +121,18 @@ flutter:
     - assets/images/companies/
 
   fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Bold.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik-Bold.ttf
+        - asset: assets/fonts/Rubik-Regular.ttf
     - family: Raleway
       fonts:
         - asset: assets/fonts/Raleway-Regular.ttf
@@ -132,20 +141,15 @@ flutter:
         - asset: assets/fonts/Raleway-Black.ttf
           weight: 900
 
-    - family: Roboto
+    - family: RobotoCondensed
       fonts:
-        - asset: assets/fonts/Roboto/Roboto-Thin.ttf
-          weight: 100
-        - asset: assets/fonts/Roboto/Roboto-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+        - asset: assets/fonts/RobotoCondensed-Regular.ttf
+        - asset: assets/fonts/RobotoCondensed-Bold.ttf
           weight: 700
-
-
+        - asset: assets/fonts/RobotoCondensed-Light.ttf
+          weight: 300
+        - asset: assets/fonts/RobotoCondensed-Italic.ttf
+          style: italic
 
     - family: Poppins
       fonts:
@@ -157,9 +161,10 @@ flutter:
           weight: 300
         - asset: assets/fonts/Poppins-Medium.ttf
 
-    - family: Helvetica
+    - family: PulpDisplay
       fonts:
-        - asset: assets/fonts/Helvetica/Helvetica-Light.ttf
-        - asset: assets/fonts/Helvetica/Helvetica-Regular.ttf
-        - asset: assets/fonts/Helvetica/Helvetica-Bold.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Regular.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Bold.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Light.ttf
+        - asset: assets/fonts/PulpDisplay/PulpDisplay-Medium.ttf
 

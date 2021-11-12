@@ -14,8 +14,6 @@ class PrivacySettingsPage extends StatefulWidget {
 class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
   bool hiddenMail;
   bool hiddenLocation;
-  bool hiddenEducation;
-  bool hiddenProfession;
 
   bool _isChanged = false;
 
@@ -24,10 +22,6 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
     super.initState();
     hiddenMail = userProvider.currentUser.privacySettings['hide_mail'];
     hiddenLocation = userProvider.currentUser.privacySettings['hide_location'];
-    hiddenEducation =
-        userProvider.currentUser.privacySettings['hide_education'];
-    hiddenProfession =
-        userProvider.currentUser.privacySettings['hide_profession'];
   }
 
   @override
@@ -80,7 +74,6 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
                   },
                 ),
               ),
-              Divider(),
               Container(
                 child: SwitchListTile(
                   title: Text(
@@ -98,42 +91,16 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
                   },
                 ),
               ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Mesleğimi Gizle',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
-                  ),
-                  subtitle: Text(
-                      'Mesleğinin profilinde görüntülenmesini önlemek için aktive edebilirsin.'),
-                  value: hiddenProfession,
-                  onChanged: (value) {
-                    setState(() {
-                      hiddenProfession = !hiddenProfession;
-                      _isChanged = true;
-                    });
-                  },
-                ),
-              ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Eğitim Durumunu Gizle',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
-                  ),
-                  subtitle: Text(
-                      'Eğitim durumunun profilinde görüntülenmesini önlemek için aktive edebilirsin.'),
-                  value: hiddenEducation,
-                  onChanged: (value) {
-                    setState(() {
-                      hiddenEducation = !hiddenEducation;
-                      _isChanged = true;
-                    });
-                  },
-                ),
-              ),
+
+              // SwitchListTile(
+              //   title: Text('Salih"e kız bul'),
+              //   value: ornekAyar4,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       ornekAyar4 = !ornekAyar4;
+              //     });
+              //   },
+              // ),
             ],
           ),
         ),
@@ -143,42 +110,24 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
 
   Future<void> updateUser() async {
     try {
-      CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
+      CommonMethods().showLoaderDialog(context, "Değişiklikler kaydediliyor.");
       await userProvider.updateCurrentUser({
         'privacySettings': {
           'hide_mail': hiddenMail,
           'hide_location': hiddenLocation,
-          'hide_education': hiddenEducation,
-          'hide_profession': hiddenProfession,
         }
       });
       userProvider.currentUser.privacySettings['hide_mail'] = hiddenMail;
       userProvider.currentUser.privacySettings['hide_location'] =
           hiddenLocation;
-      userProvider.currentUser.privacySettings['hide_education'] =
-          hiddenEducation;
-      userProvider.currentUser.privacySettings['hide_profession'] =
-          hiddenProfession;
 
       NavigationService.instance.pop();
       setState(() {
         _isChanged = false;
       });
-      showSnackBar("Gizlilik tercihlerin başarıyla güncellendi.");
     } catch (e) {
-      showSnackBar("Değişiklikler kaydedilirken bir hata oluştu.");
+      CommonMethods().showErrorDialog(
+          context, "Değişiklikler kaydedilirken bir hata oluştu");
     }
-  }
-
-  showSnackBar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text(
-          message,
-          overflow: TextOverflow.fade,
-        ),
-      ),
-    );
   }
 }

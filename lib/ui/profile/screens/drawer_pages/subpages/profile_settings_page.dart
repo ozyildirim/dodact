@@ -10,12 +10,11 @@ class ProfileSettingsPage extends StatefulWidget {
 }
 
 class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
-  final double tileTitleSize = 20;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profil Ayarları"),
+        title: Text("Profil"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -32,24 +31,11 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  ),
+                  child: Icon(Icons.vpn_key),
                 ),
-                title: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: Colors.grey[100],
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Kişisel Bilgiler",
-                      style: TextStyle(fontSize: tileTitleSize),
-                    ),
-                  ),
+                title: Text(
+                  "Kişisel Bilgiler",
+                  style: TextStyle(fontSize: kDrawerTileTitleSize),
                 ),
                 onTap: () {
                   NavigationService.instance
@@ -61,24 +47,11 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    Icons.manage_accounts,
-                    color: Colors.black,
-                  ),
+                  child: Icon(Icons.mail),
                 ),
-                title: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: Colors.grey[100],
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Diğer Platform Hesapları",
-                      style: TextStyle(fontSize: tileTitleSize),
-                    ),
-                  ),
+                title: Text(
+                  "Sosyal Medya Hesapları",
+                  style: TextStyle(fontSize: kDrawerTileTitleSize),
                 ),
                 onTap: () {
                   NavigationService.instance

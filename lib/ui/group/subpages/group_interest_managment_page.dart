@@ -433,14 +433,5 @@ class _GroupInterestManagementPageState
       isLoading = false;
       isUpdated = false;
     });
-    showSnackbar("İlgi alanları güncellendi");
-  }
-
-  showSnackbar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
   }
 }

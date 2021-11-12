@@ -79,7 +79,6 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       TextFieldContainer(
                         width: MediaQuery.of(context).size.width * 0.6,
-                        padding: EdgeInsets.all(4),
                         child: TextField(
                           decoration: InputDecoration(
                               hintText: 'Ara',
@@ -94,8 +93,6 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       TextFieldContainer(
                         width: MediaQuery.of(context).size.width * 0.30,
-                        padding: EdgeInsets.only(
-                            left: 8, top: 4, bottom: 4, right: 4),
                         child: FormBuilderDropdown(
                           name: "searchCategory",
                           initialValue: category,
@@ -103,8 +100,8 @@ class _SearchPageState extends State<SearchPage> {
                           hint:
                               Text("Kategori", style: TextStyle(fontSize: 10)),
                           decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.all(4)),
+                            border: InputBorder.none,
+                          ),
                           onChanged: (value) {
                             setState(() {
                               category = value;
@@ -138,63 +135,61 @@ class _SearchPageState extends State<SearchPage> {
     switch (searchCategory) {
       case SearchCategory.Post:
         Logger().d("Post case seçildi");
-        return Expanded(
-          child: Container(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: (input != "" && input != null)
-                  ? FirebaseFirestore.instance
-                      .collection('posts')
-                      .where("searchKeywords", arrayContains: name)
-                      .where('visible', isEqualTo: true)
-                      .snapshots()
-                  : FirebaseFirestore.instance
-                      .collection("posts")
-                      .where('visible', isEqualTo: true)
-                      .limit(5)
-                      .snapshots(),
-              builder: (context, snapshot) {
-                return (snapshot.connectionState == ConnectionState.waiting)
-                    ? Container(
-                        height: size.height * 0.5,
-                        child: Center(child: spinkit),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot data = snapshot.data.docs[index];
-                          PostModel post = PostModel.fromJson(data.data());
+        return StreamBuilder<QuerySnapshot>(
+          stream: (input != "" && input != null)
+              ? FirebaseFirestore.instance
+                  .collection('posts')
+                  .where("searchKeywords", arrayContains: name)
+                  .where('visible', isEqualTo: true)
+                  .snapshots()
+              : FirebaseFirestore.instance
+                  .collection("posts")
+                  .where('visible', isEqualTo: true)
+                  .limit(5)
+                  .snapshots(),
+          builder: (context, snapshot) {
+            return (snapshot.connectionState == ConnectionState.waiting)
+                ? Container(
+                    height: size.height * 0.5,
+                    child: Center(child: spinkit),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot data = snapshot.data.docs[index];
+                      PostModel post = PostModel.fromJson(data.data());
 
-                          var thumbnail = CommonMethods.createThumbnailURL(
-                              post.isLocatedInYoutube, post.postContentURL);
+                      var thumbnail = CommonMethods.createThumbnailURL(
+                          post.isLocatedInYoutube, post.postContentURL);
 
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance
-                                    .navigate(k_ROUTE_POST_DETAIL, args: post);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(thumbnail),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                post.postTitle,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              subtitle: Text(post.postCategory),
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          onTap: () {
+                            NavigationService.instance
+                                .navigate(k_ROUTE_POST_DETAIL, args: post);
+                          },
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(thumbnail),
+                            radius: 40,
+                          ),
+                          title: Text(
+                            post.postTitle,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 20,
                             ),
-                          );
-                        },
+                          ),
+                          subtitle: Text(post.postCategory),
+                        ),
                       );
-              },
-            ),
-          ),
+                      print(snapshot.data.docs[index]);
+                      return Container();
+                    },
+                  );
+          },
         );
         break;
       case SearchCategory.User:
@@ -243,11 +238,11 @@ class _SearchPageState extends State<SearchPage> {
                                   fontSize: 20,
                                 ),
                               ),
-                              subtitle: user.privacySettings['hide_profession']
-                                  ? Container()
-                                  : Text(user.profession),
+                              subtitle: Text(user.profession),
                             ),
                           );
+                          print(snapshot.data.docs[index]);
+                          return Container();
                         },
                       );
               },
@@ -304,6 +299,8 @@ class _SearchPageState extends State<SearchPage> {
                               subtitle: Text(event.category),
                             ),
                           );
+                          print(snapshot.data.docs[index]);
+                          return Container();
                         },
                       );
               },
@@ -358,6 +355,8 @@ class _SearchPageState extends State<SearchPage> {
                               subtitle: Text(group.groupCategory),
                             ),
                           );
+                          print(snapshot.data.docs[index]);
+                          return Container();
                         },
                       );
               },

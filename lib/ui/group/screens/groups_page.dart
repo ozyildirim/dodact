@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
-import 'package:dodact_v1/ui/common/widgets/group_card.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +31,6 @@ class _GroupsPageState extends State<GroupsPage> {
     scrollController = ScrollController();
 
     scrollController.addListener(scrollListener);
-    groupProvider.groupsSnapshot.clear();
-    groupProvider.filteredGroupsSnapshot.clear();
     groupProvider.getGroupList();
   }
 
@@ -91,17 +91,25 @@ class _GroupsPageState extends State<GroupsPage> {
                   itemCount: provider.filteredGroups.length,
                   itemBuilder: (context, index) {
                     var group = provider.filteredGroups[index];
-                    return GroupCard(group: group);
+                    return buildGroupCard(group);
                   },
                 );
               } else {
                 return Container(
-                  child: Center(
-                    child: Text(
-                      "Bu kriterlere uyan bir topluluk bulunamadı.",
-                      style: TextStyle(fontSize: kPageCenteredTextSize),
-                      textAlign: TextAlign.center,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/app/situations/not_found.png"),
+                      Text(
+                        "Bu kriterlere uyan bir topluluk bulunamadı.",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: kToolbarHeight,
+                      )
+                    ],
                   ),
                 );
               }
@@ -112,21 +120,103 @@ class _GroupsPageState extends State<GroupsPage> {
                     itemCount: provider.groups.length,
                     itemBuilder: (context, index) {
                       var group = provider.groups[index];
-                      return GroupCard(group: group);
+                      return buildGroupCard(group);
                     });
               } else {
                 return Container(
-                  child: Center(
-                    child: Text(
-                      "Bu kriterlere uyan bir etkinlik bulunamadı.",
-                      style: TextStyle(fontSize: kPageCenteredTextSize),
-                      textAlign: TextAlign.center,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/app/situations/not_found.png"),
+                      Text(
+                        "Bu kriterlere uyan bir etkinlik bulunamadı.",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: kToolbarHeight,
+                      )
+                    ],
                   ),
                 );
               }
             }
           },
+        ),
+      ),
+    );
+  }
+
+  buildGroupCard(GroupModel group) {
+    var size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          NavigationService.instance
+              .navigate(k_ROUTE_GROUP_DETAIL, args: group);
+        },
+        child: Container(
+          height: size.height * 0.15,
+          child: Card(
+            color: Colors.grey[100],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Row(
+              children: [
+                // SizedBox(
+                //   width: size.width * 0.1,
+                // ),
+                Expanded(
+                  child: Container(
+                    // height: size.height * 0.10,
+                    width: size.width * 0.25,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: CachedNetworkImageProvider(
+                              group.groupProfilePicture),
+                        )),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * 0.08,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: Text(
+                        group.groupName,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: Text(
+                        group.groupSubtitle,
+                        style: TextStyle(fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -76,44 +76,47 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Stack(children: [
-            Container(
-              height: dynamicHeight(0.56),
-              width: dynamicWidth(0.60),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.8), BlendMode.dstATop),
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    event.eventImages[0],
-                  ),
-                ),
-              ),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: 250,
+            CachedNetworkImage(
+              imageUrl: event.eventImages[0],
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  height: dynamicHeight(0.40),
+                  width: dynamicWidth(0.50),
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey[50].withOpacity(0.7),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      event.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        event.eventImages[0],
                       ),
-                      overflow: TextOverflow.fade,
                     ),
-                    subtitle: Text(
-                        DateFormat("dd.MM.yyyy")
-                            .format(event.startDate)
-                            .toString(),
-                        style: TextStyle(fontSize: 18)),
                   ),
-                ),
-              ),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey[50].withOpacity(0.8),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          event.title,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                            DateFormat("dd/MM/yyyy")
+                                .format(event.startDate)
+                                .toString(),
+                            style: TextStyle(fontSize: 18)),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
             Positioned(
               top: 1,
