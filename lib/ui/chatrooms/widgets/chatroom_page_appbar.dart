@@ -60,10 +60,10 @@ class ChatroomPageAppBar extends StatelessWidget
                   ],
                 ),
               ),
-              Icon(
-                Icons.more_vert,
-                color: Colors.grey.shade700,
-              ),
+              // Icon(
+              //   Icons.more_vert,
+              //   color: Colors.grey.shade700,
+              // ),
             ],
           ),
         ),

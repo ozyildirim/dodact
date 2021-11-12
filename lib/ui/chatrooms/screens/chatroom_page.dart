@@ -111,25 +111,25 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                   key: _formKey,
                   child: Row(
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Color(0xff194d25),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {},
+                      //   child: Container(
+                      //     height: 30,
+                      //     width: 30,
+                      //     decoration: BoxDecoration(
+                      //       color: Color(0xff194d25),
+                      //       borderRadius: BorderRadius.circular(30),
+                      //     ),
+                      //     child: Icon(
+                      //       Icons.add,
+                      //       color: Colors.white,
+                      //       size: 20,
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   width: 15,
+                      // ),
                       Expanded(
                         child: FormBuilderTextField(
                           enableSuggestions: true,
