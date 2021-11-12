@@ -198,6 +198,11 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           if (!message.isRead &&
               message.senderId != userProvider.currentUser.uid) {
             updateMessageRead(documentSnapshot, chatroomId);
+
+            // if (message.isRead == false) {
+            //   Provider.of<ChatroomProvider>(context, listen: false)
+            //       .updateMessageRead(documentSnapshot, chatroomId);
+            // }
           }
 
           return GestureDetector(
