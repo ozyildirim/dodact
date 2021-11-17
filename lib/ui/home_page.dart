@@ -36,8 +36,20 @@ class _HomePageState extends BaseState<HomePage> {
     // FirebaseMessaging.onMessageOpenedApp.listen((message) {
     //   print('Message clicked!');
     // });
-
+    checkNotificationPermissions();
     checkUserSearchKeywords();
+  }
+
+  Future checkNotificationPermissions() async {
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
   }
 
   @override

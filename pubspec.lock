@@ -112,7 +112,7 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.4"
+    version: "3.1.0"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
@@ -133,7 +133,7 @@ packages:
       name: cloud_functions
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   cloud_functions_platform_interface:
     dependency: transitive
     description:
@@ -147,7 +147,7 @@ packages:
       name: cloud_functions_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.1.1"
   collection:
     dependency: transitive
     description:
@@ -212,7 +212,7 @@ packages:
     source: hosted
     version: "0.3.2"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -246,20 +246,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.6"
-  device_frame:
-    dependency: transitive
-    description:
-      name: device_frame
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.2"
-  device_preview:
-    dependency: "direct main"
-    description:
-      name: device_preview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.0"
   dots_indicator:
     dependency: transitive
     description:
@@ -378,7 +364,7 @@ packages:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.0.9"
+    version: "11.1.0"
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
@@ -446,7 +432,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.0"
+    version: "7.3.3"
   flutter_blurhash:
     dependency: "direct main"
     description:
@@ -559,13 +545,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.1"
-  flutter_svg:
-    dependency: transitive
-    description:
-      name: flutter_svg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.23.0+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -583,13 +562,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  freezed_annotation:
-    dependency: transitive
-    description:
-      name: freezed_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.15.0"
   geolocator:
     dependency: "direct main"
     description:
@@ -673,7 +645,7 @@ packages:
       name: google_maps_place_picker_mb
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0-mb.10"
+    version: "2.0.0-mb.11"
   google_maps_webservice:
     dependency: transitive
     description:
@@ -681,13 +653,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.20-nullsafety.5"
-  google_mobile_ads:
-    dependency: "direct main"
-    description:
-      name: google_mobile_ads
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.13.6"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -953,7 +918,7 @@ packages:
       name: paginate_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   path:
     dependency: transitive
     description:
@@ -961,20 +926,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-  path_drawing:
-    dependency: transitive
-    description:
-      name: path_drawing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.1+1"
-  path_parsing:
-    dependency: transitive
-    description:
-      name: path_parsing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
   path_provider:
     dependency: "direct main"
     description:
@@ -1086,7 +1037,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.1"
   qr:
     dependency: transitive
     description:
@@ -1206,6 +1157,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  sign_in_with_apple:
+    dependency: "direct main"
+    description:
+      name: sign_in_with_apple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   simple_gesture_detector:
     dependency: transitive
     description:

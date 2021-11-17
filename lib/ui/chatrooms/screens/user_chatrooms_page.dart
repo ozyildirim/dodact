@@ -46,8 +46,8 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
     return PaginateFirestore(
       isLive: true,
       itemsPerPage: 10,
-      itemBuilder: (index, context, object) {
-        ChatroomModel model = ChatroomModel.fromJson(object.data());
+      itemBuilder: ( context, object,index) {
+        ChatroomModel model = ChatroomModel.fromJson(object[index].data());
         return FutureBuilder(
             future: getOtherUserProfile(model),
             builder: (context, object) {

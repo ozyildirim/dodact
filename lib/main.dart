@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -9,7 +8,7 @@ import 'package:dodact_v1/locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,22 +22,13 @@ Future<void> _messageHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  //MobileAds.instance.initialize();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   initScreen = _prefs.getInt("initScreen");
   await _prefs.setInt('initScreen', 1);
   await Firebase.initializeApp();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  // NotificationSettings settings = await messaging.requestPermission(
-  //   alert: true,
-  //   announcement: false,
-  //   badge: true,
-  //   carPlay: false,
-  //   criticalAlert: false,
-  //   provisional: false,
-  //   sound: true,
-  // );
 
   // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
   //   print('User granted permission');
@@ -124,7 +114,6 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
-        locale: DevicePreview.locale(context),
         useInheritedMediaQuery: true,
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,
         onUnknownRoute: NavigationRouteManager.onUnknownRoute,
