@@ -6,6 +6,7 @@ import 'package:dodact_v1/ui/general/general_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends BaseState<HomePage> {
-  FirebaseMessaging messaging;
+  var messaging;
   int selectedIndex = 0;
 
   final List<Widget> _children = [
@@ -32,6 +33,7 @@ class _HomePageState extends BaseState<HomePage> {
   @override
   void initState() {
     super.initState();
+    messaging = FirebaseMessaging.instance;
 
     // FirebaseMessaging.onMessageOpenedApp.listen((message) {
     //   print('Message clicked!');
