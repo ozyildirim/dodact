@@ -44,6 +44,19 @@ class AuthRepository {
     }
   }
 
+  Future<User> signInWithApple(BuildContext context) async {
+    if (appMode == AppMode.DEBUG) {
+    } else {
+      User user = await _firebaseAuthService.signInWithApple(context);
+      bool result = await _firebaseUserService.save(user);
+      if (result) {
+        return user;
+      } else {
+        return null;
+      }
+    }
+  }
+
   Future<bool> createAccountWithEmailAndPassword(
       String email, String password) async {
     if (appMode == AppMode.DEBUG) {

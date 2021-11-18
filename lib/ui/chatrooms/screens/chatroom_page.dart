@@ -193,11 +193,11 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
             buildEmptyRoomAction();
           }
         },
-        itemBuilder: (index, context, documentSnapshot) {
-          final message = MessageModel.fromJson(documentSnapshot.data());
+        itemBuilder: (context, documentSnapshot,index) {
+          final message = MessageModel.fromJson(documentSnapshot[index].data());
           if (!message.isRead &&
               message.senderId != userProvider.currentUser.uid) {
-            updateMessageRead(documentSnapshot, chatroomId);
+            updateMessageRead(documentSnapshot[index], chatroomId);
 
             // if (message.isRead == false) {
             //   Provider.of<ChatroomProvider>(context, listen: false)

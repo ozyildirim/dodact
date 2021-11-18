@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
@@ -10,9 +12,9 @@ import 'package:dodact_v1/ui/common/widgets/custom_button.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 enum Mode { Login, Signup }
 
@@ -40,6 +42,21 @@ class _LogInPageState extends BaseState<LogInPage> {
   void _signInWithGoogle() async {
     CommonMethods().showLoaderDialog(context, "Google ile giriş yapılıyor");
     var status = await authProvider.signInWithGoogle(context);
+
+    if (status != AuthResultStatus.successful) {
+      NavigationService.instance.pop();
+      if (status != AuthResultStatus.abortedByUser) {
+        final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
+        showSnackbar(errorMsg);
+      }
+    } else {
+      NavigationService.instance.pop();
+      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
+    }
+  }
+
+  void _signInWithApple() async {
+    var status = await authProvider.signInWithApple(context);
 
     if (status != AuthResultStatus.successful) {
       NavigationService.instance.pop();
@@ -227,6 +244,24 @@ class _LogInPageState extends BaseState<LogInPage> {
                       press: () => _signInWithGoogle(),
                       iconSrc: "assets/images/google_logo.png",
                     ),
+                    if (Platform.isIOS)
+                      GestureDetector(
+                        onTap: () => _signInWithApple(),
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            FontAwesome.apple,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ],

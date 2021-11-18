@@ -83,6 +83,29 @@ class AuthProvider extends BaseModel {
     return authStatus;
   }
 
+  Future<AuthResultStatus> signInWithApple(BuildContext context) async {
+    try {
+      authStatus = null;
+      var user = await authRepository.signInWithApple(context);
+      if (user != null) {
+        print("AuthProvider user logged with apple");
+        authStatus = AuthResultStatus.successful;
+        setUser(user);
+        notifyListeners();
+      } else {
+        print("AuthProvider apple user null");
+        authStatus = AuthResultStatus.abortedByUser;
+        notifyListeners();
+      }
+    } catch (e) {
+      logger.e("AuthProvider signInWithApple error:" + e.toString());
+      authStatus = AuthResultStatus.abortedByUser;
+      notifyListeners();
+    }
+
+    return authStatus;
+  }
+
   Future<AuthResultStatus> createAccountWithEmailAndPassword(
       String email, String password) async {
     try {

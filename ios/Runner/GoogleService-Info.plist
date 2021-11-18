@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1030067077144-2ls1ti5qq5qrokkb5fppo8fqau4pboi2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1030067077144-2ls1ti5qq5qrokkb5fppo8fqau4pboi2</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1030067077144-dd3dom97r8mmvmoieeuc5g1o23sdfeiu.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAg-XchLdl-2NT2_McJiXCqXqqC1BzStwA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1030067077144</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dodact.dodact</string>
+	<key>PROJECT_ID</key>
+	<string>dodact-7ccd3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dodact-7ccd3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1030067077144:ios:ab859a3f085a14a3b1c36d</string>
+	<key>DATABASE_URL</key>
+	<string>https://dodact-7ccd3.firebaseio.com</string>
+</dict>
+</plist>
