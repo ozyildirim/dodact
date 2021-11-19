@@ -41,12 +41,13 @@ class CommonMethods {
   }
 
   Future<void> showSuccessDialog(BuildContext context, String message,
-      {String title}) async {
+      {String title, Function okButtonTap}) async {
     await CoolAlert.show(
         context: context,
         barrierDismissible: false,
         type: CoolAlertType.success,
         text: message,
+        onConfirmBtnTap: okButtonTap,
         confirmBtnText: "Tamam",
         title: title ?? "İşlem Başarılı");
   }

@@ -1,7 +1,10 @@
 //Users are going to apply through this page to be post and event creator.
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/application_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +90,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
     );
   }
 
-  submitForm() {
+  submitForm() async {
     if (creatorApplicationFormKey.currentState.saveAndValidate()) {
       var interest = creatorApplicationFormKey.currentState.value["interest"]
           .toString()
@@ -101,16 +104,43 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
           .trim();
 
       try {
-        applicationProvider
+        await applicationProvider
             .createApplication("Creator", userProvider.currentUser.uid, {
           "selectedInterest": interest,
           "description": description,
           "link": link,
         });
+
+        CommonMethods().showSuccessDialog(
+          context,
+          "Başvurun bizlere ulaştı, en kısa zamanda dönüş yapacağız",
+        );
+        NavigationService.instance.pop();
+        NavigationService.instance.pop();
       } catch (e) {
         print(e);
       }
     } else {}
+  }
+
+  showInfoDialog(BuildContext context, String title, String infoDescription) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(infoDescription),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Tamam"),
+              onPressed: () {
+                NavigationService.instance.pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   showSnackBar(String message) {
@@ -140,7 +170,12 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                   "İlgili Sanat Dalı",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.info_outline))
+                IconButton(
+                    onPressed: () {
+                      showInfoDialog(context, "İlgili Sanat Dalı",
+                          "İçerik oluşturmayı planladığın sanat dalını seçebilir misin?");
+                    },
+                    icon: Icon(Icons.info_outline))
               ],
             ),
             TextFieldContainer(
@@ -180,7 +215,12 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                   "Sanatçı Detay",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.info_outline))
+                IconButton(
+                    onPressed: () {
+                      showInfoDialog(context, "Detaylı Bilgi",
+                          "Bize biraz kendinden ve sanat geçmişinden bahseder misin? Aldığın eğitimler veya bu zamana kadar ortaya koymuş olduğun performanslardan bahsedebilirsin.");
+                    },
+                    icon: Icon(Icons.info_outline))
               ],
             ),
             TextFieldContainer(
@@ -212,7 +252,12 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                   "Bağlantı",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.info_outline))
+                IconButton(
+                    onPressed: () {
+                      showInfoDialog(context, "Bağlantı",
+                          "Yaptığın çalışmaları inceleyebileceğimiz herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
+                    },
+                    icon: Icon(Icons.info_outline))
               ],
             ),
             TextFieldContainer(
