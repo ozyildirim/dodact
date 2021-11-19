@@ -8,9 +8,15 @@ import 'package:dodact_v1/ui/chatrooms/screens/chatroom_page.dart';
 import 'package:dodact_v1/ui/chatrooms/screens/user_chatrooms_page.dart';
 import 'package:dodact_v1/ui/common/screens/about_dodact_page.dart';
 import 'package:dodact_v1/ui/common/screens/privacy_policy_page.dart';
-import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/ui/creation/creation_landing_page.dart';
+import 'package:dodact_v1/ui/creation/creation_menu_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/creator_application_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/event_creation_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/group_application_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/stream_creation_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/streamer_application_page.dart';
+import 'package:dodact_v1/ui/creation/user_application_page.dart';
 import 'package:dodact_v1/ui/detail/podcast_detail.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_detail_comments_part.dart';
@@ -35,7 +41,6 @@ import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
 
-import 'package:dodact_v1/ui/profile/screens/drawer_pages/applications_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/calendar_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/dod_card_page.dart';
 import 'package:dodact_v1/ui/profile/screens/drawer_pages/favorites_page.dart';
@@ -87,12 +92,48 @@ class NavigationRouteManager {
 
       case k_ROUTE_HOME:
         return _navigateToDefault(HomePage(), settings);
-      case k_ROUTE_CREATION:
+
+      case k_ROUTE_CREATION_LANDING:
+        return _navigateToDefault(CreationLandingPage(), settings);
+
+      //Application Routes
+
+      case k_ROUTE_USER_APPLICATION_MENU:
+        return _navigateToDefault(UserApplicationMenuPage(), settings);
+
+      case k_ROUTE_STREAMER_APPLICATION:
+        return _navigateToDefault(StreamerApplicationPage(), settings);
+
+      case k_ROUTE_CREATOR_APPLICATION:
+        return _navigateToDefault(CreatorApplicationPage(), settings);
+
+      case k_ROUTE_GROUP_APPLICATION:
+        return _navigateToDefault(GroupApplicationPage(), settings);
+
+      //Creation Routes
+      case k_ROUTE_CREATION_MENU:
+        return _navigateToDefault(CreationMenuPage(groupId: args), settings);
+
+      case k_ROUTE_CREATE_POST_PAGE:
+        List<dynamic> args = settings.arguments;
         return _navigateToDefault(
-            CreationPage(
-              groupId: args,
-            ),
+            PostCreationPage(
+                postType: args[0], postCategory: args[1], groupId: args[2]),
             settings);
+
+      case k_ROUTE_CREATE_EVENT_PAGE:
+        List<dynamic> args = settings.arguments;
+        return _navigateToDefault(
+            EventCreationPage(
+                eventCategory: args[0],
+                eventType: args[1],
+                eventPlatform: args[2]),
+            settings);
+
+      case k_ROUTE_CREATE_USER_STREAM_PAGE:
+        return _navigateToDefault(StreamCreationPage(), settings);
+
+      //////
 
       case k_ROUTE_SEARCH:
         return _navigateToDefault(SearchPage(), settings);
@@ -165,9 +206,6 @@ class NavigationRouteManager {
       case k_ROUTE_DOD_CARD:
         return _navigateToDefault(DodCardPage(), settings);
 
-      case k_ROUTE_USER_APPLICATIONS_PAGE:
-        return _navigateToDefault(ApplicationsPage(), settings);
-
       case k_ROUTE_USER_FORM_PAGE:
         return _navigateToDefault(UserFormPage(), settings);
 
@@ -237,26 +275,6 @@ class NavigationRouteManager {
 
       case k_ROUTE_GROUP_MEDIA_MANAGEMENT_PAGE:
         return _navigateToDefault(GroupMediaManagementPage(), settings);
-
-      case k_ROUTE_CREATE_POST_PAGE:
-        List<dynamic> args = settings.arguments;
-        return _navigateToDefault(
-            PostCreationPage(
-              postType: args[0],
-              postCategory: args[1],
-              groupId: args[2],
-            ),
-            settings);
-
-      case k_ROUTE_CREATE_EVENT_PAGE:
-        List<dynamic> args = settings.arguments;
-        return _navigateToDefault(
-            EventCreationPage(
-              eventCategory: args[0],
-              eventType: args[1],
-              eventPlatform: args[2],
-            ),
-            settings);
 
       case k_ROUTE_PRIVACY_POLICY:
         return _navigateToDefault(PrivacyPolicyPage(), settings);

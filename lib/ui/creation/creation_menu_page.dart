@@ -1,21 +1,20 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/ui/creation/widgets/curved_list_item.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 // ignore: must_be_immutable
-class CreationPage extends StatefulWidget {
+class CreationMenuPage extends StatefulWidget {
   final String groupId;
 
-  CreationPage({this.groupId});
+  CreationMenuPage({this.groupId});
 
   @override
-  _CreationPageState createState() => _CreationPageState();
+  _CreationMenuPageState createState() => _CreationMenuPageState();
 }
 
-class _CreationPageState extends State<CreationPage> {
+class _CreationMenuPageState extends State<CreationMenuPage> {
   GlobalKey<FormBuilderState> _postDialogKey = GlobalKey<FormBuilderState>();
   GlobalKey<FormBuilderState> _eventDialogKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -38,20 +37,29 @@ class _CreationPageState extends State<CreationPage> {
     // radioButtonFocus.dispose();
   }
 
-  var appBar = AppBar(
-    elevation: 8,
-    title: Text(
-      "Oluştur",
-      style: TextStyle(fontWeight: FontWeight.normal),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-        appBar: appBar,
+        appBar: AppBar(
+            elevation: 8,
+            title: Text(
+              "Oluştur",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+            actions: widget.groupId == null
+                ? [
+                    MaterialButton(
+                      onPressed: () {
+                        NavigationService.instance
+                            .navigate(k_ROUTE_USER_APPLICATION_MENU);
+                      },
+                      child: Text("Başvurular",
+                          style: TextStyle(color: Colors.white)),
+                    )
+                  ]
+                : null),
         key: _scaffoldKey,
         extendBodyBehindAppBar: false,
         body: Container(

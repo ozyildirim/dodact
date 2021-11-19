@@ -8,11 +8,24 @@ const k_ROUTE_REGISTER = '/signup';
 const k_ROUTE_REGISTER_DETAIL = '/signup_detail';
 const k_ROUTE_INTEREST_REGISTRATION = '/interest-registration';
 const k_ROUTE_INTERESTS_CHOICE = '/interest_choice';
-
 const k_ROUTE_HOME = "/home";
-const k_ROUTE_CREATION = "/creation";
-const k_ROUTE_SEARCH = '/search';
 
+const k_ROUTE_CREATION_LANDING = "/creation-landing";
+
+//Application Routes
+const k_ROUTE_USER_APPLICATION_MENU = "/user-application-menu";
+const k_ROUTE_STREAMER_APPLICATION = "/streamer-application";
+const k_ROUTE_CREATOR_APPLICATION = "/creator-application";
+const k_ROUTE_GROUP_APPLICATION = "/group-creator-application";
+
+const k_ROUTE_CREATION_MENU = "/creation";
+
+//Creation Routes
+const k_ROUTE_CREATE_POST_PAGE = '/add_post';
+const k_ROUTE_CREATE_EVENT_PAGE = '/add_event';
+const k_ROUTE_CREATE_USER_STREAM_PAGE = '/add_user_stream';
+
+const k_ROUTE_SEARCH = '/search';
 const k_ROUTE_FORGOT_PASSWORD = '/forgot_password';
 const k_ROUTE_RESET_PASSWORD = '/reset_password';
 const k_ROUTE_DISCOVER = '/discover';
@@ -42,7 +55,6 @@ const k_ROUTE_USER_FAVORITES = '/user_favorites';
 const k_ROUTE_USER_CALENDAR_PAGE = '/user_calendar';
 const k_ROUTE_USER_CONTRIBUTIONS_PAGE = '/user_contributions';
 const k_ROUTE_DOD_CARD = '/dod_card';
-const k_ROUTE_USER_APPLICATIONS_PAGE = "/user_applications";
 const k_ROUTE_USER_FORM_PAGE = '/user_form';
 
 //User Settings Routes
@@ -68,10 +80,6 @@ const k_ROUTE_GROUP_EVENT_MANAGEMENT_PAGE = '/group_event_management';
 const k_ROUTE_GROUP_POST_MANAGEMENT_PAGE = '/group_post_management';
 const k_ROUTE_GROUP_INTEREST_MANAGEMENT_PAGE = '/group_interest_management';
 const k_ROUTE_GROUP_MEDIA_MANAGEMENT_PAGE = '/group_media_management';
-
-//Creation Routes
-const k_ROUTE_CREATE_POST_PAGE = '/add_post';
-const k_ROUTE_CREATE_EVENT_PAGE = '/add_event';
 
 const k_ROUTE_STORY_VIEW = "/story_view";
 
