@@ -33,6 +33,10 @@ class _ProfilePageState extends BaseState<ProfilePage>
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
+        title: Text(
+          "@" + userProvider.currentUser.username,
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),

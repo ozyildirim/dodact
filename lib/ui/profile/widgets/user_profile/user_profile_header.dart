@@ -4,7 +4,6 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeader extends StatefulWidget {
@@ -58,8 +57,15 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Text(
+            //   "@" + user.username,
+            //   style: TextStyle(
+            //     fontSize: 18,
+            //     fontWeight: FontWeight.w500,
+            //   ),
+            // ),
             Text(
-              "@" + user.username,
+              user.nameSurname,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -74,6 +80,17 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
                     color: Colors.deepOrangeAccent,
                   )
                 : SizedBox(),
+            SizedBox(height: 10),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.location_on, color: Colors.grey[600]),
+            Text(
+              provider.otherUser.location,
+              style: TextStyle(color: Colors.grey[600]),
+            ),
           ],
         )
       ],

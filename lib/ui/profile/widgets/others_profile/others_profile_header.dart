@@ -44,8 +44,15 @@ class OthersProfileHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Text(
+            //   "@" + provider.otherUser.username,
+            //   style: TextStyle(
+            //     fontSize: 18,
+            //     fontWeight: FontWeight.w500,
+            //   ),
+            // ),
             Text(
-              "@" + provider.otherUser.username,
+              provider.otherUser.nameSurname,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -65,6 +72,18 @@ class OthersProfileHeader extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
+        !provider.otherUser.privacySettings["hide_location"]
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.location_on, color: Colors.grey[600]),
+                  Text(
+                    provider.otherUser.location,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              )
+            : Container(),
       ],
     );
   }

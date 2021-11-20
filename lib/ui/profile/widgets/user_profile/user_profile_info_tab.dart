@@ -4,6 +4,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:readmore/readmore.dart';
 
 class UserProfileInfoTab extends StatefulWidget {
   @override
@@ -19,102 +20,75 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Row(
-            children: [
-              Container(
-                width: size.width * 0.5,
-                height: size.height * 0.1,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    foregroundColor: Colors.greenAccent,
-                    radius: 15,
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                    ),
-                  ),
-                  title: Text("Ad-Soyad",
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                  subtitle: Text(
-                    user.nameSurname,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+          ListTile(
+            leading: CircleAvatar(
+              foregroundColor: Colors.greenAccent,
+              radius: 16,
+              child: Icon(
+                Icons.school,
+                color: Colors.white,
               ),
-              Container(
-                width: size.width * 0.5,
-                height: size.height * 0.1,
-                child: ListTile(
-                  title: Text("Öğrenim Durumu",
-                      maxLines: null,
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                  subtitle: Text(
-                    user.education,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Container(
-                width: size.width * 0.5,
-                height: size.height * 0.1,
-                child: ListTile(
-                  title: Text("Meslek",
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                  subtitle: Text(
-                    user.profession,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: size.width * 0.5,
-                height: size.height * 0.1,
-                child: ListTile(
-                  title: Text("Lokasyon",
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                  subtitle: Text(
-                    user.location,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              width: size.width,
-              // height: size.height * 0.1,
-              child: ListTile(
-                title: Text("Detaylı Bilgi",
-                    style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                subtitle: Text(
-                  user.userDescription,
-                  maxLines: null,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
+            ),
+            title: Text("Öğrenim Durumu",
+                maxLines: null,
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            subtitle: Text(
+              user.education,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
               ),
             ),
           ),
+          ListTile(
+            leading: CircleAvatar(
+              foregroundColor: Colors.greenAccent,
+              radius: 16,
+              child: Icon(
+                Icons.work,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Meslek",
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            subtitle: Text(
+              user.profession,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              foregroundColor: Colors.greenAccent,
+              radius: 16,
+              child: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Detaylı Bilgi",
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ReadMoreText(
+                user.userDescription,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+                trimLines: 2,
+                colorClickableText: Colors.black,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'Daha fazla detay',
+                trimExpandedText: 'Küçült',
+                lessStyle: TextStyle(fontWeight: FontWeight.bold),
+                moreStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
           Container(
             width: size.width * 0.6,
             height: size.height * 0.1,
