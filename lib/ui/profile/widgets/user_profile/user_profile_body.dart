@@ -2,6 +2,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_events_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_groups_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_info_tab.dart';
+import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_interests_tab.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_posts_tab.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _UserProfileBodyState extends State<UserProfileBody>
 
   @override
   void initState() {
-    _controller = new TabController(length: 4, vsync: this);
+    _controller = new TabController(length: 5, vsync: this);
     super.initState();
   }
 
@@ -30,17 +31,26 @@ class _UserProfileBodyState extends State<UserProfileBody>
           width: size.width,
           height: size.height * 0.1,
           child: TabBar(
-            labelPadding: EdgeInsets.zero,
+            labelPadding: EdgeInsets.all(8),
             labelColor: Colors.black,
             // labelStyle: TextStyle(fontSize: 10),
             controller: _controller,
-            indicatorSize: TabBarIndicatorSize.label,
+            indicatorSize: TabBarIndicatorSize.label, isScrollable: true,
             tabs: [
               const Tab(
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
                     "Hakkında",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
+                ),
+              ),
+              const Tab(
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "İlgi Alanları",
                     style: TextStyle(fontSize: kUserProfileTabLabelSize),
                   ),
                 ),
@@ -83,6 +93,9 @@ class _UserProfileBodyState extends State<UserProfileBody>
               children: [
                 Container(
                   child: UserProfileInfoTab(),
+                ),
+                Container(
+                  child: UserProfileInterestsTab(),
                 ),
                 Container(
                   child: UserProfilePostsTab(),

@@ -33,7 +33,9 @@ class _ProfilePageState extends BaseState<ProfilePage>
     return Scaffold(
       drawer: ProfileDrawer(),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
         actions: [
           GFIconBadge(
             counterChild: Container(),
