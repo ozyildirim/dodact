@@ -107,6 +107,9 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
 
   submitForm() async {
     if (creatorApplicationFormKey.currentState.saveAndValidate()) {
+      var groupName = creatorApplicationFormKey.currentState.value['groupName']
+          .toString()
+          .trim();
       var interest = creatorApplicationFormKey.currentState.value["interest"]
           .toString()
           .trim();
@@ -120,7 +123,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
 
       try {
         await applicationProvider
-            .createApplication("Creator", userProvider.currentUser.uid, {
+            .createApplication("Group", userProvider.currentUser.uid, {
+          'groupName': groupName,
           "selectedInterest": interest,
           "description": description,
           "link": link,

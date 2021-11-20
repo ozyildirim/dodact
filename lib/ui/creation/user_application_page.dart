@@ -124,7 +124,9 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                   crossAxisCount: 1, childAspectRatio: 2),
               children: [
                 hasCreatorApplication == false
-                    ? _buildCard(Icons.post_add, "İçerik&Etkinlik Üretici",
+                    ? _buildCard(
+                        Icons.post_add,
+                        "İçerik&Etkinlik Üretici Başvurusu",
                         "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
                         () {
                         NavigationService.instance
@@ -133,7 +135,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                       })
                     : Container(),
                 hasStreamerApplication == false
-                    ? _buildCard(Icons.live_tv, "Canlı Yayın Üreticisi",
+                    ? _buildCard(Icons.live_tv, "Canlı Yayın Üretici Başvurusu",
                         "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
                         () {
                         // NavigationService.instance
