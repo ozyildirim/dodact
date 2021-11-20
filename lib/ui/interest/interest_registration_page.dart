@@ -15,6 +15,7 @@ class _InterestRegistrationPageState
     extends BaseState<InterestRegistrationPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLoading = false;
+  bool isUpdated = false;
   @override
   void initState() {
     super.initState();
@@ -71,39 +72,42 @@ class _InterestRegistrationPageState
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async => false,
-        child: Scaffold(
-          key: _scaffoldKey,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              submitInterests();
-            },
-            child: isLoading
-                // ignore: missing_required_param
-                ? FloatingActionButton(
-                    child: CircularProgressIndicator(color: Colors.white))
-                : Icon(Icons.save),
-          ),
-          body: Container(
-            width: dynamicWidth(1),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                image: AssetImage(kBackgroundImage),
-                fit: BoxFit.cover,
+        child: SafeArea(
+          child: Scaffold(
+            key: _scaffoldKey,
+            floatingActionButton: isUpdated != false
+                ? isLoading != false
+                    ? FloatingActionButton(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      )
+                    : FloatingActionButton(
+                        onPressed: submitInterests,
+                        child: Icon(Icons.save_alt),
+                      )
+                : null,
+            body: Container(
+              height: dynamicHeight(1),
+              width: dynamicWidth(1),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                  image: AssetImage(kBackgroundImage),
+                  fit: BoxFit.cover,
+                ),
               ),
+              // child: choiceWidget(),
+              // child: ListView(
+              //   // scrollDirection: Axis.horizontal,
+              //   children: [
+              //     musicSelector(),
+              //     danceSelector(),
+              //     theaterSelector(),
+              //     visualArtSelector()
+              //   ],
+              // ),
+              child: buildStack(),
             ),
-            // child: choiceWidget(),
-            // child: ListView(
-            //   // scrollDirection: Axis.horizontal,
-            //   children: [
-            //     musicSelector(),
-            //     danceSelector(),
-            //     theaterSelector(),
-            //     visualArtSelector()
-            //   ],
-            // ),
-            child: buildStack(),
           ),
         ));
   }
@@ -241,6 +245,9 @@ class _InterestRegistrationPageState
             searchHint: "Ara",
             onConfirm: (values) {
               selectedMusicValues = values;
+              setState(() {
+                isUpdated = true;
+              });
             },
           );
         });
@@ -302,6 +309,9 @@ class _InterestRegistrationPageState
             searchHint: "Ara",
             onConfirm: (values) {
               selectedTheaterValues = values;
+              setState(() {
+                isUpdated = true;
+              });
             },
           );
         });
@@ -361,6 +371,9 @@ class _InterestRegistrationPageState
             searchHint: "Ara",
             onConfirm: (values) {
               selectedDanceValues = values;
+              setState(() {
+                isUpdated = true;
+              });
             },
           );
         });
@@ -422,6 +435,9 @@ class _InterestRegistrationPageState
             searchHint: "Ara",
             onConfirm: (values) {
               selectedVisualArtValues = values;
+              setState(() {
+                isUpdated = true;
+              });
             },
           );
         });
@@ -442,6 +458,10 @@ class _InterestRegistrationPageState
     ];
 
     await userProvider.updateCurrentUserInterests(interests);
+    setState(() {
+      isLoading = false;
+      isUpdated = false;
+    });
   }
 
   void submitInterests() async {

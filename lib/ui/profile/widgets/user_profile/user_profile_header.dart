@@ -88,7 +88,7 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
           children: [
             Icon(Icons.location_on, color: Colors.grey[600]),
             Text(
-              provider.otherUser.location,
+              provider.currentUser.location,
               style: TextStyle(color: Colors.grey[600]),
             ),
           ],
