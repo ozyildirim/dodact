@@ -27,7 +27,7 @@ const kButtonFontSize = 20;
 const kDrawerTileTitleSize = 20.0;
 const kSettingsTitleSize = 20.0;
 const kPageCenteredTextSize = 20.0;
-const kUserProfileTabLabelSize = 16.0;
+const kUserProfileTabLabelSize = 14.0;
 
 const kFontFamily = "Roboto";
 
@@ -69,7 +69,7 @@ ThemeData appTheme = new ThemeData(
     backgroundColor: kCustomAppBarColor,
     iconTheme: const IconThemeData(color: Colors.white),
     centerTitle: true,
-    toolbarHeight: kToolbarHeight,
+    toolbarHeight: kToolbarHeight - 6,
   ),
   inputDecorationTheme: const InputDecorationTheme(
     errorStyle: TextStyle(fontSize: 14),

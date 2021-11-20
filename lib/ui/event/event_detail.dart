@@ -64,33 +64,58 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: BackButton(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            actionsIconTheme: IconThemeData(color: Colors.black),
             actions: canUserControlEvent()
                 ? [
-                    PopupMenuButton(
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                child: ListTile(
-                                    leading:
-                                        Icon(FontAwesome5Regular.trash_alt),
-                                    title: Text("Sil"),
-                                    onTap: () async {
-                                      await _showDeleteEventDialog(event.id);
-                                    }),
-                              )
-                            ])
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        child: PopupMenuButton(
+                            icon: Icon(Icons.more_vert, color: Colors.black),
+                            itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                        leading:
+                                            Icon(FontAwesome5Regular.trash_alt),
+                                        title: Text("Sil"),
+                                        onTap: () async {
+                                          await _showDeleteEventDialog(
+                                              event.id);
+                                        }),
+                                  )
+                                ]),
+                      ),
+                    )
                   ]
                 : [
-                    PopupMenuButton(
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(FontAwesome5Regular.bell),
-                                    title: Text("Bildir"),
-                                    onTap: () async {
-                                      await _showReportEventDialog(event.id);
-                                    }),
-                              ),
-                            ])
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: PopupMenuButton(
+                            icon: Icon(Icons.more_vert, color: Colors.black),
+                            itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                        leading: Icon(FontAwesome5Regular.bell),
+                                        title: Text("Bildir"),
+                                        onTap: () async {
+                                          await _showReportEventDialog(
+                                              event.id);
+                                        }),
+                                  ),
+                                ]),
+                      ),
+                    )
                   ],
             expandedHeight: dynamicHeight(0.4),
             pinned: true,

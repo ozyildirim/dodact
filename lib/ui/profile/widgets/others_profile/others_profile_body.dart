@@ -3,6 +3,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_event_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_group_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_info_part.dart';
+import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_interests_part.dart';
 import 'package:dodact_v1/ui/profile/widgets/others_profile/others_profile_posts_part.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
 
   @override
   void initState() {
-    _controller = new TabController(length: 4, vsync: this);
+    _controller = new TabController(length: 5, vsync: this);
     super.initState();
   }
 
@@ -35,16 +36,26 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
           width: size.width,
           height: size.height * 0.1,
           child: TabBar(
-            labelPadding: EdgeInsets.all(2),
+            labelPadding: EdgeInsets.all(9),
             labelColor: Colors.black,
             controller: _controller,
             indicatorSize: TabBarIndicatorSize.label,
+            isScrollable: true,
             tabs: const [
               const Tab(
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
                     "Hakkında",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
+                ),
+              ),
+              const Tab(
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "İlgi Alanları",
                     style: TextStyle(fontSize: kUserProfileTabLabelSize),
                   ),
                 ),
@@ -85,6 +96,9 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
             children: [
               Container(
                 child: OthersProfileInfoTab(user: widget.user),
+              ),
+              Container(
+                child: OthersProfileInterestsPart(user: widget.user),
               ),
               Container(
                 child: OthersProfilePostsTab(user: widget.user),

@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
@@ -82,10 +83,21 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
     var provider = Provider.of<UserProvider>(context);
     return Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
+          title: Text(
+            "@" + provider.otherUser.username,
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black),
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           actions: [
+            IconButton(
+              onPressed: () {
+                createChatroom(context, provider.otherUser.uid);
+              },
+              icon: Icon(Icons.message),
+            ),
             PopupMenuButton(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -107,6 +119,13 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
                 child: spinkit,
               )
             : OtherUserProfileSubpage(otherUser));
+  }
+
+  createChatroom(BuildContext context, String userId) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
+        args: [userProvider.currentUser.uid, userProvider.otherUser]);
   }
 }
 

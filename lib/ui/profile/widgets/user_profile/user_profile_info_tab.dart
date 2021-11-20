@@ -1,8 +1,10 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
+import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:readmore/readmore.dart';
 
 class UserProfileInfoTab extends StatefulWidget {
   @override
@@ -14,47 +16,86 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
   Widget build(BuildContext context) {
     var user = userProvider.currentUser;
     var size = MediaQuery.of(context).size;
-    return ListView(
-      children: [
-        ListTile(
-          leading: Icon(Icons.person),
-          title: Text(user.nameSurname),
-        ),
-        user.education != null && user.education.isNotEmpty
-            ? ListTile(
-                leading: Icon(Icons.school),
-                title: Text(user.education),
-              )
-            : Container(),
 
-        user.profession != null && user.profession.isNotEmpty
-            ? ListTile(
-                leading: Icon(Icons.work),
-                title: Text(user.profession),
-              )
-            : Container(),
-        user.location != null && user.location.isNotEmpty
-            ? ListTile(
-                leading: Icon(Icons.location_city),
-                title: Text(user.location),
-              )
-            : Container(),
-        buildSocialIcons(user),
-        Divider(
-          thickness: 1,
-        ),
-        // Padding(
-        //   padding: const EdgeInsets.only(top: 12, left: 12),
-        //   child: Text("Açıklama", style: TextStyle(fontSize: 16)),
-        // ),
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            user.userDescription,
-            style: TextStyle(fontSize: 16),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ListTile(
+            leading: CircleAvatar(
+              foregroundColor: Colors.greenAccent,
+              radius: 16,
+              child: Icon(
+                Icons.school,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Öğrenim Durumu",
+                maxLines: null,
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            subtitle: Text(
+              user.education,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
           ),
-        ),
-      ],
+          ListTile(
+            leading: CircleAvatar(
+              foregroundColor: Colors.greenAccent,
+              radius: 16,
+              child: Icon(
+                Icons.work,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Meslek",
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            subtitle: Text(
+              user.profession,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              foregroundColor: Colors.greenAccent,
+              radius: 16,
+              child: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Detaylı Bilgi",
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ReadMoreText(
+                user.userDescription,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+                trimLines: 2,
+                colorClickableText: Colors.black,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'Daha fazla detay',
+                trimExpandedText: 'Küçült',
+                lessStyle: TextStyle(fontWeight: FontWeight.bold),
+                moreStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          Container(
+            width: size.width * 0.6,
+            height: size.height * 0.1,
+            child: buildSocialIcons(user),
+          ),
+        ],
+      ),
     );
   }
 
@@ -74,10 +115,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CommonMethods.launchURL(linkedin);
                 },
-                icon: Icon(
-                  FontAwesome5Brands.linkedin,
-                  size: 30,
-                ),
+                icon: Icon(FontAwesome5Brands.linkedin, size: 25),
               )
             : Container(),
         instagram != null && instagram.isNotEmpty
@@ -85,7 +123,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CommonMethods.launchURL("www.instagram.com/$instagram");
                 },
-                icon: Icon(FontAwesome5Brands.instagram, size: 30),
+                icon: Icon(FontAwesome5Brands.instagram, size: 25),
               )
             : Container(),
         dribbble != null && dribbble.isNotEmpty
@@ -93,7 +131,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CommonMethods.launchURL(dribbble);
                 },
-                icon: Icon(FontAwesome5Brands.dribbble, size: 30),
+                icon: Icon(FontAwesome5Brands.dribbble, size: 25),
               )
             : Container(),
         soundcloud != null && soundcloud.isNotEmpty
@@ -101,7 +139,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CommonMethods.launchURL(soundcloud);
                 },
-                icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
+                icon: Icon(FontAwesome5Brands.soundcloud, size: 25),
               )
             : Container(),
         youtube != null && youtube.isNotEmpty
@@ -109,7 +147,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CommonMethods.launchURL(youtube);
                 },
-                icon: Icon(FontAwesome5Brands.youtube, size: 30),
+                icon: Icon(FontAwesome5Brands.youtube, size: 25),
               )
             : Container(),
         pinterest != null && pinterest.isNotEmpty
@@ -117,7 +155,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CommonMethods.launchURL(pinterest);
                 },
-                icon: Icon(FontAwesome5Brands.pinterest, size: 30),
+                icon: Icon(FontAwesome5Brands.pinterest, size: 25),
               )
             : Container(),
       ],

@@ -3,6 +3,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:readmore/readmore.dart';
 
 class OthersProfileInfoTab extends StatelessWidget {
   final UserObject user;
@@ -11,53 +12,95 @@ class OthersProfileInfoTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     if (user == null) {
       return Center(child: spinkit);
     }
-    return ListView(
-      children: [
-        ListTile(
-          leading: Icon(Icons.person),
-          title: Text(user.nameSurname),
-        ),
-        !user.privacySettings['hide_education'] &&
-                user.education != null &&
-                user.education.isNotEmpty
-            ? ListTile(
-                leading: Icon(Icons.school),
-                title: Text(user.education),
-              )
-            : Container(),
-        !user.privacySettings['hide_profession'] &&
-                user.profession != null &&
-                user.profession.isNotEmpty
-            ? ListTile(
-                leading: Icon(Icons.work),
-                title: Text(user.profession),
-              )
-            : Container(),
-        user.location != null && user.location.isNotEmpty
-            ? ListTile(
-                leading: Icon(Icons.location_city),
-                title: Text(user.location),
-              )
-            : Container(),
-        Divider(
-          thickness: 1,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 12, left: 12),
-          child: Text("Açıklama", style: TextStyle(fontSize: 16)),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            user.userDescription,
-            style: TextStyle(fontSize: 16),
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          !user.privacySettings['hide_education'] && user.education.isNotEmpty
+              ? ListTile(
+                  leading: CircleAvatar(
+                    foregroundColor: Colors.greenAccent,
+                    radius: 16,
+                    child: Icon(
+                      Icons.school,
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text("Öğrenim Durumu",
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                  subtitle: Text(
+                    user.education,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              : Container(),
+          SizedBox(height: 10),
+          !user.privacySettings['hide_profession'] && user.profession.isNotEmpty
+              ? ListTile(
+                  leading: CircleAvatar(
+                    foregroundColor: Colors.greenAccent,
+                    radius: 16,
+                    child: Icon(
+                      Icons.work,
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text("Meslek",
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                  subtitle: Text(
+                    user.profession,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              : Container(),
+          SizedBox(height: 10),
+          ListTile(
+            leading: CircleAvatar(
+              foregroundColor: Colors.greenAccent,
+              radius: 16,
+              child: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Detaylı Bilgi",
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ReadMoreText(
+                user.userDescription,
+                style: TextStyle(color: Colors.black),
+                trimLines: 2,
+                colorClickableText: Colors.black,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'Daha fazla detay',
+                trimExpandedText: 'Küçült',
+                lessStyle: TextStyle(fontWeight: FontWeight.bold),
+                moreStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
           ),
-        ),
-        buildSocialIcons(user)
-      ],
+          SizedBox(height: 20),
+          Container(
+            width: size.width * 0.6,
+            height: size.height * 0.1,
+            child: buildSocialIcons(user),
+          ),
+        ],
+      ),
     );
   }
 

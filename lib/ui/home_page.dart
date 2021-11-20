@@ -63,7 +63,7 @@ class _HomePageState extends BaseState<HomePage> {
           animationDuration: Duration(milliseconds: 400),
           color: Color(0xff194d25),
           backgroundColor: Colors.transparent,
-          height: 55,
+          height: 50,
           items: [
             Icon(
               FontAwesome5Solid.home,
@@ -87,6 +87,7 @@ class _HomePageState extends BaseState<HomePage> {
             ),
             IconButton(
                 padding: EdgeInsets.zero,
+                iconSize: 20,
                 icon: GFAvatar(
                   size: 24,
                   // radius: 25,

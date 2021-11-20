@@ -13,15 +13,15 @@ class UserNotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              FontAwesome5Regular.check_square,
-              size: 18,
-            ),
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {},
+        //     icon: Icon(
+        //       FontAwesome5Regular.check_square,
+        //       size: 16,
+        //     ),
+        //   )
+        // ],
         title: Text("Bildirimlerim"),
       ),
       body: Container(
@@ -69,7 +69,7 @@ class _UserInvitationsPartState extends BaseState<UserInvitationsPart> {
   Widget build(BuildContext context) {
     var provider = Provider.of<InvitationProvider>(context);
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(8.0),
       child: ListTile(
         // enabled: false,
         onTap: () {
@@ -77,7 +77,7 @@ class _UserInvitationsPartState extends BaseState<UserInvitationsPart> {
         },
         leading: CircleAvatar(
             backgroundColor: Colors.orangeAccent,
-            radius: 40,
+            radius: 20,
             child: Text(
               provider.usersInvitations.length < 10
                   ? provider.usersInvitations.length.toString()
@@ -85,6 +85,8 @@ class _UserInvitationsPartState extends BaseState<UserInvitationsPart> {
               style: TextStyle(color: Colors.black, fontSize: 20),
             )),
         title: Text("Davetler", style: TextStyle(fontSize: 18)),
+        subtitle: Text(
+            "Bu kısımdan topluluklar tarafından sana gönderilen davetleri görüntüleyebilirsin."),
       ),
     );
   }

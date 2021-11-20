@@ -1,11 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 
@@ -47,11 +44,18 @@ class OthersProfileHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Text(
+            //   "@" + provider.otherUser.username,
+            //   style: TextStyle(
+            //     fontSize: 18,
+            //     fontWeight: FontWeight.w500,
+            //   ),
+            // ),
             Text(
-              "@" + provider.otherUser.username,
+              provider.otherUser.nameSurname,
               style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
               ),
             ),
             SizedBox(
@@ -68,31 +72,20 @@ class OthersProfileHeader extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        provider.currentUser.uid != provider.otherUser.uid
-            ? ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                ),
-                onPressed: () {
-                  createChatroom(context, provider.otherUser.uid);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.message,
+        !provider.otherUser.privacySettings["hide_location"]
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.location_on, color: Colors.grey[600]),
+                  Text(
+                    provider.otherUser.location,
+                    style: TextStyle(color: Colors.grey[600]),
                   ),
-                ),
+                ],
               )
-            : Container()
+            : Container(),
       ],
     );
-  }
-
-  createChatroom(BuildContext context, String userId) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
-        args: [userProvider.currentUser.uid, userProvider.otherUser]);
   }
 
   showProfilePictureContainer(BuildContext context, String url) {
