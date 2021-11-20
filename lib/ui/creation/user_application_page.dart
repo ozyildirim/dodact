@@ -119,6 +119,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
 
             return GridView(
               reverse: true,
+              shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1, childAspectRatio: 2),
               children: [
@@ -136,16 +137,17 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                         "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
                         () {
                         // NavigationService.instance
-                        //     .navigate(k_ROUTE_CREATOR_APPLICATION)
+                        //     .navigate(k_ROUTE_STREAMER_APPLICATION)
                         //     .then((value) => setState(() {}));
+                        showSnackBar("Çok yakında!");
                       })
                     : Container(),
                 hasGroupApplication == false
                     ? _buildCard(Icons.group, "Topluluk Başvurusu",
                         "Topluluğunu Dodact'in gücü ile buluştur!", () {
-                        // NavigationService.instance
-                        //     .navigate(k_ROUTE_GROUP_APPLICATION)
-                        //     .then((value) => setState(() {}));
+                        NavigationService.instance
+                            .navigate(k_ROUTE_GROUP_APPLICATION)
+                            .then((value) => setState(() {}));
                       })
                     : Container(),
               ],
@@ -182,6 +184,18 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
     //         : Container(),
     //   ],
     // );
+  }
+
+  showSnackBar(String message) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text(
+          message,
+          overflow: TextOverflow.fade,
+        ),
+      ),
+    );
   }
 
   _buildCard(IconData icon, String title, String description, Function onTap,

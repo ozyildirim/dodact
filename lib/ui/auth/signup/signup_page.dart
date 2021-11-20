@@ -6,6 +6,7 @@ import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
+import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
@@ -160,8 +161,10 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       focusNode: _checkboxFocus,
                       title: InkWell(
                         onTap: () {
-                          NavigationService.instance
-                              .navigate(k_ROUTE_PRIVACY_POLICY);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return PrivacyPolicyPage();
+                          }));
                         },
                         child: RichText(
                           text: TextSpan(

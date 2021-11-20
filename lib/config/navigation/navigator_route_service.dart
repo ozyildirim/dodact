@@ -7,7 +7,7 @@ import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/chatrooms/screens/chatroom_page.dart';
 import 'package:dodact_v1/ui/chatrooms/screens/user_chatrooms_page.dart';
 import 'package:dodact_v1/ui/common/screens/about_dodact_page.dart';
-import 'package:dodact_v1/ui/common/screens/privacy_policy_page.dart';
+import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/creation/creation_landing_page.dart';
 import 'package:dodact_v1/ui/creation/creation_menu_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/creator_application_page.dart';
