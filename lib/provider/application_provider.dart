@@ -12,7 +12,7 @@ class ApplicationProvider extends ChangeNotifier {
   FirebaseApplicationService firebaseApplicationService =
       locator<FirebaseApplicationService>();
 
-  Future getUserApplications(String userId) async {
+  Future<List<ApplicationModel>> getUserApplications(String userId) async {
     try {
       userApplications =
           await firebaseApplicationService.checkUserApplications(userId);

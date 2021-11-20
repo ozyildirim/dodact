@@ -26,6 +26,7 @@ void main() async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   initScreen = _prefs.getInt("initScreen");
   await _prefs.setInt('initScreen', 1);
+  // await _prefs.setInt('userApplicationsIntroductionScreen', 0);
   await Firebase.initializeApp();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;

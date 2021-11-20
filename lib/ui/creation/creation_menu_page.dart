@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/utilities/lists.dart';
@@ -14,7 +15,7 @@ class CreationMenuPage extends StatefulWidget {
   _CreationMenuPageState createState() => _CreationMenuPageState();
 }
 
-class _CreationMenuPageState extends State<CreationMenuPage> {
+class _CreationMenuPageState extends BaseState<CreationMenuPage> {
   GlobalKey<FormBuilderState> _postDialogKey = GlobalKey<FormBuilderState>();
   GlobalKey<FormBuilderState> _eventDialogKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -69,16 +70,20 @@ class _CreationMenuPageState extends State<CreationMenuPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildCard(
-                  Icons.post_add,
-                  "İçerik Oluştur",
-                  "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
-                  showCreateContentBottomSheet),
-              _buildCard(
-                  Icons.event_available,
-                  "Etkinlik Oluştur",
-                  "Etkinliklerini topluluğa kolayca ulaştır, yeni serüvenlere açıl!",
-                  showCreateEventBottomSheet),
+              userProvider.currentUser.permissions['create_post'] != false
+                  ? _buildCard(
+                      Icons.post_add,
+                      "İçerik Oluştur",
+                      "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
+                      showCreateContentBottomSheet)
+                  : Container(),
+              userProvider.currentUser.permissions['create_event'] != false
+                  ? _buildCard(
+                      Icons.event_available,
+                      "Etkinlik Oluştur",
+                      "Etkinliklerini topluluğa kolayca ulaştır, yeni serüvenlere açıl!",
+                      showCreateEventBottomSheet)
+                  : Container(),
             ],
           ),
         )
