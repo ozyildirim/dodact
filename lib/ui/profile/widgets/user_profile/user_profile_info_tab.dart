@@ -16,104 +16,112 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
     var user = userProvider.currentUser;
     var size = MediaQuery.of(context).size;
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Container(
-              width: size.width * 0.5,
-              height: size.height * 0.1,
-              child: ListTile(
-                title: Text("Ad-Soyad",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                subtitle: Text(
-                  user.nameSurname,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: size.width * 0.5,
+                height: size.height * 0.1,
+                child: ListTile(
+                  leading: CircleAvatar(
+                    foregroundColor: Colors.greenAccent,
+                    radius: 15,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text("Ad-Soyad",
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                  subtitle: Text(
+                    user.nameSurname,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              width: size.width * 0.5,
-              height: size.height * 0.1,
-              child: ListTile(
-                title: Text("Öğrenim Durumu",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                subtitle: Text(
-                  user.education,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
+              Container(
+                width: size.width * 0.5,
+                height: size.height * 0.1,
+                child: ListTile(
+                  title: Text("Öğrenim Durumu",
+                      maxLines: null,
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                  subtitle: Text(
+                    user.education,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              width: size.width * 0.5,
-              height: size.height * 0.1,
-              child: ListTile(
-                title: Text("Meslek",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                subtitle: Text(
-                  user.profession,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                width: size.width * 0.5,
+                height: size.height * 0.1,
+                child: ListTile(
+                  title: Text("Meslek",
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                  subtitle: Text(
+                    user.profession,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              width: size.width * 0.4,
-              height: size.height * 0.1,
-              child: ListTile(
-                title: Text("Lokasyon",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                subtitle: Text(
-                  user.location,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
+              Container(
+                width: size.width * 0.5,
+                height: size.height * 0.1,
+                child: ListTile(
+                  title: Text("Lokasyon",
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                  subtitle: Text(
+                    user.location,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Container(
-            width: size.width * 0.8,
-            child: Divider(thickness: 0.3, color: Colors.grey)),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Container(
-            width: size.width * 0.5,
-            // height: size.height * 0.1,
-            child: ListTile(
-              title: Text("Profil Açıklaması",
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-              subtitle: Text(
-                user.userDescription,
-                maxLines: null,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
+            ],
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              width: size.width,
+              // height: size.height * 0.1,
+              child: ListTile(
+                title: Text("Detaylı Bilgi",
+                    style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                subtitle: Text(
+                  user.userDescription,
+                  maxLines: null,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(
-          width: size.width * 0.6,
-          height: size.height * 0.1,
-          child: buildSocialIcons(user),
-        ),
-      ],
+          Container(
+            width: size.width * 0.6,
+            height: size.height * 0.1,
+            child: buildSocialIcons(user),
+          ),
+        ],
+      ),
     );
   }
 
