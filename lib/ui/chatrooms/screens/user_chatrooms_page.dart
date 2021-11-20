@@ -46,7 +46,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
     return PaginateFirestore(
       isLive: true,
       itemsPerPage: 10,
-      itemBuilder: ( context, object,index) {
+      itemBuilder: (context, object, index) {
         ChatroomModel model = ChatroomModel.fromJson(object[index].data());
         return FutureBuilder(
             future: getOtherUserProfile(model),
@@ -66,6 +66,12 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
       itemBuilderType: PaginateBuilderType.listView,
       initialLoader: Center(
         child: spinkit,
+      ),
+      onEmpty: Center(
+        child: Text(
+          'Mevcut bir sohbet bulunmuyor.',
+          style: TextStyle(fontSize: kPageCenteredTextSize),
+        ),
       ),
     );
   }
