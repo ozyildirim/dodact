@@ -1,14 +1,15 @@
 //Users are going to apply through this page to be post and event creator.
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/application_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
+import 'package:dodact_v1/ui/common/screens/creator_agreement_page.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class CreatorApplicationPage extends StatefulWidget {
@@ -22,6 +23,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   FocusNode interestFocus = FocusNode();
   FocusNode descriptionFocus = FocusNode();
+  FocusNode linkFocus = FocusNode();
   ApplicationProvider applicationProvider;
 
   @override
@@ -41,7 +43,11 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -62,13 +68,19 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
             child: Column(
               children: [
                 Container(
-                  height: size.height * 0.3,
+                  height: size.height * 0.2,
+                  // child:
+                  //     Image.asset('assets/images/application_page/woman.png'),
+                  child: SvgPicture.asset(
+                      "assets/images/application_page/woman.svg",
+                      semanticsLabel: 'A red up arrow'),
                 ),
                 Container(
-                  height: size.height * 0.5,
+                  height: size.height * 0.60,
                   width: size.width,
                   child: buildFormPart(),
                 ),
+                // Expanded(child: buildFormPart()),
                 buildButton(),
               ],
             ),
@@ -79,14 +91,18 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
   }
 
   buildButton() {
-    return MaterialButton(
-      onPressed: submitForm,
-      child: Text(
-        "Başvur",
-        style: TextStyle(color: Colors.white, fontSize: 20),
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height * 0.05,
+      child: MaterialButton(
+        onPressed: submitForm,
+        child: Text(
+          "Başvur",
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+        color: Colors.blueGrey,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
-      color: Colors.blueGrey,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     );
   }
 
@@ -111,11 +127,10 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
           "link": link,
         });
 
-        CommonMethods().showSuccessDialog(
+        await CommonMethods().showSuccessDialog(
           context,
           "Başvurun bizlere ulaştı, en kısa zamanda dönüş yapacağız",
         );
-        NavigationService.instance.pop();
         NavigationService.instance.pop();
       } catch (e) {
         print(e);
@@ -160,52 +175,55 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
     return FormBuilder(
       key: creatorApplicationFormKey,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
             Row(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "İlgili Sanat Dalı",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  "İçerik Oluşturmak İstediğin Sanat Dalı",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context, "İlgili Sanat Dalı",
-                          "İçerik oluşturmayı planladığın sanat dalını seçebilir misin?");
+                          "Tecrübeli olduğun, alanında içerik oluşturmak istediğin dalı seçmelisin.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
             ),
-            TextFieldContainer(
-              width: size.width * 0.7,
-              child: FormBuilderDropdown(
-                focusNode: interestFocus,
-                name: "interest",
-                autofocus: false,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                items: interestCategoryList
-                    .map(
-                      (e) => DropdownMenuItem(
-                        child: Text(e.name),
-                        value: e.name,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: TextFieldContainer(
+                width: size.width * 0.7,
+                child: FormBuilderDropdown(
+                  focusNode: interestFocus,
+                  name: "interest",
+                  autofocus: false,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
+                  items: interestCategoryList
+                      .map(
+                        (e) => DropdownMenuItem(
+                          child: Text(e.name),
+                          value: e.name,
+                        ),
+                      )
+                      .toList(),
+                  decoration: InputDecoration(
+                      hintText: "Sanat Dalı",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
                       ),
-                    )
-                    .toList(),
-                decoration: InputDecoration(
-                    hintText: "Sanat Dalı",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: InputBorder.none,
-                    errorStyle:
-                        Theme.of(context).inputDecorationTheme.errorStyle),
-                validator: FormBuilderValidators.compose(
-                  [
-                    FormBuilderValidators.required(
-                      context,
-                      errorText: "Bu alan boş bırakılamaz.",
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -213,7 +231,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
               children: [
                 Text(
                   "Sanatçı Detay",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 IconButton(
                     onPressed: () {
@@ -223,26 +241,29 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                     icon: Icon(Icons.info_outline))
               ],
             ),
-            TextFieldContainer(
-              width: size.width * 0.7,
-              child: FormBuilderTextField(
-                focusNode: descriptionFocus,
-                name: "description",
-                autofocus: false,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                maxLines: null,
-                decoration: InputDecoration(
-                    hintText: "",
-                    border: InputBorder.none,
-                    errorStyle:
-                        Theme.of(context).inputDecorationTheme.errorStyle),
-                validator: FormBuilderValidators.compose(
-                  [
-                    FormBuilderValidators.required(
-                      context,
-                      errorText: "Bu alan boş bırakılamaz.",
-                    ),
-                  ],
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: TextFieldContainer(
+                width: size.width * 0.7,
+                child: FormBuilderTextField(
+                  focusNode: descriptionFocus,
+                  name: "description",
+                  autofocus: false,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                      hintText: "",
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -250,7 +271,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
               children: [
                 Text(
                   "Bağlantı",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 IconButton(
                     onPressed: () {
@@ -260,27 +281,74 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                     icon: Icon(Icons.info_outline))
               ],
             ),
-            TextFieldContainer(
-              width: size.width * 0.7,
-              child: FormBuilderTextField(
-                focusNode: interestFocus,
-                name: "link",
-                autofocus: false,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration: InputDecoration(
-                    hintText: "www.dodact.com",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: InputBorder.none,
-                    errorStyle:
-                        Theme.of(context).inputDecorationTheme.errorStyle),
-                validator: FormBuilderValidators.compose(
-                  [
-                    FormBuilderValidators.required(
-                      context,
-                      errorText: "Bu alan boş bırakılamaz.",
-                    ),
-                  ],
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: TextFieldContainer(
+                width: size.width * 0.7,
+                child: FormBuilderTextField(
+                  focusNode: linkFocus,
+                  name: "link",
+                  autofocus: false,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                      hintText: "www.dodact.com",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+            ),
+            Theme(
+              data: Theme.of(context).copyWith(
+                unselectedWidgetColor: Colors.black,
+              ),
+              child: FormBuilderCheckbox(
+                activeColor: kNavbarColor,
+                name: 'creatorAgreement',
+                initialValue: false,
+                // subtitle: Text(""),
+                title: InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CreatorAgreementPage();
+                    }));
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: "İçerik üretici sözleşmesini ",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "okudum ve kabul ediyorum.",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                contentPadding: EdgeInsets.zero,
+                validator: FormBuilderValidators.equal(context, true,
+                    errorText: "Sözleşmeyi kabul etmelisin."),
               ),
             )
           ],
