@@ -36,117 +36,119 @@ class _GeneralPageState extends BaseState<GeneralPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // toolbarHeight: kToolbarHeight * (3 / 4),
-        backgroundColor: kCustomAppBarColor,
-        // systemOverlayStyle: ,
-        title: Image(
-          image: AssetImage(kDodactLogo),
-          height: 40,
-          width: 50,
-          fit: BoxFit.cover,
-        ),
-      ),
-      extendBody: true,
-      // extendBodyBehindAppBar: true,
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        // appBar: AppBar(
+        //   // toolbarHeight: kToolbarHeight * (3 / 4),
+        //   backgroundColor: kCustomAppBarColor,
+        //   // systemOverlayStyle: ,
+        //   title: Image(
+        //     image: AssetImage(kDodactLogo),
+        //     height: 40,
+        //     width: 50,
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
+        extendBody: true,
+        // extendBodyBehindAppBar: true,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AnnouncementPart(),
-                  SizedBox(
-                    height: 20,
-                  ),
+          child: SingleChildScrollView(
+            child: Container(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnnouncementPart(),
+                    SizedBox(
+                      height: 20,
+                    ),
 
-                  Text(
-                    "Haftanın Öne Çıkan Paylaşımları",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headline1.copyWith(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  PostPart(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Kaçırılmaması Gereken Etkinlikler",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headline1.copyWith(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  EventPart(),
-                  SizedBox(height: 20),
-                  Text(
-                    "Açık Sahne",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headline1.copyWith(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  AcikSahnePart(),
+                    Text(
+                      "Haftanın Öne Çıkan Paylaşımları",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.headline1.copyWith(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    PostPart(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Kaçırılmaması Gereken Etkinlikler",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.headline1.copyWith(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    EventPart(),
+                    SizedBox(height: 20),
+                    Text(
+                      "Açık Sahne",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.headline1.copyWith(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    AcikSahnePart(),
 
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // Text(
-                  //   "Çark",
-                  //   textAlign: TextAlign.start,
-                  //   style: Theme.of(context).textTheme.headline1.copyWith(
-                  //       color: Colors.black,
-                  //       fontSize: 22,
-                  //       fontWeight: FontWeight.bold),
-                  // ),
-                  // SizedBox(
-                  //   height: 15,
-                  // ),
-                  // SpinnerPart(),
-                  SizedBox(
-                    height: 20,
-                  ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Text(
+                    //   "Çark",
+                    //   textAlign: TextAlign.start,
+                    //   style: Theme.of(context).textTheme.headline1.copyWith(
+                    //       color: Colors.black,
+                    //       fontSize: 22,
+                    //       fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: 15,
+                    // ),
+                    // SpinnerPart(),
+                    SizedBox(
+                      height: 20,
+                    ),
 
-                  Text(
-                    "Podcast Önerileri",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headline1.copyWith(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  PodcastPart(),
-                  SizedBox(
-                    height: kToolbarHeight,
-                  )
-                ],
+                    Text(
+                      "Podcast Önerileri",
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.headline1.copyWith(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    PodcastPart(),
+                    SizedBox(
+                      height: kToolbarHeight,
+                    )
+                  ],
+                ),
               ),
             ),
           ),

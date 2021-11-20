@@ -513,8 +513,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     CommonMethods().showLoaderDialog(context, "İçerik Yükleniyor");
     //Implement new post features into variable.
     try {
-      //TODO: GRUPLAR İÇİN DE EKLEME YAPISI OLUŞTUR.
-
       PostModel newPost = new PostModel(
         visible: true,
         isLocatedInYoutube: widget.postType == "Video" ? true : false,

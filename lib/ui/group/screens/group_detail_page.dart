@@ -134,7 +134,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             // menu item callback
             onTap: () {
               NavigationService.instance
-                  .navigate(k_ROUTE_CREATION, args: group.groupId);
+                  .navigate(k_ROUTE_CREATION_MENU, args: group.groupId);
             },
             // menu item appearance properties
             icon: Icons.add,
@@ -252,6 +252,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   void navigateCreationPage(String groupId) {
-    NavigationService.instance.navigate(k_ROUTE_CREATION, args: group.groupId);
+    NavigationService.instance
+        .navigate(k_ROUTE_CREATION_MENU, args: group.groupId);
   }
 }

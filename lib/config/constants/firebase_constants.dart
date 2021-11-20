@@ -23,3 +23,5 @@ final CollectionReference spinnerResultsRef =
 final CollectionReference chatroomsRef = firestore.collection('chatrooms');
 final CollectionReference dodcoinsRef = firestore.collection('dodcoins');
 final CollectionReference userFormsRef = firestore.collection('user_forms');
+final CollectionReference applicationsRef =
+    firestore.collection('applications');

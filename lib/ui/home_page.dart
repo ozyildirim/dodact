@@ -1,12 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
-import 'package:dodact_v1/ui/creation/creation_page.dart';
+import 'package:dodact_v1/ui/creation/creation_landing_page.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/general/general_page.dart';
 import 'package:dodact_v1/ui/profile/screens/profile_page.dart';
 import 'package:dodact_v1/ui/search/search_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
@@ -25,7 +24,7 @@ class _HomePageState extends BaseState<HomePage> {
   final List<Widget> _children = [
     GeneralPage(),
     DiscoverPage(),
-    CreationPage(),
+    CreationLandingPage(),
     SearchPage(),
     ProfilePage(),
   ];
