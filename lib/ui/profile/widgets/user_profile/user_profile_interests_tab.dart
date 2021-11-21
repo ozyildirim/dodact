@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
@@ -46,28 +48,51 @@ class _UserProfileInterestsTabState extends BaseState<UserProfileInterestsTab> {
             image: DecorationImage(
                 image: AssetImage(coverPhoto), fit: BoxFit.cover)),
         child: ExpansionTile(
-          // expandedAlignment: Alignment.topLeft,
-          // expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          expandedAlignment: Alignment.topLeft,
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
           collapsedTextColor: Colors.white,
-          title: Text(
-            title,
-            softWrap: true,
-            style: TextStyle(fontSize: 20),
+          title: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: Text(
+              title,
+              softWrap: true,
+              style: TextStyle(fontSize: 20),
+            ),
           ),
-          children: elements
-              .map((e) => Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        e,
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                  ))
-              .toList(),
+          // children: elements
+          //     .map((e) => Card(
+          //           shape: RoundedRectangleBorder(
+          //               borderRadius: BorderRadius.circular(20)),
+          //           child: Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: Text(
+          //               e,
+          //               style: TextStyle(fontSize: 18, color: Colors.black),
+          //               textAlign: TextAlign.left,
+          //             ),
+          //           ),
+          //         ))
+          //     .toList(),
+
+          children: [
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: elements
+                      .map((e) => Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, bottom: 4.0),
+                            child: Chip(
+                              backgroundColor: Colors.white,
+                              label: Text(e),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

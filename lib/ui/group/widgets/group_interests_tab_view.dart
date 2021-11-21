@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
@@ -79,14 +81,28 @@ class GroupInterestsTabView extends StatelessWidget {
                 image: AssetImage(coverPhoto), fit: BoxFit.cover)),
         child: ExpansionTile(
           collapsedTextColor: Colors.white,
-          title: Text(title, style: TextStyle(fontSize: 20)),
-          children: elements
-              .map((e) => Text(
-                    e,
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                    textAlign: TextAlign.left,
-                  ))
-              .toList(),
+          title: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: Text(title, style: TextStyle(fontSize: 20))),
+          children: [
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: elements
+                      .map((e) => Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, bottom: 4.0),
+                            child: Chip(
+                              backgroundColor: Colors.white,
+                              label: Text(e),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
