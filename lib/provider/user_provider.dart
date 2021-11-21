@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/repository/post_repository.dart';
 import 'package:dodact_v1/repository/user_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
@@ -21,6 +22,9 @@ class UserProvider with ChangeNotifier {
 
   List<UserObject> userList;
   bool isLoading = false;
+
+  //it represents the permission according to day difference
+  bool canUserCreatePost;
 
   String emailErrorMessage;
   String passwordErrorMessage;
@@ -100,6 +104,18 @@ class UserProvider with ChangeNotifier {
       changeState(false);
     }
   }
+
+  // Future<bool> canUserCreatePostInCurrentDay() async {
+  //   try {
+  //     canUserCreatePost =
+  //         await PostRepository().canUserCreatePostInCurrentDay(currentUser.uid);
+  //     return canUserCreatePost;
+  //   } catch (e) {
+  //     logger.e(
+  //         "UserProvider canUserCreatePostInCurrentDay error: " + e.toString());
+  //     return null;
+  //   }
+  // }
 
   bool _emailPasswordCheck(String email, String password) {
     var result = true;

@@ -248,7 +248,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     );
 
     if (reportReason != null) {
-      CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
+      CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
       await FirebaseReportService()
           .reportPost(userProvider.currentUser.uid, postId, reportReason)
           .then((value) async {
@@ -267,7 +267,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> deletePost() async {
-    CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
 
     await Provider.of<PostProvider>(context, listen: false)
         .deletePost(post.postId);

@@ -126,7 +126,7 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
   }
 
   Future<void> reportComment(String commentId, String postId) async {
-    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor");
     await FirebaseReportService()
         .reportComment(authProvider.currentUser.uid, commentId, postId)
         .then((value) {

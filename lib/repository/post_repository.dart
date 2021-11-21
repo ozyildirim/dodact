@@ -91,6 +91,14 @@ class PostRepository {
     }
   }
 
+  // Future<bool> canUserCreatePostInCurrentDay(String userId) async {
+  //   if (appMode == AppMode.DEBUG) {
+  //     return true;
+  //   } else {
+  //     return await _firebasePostService.canUserCreatePostInCurrentDay(userId);
+  //   }
+  // }
+
   @override
   Future<List<PostModel>> getTopPosts() async {
     if (appMode == AppMode.DEBUG) {

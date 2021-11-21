@@ -295,7 +295,7 @@ class _GroupProfileManagementPageState
   }
 
   void updateProfilePhoto(PickedFile file) async {
-    CommonMethods().showLoaderDialog(context, "Fotoğrafın değiştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "Fotoğrafın Değiştiriliyor.");
 
     try {
       var url = await UploadService().uploadGroupProfilePhoto(

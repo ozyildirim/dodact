@@ -193,7 +193,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
             buildEmptyRoomAction();
           }
         },
-        itemBuilder: (context, documentSnapshot,index) {
+        itemBuilder: (context, documentSnapshot, index) {
           final message = MessageModel.fromJson(documentSnapshot[index].data());
           if (!message.isRead &&
               message.senderId != userProvider.currentUser.uid) {
@@ -378,7 +378,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   }
 
   reportMessage(String roomId, String messageId, String message) async {
-    CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
     await FirebaseReportService()
         .reporMessage(currentUserId, roomId, messageId, message)
         .then((value) async {

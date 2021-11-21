@@ -125,7 +125,7 @@ class UserGroupInvitationsPart extends StatelessWidget {
   acceptGroupInvitation(String userId, String groupId, String invitationId,
       BuildContext context) async {
     print(invitationId);
-    CommonMethods().showLoaderDialog(context, "İşlemini gerçekleştiriyoruz");
+    CommonMethods().showLoaderDialog(context, "İşlemini Gerçekleştiriyoruz");
     var result = await Provider.of<InvitationProvider>(context, listen: false)
         .acceptGroupInvitation(userId, groupId, invitationId);
     print(result);
@@ -133,7 +133,7 @@ class UserGroupInvitationsPart extends StatelessWidget {
   }
 
   rejectGroupInvitation(String invitationId, BuildContext context) async {
-    CommonMethods().showLoaderDialog(context, "İşlemini gerçekleştiriyoruz");
+    CommonMethods().showLoaderDialog(context, "İşlemini Gerçekleştiriyoruz");
     try {
       await Provider.of<InvitationProvider>(context, listen: false)
           .rejectGroupInvitation(invitationId);

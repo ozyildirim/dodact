@@ -470,7 +470,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   Future<String> updateProfilePhoto(BuildContext context) async {
     if (profilePicture != null) {
-      CommonMethods().showLoaderDialog(context, "Fotoğraf yükleniyor");
+      CommonMethods().showLoaderDialog(context, "Fotoğraf Yükleniyor");
       await userProvider
           .updateCurrentUserProfilePicture(File(profilePicture.path))
           .then((url) {
@@ -480,7 +480,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       }).catchError((error) {
         //TODO: TRY CATCH BLOĞU EKLE - DÜZENLE
         CommonMethods()
-            .showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
+            .showErrorDialog(context, "Fotoğraf Yüklenirken hata oluştu.");
       });
       debugPrint("Picture uploaded.");
     } else {

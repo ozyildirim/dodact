@@ -299,7 +299,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void googleSignIn() async {
-    CommonMethods().showLoaderDialog(context, "Google ile giriş yapılıyor");
+    CommonMethods().showLoaderDialog(context, "Google ile Giriş Yapılıyor");
     var status = await authProvider.signInWithGoogle(context);
 
     if (status != AuthResultStatus.successful) {
@@ -352,7 +352,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
 
   void signUp() async {
     if (_formKey.currentState.saveAndValidate()) {
-      CommonMethods().showLoaderDialog(context, "Kayıt oluşturuluyor");
+      CommonMethods().showLoaderDialog(context, "Kayıt Oluşturuluyor");
       var registrationResult =
           await authProvider.createAccountWithEmailAndPassword(
         _formKey.currentState.value['email'].toString().trim(),

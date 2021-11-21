@@ -515,7 +515,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     bool isLocatedInStorage = event.eventImages != [] ? true : false;
 
     //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
-    CommonMethods().showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
+    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
 
     await Provider.of<EventProvider>(context, listen: false)
         .deleteEvent(event.id, isLocatedInStorage);

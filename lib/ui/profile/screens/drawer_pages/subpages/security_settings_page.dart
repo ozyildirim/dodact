@@ -243,7 +243,7 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
       //Her halükarda şifreniz başarıyla değiştirildi diyor.
 
       var password = _formKey.currentState.value['password'];
-      CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor");
+      CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor");
       var result = await authProvider.updatePassword(password);
       if (result == true) {
         _scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -403,7 +403,7 @@ class _ChangeEmailPageState extends BaseState<ChangeEmailPage> {
   Future updateEmail() async {
     try {
       var email = _formKey.currentState.value['email'];
-      CommonMethods().showLoaderDialog(context, "İşlemin gerçekleştiriliyor");
+      CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor");
       await authProvider.updateEmail(email);
       await userProvider.updateCurrentUser(
         {'email': email},

@@ -171,7 +171,9 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
     );
   }
 
-  showCreateContentBottomSheet() {
+  showCreateContentBottomSheet() async {
+    // var result = await userProvider.canUserCreatePostInCurrentDay();
+
     var size = MediaQuery.of(context).size;
     showModalBottomSheet(
       context: context,
@@ -343,6 +345,21 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
           ),
         );
       },
+    );
+
+    // if (result) {
+
+    // } else {
+    //   print("asdassda");
+    //   showSnackbar("Her gün 1 içerik oluşturabilirsin.");
+    // }
+  }
+
+  showSnackbar(String message) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
     );
   }
 

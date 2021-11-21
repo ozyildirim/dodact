@@ -570,7 +570,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       String category,
       String eventType) async {
     try {
-      CommonMethods().showLoaderDialog(context, "Etkinlik oluşturuluyor.");
+      CommonMethods().showLoaderDialog(context, "Etkinlik Oluşturuluyor.");
       EventModel newEvent = createEventModel(
           title,
           startDate,

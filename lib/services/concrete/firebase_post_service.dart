@@ -4,6 +4,7 @@ import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:logger/logger.dart';
+import 'package:ntp/ntp.dart';
 
 class FirebasePostService {
   var logger = new Logger();
@@ -32,6 +33,35 @@ class FirebasePostService {
     }
     return allposts;
   }
+
+  // Future<bool> canUserCreatePostInCurrentDay(String userId) async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await postsRef
+  //         .where('ownerId', isEqualTo: userId)
+  //         .orderBy('postDate', descending: true)
+  //         .limit(1)
+  //         .get();
+
+  //     if (querySnapshot.docs.length == 0) {
+  //       return true;
+  //     } else {
+  //       PostModel postModel = PostModel.fromJson(querySnapshot.docs[0].data());
+  //       DateTime lastPostDate = postModel.postDate;
+  //       print(lastPostDate);
+  //       DateTime currentDate = await NTP.now();
+  //       print(currentDate);
+  //       Duration difference = currentDate.difference(lastPostDate);
+  //       if (difference.inDays > 0) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     logger.e(e);
+  //     return false;
+  //   }
+  // }
 
   Future<List<PostModel>> getUserPosts(UserObject user) async {
     //Get post IDs from user object

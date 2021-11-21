@@ -153,7 +153,7 @@ class GroupMediaManagementPage extends StatelessWidget {
 
   addGroupMedia(BuildContext context, PickedFile file) async {
     try {
-      CommonMethods().showLoaderDialog(context, "Medya dosyası yükleniyor.");
+      CommonMethods().showLoaderDialog(context, "Medya Yükleniyor.");
       var groupProvider = Provider.of<GroupProvider>(context, listen: false);
       await groupProvider.addGroupMedia(file, groupProvider.group.groupId);
       NavigationService.instance.pop();
