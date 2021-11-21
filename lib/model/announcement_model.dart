@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AnnouncementModel {
   String announcementID;
   String announcementTitle;
   String announcementDescription;
+  String announcementImage;
   DateTime creationDate;
   DateTime expirationDate;
+  bool visible;
 
   AnnouncementModel({
     this.announcementID,
@@ -11,14 +15,17 @@ class AnnouncementModel {
     this.announcementDescription,
     this.creationDate,
     this.expirationDate,
+    this.visible,
   });
 
   AnnouncementModel.fromJson(Map<String, dynamic> json) {
     announcementID = json['announcementID'];
     announcementTitle = json['announcementTitle'];
     announcementDescription = json['announcementDescription'];
-    creationDate = json['creationDate'];
-    expirationDate = json['expirationDate'];
+    announcementImage = json['announcementImage'];
+    creationDate = (json['creationDate'] as Timestamp).toDate();
+    expirationDate = (json['expirationDate'] as Timestamp).toDate();
+    visible = json['visible'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,8 +33,11 @@ class AnnouncementModel {
     data['announcementID'] = this.announcementID;
     data['announcementTitle'] = this.announcementTitle;
     data['announcementDescription'] = this.announcementDescription;
-    data['creationDate'] = this.creationDate;
-    data['expirationDate'] = this.expirationDate;
+    data['announcementImage'] = this.announcementImage;
+    data['creationDate'] = this.creationDate ?? FieldValue.serverTimestamp();
+    data['expirationDate'] =
+        this.expirationDate ?? FieldValue.serverTimestamp();
+    data['visible'] = this.visible;
     return data;
   }
 }

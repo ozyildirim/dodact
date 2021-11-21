@@ -1,5 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/model/announcement_model.dart';
+import 'package:dodact_v1/provider/announcement_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/carousel/gf_carousel.dart';
+import 'package:provider/provider.dart';
 
 class AnnouncementPart extends StatefulWidget {
   @override
@@ -7,32 +13,58 @@ class AnnouncementPart extends StatefulWidget {
 }
 
 class _AnnouncementPartState extends State<AnnouncementPart> {
-  List<String> imageList = [
-    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/dodact_duyuru%2Fsoylesi.png?alt=media&token=eed28f61-1e52-4c73-986c-eae29a1cd20b",
-    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/dodact_duyuru%2Fsoylesi.png?alt=media&token=eed28f61-1e52-4c73-986c-eae29a1cd20b",
-    "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/dodact_duyuru%2Fsoylesi.png?alt=media&token=eed28f61-1e52-4c73-986c-eae29a1cd20b",
-  ];
+  AnnouncementProvider announcementProvider;
+  List<AnnouncementModel> announcements;
+
+  @override
+  initState() {
+    super.initState();
+    announcementProvider =
+        Provider.of<AnnouncementProvider>(context, listen: false);
+    getList();
+  }
+
+  getList() {
+    if (announcementProvider.announcementList == null) {
+      announcementProvider.getList();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GFCarousel(
-      autoPlay: true,
-      activeIndicator: Colors.black,
-      passiveIndicator: Colors.grey,
-      items: imageList.map(
-        (url) {
-          return Container(
-            margin: EdgeInsets.all(8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Image.network(url, fit: BoxFit.cover, width: 1000.0),
-            ),
-          );
+    Provider.of<AnnouncementProvider>(context);
+    if (announcementProvider.announcementList != null) {
+      return GFCarousel(
+        autoPlay: true,
+        activeIndicator: Colors.black,
+        passiveIndicator: Colors.grey,
+        items: announcementProvider.announcementList.map(
+          (announcement) {
+            return Container(
+              margin: EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                child: InkWell(
+                  onTap: () {
+                    CommonMethods.showImagePreviewDialog(context,
+                        imageProvider: CachedNetworkImageProvider(
+                            announcement.announcementImage));
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: announcement.announcementImage,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            );
+          },
+        ).toList(),
+        onPageChanged: (index) {
+          setState(() {});
         },
-      ).toList(),
-      onPageChanged: (index) {
-        setState(() {});
-      },
-    );
+      );
+    } else {
+      return Center(child: spinkit);
+    }
   }
 }

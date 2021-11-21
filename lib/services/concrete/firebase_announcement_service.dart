@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dodact_v1/config/base/base_service.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/model/announcement_model.dart';
 
@@ -17,7 +16,7 @@ class FirebaseAnnouncementService {
     List<AnnouncementModel> allAnnouncements = [];
 
     QuerySnapshot querySnapshot =
-        await announcementsRef.orderBy('eventDate').get();
+        await announcementsRef.where('visible', isEqualTo: true).get();
     for (DocumentSnapshot announcement in querySnapshot.docs) {
       AnnouncementModel _convertedAnnouncement =
           AnnouncementModel.fromJson(announcement.data());
