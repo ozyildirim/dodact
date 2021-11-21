@@ -9,7 +9,8 @@ import 'package:dodact_v1/services/concrete/firebase_dynamic_link_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/l10n/messages_ar.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +25,21 @@ Future<void> _messageHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //MobileAds.instance.initialize();
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  initScreen = _prefs.getInt("initScreen");
+  await _prefs.setInt('initScreen', 1);
+  // await _prefs.setInt('userApplicationsIntroductionScreen', 0);
+  await Firebase.initializeApp();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+  //   print('User granted permission');
+  // } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+  //   print('User granted provisional permission');
+  // } else {
+  //   print('User declined or has not accepted permission');
+  // }
 
   AwesomeNotifications().initialize(
       'resource://drawable/notification_logo',
@@ -44,7 +60,6 @@ void main() async {
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   //MobileAds.instance.initialize();
-  SharedPreferences _prefs = await SharedPreferences.getInstance();
   initScreen = _prefs.getInt("initScreen");
   await _prefs.setInt('initScreen', 1);
   // await _prefs.setInt('userApplicationsIntroductionScreen', 0);
@@ -63,7 +78,7 @@ void main() async {
     //   ),
     // );
   });
-  
+
   // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
   //   print('User granted permission');
   // } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
@@ -102,6 +117,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('tr_TR', null);
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
