@@ -62,17 +62,16 @@ class AnnouncementProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<AnnouncementModel>> getList({bool isNotify}) async {
+  Future<List<AnnouncementModel>> getList() async {
     try {
-      changeState(ViewState.Busy, isNotify: isNotify);
       var fetchedList = await AnnouncementRepository().getList();
       announcementList = fetchedList;
+      notifyListeners();
       return announcementList;
     } catch (e) {
       print("AnnouncementProvider getList error: " + e.toString());
+      notifyListeners();
       return null;
-    } finally {
-      changeState(ViewState.Idle);
     }
   }
 }
