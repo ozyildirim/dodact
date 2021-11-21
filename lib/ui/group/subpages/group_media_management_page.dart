@@ -121,8 +121,8 @@ class GroupMediaManagementPage extends StatelessWidget {
             FlatButton(
               child: Text("Evet"),
               onPressed: () async {
-                // await removeGroupMedia(context, url);
-                //TODO: Düzeltilmeli
+                await removeGroupMedia(context, url);
+                //TODO: Check it
                 Navigator.of(context).pop();
               },
             ),
@@ -138,18 +138,18 @@ class GroupMediaManagementPage extends StatelessWidget {
     );
   }
 
-  // removeGroupMedia(BuildContext context, String url) async {
-  //   try {
-  //     var groupProvider = Provider.of<GroupProvider>(context, listen: false);
-  //     await groupProvider.removeGroupMedia(url, groupProvider.group.groupId);
-  //     // groupProvider.group.groupMedia.remove(url);
-  //     // await groupProvider.updateGroup(groupProvider.group.groupId, {
-  //     //   'groupMedia': FieldValue.arrayRemove([url]),
-  //     // });
-  //   } catch (e) {
-  //     logger.e(e);
-  //   }
-  // }
+  removeGroupMedia(BuildContext context, String url) async {
+    try {
+      var groupProvider = Provider.of<GroupProvider>(context, listen: false);
+      await groupProvider.removeGroupMedia(url, groupProvider.group.groupId);
+      // groupProvider.group.groupMedia.remove(url);
+      // await groupProvider.updateGroup(groupProvider.group.groupId, {
+      //   'groupMedia': FieldValue.arrayRemove([url]),
+      // });
+    } catch (e) {
+      logger.e(e);
+    }
+  }
 
   addGroupMedia(BuildContext context, PickedFile file) async {
     try {
