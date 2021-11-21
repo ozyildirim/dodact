@@ -282,6 +282,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           var message =
               _formKey.currentState.value['message'].toString().trim();
 
+          _formKey.currentState.reset();
           await Provider.of<ChatroomProvider>(context, listen: false)
               .sendMessage(roomId, authProvider.currentUser.uid, message)
               .then((value) async {
@@ -301,7 +302,6 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
             });
           });
 
-          _formKey.currentState.reset();
         }
       } catch (e) {
         print(e);

@@ -2,6 +2,9 @@ const fs = require("fs");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
+const axios = require("axios");
+axios.defaults.headers.post['Authorization'] = 'key=AAAA79TIQBg:APA91bHHSzzidwyVGEjlJ1PgQRaUHetxM5Ww0krfBuYEMaeS_BqTHMCgpUKHPzpYrcvWOEz_32zAaXIUq_ahKeniT0yWSq2R-DAGHM1A2bnG57CynjJGqZn7xjxZ4Z4Xo-sS9D_BR4GD';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 admin.initializeApp({
   storageBucket: "gs://dodact-7ccd3.appspot.com/",
@@ -490,20 +493,64 @@ exports.messageReceiverNotification = functions.firestore
       const senderUserSnapshot = await senderUserRef.get();
       const senderUserData = senderUserSnapshot.data();
 
-      const payload = {
-        notification: {
-          title: `${senderUserData.nameSurname}`,
-          body: `${message.message}`,
-          sound: "default",
-        },
-      };
+      // const payload = {
+      //   notification: {
+      //     title: `${senderUserData.nameSurname}`,
+      //     body: `${message.message}`,
+      //     sound: "default",
+      //   },
+      // };
 
       //send notification to receiver
       var tokenRef = await tokensRef.doc(receiverId).get();
       const tokenObject = tokenRef.data();
-      admin.messaging().sendToDevice(tokenObject.token, payload);
+
+      const payload = {
+        to: tokenObject.token,
+        click_action:'FLUTTER_NOTIFICATION_CLICK',
+        data: {
+          click_action:'FLUTTER_NOTIFICATION_CLICK',
+          content: {
+            id: getRandomInt(999999),
+            title: senderUserData.nameSurname,
+            body: message.message,
+            channelKey: "basic_channel",
+            notificationLayout: "Messaging",
+            payload:{
+              type:'message'
+            }
+          },
+          actionButtons: [
+            {
+                key: "REPLY",
+                label: "Cevapla",
+                autoDismissable: true,
+                buttonType:  "InputField"
+            }
+          ]
+        },
+        mutable_content: true,
+        content_available: true,
+        priority: "high",
+      };
+
+      axios
+        .post("https://fcm.googleapis.com/fcm/send", payload)
+        .then((res) => {
+          console.log(`statusCode: ${res.status}`);
+          // console.log(payload);
+          // console.log(res);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      // admin.messaging().sendToDevice(tokenObject.token, payload);
     }
   });
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
 
 sendNotificationToUser = async (userId, payload) => {
   var tokenRef = await tokensRef.doc(userId).get();

@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends BaseState<HomePage> {
-  var messaging;
+  FirebaseMessaging messaging;
   int selectedIndex = 0;
 
   final List<Widget> _children = [
@@ -42,15 +42,17 @@ class _HomePageState extends BaseState<HomePage> {
   }
 
   Future checkNotificationPermissions() async {
-    // await messaging.requestPermission(
-    //   alert: true,
-    //   announcement: false,
-    //   badge: true,
-    //   carPlay: false,
-    //   criticalAlert: false,
-    //   provisional: false,
-    //   sound: true,
-    // );
+    await messaging.setForegroundNotificationPresentationOptions(
+        alert: true, badge: true, sound: true);
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
   }
 
   @override

@@ -95,7 +95,7 @@ class _LandingPageState extends BaseState<LandingPage> {
       'token': value,
       'lastTokenUpdate': FieldValue.serverTimestamp(),
     });
-    print("token güncellendi");
+    print("token güncellendi: $value");
   }
 
   navigateSignupDetail() {

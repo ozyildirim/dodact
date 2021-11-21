@@ -54,6 +54,15 @@
 	<string>This app needs to microphone for changing profile picture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Explain why your app uses photo library</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>FirebaseDeepLinkPasteboardRetrievalEnabled</key>
+	<false/>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://dodact.com</string>
+		<string>https://dodact.page.link</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
