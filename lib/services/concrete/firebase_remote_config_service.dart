@@ -4,6 +4,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 const String UNDER_CONSTRUCTION_VALUE = 'under_construction';
 const String _INT_VALUE = 'sample_int_value';
 const String ENFORCED_VERSION_VALUE = 'enforced_version';
+const String UNIQUE_CODE = 'unique_access_code';
 
 class RemoteConfigService {
   final RemoteConfig _remoteConfig;
@@ -14,6 +15,7 @@ class RemoteConfigService {
     UNDER_CONSTRUCTION_VALUE: true,
     _INT_VALUE: 01,
     ENFORCED_VERSION_VALUE: "Flutter Firebase",
+    UNIQUE_CODE: "Flutter Firebase",
   };
 
   static RemoteConfigService _instance;
@@ -31,6 +33,7 @@ class RemoteConfigService {
   int get getIntValue => _remoteConfig.getInt(_INT_VALUE);
   String get getEnforcedVersionValue =>
       _remoteConfig.getString(ENFORCED_VERSION_VALUE);
+  String get getUniqueCode => _remoteConfig.getString(UNIQUE_CODE);
 
   Future initialize() async {
     try {

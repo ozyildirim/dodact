@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
@@ -56,7 +57,8 @@ class _VersionControlPageState extends State<VersionControlPage> {
 
   buildPage() {
     if (!isLoading) {
-      if (_remoteConfigService.getUnderConstructionValue) {
+      if (_remoteConfigService.getUnderConstructionValue ||
+          (_remoteConfigService.getUniqueCode != AppConstant.kAppUniqueCode)) {
         return Future.microtask(() => Navigator.push(
             context,
             MaterialPageRoute(
