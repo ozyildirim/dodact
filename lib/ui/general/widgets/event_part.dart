@@ -129,7 +129,7 @@ class _EventPartState extends State<EventPart> {
                       Row(
                         children: [
                           Text(
-                            DateFormat("EEE, d/M")
+                            DateFormat("EEE, d/M", "tr_TR")
                                 .format(event.startDate)
                                 .toUpperCase(),
                             style: TextStyle(

@@ -8,6 +8,8 @@ import 'package:dodact_v1/locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +30,6 @@ void main() async {
   await _prefs.setInt('initScreen', 1);
   // await _prefs.setInt('userApplicationsIntroductionScreen', 0);
   await Firebase.initializeApp();
-
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
@@ -112,6 +113,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('tr_TR', null);
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
