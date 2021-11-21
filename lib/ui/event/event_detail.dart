@@ -79,6 +79,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CircleAvatar(
+                        backgroundColor: Colors.white,
                         child: PopupMenuButton(
                             icon: Icon(Icons.more_vert, color: Colors.black),
                             itemBuilder: (context) => [

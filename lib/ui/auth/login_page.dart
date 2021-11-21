@@ -243,13 +243,14 @@ class _LogInPageState extends BaseState<LogInPage> {
                     SocialIcon(
                       press: () => _signInWithGoogle(),
                       iconSrc: "assets/images/google_logo.png",
+                      backgroundColor: Colors.black,
                     ),
                     if (Platform.isIOS)
                       GestureDetector(
                         onTap: () => _signInWithApple(),
                         child: Container(
-                          width: 100,
-                          height: 100,
+                          width: 80,
+                          height: 80,
                           margin: EdgeInsets.symmetric(horizontal: 10),
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -258,6 +259,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                           ),
                           child: Icon(
                             FontAwesome.apple,
+                            size: 38,
                             color: Colors.white,
                           ),
                         ),

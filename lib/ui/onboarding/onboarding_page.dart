@@ -46,15 +46,6 @@ class OnBoardingPage extends StatelessWidget {
         ),
         body:
             "Çevrende olup biten sanatsal aktivitelerden haberdar ol, kendi etkinliklerini de başkalarına ulaştır!",
-      ),
-      PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_8.png'),
-        titleWidget: Text(
-          "Sanatınla Değer Yarat",
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-        //TODO: Buraya metin yazısı yazılacak
-        body: "YAZI BUL",
       )
     ];
 

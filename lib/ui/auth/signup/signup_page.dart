@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -13,6 +15,7 @@ import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -207,11 +210,36 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     },
                   ),
                   OrDivider(),
-                  SocialIcon(
-                    iconSrc: "assets/images/google_logo.png",
-                    press: () {
-                      googleSignIn();
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SocialIcon(
+                        iconSrc: "assets/images/google_logo.png",
+                        press: () {
+                          googleSignIn();
+                        },
+                        backgroundColor: Colors.black,
+                      ),
+                      if (Platform.isIOS)
+                        GestureDetector(
+                          onTap: () => _signInWithApple(),
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              FontAwesome.apple,
+                              size: 38,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   InkWell(
                     onTap: () {
@@ -284,6 +312,42 @@ class _SignUpPageState extends BaseState<SignUpPage> {
       NavigationService.instance.pop();
       NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
     }
+  }
+
+  void _signInWithApple() async {
+    var status = await authProvider.signInWithApple(context);
+
+    if (status != AuthResultStatus.successful) {
+      NavigationService.instance.pop();
+      if (status != AuthResultStatus.abortedByUser) {
+        final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
+        showSnackbar(errorMsg);
+      }
+    } else {
+      NavigationService.instance.pop();
+      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
+    }
+  }
+
+  showSnackbar(String errorMsg) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 2),
+      content: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          // new CircularProgressIndicator(),
+          Expanded(
+            child: new Text(
+              errorMsg,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+              maxLines: 1,
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    ));
   }
 
   void signUp() async {
