@@ -34,9 +34,18 @@ class PrivacyPolicyPage extends StatelessWidget {
 }
 
 class CopyrightPage extends StatelessWidget {
-  @override
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Dodact Telif Hakları Sözleşmesi"),
+      ),
+      body: SfPdfViewer.network(
+        'https://dodact.com/wp-content/uploads/2021/11/Telif-Hakki.pdf',
+        key: _pdfViewerKey,
+      ),
+    );
   }
 }
 

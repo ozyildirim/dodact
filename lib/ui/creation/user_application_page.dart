@@ -42,6 +42,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Başvur"),
+        iconTheme: IconThemeData(color: Colors.white),
+        actionsIconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
               onPressed: () {

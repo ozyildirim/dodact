@@ -230,7 +230,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
             Row(
               children: [
                 Text(
-                  "Sanatçı Detay",
+                  "Detaylı Bilgi",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 IconButton(
@@ -328,6 +328,138 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                       children: const <TextSpan>[
                         TextSpan(
                           text: "Kullanım koşulları sözleşmesini ",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "okudum ve kabul ediyorum.",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                contentPadding: EdgeInsets.zero,
+                validator: FormBuilderValidators.equal(context, true,
+                    errorText: "Sözleşmeyi kabul etmelisin."),
+              ),
+            ),
+            Theme(
+              data: Theme.of(context).copyWith(
+                unselectedWidgetColor: Colors.black,
+              ),
+              child: FormBuilderCheckbox(
+                activeColor: kNavbarColor,
+                name: 'copyright',
+                initialValue: false,
+                // subtitle: Text(""),
+                title: InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CopyrightPage();
+                    }));
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: "Telif hakları sözleşmesini ",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "okudum ve kabul ediyorum.",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                contentPadding: EdgeInsets.zero,
+                validator: FormBuilderValidators.equal(context, true,
+                    errorText: "Sözleşmeyi kabul etmelisin."),
+              ),
+            ),
+            Theme(
+              data: Theme.of(context).copyWith(
+                unselectedWidgetColor: Colors.black,
+              ),
+              child: FormBuilderCheckbox(
+                activeColor: kNavbarColor,
+                name: 'privacy',
+                initialValue: false,
+                // subtitle: Text(""),
+                title: InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PrivacyPolicyPage();
+                    }));
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: "Gizlilik sözleşmesini ",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "okudum ve kabul ediyorum.",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                contentPadding: EdgeInsets.zero,
+                validator: FormBuilderValidators.equal(context, true,
+                    errorText: "Sözleşmeyi kabul etmelisin."),
+              ),
+            ),
+            Theme(
+              data: Theme.of(context).copyWith(
+                unselectedWidgetColor: Colors.black,
+              ),
+              child: FormBuilderCheckbox(
+                activeColor: kNavbarColor,
+                name: 'kvkk',
+                initialValue: false,
+                // subtitle: Text(""),
+                title: InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return KvkkPage();
+                    }));
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: "KVKK sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.bold,
