@@ -73,7 +73,7 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    "Gruplar",
+                    "Topluluklar",
                     style: TextStyle(fontSize: kUserProfileTabLabelSize),
                   ),
                 ),
