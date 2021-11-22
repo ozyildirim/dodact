@@ -25,8 +25,8 @@ class UserObject {
 
   //Permissions
   Map<String, dynamic> permissions = {
-    'create_post': true,
-    'create_event': true,
+    'create_post': false,
+    'create_event': false,
     'create_group': false,
     'create_room': false,
     'create_stream': false,

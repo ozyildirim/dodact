@@ -1,5 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/services/concrete/firebase_dynamic_link_service.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -58,16 +59,26 @@ class _DodCardPageState extends BaseState<DodCardPage> {
   }
 
   createQrImage() {
-    return QrImage(
-      data: 'Dodact ile sanat her zaman yanında!',
-      version: QrVersions.auto,
-      size: 240,
-      gapless: false,
-      embeddedImage: AssetImage(kDodactLogo),
-      embeddedImageStyle: QrEmbeddedImageStyle(
-        size: Size(30, 30),
-      ),
-    );
+    var params = FirebaseDynamicLinkService.createUserProfileDynamicLink(
+        userProvider.currentUser.uid);
+    return FutureBuilder(
+        future: FirebaseDynamicLinkService.getShortLink(params),
+        builder: (_, AsyncSnapshot<Uri> snapshot) {
+          if (snapshot.hasData) {
+            return QrImage(
+              data: snapshot.data.toString(),
+              version: QrVersions.auto,
+              size: 240,
+              gapless: false,
+              embeddedImage: AssetImage(kDodactLogo),
+              embeddedImageStyle: QrEmbeddedImageStyle(
+                size: Size(30, 30),
+              ),
+            );
+          } else {
+            return CircularProgressIndicator.adaptive();
+          }
+        });
 
     // return QrImage(
     //   data: "1234567890",

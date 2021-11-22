@@ -26,6 +26,7 @@ class _VersionControlPageState extends State<VersionControlPage> {
   }
 
   Future<bool> checkEnforcedVersion() async {
+    // return Future.value(false);
     packageInfo = await PackageInfo.fromPlatform();
     var currentVersion = packageInfo.version;
     var enforcedVersion = _remoteConfigService.getEnforcedVersionValue;

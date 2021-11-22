@@ -62,7 +62,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                       radius: 30,
                     ),
                   ),
-                  buildShareButton()
+                  // buildShareButton()
                 ],
               ),
             );
@@ -98,7 +98,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                         radius: 30,
                       ),
                     ),
-                    buildShareButton()
+                    // buildShareButton()
                   ],
                 ),
               ),

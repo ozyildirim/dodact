@@ -1,4 +1,9 @@
+import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/model/user_model.dart';
+import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseDynamicLinkService {
   static initDynamicLinks() async {
@@ -8,6 +13,18 @@ class FirebaseDynamicLinkService {
 
       if (deepLink != null) {
         print(deepLink);
+        // if (deepLink.hasQuery) {
+        //   if (deepLink.queryParameters.containsKey('userId')) {
+        //     if (deepLink.queryParameters['userId'] != null) {
+        //       UserObject otherUser =
+        //           await Provider.of<UserProvider>(context, listen: false)
+        //               .getUserByID(deepLink.queryParameters['userId']);
+        //       NavigationService.instance
+        //           .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: otherUser);
+        //     }
+        //   }
+        // }
+        //TODO: Deep linkten gelen urlden user'i olusturmaya bak giris yapmis olmali bir de
       }
     }, onError: (OnLinkErrorException e) async {
       print('onLinkError');
@@ -19,6 +36,7 @@ class FirebaseDynamicLinkService {
 
     if (deepLink != null) {
       print('getInitialLink=> $deepLink');
+      //TODO: uygulama normalde kapali ama deep linke tiklanarak acilmissa buraya gelir link.
     }
   }
 

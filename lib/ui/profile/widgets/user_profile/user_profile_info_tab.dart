@@ -90,7 +90,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ),
           SizedBox(height: 20),
           Container(
-            width: size.width * 0.6,
+            // width: size.width * 0.6,
             height: size.height * 0.1,
             child: buildSocialIcons(user),
           ),

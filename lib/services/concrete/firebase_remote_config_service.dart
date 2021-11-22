@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 const String UNDER_CONSTRUCTION_VALUE = 'under_construction';
 const String _INT_VALUE = 'sample_int_value';
-const String ENFORCED_VERSION_VALUE = 'enforced_version';
+const String ENFORCED_VERSION_VALUE_IOS = 'enforced_version_ios';
+const String ENFORCED_VERSION_VALUE_ANDROID = 'enforced_version_android';
 const String UNIQUE_CODE = 'unique_access_code';
 
 class RemoteConfigService {
@@ -14,7 +17,8 @@ class RemoteConfigService {
   final defaults = <String, dynamic>{
     UNDER_CONSTRUCTION_VALUE: true,
     _INT_VALUE: 01,
-    ENFORCED_VERSION_VALUE: "Flutter Firebase",
+    ENFORCED_VERSION_VALUE_IOS: "0.0.4",
+    ENFORCED_VERSION_VALUE_ANDROID: "0.0.4",
     UNIQUE_CODE: "Flutter Firebase",
   };
 
@@ -31,8 +35,14 @@ class RemoteConfigService {
   bool get getUnderConstructionValue =>
       _remoteConfig.getBool(UNDER_CONSTRUCTION_VALUE);
   int get getIntValue => _remoteConfig.getInt(_INT_VALUE);
-  String get getEnforcedVersionValue =>
-      _remoteConfig.getString(ENFORCED_VERSION_VALUE);
+  String get getEnforcedVersionValue {
+    if (Platform.isIOS) {
+      return _remoteConfig.getString(ENFORCED_VERSION_VALUE_IOS);
+    } else {
+      return _remoteConfig.getString(ENFORCED_VERSION_VALUE_ANDROID);
+    }
+  }
+
   String get getUniqueCode => _remoteConfig.getString(UNIQUE_CODE);
 
   Future initialize() async {

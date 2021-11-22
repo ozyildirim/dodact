@@ -11,7 +11,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,10 +41,10 @@ void main() async {
   // }
 
   AwesomeNotifications().initialize(
-      'resource://drawable/notification_logo',
+      null,
       [
         NotificationChannel(
-          // icon: 'resource://drawable/notification_logo',
+          icon: 'resource://drawable/notification_logo',
           enableLights: true,
           onlyAlertOnce: true,
           channelKey: 'basic_channel',
@@ -78,6 +77,21 @@ void main() async {
     //   ),
     // );
   });
+
+  //TODO: Notification'a tiklanma olayi bu fonksiyon. Kullanici giris yapmis mi vs kontrolleri et dene oyle koyalim.
+  // AwesomeNotifications().actionStream.listen((receivedNotification) {
+  //   if (receivedNotification.buttonKeyPressed == 'REPLY') {
+  //     //REPLY butonuna yazi girip gondere basarsa calisir.
+  //     String message = receivedNotification.buttonKeyInput;
+  //     NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS, args: {
+  //       'reply': message,
+  //       'from': receivedNotification.payload['from'],
+  //     });
+  //   }
+  //   if (receivedNotification.payload['type'] == 'message') {
+  //     NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
+  //   }
+  // });
 
   // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
   //   print('User granted permission');

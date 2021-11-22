@@ -67,7 +67,7 @@ ThemeData appTheme = new ThemeData(
       fontFamily: "Roboto",
     ),
     backgroundColor: kCustomAppBarColor,
-    iconTheme: const IconThemeData(color: Colors.white),
+    // iconTheme: const IconThemeData(color: Colors.white),
     centerTitle: true,
     toolbarHeight: kToolbarHeight - 6,
   ),

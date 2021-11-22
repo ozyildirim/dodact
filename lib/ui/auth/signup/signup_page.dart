@@ -158,7 +158,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                     child: FormBuilderCheckbox(
                       autovalidateMode: _autoValidate,
                       checkColor: Colors.white,
-                      activeColor: Colors.cyan,
+                      activeColor: kNavbarColor,
                       name: "privacyCheckbox",
                       initialValue: false,
                       focusNode: _checkboxFocus,
@@ -199,6 +199,54 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       ),
                       validator: FormBuilderValidators.equal(context, true,
                           errorText: "Sözleşmeyi kabul etmelisin."),
+                    ),
+                  ),
+                  Container(
+                    width: dynamicWidth(1) * 0.8,
+                    child: FormBuilderCheckbox(
+                      autovalidateMode: _autoValidate,
+                      checkColor: Colors.white,
+                      activeColor: kNavbarColor,
+                      name: "kvkkCheckbox",
+                      initialValue: false,
+                      focusNode: _checkboxFocus,
+                      title: InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return KvkkPage();
+                          }));
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: "KVKK metnini ",
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "okudum ve kabul ediyorum.",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        errorStyle:
+                            TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                      validator: FormBuilderValidators.equal(context, true,
+                          errorText: "KVKK metnini kabul etmelisin."),
                     ),
                   ),
                   RoundedButton(

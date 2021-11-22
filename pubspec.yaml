@@ -3,7 +3,7 @@ description: Sanatçı ruhların buluşma noktası.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.3
+version: 0.0.5
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -81,7 +81,7 @@ dependencies:
   qr_flutter: ^4.0.0
   profanity_filter: ^2.0.0
   circular_menu: ^1.2.3
-  awesome_notifications: any
+  awesome_notifications: ^0.6.17
   paginate_firestore: ^1.0.3
   connectivity_plus: ^1.1.0
   package_info_plus: ^1.0.6

@@ -1,7 +1,9 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
+import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserOptionsPage extends StatelessWidget {
   final double tileTitleSize = 20;
@@ -147,7 +149,12 @@ class UserOptionsPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return PrivacyPolicyPage();
+                      }));
+                    },
                     child: Center(
                         child: Text("Gizlilik Sözleşmesi",
                             style: TextStyle(fontSize: 18))),
@@ -156,7 +163,7 @@ class UserOptionsPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () => launchURL('https://dodact.com/hakkimizda/'),
                     child: Center(
                       child: Text("İletişim", style: TextStyle(fontSize: 18)),
                     ),
@@ -168,5 +175,17 @@ class UserOptionsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  static void launchURL(String requestedUrl) async {
+    if (requestedUrl != null) {
+      if (await canLaunch(requestedUrl)) {
+        await launch(requestedUrl);
+      } else {
+        throw new Exception("Cannot open URL: " + requestedUrl);
+      }
+    } else {
+      print("URL mevcut değil");
+    }
   }
 }

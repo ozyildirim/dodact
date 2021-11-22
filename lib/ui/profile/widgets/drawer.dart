@@ -100,13 +100,13 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
 
-          ListTile(
-            leading: Icon(Icons.info),
-            title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
-            onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_ABOUT_DODACT);
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.info),
+          //   title: Text("Dodact Hakkında", style: TextStyle(fontSize: 18)),
+          //   onTap: () {
+          //     NavigationService.instance.navigate(k_ROUTE_ABOUT_DODACT);
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.report),
             title:

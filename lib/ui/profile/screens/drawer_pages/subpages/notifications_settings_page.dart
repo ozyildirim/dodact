@@ -51,155 +51,160 @@ class _NotificationsSettingsPageState
               fit: BoxFit.cover,
             ),
           ),
-          child: Column(
-            children: [
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Beğeni Bildirimleri',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Beğeni Bildirimleri',
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                    subtitle: Text(
+                        "İçeriklerine gelen beğeniler sonucu bildirim almayı önlemek için aktive edebilirsin."),
+                    value:
+                        notificationSettings['allow_post_like_notifications'],
+                    onChanged: (value) {
+                      setState(() {
+                        notificationSettings['allow_post_like_notifications'] =
+                            !notificationSettings[
+                                'allow_post_like_notifications'];
+                        _isChanged = true;
+                      });
+                    },
                   ),
-                  subtitle: Text(
-                      "İçeriklerine gelen beğeniler sonucu bildirim almayı önlemek için aktive edebilirsin."),
-                  value: notificationSettings['allow_post_like_notifications'],
-                  onChanged: (value) {
-                    setState(() {
-                      notificationSettings['allow_post_like_notifications'] =
-                          !notificationSettings[
-                              'allow_post_like_notifications'];
-                      _isChanged = true;
-                    });
-                  },
                 ),
-              ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Yorum Bildirimleri',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
+                Divider(),
+                Container(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Yorum Bildirimleri',
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                    subtitle: Text(
+                        'İçeriklerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                    value: notificationSettings['allow_comment_notifications'],
+                    onChanged: (value) {
+                      setState(() {
+                        notificationSettings['allow_comment_notifications'] =
+                            !notificationSettings[
+                                'allow_comment_notifications'];
+                        _isChanged = true;
+                      });
+                    },
                   ),
-                  subtitle: Text(
-                      'İçeriklerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
-                  value: notificationSettings['allow_comment_notifications'],
-                  onChanged: (value) {
-                    setState(() {
-                      notificationSettings['allow_comment_notifications'] =
-                          !notificationSettings['allow_comment_notifications'];
-                      _isChanged = true;
-                    });
-                  },
                 ),
-              ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Özel Mesaj Bildirimleri',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
+                Divider(),
+                Container(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Özel Mesaj Bildirimleri',
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                    subtitle: Text(
+                        'Sana gelen özel mesajlar için bildirim almayı önlemek için aktive edebilirsin.'),
+                    value: notificationSettings[
+                        'allow_private_message_notifications'],
+                    onChanged: (value) {
+                      setState(() {
+                        notificationSettings[
+                                'allow_private_message_notifications'] =
+                            !notificationSettings[
+                                'allow_private_message_notifications'];
+                        _isChanged = true;
+                      });
+                    },
                   ),
-                  subtitle: Text(
-                      'Sana gelen özel mesajlar için bildirim almayı önlemek için aktive edebilirsin.'),
-                  value: notificationSettings[
-                      'allow_private_message_notifications'],
-                  onChanged: (value) {
-                    setState(() {
-                      notificationSettings[
-                              'allow_private_message_notifications'] =
-                          !notificationSettings[
-                              'allow_private_message_notifications'];
-                      _isChanged = true;
-                    });
-                  },
                 ),
-              ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Grup İçerikleri Yorum Bildirimleri',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
+                Divider(),
+                Container(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Grup İçerikleri Yorum Bildirimleri',
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                    subtitle: Text(
+                        'Yöneticisi olduğun grupların içeriklerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                    value: notificationSettings[
+                        'allow_group_comment_notifications'],
+                    onChanged: (value) {
+                      setState(() {
+                        notificationSettings[
+                                'allow_group_comment_notifications'] =
+                            !notificationSettings[
+                                'allow_group_comment_notifications'];
+                        _isChanged = true;
+                      });
+                    },
                   ),
-                  subtitle: Text(
-                      'Yöneticisi olduğun grupların içeriklerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
-                  value:
-                      notificationSettings['allow_group_comment_notifications'],
-                  onChanged: (value) {
-                    setState(() {
-                      notificationSettings[
-                              'allow_group_comment_notifications'] =
-                          !notificationSettings[
-                              'allow_group_comment_notifications'];
-                      _isChanged = true;
-                    });
-                  },
                 ),
-              ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Grup Davet Bildirimleri',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
+                Divider(),
+                Container(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Grup Davet Bildirimleri',
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                    subtitle: Text(
+                        'Gruplara davet edilmen sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                    value: notificationSettings[
+                        'allow_group_invitation_notifications'],
+                    onChanged: (value) {
+                      setState(() {
+                        notificationSettings[
+                                'allow_group_invitation_notifications'] =
+                            !notificationSettings[
+                                'allow_group_invitation_notifications'];
+                        _isChanged = true;
+                      });
+                    },
                   ),
-                  subtitle: Text(
-                      'Gruplara davet edilmen sonucu bildirim almayı önlemek için aktive edebilirsin.'),
-                  value: notificationSettings[
-                      'allow_group_invitation_notifications'],
-                  onChanged: (value) {
-                    setState(() {
-                      notificationSettings[
-                              'allow_group_invitation_notifications'] =
-                          !notificationSettings[
-                              'allow_group_invitation_notifications'];
-                      _isChanged = true;
-                    });
-                  },
                 ),
-              ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Grup Duyuru Bildirimleri',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
+                Divider(),
+                Container(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Grup Duyuru Bildirimleri',
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                    subtitle: Text(
+                        'Dahil olduğun gruplar tarafından yapılan duyurular sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                    value: notificationSettings[
+                        'allow_group_announcement_notifications'],
+                    onChanged: (value) {
+                      setState(() {
+                        notificationSettings[
+                                'allow_group_announcement_notifications'] =
+                            !notificationSettings[
+                                'allow_group_announcement_notifications'];
+                        _isChanged = true;
+                      });
+                    },
                   ),
-                  subtitle: Text(
-                      'Dahil olduğun gruplar tarafından yapılan duyurular sonucu bildirim almayı önlemek için aktive edebilirsin.'),
-                  value: notificationSettings[
-                      'allow_group_announcement_notifications'],
-                  onChanged: (value) {
-                    setState(() {
-                      notificationSettings[
-                              'allow_group_announcement_notifications'] =
-                          !notificationSettings[
-                              'allow_group_announcement_notifications'];
-                      _isChanged = true;
-                    });
-                  },
                 ),
-              ),
-              Divider(),
-              Container(
-                child: SwitchListTile(
-                  title: Text(
-                    'Grup İçerik Bildirimleri',
-                    style: TextStyle(fontSize: kSettingsTitleSize),
+                Divider(),
+                Container(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Grup İçerik Bildirimleri',
+                      style: TextStyle(fontSize: kSettingsTitleSize),
+                    ),
+                    subtitle: Text(
+                        'Dahil olduğun gruplar tarafından oluşturulan içerikler sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                    value:
+                        notificationSettings['allow_group_post_notifications'],
+                    onChanged: (value) {
+                      setState(() {
+                        notificationSettings['allow_group_post_notifications'] =
+                            !notificationSettings[
+                                'allow_group_post_notifications'];
+                        _isChanged = true;
+                      });
+                    },
                   ),
-                  subtitle: Text(
-                      'Dahil olduğun gruplar tarafından oluşturulan içerikler sonucu bildirim almayı önlemek için aktive edebilirsin.'),
-                  value: notificationSettings['allow_group_post_notifications'],
-                  onChanged: (value) {
-                    setState(() {
-                      notificationSettings['allow_group_post_notifications'] =
-                          !notificationSettings[
-                              'allow_group_post_notifications'];
-                      _isChanged = true;
-                    });
-                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
