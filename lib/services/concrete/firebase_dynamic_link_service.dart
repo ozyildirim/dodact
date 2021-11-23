@@ -3,27 +3,58 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FirebaseDynamicLinkService {
-  static initDynamicLinks() async {
+  initDynamicLinks(BuildContext context) async {
     FirebaseDynamicLinks.instance.onLink(
         onSuccess: (PendingDynamicLinkData dynamicLink) async {
       final Uri deepLink = dynamicLink.link;
 
       if (deepLink != null) {
-        print(deepLink);
+        final queryParams = deepLink.queryParameters;
+        final userId = queryParams['userId'];
+
+        if (userId != null) {
+          print("çalıştı");
+          UserProvider userProvider =
+              Provider.of<UserProvider>(context, listen: false);
+
+          print(userProvider);
+          print("çalıştı 2");
+          // await userProvider.getCurrentUser();
+
+          // if (userProvider.currentUser != null) {
+          // UserObject otherUser = await userProvider.getUserByID(userId);
+          // NavigationService.instance
+          //     .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: otherUser);
+          print("yönlendirme yapıldı");
+          // }
+        }
+        print("userId: " + userId);
+
         // if (deepLink.hasQuery) {
+        //   print("asdasd123123");
         //   if (deepLink.queryParameters.containsKey('userId')) {
+        //     print("asdasd");
         //     if (deepLink.queryParameters['userId'] != null) {
-        //       UserObject otherUser =
-        //           await Provider.of<UserProvider>(context, listen: false)
-        //               .getUserByID(deepLink.queryParameters['userId']);
-        //       NavigationService.instance
-        //           .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: otherUser);
+        //       var userProvider =
+        //           Provider.of<UserProvider>(context, listen: false);
+
+        //       if (userProvider.currentUser != null) {
+        //         UserObject otherUser = await userProvider
+        //             .getUserByID(deepLink.queryParameters['userId']);
+        //         NavigationService.instance
+        //             .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: otherUser);
+        //         print("yönlendirme yapıldı");
+        //       } else {
+        //         print("bozuk");
+        //       }
         //     }
         //   }
         // }
+
         //TODO: Deep linkten gelen urlden user'i olusturmaya bak giris yapmis olmali bir de
       }
     }, onError: (OnLinkErrorException e) async {

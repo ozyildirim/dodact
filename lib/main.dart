@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
@@ -9,8 +11,8 @@ import 'package:dodact_v1/services/concrete/firebase_dynamic_link_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -121,12 +123,39 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  final FirebaseDynamicLinkService _dynamicLinkService =
+      FirebaseDynamicLinkService();
+
+  Timer _timerLink;
+
   @override
   void initState() {
     super.initState();
-    FirebaseDynamicLinkService.initDynamicLinks();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _timerLink = new Timer(
+        const Duration(milliseconds: 1000),
+        () {
+          _dynamicLinkService.initDynamicLinks(context);
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink != null) {
+      _timerLink.cancel();
+    }
+    super.dispose();
   }
 
   @override
@@ -135,6 +164,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
+        // supportedLocales: [const Locale('tr', 'TR')],
+
         useInheritedMediaQuery: true,
         onGenerateRoute: NavigationRouteManager.onRouteGenerate,
         onUnknownRoute: NavigationRouteManager.onUnknownRoute,
