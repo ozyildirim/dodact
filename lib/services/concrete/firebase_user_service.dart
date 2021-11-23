@@ -34,7 +34,11 @@ class FirebaseUserService {
       return true;
     } else {
       //Creates new user in DB if there is not
-      UserObject userObject = UserObject(uid: user.uid, email: user.email);
+
+      UserObject userObject = UserObject(
+          uid: user.uid,
+          email: user.email,
+          nameSurname: user.displayName ?? null);
       await usersRef.doc(user.uid).set(userObject.toMap());
       return true;
     }

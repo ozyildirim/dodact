@@ -48,6 +48,7 @@ class AuthRepository {
     if (appMode == AppMode.DEBUG) {
     } else {
       User user = await _firebaseAuthService.signInWithApple(context);
+
       bool result = await _firebaseUserService.save(user);
       if (result) {
         return user;

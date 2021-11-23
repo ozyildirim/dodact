@@ -47,6 +47,10 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void initState() {
     super.initState();
+    if ((userProvider.currentUser.nameSurname != null) &
+        (userProvider.currentUser.nameSurname != '')) {
+      nameController.text = userProvider.currentUser.nameSurname;
+    }
   }
 
   void forward() {
