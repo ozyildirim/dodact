@@ -62,7 +62,7 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
               } else {
                 return Center(
                   child: Text(
-                    "Herhangi bir içerik oluşturulmamış.",
+                    "Herhangi bir gönderi oluşturulmamış.",
                     style: TextStyle(fontSize: kPageCenteredTextSize),
                   ),
                 );
@@ -70,7 +70,7 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
             } else {
               return Center(
                 child: Text(
-                  "Herhangi bir içerik oluşturulmamış.",
+                  "Herhangi bir gönderi oluşturulmamış.",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );

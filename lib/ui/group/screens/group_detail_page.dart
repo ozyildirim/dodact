@@ -191,7 +191,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         tabs: [
           Tab(text: "Açıklama"),
           Tab(text: "Üyeler"),
-          Tab(text: "İçerikler"),
+          Tab(text: "Gönderiler"),
           Tab(text: "Etkinlikler"),
           Tab(text: "Fotoğraflar"),
           Tab(text: "Duyurular"),

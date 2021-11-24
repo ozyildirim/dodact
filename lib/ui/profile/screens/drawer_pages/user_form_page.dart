@@ -36,6 +36,7 @@ class _UserFormPageState extends BaseState<UserFormPage> {
         child: Icon(Icons.send),
       ),
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text('Form'),
       ),
       body: GestureDetector(

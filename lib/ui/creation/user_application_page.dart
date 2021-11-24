@@ -137,7 +137,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                       })
                     : Container(),
                 hasStreamerApplication == false
-                    ? _buildCard(Icons.live_tv, "Canlı Yayın Üretici Başvurusu",
+                    ? _buildCard(Icons.live_tv, "Yayıncı Başvurusu",
                         "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
                         () {
                         // NavigationService.instance

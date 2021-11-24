@@ -92,8 +92,8 @@ class UserObject {
   });
 
   Map<String, dynamic> defaultPermissions = {
-    'create_post': true,
-    'create_event': true,
+    'create_post': false,
+    'create_event': false,
     'create_group': false,
     'create_room': false,
     'create_stream': false,
@@ -123,7 +123,7 @@ class UserObject {
     userData['uid'] = this.uid;
     userData['email'] = this.email;
     userData['username'] = this.username;
-    userData['nameSurname'] = this.nameSurname ?? 'Dodact Sanatçısı';
+    userData['nameSurname'] = this.nameSurname;
     userData['userRegistrationDate'] = FieldValue.serverTimestamp();
     userData['telephoneNumber'] = this.telephoneNumber ?? '';
     userData['profilePictureURL'] = this.profilePictureURL;

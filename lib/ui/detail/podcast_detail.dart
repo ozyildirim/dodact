@@ -17,6 +17,9 @@ class PodcastDetail extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
         title: Text("Podcast Detayları"),
       ),
       body: Container(
@@ -71,7 +74,7 @@ class PodcastDetail extends StatelessWidget {
                 },
                 icon: Icon(FontAwesome5Brands.spotify),
               ),
-              subtitle: Center(child: Text("Yayın Kanalları")),
+              subtitle: Center(child: Text("Yayın Platformları")),
             ),
             Expanded(
               child: Padding(

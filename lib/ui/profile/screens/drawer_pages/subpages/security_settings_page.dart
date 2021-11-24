@@ -12,7 +12,8 @@ class SecuritySettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Güvenlik Ayarları"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Güvenlik"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -43,7 +44,7 @@ class SecuritySettingsPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      "Parola Değişikliği",
+                      "Şifre Değişikliği",
                       style: TextStyle(fontSize: tileTitleSize),
                     ),
                   ),
@@ -76,7 +77,7 @@ class SecuritySettingsPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      "E-posta Adresi Değişikliği",
+                      "E-posta Değişikliği",
                       style: TextStyle(fontSize: tileTitleSize),
                     ),
                   ),
@@ -122,7 +123,7 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
     return Scaffold(
       floatingActionButton: isChanged
           ? FloatingActionButton(
-              child: Icon(Icons.save),
+              child: Icon(Icons.check),
               onPressed: () async {
                 await _submitForm();
               },
@@ -130,7 +131,8 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
           : null,
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Parola Değişikliği"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Şifre Değişikliği"),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -165,11 +167,11 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
                       name: "password",
                       cursorColor: kPrimaryColor,
                       decoration: InputDecoration(
-                        hintText: "Yeni parola",
+                        hintText: "Yeni şifre",
                         border: InputBorder.none,
                         icon: Icon(Icons.lock),
                       ),
-                      onEditingComplete: () {
+                      onChanged: (value) {
                         setState(() {
                           isChanged = true;
                         });
@@ -181,7 +183,7 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
                       validator: FormBuilderValidators.compose(
                         [
                           FormBuilderValidators.required(context,
-                              errorText: "Yeni parolanı gir"),
+                              errorText: "Yeni şifre gir"),
                         ],
                       ),
                     ),
@@ -199,23 +201,22 @@ class _ChangePasswordPageState extends BaseState<ChangePasswordPage> {
                       name: "secondPassword",
                       cursorColor: kPrimaryColor,
                       decoration: InputDecoration(
-                        hintText: "Tekrar yeni parola",
+                        hintText: "Tekrar yeni şifre",
                         border: InputBorder.none,
                         icon: Icon(Icons.lock),
                       ),
-                      onEditingComplete: () {
+                      onChanged: (value) {
                         setState(() {
-                          FocusScope.of(context).unfocus();
                           isChanged = true;
                         });
                       },
                       validator: FormBuilderValidators.compose(
                         [
                           FormBuilderValidators.required(context,
-                              errorText: "Yeni parolanı gir"),
+                              errorText: "Yeni şifreni gir"),
                           FormBuilderValidators.equal(
                               context, passwordController.text,
-                              errorText: "Parolalar eşleşmiyor"),
+                              errorText: "Şifreler eşleşmiyor"),
                         ],
                       ),
                     ),
@@ -315,14 +316,15 @@ class _ChangeEmailPageState extends BaseState<ChangeEmailPage> {
       key: _scaffoldKey,
       floatingActionButton: isChanged
           ? FloatingActionButton(
-              child: Icon(Icons.save),
+              child: Icon(Icons.check),
               onPressed: () async {
                 await _submitForm();
               },
             )
           : null,
       appBar: AppBar(
-        title: Text("E-posta Adresi Değişikliği"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("E-posta Değişikliği"),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -361,7 +363,7 @@ class _ChangeEmailPageState extends BaseState<ChangeEmailPage> {
                         border: InputBorder.none,
                         icon: Icon(Icons.mail),
                       ),
-                      onEditingComplete: () {
+                      onChanged: (value) {
                         setState(() {
                           isChanged = true;
                         });

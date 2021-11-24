@@ -64,6 +64,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
     // );
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         backwardsCompatibility: true,
         title: Text('Favorilerim'),
         elevation: 8,

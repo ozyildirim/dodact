@@ -32,12 +32,13 @@ class _NotificationsSettingsPageState
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.save),
+                  Icon(Icons.check),
                 ],
               ),
             )
           : null,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Bildirimler"),
       ),
       body: Padding(
@@ -61,7 +62,7 @@ class _NotificationsSettingsPageState
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(
-                        "İçeriklerine gelen beğeniler sonucu bildirim almayı önlemek için aktive edebilirsin."),
+                        "Gönderilerine gelen beğeniler sonucu bildirim almayı önlemek için aktive edebilirsin."),
                     value:
                         notificationSettings['allow_post_like_notifications'],
                     onChanged: (value) {
@@ -82,7 +83,7 @@ class _NotificationsSettingsPageState
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(
-                        'İçeriklerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                        'Gönderilerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
                     value: notificationSettings['allow_comment_notifications'],
                     onChanged: (value) {
                       setState(() {
@@ -120,7 +121,7 @@ class _NotificationsSettingsPageState
                 Container(
                   child: SwitchListTile(
                     title: Text(
-                      'Grup İçerikleri Yorum Bildirimleri',
+                      'Grup Gönderileri Yorum Bildirimleri',
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(
@@ -186,7 +187,7 @@ class _NotificationsSettingsPageState
                 Container(
                   child: SwitchListTile(
                     title: Text(
-                      'Grup İçerik Bildirimleri',
+                      'Grup Gönderi Bildirimleri',
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(

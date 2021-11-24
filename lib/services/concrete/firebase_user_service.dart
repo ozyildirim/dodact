@@ -38,7 +38,8 @@ class FirebaseUserService {
       UserObject userObject = UserObject(
           uid: user.uid,
           email: user.email,
-          nameSurname: user.displayName ?? null);
+          nameSurname: user.displayName ?? null,
+          profilePictureURL: user.photoURL ?? null);
       await usersRef.doc(user.uid).set(userObject.toMap());
       return true;
     }

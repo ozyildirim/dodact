@@ -24,7 +24,8 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sohbetler'),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Mesajlar'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -54,9 +55,15 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
               if (object.connectionState == ConnectionState.waiting) {
                 // return Center(child: spinkit);
                 return Container();
+              } else if (object.connectionState == ConnectionState.done) {
+                if (object.hasData) {
+                  UserObject otherUser = object.data;
+                  return buildListTile(model, otherUser);
+                } else {
+                  return Container();
+                }
               } else {
-                UserObject otherUser = object.data;
-                return buildListTile(model, otherUser);
+                return Container();
               }
             });
       },
@@ -86,11 +93,12 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
         .catchError((error) {
       return UserObject(
           nameSurname: "Dodact Kullanıcısı",
+          uid: otherUserId,
           profilePictureURL:
               "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png");
     });
 
-    return user;
+    return user ?? null;
 
     // return buildListTile(chatroom, user);
   }

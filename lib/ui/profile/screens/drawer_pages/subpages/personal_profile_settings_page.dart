@@ -94,12 +94,13 @@ class _UserPersonalProfileSettingsPageState
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.save),
+                  Icon(Icons.check),
                 ],
               ),
             )
           : null,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Kişisel Bilgiler"),
       ),
       body: GestureDetector(

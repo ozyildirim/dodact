@@ -29,7 +29,7 @@ class _SearchPageState extends State<SearchPage> {
 
   List<DropdownMenuItem> categoryItems = [
     DropdownMenuItem(
-      child: Text("İçerik"),
+      child: Text("Gönderi"),
       value: SearchCategory.Post,
     ),
     DropdownMenuItem(

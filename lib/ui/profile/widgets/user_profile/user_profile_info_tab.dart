@@ -1,7 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
-import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:readmore/readmore.dart';

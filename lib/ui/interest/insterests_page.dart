@@ -75,10 +75,11 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           : isUpdated
               ? FloatingActionButton(
                   onPressed: updateUserInterests,
-                  child: Icon(Icons.save_alt),
+                  child: Icon(Icons.done),
                 )
               : null,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text('İlgi Alanları'),
       ),
       body: Container(

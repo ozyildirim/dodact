@@ -77,7 +77,8 @@ class _UserSocialAccountsSettingsState
             )
           : null,
       appBar: AppBar(
-        title: Text("Sosyal Medya Hesapları"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Diğer Platform Hesapları"),
       ),
       body: GestureDetector(
         onTap: () {
@@ -130,8 +131,7 @@ class _UserSocialAccountsSettingsState
                         },
                         validator: FormBuilderValidators.compose([
                           (value) {
-                            return ProfanityChecker.profanityValidator(
-                                value.trim());
+                            return ProfanityChecker.profanityValidator(value);
                           },
                           FormBuilderValidators.url(context)
                         ]),
@@ -198,8 +198,7 @@ class _UserSocialAccountsSettingsState
                         },
                         validator: FormBuilderValidators.compose([
                           (value) {
-                            return ProfanityChecker.profanityValidator(
-                                value.trim());
+                            return ProfanityChecker.profanityValidator(value);
                           },
                           FormBuilderValidators.url(context)
                         ]),
@@ -232,8 +231,7 @@ class _UserSocialAccountsSettingsState
                         },
                         validator: FormBuilderValidators.compose([
                           (value) {
-                            return ProfanityChecker.profanityValidator(
-                                value.trim());
+                            return ProfanityChecker.profanityValidator(value);
                           },
                           FormBuilderValidators.url(context)
                         ]),
@@ -266,8 +264,7 @@ class _UserSocialAccountsSettingsState
                         },
                         validator: FormBuilderValidators.compose([
                           (value) {
-                            return ProfanityChecker.profanityValidator(
-                                value.trim());
+                            return ProfanityChecker.profanityValidator(value);
                           },
                           FormBuilderValidators.url(context)
                         ]),
@@ -300,8 +297,7 @@ class _UserSocialAccountsSettingsState
                         },
                         validator: FormBuilderValidators.compose([
                           (value) {
-                            return ProfanityChecker.profanityValidator(
-                                value.trim());
+                            return ProfanityChecker.profanityValidator(value);
                           },
                         ]),
                       ),

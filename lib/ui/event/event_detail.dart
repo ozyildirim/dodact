@@ -272,7 +272,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             controller: tabController,
             tabs: const [
               const Tab(text: "Detaylar"),
-              const Tab(text: "Medya"),
+              const Tab(text: "Görseller"),
             ],
           ),
         ),

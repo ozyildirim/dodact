@@ -72,10 +72,11 @@ class _PostDetailState extends BaseState<PostDetail> {
     var mediaQuery = MediaQuery.of(context);
 
     var appBar = AppBar(
+      iconTheme: IconThemeData(color: Colors.white),
       actions: buildAppbarActions(),
       centerTitle: true,
       title: Text(
-        "İçerik Detayı",
+        "Gönderi Detayı",
       ),
     );
 
@@ -197,7 +198,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği silmek istediğinden emin misin?",
+        text: "Bu gönderiyi silmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",
@@ -209,25 +210,25 @@ class _PostDetailState extends BaseState<PostDetail> {
         });
   }
 
-  Future<void> showEditPostDialog() async {
-    CoolAlert.show(
-      context: context,
-      type: CoolAlertType.info,
-      text: "SALİH AĞLAMA GUZUM",
-      confirmBtnText: "Evet",
-      cancelBtnText: "Vazgeç",
-      title: "SALİHA AĞLAMA",
-      onCancelBtnTap: () {
-        NavigationService.instance.pop();
-      },
-    );
-  }
+  // Future<void> showEditPostDialog() async {
+  //   CoolAlert.show(
+  //     context: context,
+  //     type: CoolAlertType.info,
+  //     text: "SALİH AĞLAMA GUZUM",
+  //     confirmBtnText: "Evet",
+  //     cancelBtnText: "Vazgeç",
+  //     title: "SALİHA AĞLAMA",
+  //     onCancelBtnTap: () {
+  //       NavigationService.instance.pop();
+  //     },
+  //   );
+  // }
 
   Future<void> showReportPostDialog() async {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği bildirmek istediğinden emin misin?",
+        text: "Bu gönderiyi bildirmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",

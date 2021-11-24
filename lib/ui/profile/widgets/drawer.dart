@@ -60,7 +60,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           Divider(height: 10),
           ListTile(
             leading: Icon(Icons.star),
-            title: Text("Favorilerim", style: TextStyle(fontSize: 18)),
+            title: Text("Favoriler", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_USER_FAVORITES);
             },
@@ -77,15 +77,15 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           // ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text("Ayarlarım", style: TextStyle(fontSize: 18)),
+            title: Text("Ayarlar", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_USER_OPTIONS);
             },
           ),
 
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text("İlgi Alanlarım", style: TextStyle(fontSize: 18)),
+            leading: Icon(Icons.auto_awesome_motion),
+            title: Text("İlgi Alanları", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance
                   .navigate(k_ROUTE_INTERESTS_CHOICE, args: false);
@@ -93,8 +93,8 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           ),
 
           ListTile(
-            leading: Icon(Icons.star),
-            title: Text("Dod Kartım", style: TextStyle(fontSize: 18)),
+            leading: Icon(Icons.badge),
+            title: Text("DodCard", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
             },
@@ -109,8 +109,8 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           // ),
           ListTile(
             leading: Icon(Icons.report),
-            title:
-                Text("Şikayet/Bildiri/Öneri", style: TextStyle(fontSize: 18)),
+            title: Text("Şikayetler: Öneriler ve Bildiriler",
+                style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_USER_FORM_PAGE);
             },

@@ -65,7 +65,7 @@ class _DiscoverPageState extends State<DiscoverPage>
             FittedBox(
               fit: BoxFit.fitWidth,
               child: Text(
-                "Paylaşımlar",
+                "Gönderiler",
               ),
             ),
             FittedBox(

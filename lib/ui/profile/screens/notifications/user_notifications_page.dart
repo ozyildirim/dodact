@@ -5,7 +5,6 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/invitation_model.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
 class UserNotificationsPage extends StatelessWidget {
@@ -22,7 +21,7 @@ class UserNotificationsPage extends StatelessWidget {
         //     ),
         //   )
         // ],
-        title: Text("Bildirimlerim"),
+        title: Text("Bildirimler"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -86,7 +85,7 @@ class _UserInvitationsPartState extends BaseState<UserInvitationsPart> {
             )),
         title: Text("Davetler", style: TextStyle(fontSize: 18)),
         subtitle: Text(
-            "Bu kısımdan topluluklar tarafından sana gönderilen davetleri görüntüleyebilirsin."),
+            "Bu kısımda topluluklar tarafından sana gönderilen davetleri görüntüleyebilirsin."),
       ),
     );
   }

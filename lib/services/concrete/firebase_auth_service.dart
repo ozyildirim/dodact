@@ -164,7 +164,7 @@ class FirebaseAuthService {
 
   Future<UserObject> getUserByID(String userId) async {
     var userObjectDoc = await usersRef.doc(userId).get();
-    return UserObject.fromDoc(userObjectDoc);
+    return UserObject.fromDoc(userObjectDoc) ?? null;
   }
 
   Future<void> updateEmail(String newEmail) async {

@@ -40,6 +40,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   int _currentStep = 0;
 
   PickedFile profilePicture;
+  String socialAccountProfilePictureUrl;
   String errorMessage;
   bool isUploaded = false;
   bool inProgress = false;
@@ -50,6 +51,13 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
     if ((userProvider.currentUser.nameSurname != null) &
         (userProvider.currentUser.nameSurname != '')) {
       nameController.text = userProvider.currentUser.nameSurname;
+    }
+
+    if (userProvider.currentUser.profilePictureURL != null) {
+      socialAccountProfilePictureUrl =
+          userProvider.currentUser.profilePictureURL;
+    } else {
+      socialAccountProfilePictureUrl = null;
     }
   }
 
@@ -91,7 +99,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             Row(
               children: [
                 Text(
-                  "Adın Soyadın",
+                  "Ad Soyad",
                   style: TextStyle(fontSize: 18),
                 ),
                 SizedBox(
@@ -172,18 +180,24 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                 child: Stack(children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Container(
-                        width: 200,
-                        height: 200,
-                        child: profilePicture == null
-                            ? Image.network(
-                                "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png",
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                File(profilePicture.path),
-                                fit: BoxFit.cover,
-                              )),
+                    child: InkWell(
+                      onTap: () {
+                        showPickerOptions();
+                      },
+                      child: Container(
+                          width: 200,
+                          height: 200,
+                          child: profilePicture == null
+                              ? Image.network(
+                                  socialAccountProfilePictureUrl ??
+                                      "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png",
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(profilePicture.path),
+                                  fit: BoxFit.cover,
+                                )),
+                    ),
                   ),
                   Positioned(
                     top: 160,
@@ -204,7 +218,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
               ),
             ),
             Text(
-              "Kullanıcı Adın",
+              "Kullanıcı Adı",
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 4),
@@ -269,50 +283,58 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           ),
           child: FormBuilder(
             key: formKey,
-            child: Stepper(
-              controlsBuilder: (BuildContext context,
-                  {void Function() onStepCancel,
-                  void Function() onStepContinue}) {
-                return Row(
-                  children: <Widget>[
-                    _currentStep != steps.length - 1
-                        ? GFButton(
-                            size: GFSize.LARGE,
-                            shape: GFButtonShape.pills,
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .button
-                                .copyWith(fontSize: 18, color: Colors.white),
-                            text: "İleri",
-                            onPressed: forward,
-                            child: const Text('İleri'),
-                            color: kNavbarColor,
-                          )
-                        : GFButton(
-                            size: GFSize.LARGE,
-                            shape: GFButtonShape.pills,
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .button
-                                .copyWith(fontSize: 18, color: Colors.white),
-                            color: kNavbarColor,
-                            child: Text('Tamamla'),
-                            onPressed: () async {
-                              await submitForm();
-                            },
-                          ),
-                    TextButton(
-                      onPressed: back,
-                      child: const Text('Geri',
-                          style: TextStyle(fontSize: 18, color: Colors.black)),
-                    ),
-                  ],
-                );
-              },
-              currentStep: _currentStep,
-              type: StepperType.horizontal,
-              steps: steps,
-              onStepTapped: null,
+            child: Theme(
+              data: ThemeData(
+                  colorScheme: ColorScheme.light(
+                primary: kNavbarColor,
+              )),
+              child: Stepper(
+                controlsBuilder: (BuildContext context,
+                    {void Function() onStepCancel,
+                    void Function() onStepContinue}) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _currentStep != steps.length - 1
+                          ? GFButton(
+                              size: GFSize.LARGE,
+                              shape: GFButtonShape.pills,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(fontSize: 18, color: Colors.white),
+                              text: "İleri",
+                              onPressed: forward,
+                              child: const Text('İleri'),
+                              color: kNavbarColor,
+                            )
+                          : GFButton(
+                              size: GFSize.LARGE,
+                              shape: GFButtonShape.pills,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(fontSize: 18, color: Colors.white),
+                              color: kNavbarColor,
+                              child: Text('Tamamla'),
+                              onPressed: () async {
+                                await submitForm();
+                              },
+                            ),
+                      TextButton(
+                        onPressed: back,
+                        child: const Text('Geri',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.black)),
+                      ),
+                    ],
+                  );
+                },
+                currentStep: _currentStep,
+                type: StepperType.horizontal,
+                steps: steps,
+                onStepTapped: null,
+              ),
             ),
           ),
         ),
@@ -487,9 +509,9 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             .showErrorDialog(context, "Fotoğraf Yüklenirken hata oluştu.");
       });
       debugPrint("Picture uploaded.");
+    } else if (socialAccountProfilePictureUrl != null) {
     } else {
       uploadDefaultPicture();
-      navigateInterestSelectionPage();
     }
   }
 

@@ -25,7 +25,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Grup İçerik Yönetimi"),
+        title: Text("Grup Gönderi Yönetimi"),
       ),
       body: Container(
         decoration: BoxDecoration(

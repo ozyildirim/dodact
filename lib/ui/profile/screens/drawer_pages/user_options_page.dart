@@ -11,6 +11,7 @@ class UserOptionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
           "Ayarlar",
         ),
@@ -74,7 +75,7 @@ class UserOptionsPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      "Profil",
+                      "Hesap",
                       style: TextStyle(fontSize: tileTitleSize),
                     ),
                   ),

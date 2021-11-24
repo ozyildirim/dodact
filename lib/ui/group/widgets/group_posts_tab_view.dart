@@ -46,7 +46,7 @@ class GroupPostsTab extends StatelessWidget {
                 );
               } else {
                 return Center(
-                  child: Text("Bu topluluk henüz bir içerik paylaşmadı.",
+                  child: Text("Bu topluluk henüz bir gönderil oluşturmadı.",
                       style: TextStyle(fontSize: kPageCenteredTextSize)),
                 );
               }

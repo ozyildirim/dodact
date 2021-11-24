@@ -58,7 +58,7 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
               } else {
                 return Center(
                   child: Text(
-                    "Herhangi bir içerik oluşturulmamış.",
+                    "Herhangi bir gönderi oluşturulmamış.",
                     style: TextStyle(fontSize: kPageCenteredTextSize),
                   ),
                 );
@@ -66,7 +66,7 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
             } else {
               return Center(
                 child: Text(
-                  "Herhangi bir içerik oluşturulmamış.",
+                  "Herhangi bir gönderi oluşturulmamış.",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );

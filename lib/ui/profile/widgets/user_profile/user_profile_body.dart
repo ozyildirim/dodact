@@ -59,7 +59,7 @@ class _UserProfileBodyState extends State<UserProfileBody>
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    "Paylaşımlar",
+                    "Gönderiler",
                     style: TextStyle(fontSize: kUserProfileTabLabelSize),
                   ),
                 ),

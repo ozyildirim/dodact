@@ -77,7 +77,7 @@ SimpleDialog postTypeDialog(BuildContext context) {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
     ),
-    title: Text('İçerik Türü'),
+    title: Text('Gönderi Türü'),
     children: [
       SimpleDialogItem(
         icon: FontAwesome5Solid.image,

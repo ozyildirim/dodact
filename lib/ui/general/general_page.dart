@@ -73,7 +73,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                     ),
 
                     Text(
-                      "Haftanın Öne Çıkan Paylaşımları",
+                      "Öne Çıkan Paylaşımlar",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,

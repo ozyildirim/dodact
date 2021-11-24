@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "1030067077144-0rpqe1lsl6ie2k22mi2ektj4cs1grecu.apps.googleusercontent.com",
+          "client_id": "1030067077144-1puh00f5kr53i8d2fi5gpbt8b5qsk03i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dodact.dodact_v1",
             "certificate_hash": "b0bea007aaaf2571bfc9636cc876c907e08b5a1a"
+          }
+        },
+        {
+          "client_id": "1030067077144-dd3dom97r8mmvmoieeuc5g1o23sdfeiu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dodact.dodact_v1",
+            "certificate_hash": "93a2919157492b3bb6c1d24e042af977a2b32704"
           }
         },
         {
@@ -38,6 +46,14 @@
             {
               "client_id": "1030067077144-glo8b84id09i3530dumelq46f8a1t93q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1030067077144-2ls1ti5qq5qrokkb5fppo8fqau4pboi2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dodact.dodact",
+                "app_store_id": "1596151747"
+              }
             }
           ]
         }
@@ -68,6 +84,14 @@
             {
               "client_id": "1030067077144-glo8b84id09i3530dumelq46f8a1t93q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1030067077144-2ls1ti5qq5qrokkb5fppo8fqau4pboi2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dodact.dodact",
+                "app_store_id": "1596151747"
+              }
             }
           ]
         }

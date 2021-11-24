@@ -15,7 +15,8 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profil Ayarları"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Hesap"),
       ),
       body: Container(
         decoration: BoxDecoration(
