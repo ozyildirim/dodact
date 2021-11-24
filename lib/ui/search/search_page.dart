@@ -79,7 +79,8 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       TextFieldContainer(
                         width: MediaQuery.of(context).size.width * 0.6,
-                        padding: EdgeInsets.all(4),
+                        padding: EdgeInsets.only(
+                            left: 16, bottom: 4, top: 4, right: 4),
                         child: TextField(
                           decoration: InputDecoration(
                               hintText: 'Ara',

@@ -66,7 +66,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         backwardsCompatibility: true,
-        title: Text('Favorilerim'),
+        title: Text('Favoriler'),
         elevation: 8,
       ),
       body: Container(
