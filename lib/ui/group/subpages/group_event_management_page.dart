@@ -23,7 +23,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Grup Etkinlik Yönetimi"),
+        title: Text("Topluluk Etkinlik Yönetimi"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -45,7 +45,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
               if (asyncSnapshot.data.length == 0) {
                 return Center(
                     child: Text(
-                  "Gruba ait etkinlik bulunmuyor.",
+                  "Topluluğa ait etkinlik bulunmuyor.",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ));
               } else {

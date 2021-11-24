@@ -289,6 +289,8 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                                   ),
                                 ),
                                 options: buildPostTypeChips(),
+
+                                // selectedColor: Colors.orangeAccent,
                                 validator: FormBuilderValidators.compose(
                                   [FormBuilderValidators.required(context)],
                                 ),

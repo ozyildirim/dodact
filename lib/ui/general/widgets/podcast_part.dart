@@ -14,8 +14,8 @@ class PodcastPart extends StatelessWidget {
 
     if (podcastProvider.podcastList != null) {
       return GFItemsCarousel(
-        itemHeight: 170,
-        rowCount: 2,
+        itemHeight: 150,
+        rowCount: 3,
         children: podcastProvider.podcastList.map((podcast) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -44,13 +44,18 @@ class PodcastPart extends StatelessWidget {
   }
 
   buildPodcastCard(ImageProvider imageProvider) {
-    return Container(
-      height: 150,
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        image: DecorationImage(
-          image: imageProvider,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      clipBehavior: Clip.antiAlias,
+      child: Container(
+        height: 150,
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: imageProvider,
+          ),
         ),
       ),
     );

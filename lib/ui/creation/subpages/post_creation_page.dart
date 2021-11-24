@@ -94,7 +94,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     return Scaffold(
       key: _scaffoldKey,
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: Icon(Icons.check),
           onPressed: () {
             formSubmit();
           }),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -112,12 +113,9 @@ class _EventPartState extends State<EventPart> {
               Container(
                 width: cardWidth * 0.5,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(
-                        event.eventImages[0],
-                      ),
-                      fit: BoxFit.cover),
-                ),
+                    image: DecorationImage(
+                        image: CachedNetworkImageProvider(event.eventImages[0]),
+                        fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Padding(

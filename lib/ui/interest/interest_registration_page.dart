@@ -82,7 +82,7 @@ class _InterestRegistrationPageState
                       )
                     : FloatingActionButton(
                         onPressed: submitInterests,
-                        child: Icon(Icons.save_alt),
+                        child: Icon(Icons.check),
                       )
                 : null,
             body: Container(
@@ -235,7 +235,7 @@ class _InterestRegistrationPageState
             initialValue: selectedMusicValues,
             checkColor: Colors.blue,
             // chipDisplay: MultiSelectChipDisplay.none(),
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
@@ -298,7 +298,7 @@ class _InterestRegistrationPageState
             initialValue: selectedTheaterValues,
             checkColor: Colors.blue,
 
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             // decoration: BoxDecoration(color: Colors.white),
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
@@ -361,7 +361,7 @@ class _InterestRegistrationPageState
             listType: MultiSelectListType.CHIP,
             initialValue: selectedDanceValues,
             checkColor: Colors.blue,
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
@@ -425,7 +425,7 @@ class _InterestRegistrationPageState
             listType: MultiSelectListType.CHIP,
             initialValue: selectedVisualArtValues,
             checkColor: Colors.white,
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),

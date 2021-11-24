@@ -73,7 +73,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                     ),
 
                     Text(
-                      "Öne Çıkan Paylaşımlar",
+                      "Öne Çıkan Gönderiler",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,

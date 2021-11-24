@@ -44,7 +44,6 @@ List<InterestType> interestCategoryList = [
         'Jazz',
         'Pop',
         'Rock',
-        'asasd'
       ]),
   new InterestType(
       id: "2",

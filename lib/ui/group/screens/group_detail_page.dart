@@ -66,7 +66,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
                           PopupMenuItem(
                             child: ListTile(
                               leading: Icon(FontAwesome5Solid.cogs),
-                              title: Text("Grup Yönetimi"),
+                              title: Text("Topluluk Yönetimi"),
                               onTap: () {
                                 navigateGroupManagementPage();
                               },

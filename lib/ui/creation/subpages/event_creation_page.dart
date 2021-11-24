@@ -93,7 +93,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       // extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
         onPressed: _formSubmit,
-        child: Icon(Icons.add),
+        child: Icon(Icons.check),
       ),
       appBar: AppBar(
         elevation: 0,

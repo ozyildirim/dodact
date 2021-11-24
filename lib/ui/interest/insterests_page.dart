@@ -75,7 +75,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           : isUpdated
               ? FloatingActionButton(
                   onPressed: updateUserInterests,
-                  child: Icon(Icons.done),
+                  child: Icon(Icons.check),
                 )
               : null,
       appBar: AppBar(
@@ -205,7 +205,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             initialValue: selectedMusicValues,
             checkColor: Colors.blue,
             // chipDisplay: MultiSelectChipDisplay.none(),
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
@@ -268,7 +268,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             initialValue: selectedTheaterValues,
             checkColor: Colors.blue,
 
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             // decoration: BoxDecoration(color: Colors.white),
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
@@ -331,7 +331,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             listType: MultiSelectListType.CHIP,
             initialValue: selectedDanceValues,
             checkColor: Colors.blue,
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),
@@ -395,7 +395,7 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             listType: MultiSelectListType.CHIP,
             initialValue: selectedVisualArtValues,
             checkColor: Colors.white,
-            selectedColor: Colors.black26,
+            selectedColor: Colors.orangeAccent,
             selectedItemsTextStyle: TextStyle(color: Colors.black),
             itemsTextStyle: TextStyle(color: Colors.black),
             cancelText: Text("İptal", style: TextStyle(fontSize: 20)),

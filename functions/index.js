@@ -83,7 +83,7 @@ exports.sendInvitationNotificationToUser = functions.firestore
 
       const payload = {
         notification: {
-          title: "Grup Katılım Daveti",
+          title: "Topluluk Katılım Daveti",
           body: groupData.groupName + " tarafından davet edildin.",
         },
       };
@@ -110,7 +110,7 @@ exports.addUserToGroup = functions.https.onCall(async (data, context) => {
   const groupData = groupSnapshot.data();
 
   if (!groupSnapshot.exists) {
-    console.log("Grup bulunamadı");
+    console.log("Topluluk bulunamadı");
     return {
       result: "GROUP_NOT_FOUND",
     };
@@ -132,7 +132,7 @@ exports.addUserToGroup = functions.https.onCall(async (data, context) => {
 
       let payload = {
         notification: {
-          title: "Gruba başarıyla dahil oldun!",
+          title: "Topluluğa başarıyla dahil oldun!",
           body: `${groupData.groupName} ile güzel günlere!`,
           sound: "default",
         },
@@ -366,8 +366,8 @@ exports.checkPostReports = functions.firestore
         if (postData.ownerType == "User") {
           const payload = {
             notification: {
-              title: "Oluşturduğun içerik incelemeye alındı",
-              body: "Oluşturduğun içerik 3 defa rapor edildiği için içerik incelemeye alındı.",
+              title: "Oluşturduğun gönderi incelemeye alındı",
+              body: "Oluşturduğun gönderi 3 defa rapor edildiği için gönderi incelemeye alındı.",
               sound: "default",
             },
           };
@@ -385,8 +385,8 @@ exports.checkPostReports = functions.firestore
 
           const payload = {
             notification: {
-              title: "Oluşturduğun içerik incelemeye alındı",
-              body: "Oluşturduğun içerik 3 defa rapor edildiği için içerik incelemeye alındı.",
+              title: "Oluşturduğun gönderi incelemeye alındı",
+              body: "Oluşturduğun gönderi 3 defa rapor edildiği için gönderi incelemeye alındı.",
               sound: "default",
             },
           };
@@ -451,7 +451,7 @@ exports.commentNotificationToCreator = functions.firestore
         const payload = {
           notification: {
             title: `Grubunun içeriğine yorum yapıldı.`,
-            body: `${postData.postTitle} başlıklı grup içeriğine yorum yapıldı.`,
+            body: `${postData.postTitle} başlıklı topluluk gönderi yorum yapıldı.`,
             sound: "default",
           },
         };
@@ -502,14 +502,12 @@ exports.messageReceiverNotification = functions.firestore
         type: "message",
         from: senderUserData.uid,
       };
-      const actionButtons = [
-        {
-          key: "REPLY",
-          label: "Cevapla",
-          autoDismissable: true,
-          buttonType: "InputField",
-        },
-      ];
+      const actionButtons = [{
+        key: "REPLY",
+        label: "Cevapla",
+        autoDismissable: true,
+        buttonType: "InputField",
+      }, ];
       sendNotification(
         senderUserData.nameSurname,
         message.message,

@@ -121,11 +121,11 @@ class _NotificationsSettingsPageState
                 Container(
                   child: SwitchListTile(
                     title: Text(
-                      'Grup Gönderileri Yorum Bildirimleri',
+                      'Topluluk Gönderileri Yorum Bildirimleri',
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(
-                        'Yöneticisi olduğun grupların içeriklerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                        'Yöneticisi olduğun topluluk gönderilerine yapılan yorumlar sonucu bildirim almayı önlemek için aktive edebilirsin.'),
                     value: notificationSettings[
                         'allow_group_comment_notifications'],
                     onChanged: (value) {
@@ -143,11 +143,11 @@ class _NotificationsSettingsPageState
                 Container(
                   child: SwitchListTile(
                     title: Text(
-                      'Grup Davet Bildirimleri',
+                      'Topluluk Davet Bildirimleri',
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(
-                        'Gruplara davet edilmen sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                        'Topluluklara davet edilmen sonucu bildirim almayı önlemek için aktive edebilirsin.'),
                     value: notificationSettings[
                         'allow_group_invitation_notifications'],
                     onChanged: (value) {
@@ -165,11 +165,11 @@ class _NotificationsSettingsPageState
                 Container(
                   child: SwitchListTile(
                     title: Text(
-                      'Grup Duyuru Bildirimleri',
+                      'Topluluk Duyuru Bildirimleri',
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(
-                        'Dahil olduğun gruplar tarafından yapılan duyurular sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                        'Dahil olduğun topluluklar tarafından yapılan duyurular sonucu bildirim almayı önlemek için aktive edebilirsin.'),
                     value: notificationSettings[
                         'allow_group_announcement_notifications'],
                     onChanged: (value) {
@@ -187,11 +187,11 @@ class _NotificationsSettingsPageState
                 Container(
                   child: SwitchListTile(
                     title: Text(
-                      'Grup Gönderi Bildirimleri',
+                      'Topluluk Gönderi Bildirimleri',
                       style: TextStyle(fontSize: kSettingsTitleSize),
                     ),
                     subtitle: Text(
-                        'Dahil olduğun gruplar tarafından oluşturulan içerikler sonucu bildirim almayı önlemek için aktive edebilirsin.'),
+                        'Dahil olduğun topluluklar tarafından oluşturulan içerikler sonucu bildirim almayı önlemek için aktive edebilirsin.'),
                     value:
                         notificationSettings['allow_group_post_notifications'],
                     onChanged: (value) {

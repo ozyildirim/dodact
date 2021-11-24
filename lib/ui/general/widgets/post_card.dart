@@ -29,7 +29,10 @@ class PostCard extends StatelessWidget {
       child: Card(
         semanticContainer: true,
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: CachedNetworkImage(imageUrl: coverPhotoURL, fit: BoxFit.cover),
+        child: CachedNetworkImage(
+          imageUrl: coverPhotoURL,
+          fit: BoxFit.cover,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),

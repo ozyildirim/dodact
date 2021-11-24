@@ -16,7 +16,7 @@ class PostPart extends StatelessWidget {
       List<PostModel> _topPosts = postProvider.topPosts;
       return GFCarousel(
         viewportFraction: 0.6,
-        height: size.height * 0.20,
+        height: size.height * 0.25,
         items: _topPosts.map(
           (topPost) {
             return PostCard(topPost);

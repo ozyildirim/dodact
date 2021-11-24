@@ -84,7 +84,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
               )
             : (posts == null
                 ? Center(
-                    child: Text("Henüz bir içeriği favorilere eklemedin",
+                    child: Text("Henüz bir gönderiyi favorilere eklemedin",
                         style: TextStyle(fontSize: 20)),
                   )
                 : posts.isNotEmpty
