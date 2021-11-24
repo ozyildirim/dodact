@@ -259,7 +259,8 @@ class _EventsPageState extends BaseState<EventsPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
                               child: FormBuilderDropdown(
                                   isExpanded: true,
                                   initialValue: selectedCity ?? null,
@@ -302,7 +303,8 @@ class _EventsPageState extends BaseState<EventsPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
                               child: FormBuilderDropdown(
                                 initialValue: selectedCategory ?? null,
                                 name: "category",
@@ -345,7 +347,8 @@ class _EventsPageState extends BaseState<EventsPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
                               child: FormBuilderDropdown(
                                 initialValue: selectedType ?? null,
                                 name: "type",

@@ -109,10 +109,10 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       textInputAction: TextInputAction.next,
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(context,
-                            errorText: "Lütfen e-posta adresi giriniz."),
+                            errorText: "Bu alan boş bırakılamaz."),
                         FormBuilderValidators.email(context,
                             errorText:
-                                "Lütfen geçerli bir e-posta adresi giriniz."),
+                                "Lütfen geçerli bir e-posta adresi girin."),
                       ]),
                     ),
                   ),
@@ -147,9 +147,9 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       ),
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(context,
-                            errorText: "Lütfen parolanı gir."),
+                            errorText: "Bu alan boş bırakılamaz."),
                         FormBuilderValidators.minLength(context, 6,
-                            errorText: "Parolan en az 6 karakter olmalı.")
+                            errorText: "Şifren en az 6 karakter olmalı.")
                       ]),
                     ),
                   ),
@@ -246,7 +246,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                             TextStyle(color: Colors.white, fontSize: 14),
                       ),
                       validator: FormBuilderValidators.equal(context, true,
-                          errorText: "KVKK metnini kabul etmelisin."),
+                          errorText: "KVKK sözleşmesini kabul etmelisin."),
                     ),
                   ),
                   RoundedButton(

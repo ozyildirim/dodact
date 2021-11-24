@@ -78,7 +78,7 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
                     textInputAction: TextInputAction.next,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context,
-                          errorText: "Lütfen e-posta adresi gir."),
+                          errorText: "Bu alan boş bırakılamaz."),
                       FormBuilderValidators.email(context,
                           errorText: "Lütfen geçerli bir e-posta adresi gir."),
                     ]),

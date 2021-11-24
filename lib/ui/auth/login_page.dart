@@ -159,10 +159,10 @@ class _LogInPageState extends BaseState<LogInPage> {
                     textInputAction: TextInputAction.next,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context,
-                          errorText: "Lütfen e-posta adresi giriniz."),
+                          errorText: "Bu alan boş bırakılamaz."),
                       FormBuilderValidators.email(context,
                           errorText:
-                              "Lütfen geçerli bir e-posta adresi giriniz."),
+                              "Lütfen geçerli bir e-posta adresi girin."),
                     ]),
                   ),
                 ),
@@ -201,7 +201,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                     },
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context,
-                          errorText: "Lütfen parolanızı giriniz.")
+                          errorText: "Bu alan boş bırakılamaz.")
                     ]),
                   ),
                 ),

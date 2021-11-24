@@ -11,6 +11,7 @@ import 'package:dodact_v1/services/concrete/firebase_dynamic_link_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -105,8 +106,8 @@ void main() async {
 
   setupLocator();
 
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-  //     .then((value) => runApp(MyApp()));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(MyApp()));
 
   // runApp(
   //   DevicePreview(
@@ -114,8 +115,6 @@ void main() async {
   //     builder: (context) => MyApp(),
   //   ),
   // );
-
-  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {

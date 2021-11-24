@@ -163,10 +163,10 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
           comment: commentController.text,
         );
 
-        await commentProvider.saveComment(commentModel, widget.postId);
-
         FocusScope.of(context).unfocus();
         commentController.text = "";
+
+        await commentProvider.saveComment(commentModel, widget.postId);
       }
     }
   }

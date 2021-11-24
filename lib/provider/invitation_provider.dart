@@ -11,7 +11,7 @@ class InvitationProvider with ChangeNotifier {
   //Kullanıcının aldığı davetlerin listesi
   List<InvitationModel> usersInvitations = [];
 
-  //Grupların davet ettiklerinin listesi
+  //Toplulukların davet ettiklerinin listesi
 
   List<InvitationModel> sentGroupInvitations = [];
 

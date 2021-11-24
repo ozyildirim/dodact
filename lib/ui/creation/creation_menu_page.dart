@@ -1,5 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
@@ -228,7 +229,8 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
                               child: FormBuilderDropdown(
                                 name: "postCategory",
                                 focusNode: postCategoryDropdownFocus,
@@ -242,7 +244,10 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                                 ),
                                 items: buildArtCategoryDropdownItems(),
                                 validator: FormBuilderValidators.compose(
-                                  [FormBuilderValidators.required(context)],
+                                  [
+                                    FormBuilderValidators.required(context,
+                                        errorText: "Bu alan boş bırakılamaz.")
+                                  ],
                                 ),
                               ),
                             ),
@@ -273,26 +278,45 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                           child: Container(
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: FormBuilderChoiceChip(
-                                name: "postType",
-                                // focusNode: postTypeDropdownFocus,
-                                direction: Axis.horizontal,
-                                padding: EdgeInsets.all(12),
-                                spacing: 4,
-                                decoration: InputDecoration(
-                                  hintText: "Tür Seçin",
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(15),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
+                              child: ChipTheme(
+                                data: ChipTheme.of(context).copyWith(
+                                  // labelStyle: TextStyle(
+                                  //   color: Colors.white,
+                                  //   fontSize: 16,
+                                  // ),
+                                  backgroundColor: Colors.grey[200],
+
+                                  // disabledColor: Colors.grey[200],
+                                  secondarySelectedColor: kNavbarColor,
+                                  secondaryLabelStyle: TextStyle(
+                                    color: Colors.white,
                                   ),
                                 ),
-                                options: buildPostTypeChips(),
+                                child: FormBuilderChoiceChip(
+                                  name: "postType",
+                                  // focusNode: postTypeDropdownFocus,
+                                  direction: Axis.horizontal,
+                                  padding: EdgeInsets.all(12),
+                                  spacing: 4,
+                                  decoration: InputDecoration(
+                                    hintText: "Tür Seçin",
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  options: buildPostTypeChips(),
 
-                                // selectedColor: Colors.orangeAccent,
-                                validator: FormBuilderValidators.compose(
-                                  [FormBuilderValidators.required(context)],
+                                  // selectedColor: Colors.orangeAccent,
+                                  validator: FormBuilderValidators.compose(
+                                    [
+                                      FormBuilderValidators.required(context,
+                                          errorText: "Bu alan boş bırakılamaz.")
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -421,7 +445,8 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
                               child: FormBuilderDropdown(
                                 name: "eventCategory",
                                 focusNode: eventCategoryDropdownFocus,
@@ -435,7 +460,10 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                                 ),
                                 items: buildArtCategoryDropdownItems(),
                                 validator: FormBuilderValidators.compose(
-                                  [FormBuilderValidators.required(context)],
+                                  [
+                                    FormBuilderValidators.required(context,
+                                        errorText: "Bu alan boş bırakılamaz.")
+                                  ],
                                 ),
                               ),
                             ),
@@ -467,21 +495,40 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: FormBuilderDropdown(
-                                name: "eventType",
-                                focusNode: eventTypeDropdownFocus,
-                                decoration: InputDecoration(
-                                  hintText: "Tür Seçin",
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(15),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
+                              child: ChipTheme(
+                                data: ChipTheme.of(context).copyWith(
+                                  // labelStyle: TextStyle(
+                                  //   color: Colors.white,
+                                  //   fontSize: 16,
+                                  // ),
+                                  backgroundColor: Colors.grey[200],
+
+                                  // disabledColor: Colors.grey[200],
+                                  secondarySelectedColor: kNavbarColor,
+                                  secondaryLabelStyle: TextStyle(
+                                    color: Colors.white,
                                   ),
                                 ),
-                                items: buildEventTypeDropdownItems(),
-                                validator: FormBuilderValidators.compose(
-                                  [FormBuilderValidators.required(context)],
+                                child: FormBuilderDropdown(
+                                  name: "eventType",
+                                  focusNode: eventTypeDropdownFocus,
+                                  decoration: InputDecoration(
+                                    hintText: "Tür Seçin",
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  items: buildEventTypeDropdownItems(),
+                                  validator: FormBuilderValidators.compose(
+                                    [
+                                      FormBuilderValidators.required(context,
+                                          errorText: "Bu alan boş bırakılamaz.")
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -513,7 +560,8 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
                               child: FormBuilderRadioGroup(
                                 // focusNode: radioButtonFocus,
                                 decoration:
@@ -530,7 +578,10 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                                   ),
                                 ],
                                 validator: FormBuilderValidators.compose(
-                                  [FormBuilderValidators.required(context)],
+                                  [
+                                    FormBuilderValidators.required(context,
+                                        errorText: "Bu alan boş bırakılamaz")
+                                  ],
                                 ),
                               ),
                             ),

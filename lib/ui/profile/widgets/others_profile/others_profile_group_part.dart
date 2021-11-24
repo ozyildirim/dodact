@@ -39,7 +39,7 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
           if (snapshot.data.isEmpty) {
             return Center(
               child: Text(
-                "Herhangi bir gruba dahil değil.",
+                "Herhangi bir topluluğa dahil değil.",
                 style: TextStyle(fontSize: kPageCenteredTextSize),
               ),
             );

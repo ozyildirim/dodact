@@ -157,7 +157,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                         ))
                     .toList(),
                 validator: FormBuilderValidators.required(context,
-                    errorText: "Lütfen bulunduğun şehri belirt"),
+                    errorText: "Bu alan boş bırakılamaz."),
               ),
             ),
           ],
@@ -451,7 +451,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         });
       } else {
         formKey.currentState.invalidateField(
-            name: "username", errorText: "Bu kullanıcı adı kullanılıyor");
+            name: "username", errorText: "Bu kullanıcı adı kullanılıyor.");
       }
     } catch (e) {
       print(e);

@@ -267,7 +267,7 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           currentColor: kNavbarColor,
         ),
         titleWidget: Text(
-          "İçeriklerini & Etkinliklerini Herkes Kolaylıkla Görsün",
+          "İçeriklerini & Etkinliklerine Herkes Kolaylıkla Erişsin",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),

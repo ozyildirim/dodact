@@ -266,7 +266,7 @@ class _GroupMemberManagementPageState
                 onPressed: () async {
                   try {
                     await setGroupManager(userId, groupProvider.group.groupId);
-                    NavigationService.instance.popUntil(k_ROUTE_GROUPS_PAGE);
+                    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
                   } catch (e) {
                     showSnackBar("Bir hata oluştu.");
                     NavigationService.instance.pop();

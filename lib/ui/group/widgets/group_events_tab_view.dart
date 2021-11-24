@@ -25,7 +25,7 @@ class GroupEventsTab extends StatelessWidget {
     //           : Center(
     //               child: Container(
     //                 color: Colors.white60,
-    //                 child: Text("Bu grup henüz bir etkinlik paylaşmadı.",
+    //                 child: Text("Bu topluluk henüz bir etkinlik paylaşmadı.",
     //                     style: TextStyle(fontSize: 22)),
     //               ),
     //             )

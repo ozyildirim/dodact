@@ -58,7 +58,7 @@ class FirebaseGroupService {
     await groupsRef.doc(groupID).update({
       'groupMemberList': FieldValue.arrayRemove([userID])
     });
-    Logger().d("Grup üyesi silindi");
+    Logger().d("Topluluk üyesi silindi");
   }
 
   Future getFilteredGroupList(

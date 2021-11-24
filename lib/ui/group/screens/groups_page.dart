@@ -215,7 +215,8 @@ class _GroupsPageState extends State<GroupsPage> {
                             color: Colors.grey[200],
                             width: size.width * 0.4,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
                               child: FormBuilderDropdown(
                                   isExpanded: true,
                                   initialValue: selectedCity ?? null,

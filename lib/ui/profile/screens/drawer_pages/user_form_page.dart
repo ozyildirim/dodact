@@ -138,7 +138,7 @@ class _UserFormPageState extends BaseState<UserFormPage> {
                             errorText: "Bu alan boş bırakılamaz.",
                           ),
                           FormBuilderValidators.minLength(context, 30,
-                              errorText: "En az 30 karakter giriniz.",
+                              errorText: "En az 30 karakter girin.",
                               allowEmpty: false),
                         ],
                       ),

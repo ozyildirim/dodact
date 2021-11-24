@@ -29,7 +29,7 @@ class _UserProfileGroupsTabState extends BaseState<UserProfileGroupsTab> {
           if (snapshot.data.isEmpty) {
             return Center(
               child: Text(
-                "Herhangi bir gruba dahil değil.",
+                "Herhangi bir topluluğa dahil değil.",
                 style: TextStyle(fontSize: kPageCenteredTextSize),
               ),
             );

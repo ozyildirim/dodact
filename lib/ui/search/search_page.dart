@@ -312,7 +312,7 @@ class _SearchPageState extends State<SearchPage> {
         );
         break;
       case SearchCategory.Group:
-        Logger().d("Grup case seçildi");
+        Logger().d("Topluluk case seçildi");
         return Expanded(
           child: Container(
             child: StreamBuilder<QuerySnapshot>(

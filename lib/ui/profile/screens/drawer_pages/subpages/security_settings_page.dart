@@ -374,7 +374,7 @@ class _ChangeEmailPageState extends BaseState<ChangeEmailPage> {
                       validator: FormBuilderValidators.compose(
                         [
                           FormBuilderValidators.required(context,
-                              errorText: "Yeni e-posta adresini gir."),
+                              errorText: "Bu alan boş bırakılamaz."),
                           FormBuilderValidators.notEqual(
                               context, authProvider.currentUser.email,
                               errorText:

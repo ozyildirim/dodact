@@ -172,7 +172,7 @@ class GroupProvider extends ChangeNotifier {
     try {
       var fetchedGroup = await _groupRepository.getDetail(groupId);
       group = fetchedGroup;
-      //TODO: grup güncellemelerini düzenle
+      //TODO: Topluluk güncellemelerini düzenle
       notifyListeners();
       return fetchedGroup;
     } catch (e) {
