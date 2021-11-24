@@ -23,11 +23,7 @@ class CommentProvider extends ChangeNotifier {
 
   Future<void> saveComment(CommentModel comment, String postId) async {
     try {
-      await firebaseCommentService.saveComment(comment, postId).then((value) {
-        comment.commentId = value;
-        comments.add(comment);
-        notifyListeners();
-      });
+      await firebaseCommentService.saveComment(comment, postId);
     } catch (e) {
       print("CommentProvider saveComment error: $e");
       return null;
@@ -37,10 +33,6 @@ class CommentProvider extends ChangeNotifier {
   Future<void> deleteComment(String commentId, String postId) async {
     try {
       await firebaseCommentService.deleteComment(commentId, postId);
-      var comment =
-          comments.firstWhere((element) => element.commentId == commentId);
-      comments.remove(comment);
-      notifyListeners();
     } catch (e) {
       print("CommentProvider deleteComment error: $e");
     }

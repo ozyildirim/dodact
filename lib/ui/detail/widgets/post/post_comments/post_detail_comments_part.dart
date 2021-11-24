@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -8,6 +10,7 @@ import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_comment_tile
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
 class PostCommentsPage extends StatefulWidget {
@@ -26,58 +29,35 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
 
   @override
   void initState() {
-    Provider.of<CommentProvider>(context, listen: false)
-        .getPostComments(widget.postId)
-        .then((value) {
-      print(value);
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final commentProvider = Provider.of<CommentProvider>(context);
-
     buildBody() {
-      if (commentProvider.comments == null) {
-        return Container(
-          height: 200,
-          child: Center(child: spinkit),
-        );
-      } else {
-        if (commentProvider.comments.isEmpty) {
-          return Container(
-            // height: 200,
-
-            child: Center(
-              child: Text(
-                "Henüz yorum yapılmamış.",
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
+      return PaginateFirestore(
+        query: postsRef.doc(widget.postId).collection("comments"),
+        itemBuilderType: PaginateBuilderType.listView,
+        itemsPerPage: 10,
+        isLive: true,
+        onEmpty: Center(
+            child: Text("Bu gönderi için henüz yorum yapılmamış.",
+                style: TextStyle(fontSize: kPageCenteredTextSize))),
+        itemBuilder:
+            (BuildContext context, List<DocumentSnapshot> document, int index) {
+          CommentModel comment = CommentModel.fromJson(document[index].data());
+          return PostCommentTile(
+            postId: widget.postId,
+            comment: comment,
+            postOwnerId: widget.postOwnerId,
           );
-        }
-        commentProvider.comments
-            .sort((a, b) => a.commentDate.compareTo(b.commentDate));
-        return Container(
-          height: 220,
-          child: ListView.builder(
-            itemCount: commentProvider.comments.length,
-            itemBuilder: (context, index) {
-              var comment = commentProvider.comments[index];
-              return PostCommentTile(
-                postId: widget.postId,
-                comment: comment,
-                postOwnerId: widget.postOwnerId,
-              );
-            },
-          ),
-        );
-      }
+        },
+      );
     }
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Yorumlar"),
       ),
       body: GestureDetector(
@@ -184,7 +164,7 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
         );
 
         await commentProvider.saveComment(commentModel, widget.postId);
-        setState(() {});
+
         FocusScope.of(context).unfocus();
         commentController.text = "";
       }

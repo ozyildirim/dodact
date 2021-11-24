@@ -183,7 +183,11 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
       child: PaginateFirestore(
         // emptyDisplay: buildEmptyRoomAction(),
         scrollController: scrollController,
-        itemsPerPage: 5,
+        onEmpty: Center(
+          child: Text("Mesaj bulunamadı.",
+              style: TextStyle(fontSize: kPageCenteredTextSize)),
+        ),
+        itemsPerPage: 5, initialLoader: Center(child: spinkit),
         // Use SliverAppBar in header to make it sticky
         // item builder type is compulsory.
         itemBuilderType:
@@ -250,7 +254,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         bottomLoader: Container(
           height: 50,
           child: Center(
-            child: CircularProgressIndicator(),
+            child: spinkit,
           ),
         ),
       ),
@@ -301,7 +305,6 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
               'lastMessage': messageModel.toJson(),
             });
           });
-
         }
       } catch (e) {
         print(e);

@@ -77,9 +77,7 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
                     ],
                   ),
                 )
-              : Center(
-                  child: spinkit,
-                )),
+              : null),
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       actions: comment.authorId != authProvider.currentUser.uid ||
