@@ -7,6 +7,7 @@ class VideoPostHeader extends StatelessWidget {
 
   VideoPostHeader({this.post});
 
+  //TODO: Burası düzenlenmeli
   buildYoutubeController() {
     return YoutubePlayerController(
       initialVideoId:
@@ -23,11 +24,10 @@ class VideoPostHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: YoutubePlayer(
-        controller: buildYoutubeController(),
-        showVideoProgressIndicator: true,
-        progressIndicatorColor: Colors.blueAccent,
-      ),
-    );
+        child: YoutubePlayer(
+      controller: buildYoutubeController(),
+      showVideoProgressIndicator: true,
+      progressIndicatorColor: Colors.blueAccent,
+    ));
   }
 }

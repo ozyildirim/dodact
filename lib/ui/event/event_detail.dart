@@ -81,6 +81,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         child: PopupMenuButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             icon: Icon(Icons.more_vert, color: Colors.black),
                             itemBuilder: (context) => [
                                   PopupMenuItem(
@@ -103,6 +106,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         child: PopupMenuButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             icon: Icon(Icons.more_vert, color: Colors.black),
                             itemBuilder: (context) => [
                                   PopupMenuItem(
@@ -209,7 +215,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             ListTile(
               leading: Icon(Icons.calendar_today),
               title: Text(
-                DateFormat('dd,MM,yyyy hh:mm').format(event.startDate),
+                DateFormat('dd.MM.yyyy hh:mm').format(event.startDate),
                 style: TextStyle(fontSize: 18),
               ),
               subtitle: Text("Etkinlik Başlangıcı"),
@@ -223,11 +229,12 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             //   ],
             // ),
             ListTile(
-                leading: Icon(Icons.view_day),
-                title: Text(
-                  event.isOnline ? "Online Etkinlik" : "Fiziksel Etkinlik",
-                  style: TextStyle(fontSize: 18),
-                )),
+              leading: Icon(Icons.view_day),
+              title: Text(
+                event.isOnline ? "Online Etkinlik" : "Fiziksel Etkinlik",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
             !event.isOnline
                 ? ListTile(
                     leading: Icon(Icons.location_city),
@@ -237,21 +244,24 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     ),
                   )
                 : ListTile(
-                    leading: Icon(Icons.web),
+                    leading: Icon(Icons.public),
                     title: Text(
                       event.eventURL,
                       style: TextStyle(fontSize: 18),
                     ),
+                    subtitle: Text("Etkinlik Web Adresi"),
                     onTap: () {
                       CommonMethods.launchURL(event.eventURL);
                     },
                   ),
             ListTile(
-                leading: Icon(Icons.category),
-                title: Text(
-                  event.eventType,
-                  style: TextStyle(fontSize: 18),
-                ))
+              leading: Icon(Icons.category),
+              title: Text(
+                event.eventType,
+                style: TextStyle(fontSize: 18),
+              ),
+              subtitle: Text("Etkinlik Türü"),
+            )
           ],
         ),
       ),

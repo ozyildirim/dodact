@@ -59,9 +59,13 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         actions: isUserGroupFounder()
             ? [
                 PopupMenuButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     itemBuilder: (context) => [
                           PopupMenuItem(
                             child: ListTile(

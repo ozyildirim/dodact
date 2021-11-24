@@ -80,35 +80,43 @@ class _PostDetailState extends BaseState<PostDetail> {
       ),
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
-        child: Container(
-          height: dynamicHeight(1) -
-              appBar.preferredSize.height -
-              mediaQuery.padding.top,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
-              image: AssetImage(kBackgroundImage),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            children: [
-              HeaderPart(post: post),
-              PostDetailInfoPart(post: post),
-              SizedBox(height: 10),
-              PostDescriptionCard(post: post),
-              Expanded(
-                child: Container(),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        if (orientation == Orientation.portrait) {
+          return Scaffold(
+            appBar: appBar,
+            body: SingleChildScrollView(
+              child: Container(
+                height: dynamicHeight(1) -
+                    appBar.preferredSize.height -
+                    mediaQuery.padding.top,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                    image: AssetImage(kBackgroundImage),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    HeaderPart(post: post),
+                    PostDetailInfoPart(post: post),
+                    SizedBox(height: 10),
+                    PostDescriptionCard(post: post),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    buildPostCommentsNavigator(),
+                  ],
+                ),
               ),
-              buildPostCommentsNavigator(),
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        } else {
+          return VideoPostHeader(post: post);
+        }
+      },
     );
   }
 
