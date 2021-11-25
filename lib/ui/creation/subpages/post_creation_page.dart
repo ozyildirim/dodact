@@ -567,9 +567,19 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Future<void> _selectFile(FileType selectedType) async {
+    bool isAudio = false;
+    List<String> allowedTypes;
+
+    if (selectedType == FileType.audio) {
+      isAudio = true;
+      allowedTypes = ["m4a", "mp3", "flac", "wav", "wma", "aac"];
+    } else {}
+
     FilePickerResult result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
-        type: selectedType,
+        type: selectedType == FileType.audio ? FileType.custom : selectedType,
+        allowedExtensions: selectedType == FileType.audio ? allowedTypes : null,
+        allowCompression: true,
         onFileLoading: (FilePickerStatus status) {
           if (status == FilePickerStatus.picking) {
             setState(() {
