@@ -321,9 +321,11 @@ class _SearchPageState extends State<SearchPage> {
                   ? FirebaseFirestore.instance
                       .collection('groups')
                       .where("groupName", arrayContains: name)
+                      .where('visible', isEqualTo: true)
                       .snapshots()
                   : FirebaseFirestore.instance
                       .collection("groups")
+                      .where('visible', isEqualTo: true)
                       .limit(5)
                       .snapshots(),
               builder: (context, snapshot) {
