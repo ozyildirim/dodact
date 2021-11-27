@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -11,6 +12,7 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 enum SearchCategory { User, Post, Group, Event }
 
@@ -341,6 +343,10 @@ class _SearchPageState extends State<SearchPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
                               onTap: () {
+                                Provider.of<GroupProvider>(context,
+                                        listen: false)
+                                    .setGroup(group);
+
                                 NavigationService.instance.navigate(
                                     k_ROUTE_GROUP_DETAIL,
                                     args: group);
