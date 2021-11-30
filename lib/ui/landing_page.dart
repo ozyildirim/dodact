@@ -11,6 +11,7 @@ import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart'
 import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/home_page.dart';
+import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -72,6 +73,8 @@ class _LandingPageState extends BaseState<LandingPage> {
           builder: (_, model, child) {
             if (model.currentUser != null) {
               if (model.currentUser.newUser) return SignUpDetail();
+              if (model.currentUser.interests == null)
+                return InterestRegistrationPage();
 
               return HomePage();
             } else {

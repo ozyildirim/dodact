@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
-class GroupPhotosTabView extends StatelessWidget {
+class GroupMediaTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
@@ -16,7 +16,8 @@ class GroupPhotosTabView extends StatelessWidget {
       return Center(
         child: Container(
           color: Colors.white60,
-          child: Text("Bu topluluk henüz bir fotoğraf eklemedi.",
+          child: Text("Bu topluluk henüz bir medya dosyası eklemedi.",
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: kPageCenteredTextSize)),
         ),
       );

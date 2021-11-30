@@ -15,6 +15,7 @@ class GroupMediaManagementPage extends StatelessWidget {
     var groupProvider = Provider.of<GroupProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text('Topluluk Medya Yönetimi'),
       ),
       body: Container(
@@ -64,6 +65,7 @@ class GroupMediaManagementPage extends StatelessWidget {
               );
             }
             var media = groupProvider.group.groupMedia[index - 1];
+            print(media);
             return Stack(
               children: [
                 InkWell(
@@ -116,7 +118,7 @@ class GroupMediaManagementPage extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: Text("Medya Sil"),
-          content: Text("Medya silmek istediğinize emin misiniz?"),
+          content: Text("Medya silmek istediğine emin misin?"),
           actions: [
             FlatButton(
               child: Text("Evet"),
@@ -146,14 +148,24 @@ class GroupMediaManagementPage extends StatelessWidget {
       // await groupProvider.updateGroup(groupProvider.group.groupId, {
       //   'groupMedia': FieldValue.arrayRemove([url]),
       // });
+      showSnackbar("Medya dosyası başarıyla silindi.", context);
     } catch (e) {
       logger.e(e);
+      showSnackbar("Medya dosyası silinirken hata oluştu.", context);
     }
+  }
+
+  showSnackbar(String message, BuildContext context) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   addGroupMedia(BuildContext context, PickedFile file) async {
     try {
-      CommonMethods().showLoaderDialog(context, "Medya Yükleniyor.");
+      CommonMethods().showLoaderDialog(context, "Medya Yükleniyor");
       var groupProvider = Provider.of<GroupProvider>(context, listen: false);
       await groupProvider.addGroupMedia(file, groupProvider.group.groupId);
       NavigationService.instance.pop();

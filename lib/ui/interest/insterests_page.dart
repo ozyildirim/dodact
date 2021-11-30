@@ -94,42 +94,42 @@ class _InterestsPageState extends BaseState<InterestsPage> {
           ),
         ),
         // child: choiceWidget(),
-        // child: ListView(
-        //   // scrollDirection: Axis.horizontal,
-        //   children: [
-        //     musicSelector(),
-        //     danceSelector(),
-        //     theaterSelector(),
-        //     visualArtSelector()
-        //   ],
-        // ),
-        child: buildStack(),
+        child: ListView(
+          // scrollDirection: Axis.horizontal,
+          children: [
+            musicSelector(),
+            danceSelector(),
+            theaterSelector(),
+            visualArtSelector()
+          ],
+        ),
+        // child: buildStack(),
       ),
     );
   }
 
-  buildStack() {
-    var size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Positioned(
-          top: size.height * 0.55,
-          child: musicSelector(),
-        ),
-        Positioned(
-          top: size.height * 0.35,
-          child: danceSelector(),
-        ),
-        Positioned(
-          top: size.height * 0.15,
-          child: visualArtSelector(),
-        ),
-        Positioned(
-          child: theaterSelector(),
-        ),
-      ],
-    );
-  }
+  // buildStack() {
+  //   var size = MediaQuery.of(context).size;
+  //   return Stack(
+  //     children: [
+  //       Positioned(
+  //         top: size.height * 0.55,
+  //         child: musicSelector(),
+  //       ),
+  //       Positioned(
+  //         top: size.height * 0.35,
+  //         child: danceSelector(),
+  //       ),
+  //       Positioned(
+  //         top: size.height * 0.15,
+  //         child: visualArtSelector(),
+  //       ),
+  //       Positioned(
+  //         child: theaterSelector(),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   List<String> musicCategories = interestCategoryList
       .where((element) => element.name == "Müzik")
@@ -161,17 +161,20 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   List<String> selectedDanceValues = [];
 
   musicSelector() {
-    return InkWell(
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(100),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          clipBehavior: Clip.antiAlias,
+          elevation: 10,
           margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/app/interests/muzik.jpeg'),
@@ -180,18 +183,22 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             ),
             child: Align(
                 alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Müzik Alt Kategorileri",
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.045,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey.withOpacity(0.5),
+                  child: Center(
+                    child: Text("Müzik Alt Kategorileri",
+                        style: TextStyle(
+                            fontSize: 21,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 )),
           ),
         ),
+        onTap: musicSelectorDialog,
       ),
-      onTap: musicSelectorDialog,
     );
   }
 
@@ -226,17 +233,20 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   }
 
   theaterSelector() {
-    return InkWell(
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(100),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          clipBehavior: Clip.antiAlias,
+          elevation: 10,
           margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
@@ -245,18 +255,22 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             ),
             child: Align(
                 alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Tiyatro Alt Kategorileri",
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.045,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey.withOpacity(0.5),
+                  child: Center(
+                    child: Text("Tiyatro Alt Kategorileri",
+                        style: TextStyle(
+                            fontSize: 21,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 )),
           ),
         ),
+        onTap: theaterSelectorDialog,
       ),
-      onTap: theaterSelectorDialog,
     );
   }
 
@@ -290,18 +304,21 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   }
 
   danceSelector() {
-    return InkWell(
-      onTap: danceSelectorDialog,
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(100),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: danceSelectorDialog,
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          clipBehavior: Clip.antiAlias,
+          elevation: 10,
           margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/app/interests/dans.jpeg'),
@@ -310,13 +327,17 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             ),
             child: Align(
                 alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Dans Alt Kategorileri",
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.045,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey.withOpacity(0.5),
+                  child: Center(
+                    child: Text("Dans Alt Kategorileri",
+                        style: TextStyle(
+                            fontSize: 21,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 )),
           ),
         ),
@@ -354,18 +375,21 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   }
 
   visualArtSelector() {
-    return InkWell(
-      onTap: visualArtSelectorDialog,
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(100),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: visualArtSelectorDialog,
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          clipBehavior: Clip.antiAlias,
+          elevation: 10,
           margin: EdgeInsets.zero,
           color: Colors.transparent,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
@@ -375,13 +399,17 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             ),
             child: Align(
                 alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Görsel Sanatlar Alt Kategorileri",
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.045,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey.withOpacity(0.5),
+                  child: Center(
+                    child: Text("Görsel Sanatlar Alt Kategorileri",
+                        style: TextStyle(
+                            fontSize: 21,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 )),
           ),
         ),

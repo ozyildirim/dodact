@@ -7,6 +7,7 @@ class GroupManagementPage extends StatelessWidget {
   final double tileTitleSize = 20;
   AppBar appBar = new AppBar(
     title: Text("Topluluk Yönetim"),
+    iconTheme: IconThemeData(color: Colors.white),
   );
 
   @override

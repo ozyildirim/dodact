@@ -23,6 +23,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Topluluk Etkinlik Yönetimi"),
       ),
       body: Container(

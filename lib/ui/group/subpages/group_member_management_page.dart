@@ -62,6 +62,7 @@ class _GroupMemberManagementPageState
       key: scaffoldKey,
       appBar: AppBar(
         actions: actions,
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Üye Yönetimi"),
       ),
       body: Container(
@@ -113,10 +114,13 @@ class _GroupMemberManagementPageState
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(Icons.add),
-                                      ),
-                                      Text("Üye Ekle"),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Icon(Icons.add,
+                                              color: Colors.black)),
+                                      Text("Üye Ekle",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black)),
                                     ],
                                   ),
                                 ),

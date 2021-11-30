@@ -1,18 +1,20 @@
 import 'dart:io';
+import 'dart:ui';
 
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
+import 'package:dodact_v1/ui/common/screens/agreements.dart';
+import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/validators/validators.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
-import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
@@ -37,14 +39,14 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   String name;
   String location;
 
-  int _currentStep = 0;
-
   PickedFile profilePicture;
   String socialAccountProfilePictureUrl;
   String errorMessage;
   bool isUploaded = false;
-  bool inProgress = false;
+  bool isLoading = false;
   bool isAvailableUsername;
+
+  double fieldLabelSize = 20.0;
 
   void initState() {
     super.initState();
@@ -53,218 +55,48 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       nameController.text = userProvider.currentUser.nameSurname;
     }
 
-    if (userProvider.currentUser.profilePictureURL != null) {
-      socialAccountProfilePictureUrl =
-          userProvider.currentUser.profilePictureURL;
-    } else {
-      socialAccountProfilePictureUrl = null;
-    }
+    print("social: $socialAccountProfilePictureUrl");
+    print("profile: ${userProvider.currentUser.profilePictureURL}");
   }
 
-  void forward() {
-    if (formKey.currentState.saveAndValidate()) {
-      _currentStep < 1
-          ? setState(() {
-              location = formKey.currentState.value['location'];
-              name = formKey.currentState.value['name'];
-              _currentStep++;
-            })
-          : null;
-    } else {}
-  }
-
-  void back() {
-    formKey.currentState.save();
-
-    _currentStep != 0
-        ? setState(() {
-            _currentStep--;
-          })
-        : null;
+  bool isUserPictureAssigned() {
+    if (userProvider.currentUser.profilePictureURL != null) {}
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    List<Step> steps = [
-      Step(
-        title: Text(
-          "Kişisel",
-          style: TextStyle(fontSize: 18),
-        ),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: [
-                Text(
-                  "Ad Soyad",
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                // Text(
-                //   "(Opsiyonel)",
-                //   style: TextStyle(fontSize: 14),
-                // )
-              ],
-            ),
-            SizedBox(height: 4),
-            TextFieldContainer(
-              width: size.width * 0.9,
-              child: FormBuilderTextField(
-                textInputAction: TextInputAction.done,
-                name: "name",
-                autofocus: false,
-                autovalidateMode: autoValidateMode,
-                controller: nameController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                ),
-                focusNode: _nameFocus,
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(
-                    context,
-                    errorText: "Bu alan boş bırakılamaz.",
-                  ),
-                  (value) {
-                    return ProfanityChecker.profanityValidator(value);
-                  },
-                ]),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              "Lokasyon",
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 4),
-            TextFieldContainer(
-              width: size.width * 0.9,
-              child: FormBuilderDropdown(
-                focusNode: dropdownFocus,
-                hint: Text("Şehir Seçin"),
-                decoration: InputDecoration(border: InputBorder.none),
-                name: "location",
-                items: cities
-                    .map((city) => DropdownMenuItem(
-                          value: city,
-                          child: Text('$city'),
-                        ))
-                    .toList(),
-                validator: FormBuilderValidators.required(context,
-                    errorText: "Bu alan boş bırakılamaz."),
-              ),
-            ),
-          ],
-        ),
-        isActive: _currentStep == 0,
-        state: _currentStep > 0 ? StepState.complete : StepState.disabled,
-      ),
-      Step(
-        title: Text(
-          "Profil",
-          style: TextStyle(fontSize: 18),
-        ),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: 250,
-              width: double.infinity,
-              child: Center(
-                child: Stack(children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: InkWell(
-                      onTap: () {
-                        showPickerOptions();
-                      },
-                      child: Container(
-                          width: 200,
-                          height: 200,
-                          child: profilePicture == null
-                              ? Image.network(
-                                  socialAccountProfilePictureUrl ??
-                                      "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png",
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.file(
-                                  File(profilePicture.path),
-                                  fit: BoxFit.cover,
-                                )),
-                    ),
-                  ),
-                  Positioned(
-                    top: 160,
-                    left: 160,
-                    child: InkWell(
-                      onTap: () {
-                        showPickerOptions();
-                      },
-                      child: GFBadge(
-                        size: 60,
-                        child: Icon(FontAwesome5Solid.camera,
-                            color: Colors.white, size: 20),
-                        shape: GFBadgeShape.circle,
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-            Text(
-              "Kullanıcı Adı",
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 4),
-            TextFieldContainer(
-              width: size.width * 0.9,
-              child: FormBuilderTextField(
-                name: "username",
-                textInputAction: TextInputAction.done,
-                autofocus: false,
-                decoration: InputDecoration(border: InputBorder.none),
-                focusNode: _usernameFocus,
-                onChanged: (value) {
-                  setState(() {
-                    checkUsername(value);
-                  });
-                },
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(
-                    context,
-                    errorText: "Bu alan boş bırakılamaz.",
-                  ),
-                  (value) {
-                    return ProfanityChecker.profanityValidator(value);
-                  },
-                ]),
-              ),
-            ),
-          ],
-        ),
-        isActive: _currentStep == 1,
-      ),
-    ];
-
     return Scaffold(
       key: _scaffoldKey,
+      floatingActionButton: isLoading
+          // ignore: missing_required_param
+          ? FloatingActionButton(
+              child: CircularProgressIndicator(color: Colors.white))
+          : FloatingActionButton(
+              onPressed: submitForm,
+              child: Icon(Icons.check),
+            ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            color: Colors.black,
-            onPressed: () {
-              _signOut();
-            },
-          )
+          TextButton(
+              style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all<Color>(Colors.white)),
+              child: Text(
+                "Bilgilendirme",
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: showInformationDialog),
+          TextButton(
+              style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all<Color>(Colors.white)),
+              child: Text(
+                "Çıkış Yap",
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: _signOut)
         ],
       ),
       body: GestureDetector(
@@ -273,6 +105,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           FocusScope.of(context).unfocus();
         },
         child: Container(
+          height: size.height,
+          width: size.width,
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
@@ -281,64 +115,232 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
               fit: BoxFit.cover,
             ),
           ),
-          child: FormBuilder(
-            key: formKey,
-            child: Theme(
-              data: ThemeData(
-                  colorScheme: ColorScheme.light(
-                primary: kNavbarColor,
-              )),
-              child: Stepper(
-                controlsBuilder: (BuildContext context,
-                    {void Function() onStepCancel,
-                    void Function() onStepContinue}) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      _currentStep != steps.length - 1
-                          ? GFButton(
-                              size: GFSize.LARGE,
-                              shape: GFButtonShape.pills,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .button
-                                  .copyWith(fontSize: 18, color: Colors.white),
-                              text: "İleri",
-                              onPressed: forward,
-                              child: const Text('İleri'),
-                              color: kNavbarColor,
-                            )
-                          : GFButton(
-                              size: GFSize.LARGE,
-                              shape: GFButtonShape.pills,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .button
-                                  .copyWith(fontSize: 18, color: Colors.white),
-                              color: kNavbarColor,
-                              child: Text('Tamamla'),
-                              onPressed: () async {
-                                await submitForm();
-                              },
-                            ),
-                      TextButton(
-                        onPressed: back,
-                        child: const Text('Geri',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.black)),
-                      ),
-                    ],
-                  );
-                },
-                currentStep: _currentStep,
-                type: StepperType.horizontal,
-                steps: steps,
-                onStepTapped: null,
-              ),
-            ),
-          ),
+          child: buildForm(),
         ),
       ),
+    );
+  }
+
+  buildForm() {
+    var size = MediaQuery.of(context).size;
+    return FormBuilder(
+      key: formKey,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: CircleAvatar(
+                  maxRadius: 90,
+                  minRadius: 70,
+                  backgroundColor: Colors.black,
+                  child: CircleAvatar(
+                    minRadius: 60,
+                    maxRadius: 80,
+                    backgroundImage: profilePicture == null
+                        ? NetworkImage(
+                            userProvider.currentUser.profilePictureURL == null
+                                ? AppConstant.kDefaultUserProfilePicture
+                                : userProvider.currentUser.profilePictureURL,
+                          )
+                        : FileImage(
+                            File(profilePicture.path),
+                          ),
+
+                    // backgroundImage: NetworkImage(
+                    //     userProvider.currentUser.profilePictureURL),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                  child: Text(
+                    "Profil fotoğrafı seç",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
+                  ),
+                  onTap: showPickerOptions),
+            ),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Kullanıcı Adı",
+                  style: TextStyle(
+                      fontSize: fieldLabelSize, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 4),
+                TextFieldContainer(
+                  width: size.width * 0.9,
+                  child: FormBuilderTextField(
+                    name: "username",
+                    textInputAction: TextInputAction.done,
+                    autofocus: false,
+                    decoration: InputDecoration(border: InputBorder.none),
+                    focusNode: _usernameFocus,
+                    onChanged: (value) {
+                      setState(() {
+                        checkUsername(value);
+                      });
+                    },
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      ),
+                      (value) {
+                        return ProfanityChecker.profanityValidator(value);
+                      },
+                    ]),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Ad Soyad",
+                  style: TextStyle(
+                      fontSize: fieldLabelSize, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 4),
+                TextFieldContainer(
+                  width: size.width * 0.9,
+                  child: FormBuilderTextField(
+                    textInputAction: TextInputAction.done,
+                    name: "name",
+                    autofocus: false,
+                    autovalidateMode: autoValidateMode,
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    focusNode: _nameFocus,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      ),
+                      (value) {
+                        return ProfanityChecker.profanityValidator(value);
+                      },
+                    ]),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Lokasyon",
+                  style: TextStyle(
+                      fontSize: fieldLabelSize, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 4),
+                TextFieldContainer(
+                  width: size.width * 0.9,
+                  child: FormBuilderDropdown(
+                    focusNode: dropdownFocus,
+                    hint: Text("Şehir Seçin"),
+                    decoration: InputDecoration(border: InputBorder.none),
+                    name: "location",
+                    items: cities
+                        .map((city) => DropdownMenuItem(
+                              value: city,
+                              child: Text('$city'),
+                            ))
+                        .toList(),
+                    validator: FormBuilderValidators.required(context,
+                        errorText: "Bu alan boş bırakılamaz."),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  showInformationDialog() {
+    double textSize = 16.0;
+
+    var text = RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: textSize),
+              text: 'Değerli Dodact’li Merhaba!'),
+          TextSpan(text: '\n\n'),
+          TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: textSize),
+              text:
+                  "Kayıt bölümümüzde, ad-soyad vb bilgilerinizi rica ediyoruz.Amacımız platformumuzu güvenilir, samimi, üretken ve kalıcı değerler yaratabilen bir topluluk çerçevesinde oluşturabilmektir."),
+          TextSpan(text: '\n\n'),
+          TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: textSize),
+              text: "Amacımızın sürdürülebilir olması için,"),
+          TextSpan(
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                  fontSize: textSize),
+              text: "\nyasal sorumluluklarını "),
+          TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: textSize),
+              text:
+                  "da göz önünde bulundurarak platformumuzun bir parçası olmanı diliyoruz."),
+          TextSpan(text: '\n\n'),
+          TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: textSize),
+              text:
+                  "Aramıza katıldığın için çok mutluyuz. \nTekrar hoş geldin😊"),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Bilgilendirme"),
+          content: InkWell(
+            child: text,
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TermsOfUsagePage();
+              }));
+              ;
+            },
+          ),
+          actions: [
+            FlatButton(
+              child: Text("Kapat"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -370,20 +372,60 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         });
   }
 
+  Future cropImage(File file) async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: file.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Özelleştir',
+            toolbarColor: Color(0xff194d25),
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Özelleştir',
+        ));
+    if (croppedFile != null) {
+      return croppedFile;
+    }
+  }
+
   void submitForm() async {
+    setState(() {
+      isLoading = true;
+    });
     await checkUsername(formKey.currentState.value["username"]);
     if (isAvailableUsername) {
       if (formKey.currentState.saveAndValidate()) {
         // CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
 
         var username = formKey.currentState.value['username'].toString().trim();
+        var name = formKey.currentState.value['name'].toString().trim();
+        var location = formKey.currentState.value['location'].toString().trim();
 
         Logger().e("name: $name, location: $location, username: $username");
 
         try {
           await updateDetails(
             username: username,
-            name: name ?? "Dodact Kullanıcısı",
+            name: name,
             location: location,
           );
           CommonMethods().hideDialog();
@@ -392,8 +434,15 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
         }
       } else {
+        setState(() {
+          isLoading = false;
+        });
         showErrorSnackBar("Formu doldururken bir hata oldu");
       }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -479,8 +528,10 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   void takePhotoFromGallery(BuildContext context) async {
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+
+    File croppedFile = await cropImage(File(newImage.path));
     setState(() {
-      profilePicture = newImage;
+      profilePicture = PickedFile(croppedFile.path);
       NavigationService.instance.pop();
     });
   }
@@ -488,8 +539,10 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   void takePhotoFromCamera(BuildContext context) async {
     var newImage =
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
+
+    File croppedFile = await cropImage(File(newImage.path));
     setState(() {
-      profilePicture = newImage;
+      profilePicture = PickedFile(croppedFile.path);
       NavigationService.instance.pop();
     });
   }
@@ -509,7 +562,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             .showErrorDialog(context, "Fotoğraf Yüklenirken hata oluştu.");
       });
       debugPrint("Picture uploaded.");
-    } else if (socialAccountProfilePictureUrl != null) {
+    } else if (userProvider.currentUser.profilePictureURL != null) {
+      //Eğer diğer auth yöntemlerinden gelen bir profil fotoğrafı varsa bu yüklemeyi pas geçiyoruz.
     } else {
       uploadDefaultPicture();
     }
@@ -517,12 +571,10 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void uploadDefaultPicture() async {
     try {
-      await userProvider.updateCurrentUser({
-        'profilePictureURL':
-            'https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png'
-      });
+      await userProvider.updateCurrentUser(
+          {'profilePictureURL': AppConstant.kDefaultUserProfilePicture});
       userProvider.currentUser.profilePictureURL =
-          "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png";
+          AppConstant.kDefaultUserProfilePicture;
       debugPrint("userPicture default olarak ayarlandı.");
     } catch (e) {
       showErrorSnackBar("Teknik bir problem oluştu.");

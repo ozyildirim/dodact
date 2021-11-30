@@ -58,6 +58,15 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      floatingActionButton: isUserGroupFounder()
+          ? FloatingActionButton(
+              onPressed: () {
+                NavigationService.instance
+                    .navigate(k_ROUTE_CREATION_MENU, args: group.groupId);
+              },
+              child: Icon(Icons.add),
+            )
+          : null,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         actions: isUserGroupFounder()
@@ -93,7 +102,8 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             fit: BoxFit.cover,
           ),
         ),
-        child: isUserGroupFounder() ? adminView() : userView(),
+        // child: isUserGroupFounder() ? adminView() : userView(),
+        child: pageBody(),
       ),
     );
   }
@@ -161,20 +171,31 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   pageBody() {
     return Column(
       children: [
-        Expanded(
-          flex: 1,
-          child: Center(
-              child: ClipRRect(
-            borderRadius: BorderRadius.circular(18),
-            child: Card(
-              child: Image.network(group.groupProfilePicture),
+        // Expanded(
+        //   flex: 1,
+        //   child: Center(
+        //       child: ClipRRect(
+        //     borderRadius: BorderRadius.circular(18),
+        //     child: Card(
+        //       child: Image.network(group.groupProfilePicture),
+        //     ),
+        //   )),
+        // ),
+        Container(
+          height: dynamicHeight(0.3),
+          width: dynamicWidth(1),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(group.groupProfilePicture),
+              fit: BoxFit.cover,
             ),
-          )),
+          ),
         ),
-        Divider(),
+
+        // Divider(),
         buildTabs(),
         Expanded(
-          child: SingleChildScrollView(child: buildTabViews()),
+          child: buildTabViews(),
         )
       ],
     );
@@ -197,7 +218,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           Tab(text: "Üyeler"),
           Tab(text: "Gönderiler"),
           Tab(text: "Etkinlikler"),
-          Tab(text: "Fotoğraflar"),
+          Tab(text: "Medya"),
           Tab(text: "Duyurular"),
           Tab(text: "İlgi Alanları"),
         ],
@@ -206,23 +227,19 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   buildTabViews() {
-    return Container(
-      //TODO: Boyutu ayarla
-      height: dynamicHeight(0.4),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TabBarView(
-          controller: tabController,
-          children: [
-            buildDetailTabView(),
-            buildMembersTabView(),
-            buildPostsTabView(),
-            buildEventsTabView(),
-            buildPhotosTabView(),
-            buildAnnouncementsTabView(),
-            buildInterestsTabView()
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TabBarView(
+        controller: tabController,
+        children: [
+          buildDetailTabView(),
+          buildMembersTabView(),
+          buildPostsTabView(),
+          buildEventsTabView(),
+          buildMediaTabView(),
+          buildAnnouncementsTabView(),
+          buildInterestsTabView()
+        ],
       ),
     );
   }
@@ -247,8 +264,8 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     return Container();
   }
 
-  buildPhotosTabView() {
-    return GroupPhotosTabView();
+  buildMediaTabView() {
+    return GroupMediaTabView();
   }
 
   buildInterestsTabView() {

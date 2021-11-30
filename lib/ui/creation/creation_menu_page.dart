@@ -336,7 +336,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                       width: size.width * 0.4,
                       child: new ListTile(
                         title: const Text(
-                          'Uygula',
+                          'Oluştur',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -352,7 +352,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                       width: size.width * 0.4,
                       child: new ListTile(
                         title: const Text(
-                          'Temizle',
+                          'İptal',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -601,7 +601,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                       width: size.width * 0.4,
                       child: new ListTile(
                         title: const Text(
-                          'Uygula',
+                          'Oluştur',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -617,7 +617,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                       width: size.width * 0.4,
                       child: new ListTile(
                         title: const Text(
-                          'Temizle',
+                          'İptal',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16.0,

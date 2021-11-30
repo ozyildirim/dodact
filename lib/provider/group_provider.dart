@@ -9,6 +9,7 @@ import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/group_repository.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -241,7 +242,8 @@ class GroupProvider extends ChangeNotifier {
   Future<void> deleteGroupPost(String postId) async {
     try {
       await _groupRepository.deleteGroupPost(postId);
-      groupPosts.removeWhere((post) => post.postId == postId);
+      var post = groupPosts.firstWhere((element) => element.postId == postId);
+      groupPosts.remove(post);
       notifyListeners();
     } catch (e) {
       logger.e("GroupProvider deleteGroupPost error: " + e.toString());
@@ -267,19 +269,17 @@ class GroupProvider extends ChangeNotifier {
 
   Future removeGroupMedia(String url, String groupId) async {
     try {
-      HttpsCallable callable =
-          FirebaseFunctions.instance.httpsCallable('deleteGroupMedia');
-      HttpsCallableResult result =
-          await callable.call(<String, dynamic>{'url': url});
+      // HttpsCallable callable =
+      //     FirebaseFunctions.instance.httpsCallable('deleteGroupMedia');
+      // HttpsCallableResult result =
+      //     await callable.call(<String, dynamic>{'url': url});
 
-      if (result.data['result'] == true) {
-        await updateGroup(groupId, {
-          'groupMedia': FieldValue.arrayRemove([url]),
-        });
-        group.groupMedia.remove(url);
-      } else {
-        logger.e("GroupProvider removeGroupMedia error: " + result.toString());
-      }
+      FirebaseStorage.instance.refFromURL(url).delete();
+      logger.i("Group media deleted: $url");
+      await updateGroup(groupId, {
+        'groupMedia': FieldValue.arrayRemove([url]),
+      });
+      group.groupMedia.remove(url);
     } catch (e) {
       logger.e("GroupProvider removeGroupMedia error: " + e.toString());
     }

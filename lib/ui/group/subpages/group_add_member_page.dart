@@ -58,6 +58,7 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Ara'),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: GestureDetector(
           onTap: () {
