@@ -62,6 +62,7 @@ class _GroupMemberManagementPageState
       key: scaffoldKey,
       appBar: AppBar(
         actions: actions,
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Üye Yönetimi"),
       ),
       body: Container(

@@ -1,20 +1,19 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
+import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/validators/validators.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
-import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -56,12 +55,12 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       nameController.text = userProvider.currentUser.nameSurname;
     }
 
-    if (userProvider.currentUser.profilePictureURL != null) {
-      socialAccountProfilePictureUrl =
-          userProvider.currentUser.profilePictureURL;
-    } else {
-      socialAccountProfilePictureUrl = null;
-    }
+    print("social: $socialAccountProfilePictureUrl");
+    print("profile: ${userProvider.currentUser.profilePictureURL}");
+  }
+
+  bool isUserPictureAssigned() {
+    if (userProvider.currentUser.profilePictureURL != null) {}
   }
 
   @override
@@ -76,7 +75,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
               child: CircularProgressIndicator(color: Colors.white))
           : FloatingActionButton(
               onPressed: submitForm,
-              child: Icon(Icons.cloud_upload_rounded),
+              child: Icon(Icons.check),
             ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -142,12 +141,16 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                     maxRadius: 80,
                     backgroundImage: profilePicture == null
                         ? NetworkImage(
-                            socialAccountProfilePictureUrl ??
-                                "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png",
+                            userProvider.currentUser.profilePictureURL == null
+                                ? AppConstant.kDefaultUserProfilePicture
+                                : userProvider.currentUser.profilePictureURL,
                           )
                         : FileImage(
                             File(profilePicture.path),
                           ),
+
+                    // backgroundImage: NetworkImage(
+                    //     userProvider.currentUser.profilePictureURL),
                   ),
                 ),
               ),
@@ -284,7 +287,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         children: [
           TextSpan(
               style: TextStyle(color: Colors.black, fontSize: textSize),
-              text: 'Sevgili Dodact’li Merhaba!'),
+              text: 'Değerli Dodact’li Merhaba!'),
           TextSpan(text: '\n\n'),
           TextSpan(
               style: TextStyle(color: Colors.black, fontSize: textSize),
@@ -422,7 +425,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         try {
           await updateDetails(
             username: username,
-            name: name ?? "Dodact Kullanıcısı",
+            name: name,
             location: location,
           );
           CommonMethods().hideDialog();
@@ -559,7 +562,8 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             .showErrorDialog(context, "Fotoğraf Yüklenirken hata oluştu.");
       });
       debugPrint("Picture uploaded.");
-    } else if (socialAccountProfilePictureUrl != null) {
+    } else if (userProvider.currentUser.profilePictureURL != null) {
+      //Eğer diğer auth yöntemlerinden gelen bir profil fotoğrafı varsa bu yüklemeyi pas geçiyoruz.
     } else {
       uploadDefaultPicture();
     }
@@ -567,12 +571,10 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
 
   void uploadDefaultPicture() async {
     try {
-      await userProvider.updateCurrentUser({
-        'profilePictureURL':
-            'https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png'
-      });
+      await userProvider.updateCurrentUser(
+          {'profilePictureURL': AppConstant.kDefaultUserProfilePicture});
       userProvider.currentUser.profilePictureURL =
-          "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png";
+          AppConstant.kDefaultUserProfilePicture;
       debugPrint("userPicture default olarak ayarlandı.");
     } catch (e) {
       showErrorSnackBar("Teknik bir problem oluştu.");

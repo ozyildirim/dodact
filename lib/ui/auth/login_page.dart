@@ -186,7 +186,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                               : Icons.visibility_off,
                         ),
                       ),
-                      hintText: "Parola",
+                      hintText: "Şifre",
                       hintStyle: TextStyle(fontFamily: kFontFamily),
                       icon: Icon(
                         Icons.lock,

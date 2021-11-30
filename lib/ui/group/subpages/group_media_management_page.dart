@@ -15,6 +15,7 @@ class GroupMediaManagementPage extends StatelessWidget {
     var groupProvider = Provider.of<GroupProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text('Topluluk Medya Yönetimi'),
       ),
       body: Container(

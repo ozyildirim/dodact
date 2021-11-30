@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -94,8 +95,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
       return UserObject(
           nameSurname: "Dodact Kullanıcısı",
           uid: otherUserId,
-          profilePictureURL:
-              "https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png");
+          profilePictureURL: AppConstant.kDefaultUserProfilePicture);
     });
 
     return user ?? null;

@@ -70,6 +70,7 @@ class _GroupProfileManagementPageState
             )
           : null,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text('Profil Yönetimi'),
       ),
       body: GestureDetector(

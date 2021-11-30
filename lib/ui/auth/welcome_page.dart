@@ -66,9 +66,11 @@ class _WelcomePageState extends BaseState<WelcomePage> {
                         Row(
                           children: [
                             Text(
-                              "Sanatçı ruhların buluşma noktası",
+                              "Sanatın sosyal medyası",
                               style: TextStyle(
-                                  color: Colors.white60, fontSize: 20),
+                                color: Colors.white60,
+                                fontSize: 20,
+                              ),
                             )
                           ],
                         )

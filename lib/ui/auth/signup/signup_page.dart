@@ -136,7 +136,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                                 : Icons.visibility_off,
                           ),
                         ),
-                        hintText: "Parola",
+                        hintText: "Şifre",
                         hintStyle: TextStyle(fontFamily: kFontFamily),
                         errorStyle: TextStyle(fontSize: 14),
                         icon: Icon(
@@ -173,7 +173,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                           text: TextSpan(
                             children: const <TextSpan>[
                               TextSpan(
-                                text: "Gizlilik sözleşmesini ",
+                                text: "Gizlilik sözleşmesini",
                                 style: TextStyle(
                                   decoration: TextDecoration.underline,
                                   fontWeight: FontWeight.bold,
@@ -182,7 +182,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                                 ),
                               ),
                               TextSpan(
-                                text: "okudum ve kabul ediyorum.",
+                                text: " okudum ve kabul ediyorum.",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,

@@ -25,6 +25,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Topluluk Gönderi Yönetimi"),
       ),
       body: Container(

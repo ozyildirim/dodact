@@ -106,10 +106,11 @@ class _GroupInterestManagementPageState
           : isUpdated
               ? FloatingActionButton(
                   onPressed: updateGroupInterests,
-                  child: Icon(Icons.cloud_upload_rounded),
+                  child: Icon(Icons.check),
                 )
               : null,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text('Topluluk İlgi Alanları'),
       ),
       body: Container(

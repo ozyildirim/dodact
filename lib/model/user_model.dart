@@ -118,6 +118,16 @@ class UserObject {
     'opensea': '',
   };
 
+  Map<String, dynamic> defaultNotificationSettings = {
+    'allow_comment_notifications': true,
+    'allow_post_like_notifications': false,
+    'allow_group_comment_notifications': true,
+    'allow_group_invitation_notifications': true,
+    'allow_group_announcement_notifications': true,
+    'allow_group_post_notifications': true,
+    'allow_private_message_notifications': true,
+  };
+
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> userData = new Map<String, dynamic>();
     userData['uid'] = this.uid;
@@ -137,7 +147,7 @@ class UserObject {
     userData['permissions'] = defaultPermissions;
     userData['privacySettings'] = defaultPrivacySettings;
     userData['socialMediaLinks'] = defaultSocialMediaLinks;
-    userData['notificationSettings'] = this.notificationSettings;
+    userData['notificationSettings'] = defaultNotificationSettings;
     userData['newUser'] = this.newUser ?? true;
     userData['userDescription'] = this.userDescription ?? '';
     userData['education'] = this.education ?? '';
@@ -156,7 +166,7 @@ class UserObject {
     userRegistrationDate =
         (doc.data()['userRegistrationDate'] as Timestamp).toDate() ?? '';
     telephoneNumber = doc.data()['telephoneNumber'] ?? '';
-    profilePictureURL = doc.data()['profilePictureURL'] ?? '';
+    profilePictureURL = doc.data()['profilePictureURL'];
     experiencePoint = doc.data()['experiencePoint'] ?? '';
     location = doc.data()['location'];
     rosettes = doc.data()['rosettes'];

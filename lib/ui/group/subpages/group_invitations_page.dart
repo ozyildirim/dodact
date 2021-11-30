@@ -40,6 +40,7 @@ class _GroupMemberSentInvitationsPageState
     return Scaffold(
       appBar: AppBar(
         title: const Text('Davetler'),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Container(
         decoration: BoxDecoration(
