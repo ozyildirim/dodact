@@ -109,8 +109,8 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
           // ),
           ListTile(
             leading: Icon(Icons.report),
-            title: Text("Şikayetler: Öneriler ve Bildiriler",
-                style: TextStyle(fontSize: 18)),
+            title:
+                Text("Öneriler ve Bildiriler", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_USER_FORM_PAGE);
             },

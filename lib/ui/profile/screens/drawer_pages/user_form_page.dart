@@ -37,7 +37,7 @@ class _UserFormPageState extends BaseState<UserFormPage> {
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text('Şikayetler: Öneriler ve Bildiriler'),
+        title: Text('Öneriler ve Bildiriler'),
       ),
       body: GestureDetector(
         onTap: () {

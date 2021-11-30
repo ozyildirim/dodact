@@ -98,7 +98,9 @@ class _GroupProfileManagementPageState
                   children: [
                     profilePicturePart(),
                     Text("Topluluk Adı",
-                        style: TextStyle(fontSize: kSettingsTitleSize)),
+                        style: TextStyle(
+                            fontSize: kSettingsTitleSize,
+                            fontWeight: FontWeight.w500)),
                     TextFieldContainer(
                       width: size.width * 0.9,
                       child: FormBuilderTextField(
@@ -130,7 +132,9 @@ class _GroupProfileManagementPageState
                     Row(
                       children: [
                         Text("Topluluk Tanıtım Yazısı",
-                            style: TextStyle(fontSize: kSettingsTitleSize)),
+                            style: TextStyle(
+                                fontSize: kSettingsTitleSize,
+                                fontWeight: FontWeight.w500)),
                         IconButton(
                           onPressed: () {},
                           icon: Icon(Icons.help, size: 16),
@@ -167,7 +171,9 @@ class _GroupProfileManagementPageState
                     ),
                     Text(
                       "Lokasyon",
-                      style: TextStyle(fontSize: kSettingsTitleSize),
+                      style: TextStyle(
+                          fontSize: kSettingsTitleSize,
+                          fontWeight: FontWeight.w500),
                     ),
                     TextFieldContainer(
                       width: size.width * 0.9,
@@ -205,7 +211,9 @@ class _GroupProfileManagementPageState
                       ),
                     ),
                     Text("Topluluk Açıklaması",
-                        style: TextStyle(fontSize: kSettingsTitleSize)),
+                        style: TextStyle(
+                            fontSize: kSettingsTitleSize,
+                            fontWeight: FontWeight.w500)),
                     TextFieldContainer(
                       width: size.width * 0.9,
                       child: FormBuilderTextField(
@@ -247,39 +255,35 @@ class _GroupProfileManagementPageState
   }
 
   Widget profilePicturePart() {
-    return Container(
-      height: 250,
-      width: double.infinity,
-      child: Center(
-        child: Stack(children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: Container(
-              width: 200,
-              height: 200,
-              child: Image.network(
-                groupProvider.group.groupProfilePicture,
-                fit: BoxFit.cover,
-              ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: CircleAvatar(
+              maxRadius: 90,
+              minRadius: 70,
+              backgroundColor: Colors.black,
+              child: CircleAvatar(
+                  minRadius: 60,
+                  maxRadius: 80,
+                  backgroundImage: NetworkImage(group.groupProfilePicture)),
             ),
           ),
-          Positioned(
-            top: 160,
-            left: 160,
-            child: InkWell(
-              onTap: () {
-                takePhotoFromGallery();
-              },
-              child: GFBadge(
-                size: 60,
-                child: Icon(FontAwesome5Solid.camera,
-                    color: Colors.white, size: 20),
-                shape: GFBadgeShape.circle,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+              child: Text(
+                "Profil fotoğrafı seç",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16),
               ),
-            ),
-          ),
-        ]),
-      ),
+              onTap: takePhotoFromGallery),
+        ),
+      ],
     );
   }
 
