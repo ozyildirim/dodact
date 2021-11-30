@@ -61,7 +61,8 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
       floatingActionButton: isUserGroupFounder()
           ? FloatingActionButton(
               onPressed: () {
-                navigateGroupManagementPage();
+                NavigationService.instance
+                    .navigate(k_ROUTE_CREATION_MENU, args: group.groupId);
               },
               child: Icon(Icons.add),
             )

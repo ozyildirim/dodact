@@ -102,34 +102,35 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                                     trailing: IconButton(
                                       icon: Icon(Icons.delete),
                                       onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: Text("Uyarı"),
-                                              content: Text(
-                                                  "Bu gönderiyi silmek istediğine emin misin?"),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                  child: Text("Evet"),
-                                                  onPressed: () async {
-                                                    await showDeletePostDialog(
-                                                        post.postId);
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                                FlatButton(
-                                                  child: Text("Hayır"),
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                            // return showDeletePostDialog(
-                                            //     post.postId);
-                                          },
-                                        );
+                                        // showDialog(
+                                        //   context: context,
+                                        //   builder: (context) {
+                                        //     return AlertDialog(
+                                        //       title: Text("Uyarı"),
+                                        //       content: Text(
+                                        //           "Bu gönderiyi silmek istediğine emin misin?"),
+                                        //       actions: <Widget>[
+                                        //         FlatButton(
+                                        //           child: Text("Evet"),
+                                        //           onPressed: () async {
+                                        //             await showDeletePostDialog(
+                                        //                 post.postId);
+                                        //             Navigator.pop(context);
+                                        //           },
+                                        //         ),
+                                        //         FlatButton(
+                                        //           child: Text("Hayır"),
+                                        //           onPressed: () {
+                                        //             Navigator.pop(context);
+                                        //           },
+                                        //         ),
+                                        //       ],
+                                        //     );
+                                        //     // return showDeletePostDialog(
+                                        //     //     post.postId);
+                                        //   },
+                                        // );
+                                        showDeletePostDialog(post.postId);
                                       },
                                     ),
                                   ),
@@ -153,7 +154,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
     await CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği silmek istediğinden emin misin?",
+        text: "Bu içeriği kaldırmak istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",
@@ -161,14 +162,26 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
           NavigationService.instance.pop();
         },
         onConfirmBtnTap: () async {
-          await deleteGroupPost(postId);
+          deleteGroupPost(postId);
         });
   }
 
   Future<void> deleteGroupPost(String postId) async {
-    if (canUserManage()) {
+    try {
       await groupProvider.deleteGroupPost(postId);
+
+      showSnackbar("Topluluk gönderisi başarıyla kaldırıldı.");
+    } catch (e) {
+      showSnackbar("Topluluk gönderisi kaldırılırken bir hata oluştu.");
     }
+  }
+
+  showSnackbar(String message) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   Future<List<PostModel>> getGroupPosts() async {

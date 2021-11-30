@@ -54,6 +54,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   void initState() {
     event = widget.event;
     tabController = new TabController(length: 2, vsync: this);
+
     super.initState();
   }
 
@@ -194,26 +195,16 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
                       event.title,
-                      style: TextStyle(fontSize: 28),
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                !event.isOnline
-                    ? Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: FloatingActionButton(
-                          onPressed: () async {
-                            await _buildMap();
-                          },
-                          child: Icon(Icons.navigation),
-                        ),
-                      )
-                    : Container()
               ],
             ),
             _getCreatorInfo(),
             ListTile(
-              leading: Icon(Icons.calendar_today),
+              leading: Icon(Icons.event),
               title: Text(
                 DateFormat('dd.MM.yyyy hh:mm').format(event.startDate),
                 style: TextStyle(fontSize: 18),
@@ -228,25 +219,29 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             //     ),
             //   ],
             // ),
-            ListTile(
-              leading: Icon(Icons.view_day),
-              title: Text(
-                event.isOnline ? "Online Etkinlik" : "Fiziksel Etkinlik",
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
+
             !event.isOnline
                 ? ListTile(
-                    leading: Icon(Icons.location_city),
+                    leading: Icon(Icons.location_on),
                     title: Text(
                       event.city,
                       style: TextStyle(fontSize: 18),
                     ),
+                    subtitle: Text("Lokasyon"),
+                    trailing: CircleAvatar(
+                      backgroundColor: Colors.deepOrange,
+                      child: IconButton(
+                        icon: Icon(Icons.map),
+                        onPressed: () async {
+                          await _buildMap();
+                        },
+                      ),
+                    ),
                   )
                 : ListTile(
-                    leading: Icon(Icons.public),
+                    leading: Icon(Icons.link),
                     title: Text(
-                      event.eventURL,
+                      "Referans Bağlantı",
                       style: TextStyle(fontSize: 18),
                     ),
                     subtitle: Text("Etkinlik Web Adresi"),
@@ -257,7 +252,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             ListTile(
               leading: Icon(Icons.category),
               title: Text(
-                event.eventType,
+                event.eventType +
+                    (event.isOnline
+                        ? " / Online Etkinlik"
+                        : " / Fiziksel Etkinlik"),
                 style: TextStyle(fontSize: 18),
               ),
               subtitle: Text("Etkinlik Türü"),
@@ -280,9 +278,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               fontSize: 18,
             ),
             controller: tabController,
-            tabs: const [
-              const Tab(text: "Detaylar"),
-              const Tab(text: "Görseller"),
+            tabs: [
+              Tab(text: "Detaylar"),
+              Tab(text: "Görseller"),
             ],
           ),
         ),
@@ -306,7 +304,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         padding: const EdgeInsets.all(12.0),
         child: Text(
           event.description,
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 16),
         ),
       ),
     );
@@ -365,11 +363,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               }
               UserObject fetchedUser = snapshot.data;
 
-              var nameToShow = fetchedUser.nameSurname == null ||
-                      fetchedUser.nameSurname == ""
-                  ? fetchedUser.username
-                  : fetchedUser.nameSurname;
-
               return ListTile(
                 leading: CircleAvatar(
                   radius: 15,
@@ -387,7 +380,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                         ),
                       ),
                       TextSpan(
-                        text: nameToShow,
+                        text: fetchedUser.nameSurname,
                         style: TextStyle(
                           fontFamily: "Raleway",
                           fontWeight: FontWeight.w600,

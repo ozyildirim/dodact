@@ -242,7 +242,8 @@ class GroupProvider extends ChangeNotifier {
   Future<void> deleteGroupPost(String postId) async {
     try {
       await _groupRepository.deleteGroupPost(postId);
-      groupPosts.removeWhere((post) => post.postId == postId);
+      var post = groupPosts.firstWhere((element) => element.postId == postId);
+      groupPosts.remove(post);
       notifyListeners();
     } catch (e) {
       logger.e("GroupProvider deleteGroupPost error: " + e.toString());

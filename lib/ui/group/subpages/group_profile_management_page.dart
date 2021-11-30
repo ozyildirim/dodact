@@ -129,6 +129,7 @@ class _GroupProfileManagementPageState
                         ]),
                       ),
                     ),
+                    SizedBox(height: 10),
                     Row(
                       children: [
                         Text("Topluluk Tanıtım Yazısı",
@@ -136,6 +137,7 @@ class _GroupProfileManagementPageState
                                 fontSize: kSettingsTitleSize,
                                 fontWeight: FontWeight.w500)),
                         IconButton(
+                          padding: EdgeInsets.zero,
                           onPressed: () {},
                           icon: Icon(Icons.help, size: 16),
                         )
@@ -169,6 +171,7 @@ class _GroupProfileManagementPageState
                         ]),
                       ),
                     ),
+                    SizedBox(height: 10),
                     Text(
                       "Lokasyon",
                       style: TextStyle(
@@ -210,10 +213,12 @@ class _GroupProfileManagementPageState
                         ),
                       ),
                     ),
+                    SizedBox(height: 10),
                     Text("Topluluk Açıklaması",
                         style: TextStyle(
                             fontSize: kSettingsTitleSize,
                             fontWeight: FontWeight.w500)),
+                    SizedBox(height: 4),
                     TextFieldContainer(
                       width: size.width * 0.9,
                       child: FormBuilderTextField(
