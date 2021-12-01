@@ -7,7 +7,7 @@ class ContributionsPart extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        NavigationService.instance.navigate(k_ROUTE_CONTRIBUTIONS_PAGE);
+        // NavigationService.instance.navigate(k_ROUTE_CONTRIBUTIONS_PAGE);
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),

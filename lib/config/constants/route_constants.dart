@@ -40,8 +40,7 @@ const k_ROUTE_GROUPS_PAGE = '/groups';
 const k_ROUTE_GROUP_DETAIL = '/group';
 
 const k_ROUTE_SPINNER_PAGE = '/spinner';
-const k_ROUTE_CONTRIBUTIONS_PAGE = '/contributions';
-const k_ROUTE_CONTRIBUTIONS_POST_LIST_PAGE = '/contribution_list';
+const k_ROUTE_ACIK_SAHNE_PAGE = '/acik_sahne';
 
 const k_ROUTE_USER_PROFILE = '/profile';
 const k_ROUTE_USER_NOTIFICATIONS = '/user_notifications';
