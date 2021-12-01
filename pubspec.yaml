@@ -124,13 +124,11 @@ flutter:
   assets:
     - assets/lang/
     - assets/images/
-    - assets/images/creation/
     - assets/images/application_page/
     - assets/images/app/
     - assets/images/app/interests/
     - assets/images/app/situations/
     - assets/images/onboarding/
-    - assets/images/companies/
 
   fonts:
     - family: Raleway
@@ -153,22 +151,3 @@ flutter:
           weight: 500
         - asset: assets/fonts/Roboto/Roboto-Bold.ttf
           weight: 700
-
-
-
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Black.ttf
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Poppins-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Poppins-Medium.ttf
-
-    - family: Helvetica
-      fonts:
-        - asset: assets/fonts/Helvetica/Helvetica-Light.ttf
-        - asset: assets/fonts/Helvetica/Helvetica-Regular.ttf
-        - asset: assets/fonts/Helvetica/Helvetica-Bold.ttf
-

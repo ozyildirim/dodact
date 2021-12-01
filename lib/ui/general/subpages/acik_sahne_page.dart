@@ -19,13 +19,24 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             leading: CircleAvatar(
+              radius: 15,
               backgroundColor: Colors.white,
               child: BackButton(
                 color: Colors.black,
               ),
             ),
+            // leading: MaterialButton(
+            //   color: Colors.white,
+            //   shape: CircleBorder(),
+            //   onPressed: () {},
+            //   child: Padding(
+            //       padding: const EdgeInsets.all(100),
+            //       child: BackButton(
+            //         color: Colors.black,
+            //       )),
+            // ),
             elevation: 0,
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.transparent,
           ),
           body: Container(

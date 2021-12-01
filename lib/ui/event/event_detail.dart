@@ -374,7 +374,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                       TextSpan(
                         text: "Oluşturan: ",
                         style: TextStyle(
-                          fontFamily: "Poppins",
                           fontSize: 16,
                           color: Colors.grey,
                         ),
@@ -382,7 +381,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                       TextSpan(
                         text: fetchedUser.nameSurname,
                         style: TextStyle(
-                          fontFamily: "Raleway",
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                           color: Colors.black,
