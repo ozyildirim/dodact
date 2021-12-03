@@ -173,7 +173,15 @@ class _EventPartState extends State<EventPart> {
                           SizedBox(
                             width: 3,
                           ),
-                          Text(event.eventType)
+                          Flexible(
+                            child: Container(
+                              child: Text(
+                                event.eventType,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )
                         ],
                       )
                     ],

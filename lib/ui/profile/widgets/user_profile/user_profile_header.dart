@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/badge/gf_badge.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeader extends StatefulWidget {
@@ -42,9 +46,23 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
                 child: CircleAvatar(
                   backgroundColor: Colors.black,
                   radius: dynamicWidth(0.2),
-                  child: CircleAvatar(
-                    radius: dynamicWidth(0.19),
-                    backgroundImage: imageProvider,
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: dynamicWidth(0.19),
+                        backgroundImage: imageProvider,
+                      ),
+                      InkWell(
+                        onTap: navigateUserProfileSettings,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            child: Icon(Icons.edit, color: Colors.black),
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               );
@@ -95,5 +113,9 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
         )
       ],
     );
+  }
+
+  void navigateUserProfileSettings() {
+    NavigationService.instance.navigate(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
   }
 }
