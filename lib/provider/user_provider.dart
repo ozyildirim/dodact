@@ -4,12 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/repository/post_repository.dart';
 import 'package:dodact_v1/repository/user_repository.dart';
 import 'package:dodact_v1/services/concrete/firebase_auth_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_favorites_service.dart';
 import 'package:dodact_v1/services/concrete/upload_service.dart';
-
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 

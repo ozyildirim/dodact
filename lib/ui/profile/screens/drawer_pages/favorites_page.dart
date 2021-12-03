@@ -36,8 +36,12 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
         var post = await Provider.of<PostProvider>(context, listen: false)
             .getDetail(postID);
 
+        //Null ise favorilerden sildirecek bir şey yapmak lazım.
+
         if (post != null) {
           fetchedPosts.add(post);
+        } else {
+          userProvider.removeFavoritePost(postID);
         }
       }
       setState(() {
@@ -46,7 +50,9 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
       return fetchedPosts;
     } else {
       print("fav post yok");
-      setState(() {});
+      setState(() {
+        posts = fetchedPosts;
+      });
     }
   }
 
@@ -58,10 +64,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     print("favs" + userProvider.currentUser.favoritedPosts.toString());
-    // return Scaffold(
-    //   appBar: AppBar(),
-    //   body: Container(),
-    // );
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -78,11 +81,11 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: userProvider.currentUser.favoritedPosts == null
+        child: posts == null
             ? Center(
                 child: spinkit,
               )
-            : (posts == null
+            : (posts.isEmpty
                 ? Center(
                     child: Text("Henüz bir gönderiyi favorilere eklemedin",
                         style: TextStyle(fontSize: 20)),

@@ -15,8 +15,11 @@ class FirebasePostService {
 
   Future<PostModel> getDetail(String id) async {
     DocumentSnapshot documentSnapshot = await postsRef.doc(id).get();
-    PostModel postModel = PostModel.fromJson(documentSnapshot.data());
-    return postModel;
+    if (documentSnapshot.exists) {
+      PostModel postModel = PostModel.fromJson(documentSnapshot.data());
+      return postModel;
+    } else
+      return null;
   }
 
   // Get all posts

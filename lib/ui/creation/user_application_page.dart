@@ -148,7 +148,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                     : Container(),
                 hasGroupApplication == false
                     ? _buildCard(Icons.group, "Topluluk Başvurusu",
-                        "Topluluğunu Dodact'in gücü ile buluştur!", () {
+                        "Topluluk ve  sanat alanındaki topluluk çalışmalarını hedef kitlen ile buluştur.",
+                        () {
                         NavigationService.instance
                             .navigate(k_ROUTE_GROUP_APPLICATION)
                             .then((value) => setState(() {}));
@@ -212,8 +213,9 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
         onTap: onTap,
         child: Card(
           elevation: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
           color: cardBackgroundColor,
           child: Container(
             width: size.width * 0.2,
@@ -286,7 +288,7 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Canlı yayınlarını Dodact üzerinden paylaşarak, diğer sanatçı takipçilerinle kolayca interaktif bir süreç başlatabilirsin.",
+            "Gerçekleştirdiğin canlı yayınları artık Dodact üzerinden oluşturabilirsin. Bu sayede yayınların hedef kitlene kolayca ulaşabilir.",
       ),
       PageViewModel(
         image: Image.asset('assets/images/onboarding/onboarding_1.png'),

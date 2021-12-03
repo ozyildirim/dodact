@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class AcikSahnePage extends StatefulWidget {
@@ -18,11 +19,23 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
       child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            leading: CircleAvatar(
-              radius: 15,
-              backgroundColor: Colors.white,
-              child: BackButton(
-                color: Colors.black,
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  NavigationService.instance.pop();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: Center(
+                    child: BackButtonIcon(
+                        // color: Colors.black,
+                        ),
+                  ),
+                ),
               ),
             ),
             // leading: MaterialButton(
@@ -69,7 +82,7 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
       imageBuilder: (context, imageProvider) {
         return Container(
           width: size.width,
-          height: size.height * 0.4,
+          height: size.height * 0.3,
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
@@ -97,18 +110,14 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
 
   List<QuestionItem> questionItems = [
     QuestionItem(
-        headerValue: "Açık Sahne nedir?",
+        headerValue: "İzleyici olarak Açık Sahne sayesinde neler yapabilirim?",
         expandedValue:
-            "Açık Sahne: sahnelerde sergilenen etkinlik, workshop, eğitim gibi aktivitelerin canlı ve kayıtlı yayınlandığı, sanatçılar ile sanatseverler arasında dijital bir bağlantı oluşturduğumuz yapıdır."),
+            "Açık Sahne sayesinde sanatın her alanında gerçekleştirilecek dijital performanslara dilediğin zamanda ve dilediğin yerden katılım sağlayabilirsin. İlgilendiğin sanat dalını daha kolay takip edebilmeni ve daha kolay katılım sağlayabilmeni sağlamak için Açık Sahne seninle!"),
     QuestionItem(
         headerValue:
-            "Sanatsever olarak Açık Sahne sayesinde neler yapabilirim?",
+            "İlgilendiğim sanat alanı ile ilgili Açık Sahne'de kendimi göstermek istiyorum, neler yapabilirim?",
         expandedValue:
-            "Açık Sahne sayesinde ücretli/ücretsiz, farklı türden dijital etkinliklere dilediğin yerden dilediğin zaman katılabilirsin. Sanat ile arandaki mesafeyi kaldırmak istiyoruz."),
-    QuestionItem(
-        headerValue: "Sanatçı olarak Açık Sahne sayesinde neler yapabilirim?",
-        expandedValue:
-            "Dodact, Açık Sahne ile amatör sahnelerin etkinliklerini daha büyük kitlelere ulaştırmalarını sağlıyor. Platform sayesinde dijital etkinliklerinizden maddi gelir ve yeni takipçiler elde edebilirsiniz. Teknolojik gereksinimlerin karşılanması durumunda Dodact ile sanatını dilediğin yere ulaştır!"),
+            "Dodact kişilerin Açık Sahne vasıtasıyla belirlenen kalite standartları dahilinde performanslarını kitleler ile buluşturmasını, yeni yeteneklerin keşfedilmesini ve yapılan bu işten kazanç sağlamalarını amaçlamaktadır. Açık Sahne'de olacak kişi performansı ile ilgili detayları öncesinde belirlemek ve bildirmek zorundadır. Gerekli teknolojik standartlar oluşturulduktan sonra sürece dahil olabilirsin."),
     QuestionItem(
         headerValue: "Açık Sahne'de nasıl yer alabilirim?",
         expandedValue:
@@ -121,9 +130,12 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          Text(
-            "Açık Sahne ile sanatın ulaşılabilirliğini artırmak için elimizden geleni yapıyoruz. Sahnelenen performansların canlı ve kayıtlı olacak şekilde sergileneceği bu yapı ile hem sanatseverler hem de sanatçılar için kolay ve keyifli bir dijital süreç oluşturuyoruz.",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Açık Sahne: Sanat ile ilgilenen kişilerin hedef kitlesine canlı yayınlar ile ulaşmasını sağlayacak bir aracı kanaldır.\n\nKişiler performanslarını belirlenmiş kalite standartları dahilinde izleyicilerine, zaman,mekan veya olumsuz şartlardan bağımsız şekilde, diledikleri her an ulaştırabilecekler. Böylelikle ilgilendiği sanat dalında performansını sergilemek isteyen kişilerin sahneye ulaşılabilirliğini arttırıyoruz.",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
           ),
           SizedBox(
             height: size.height * 0.02,

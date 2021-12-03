@@ -167,10 +167,6 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                       (value) {
                         return ProfanityChecker.profanityValidator(value);
                       },
-                      FormBuilderValidators.minLength(context, 20,
-                          errorText:
-                              "Etkinlik başlığı en az 10 karakter olmalı.",
-                          allowEmpty: false)
                     ],
                   ),
                 ),

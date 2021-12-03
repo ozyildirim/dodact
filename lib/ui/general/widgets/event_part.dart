@@ -137,7 +137,7 @@ class _EventPartState extends State<EventPart> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(DateFormat("h:mm").format(event.startDate)),
+                          Text(DateFormat("HH:mm").format(event.startDate)),
                         ],
                       ),
                       SizedBox(

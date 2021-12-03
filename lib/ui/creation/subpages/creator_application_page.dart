@@ -138,13 +138,18 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
     } else {}
   }
 
-  showInfoDialog(BuildContext context, String title, String infoDescription) {
+  showInfoDialog(BuildContext context, String infoDescription) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(infoDescription),
+          // title: Text(title),
+          content: Text(
+            infoDescription,
+            textAlign: TextAlign.center,
+          ),
+          contentTextStyle: TextStyle(fontSize: 18, color: Colors.black),
+          actionsAlignment: MainAxisAlignment.center,
           actions: <Widget>[
             FlatButton(
               child: Text("Tamam"),
@@ -187,8 +192,8 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      showInfoDialog(context, "İlgili Sanat Dalı",
-                          "Tecrübeli olduğun, alanında içerik oluşturmak istediğin dalı seçmelisin.");
+                      showInfoDialog(context,
+                          "Aktif olduğun, takip etmekten hoşlandığın ve paylaşım yapabileceğin sanat dalını seçmelisin.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -235,7 +240,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      showInfoDialog(context, "Detaylı Bilgi",
+                      showInfoDialog(context,
                           "Bize biraz kendinden ve sanat geçmişinden bahseder misin? Aldığın eğitimler veya bu zamana kadar ortaya koymuş olduğun performanslardan bahsedebilirsin.");
                     },
                     icon: Icon(Icons.info_outline))
@@ -275,7 +280,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      showInfoDialog(context, "Bağlantı",
+                      showInfoDialog(context,
                           "Yaptığın çalışmaları inceleyebileceğimiz herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
                     },
                     icon: Icon(Icons.info_outline))

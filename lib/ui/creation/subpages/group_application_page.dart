@@ -141,13 +141,17 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
     } else {}
   }
 
-  showInfoDialog(BuildContext context, String title, String infoDescription) {
+  showInfoDialog(BuildContext context, String infoDescription) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(infoDescription),
+          content: Text(
+            infoDescription,
+            textAlign: TextAlign.center,
+          ),
+          contentTextStyle: TextStyle(fontSize: 18, color: Colors.black),
+          actionsAlignment: MainAxisAlignment.center,
           actions: <Widget>[
             FlatButton(
               child: Text("Tamam"),
@@ -224,7 +228,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      showInfoDialog(context, "Faaliyet Gösterilen Sanat Dalı",
+                      showInfoDialog(context,
                           "Topluluk olarak üzerine çalıştığınız sanat dalını seçmelisin.");
                     },
                     icon: Icon(Icons.info_outline))
@@ -272,8 +276,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      showInfoDialog(context, "Detaylı Bilgi",
-                          "Bize biraz topluluğundan ve sanat geçmişinden bahseder misin? Kaç üyesi olduğunu, ne sıklıkla faaliyet gösterdiğinizi de belirtebilirsin.");
+                      showInfoDialog(context,
+                          "Bize biraz topluluğundan ve sanat ile ilgili tecrübelerinden bahseder misin? (Örnek olarak ne tarz performanslar ortaya koyduğundan, kaç üyesi olduğundan, nerede ve hangi sıklıkla sahne aldığınızdan bahsedebilirsin.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -312,7 +316,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      showInfoDialog(context, "Bağlantı",
+                      showInfoDialog(context,
                           "Topluluğunuzu ve çalışmalarınızı inceleyebileceğimiz herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
                     },
                     icon: Icon(Icons.info_outline))

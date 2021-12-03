@@ -206,7 +206,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             ListTile(
               leading: Icon(Icons.event),
               title: Text(
-                DateFormat('dd.MM.yyyy hh:mm').format(event.startDate),
+                DateFormat('dd.MM.yyyy HH:mm', 'tr_TR').format(event.startDate),
                 style: TextStyle(fontSize: 18),
               ),
               subtitle: Text("Etkinlik Başlangıcı"),
