@@ -18,9 +18,12 @@ class FirebaseEventService {
     final refEvents = eventsRef.limit(limit);
 
     if (startAfter == null) {
-      return refEvents.get();
+      return refEvents.where('visible', isEqualTo: true).get();
     } else {
-      return refEvents.startAfterDocument(startAfter).get();
+      return refEvents
+          .startAfterDocument(startAfter)
+          .where('visible', isEqualTo: true)
+          .get();
     }
   }
 

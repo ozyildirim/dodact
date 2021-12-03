@@ -153,7 +153,7 @@ class _SearchPageState extends State<SearchPage> {
                   : FirebaseFirestore.instance
                       .collection("posts")
                       .where('visible', isEqualTo: true)
-                      .limit(5)
+                      .limit(10)
                       .snapshots(),
               builder: (context, snapshot) {
                 return (snapshot.connectionState == ConnectionState.waiting)
@@ -168,31 +168,36 @@ class _SearchPageState extends State<SearchPage> {
                           DocumentSnapshot data = snapshot.data.docs[index];
                           PostModel post = PostModel.fromJson(data.data());
 
-                          var thumbnail = CommonMethods.createThumbnailURL(
-                              post.isLocatedInYoutube, post.postContentURL);
+                          if (post.postContentURL != null) {
+                            var thumbnail = CommonMethods.createThumbnailURL(
+                                post.isLocatedInYoutube, post.postContentURL);
 
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance
-                                    .navigate(k_ROUTE_POST_DETAIL, args: post);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(thumbnail),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                post.postTitle,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                onTap: () {
+                                  NavigationService.instance.navigate(
+                                      k_ROUTE_POST_DETAIL,
+                                      args: post);
+                                },
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(thumbnail),
+                                  radius: 40,
                                 ),
+                                title: Text(
+                                  post.postTitle,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                subtitle: Text(post.postCategory),
                               ),
-                              subtitle: Text(post.postCategory),
-                            ),
-                          );
+                            );
+                          } else {
+                            return Container();
+                          }
                         },
                       );
               },
@@ -214,7 +219,7 @@ class _SearchPageState extends State<SearchPage> {
                   : FirebaseFirestore.instance
                       .collection("users")
                       .where('newUser', isEqualTo: false)
-                      .limit(5)
+                      .limit(10)
                       .snapshots(),
               builder: (context, snapshot) {
                 return (snapshot.connectionState == ConnectionState.waiting)
@@ -225,32 +230,37 @@ class _SearchPageState extends State<SearchPage> {
                           DocumentSnapshot data = snapshot.data.docs[index];
                           UserObject user = UserObject.fromDoc(data);
 
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_OTHERS_PROFILE_PAGE,
-                                    args: user);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(user.profilePictureURL),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                user.username,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
+                          if (user.profilePictureURL != null) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                onTap: () {
+                                  NavigationService.instance.navigate(
+                                      k_ROUTE_OTHERS_PROFILE_PAGE,
+                                      args: user);
+                                },
+                                leading: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(user.profilePictureURL),
+                                  radius: 40,
                                 ),
+                                title: Text(
+                                  user.username,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                subtitle:
+                                    user.privacySettings['hide_profession']
+                                        ? Container()
+                                        : Text(user.profession),
                               ),
-                              subtitle: user.privacySettings['hide_profession']
-                                  ? Container()
-                                  : Text(user.profession),
-                            ),
-                          );
+                            );
+                          } else {
+                            return Container();
+                          }
                         },
                       );
               },
@@ -272,7 +282,7 @@ class _SearchPageState extends State<SearchPage> {
                   : FirebaseFirestore.instance
                       .collection("events")
                       .where('visible', isEqualTo: true)
-                      .limit(5)
+                      .limit(10)
                       .snapshots(),
               builder: (context, snapshot) {
                 return (snapshot.connectionState == ConnectionState.waiting)
@@ -283,30 +293,34 @@ class _SearchPageState extends State<SearchPage> {
                           DocumentSnapshot data = snapshot.data.docs[index];
                           EventModel event = EventModel.fromJson(data.data());
 
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              onTap: () {
-                                NavigationService.instance.navigate(
-                                    k_ROUTE_EVENT_DETAIL,
-                                    args: event);
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(event.eventImages[0]),
-                                radius: 40,
-                              ),
-                              title: Text(
-                                event.title,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
+                          if (event.eventImages != null) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                onTap: () {
+                                  NavigationService.instance.navigate(
+                                      k_ROUTE_EVENT_DETAIL,
+                                      args: event);
+                                },
+                                leading: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(event.eventImages[0]),
+                                  radius: 40,
                                 ),
+                                title: Text(
+                                  event.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                subtitle: Text(event.category),
                               ),
-                              subtitle: Text(event.category),
-                            ),
-                          );
+                            );
+                          } else {
+                            return Container();
+                          }
                         },
                       );
               },
@@ -328,7 +342,7 @@ class _SearchPageState extends State<SearchPage> {
                   : FirebaseFirestore.instance
                       .collection("groups")
                       .where('visible', isEqualTo: true)
-                      .limit(5)
+                      .limit(10)
                       .snapshots(),
               builder: (context, snapshot) {
                 return (snapshot.connectionState == ConnectionState.waiting)

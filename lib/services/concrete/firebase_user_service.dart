@@ -63,8 +63,10 @@ class FirebaseUserService {
     print("Member IDs from group object:" + memberIDs.toString());
     for (String memberID in memberIDs) {
       DocumentSnapshot documentSnapshot = await usersRef.doc(memberID).get();
-      UserObject singleMember = UserObject.fromDoc(documentSnapshot);
-      allGroupMembers.add(singleMember);
+      if (documentSnapshot.exists) {
+        UserObject singleMember = UserObject.fromDoc(documentSnapshot);
+        allGroupMembers.add(singleMember);
+      }
     }
     return allGroupMembers;
   }

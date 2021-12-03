@@ -22,7 +22,7 @@ class FirebaseGroupService {
     Query query = groupsRef.limit(limit);
 
     if (startAfter == null) {
-      return query.get();
+      return query.where('visible', isEqualTo: true).get();
     }
     return query.startAfterDocument(startAfter).get();
   }
@@ -83,17 +83,23 @@ class FirebaseGroupService {
     }
 
     if (startAfter == null) {
-      return query.limit(limit).get();
+      return query.where('visible', isEqualTo: true).limit(limit).get();
     } else {
-      return query.limit(limit).startAfterDocument(startAfter).get();
+      return query
+          .where('visible', isEqualTo: true)
+          .limit(limit)
+          .startAfterDocument(startAfter)
+          .get();
     }
   }
 
   Future<List<GroupModel>> getUserGroups(String userId) async {
     List<GroupModel> userGroups = [];
 
-    QuerySnapshot querySnapshot =
-        await groupsRef.where("groupMemberList", arrayContains: userId).get();
+    QuerySnapshot querySnapshot = await groupsRef
+        .where("groupMemberList", arrayContains: userId)
+        .where('visible', isEqualTo: true)
+        .get();
     for (DocumentSnapshot group in querySnapshot.docs) {
       GroupModel groupObject = GroupModel.fromJson(group.data());
 
