@@ -5,8 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AcikSahnePart extends StatelessWidget {
+  // var imageUrl =
+  //     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/app%2Facik_sahne_cover-min.jpeg?alt=media&token=64b3f1ee-7015-4230-8c4e-525c0b0b0e40";
+
   var imageUrl =
-      "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/app%2Facik_sahne_cover-min.jpeg?alt=media&token=64b3f1ee-7015-4230-8c4e-525c0b0b0e40";
+      "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/tiyatro-sahne.gif?alt=media&token=2b68237d-37c7-45e0-a126-c6926aa1ce47";
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +33,16 @@ class AcikSahnePart extends StatelessWidget {
                     image: imageProvider,
                   ),
                 ),
-                child: Center(
-                  child: Text("Yakında",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: Center(
+                    child: Text("AÇIK SAHNE",
+                        style: TextStyle(
+                            color: Colors.white,
+                            letterSpacing: 6,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 ),
               ),
             ),

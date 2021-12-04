@@ -112,7 +112,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                     EventPart(),
                     SizedBox(height: 20),
                     Text(
-                      "Açık Sahne",
+                      "Yakında",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
