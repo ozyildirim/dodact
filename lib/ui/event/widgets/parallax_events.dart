@@ -21,8 +21,8 @@ class ParallaxEvent extends StatelessWidget {
             : "https://flutter.dev/docs/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg",
         name: event.title,
         country: event.isOnline
-            ? "Online - ${DateFormat('hh.MM.yyyy').format(event.startDate)}"
-            : "${event.city} - ${DateFormat('hh.MM.yyyy').format(event.startDate)}",
+            ? "Online - ${DateFormat('dd.MM.yyyy').format(event.startDate)}"
+            : "${event.city} - ${DateFormat('dd.MM.yyyy').format(event.startDate)}",
         isEventEnded: isEventEnded(event),
       ),
     );

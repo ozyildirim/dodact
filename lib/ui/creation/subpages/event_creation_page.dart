@@ -539,7 +539,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           var mapLocation =
               isOnline ? "" : selectedPlace.geometry.location.toString();
 
-          var address = isOnline ? null : selectedPlace.formattedAddress;
+          var address =
+              isOnline ? null : selectedPlace.formattedAddress.toString();
 
           var url = isOnline
               ? _eventFormKey.currentState.value['eventURL'].toString().trim()

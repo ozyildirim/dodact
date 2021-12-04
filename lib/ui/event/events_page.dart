@@ -129,9 +129,14 @@ class _EventsPageState extends BaseState<EventsPage> {
                     itemCount: provider.events.length,
                     itemBuilder: (context, index) {
                       var event = provider.events[index];
-                      return Container(
-                          height: size.height * 0.3,
-                          child: ParallaxEvent(event: event));
+                      if (event.eventImages.isNotEmpty &&
+                          event.eventImages != null) {
+                        return Container(
+                            height: size.height * 0.3,
+                            child: ParallaxEvent(event: event));
+                      } else {
+                        return Container();
+                      }
                     });
               } else {
                 return Container(
