@@ -13,11 +13,13 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  TextEditingController emailController = new TextEditingController();
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  TextEditingController emailController = new TextEditingController();
+  bool isLoading = false;
 
   FocusNode emailFocus = FocusNode();
 
@@ -84,6 +86,9 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
                     ]),
                   ),
                 ),
+                isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Container(),
                 RoundedButton(
                   textSize: 15,
                   text: "Sıfırlama Linki Gönder",
@@ -103,10 +108,15 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
 
   submitForm() async {
     if (_formKey.currentState.saveAndValidate()) {
+      setState(() {
+        isLoading = true;
+      });
       await sendPasswordResetMail();
+      _formKey.currentState.reset();
+      setState(() {
+        isLoading = false;
+      });
     } else {}
-
-    _formKey.currentState.reset();
   }
 
   sendPasswordResetMail() async {
@@ -115,66 +125,27 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
 
       await _firebaseAuth.sendPasswordResetEmail(email: email);
 
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        duration: new Duration(seconds: 2),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                "Şifre sıfırlama talimatları mail adresine gönderildi.",
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ));
-
-      print("şifre sıfırlandı");
+      showSnackbar("Şifre sıfırlama talimatları mail adresine gönderildi.");
     } on FirebaseAuthException catch (e) {
       final errorMsg = AuthExceptionHandler.generateExceptionMessage(e.message);
 
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        duration: new Duration(seconds: 2),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                errorMsg,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ));
+      showSnackbar(errorMsg);
     } catch (e) {
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        duration: new Duration(seconds: 2),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                "Bir hata ile karşılaşıldı.",
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ));
+      showSnackbar("Bir hata ile karşılaşıldı.");
     }
+  }
+
+  showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+      content: Flexible(
+        child: new Text(
+          message,
+          softWrap: false,
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    ));
   }
 }

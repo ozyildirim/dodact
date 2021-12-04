@@ -12,6 +12,7 @@ import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -159,7 +160,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       autovalidateMode: _autoValidate,
                       checkColor: Colors.white,
                       activeColor: kNavbarColor,
-                      name: "privacyCheckbox",
+                      name: "agreementsCheckbox",
                       initialValue: false,
                       focusNode: _checkboxFocus,
                       title: InkWell(
@@ -171,7 +172,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                         },
                         child: RichText(
                           text: TextSpan(
-                            children: const <TextSpan>[
+                            children: <TextSpan>[
                               TextSpan(
                                 text: "Gizlilik sözleşmesini",
                                 style: TextStyle(
@@ -182,46 +183,21 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                                 ),
                               ),
                               TextSpan(
-                                text: " okudum ve kabul ediyorum.",
+                                text: " ve ",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        errorStyle:
-                            TextStyle(color: Colors.white, fontSize: 14),
-                      ),
-                      validator: FormBuilderValidators.equal(context, true,
-                          errorText: "Sözleşmeyi kabul etmelisin."),
-                    ),
-                  ),
-                  Container(
-                    width: dynamicWidth(1) * 0.8,
-                    child: FormBuilderCheckbox(
-                      autovalidateMode: _autoValidate,
-                      checkColor: Colors.white,
-                      activeColor: kNavbarColor,
-                      name: "kvkkCheckbox",
-                      initialValue: false,
-                      focusNode: _checkboxFocus,
-                      title: InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return KvkkPage();
-                          }));
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            children: const <TextSpan>[
                               TextSpan(
-                                text: "KVKK metnini ",
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return KvkkPage();
+                                    }));
+                                  },
+                                text: "KVKK metnini",
                                 style: TextStyle(
                                   decoration: TextDecoration.underline,
                                   fontWeight: FontWeight.bold,
@@ -230,7 +206,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                                 ),
                               ),
                               TextSpan(
-                                text: "okudum ve kabul ediyorum.",
+                                text: " okudum, kabul ediyorum.",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,
@@ -246,9 +222,10 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                             TextStyle(color: Colors.white, fontSize: 14),
                       ),
                       validator: FormBuilderValidators.equal(context, true,
-                          errorText: "KVKK sözleşmesini kabul etmelisin."),
+                          errorText: "Sözleşmeleri kabul etmelisin."),
                     ),
                   ),
+
                   RoundedButton(
                     textSize: 15,
                     text: "Kayıt Ol",
@@ -257,7 +234,8 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                       signUp();
                     },
                   ),
-                  OrDivider(),
+                  // OrDivider(),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -272,22 +250,25 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                         GestureDetector(
                           onTap: () => _signInWithApple(),
                           child: Container(
-                            width: 80,
-                            height: 80,
+                            width: 50,
+                            height: 50,
                             margin: EdgeInsets.symmetric(horizontal: 10),
-                            padding: EdgeInsets.all(20),
+                            // padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               color: Colors.black,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               FontAwesome.apple,
-                              size: 38,
+                              // size: 38,
                               color: Colors.white,
                             ),
                           ),
                         ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   InkWell(
                     onTap: () {
@@ -300,7 +281,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                             text: "Zaten hesabın var mı?  ",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 18,
                             ),
                           ),
                           TextSpan(
@@ -308,7 +289,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -400,7 +381,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
 
   void signUp() async {
     if (_formKey.currentState.saveAndValidate()) {
-      CommonMethods().showLoaderDialog(context, "Kayıt Oluşturuluyor");
+      CommonMethods().showLoaderDialog(context, "Hesap Oluşturuluyor");
       var registrationResult =
           await authProvider.createAccountWithEmailAndPassword(
         _formKey.currentState.value['email'].toString().trim(),
@@ -413,7 +394,9 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         showSnackBar(errorMsg);
       } else {
         NavigationService.instance.pop();
-        showSnackBar("Onay linki e-posta hesabına gönderildi.", duration: 4);
+        showSnackBar(
+            "Onay linki e-posta hesabına gönderildi. Spam klasörünü de kontrol etmeyi unutma.",
+            duration: 4);
         _formKey.currentState.reset();
       }
     } else {
@@ -424,23 +407,18 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void showSnackBar(String message, {int duration = 2}) {
-    _scaffoldKey.currentState.showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       new SnackBar(
+        behavior: SnackBarBehavior.floating,
         duration: new Duration(seconds: duration),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                message,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
+        content: Flexible(
+          child: new Text(
+            message,
+            // overflow: TextOverflow.fade,
+            softWrap: true,
+            // maxLines: 1,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
       ),
     );

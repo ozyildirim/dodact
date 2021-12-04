@@ -58,8 +58,12 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                       showOwnerProfile(post);
                     },
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(user.profilePictureURL),
-                      radius: 30,
+                      backgroundColor: Colors.black,
+                      radius: 32,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(user.profilePictureURL),
+                        radius: 30,
+                      ),
                     ),
                   ),
                   // buildShareButton()

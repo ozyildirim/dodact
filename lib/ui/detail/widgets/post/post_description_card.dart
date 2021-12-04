@@ -44,7 +44,8 @@ class PostDescriptionCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(14.0),
-            child: Text(post.postTitle, style: TextStyle(fontSize: 20)),
+            child: Text(post.postTitle,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
           ),
           Padding(
             padding: const EdgeInsets.all(14.0),

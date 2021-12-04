@@ -93,7 +93,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                        Colors.black.withOpacity(0.5), BlendMode.dstATop),
                     image: AssetImage(kBackgroundImage),
                     fit: BoxFit.cover,
                   ),
@@ -307,8 +307,9 @@ class _PostDetailState extends BaseState<PostDetail> {
 
   buildPostCommentsNavigator() {
     return ListTile(
-      title: Text("Yorumları Görüntüle", style: TextStyle(fontSize: 18)),
-      trailing: Icon(Icons.forward),
+      title: Text("Yorumları Görüntüle",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+      trailing: Icon(Icons.forward, color: Colors.black),
       onTap: () {
         NavigationService.instance
             .navigate(k_ROUTE_POST_COMMENTS, args: [post.postId, post.ownerId]);

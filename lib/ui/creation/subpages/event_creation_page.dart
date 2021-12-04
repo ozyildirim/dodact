@@ -538,6 +538,9 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
           var mapLocation =
               isOnline ? "" : selectedPlace.geometry.location.toString();
+
+          var address = isOnline ? null : selectedPlace.formattedAddress;
+
           var url = isOnline
               ? _eventFormKey.currentState.value['eventURL'].toString().trim()
               : null;
@@ -546,7 +549,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           var eventType = widget.eventType;
 
           await createEvent(title, startDate, endDate, description, location,
-              mapLocation, url, searchKeywords, category, eventType);
+              mapLocation, address, url, searchKeywords, category, eventType);
         }
       } catch (e) {
         logger.e("Form submit edilirken hata oluştu: $e ");
@@ -561,6 +564,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       String description,
       String location,
       String mapLocation,
+      String address,
       String url,
       List<String> searchKeywords,
       String category,
@@ -575,6 +579,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           location,
           mapLocation,
           url,
+          address,
           searchKeywords,
           category,
           eventType);
@@ -600,6 +605,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       String description,
       String location,
       String mapLocation,
+      String address,
       String url,
       List<String> searchKeywords,
       String category,
@@ -621,6 +627,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       ownerType: ownerType,
       ownerId: ownerId,
       locationCoordinates: mapLocation,
+      address: address,
       searchKeywords: searchKeywords,
     );
 

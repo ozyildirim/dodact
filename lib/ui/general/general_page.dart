@@ -67,6 +67,17 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Text(
+                    //   "Duyurular",
+                    //   textAlign: TextAlign.start,
+                    //   style: Theme.of(context).textTheme.headline1.copyWith(
+                    //       color: Colors.black,
+                    //       fontSize: 22,
+                    //       fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
                     AnnouncementPart(),
                     SizedBox(
                       height: 20,

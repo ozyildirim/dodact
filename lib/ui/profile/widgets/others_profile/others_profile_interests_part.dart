@@ -65,11 +65,11 @@ class _OthersProfileInterestsPartState
           // expandedCrossAxisAlignment: CrossAxisAlignment.start,
           collapsedTextColor: Colors.white,
           title: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: Text(
               title,
               softWrap: true,
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           children: [

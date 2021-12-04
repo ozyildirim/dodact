@@ -60,7 +60,7 @@ class KvkkPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text("Dodact KVKK Sözleşmesi"),
+        title: Text("Dodact KVKK Metni"),
       ),
       body: SfPdfViewer.network(
         'https://dodact.com/wp-content/uploads/2021/11/Dodact-KVKK.pdf',

@@ -164,6 +164,7 @@ class _EventPartState extends State<EventPart> {
                           event.isOnline ? Text("Online") : Text(event.city)
                         ],
                       ),
+                      SizedBox(height: 10),
                       Row(
                         children: [
                           Icon(

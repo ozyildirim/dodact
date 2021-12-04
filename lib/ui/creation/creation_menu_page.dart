@@ -65,6 +65,14 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
         key: _scaffoldKey,
         extendBodyBehindAppBar: false,
         body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
+          ),
           height: size.height,
           width: double.infinity,
           child: Column(

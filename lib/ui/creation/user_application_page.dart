@@ -83,6 +83,14 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
       //     // )
       //   ],
       // ),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3), BlendMode.dstATop),
+          image: AssetImage(kBackgroundImage),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Center(
         child: buildCardPart(),
       ),

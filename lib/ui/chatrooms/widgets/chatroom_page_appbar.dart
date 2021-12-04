@@ -1,3 +1,5 @@
+import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,31 +35,43 @@ class ChatroomPageAppBar extends StatelessWidget
               ),
               Hero(
                 tag: user.uid,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(user.profilePictureURL),
-                  maxRadius: 25,
+                child: InkWell(
+                  onTap: () {
+                    NavigationService.instance
+                        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(user.profilePictureURL),
+                    maxRadius: 25,
+                  ),
                 ),
               ),
               SizedBox(
                 width: 12,
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      user.nameSurname,
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      "@" + user.username,
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                  ],
+                child: GestureDetector(
+                  onTap: () {
+                    NavigationService.instance
+                        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        user.nameSurname,
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Text(
+                        "@" + user.username,
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               // Icon(

@@ -82,7 +82,7 @@ class GroupInterestsTabView extends StatelessWidget {
         child: ExpansionTile(
           collapsedTextColor: Colors.white,
           title: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
               child: Text(title, style: TextStyle(fontSize: 20))),
           children: [
             Container(

@@ -232,7 +232,10 @@ class _LogInPageState extends BaseState<LogInPage> {
                     )
                   ],
                 ),
-                OrDivider(),
+                // OrDivider(),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -249,17 +252,16 @@ class _LogInPageState extends BaseState<LogInPage> {
                       GestureDetector(
                         onTap: () => _signInWithApple(),
                         child: Container(
-                          width: 80,
-                          height: 80,
+                          width: 50,
+                          height: 50,
                           margin: EdgeInsets.symmetric(horizontal: 10),
-                          padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: Colors.black,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             FontAwesome.apple,
-                            size: 38,
+                            // size: 38,
                             color: Colors.white,
                           ),
                         ),

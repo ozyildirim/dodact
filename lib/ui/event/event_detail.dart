@@ -62,123 +62,233 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: BackButton(
-                  color: Colors.black,
-                ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              NavigationService.instance.pop();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
               ),
-            ),
-            actionsIconTheme: IconThemeData(color: Colors.black),
-            actions: canUserControlEvent()
-                ? [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: PopupMenuButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            icon: Icon(Icons.more_vert, color: Colors.black),
-                            itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    child: ListTile(
-                                        leading:
-                                            Icon(FontAwesome5Regular.trash_alt),
-                                        title: Text("Sil"),
-                                        onTap: () async {
-                                          await _showDeleteEventDialog(
-                                              event.id);
-                                        }),
-                                  )
-                                ]),
-                      ),
-                    )
-                  ]
-                : [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: PopupMenuButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            icon: Icon(Icons.more_vert, color: Colors.black),
-                            itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    child: ListTile(
-                                        leading: Icon(FontAwesome5Regular.bell),
-                                        title: Text("Bildir"),
-                                        onTap: () async {
-                                          await _showReportEventDialog(
-                                              event.id);
-                                        }),
-                                  ),
-                                ]),
-                      ),
-                    )
-                  ],
-            expandedHeight: dynamicHeight(0.4),
-            pinned: true,
-            snap: false,
-            floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                event.eventImages[0],
-                fit: BoxFit.cover,
-              ),
+              child: BackButtonIcon(),
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: AssetImage(kBackgroundImage),
-                    fit: BoxFit.cover,
+        ),
+        actionsIconTheme: IconThemeData(color: Colors.black),
+        actions: canUserControlEvent()
+            ? [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: PopupMenuButton(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        icon: Icon(Icons.more_vert, color: Colors.black),
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                    leading:
+                                        Icon(FontAwesome5Regular.trash_alt),
+                                    title: Text("Sil"),
+                                    onTap: () async {
+                                      await _showDeleteEventDialog(event.id);
+                                    }),
+                              )
+                            ]),
                   ),
-                ),
-                width: dynamicWidth(1),
-                height: dynamicHeight(1),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      //_buildEventHeader(),
-                      _buildEventDetailBody(),
-                      _buildEventDetailTabs()
-                      // _buildMap()
-                    ],
+                )
+              ]
+            : [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: PopupMenuButton(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        icon: Icon(Icons.more_vert, color: Colors.black),
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                    leading: Icon(FontAwesome5Regular.bell),
+                                    title: Text("Bildir"),
+                                    onTap: () async {
+                                      await _showReportEventDialog(event.id);
+                                    }),
+                              ),
+                            ]),
                   ),
-                ),
-              ),
-            ]),
+                )
+              ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
           ),
-        ],
+        ),
+        width: dynamicWidth(1),
+        height: dynamicHeight(1),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildEventHeader(),
+              _buildEventDetailBody(),
+              _buildEventDetailTabs()
+              // _buildMap()
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // return Scaffold(
+    //   extendBodyBehindAppBar: true,
+    //   body: CustomScrollView(
+    //     slivers: [
+    //       SliverAppBar(
+    //         leading: Padding(
+    //           padding: const EdgeInsets.all(8.0),
+    //           child: CircleAvatar(
+    //             backgroundColor: Colors.white,
+    //             child: BackButton(
+    //               color: Colors.black,
+    //             ),
+    //           ),
+    //         ),
+    //         actionsIconTheme: IconThemeData(color: Colors.black),
+    //         actions: canUserControlEvent()
+    //             ? [
+    //                 Padding(
+    //                   padding: const EdgeInsets.all(8.0),
+    //                   child: CircleAvatar(
+    //                     backgroundColor: Colors.white,
+    //                     child: PopupMenuButton(
+    //                         shape: RoundedRectangleBorder(
+    //                           borderRadius: BorderRadius.circular(10),
+    //                         ),
+    //                         icon: Icon(Icons.more_vert, color: Colors.black),
+    //                         itemBuilder: (context) => [
+    //                               PopupMenuItem(
+    //                                 child: ListTile(
+    //                                     leading:
+    //                                         Icon(FontAwesome5Regular.trash_alt),
+    //                                     title: Text("Sil"),
+    //                                     onTap: () async {
+    //                                       await _showDeleteEventDialog(
+    //                                           event.id);
+    //                                     }),
+    //                               )
+    //                             ]),
+    //                   ),
+    //                 )
+    //               ]
+    //             : [
+    //                 Padding(
+    //                   padding: const EdgeInsets.all(8.0),
+    //                   child: CircleAvatar(
+    //                     backgroundColor: Colors.white,
+    //                     child: PopupMenuButton(
+    //                         shape: RoundedRectangleBorder(
+    //                           borderRadius: BorderRadius.circular(10),
+    //                         ),
+    //                         icon: Icon(Icons.more_vert, color: Colors.black),
+    //                         itemBuilder: (context) => [
+    //                               PopupMenuItem(
+    //                                 child: ListTile(
+    //                                     leading: Icon(FontAwesome5Regular.bell),
+    //                                     title: Text("Bildir"),
+    //                                     onTap: () async {
+    //                                       await _showReportEventDialog(
+    //                                           event.id);
+    //                                     }),
+    //                               ),
+    //                             ]),
+    //                   ),
+    //                 )
+    //               ],
+    //         expandedHeight: dynamicHeight(0.4),
+    //         pinned: true,
+    //         snap: false,
+    //         floating: true,
+    //         flexibleSpace: FlexibleSpaceBar(
+    //           background: Image.network(
+    //             event.eventImages[0],
+    //             fit: BoxFit.cover,
+    //           ),
+    //         ),
+    //       ),
+    //       SliverList(
+    //         delegate: SliverChildListDelegate(
+    //           [
+    //             Container(
+    //               decoration: BoxDecoration(
+    //                 image: DecorationImage(
+    //                   colorFilter: ColorFilter.mode(
+    //                       Colors.black.withOpacity(0.2), BlendMode.dstATop),
+    //                   image: AssetImage(kBackgroundImage),
+    //                   fit: BoxFit.cover,
+    //                 ),
+    //               ),
+    //               width: dynamicWidth(1),
+    //               height: dynamicHeight(1),
+    //               child: SingleChildScrollView(
+    //                 child: Column(
+    //                   children: [
+    //                     //_buildEventHeader(),
+    //                     _buildEventDetailBody(),
+    //                     _buildEventDetailTabs()
+    //                     // _buildMap()
+    //                   ],
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+  }
+
+  Widget _buildEventHeader() {
+    return GestureDetector(
+      onTap: () {
+        CommonMethods.showImagePreviewDialog(context,
+            url: event.eventImages[0]);
+      },
+      child: Container(
+        width: dynamicWidth(1),
+        height: dynamicHeight(0.4),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(event.eventImages[0]),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }
-
-  //Widget _buildEventHeader() {
-  //  return Container(
-  //    width: dynamicWidth(1),
-  //    height: dynamicHeight(0.4),
-  //    decoration: BoxDecoration(
-  //      image: DecorationImage(
-  //        image: NetworkImage(event.eventImages[0]),
-  //        fit: BoxFit.cover,
-  //      ),
-  //    ),
-  //  );
-  //}
 
   Widget _buildEventDetailBody() {
     return Container(
@@ -482,7 +592,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği silmek istediğinden emin misin?",
+        text: "Bu etkinliği silmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",
@@ -499,7 +609,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: "Bu içeriği bildirmek istediğinden emin misin?",
+        text: "Bu etkinliği bildirmek istediğinden emin misin?",
         confirmBtnText: "Evet",
         cancelBtnText: "Vazgeç",
         title: "",

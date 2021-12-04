@@ -13,6 +13,7 @@ class EventModel {
   List<String> eventImages;
   String locationCoordinates;
   String city;
+  String address;
   bool isOnline;
   String eventType;
   bool isDone;
@@ -35,6 +36,7 @@ class EventModel {
       this.eventImages,
       this.isOnline,
       this.locationCoordinates,
+      this.address,
       this.eventType,
       this.isDone,
       this.ownerType,
@@ -55,7 +57,7 @@ class EventModel {
     eventImages = json['eventImages']?.cast<String>() ?? [];
     isOnline = json['isOnline'];
     locationCoordinates = json['locationCoordinates'];
-
+    address = json['address'] ?? '';
     eventType = json['eventType'];
     isDone = json['isDone'];
     ownerType = json['ownerType'];
@@ -77,7 +79,7 @@ class EventModel {
     data['endDate'] = this.endDate ?? FieldValue.serverTimestamp();
     data['category'] = this.category;
     data['locationCoordinates'] = this.locationCoordinates;
-
+    data['address'] = this.address;
     data['eventImages'] = this.eventImages;
     data['isOnline'] = this.isOnline;
     data['eventType'] = this.eventType;

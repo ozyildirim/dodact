@@ -27,6 +27,11 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Mesajlar'),
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(),
+        //   )
+        // ],
       ),
       body: Container(
         decoration: BoxDecoration(
