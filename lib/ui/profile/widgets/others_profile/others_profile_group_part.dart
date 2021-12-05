@@ -38,9 +38,13 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data.isEmpty) {
             return Center(
-              child: Text(
-                "Herhangi bir topluluğa dahil değil.",
-                style: TextStyle(fontSize: kPageCenteredTextSize),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Herhangi bir topluluğa dahil değil",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                ),
               ),
             );
           } else {

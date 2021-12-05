@@ -29,7 +29,7 @@ class _UserProfileBodyState extends State<UserProfileBody>
         Container(
           padding: EdgeInsets.all(18),
           width: size.width,
-          height: size.height * 0.1,
+          height: size.height * 0.15,
           child: TabBar(
             labelPadding: EdgeInsets.all(8),
             labelColor: Colors.black,
@@ -38,76 +38,58 @@ class _UserProfileBodyState extends State<UserProfileBody>
             indicatorSize: TabBarIndicatorSize.label, isScrollable: true,
             tabs: [
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Hakkında",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Hakkında",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "İlgi Alanları",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "İlgi Alanları",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Gönderiler",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Gönderiler",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Topluluklar",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Topluluklar",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Etkinlikler",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Etkinlikler",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
             ],
           ),
         ),
         Expanded(
-          child: Container(
-            height: 320,
-            child: TabBarView(
-              controller: _controller,
-              children: [
-                Container(
-                  child: UserProfileInfoTab(),
-                ),
-                Container(
-                  child: UserProfileInterestsTab(),
-                ),
-                Container(
-                  child: UserProfilePostsTab(),
-                ),
-                Container(
-                  child: UserProfileGroupsTab(),
-                ),
-                Container(
-                  child: UserProfileEventsTab(),
-                ),
-              ],
-            ),
+          child: TabBarView(
+            controller: _controller,
+            children: [
+              Container(
+                child: UserProfileInfoTab(),
+              ),
+              Container(
+                child: UserProfileInterestsTab(),
+              ),
+              Container(
+                child: UserProfilePostsTab(),
+              ),
+              Container(
+                child: UserProfileGroupsTab(),
+              ),
+              Container(
+                child: UserProfileEventsTab(),
+              ),
+            ],
           ),
         )
       ],

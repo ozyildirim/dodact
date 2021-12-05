@@ -6,8 +6,6 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/badge/gf_badge.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeader extends StatefulWidget {
@@ -28,45 +26,37 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
     var user = provider.currentUser;
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Center(
-          child: CachedNetworkImage(
-            placeholder: (context, url) => Container(
-              child: spinkit,
-            ),
-            imageUrl: user.profilePictureURL,
-            fit: BoxFit.cover,
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            imageBuilder: (context, imageProvider) {
-              return InkWell(
-                onTap: () {
-                  CommonMethods.showImagePreviewDialog(context,
-                      imageProvider: imageProvider);
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: dynamicWidth(0.2),
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: dynamicWidth(0.19),
-                        backgroundImage: imageProvider,
-                      ),
-                      InkWell(
-                        onTap: navigateUserProfileSettings,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            child: Icon(Icons.edit, color: Colors.black),
-                            backgroundColor: Colors.white,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+        InkWell(
+          onTap: () {
+            CommonMethods.showImagePreviewDialog(context,
+                url: user.profilePictureURL);
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.black,
+            radius: dynamicWidth(0.2),
+            child: Stack(
+              children: [
+                CircleAvatar(
+                  radius: dynamicWidth(0.19),
+                  backgroundImage:
+                      CachedNetworkImageProvider(user.profilePictureURL),
                 ),
-              );
-            },
+                Positioned(
+                  bottom: 1,
+                  right: 1,
+                  child: InkWell(
+                    onTap: navigateUserProfileSettings,
+                    child: CircleAvatar(
+                      child: Icon(Icons.edit, color: Colors.black),
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         SizedBox(

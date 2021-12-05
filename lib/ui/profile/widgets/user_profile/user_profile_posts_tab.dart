@@ -34,43 +34,46 @@ class _UserProfilePostsTabState extends BaseState<UserProfilePostsTab>
             if (snapshot.data.isNotEmpty) {
               List<PostModel> posts = snapshot.data;
 
-              if (posts.isNotEmpty && posts != null) {
-                return StaggeredGridView.countBuilder(
-                  crossAxisCount: 4,
-                  itemCount: posts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var postItem = posts[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Container(
-                        height: 200,
-                        child: PostCardForGrid(
-                          post: postItem,
-                        ),
+              return StaggeredGridView.countBuilder(
+                crossAxisCount: 4,
+                itemCount: posts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var postItem = posts[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Container(
+                      height: 200,
+                      child: PostCardForGrid(
+                        post: postItem,
                       ),
-                    );
-                  },
-                  staggeredTileBuilder: (int index) =>
-                      new StaggeredTile.count(2, index.isEven ? 2 : 1),
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 4.0,
-                );
-              } else {
-                return Center(
-                  child: Text(
-                    "Herhangi bir gönderi oluşturulmamış.",
-                    style: TextStyle(fontSize: kPageCenteredTextSize),
-                  ),
-                );
-              }
+                    ),
+                  );
+                },
+                staggeredTileBuilder: (int index) =>
+                    new StaggeredTile.count(2, index.isEven ? 2 : 1),
+                mainAxisSpacing: 8.0,
+                crossAxisSpacing: 4.0,
+              );
             } else {
               return Center(
                 child: Text(
-                  "Herhangi bir gönderi oluşturulmamış.",
+                  "Herhangi bir gönderi oluşturulmamış",
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );
             }
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Bir hata oluştu",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: kPageCenteredTextSize),
+                ),
+              ),
+            );
           } else {
             return Center(
               child: spinkit,

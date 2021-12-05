@@ -32,59 +32,44 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(18),
+          padding: EdgeInsets.only(left: 8, right: 8, bottom: 6),
           width: size.width,
-          height: size.height * 0.1,
+          // height: size.height * 0.15,
           child: TabBar(
-            labelPadding: EdgeInsets.all(9),
+            labelPadding: EdgeInsets.only(left: 8, right: 8),
             labelColor: Colors.black,
             controller: _controller,
             indicatorSize: TabBarIndicatorSize.label,
             isScrollable: true,
             tabs: const [
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Hakkında",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Hakkında",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "İlgi Alanları",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "İlgi Alanları",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Gönderiler",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Gönderiler",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Topluluklar",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Topluluklar",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
               const Tab(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    "Etkinlikler",
-                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
-                  ),
+                child: Text(
+                  "Etkinlikler",
+                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
                 ),
               ),
             ],

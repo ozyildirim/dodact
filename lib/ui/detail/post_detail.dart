@@ -85,31 +85,37 @@ class _PostDetailState extends BaseState<PostDetail> {
         if (orientation == Orientation.portrait) {
           return Scaffold(
             appBar: appBar,
-            body: SingleChildScrollView(
-              child: Container(
-                height: dynamicHeight(1) -
-                    appBar.preferredSize.height -
-                    mediaQuery.padding.top,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                    image: AssetImage(kBackgroundImage),
-                    fit: BoxFit.cover,
+            body: Container(
+              height: dynamicHeight(1) -
+                  appBar.preferredSize.height -
+                  mediaQuery.padding.top,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                  image: AssetImage(kBackgroundImage),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Column(
+                // mainAxisSize: MainAxisSize.max,
+                children: [
+                  HeaderPart(post: post),
+                  PostDetailInfoPart(post: post),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: Text(post.postTitle,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w800)),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    HeaderPart(post: post),
-                    PostDetailInfoPart(post: post),
-                    SizedBox(height: 10),
-                    PostDescriptionCard(post: post),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    buildPostCommentsNavigator(),
-                  ],
-                ),
+                  PostDescriptionCard(post: post),
+                  // Expanded(
+                  //   child: Container(),
+                  // ),
+                  // Spacer(),
+                  buildPostCommentsNavigator(),
+                ],
               ),
             ),
           );
@@ -306,14 +312,24 @@ class _PostDetailState extends BaseState<PostDetail> {
   //Post onay durumundan önce
 
   buildPostCommentsNavigator() {
-    return ListTile(
-      title: Text("Yorumları Görüntüle",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-      trailing: Icon(Icons.forward, color: Colors.black),
-      onTap: () {
-        NavigationService.instance
-            .navigate(k_ROUTE_POST_COMMENTS, args: [post.postId, post.ownerId]);
-      },
+    return Expanded(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          child: ListTile(
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text("Yorumları Görüntüle",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            ),
+            trailing: Icon(Icons.forward, color: Colors.black),
+            onTap: () {
+              NavigationService.instance.navigate(k_ROUTE_POST_COMMENTS,
+                  args: [post.postId, post.ownerId]);
+            },
+          ),
+        ),
+      ),
     );
   }
 }

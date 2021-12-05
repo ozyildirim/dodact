@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -45,7 +44,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
             } else {
               return Center(
                 child: Text(
-                  "Herhangi bir etkinlik oluşturulmamış.",
+                  "Herhangi bir etkinlik oluşturulmamış",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );
@@ -53,7 +52,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
           } else {
             return Center(
               child: Text(
-                "Herhangi bir etkinlik oluşturulmamış.",
+                "Herhangi bir etkinlik oluşturulmamış",
                 style: TextStyle(fontSize: kPageCenteredTextSize),
               ),
             );

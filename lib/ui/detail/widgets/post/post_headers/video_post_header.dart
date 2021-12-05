@@ -23,6 +23,7 @@ class VideoPostHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
         child: YoutubePlayer(
       controller: buildYoutubeController(),
