@@ -27,47 +27,50 @@ class _UserProfileBodyState extends State<UserProfileBody>
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(18),
+          padding: EdgeInsets.only(left: 8, right: 8),
+          // color: Colors.green,
           width: size.width,
-          height: size.height * 0.15,
-          child: TabBar(
-            labelPadding: EdgeInsets.all(8),
-            labelColor: Colors.black,
-            // labelStyle: TextStyle(fontSize: 10),
-            controller: _controller,
-            indicatorSize: TabBarIndicatorSize.label, isScrollable: true,
-            tabs: [
-              const Tab(
-                child: Text(
-                  "Hakkında",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+          // height: size.height * 0.15,
+          child: Center(
+            child: TabBar(
+              labelPadding: EdgeInsets.only(left: 8, right: 8),
+              labelColor: Colors.black,
+              // labelStyle: TextStyle(fontSize: 10),
+              controller: _controller,
+              indicatorSize: TabBarIndicatorSize.label, isScrollable: true,
+              tabs: [
+                const Tab(
+                  child: Text(
+                    "Hakkında",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
-              ),
-              const Tab(
-                child: Text(
-                  "İlgi Alanları",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                const Tab(
+                  child: Text(
+                    "İlgi Alanları",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
-              ),
-              const Tab(
-                child: Text(
-                  "Gönderiler",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                const Tab(
+                  child: Text(
+                    "Gönderiler",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
-              ),
-              const Tab(
-                child: Text(
-                  "Topluluklar",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                const Tab(
+                  child: Text(
+                    "Topluluklar",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
-              ),
-              const Tab(
-                child: Text(
-                  "Etkinlikler",
-                  style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                const Tab(
+                  child: Text(
+                    "Etkinlikler",
+                    style: TextStyle(fontSize: kUserProfileTabLabelSize),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         Expanded(

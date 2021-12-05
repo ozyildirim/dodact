@@ -11,6 +11,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -27,11 +28,17 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Mesajlar'),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(),
-        //   )
-        // ],
+        actions: [
+          IconButton(
+            icon: Icon(
+              FontAwesome5Solid.edit,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              NavigationService.instance.navigate(k_ROUTE_CREATE_CHAT_PAGE);
+            },
+          )
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(

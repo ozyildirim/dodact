@@ -32,7 +32,7 @@ class _OthersProfileBodyState extends State<OthersProfileBody>
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(left: 8, right: 8, bottom: 6),
+          padding: EdgeInsets.only(left: 8, right: 8),
           width: size.width,
           // height: size.height * 0.15,
           child: TabBar(

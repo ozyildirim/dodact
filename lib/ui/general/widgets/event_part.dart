@@ -106,7 +106,7 @@ class _EventPartState extends State<EventPart> {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Container(
-          height: size.height * 0.10,
+          height: size.height * 0.12,
           width: cardWidth,
           child: Row(
             children: [
@@ -161,10 +161,23 @@ class _EventPartState extends State<EventPart> {
                           SizedBox(
                             width: 3,
                           ),
-                          event.isOnline ? Text("Online") : Text(event.city)
+                          event.isOnline
+                              ? Flexible(
+                                  child: FittedBox(
+                                      fit: BoxFit.fitHeight,
+                                      child: Text("Online")),
+                                )
+                              : Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.fitHeight,
+                                    child: Text(
+                                      event.city,
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Row(
                         children: [
                           Icon(
@@ -175,10 +188,12 @@ class _EventPartState extends State<EventPart> {
                             width: 3,
                           ),
                           Flexible(
-                            child: Container(
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
                               child: Text(
                                 event.eventType,
                                 maxLines: 2,
+                                style: TextStyle(fontSize: 14),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),

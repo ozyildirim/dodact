@@ -46,6 +46,7 @@ const k_ROUTE_USER_PROFILE = '/profile';
 const k_ROUTE_USER_NOTIFICATIONS = '/user_notifications';
 const k_ROUTE_USER_CHATROOMS = '/user_chatrooms';
 const k_ROUTE_CHATROOM_PAGE = '/chatroom';
+const k_ROUTE_CREATE_CHAT_PAGE = '/create_chat';
 const k_ROUTE_USER_INVITATIONS_PAGE = '/user_invitations';
 
 //User Drawer Routes
