@@ -5,6 +5,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/group/widgets/group_events_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_info_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_interests_tab_view.dart';
@@ -68,7 +69,9 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
             )
           : null,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        actionsIconTheme: IconThemeData(color: Colors.black),
         actions: isUserGroupFounder()
             ? [
                 PopupMenuButton(
@@ -88,8 +91,8 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
                         ])
               ]
             : null,
-        title: Text(group.groupName),
-        elevation: 8,
+        // title: Text(group.groupName),
+        elevation: 0,
       ),
       body: Container(
         width: dynamicWidth(1),
@@ -171,24 +174,49 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   pageBody() {
     return Column(
       children: [
-        // Expanded(
-        //   flex: 1,
-        //   child: Center(
-        //       child: ClipRRect(
-        //     borderRadius: BorderRadius.circular(18),
-        //     child: Card(
-        //       child: Image.network(group.groupProfilePicture),
-        //     ),
-        //   )),
-        // ),
         Container(
           height: dynamicHeight(0.3),
           width: dynamicWidth(1),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(group.groupProfilePicture),
-              fit: BoxFit.cover,
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: dynamicWidth(0.35),
+                child: Text(
+                  group.groupName,
+                  // maxLines: 3,
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                width: dynamicWidth(0.02),
+              ),
+              GestureDetector(
+                onTap: () {
+                  CommonMethods.showImagePreviewDialog(context,
+                      url: group.groupProfilePicture);
+                },
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(group.groupProfilePicture),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    height: dynamicHeight(0.25),
+                    width: dynamicWidth(0.5),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
 
@@ -211,7 +239,8 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         // labelStyle: GoogleFonts.poppins(
         //   fontSize: 18,
         // ),
-        labelStyle: TextStyle(fontSize: 18),
+        labelStyle: TextStyle(fontSize: 16),
+        indicatorSize: TabBarIndicatorSize.label,
         controller: tabController,
         tabs: [
           Tab(text: "Açıklama"),

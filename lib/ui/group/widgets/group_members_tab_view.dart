@@ -46,9 +46,13 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
                                 imageUrl: user.profilePictureURL,
                                 imageBuilder: (context, imageProvider) {
                                   return CircleAvatar(
-                                    radius: 60,
-                                    backgroundImage:
-                                        NetworkImage(user.profilePictureURL),
+                                    radius: 45,
+                                    backgroundColor: Colors.black,
+                                    child: CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage:
+                                          NetworkImage(user.profilePictureURL),
+                                    ),
                                   );
                                 },
                               ),
@@ -56,7 +60,7 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15,
-                                      fontWeight: FontWeight.bold))
+                                      fontWeight: FontWeight.w500))
                             ],
                           ),
                         ),
