@@ -75,4 +75,16 @@ class FirebaseUserService {
       Map<String, dynamic> newData, String uid) async {
     await usersRef.doc(uid).update(newData);
   }
+
+  Future<void> blockUser(String uid, String blockedUserId) async {
+    await usersRef.doc(uid).update({
+      "blockedUserList": FieldValue.arrayUnion([blockedUserId])
+    });
+  }
+
+  Future<void> unblockUser(String uid, String blockedUserId) async {
+    await usersRef.doc(uid).update({
+      "blockedUserList": FieldValue.arrayRemove([blockedUserId])
+    });
+  }
 }

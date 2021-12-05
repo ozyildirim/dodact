@@ -63,4 +63,12 @@ class UserRepository {
       Map<String, dynamic> newData, String uid) async {
     await firebaseUserService.updateCurrentUser(newData, uid);
   }
+
+  Future blockUser(String uid, String blockedUserId) async {
+    await firebaseUserService.blockUser(uid, blockedUserId);
+  }
+
+  Future unblockUser(String uid, String blockedUserId) async {
+    await firebaseUserService.unblockUser(uid, blockedUserId);
+  }
 }

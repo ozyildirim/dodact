@@ -17,6 +17,7 @@ class UserObject {
   String education;
   String profession;
   bool isVerified;
+  List<String> blockedUserList;
 
   List<String> favoritedPosts = [];
   List<Map<String, dynamic>> interests;
@@ -86,6 +87,7 @@ class UserObject {
     this.socialMediaLinks,
     this.notificationSettings,
     this.education,
+    this.blockedUserList,
     this.profession,
     this.searchKeywords,
     this.isVerified,
@@ -150,6 +152,7 @@ class UserObject {
     userData['notificationSettings'] = defaultNotificationSettings;
     userData['newUser'] = this.newUser ?? true;
     userData['userDescription'] = this.userDescription ?? '';
+    userData['blockedUserList'] = this.blockedUserList ?? [];
     userData['education'] = this.education ?? '';
     userData['profession'] = this.profession ?? '';
     userData['searchKeywords'] = this.searchKeywords ?? [];
@@ -172,6 +175,7 @@ class UserObject {
     rosettes = doc.data()['rosettes'];
     mainInterest = doc.data()['mainInterest'] ?? "";
     interests = doc.data()['interests']?.cast<Map<String, dynamic>>();
+    blockedUserList = doc.data()['blockedUserList']?.cast<String>() ?? [];
 
     permissions = doc.data()['permissions'] ?? this.permissions;
 

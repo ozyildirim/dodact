@@ -40,14 +40,19 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   String otherUserId;
   ChatroomProvider chatroomProvider;
 
+  UserObject otherUser;
+
   //Son mesaj silindiğinde buildEmptyRoomAction fonksiyonu 2 kere çalışıyor ve 2 kere pop yapıyor. Bunu önlemek için böyle ilkel bir çözüm buldum.
   int exitCounter = 0;
+
+  getOtherUser() {}
 
   @override
   void initState() {
     chatroomProvider = Provider.of<ChatroomProvider>(context, listen: false);
     currentUserId = widget.currentUserId;
     otherUserId = widget.otherUserObject.uid;
+    // otherUser = userProvider.getUserByID(otherUserId);
     roomId = generateRoomId(currentUserId, otherUserId);
     checkChatroom();
     super.initState();
@@ -274,43 +279,87 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   }
 
   submitMessage() async {
-    if (_formKey.currentState.saveAndValidate()) {
-      try {
-        if (doesRoomExist != null) {
-          if (doesRoomExist == false) {
-            await chatroomProvider.createChatRoom(currentUserId, otherUserId);
-            setState(() {
-              doesRoomExist = true;
+    if (checkIfCurrentUserIsBlocked() || checkIfOtherUserIsBlocked()) {
+      if (checkIfCurrentUserIsBlocked() && !checkIfOtherUserIsBlocked()) {
+        _formKey.currentState.invalidateFirstField(
+            errorText: "Bu kullanıcıya mesaj gönderemezsin.");
+      } else if (!checkIfCurrentUserIsBlocked() &&
+          checkIfOtherUserIsBlocked()) {
+        _formKey.currentState
+            .invalidateFirstField(errorText: "Bu kullanıcıyı engelledin.");
+      } else {
+        _formKey.currentState.invalidateFirstField(
+            errorText: "Bu kullanıcıya mesaj gönderemezsin.");
+      }
+    } else {
+      if (_formKey.currentState.saveAndValidate()) {
+        try {
+          if (doesRoomExist != null) {
+            if (doesRoomExist == false) {
+              await chatroomProvider.createChatRoom(currentUserId, otherUserId);
+              setState(() {
+                doesRoomExist = true;
+              });
+            }
+            var message =
+                _formKey.currentState.value['message'].toString().trim();
+
+            _formKey.currentState.reset();
+            await Provider.of<ChatroomProvider>(context, listen: false)
+                .sendMessage(roomId, authProvider.currentUser.uid, message)
+                .then((value) async {
+              print("asda");
+              final DocumentReference docRef = chatroomsRef.doc(roomId);
+
+              MessageModel messageModel = MessageModel(
+                message: message,
+                isRead: false,
+                senderId: authProvider.currentUser.uid,
+                messageCreationDate: DateTime.now(),
+                messageId: value.id,
+              );
+
+              await docRef.update({
+                'lastMessage': messageModel.toJson(),
+              });
             });
           }
-          var message =
-              _formKey.currentState.value['message'].toString().trim();
-
+        } catch (e) {
+          print(e);
           _formKey.currentState.reset();
-          await Provider.of<ChatroomProvider>(context, listen: false)
-              .sendMessage(roomId, authProvider.currentUser.uid, message)
-              .then((value) async {
-            print("asda");
-            final DocumentReference docRef = chatroomsRef.doc(roomId);
-
-            MessageModel messageModel = MessageModel(
-              message: message,
-              isRead: false,
-              senderId: authProvider.currentUser.uid,
-              messageCreationDate: DateTime.now(),
-              messageId: value.id,
-            );
-
-            await docRef.update({
-              'lastMessage': messageModel.toJson(),
-            });
-          });
         }
-      } catch (e) {
-        print(e);
-        _formKey.currentState.reset();
       }
     }
+  }
+
+  checkIfCurrentUserIsBlocked() {
+    if (widget.otherUserObject.blockedUserList
+        .contains(userProvider.currentUser.uid)) {
+      return true;
+    }
+    return false;
+  }
+
+  checkIfOtherUserIsBlocked() {
+    if (userProvider.currentUser.blockedUserList
+        .contains(widget.otherUserObject.uid)) {
+      return true;
+    }
+    return false;
+  }
+
+  showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+      content: Flexible(
+        child: new Text(
+          message,
+          softWrap: false,
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    ));
   }
 
   updateMessageRead(DocumentSnapshot snapshot, String conversationId) {
@@ -370,14 +419,6 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           await reportMessage(roomId, messageId, message);
           NavigationService.instance.pop();
         });
-  }
-
-  showSnackbar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
   }
 
   reportMessage(String roomId, String messageId, String message) async {

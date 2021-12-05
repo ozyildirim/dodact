@@ -31,7 +31,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
         actions: [
           IconButton(
             icon: Icon(
-              FontAwesome5Solid.edit,
+              FontAwesome5Regular.edit,
               color: Colors.white,
             ),
             onPressed: () {
@@ -156,7 +156,8 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
                               ? FontWeight.w400
                               : FontWeight.w700)),
           trailing: Text(
-            DateFormat('dd/MM HH:mm').format(lastMessage.messageCreationDate),
+            DateFormat('dd/MM HH:mm', 'tr_TR')
+                .format(lastMessage.messageCreationDate),
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: lastMessage.senderId == authProvider.currentUser.uid

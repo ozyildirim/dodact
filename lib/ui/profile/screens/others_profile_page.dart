@@ -111,6 +111,24 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
                               await _showReportUserDialog();
                             }),
                       ),
+                      userProvider.currentUser.blockedUserList
+                              .contains(otherUser.uid)
+                          ? PopupMenuItem(
+                              child: ListTile(
+                                  leading: Icon(FontAwesome5Solid.ban),
+                                  title: Text("Engeli Kaldır"),
+                                  onTap: () async {
+                                    await _showUnblockDialog();
+                                  }),
+                            )
+                          : PopupMenuItem(
+                              child: ListTile(
+                                  leading: Icon(FontAwesome5Solid.ban),
+                                  title: Text("Engelle"),
+                                  onTap: () async {
+                                    await _showBlockDialog();
+                                  }),
+                            )
                     ])
           ],
         ),
@@ -126,6 +144,74 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
 
     NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
         args: [userProvider.currentUser.uid, userProvider.otherUser]);
+  }
+
+  _showUnblockDialog() {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu kullanıcının engelini kaldırmak istediğinden emin misin?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          unblockUser();
+          NavigationService.instance.pop();
+          NavigationService.instance.pop();
+        });
+  }
+
+  unblockUser() async {
+    try {
+      await userProvider.unblockUser(otherUser.uid);
+      showSnackbar("Kullanıcının engelini kaldırdın.");
+    } catch (e) {
+      showSnackbar("Kullanıcı engellenirken bir sorun oluştu.");
+    }
+  }
+
+  _showBlockDialog() {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: "Bu kullanıcıyı engellemek istediğinden emin misin?",
+        confirmBtnText: "Evet",
+        cancelBtnText: "Vazgeç",
+        title: "",
+        onCancelBtnTap: () {
+          NavigationService.instance.pop();
+        },
+        onConfirmBtnTap: () async {
+          await blockUser();
+          NavigationService.instance.pop();
+          NavigationService.instance.pop();
+        });
+  }
+
+  blockUser() async {
+    try {
+      await userProvider.blockUser(otherUser.uid);
+      showSnackbar("Kullanıcıyı engelledin.");
+    } catch (e) {
+      showSnackbar("Kullanıcı engellenirken bir sorun oluştu.");
+    }
+  }
+
+  showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+      content: Flexible(
+        child: new Text(
+          message,
+          softWrap: false,
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    ));
   }
 }
 

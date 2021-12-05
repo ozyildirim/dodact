@@ -133,6 +133,26 @@ class UserProvider with ChangeNotifier {
     return result;
   }
 
+  Future<void> blockUser(String blockedUserId) async {
+    try {
+      await userRepository.blockUser(currentUser.uid, blockedUserId);
+      currentUser.blockedUserList.add(blockedUserId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("UserProvider blockUser error: " + e.toString());
+    }
+  }
+
+  Future<void> unblockUser(String blockedUserId) async {
+    try {
+      await userRepository.unblockUser(currentUser.uid, blockedUserId);
+      currentUser.blockedUserList.remove(blockedUserId);
+      notifyListeners();
+    } catch (e) {
+      logger.e("UserProvider unblockUser error: " + e.toString());
+    }
+  }
+
   Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
     try {
       await userRepository.updateCurrentUser(newData, currentUser.uid);
