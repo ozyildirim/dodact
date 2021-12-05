@@ -189,7 +189,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         // emptyDisplay: buildEmptyRoomAction(),
         scrollController: scrollController,
         onEmpty: Center(
-          child: Text("Mesaj bulunamadı.",
+          child: Text("Mesaj bulunamadı",
               style: TextStyle(fontSize: kPageCenteredTextSize)),
         ),
         itemsPerPage: 5, initialLoader: Center(child: spinkit),

@@ -98,7 +98,7 @@ class _GroupsPageState extends State<GroupsPage> {
                 return Container(
                   child: Center(
                     child: Text(
-                      "Bu kriterlere uyan bir topluluk bulunamadı.",
+                      "Bu kriterlere uyan bir topluluk bulunamadı",
                       style: TextStyle(fontSize: kPageCenteredTextSize),
                       textAlign: TextAlign.center,
                     ),
@@ -118,7 +118,7 @@ class _GroupsPageState extends State<GroupsPage> {
                 return Container(
                   child: Center(
                     child: Text(
-                      "Bu kriterlere uyan bir topluluk bulunamadı.",
+                      "Bu kriterlere uyan bir topluluk bulunamadı",
                       style: TextStyle(fontSize: kPageCenteredTextSize),
                       textAlign: TextAlign.center,
                     ),

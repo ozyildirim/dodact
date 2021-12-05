@@ -200,6 +200,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
                       url: group.groupProfilePicture);
                 },
                 child: Card(
+                  elevation: 8,
                   clipBehavior: Clip.antiAlias,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),

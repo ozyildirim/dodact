@@ -188,7 +188,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     width: size.width * 0.4,
                     child: FormBuilderDateTimePicker(
                       // textAlign: TextAlign.center,
-                      format: DateFormat("dd/MM/yyyy hh:mm"),
+                      format: DateFormat("dd/MM/yyyy hh:mm", "tr_TR"),
+                      locale: Locale("tr", "TR"),
                       alwaysUse24HourFormat: true,
 
                       name: "eventStartDate",
@@ -231,9 +232,14 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     child: FormBuilderDateTimePicker(
                       // textAlign: TextAlign.center,
                       helpText: "Bir bitiş tarihi seç",
-                      format: DateFormat("dd/MM/yyyy hh:mm"),
+                      format: DateFormat("dd/MM/yyyy hh:mm", "tr_TR"),
+                      locale: Locale("tr", "TR"),
                       alwaysUse24HourFormat: true,
                       name: "eventEndDate",
+                      cancelText: "İptal",
+                      confirmText: "Tamam", fieldLabelText: 'Bitiş tarihi',
+                      fieldHintText: 'Gün/Ay/Yıl',
+                      // timePickerInitialEntryMode: TimePickerEntryMode.input,
 
                       initialDate: nextPossibleDate,
                       firstDate: nextPossibleDate,
@@ -646,11 +652,17 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   }
 
   showSnackbar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 4),
+      behavior: SnackBarBehavior.fixed,
+      content: Flexible(
+        child: new Text(
+          message,
+          softWrap: false,
+          style: TextStyle(fontSize: 16),
+        ),
       ),
-    );
+    ));
   }
 
   List<String> createSearchKeywords(String title) {
@@ -740,7 +752,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                         child: Text(
                           "Seç",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 20,
                             // fontFamily: "Raleway",
                           ),
