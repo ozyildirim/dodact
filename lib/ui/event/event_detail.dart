@@ -248,8 +248,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             width: double.infinity,
             height: 50,
             child: TabBar(
-              labelStyle: TextStyle(fontSize: 18),
+              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               labelColor: Colors.black,
+              indicatorSize: TabBarIndicatorSize.label,
               controller: tabController,
               tabs: [
                 Tab(text: "Bilgiler"),
@@ -271,12 +272,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Widget buildDescriptionTab() {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Text(
-          event.description,
-          style: TextStyle(fontSize: 16),
+    return SingleChildScrollView(
+      child: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Text(
+            event.description,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
       ),
     );
@@ -320,67 +323,107 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     return SingleChildScrollView(
       child: Column(
         children: [
-          ListTile(
-            leading: Icon(Icons.category),
-            title: Text(
-              event.eventType +
-                  (event.isOnline
-                      ? " / Online Etkinlik"
-                      : " / Fiziksel Etkinlik"),
-              style: TextStyle(fontSize: 16),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+            child: ListTile(
+              leading: Icon(Icons.category),
+              title: Text(
+                event.eventType +
+                    (event.isOnline
+                        ? " / Online Etkinlik"
+                        : " / Fiziksel Etkinlik"),
+                style: TextStyle(fontSize: 16),
+              ),
+              subtitle: Text("Etkinlik Türü"),
             ),
-            subtitle: Text("Etkinlik Türü"),
           ),
           !event.isOnline
-              ? ListTile(
-                  leading: Icon(Icons.location_on),
-                  title: Text(
-                    event.city,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  subtitle: Text("Şehir"),
-                  trailing: CircleAvatar(
-                    backgroundColor: Colors.deepOrange,
-                    child: IconButton(
-                      icon: Icon(Icons.map),
-                      onPressed: () async {
-                        await _buildMap();
-                      },
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: ListTile(
+                    leading: Icon(Icons.location_on),
+                    title: Text(
+                      event.address,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    subtitle: Text("Adres"),
+                    trailing: CircleAvatar(
+                      backgroundColor: kNavbarColor,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.map,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          await _buildMap();
+                        },
+                      ),
                     ),
                   ),
                 )
-              : ListTile(
-                  leading: Icon(Icons.link),
-                  title: Text(
-                    "Referans Bağlantı",
-                    style: TextStyle(fontSize: 16),
+              : Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: ListTile(
+                    leading: Icon(Icons.link),
+                    title: Text(
+                      "Referans Bağlantı",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    subtitle: Text("Etkinlik Web Adresi"),
+                    onTap: () {
+                      CommonMethods.launchURL(event.eventURL);
+                    },
+                    trailing: IconButton(
+                      onPressed: () {
+                        showInfoDialog(context,
+                            "Bu web sitesi üzerinden online etkinliğe ulaşabilirsin.");
+                      },
+                      icon: Icon(Icons.info),
+                    ),
                   ),
-                  subtitle: Text("Etkinlik Web Adresi"),
-                  onTap: () {
-                    CommonMethods.launchURL(event.eventURL);
-                  },
                 ),
-          !event.isOnline
-              ? ListTile(
-                  leading: Icon(Icons.location_on),
-                  title: Text(
-                    event.address,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  subtitle: Text("Adres"),
-                  trailing: CircleAvatar(
-                    backgroundColor: Colors.deepOrange,
-                    child: IconButton(
-                      icon: Icon(Icons.map),
-                      onPressed: () async {
-                        await _buildMap();
-                      },
-                    ),
-                  ),
-                )
-              : Container(),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: ListTile(
+              leading: Icon(Icons.calendar_today),
+              title: Text(
+                DateFormat("dd.MM.yyyy HH:mm", "tr_TR")
+                        .format(event.startDate) +
+                    " - " +
+                    DateFormat("dd.MM.yyyy HH:mm", "tr_TR")
+                        .format(event.endDate),
+                style: TextStyle(fontSize: 16),
+              ),
+              subtitle: Text("Etkinlik Başlangıç/Bitiş Tarihleri"),
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  showInfoDialog(BuildContext context, String infoDescription) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text(title),
+          content: Text(
+            infoDescription,
+            textAlign: TextAlign.center,
+          ),
+          contentTextStyle: TextStyle(fontSize: 18, color: Colors.black),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Tamam"),
+              onPressed: () {
+                NavigationService.instance.pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -601,6 +644,7 @@ class _MapPageState extends State<MapPage> {
           markers: {
             Marker(
               infoWindow: InfoWindow(title: "Etkinlik Konum"),
+              zIndex: 1,
               markerId: MarkerId("1"),
               position: LatLng(widget.googlePlex.target.latitude,
                   widget.googlePlex.target.longitude),

@@ -334,7 +334,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                             (value) {
                               return ProfanityChecker.profanityValidator(value);
                             },
-                            FormBuilderValidators.url(context),
+                            FormBuilderValidators.url(context,
+                                errorText: "Lütfen geçerli bir URL gir."),
                           ],
                         ),
                       ),
@@ -571,7 +572,8 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       String category,
       String eventType) async {
     try {
-      CommonMethods().showLoaderDialog(context, "Etkinlik Oluşturuluyor.");
+      // print(address);
+      CommonMethods().showLoaderDialog(context, "Etkinlik Oluşturuluyor");
       EventModel newEvent = createEventModel(
           title,
           startDate,
@@ -579,11 +581,12 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           description,
           location,
           mapLocation,
-          url,
           address,
+          url,
           searchKeywords,
           category,
           eventType);
+      print(newEvent.address);
 
       await eventProvider.addEvent(newEvent, _eventImages).then((_) async {
         NavigationService.instance.pop();
@@ -730,7 +733,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: FloatingActionButton(
-                        backgroundColor: Colors.cyan[300],
+                        backgroundColor: kNavbarColor,
                         onPressed: () {
                           Navigator.of(context).pop(selectedPlace);
                         },
