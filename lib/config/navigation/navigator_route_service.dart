@@ -5,6 +5,7 @@ import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/signup/signup_page.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
 import 'package:dodact_v1/ui/chatrooms/screens/chatroom_page.dart';
+import 'package:dodact_v1/ui/chatrooms/screens/create_chat_page.dart';
 import 'package:dodact_v1/ui/chatrooms/screens/user_chatrooms_page.dart';
 import 'package:dodact_v1/ui/common/screens/about_dodact_page.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
@@ -226,6 +227,9 @@ class NavigationRouteManager {
         return _navigateToDefault(
             ChatroomPage(currentUserId: args[0], otherUserObject: args[1]),
             settings);
+
+      case k_ROUTE_CREATE_CHAT_PAGE:
+        return _navigateToDefault(CreateChatPage(), settings);
 
       case k_ROUTE_USER_INVITATIONS_PAGE:
         return _navigateToDefault(UserInvitationsPage(), settings);

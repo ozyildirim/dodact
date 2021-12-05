@@ -53,7 +53,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   @override
   void initState() {
     event = widget.event;
-    tabController = new TabController(length: 2, vsync: this);
+    tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
   }
@@ -149,126 +149,16 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         ),
         width: dynamicWidth(1),
         height: dynamicHeight(1),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildEventHeader(),
-              _buildEventDetailBody(),
-              _buildEventDetailTabs()
-              // _buildMap()
-            ],
-          ),
+        child: Column(
+          children: [
+            _buildEventHeader(),
+            _buildEventDetailBody(),
+            _buildEventDetailTabs()
+            // _buildMap()
+          ],
         ),
       ),
     );
-
-    // return Scaffold(
-    //   extendBodyBehindAppBar: true,
-    //   body: CustomScrollView(
-    //     slivers: [
-    //       SliverAppBar(
-    //         leading: Padding(
-    //           padding: const EdgeInsets.all(8.0),
-    //           child: CircleAvatar(
-    //             backgroundColor: Colors.white,
-    //             child: BackButton(
-    //               color: Colors.black,
-    //             ),
-    //           ),
-    //         ),
-    //         actionsIconTheme: IconThemeData(color: Colors.black),
-    //         actions: canUserControlEvent()
-    //             ? [
-    //                 Padding(
-    //                   padding: const EdgeInsets.all(8.0),
-    //                   child: CircleAvatar(
-    //                     backgroundColor: Colors.white,
-    //                     child: PopupMenuButton(
-    //                         shape: RoundedRectangleBorder(
-    //                           borderRadius: BorderRadius.circular(10),
-    //                         ),
-    //                         icon: Icon(Icons.more_vert, color: Colors.black),
-    //                         itemBuilder: (context) => [
-    //                               PopupMenuItem(
-    //                                 child: ListTile(
-    //                                     leading:
-    //                                         Icon(FontAwesome5Regular.trash_alt),
-    //                                     title: Text("Sil"),
-    //                                     onTap: () async {
-    //                                       await _showDeleteEventDialog(
-    //                                           event.id);
-    //                                     }),
-    //                               )
-    //                             ]),
-    //                   ),
-    //                 )
-    //               ]
-    //             : [
-    //                 Padding(
-    //                   padding: const EdgeInsets.all(8.0),
-    //                   child: CircleAvatar(
-    //                     backgroundColor: Colors.white,
-    //                     child: PopupMenuButton(
-    //                         shape: RoundedRectangleBorder(
-    //                           borderRadius: BorderRadius.circular(10),
-    //                         ),
-    //                         icon: Icon(Icons.more_vert, color: Colors.black),
-    //                         itemBuilder: (context) => [
-    //                               PopupMenuItem(
-    //                                 child: ListTile(
-    //                                     leading: Icon(FontAwesome5Regular.bell),
-    //                                     title: Text("Bildir"),
-    //                                     onTap: () async {
-    //                                       await _showReportEventDialog(
-    //                                           event.id);
-    //                                     }),
-    //                               ),
-    //                             ]),
-    //                   ),
-    //                 )
-    //               ],
-    //         expandedHeight: dynamicHeight(0.4),
-    //         pinned: true,
-    //         snap: false,
-    //         floating: true,
-    //         flexibleSpace: FlexibleSpaceBar(
-    //           background: Image.network(
-    //             event.eventImages[0],
-    //             fit: BoxFit.cover,
-    //           ),
-    //         ),
-    //       ),
-    //       SliverList(
-    //         delegate: SliverChildListDelegate(
-    //           [
-    //             Container(
-    //               decoration: BoxDecoration(
-    //                 image: DecorationImage(
-    //                   colorFilter: ColorFilter.mode(
-    //                       Colors.black.withOpacity(0.2), BlendMode.dstATop),
-    //                   image: AssetImage(kBackgroundImage),
-    //                   fit: BoxFit.cover,
-    //                 ),
-    //               ),
-    //               width: dynamicWidth(1),
-    //               height: dynamicHeight(1),
-    //               child: SingleChildScrollView(
-    //                 child: Column(
-    //                   children: [
-    //                     //_buildEventHeader(),
-    //                     _buildEventDetailBody(),
-    //                     _buildEventDetailTabs()
-    //                     // _buildMap()
-    //                   ],
-    //                 ),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 
   Widget _buildEventHeader() {
@@ -302,7 +192,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.only(
+                        left: 12.0, right: 12.0, bottom: 12.0),
                     child: Text(
                       event.title,
                       style:
@@ -310,17 +201,31 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     ),
                   ),
                 ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  color: kNavbarColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Text(
+                            DateFormat("MMMM", "tr_TR").format(event.startDate),
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.white)),
+                        Text(DateFormat("d").format(event.startDate),
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
             _getCreatorInfo(),
-            ListTile(
-              leading: Icon(Icons.event),
-              title: Text(
-                DateFormat('dd.MM.yyyy HH:mm', 'tr_TR').format(event.startDate),
-                style: TextStyle(fontSize: 18),
-              ),
-              subtitle: Text("Etkinlik Başlangıcı"),
-            ),
+
             // Column(
             //   children: [
             //     Text("Etkinlik Başlangıcı", style: TextStyle(fontSize: 18)),
@@ -329,47 +234,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             //     ),
             //   ],
             // ),
-
-            !event.isOnline
-                ? ListTile(
-                    leading: Icon(Icons.location_on),
-                    title: Text(
-                      event.city,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    subtitle: Text("Lokasyon"),
-                    trailing: CircleAvatar(
-                      backgroundColor: Colors.deepOrange,
-                      child: IconButton(
-                        icon: Icon(Icons.map),
-                        onPressed: () async {
-                          await _buildMap();
-                        },
-                      ),
-                    ),
-                  )
-                : ListTile(
-                    leading: Icon(Icons.link),
-                    title: Text(
-                      "Referans Bağlantı",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    subtitle: Text("Etkinlik Web Adresi"),
-                    onTap: () {
-                      CommonMethods.launchURL(event.eventURL);
-                    },
-                  ),
-            ListTile(
-              leading: Icon(Icons.category),
-              title: Text(
-                event.eventType +
-                    (event.isOnline
-                        ? " / Online Etkinlik"
-                        : " / Fiziksel Etkinlik"),
-                style: TextStyle(fontSize: 18),
-              ),
-              subtitle: Text("Etkinlik Türü"),
-            )
           ],
         ),
       ),
@@ -377,44 +241,45 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Widget _buildEventDetailTabs() {
-    return Column(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 50,
-          child: TabBar(
-            labelColor: Colors.black,
-            labelStyle: GoogleFonts.poppins(
-              fontSize: 18,
+    return Flexible(
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 50,
+            child: TabBar(
+              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              labelColor: Colors.black,
+              indicatorSize: TabBarIndicatorSize.label,
+              controller: tabController,
+              tabs: [
+                Tab(text: "Bilgiler"),
+                Tab(text: "Açıklama"),
+                Tab(text: "Görseller"),
+              ],
             ),
-            controller: tabController,
-            tabs: [
-              Tab(text: "Detaylar"),
-              Tab(text: "Görseller"),
-            ],
           ),
-        ),
-        Container(
-          height: 300,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          Flexible(
             child: TabBarView(controller: tabController, children: [
-              buildDetailTab(),
+              buildInfoTab(),
+              buildDescriptionTab(),
               buildEventMediaTab(),
             ]),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget buildDetailTab() {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Text(
-          event.description,
-          style: TextStyle(fontSize: 16),
+  Widget buildDescriptionTab() {
+    return SingleChildScrollView(
+      child: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Text(
+            event.description,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
       ),
     );
@@ -454,6 +319,114 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     }
   }
 
+  Widget buildInfoTab() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+            child: ListTile(
+              leading: Icon(Icons.category),
+              title: Text(
+                event.eventType +
+                    (event.isOnline
+                        ? " / Online Etkinlik"
+                        : " / Fiziksel Etkinlik"),
+                style: TextStyle(fontSize: 16),
+              ),
+              subtitle: Text("Etkinlik Türü"),
+            ),
+          ),
+          !event.isOnline
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: ListTile(
+                    leading: Icon(Icons.location_on),
+                    title: Text(
+                      event.address,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    subtitle: Text("Adres"),
+                    trailing: CircleAvatar(
+                      backgroundColor: kNavbarColor,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.map,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          await _buildMap();
+                        },
+                      ),
+                    ),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: ListTile(
+                    leading: Icon(Icons.link),
+                    title: Text(
+                      "Referans Bağlantı",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    subtitle: Text("Etkinlik Web Adresi"),
+                    onTap: () {
+                      CommonMethods.launchURL(event.eventURL);
+                    },
+                    trailing: IconButton(
+                      onPressed: () {
+                        showInfoDialog(context,
+                            "Bu web sitesi üzerinden online etkinliğe ulaşabilirsin.");
+                      },
+                      icon: Icon(Icons.info),
+                    ),
+                  ),
+                ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: ListTile(
+              leading: Icon(Icons.calendar_today),
+              title: Text(
+                DateFormat("dd.MM.yyyy HH:mm", "tr_TR")
+                        .format(event.startDate) +
+                    " - " +
+                    DateFormat("dd.MM.yyyy HH:mm", "tr_TR")
+                        .format(event.endDate),
+                style: TextStyle(fontSize: 16),
+              ),
+              subtitle: Text("Etkinlik Başlangıç/Bitiş Tarihleri"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  showInfoDialog(BuildContext context, String infoDescription) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text(title),
+          content: Text(
+            infoDescription,
+            textAlign: TextAlign.center,
+          ),
+          contentTextStyle: TextStyle(fontSize: 18, color: Colors.black),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Tamam"),
+              onPressed: () {
+                NavigationService.instance.pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _getCreatorInfo() {
     if (event.ownerType == "User") {
       final provider = Provider.of<UserProvider>(context, listen: false);
@@ -474,29 +447,23 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               UserObject fetchedUser = snapshot.data;
 
               return ListTile(
+                onTap: () {
+                  if (fetchedUser.uid != userProvider.currentUser.uid) {
+                    NavigationService.instance.navigate(
+                        k_ROUTE_OTHERS_PROFILE_PAGE,
+                        args: fetchedUser);
+                  }
+                },
                 leading: CircleAvatar(
-                  radius: 15,
+                  radius: 30,
                   backgroundImage: NetworkImage(fetchedUser.profilePictureURL),
                 ),
-                title: RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "Oluşturan: ",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      TextSpan(
-                        text: fetchedUser.nameSurname,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                title: Text(
+                  fetchedUser.nameSurname,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               );
@@ -521,61 +488,22 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               }
               GroupModel fetchedGroup = snapshot.data;
 
-              // return Column(
-              //   children: [
-              //     Padding(
-              //       padding: const EdgeInsets.all(8.0),
-              //       child: InkWell(
-              //         onTap: () {
-              //           NavigationService.instance
-              //               .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
-              //         },
-              //         child: GFImageOverlay(
-              //           width: 100,
-              //           height: 100,
-              //           shape: BoxShape.circle,
-              //           image: NetworkImage(fetchedGroup.groupProfilePicture),
-              //           boxFit: BoxFit.cover,
-              //         ),
-              //       ),
-              //     ),
-              //     Text(
-              //       fetchedGroup.groupName.toUpperCase(),
-              //       style: TextStyle(fontWeight: FontWeight.w700),
-              //     )
-              //   ],
-              // );
               return ListTile(
                 onTap: () {
                   NavigationService.instance
                       .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
                 },
                 leading: CircleAvatar(
-                  radius: 15,
+                  radius: 30,
                   backgroundImage:
                       NetworkImage(fetchedGroup.groupProfilePicture),
                 ),
-                title: RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "Oluşturan: ",
-                        style: TextStyle(
-                          fontFamily: "Poppins",
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      TextSpan(
-                        text: fetchedGroup.groupName.toUpperCase(),
-                        style: TextStyle(
-                          fontFamily: "Raleway",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                title: Text(
+                  fetchedGroup.groupName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               );
@@ -702,6 +630,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Etkinlik Konum Bilgileri"),
       ),
       body: Container(
@@ -714,7 +643,8 @@ class _MapPageState extends State<MapPage> {
           buildingsEnabled: false,
           markers: {
             Marker(
-              infoWindow: InfoWindow(title: "Etkinlik Lokasyonu"),
+              infoWindow: InfoWindow(title: "Etkinlik Konum"),
+              zIndex: 1,
               markerId: MarkerId("1"),
               position: LatLng(widget.googlePlex.target.latitude,
                   widget.googlePlex.target.longitude),

@@ -11,8 +11,9 @@ class ImagePostHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      height: 250,
+      height: size.height * 0.3,
       width: double.infinity,
       child: CachedNetworkImage(
         imageUrl: post.postContentURL,

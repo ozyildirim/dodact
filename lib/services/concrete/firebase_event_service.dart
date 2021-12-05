@@ -85,7 +85,10 @@ class FirebaseEventService {
 
   Future<QuerySnapshot> getEventList(
       {int limit, DocumentSnapshot startAfter}) async {
-    Query query = eventsRef.where('visible', isEqualTo: true).limit(limit);
+    Query query = eventsRef
+        .where('visible', isEqualTo: true)
+        .orderBy('startDate', descending: true)
+        .limit(limit);
 
     if (startAfter == null) {
       return query.get();

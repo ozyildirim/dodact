@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -45,7 +44,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
             } else {
               return Center(
                 child: Text(
-                  "Herhangi bir etkinlik oluşturulmamış.",
+                  "Herhangi bir etkinlik oluşturulmamış",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );
@@ -53,7 +52,7 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
           } else {
             return Center(
               child: Text(
-                "Herhangi bir etkinlik oluşturulmamış.",
+                "Herhangi bir etkinlik oluşturulmamış",
                 style: TextStyle(fontSize: kPageCenteredTextSize),
               ),
             );
@@ -66,76 +65,81 @@ class _UserProfileEventsTabState extends BaseState<UserProfileEventsTab> {
   Widget _buildUserEventCard(EventModel event) {
     bool isEnded = isEventEnded(event);
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () {
-          NavigationService.instance
-              .navigate(k_ROUTE_EVENT_DETAIL, args: event);
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(children: [
-            Container(
-              height: dynamicHeight(0.56),
-              width: dynamicWidth(0.60),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.8), BlendMode.dstATop),
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    event.eventImages[0],
-                  ),
-                ),
-              ),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: 250,
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey[50].withOpacity(0.7),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      event.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.fade,
+    if (event.eventImages != null && event.eventImages.length > 0) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: InkWell(
+          onTap: () {
+            NavigationService.instance
+                .navigate(k_ROUTE_EVENT_DETAIL, args: event);
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Stack(children: [
+              Container(
+                height: dynamicHeight(0.56),
+                width: dynamicWidth(0.60),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.8), BlendMode.dstATop),
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      event.eventImages[0],
                     ),
-                    subtitle: Text(
-                        DateFormat("dd.MM.yyyy")
-                            .format(event.startDate)
-                            .toString(),
-                        style: TextStyle(fontSize: 18)),
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: 250,
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[50].withOpacity(0.7),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        event.title,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.fade,
+                      ),
+                      subtitle: Text(
+                          DateFormat("dd.MM.yyyy")
+                              .format(event.startDate)
+                              .toString(),
+                          style: TextStyle(fontSize: 18)),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 1,
-              right: 1,
-              child: isEnded
-                  ? Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.hourglass_full, color: Colors.grey),
+              Positioned(
+                top: 1,
+                right: 1,
+                child: isEnded
+                    ? Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.white,
+                            child:
+                                Icon(Icons.hourglass_full, color: Colors.grey),
+                          ),
                         ),
-                      ),
-                    )
-                  : Container(),
-            )
-          ]),
+                      )
+                    : Container(),
+              )
+            ]),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container();
+    }
   }
 
   bool isEventEnded(EventModel event) {
