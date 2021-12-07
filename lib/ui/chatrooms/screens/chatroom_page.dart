@@ -13,6 +13,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:paginate_firestore/bloc/pagination_cubit.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
@@ -180,6 +181,8 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
     );
   }
 
+  bool showDate = false;
+
   buildMessageStream(String chatroomId) {
     return GestureDetector(
       onTap: () {
@@ -234,7 +237,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                         : Color(0xff194d25)),
                   ),
                   padding: EdgeInsets.all(16),
-                  child: SelectableText(
+                  child: Text(
                     message.message,
                     style: TextStyle(
                         fontSize: 16,
