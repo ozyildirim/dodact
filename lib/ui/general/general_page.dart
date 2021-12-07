@@ -62,28 +62,31 @@ class _GeneralPageState extends BaseState<GeneralPage> {
           ),
           child: SingleChildScrollView(
             child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Text(
-                    //   "Duyurular",
-                    //   textAlign: TextAlign.start,
-                    //   style: Theme.of(context).textTheme.headline1.copyWith(
-                    //       color: Colors.black,
-                    //       fontSize: 22,
-                    //       fontWeight: FontWeight.bold),
-                    // ),
-                    // SizedBox(
-                    //   height: 20,
-                    // ),
-                    AnnouncementPart(),
-                    SizedBox(
-                      height: 20,
-                    ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Text(
+                  //   "Duyurular",
+                  //   textAlign: TextAlign.start,
+                  //   style: Theme.of(context).textTheme.headline1.copyWith(
+                  //       color: Colors.black,
+                  //       fontSize: 22,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: AnnouncementPart(),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
 
-                    Text(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
                       "Öne Çıkan Gönderiler",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
@@ -91,14 +94,20 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    PostPart(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: PostPart(),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
                       "Kaçırılmaması Gereken Etkinlikler",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
@@ -106,12 +115,15 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    EventPart(),
-                    SizedBox(height: 20),
-                    Text(
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  EventPart(),
+                  SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
                       "Yakında",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
@@ -119,31 +131,19 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    AcikSahnePart(),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  AcikSahnePart(),
 
-                    SizedBox(
-                      height: 15,
-                    ),
-                    // Text(
-                    //   "Çark",
-                    //   textAlign: TextAlign.start,
-                    //   style: Theme.of(context).textTheme.headline1.copyWith(
-                    //       color: Colors.black,
-                    //       fontSize: 22,
-                    //       fontWeight: FontWeight.bold),
-                    // ),
-                    // SizedBox(
-                    //   height: 15,
-                    // ),
-                    // SpinnerPart(),
-                    SizedBox(
-                      height: 20,
-                    ),
+                  SizedBox(
+                    height: 30,
+                  ),
 
-                    Text(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
                       "Podcast Önerileri",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
@@ -151,15 +151,15 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    PodcastPart(),
-                    SizedBox(
-                      height: kToolbarHeight,
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  PodcastPart(),
+                  SizedBox(
+                    height: kToolbarHeight,
+                  )
+                ],
               ),
             ),
           ),

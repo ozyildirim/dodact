@@ -156,75 +156,67 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   ),
                   Container(
                     width: dynamicWidth(1) * 0.8,
-                    child: FormBuilderCheckbox(
-                      autovalidateMode: _autoValidate,
-                      checkColor: Colors.white,
-                      activeColor: kNavbarColor,
-                      name: "agreementsCheckbox",
-                      initialValue: false,
-                      focusNode: _checkboxFocus,
-                      title: InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return PrivacyPolicyPage();
-                          }));
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: "Gizlilik sözleşmesini",
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              TextSpan(
-                                text: " ve ",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              TextSpan(
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return KvkkPage();
-                                    }));
-                                  },
-                                text: "KVKK metnini",
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              TextSpan(
-                                text: " okudum, kabul ediyorum.",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                    child: RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "Kayıt olarak ",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
+                          TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return KvkkPage();
+                                }));
+                              },
+                            text: "KVKK metnini",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " ve ",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return PrivacyPolicyPage();
+                                }));
+                              },
+                            text: "gizlilik sözleşmesini",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " okuyup, kabul etmiş olursunuz.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        errorStyle:
-                            TextStyle(color: Colors.white, fontSize: 14),
-                      ),
-                      validator: FormBuilderValidators.equal(context, true,
-                          errorText: "Sözleşmeleri kabul etmelisin."),
                     ),
                   ),
+                  Text(" ve"),
 
                   RoundedButton(
                     textSize: 15,

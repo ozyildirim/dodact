@@ -13,9 +13,9 @@ class VideoPostHeader extends StatelessWidget {
       initialVideoId:
           YoutubePlayer.convertUrlToId(post.postContentURL), //Add videoID.
       flags: YoutubePlayerFlags(
+        forceHD: true,
         hideControls: false,
         controlsVisibleAtStart: true,
-        autoPlay: false,
         mute: false,
       ),
     );

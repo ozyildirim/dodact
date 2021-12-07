@@ -20,7 +20,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
 
   @override
   Widget build(BuildContext context) {
-    groupProvider = Provider.of<GroupProvider>(context, listen: false);
+    groupProvider = Provider.of<GroupProvider>(context);
     var mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
@@ -163,6 +163,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
         },
         onConfirmBtnTap: () async {
           deleteGroupPost(postId);
+          NavigationService.instance.pop();
         });
   }
 

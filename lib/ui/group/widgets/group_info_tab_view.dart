@@ -11,10 +11,10 @@ class GroupInfoTab extends StatelessWidget {
       child: provider.group != null
           ? SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
                   provider.group.groupDescription,
-                  style: TextStyle(fontSize: 22),
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
             )
