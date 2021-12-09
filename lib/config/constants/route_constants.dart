@@ -36,6 +36,7 @@ const k_ROUTE_POST_COMMENTS = '/post_comments';
 const k_ROUTE_PODCAST_DETAIL = '/podcast';
 const k_ROUTE_EVENTS_PAGE = '/events';
 const k_ROUTE_EVENT_DETAIL = '/event';
+const k_ROUTE_EVENT_EDIT_PAGE = '/edit_event';
 const k_ROUTE_COMMUNITIES_PAGE = '/communities';
 const k_ROUTE_COMMUNITY_DETAIL = '/community';
 const k_ROUTE_GROUPS_PAGE = '/groups';

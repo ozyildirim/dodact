@@ -25,6 +25,7 @@ import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
+import 'package:dodact_v1/ui/event/event_edit_page.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/general/subpages/acik_sahne_page.dart';
 import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
@@ -183,6 +184,9 @@ class NavigationRouteManager {
               event: args,
             ),
             settings);
+
+      case k_ROUTE_EVENT_EDIT_PAGE:
+        return _navigateToDefault(EventEditPage(event: args), settings);
 
       case k_ROUTE_GROUPS_PAGE:
         return _navigateToDefault(GroupsPage(), settings);

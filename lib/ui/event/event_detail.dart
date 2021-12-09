@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
@@ -105,7 +106,15 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                                     onTap: () async {
                                       await _showDeleteEventDialog(event.id);
                                     }),
-                              )
+                              ),
+                              // PopupMenuItem(
+                              //   child: ListTile(
+                              //       leading: Icon(FontAwesome5Regular.edit),
+                              //       title: Text("Düzenle"),
+                              //       onTap: () async {
+                              //         await _showEditEventDialog(event);
+                              //       }),
+                              // )
                             ]),
                   ),
                 )
@@ -563,7 +572,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     //}
   }
 
-  _showEditEventDialog() {}
+  _showEditEventDialog(EventModel event) {
+    NavigationService.instance.navigate(k_ROUTE_EVENT_EDIT_PAGE, args: event);
+  }
 
   _buildMap() {
     if (event.locationCoordinates != null) {
