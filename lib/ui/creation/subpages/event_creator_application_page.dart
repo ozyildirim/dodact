@@ -12,13 +12,15 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class CreatorApplicationPage extends StatefulWidget {
+class EventCreatorApplicationPage extends StatefulWidget {
   @override
-  State<CreatorApplicationPage> createState() => _CreatorApplicationPageState();
+  State<EventCreatorApplicationPage> createState() =>
+      _EventCreatorApplicationPageState();
 }
 
-class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
-  GlobalKey<FormBuilderState> creatorApplicationFormKey =
+class _EventCreatorApplicationPageState
+    extends BaseState<EventCreatorApplicationPage> {
+  GlobalKey<FormBuilderState> eventCreatorApplicationFormKey =
       new GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   FocusNode interestFocus = FocusNode();
@@ -107,21 +109,22 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
   }
 
   submitForm() async {
-    if (creatorApplicationFormKey.currentState.saveAndValidate()) {
-      var interest = creatorApplicationFormKey.currentState.value["interest"]
+    if (eventCreatorApplicationFormKey.currentState.saveAndValidate()) {
+      var interest = eventCreatorApplicationFormKey
+          .currentState.value["interest"]
           .toString()
           .trim();
-      var description = creatorApplicationFormKey
+      var description = eventCreatorApplicationFormKey
           .currentState.value["description"]
           .toString()
           .trim();
-      var link = creatorApplicationFormKey.currentState.value["link"]
+      var link = eventCreatorApplicationFormKey.currentState.value["link"]
           .toString()
           .trim();
 
       try {
         await applicationProvider
-            .createApplication("Creator", userProvider.currentUser.uid, {
+            .createApplication("Post_Creator", userProvider.currentUser.uid, {
           "selectedInterest": interest,
           "description": description,
           "link": link,
@@ -178,7 +181,7 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
   buildFormPart() {
     var size = MediaQuery.of(context).size;
     return FormBuilder(
-      key: creatorApplicationFormKey,
+      key: eventCreatorApplicationFormKey,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
