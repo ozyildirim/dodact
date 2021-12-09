@@ -73,7 +73,8 @@ class _LandingPageState extends BaseState<LandingPage> {
           builder: (_, model, child) {
             if (model.currentUser != null) {
               if (model.currentUser.newUser) return SignUpDetail();
-              if (model.currentUser.interests == null)
+              if (model.currentUser.interests == null ||
+                  model.currentUser.interests.isEmpty)
                 return InterestRegistrationPage();
 
               return HomePage();

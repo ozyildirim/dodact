@@ -16,8 +16,8 @@ const k_ROUTE_CREATION_LANDING = "/creation-landing";
 const k_ROUTE_USER_APPLICATION_MENU = "/user-application-menu";
 const k_ROUTE_USER_APPLICATION_HISTORY = "/user-application-history";
 const k_ROUTE_STREAMER_APPLICATION = "/streamer-application";
-const k_ROUTE_CONTENT_CREATOR_APPLICATION = "/creator-application";
-const k_ROUTE_EVENT_CREATOR_APPLICATION = "/creator-application";
+const k_ROUTE_CONTENT_CREATOR_APPLICATION = "/content-creator-application";
+const k_ROUTE_EVENT_CREATOR_APPLICATION = "/event-creator-application";
 const k_ROUTE_GROUP_APPLICATION = "/group-creator-application";
 
 const k_ROUTE_CREATION_MENU = "/creation";

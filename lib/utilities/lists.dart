@@ -1,10 +1,3 @@
-List<String> artCategories = [
-  "Müzik",
-  "Dans",
-  "Tiyatro",
-  "Görsel Sanatlar",
-];
-
 List<String> eventTypes = [
   "Açık Hava Etkinliği",
   "Kapalı Mekan Etkinliği",

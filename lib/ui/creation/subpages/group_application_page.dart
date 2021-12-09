@@ -8,7 +8,6 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class GroupApplicationPage extends StatefulWidget {
@@ -67,20 +66,17 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             child: Column(
               children: [
                 Container(
-                  height: size.height * 0.2,
-                  // child:
-                  //     Image.asset('assets/images/application_page/woman.png'),
-                  child: SvgPicture.asset(
-                      "assets/images/application_page/group_application.svg",
-                      semanticsLabel: 'A red up arrow'),
+                  height: (size.height - kToolbarHeight) * 0.2,
+                  child: Image.asset(
+                    "assets/images/application_page/group_application.png",
+                  ),
                 ),
                 Container(
-                  height: size.height * 0.60,
+                  height: (size.height - kToolbarHeight) * 0.8,
                   width: size.width,
                   child: buildFormPart(),
                 ),
                 // Expanded(child: buildFormPart()),
-                buildButton(),
               ],
             ),
           ),
@@ -99,7 +95,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
           "Başvur",
           style: TextStyle(color: Colors.white, fontSize: 18),
         ),
-        color: Colors.blueGrey,
+        color: kNavbarColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
     );
@@ -188,7 +184,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
-                "Oluşturmak İstediğin Topluluğun Adı",
+                "Topluluğunun adı ne olsun istersin?",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ),
@@ -219,17 +215,18 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
             Row(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Topluluğunuzun Faaliyet Gösterdiği Alan",
+                  "Hangi sanat dalıyla ilgileniyorsunuz?",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Topluluk olarak üzerine çalıştığınız sanat dalını seçmelisin.");
+                          "Topluluk olarak üzerinde çalıştığınız sanat dalını seçmelisin.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -268,10 +265,11 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
+            SizedBox(height: 15),
             Row(
               children: [
                 Text(
-                  "Topluluk Hakkında Detaylı Bilgi",
+                  "Bize biraz topluluğundan bahseder misin?",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 IconButton(
@@ -308,16 +306,19 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
+            SizedBox(height: 15),
             Row(
               children: [
-                Text(
-                  "Bağlantı",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Şimdiye kadarki çalışmalarınızı merak ediyoruz. Bizimle bir link paylaşır mısın?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Topluluğunuzu ve çalışmalarınızı inceleyebileceğimiz herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
+                          "Topluluğunuzla ve çalışmalarınızla ilgili herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -435,7 +436,9 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),
               ),
-            )
+            ),
+            buildButton(),
+            SizedBox(height: 30),
           ],
         ),
       ),

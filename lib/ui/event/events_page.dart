@@ -5,6 +5,7 @@ import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
+import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -448,12 +449,12 @@ class _EventsPageState extends BaseState<EventsPage> {
   }
 
   buildArtCategoryDropdownItems() {
-    return artCategories
+    return interestCategoryList
         .map((category) => DropdownMenuItem(
-              value: category,
+              value: category.name,
               child: Center(
                 child: Text(
-                  category,
+                  category.name,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

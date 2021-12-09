@@ -141,8 +141,10 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                           userProvider
                                   .currentUser.permissions["create_event"] ==
                               false
-                      ? _buildCard(Icons.post_add, "Etkinlik Üretici Başvurusu",
-                          "Etkinliklerini diğer sanatseverlere kolayca ulaştır!",
+                      ? _buildCard(
+                          Icons.post_add,
+                          "Etkinlik Oluşturucu Başvurusu",
+                          "Sanatsal aktivitelerini diğer sanatseverlere kolayca ulaştır!",
                           () {
                           NavigationService.instance
                               .navigate(k_ROUTE_EVENT_CREATOR_APPLICATION)
@@ -177,77 +179,12 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                 ],
               ),
             );
-
-            // return GridView(
-            //   reverse: true,
-            //   shrinkWrap: true,
-            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //       crossAxisCount: 1, childAspectRatio: 2),
-            //   children: [
-            //     hasCreatorApplication == false
-            //         ? _buildCard(
-            //             Icons.post_add,
-            //             "İçerik&Etkinlik Üretici Başvurusu",
-            //             "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
-            //             () {
-            //             NavigationService.instance
-            //                 .navigate(k_ROUTE_CREATOR_APPLICATION)
-            //                 .then((value) => setState(() {}));
-            //           })
-            //         : Container(),
-            //     hasStreamerApplication == false
-            //         ? _buildCard(Icons.live_tv, "Yayıncı Başvurusu",
-            //             "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
-            //             () {
-            //             // NavigationService.instance
-            //             //     .navigate(k_ROUTE_STREAMER_APPLICATION)
-            //             //     .then((value) => setState(() {}));
-            //             showSnackBar("Çok yakında!");
-            //           })
-            //         : Container(),
-            //     hasGroupApplication == false
-            //         ? _buildCard(Icons.group, "Topluluk Başvurusu",
-            //             "Topluluk ve  sanat alanındaki topluluk çalışmalarını hedef kitlen ile buluştur.",
-            //             () {
-            //             NavigationService.instance
-            //                 .navigate(k_ROUTE_GROUP_APPLICATION)
-            //                 .then((value) => setState(() {}));
-            //           })
-            //         : Container(),
-            //   ],
-            // );
           } else {
             return Center(
               child: Text("Bir hata oluştu."),
             );
           }
         });
-
-    // return GridView(
-    //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //       crossAxisCount: 2, childAspectRatio: 1),
-    //   children: [
-    //     hasCreatorApplication != true
-    // ? _buildCard(Icons.post_add, "İçerik&Etkinlik Üretici",
-    //     "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
-    //     () {
-    //     NavigationService.instance
-    //         .navigate(k_ROUTE_CREATOR_APPLICATION);
-    //           })
-    //         : Container(),
-    //     hasStreamerApplication != true
-    //         ? _buildCard(
-    //             Icons.stream,
-    //             "Canlı Yayın Üretici",
-    //             "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
-    //             () {})
-    //         : Container(),
-    //     hasGroupApplication != true
-    //         ? _buildCard(Icons.group, "Topluluk Başvurusu",
-    //             "Topluluğunu Dodact'in gücü ile buluştur!", () {})
-    //         : Container(),
-    //   ],
-    // );
   }
 
   showSnackBar(String message) {
@@ -322,24 +259,35 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     listPages = [
       PageViewModel(
-        image: SvgPicture.asset(
-          'assets/images/application_page/application_onboarding1.svg',
+        image: Image.asset(
+          'assets/images/application_page/application_onboarding_1.png',
           height: size.height * 0.3,
-          currentColor: kNavbarColor,
         ),
         titleWidget: Text(
-          "İçeriklerini & Etkinliklerine Herkes Kolaylıkla Erişsin",
+          "İçeriklerin Göz Önünde Olsun",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         body:
-            "Dodact içerisinde içeriklerini ve etkinliklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+            "Dodact içerisinde içeriklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
       ),
       PageViewModel(
-        image: SvgPicture.asset(
-          'assets/images/application_page/application_onboarding2.svg',
+        image: Image.asset(
+          'assets/images/application_page/application_onboarding_2.png',
           height: size.height * 0.3,
-          currentColor: kNavbarColor,
+        ),
+        titleWidget: Text(
+          "Etkinliklerine Herkes Kolaylıkla Ulaşsın",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Etkinliklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+      ),
+      PageViewModel(
+        image: Image.asset(
+          'assets/images/application_page/application_onboarding_3.png',
+          height: size.height * 0.3,
         ),
         titleWidget: Text(
           "Canlı Yayınlarını Dodact Üzerinden Paylaş",
