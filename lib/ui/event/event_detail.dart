@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
@@ -105,7 +106,15 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                                     onTap: () async {
                                       await _showDeleteEventDialog(event.id);
                                     }),
-                              )
+                              ),
+                              // PopupMenuItem(
+                              //   child: ListTile(
+                              //       leading: Icon(FontAwesome5Regular.edit),
+                              //       title: Text("Düzenle"),
+                              //       onTap: () async {
+                              //         await _showEditEventDialog(event);
+                              //       }),
+                              // )
                             ]),
                   ),
                 )
@@ -326,13 +335,15 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
             child: ListTile(
-              leading: Icon(Icons.category),
+              leading: Icon(
+                Icons.category,
+              ),
               title: Text(
                 event.eventType +
                     (event.isOnline
                         ? " / Online Etkinlik"
                         : " / Fiziksel Etkinlik"),
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               subtitle: Text("Etkinlik Türü"),
             ),
@@ -344,7 +355,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     leading: Icon(Icons.location_on),
                     title: Text(
                       event.address,
-                      style: TextStyle(fontSize: 16),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     subtitle: Text("Adres"),
                     trailing: CircleAvatar(
@@ -367,7 +379,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     leading: Icon(Icons.link),
                     title: Text(
                       "Referans Bağlantı",
-                      style: TextStyle(fontSize: 16),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     subtitle: Text("Etkinlik Web Adresi"),
                     onTap: () {
@@ -387,14 +400,21 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             child: ListTile(
               leading: Icon(Icons.calendar_today),
               title: Text(
-                DateFormat("dd.MM.yyyy HH:mm", "tr_TR")
-                        .format(event.startDate) +
-                    " - " +
-                    DateFormat("dd.MM.yyyy HH:mm", "tr_TR")
-                        .format(event.endDate),
-                style: TextStyle(fontSize: 16),
+                DateFormat("dd.MM.yyyy HH:mm", "tr_TR").format(event.startDate),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
-              subtitle: Text("Etkinlik Başlangıç/Bitiş Tarihleri"),
+              subtitle: Text("Etkinlik Başlangıç Tarihi"),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: ListTile(
+              leading: Icon(Icons.calendar_today),
+              title: Text(
+                DateFormat("dd.MM.yyyy HH:mm", "tr_TR").format(event.endDate),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              subtitle: Text("Etkinlik Bitiş Tarihi"),
             ),
           ),
         ],
@@ -563,7 +583,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     //}
   }
 
-  _showEditEventDialog() {}
+  _showEditEventDialog(EventModel event) {
+    NavigationService.instance.navigate(k_ROUTE_EVENT_EDIT_PAGE, args: event);
+  }
 
   _buildMap() {
     if (event.locationCoordinates != null) {

@@ -11,8 +11,10 @@ import 'package:dodact_v1/ui/common/screens/about_dodact_page.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/creation/creation_landing_page.dart';
 import 'package:dodact_v1/ui/creation/creation_menu_page.dart';
-import 'package:dodact_v1/ui/creation/subpages/creator_application_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/application_history_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/content_creator_application_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/event_creation_page.dart';
+import 'package:dodact_v1/ui/creation/subpages/event_creator_application_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/group_application_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/post_creation_page.dart';
 import 'package:dodact_v1/ui/creation/subpages/stream_creation_page.dart';
@@ -23,6 +25,7 @@ import 'package:dodact_v1/ui/detail/post_detail.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
+import 'package:dodact_v1/ui/event/event_edit_page.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/general/subpages/acik_sahne_page.dart';
 import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
@@ -103,11 +106,17 @@ class NavigationRouteManager {
       case k_ROUTE_USER_APPLICATION_MENU:
         return _navigateToDefault(UserApplicationMenuPage(), settings);
 
+      case k_ROUTE_USER_APPLICATION_HISTORY:
+        return _navigateToDefault(UserApplicationHistoryPage(), settings);
+
       case k_ROUTE_STREAMER_APPLICATION:
         return _navigateToDefault(StreamerApplicationPage(), settings);
 
-      case k_ROUTE_CREATOR_APPLICATION:
-        return _navigateToDefault(CreatorApplicationPage(), settings);
+      case k_ROUTE_CONTENT_CREATOR_APPLICATION:
+        return _navigateToDefault(ContentCreatorApplicationPage(), settings);
+
+      case k_ROUTE_EVENT_CREATOR_APPLICATION:
+        return _navigateToDefault(EventCreatorApplicationPage(), settings);
 
       case k_ROUTE_GROUP_APPLICATION:
         return _navigateToDefault(GroupApplicationPage(), settings);
@@ -175,6 +184,9 @@ class NavigationRouteManager {
               event: args,
             ),
             settings);
+
+      case k_ROUTE_EVENT_EDIT_PAGE:
+        return _navigateToDefault(EventEditPage(event: args), settings);
 
       case k_ROUTE_GROUPS_PAGE:
         return _navigateToDefault(GroupsPage(), settings);

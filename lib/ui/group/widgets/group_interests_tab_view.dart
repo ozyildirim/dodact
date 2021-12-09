@@ -33,25 +33,6 @@ class GroupInterestsTabView extends StatelessWidget {
     }
   }
 
-  // buildInterstCard() {
-  //   return Card(
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //           image: DecorationImage(
-  //               image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
-  //               fit: BoxFit.cover)),
-  //       child: ExpansionTile(
-  //         title: Text('Birth of Universe'),
-  //         children: <Widget>[
-  //           Text('Big Bang'),
-  //           Text('Birth of the Sun'),
-  //           Text('Earth is Born'),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   buildInterestElements() {
     var groupInterests = group.interests;
     // var coverPhoto = group.coverPhoto;

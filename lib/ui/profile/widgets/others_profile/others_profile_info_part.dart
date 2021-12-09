@@ -17,87 +17,108 @@ class OthersProfileInfoTab extends StatelessWidget {
       return Center(child: spinkit);
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          !user.privacySettings['hide_education'] && user.education.isNotEmpty
-              ? ListTile(
-                  leading: CircleAvatar(
-                    foregroundColor: Colors.greenAccent,
-                    radius: 16,
-                    child: Icon(
-                      Icons.school,
-                      color: Colors.white,
+    buildTiles() {
+      if (user.education.isEmpty &&
+          user.profession.isEmpty &&
+          user.userDescription.isEmpty) {
+        return Center(
+          child: Container(
+            width: size.width * 0.8,
+            child: Image.asset(
+              'assets/images/app/empty_profile.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+        );
+      } else {
+        return Column(
+          children: [
+            !user.privacySettings['hide_education'] && user.education.isNotEmpty
+                ? ListTile(
+                    leading: CircleAvatar(
+                      foregroundColor: Colors.greenAccent,
+                      radius: 16,
+                      child: Icon(
+                        Icons.school,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  title: Text("Öğrenim Durumu",
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                  subtitle: Text(
-                    user.education,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
+                    title: Text("Öğrenim Durumu",
+                        style:
+                            TextStyle(fontSize: 13, color: Colors.grey[600])),
+                    subtitle: Text(
+                      user.education,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                )
-              : Container(),
-          SizedBox(height: 10),
-          !user.privacySettings['hide_profession'] && user.profession.isNotEmpty
-              ? ListTile(
-                  leading: CircleAvatar(
-                    foregroundColor: Colors.greenAccent,
-                    radius: 16,
-                    child: Icon(
-                      Icons.work,
-                      color: Colors.white,
+                  )
+                : Container(),
+            SizedBox(height: 10),
+            !user.privacySettings['hide_profession'] &&
+                    user.profession.isNotEmpty
+                ? ListTile(
+                    leading: CircleAvatar(
+                      foregroundColor: Colors.greenAccent,
+                      radius: 16,
+                      child: Icon(
+                        Icons.work,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  title: Text("Meslek",
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                  subtitle: Text(
-                    user.profession,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
+                    title: Text("Meslek",
+                        style:
+                            TextStyle(fontSize: 13, color: Colors.grey[600])),
+                    subtitle: Text(
+                      user.profession,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                )
-              : Container(),
-          SizedBox(height: 10),
-          ListTile(
-            leading: CircleAvatar(
-              foregroundColor: Colors.greenAccent,
-              radius: 16,
-              child: Icon(
-                Icons.info,
-                color: Colors.white,
+                  )
+                : Container(),
+            SizedBox(height: 10),
+            ListTile(
+              leading: CircleAvatar(
+                foregroundColor: Colors.greenAccent,
+                radius: 16,
+                child: Icon(
+                  Icons.info,
+                  color: Colors.white,
+                ),
+              ),
+              title: Text("Detaylı Bilgi",
+                  style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+              subtitle: ReadMoreText(
+                user.userDescription,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+                trimLines: 2,
+                colorClickableText: Colors.black,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'Daha fazla detay',
+                trimExpandedText: 'Küçült',
+                lessStyle: TextStyle(fontWeight: FontWeight.bold),
+                moreStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
             ),
-            title: Text("Detaylı Bilgi",
-                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-            subtitle: ReadMoreText(
-              user.userDescription,
-              style: TextStyle(color: Colors.black, fontSize: 16),
-              trimLines: 2,
-              colorClickableText: Colors.black,
-              trimMode: TrimMode.Line,
-              trimCollapsedText: 'Daha fazla detay',
-              trimExpandedText: 'Küçült',
-              lessStyle: TextStyle(fontWeight: FontWeight.bold),
-              moreStyle: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+            SizedBox(height: 20),
+            Container(
+              // width: size.width * 0.6,
+              height: size.height * 0.1,
+              child: buildSocialIcons(user),
             ),
-          ),
-          SizedBox(height: 20),
-          Container(
-            // width: size.width * 0.6,
-            height: size.height * 0.1,
-            child: buildSocialIcons(user),
-          ),
-        ],
-      ),
+          ],
+        );
+      }
+    }
+
+    return SingleChildScrollView(
+      child: buildTiles(),
     );
   }
 

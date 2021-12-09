@@ -36,7 +36,6 @@ class FirebaseApplicationService {
   }
 
   Future cancelApplication(String userId, String applicationId) async {
-    // await applicationsRef.doc(applicationId).;
-    //TODO: Servisini yaz
+    await applicationsRef.doc(applicationId).delete();
   }
 }

@@ -7,6 +7,7 @@ class ApplicationModel {
   String applicantId;
   Map<String, dynamic> answers;
   String status;
+  String rejectionReason;
 
   ApplicationModel(
       {this.applicationId,
@@ -14,7 +15,8 @@ class ApplicationModel {
       this.applicationDate,
       this.applicantId,
       this.answers,
-      this.status});
+      this.status,
+      this.rejectionReason});
 
   ApplicationModel.fromJson(Map<String, dynamic> json)
       : applicationId = json['applicationId'],
@@ -22,7 +24,8 @@ class ApplicationModel {
         applicationType = json['applicationType'],
         applicantId = json['applicantId'],
         status = json['status'],
-        answers = json['answers'];
+        answers = json['answers'],
+        rejectionReason = json['rejectionReason'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -33,6 +36,7 @@ class ApplicationModel {
     data['answers'] = this.answers;
     data['applicationType'] = this.applicationType;
     data['status'] = this.status;
+    data['rejectionReason'] = this.rejectionReason;
     return data;
   }
 }

@@ -9,16 +9,19 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+
 import 'package:provider/provider.dart';
 
-class CreatorApplicationPage extends StatefulWidget {
+class EventCreatorApplicationPage extends StatefulWidget {
   @override
-  State<CreatorApplicationPage> createState() => _CreatorApplicationPageState();
+  State<EventCreatorApplicationPage> createState() =>
+      _EventCreatorApplicationPageState();
 }
 
-class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
-  GlobalKey<FormBuilderState> creatorApplicationFormKey =
+class _EventCreatorApplicationPageState
+    extends BaseState<EventCreatorApplicationPage> {
+  GlobalKey<FormBuilderState> eventCreatorApplicationFormKey =
       new GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   FocusNode interestFocus = FocusNode();
@@ -68,20 +71,17 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
             child: Column(
               children: [
                 Container(
-                  height: size.height * 0.2,
-                  // child:
-                  //     Image.asset('assets/images/application_page/woman.png'),
-                  child: SvgPicture.asset(
-                      "assets/images/application_page/woman.svg",
-                      semanticsLabel: 'A red up arrow'),
+                  height: (size.height - kToolbarHeight) * 0.2,
+                  child: Image.asset(
+                    "assets/images/application_page/event_application.png",
+                  ),
                 ),
                 Container(
-                  height: size.height * 0.60,
+                  height: (size.height - kToolbarHeight) * 0.80,
                   width: size.width,
                   child: buildFormPart(),
                 ),
                 // Expanded(child: buildFormPart()),
-                buildButton(),
               ],
             ),
           ),
@@ -100,28 +100,29 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
           "Başvur",
           style: TextStyle(color: Colors.white, fontSize: 18),
         ),
-        color: Colors.blueGrey,
+        color: kNavbarColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
     );
   }
 
   submitForm() async {
-    if (creatorApplicationFormKey.currentState.saveAndValidate()) {
-      var interest = creatorApplicationFormKey.currentState.value["interest"]
+    if (eventCreatorApplicationFormKey.currentState.saveAndValidate()) {
+      var interest = eventCreatorApplicationFormKey
+          .currentState.value["interest"]
           .toString()
           .trim();
-      var description = creatorApplicationFormKey
+      var description = eventCreatorApplicationFormKey
           .currentState.value["description"]
           .toString()
           .trim();
-      var link = creatorApplicationFormKey.currentState.value["link"]
+      var link = eventCreatorApplicationFormKey.currentState.value["link"]
           .toString()
           .trim();
 
       try {
         await applicationProvider
-            .createApplication("Creator", userProvider.currentUser.uid, {
+            .createApplication("Event_Creator", userProvider.currentUser.uid, {
           "selectedInterest": interest,
           "description": description,
           "link": link,
@@ -178,22 +179,24 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
   buildFormPart() {
     var size = MediaQuery.of(context).size;
     return FormBuilder(
-      key: creatorApplicationFormKey,
+      key: eventCreatorApplicationFormKey,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
             Row(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "İçerik Oluşturmak İstediğin Sanat Dalı",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Hangi sanat dalıyla ilgili etkinlik oluşturmak istersin?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Aktif olduğun, takip etmekten hoşlandığın ve paylaşım yapabileceğin sanat dalını seçmelisin.");
+                          "Öncelikli olarak hangi sanat dalı ile ilgili etkinlik oluşturmak istediğini seçmelisin. ");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -232,16 +235,19 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                 ),
               ),
             ),
+            SizedBox(height: 30),
             Row(
               children: [
-                Text(
-                  "Detaylı Bilgi",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Şimdiye kadar herhangi bir etkinlik düzenledin mi?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Bize biraz kendinden ve sanat geçmişinden bahseder misin? Aldığın eğitimler veya bu zamana kadar ortaya koymuş olduğun performanslardan bahsedebilirsin.");
+                          "Örneğin: üniversite etkinlikleri, sosyal sorumluluk etkinlikleri, profesyonel veya amatör olarak yapılan etkinlikler");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -272,16 +278,19 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                 ),
               ),
             ),
+            SizedBox(height: 10),
             Row(
               children: [
-                Text(
-                  "Bağlantı",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Şimdiye kadarki etkinliklerini merak ediyoruz. Bizimle örnek bir bağlantı paylaşır mısın?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Yaptığın çalışmaları inceleyebileceğimiz herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
+                          "Etkinliklerle ilgili materyal, video, görsel vb. içeren bir bağlantı olabilir. Diğer kullandığın platformlardan bağlantılar da olabilir.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -318,50 +327,6 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
               ),
               child: FormBuilderCheckbox(
                 activeColor: kNavbarColor,
-                name: 'termsOfUsageAgreement',
-                initialValue: false,
-                // subtitle: Text(""),
-                title: InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return TermsOfUsagePage();
-                    }));
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: "Kullanım koşulları sözleşmesini ",
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        TextSpan(
-                          text: "okudum ve kabul ediyorum.",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                contentPadding: EdgeInsets.zero,
-                validator: FormBuilderValidators.equal(context, true,
-                    errorText: "Sözleşmeyi kabul etmelisin."),
-              ),
-            ),
-            Theme(
-              data: Theme.of(context).copyWith(
-                unselectedWidgetColor: Colors.black,
-              ),
-              child: FormBuilderCheckbox(
-                activeColor: kNavbarColor,
                 name: 'copyright',
                 initialValue: false,
                 // subtitle: Text(""),
@@ -377,50 +342,6 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                       children: const <TextSpan>[
                         TextSpan(
                           text: "Telif hakları sözleşmesini ",
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        TextSpan(
-                          text: "okudum ve kabul ediyorum.",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                contentPadding: EdgeInsets.zero,
-                validator: FormBuilderValidators.equal(context, true,
-                    errorText: "Sözleşmeyi kabul etmelisin."),
-              ),
-            ),
-            Theme(
-              data: Theme.of(context).copyWith(
-                unselectedWidgetColor: Colors.black,
-              ),
-              child: FormBuilderCheckbox(
-                activeColor: kNavbarColor,
-                name: 'privacy',
-                initialValue: false,
-                // subtitle: Text(""),
-                title: InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return PrivacyPolicyPage();
-                    }));
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: "Gizlilik sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.bold,
@@ -487,7 +408,9 @@ class _CreatorApplicationPageState extends BaseState<CreatorApplicationPage> {
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),
               ),
-            )
+            ),
+            buildButton(),
+            SizedBox(height: 30)
           ],
         ),
       ),

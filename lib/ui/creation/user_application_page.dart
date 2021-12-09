@@ -46,12 +46,21 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
         actionsIconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ApplicationPageIntroductionPage();
+              }));
+            },
+            icon: Icon(Icons.info),
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.history_outlined,
+              ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ApplicationPageIntroductionPage();
-                }));
-              },
-              icon: Icon(Icons.info))
+                NavigationService.instance
+                    .navigate(k_ROUTE_USER_APPLICATION_HISTORY);
+              })
         ],
       ),
       body: buildBody(),
@@ -64,25 +73,6 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
     return Container(
       height: size.height,
       width: size.width,
-      // child: Column(
-      //   children: [
-      //     // Card(
-      //     //   margin: EdgeInsets.zero,
-      //     //   elevation: 2,
-      //     //   child: Container(
-      //     //     height: size.height * 0.3,
-      //     //     child: CachedNetworkImage(
-      //     //         imageUrl:
-      //     //             "https://ae01.alicdn.com/kf/HTB1U7dDX6LuK1Rjy0Fhq6xpdFXad.jpg",
-      //     //         width: size.width,
-      //     //         fit: BoxFit.cover),
-      //     //   ),
-      //     // ),
-      //     // Expanded(
-      //     //   child: buildCardPart(),
-      //     // )
-      //   ],
-      // ),
       decoration: BoxDecoration(
         image: DecorationImage(
           colorFilter: ColorFilter.mode(
@@ -110,60 +100,84 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
             List<ApplicationModel> applications = snapshot.data;
 
             bool hasStreamerApplication = false;
-            bool hasCreatorApplication = false;
+            bool hasContentCreatorApplication = false;
+            bool hasEventCreatorApplication = false;
             bool hasGroupApplication = false;
 
             for (var application in applications) {
               if (application.applicationType == "Streamer") {
                 hasStreamerApplication = true;
-              } else if (application.applicationType == "Creator") {
-                hasCreatorApplication = true;
+              } else if (application.applicationType == "Content_Creator") {
+                hasContentCreatorApplication = true;
+              } else if (application.applicationType == "Event_Creator") {
+                hasEventCreatorApplication = true;
               } else if (application.applicationType == "Group") {
                 hasGroupApplication = true;
               }
             }
 
             print("hasStreamerApplication: $hasStreamerApplication");
-            print("hasCreatorApplication: $hasCreatorApplication");
+            print(
+                "hasContentCreatorApplication: $hasContentCreatorApplication");
+            print("hasEventCreatorApplication: $hasEventCreatorApplication");
             print("hasGroupApplication: $hasGroupApplication");
 
-            return GridView(
-              reverse: true,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1, childAspectRatio: 2),
-              children: [
-                hasCreatorApplication == false
-                    ? _buildCard(
-                        Icons.post_add,
-                        "İçerik&Etkinlik Üretici Başvurusu",
-                        "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
-                        () {
-                        NavigationService.instance
-                            .navigate(k_ROUTE_CREATOR_APPLICATION)
-                            .then((value) => setState(() {}));
-                      })
-                    : Container(),
-                hasStreamerApplication == false
-                    ? _buildCard(Icons.live_tv, "Yayıncı Başvurusu",
-                        "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
-                        () {
-                        // NavigationService.instance
-                        //     .navigate(k_ROUTE_STREAMER_APPLICATION)
-                        //     .then((value) => setState(() {}));
-                        showSnackBar("Çok yakında!");
-                      })
-                    : Container(),
-                hasGroupApplication == false
-                    ? _buildCard(Icons.group, "Topluluk Başvurusu",
-                        "Topluluk ve  sanat alanındaki topluluk çalışmalarını hedef kitlen ile buluştur.",
-                        () {
-                        NavigationService.instance
-                            .navigate(k_ROUTE_GROUP_APPLICATION)
-                            .then((value) => setState(() {}));
-                      })
-                    : Container(),
-              ],
+            return Center(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  hasContentCreatorApplication == false &&
+                          userProvider.currentUser.permissions["create_post"] ==
+                              false
+                      ? _buildCard(Icons.post_add, "İçerik Üretici Başvurusu",
+                          "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
+                          () {
+                          NavigationService.instance
+                              .navigate(k_ROUTE_CONTENT_CREATOR_APPLICATION)
+                              .then((value) => setState(() {}));
+                        })
+                      : Container(),
+                  hasEventCreatorApplication == false &&
+                          userProvider
+                                  .currentUser.permissions["create_event"] ==
+                              false
+                      ? _buildCard(
+                          Icons.post_add,
+                          "Etkinlik Oluşturucu Başvurusu",
+                          "Sanatsal aktivitelerini diğer sanatseverlere kolayca ulaştır!",
+                          () {
+                          NavigationService.instance
+                              .navigate(k_ROUTE_EVENT_CREATOR_APPLICATION)
+                              .then((value) => setState(() {}));
+                        })
+                      : Container(),
+                  hasGroupApplication == false &&
+                          userProvider
+                                  .currentUser.permissions["create_group"] ==
+                              false
+                      ? _buildCard(Icons.group, "Topluluk Başvurusu",
+                          "Topluluk ve  sanat alanındaki topluluk çalışmalarını hedef kitlen ile buluştur.",
+                          () {
+                          NavigationService.instance
+                              .navigate(k_ROUTE_GROUP_APPLICATION)
+                              .then((value) => setState(() {}));
+                        })
+                      : Container(),
+                  hasStreamerApplication == false &&
+                          userProvider
+                                  .currentUser.permissions["create_stream"] ==
+                              false
+                      ? _buildCard(Icons.live_tv, "Yayıncı Başvurusu",
+                          "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
+                          () {
+                          // NavigationService.instance
+                          //     .navigate(k_ROUTE_STREAMER_APPLICATION)
+                          //     .then((value) => setState(() {}));
+                          showSnackBar("Çok yakında!");
+                        })
+                      : Container(),
+                ],
+              ),
             );
           } else {
             return Center(
@@ -171,44 +185,18 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
             );
           }
         });
-
-    // return GridView(
-    //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //       crossAxisCount: 2, childAspectRatio: 1),
-    //   children: [
-    //     hasCreatorApplication != true
-    // ? _buildCard(Icons.post_add, "İçerik&Etkinlik Üretici",
-    //     "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
-    //     () {
-    //     NavigationService.instance
-    //         .navigate(k_ROUTE_CREATOR_APPLICATION);
-    //           })
-    //         : Container(),
-    //     hasStreamerApplication != true
-    //         ? _buildCard(
-    //             Icons.stream,
-    //             "Canlı Yayın Üretici",
-    //             "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
-    //             () {})
-    //         : Container(),
-    //     hasGroupApplication != true
-    //         ? _buildCard(Icons.group, "Topluluk Başvurusu",
-    //             "Topluluğunu Dodact'in gücü ile buluştur!", () {})
-    //         : Container(),
-    //   ],
-    // );
   }
 
   showSnackBar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text(
-          message,
-          overflow: TextOverflow.fade,
-        ),
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 2),
+      behavior: SnackBarBehavior.floating,
+      content: new Text(
+        message,
+        softWrap: false,
+        style: TextStyle(fontSize: 16),
       ),
-    );
+    ));
   }
 
   _buildCard(IconData icon, String title, String description, Function onTap,
@@ -271,24 +259,35 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     listPages = [
       PageViewModel(
-        image: SvgPicture.asset(
-          'assets/images/application_page/application_onboarding1.svg',
+        image: Image.asset(
+          'assets/images/application_page/application_onboarding_1.png',
           height: size.height * 0.3,
-          currentColor: kNavbarColor,
         ),
         titleWidget: Text(
-          "İçeriklerini & Etkinliklerine Herkes Kolaylıkla Erişsin",
+          "İçeriklerin Göz Önünde Olsun",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         body:
-            "Dodact içerisinde içeriklerini ve etkinliklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+            "Dodact içerisinde içeriklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
       ),
       PageViewModel(
-        image: SvgPicture.asset(
-          'assets/images/application_page/application_onboarding2.svg',
+        image: Image.asset(
+          'assets/images/application_page/application_onboarding_2.png',
           height: size.height * 0.3,
-          currentColor: kNavbarColor,
+        ),
+        titleWidget: Text(
+          "Etkinliklerine Herkes Kolaylıkla Ulaşsın",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Etkinliklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+      ),
+      PageViewModel(
+        image: Image.asset(
+          'assets/images/application_page/application_onboarding_3.png',
+          height: size.height * 0.3,
         ),
         titleWidget: Text(
           "Canlı Yayınlarını Dodact Üzerinden Paylaş",

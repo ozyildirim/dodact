@@ -1,4 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,38 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
     var size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
-      child: Column(
+      child: buildTiles(),
+    );
+  }
+
+  buildTiles() {
+    var user = userProvider.currentUser;
+    var size = MediaQuery.of(context).size;
+    if (userProvider.currentUser.education.isEmpty &&
+        userProvider.currentUser.profession.isEmpty &&
+        userProvider.currentUser.userDescription.isEmpty) {
+      return Center(
+          child: Column(
+        children: [
+          Container(
+            width: size.width * 0.8,
+            child: Image.asset(
+              'assets/images/app/empty_profile.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              NavigationService.instance
+                  .navigate(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
+            },
+            child: Text("Profiline detayları eklemek için tıkla",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+          ),
+        ],
+      ));
+    } else {
+      return Column(
         children: [
           ListTile(
             leading: CircleAvatar(
@@ -92,10 +125,10 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
             // width: size.width * 0.6,
             height: size.height * 0.1,
             child: buildSocialIcons(user),
-          ),
+          )
         ],
-      ),
-    );
+      );
+    }
   }
 
   buildSocialIcons(UserObject user) {
