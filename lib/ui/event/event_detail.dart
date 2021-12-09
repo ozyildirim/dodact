@@ -575,6 +575,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         zoom: 8,
       );
 
+      Marker(
+          markerId: MarkerId("0"),
+          position: LatLng(double.parse(lat), double.parse(lng)));
+
       Navigator.push(
         context,
         MaterialPageRoute(
