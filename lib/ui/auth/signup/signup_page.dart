@@ -5,7 +5,6 @@ import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
@@ -46,6 +45,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     super.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
+    _checkboxFocus.dispose();
   }
 
   @override
@@ -156,67 +156,77 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   ),
                   Container(
                     width: dynamicWidth(1) * 0.8,
-                    child: RichText(
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: "Kayıt olarak ",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
+                    child: FormBuilderCheckbox(
+                      autovalidateMode: _autoValidate,
+                      checkColor: Colors.white,
+                      activeColor: kNavbarColor,
+                      name: "privacyCheckbox",
+                      initialValue: false,
+                      focusNode: _checkboxFocus,
+                      title: ExcludeSemantics(
+                        child: RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return TermsOfUsagePage();
+                                    }));
+                                  },
+                                text: "Kullanım koşullarını",
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              TextSpan(
+                                text: " ve ",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return PrivacyPolicyPage();
+                                    }));
+                                  },
+                                text: "gizlilik sözleşmesini",
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              TextSpan(
+                                text: " okudum, kabul ediyorum.",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
-                          TextSpan(
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return KvkkPage();
-                                }));
-                              },
-                            text: "KVKK metnini",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          TextSpan(
-                            text: " ve ",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          TextSpan(
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return PrivacyPolicyPage();
-                                }));
-                              },
-                            text: "gizlilik sözleşmesini",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          TextSpan(
-                            text: " okuyup, kabul etmiş olursunuz.",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        errorStyle:
+                            TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                      validator: FormBuilderValidators.equal(context, true,
+                          errorText: "Sözleşmeyi kabul etmelisin."),
                     ),
                   ),
-                  Text(" ve"),
 
                   RoundedButton(
                     textSize: 15,
