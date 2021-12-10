@@ -11,7 +11,7 @@ class TermsOfUsagePage extends StatelessWidget {
         title: Text("Dodact Kullanım Şartları Sözleşmesi"),
       ),
       body: SfPdfViewer.network(
-        'https://dodact.com/wp-content/uploads/2021/11/Kullanim-Kosullari.pdf',
+        'https://dodact.com/wp-content/uploads/2021/12/Kullanim-Kosullari.pdf',
         key: _pdfViewerKey,
       ),
     );
@@ -28,7 +28,7 @@ class PrivacyPolicyPage extends StatelessWidget {
         title: Text("Dodact Gizlilik Sözleşmesi"),
       ),
       body: SfPdfViewer.network(
-        'https://dodact.com/wp-content/uploads/2021/11/Gizlilik-Sozlesmesi-Dodact-Guncel.pdf',
+        'https://dodact.com/wp-content/uploads/2021/12/Gizlilik-Sozlesmesi-Dodact-Guncel.pdf',
         key: _pdfViewerKey,
       ),
     );
@@ -45,7 +45,7 @@ class CopyrightPage extends StatelessWidget {
         title: Text("Dodact Telif Hakları Sözleşmesi"),
       ),
       body: SfPdfViewer.network(
-        'https://dodact.com/wp-content/uploads/2021/11/Telif-Hakki.pdf',
+        'https://dodact.com/wp-content/uploads/2021/12/Telif-Hakki.pdf',
         key: _pdfViewerKey,
       ),
     );
@@ -63,7 +63,7 @@ class KvkkPage extends StatelessWidget {
         title: Text("Dodact KVKK Metni"),
       ),
       body: SfPdfViewer.network(
-        'https://dodact.com/wp-content/uploads/2021/11/Dodact-KVKK.pdf',
+        'https://dodact.com/wp-content/uploads/2021/12/Dodact-KVKK.pdf',
         key: _pdfViewerKey,
       ),
     );

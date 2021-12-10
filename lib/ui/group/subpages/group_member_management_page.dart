@@ -7,6 +7,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 enum InvitationType { GroupMembership }
@@ -272,7 +273,7 @@ class _GroupMemberManagementPageState
                     await setGroupManager(userId, groupProvider.group.groupId);
                     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
                   } catch (e) {
-                    showSnackBar("Bir hata oluştu.");
+                    showSnackbar("Bir hata oluştu.");
                     NavigationService.instance.pop();
                   }
                 },
@@ -288,26 +289,12 @@ class _GroupMemberManagementPageState
         });
   }
 
-  void showSnackBar(String message, {int duration = 2}) {
-    scaffoldKey.currentState.showSnackBar(
-      new SnackBar(
-        duration: new Duration(seconds: duration),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                message,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ),
+  void showSnackbar(String message, {int duration = 2}) {
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 }

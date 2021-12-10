@@ -131,7 +131,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                           userProvider.currentUser.permissions["create_post"] ==
                               false
                       ? _buildCard(Icons.post_add, "İçerik Üretici Başvurusu",
-                          "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
+                          "Kendine özgü içeriklerini sanatseverlerle paylaş!",
                           () {
                           NavigationService.instance
                               .navigate(k_ROUTE_CONTENT_CREATOR_APPLICATION)
@@ -157,26 +157,26 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                                   .currentUser.permissions["create_group"] ==
                               false
                       ? _buildCard(Icons.group, "Topluluk Başvurusu",
-                          "Topluluk ve  sanat alanındaki topluluk çalışmalarını hedef kitlen ile buluştur.",
+                          "Sanat topluluğu oluştur, mevcut topluluklara katıl",
                           () {
                           NavigationService.instance
                               .navigate(k_ROUTE_GROUP_APPLICATION)
                               .then((value) => setState(() {}));
                         })
                       : Container(),
-                  hasStreamerApplication == false &&
-                          userProvider
-                                  .currentUser.permissions["create_stream"] ==
-                              false
-                      ? _buildCard(Icons.live_tv, "Yayıncı Başvurusu",
-                          "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
-                          () {
-                          // NavigationService.instance
-                          //     .navigate(k_ROUTE_STREAMER_APPLICATION)
-                          //     .then((value) => setState(() {}));
-                          showSnackBar("Çok yakında!");
-                        })
-                      : Container(),
+                  // hasStreamerApplication == false &&
+                  //         userProvider
+                  //                 .currentUser.permissions["create_stream"] ==
+                  //             false
+                  //     ? _buildCard(Icons.live_tv, "Yayıncı Başvurusu",
+                  //         "Canlı yayınlarını Dodact üzerinden yayınla, hedef kitlene daha kolay ulaş!",
+                  //         () {
+                  //         // NavigationService.instance
+                  //         //     .navigate(k_ROUTE_STREAMER_APPLICATION)
+                  //         //     .then((value) => setState(() {}));
+                  //         showSnackBar("Çok yakında!");
+                  //       })
+                  //     : Container(),
                 ],
               ),
             );
@@ -264,7 +264,7 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
         titleWidget: Text(
           "İçeriklerin Göz Önünde Olsun",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
             "Dodact içerisinde içeriklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
@@ -277,7 +277,7 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
         titleWidget: Text(
           "Etkinliklerine Herkes Kolaylıkla Ulaşsın",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
             "Etkinliklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",

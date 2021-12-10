@@ -179,16 +179,16 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                                 text: "Kullanım koşullarını",
                                 style: TextStyle(
                                   decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
                                   color: Colors.white,
                                 ),
                               ),
                               TextSpan(
                                 text: " ve ",
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
                                   color: Colors.white,
                                 ),
                               ),
@@ -203,15 +203,15 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                                 text: "gizlilik sözleşmesini",
                                 style: TextStyle(
                                   decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
                                   color: Colors.white,
                                 ),
                               ),
                               TextSpan(
                                 text: " okudum, kabul ediyorum.",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: Colors.white,
                                 ),
                               ),
@@ -231,27 +231,28 @@ class _SignUpPageState extends BaseState<SignUpPage> {
 
                   RoundedButton(
                     textSize: 15,
-                    text: "Kayıt Ol",
+                    text: "KAYIT OL",
                     textColor: Colors.white,
                     press: () {
                       signUp();
                     },
                   ),
                   // OrDivider(),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SocialIcon(
                         iconSrc: "assets/images/google_logo.png",
                         press: () {
-                          googleSignIn();
+                          showAgreementDialog("google");
                         },
                         backgroundColor: Colors.black,
                       ),
                       if (Platform.isIOS)
                         GestureDetector(
-                          onTap: () => _signInWithApple(),
+                          onTap: () {
+                            showAgreementDialog("apple");
+                          },
                           child: Container(
                             width: 50,
                             height: 50,
@@ -273,6 +274,8 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   SizedBox(
                     height: 10,
                   ),
+
+                  SizedBox(height: 10),
                   InkWell(
                     onTap: () {
                       NavigationService.instance.navigate(k_ROUTE_LOGIN);
@@ -292,8 +295,8 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -302,31 +305,109 @@ class _SignUpPageState extends BaseState<SignUpPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     CustomButton(
-                  //       icon: Icon(
-                  //         Icons.info,
-                  //         color: Colors.white,
-                  //       ),
-                  //       titleText: Text(
-                  //         "Dodact Nedir?",
-                  //         style: TextStyle(color: Colors.white),
-                  //       ),
-                  //       onPressed: () {
-                  //         NavigationService.instance
-                  //             .navigate(k_ROUTE_ABOUT_DODACT);
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  showAgreementDialog(String channel) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Onay", textAlign: TextAlign.center),
+          content: SingleChildScrollView(
+            child: ExcludeSemantics(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text:
+                          "Farklı giriş yöntemleri ile hesap oluşturduğunuzda veya giriş yaptığınızda, ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return TermsOfUsagePage();
+                          }));
+                        },
+                      text: "Kullanım Koşullarını",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: " ve ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return PrivacyPolicyPage();
+                          }));
+                        },
+                      text: "Gizlilik Sözleşmesini",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: " okuduğunuzu ve kabul ettiğinizi onaylıyorsunuz.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            FlatButton(
+              child: Text("Kabul et"),
+              onPressed: () {
+                if (channel == "apple") {
+                  Navigator.of(context).pop();
+                  _signInWithApple();
+                } else if (channel == "google") {
+                  Navigator.of(context).pop();
+                  googleSignIn();
+                }
+              },
+            ),
+            FlatButton(
+              child: Text("Vazgeç"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -338,7 +419,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
       NavigationService.instance.pop();
       if (status != AuthResultStatus.abortedByUser) {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        showSnackBar(errorMsg);
+        showSnackbar(errorMsg);
       }
     } else {
       NavigationService.instance.pop();
@@ -361,27 +442,6 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     }
   }
 
-  showSnackbar(String errorMsg) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 2),
-      content: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // new CircularProgressIndicator(),
-          Expanded(
-            child: new Text(
-              errorMsg,
-              overflow: TextOverflow.fade,
-              softWrap: false,
-              maxLines: 1,
-              style: TextStyle(fontSize: 16),
-            ),
-          )
-        ],
-      ),
-    ));
-  }
-
   void signUp() async {
     if (_formKey.currentState.saveAndValidate()) {
       CommonMethods().showLoaderDialog(context, "Hesap Oluşturuluyor");
@@ -394,10 +454,10 @@ class _SignUpPageState extends BaseState<SignUpPage> {
         NavigationService.instance.pop();
         final errorMsg =
             AuthExceptionHandler.generateExceptionMessage(registrationResult);
-        showSnackBar(errorMsg);
+        showSnackbar(errorMsg);
       } else {
         NavigationService.instance.pop();
-        showSnackBar(
+        showSnackbar(
             "Onay linki e-posta hesabına gönderildi. Spam klasörünü de kontrol etmeyi unutma.",
             duration: 4);
         _formKey.currentState.reset();
@@ -409,7 +469,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     }
   }
 
-  void showSnackBar(String message, {int duration = 2}) {
+  void showSnackbar(String message, {int duration = 2}) {
     GFToast.showToast(
       message,
       context,

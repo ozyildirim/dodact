@@ -188,7 +188,7 @@ class _SearchPageState extends State<SearchPage> {
                                   post.postTitle,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w300,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 20,
                                   ),
                                 ),
@@ -248,7 +248,7 @@ class _SearchPageState extends State<SearchPage> {
                                   user.username,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w300,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 20,
                                   ),
                                 ),
@@ -311,7 +311,7 @@ class _SearchPageState extends State<SearchPage> {
                                   event.title,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w300,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 20,
                                   ),
                                 ),
@@ -374,7 +374,7 @@ class _SearchPageState extends State<SearchPage> {
                                 group.groupName,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 20,
                                 ),
                               ),

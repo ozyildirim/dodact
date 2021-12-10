@@ -1,4 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
@@ -26,6 +27,15 @@ class _InterestRegistrationPageState
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       showInformationDialog();
     });
+  }
+
+  checkProfilePicture() async {
+    if (userProvider.currentUser.profilePictureURL == null) {
+      await userProvider.updateCurrentUser(
+          {'profilePictureURL': AppConstant.kDefaultUserProfilePicture});
+      userProvider.currentUser.profilePictureURL =
+          AppConstant.kDefaultUserProfilePicture;
+    }
   }
 
   arrangeSelectedValues() {

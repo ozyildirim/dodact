@@ -215,6 +215,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         initialRoute: initScreen == null
             ? k_ROUTE_ONBOARDING
             : k_ROUTE_VERSION_CONTROL_PAGE,
+
         // initialRoute: k_ROUTE_ONBOARDING,
         title: "Dodact",
         theme: appTheme,

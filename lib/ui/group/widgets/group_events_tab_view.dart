@@ -54,14 +54,14 @@ class GroupEventsTab extends StatelessWidget {
                 );
               } else {
                 return Center(
-                  child: Text("Bu topluluk henüz bir etkinlik paylaşmadı.",
+                  child: Text("Bu topluluk henüz bir etkinlik paylaşmadı",
                       style: TextStyle(fontSize: kPageCenteredTextSize)),
                 );
               }
             } else {
               return Center(
                 child: Text(
-                  "Bir hata oluştu.",
+                  "Bir hata oluştu",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );

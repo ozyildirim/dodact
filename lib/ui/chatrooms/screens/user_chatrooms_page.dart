@@ -31,7 +31,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
         actions: [
           IconButton(
             icon: Icon(
-              FontAwesome5Regular.edit,
+              Icons.edit,
               color: Colors.white,
             ),
             onPressed: () {

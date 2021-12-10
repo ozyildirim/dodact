@@ -166,13 +166,13 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
       setState(() {
         _isChanged = false;
       });
-      showSnackBar("Gizlilik tercihlerin başarıyla güncellendi.");
+      showSnackbar("Gizlilik tercihlerin başarıyla güncellendi.");
     } catch (e) {
-      showSnackBar("Değişiklikler kaydedilirken bir hata oluştu.");
+      showSnackbar("Değişiklikler kaydedilirken bir hata oluştu.");
     }
   }
 
-  showSnackBar(String message) {
+  showSnackbar(String message) {
     GFToast.showToast(
       message,
       context,

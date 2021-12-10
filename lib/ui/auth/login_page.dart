@@ -1,20 +1,22 @@
 import 'dart:io';
 
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/ui/auth/signup/components/or_dividers.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
+import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/custom_button.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
 
 enum Mode { Login, Signup }
 
@@ -70,25 +72,110 @@ class _LogInPageState extends BaseState<LogInPage> {
     }
   }
 
-  showSnackbar(String errorMsg) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 2),
-      content: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // new CircularProgressIndicator(),
-          Expanded(
-            child: new Text(
-              errorMsg,
-              overflow: TextOverflow.fade,
-              softWrap: false,
-              maxLines: 1,
-              style: TextStyle(fontSize: 16),
+  showAgreementDialog(String channel) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Onay", textAlign: TextAlign.center),
+          content: SingleChildScrollView(
+            child: ExcludeSemantics(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text:
+                          "Farklı giriş yöntemleri ile hesap oluşturduğunuzda veya giriş yaptığınızda, ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return TermsOfUsagePage();
+                          }));
+                        },
+                      text: "Kullanım Koşullarını",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: " ve ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return PrivacyPolicyPage();
+                          }));
+                        },
+                      text: "Gizlilik Sözleşmesini",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: " okuduğunuzu ve kabul ettiğinizi onaylıyorsunuz.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          )
-        ],
-      ),
-    ));
+          ),
+          actions: [
+            FlatButton(
+              child: Text("Kabul et"),
+              onPressed: () {
+                if (channel == "apple") {
+                  Navigator.of(context).pop();
+                  _signInWithApple();
+                } else if (channel == "google") {
+                  Navigator.of(context).pop();
+                  _signInWithGoogle();
+                }
+              },
+            ),
+            FlatButton(
+              child: Text("Vazgeç"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  showSnackbar(String message) {
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 
   @override
@@ -207,7 +294,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                 ),
                 RoundedButton(
                   textSize: 15,
-                  text: "Giriş Yap",
+                  text: "GİRİŞ YAP",
                   textColor: Colors.white,
                   press: () {
                     FocusScope.of(context).unfocus();
@@ -244,13 +331,17 @@ class _LogInPageState extends BaseState<LogInPage> {
                     //   iconSrc: "assets/images/facebook_circular.png",
                     // ),
                     SocialIcon(
-                      press: () => _signInWithGoogle(),
+                      press: () {
+                        showAgreementDialog("google");
+                      },
                       iconSrc: "assets/images/google_logo.png",
                       backgroundColor: Colors.black,
                     ),
                     if (Platform.isIOS)
                       GestureDetector(
-                        onTap: () => _signInWithApple(),
+                        onTap: () {
+                          showAgreementDialog("apple");
+                        },
                         child: Container(
                           width: 50,
                           height: 50,

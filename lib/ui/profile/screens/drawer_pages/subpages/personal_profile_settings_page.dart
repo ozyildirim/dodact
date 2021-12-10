@@ -531,7 +531,7 @@ class _UserPersonalProfileSettingsPageState
         .then((url) {
       NavigationService.instance.pop();
       setState(() {});
-      showSnackBar("Fotoğrafın güncellendi");
+      showSnackbar("Fotoğrafın güncellendi");
       debugPrint("Picture uploaded.");
     }).catchError((error) {
       CommonMethods()
@@ -539,7 +539,7 @@ class _UserPersonalProfileSettingsPageState
     });
   }
 
-  showSnackBar(String message) {
+  showSnackbar(String message) {
     GFToast.showToast(
       message,
       context,
@@ -568,12 +568,12 @@ class _UserPersonalProfileSettingsPageState
                 formKey.currentState.value['profession'].toString().trim(),
           });
           NavigationService.instance.pop();
-          showSnackBar("Profil bilgilerin güncellendi.");
+          showSnackbar("Profil bilgilerin güncellendi.");
           setState(() {
             isChanged = false;
           });
         } catch (e) {
-          showSnackBar("Değişiklikler kaydedilirken bir hata oluştu.");
+          showSnackbar("Değişiklikler kaydedilirken bir hata oluştu.");
         }
       } else {}
     }

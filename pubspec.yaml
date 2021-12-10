@@ -3,7 +3,7 @@ description: Sanatçı ruhların buluşma noktası.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.8+4
+version: 0.0.8+5
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -140,15 +140,15 @@ flutter:
         - asset: assets/fonts/Raleway-Black.ttf
           weight: 900
 
-    - family: Roboto
+    - family: SanFrancisco
       fonts:
-        - asset: assets/fonts/Roboto/Roboto-Thin.ttf
+        - asset: assets/fonts/SanFrancisco/SF-Pro-Display-Thin.otf
           weight: 100
-        - asset: assets/fonts/Roboto/Roboto-Light.ttf
+        - asset: assets/fonts/SanFrancisco/SF-Pro-Display-Light.otf
           weight: 300
-        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+        - asset: assets/fonts/SanFrancisco/SF-Pro-Display-Medium.otf
           weight: 400
-        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
+        - asset: assets/fonts/SanFrancisco/SF-Pro-Display-Regular.otf
           weight: 500
-        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+        - asset: assets/fonts/SanFrancisco/SF-Pro-Display-Bold.otf
           weight: 700

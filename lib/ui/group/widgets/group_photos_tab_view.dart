@@ -16,7 +16,7 @@ class GroupMediaTabView extends StatelessWidget {
       return Center(
         child: Container(
           color: Colors.white60,
-          child: Text("Bu topluluk henüz bir medya dosyası eklemedi.",
+          child: Text("Bu topluluk henüz bir medya dosyası eklemedi",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: kPageCenteredTextSize)),
         ),

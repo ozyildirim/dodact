@@ -46,8 +46,8 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
                                 imageUrl: user.profilePictureURL,
                                 imageBuilder: (context, imageProvider) {
                                   return CircleAvatar(
-                                    radius: 45,
-                                    backgroundColor: Colors.black,
+                                    radius: 43,
+                                    backgroundColor: kNavbarColor,
                                     child: CircleAvatar(
                                       radius: 40,
                                       backgroundImage:
@@ -68,14 +68,14 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
                     });
               } else {
                 return Center(
-                  child: Text("Boş.",
+                  child: Text("Boş",
                       style: TextStyle(fontSize: kPageCenteredTextSize)),
                 );
               }
             } else {
               return Center(
                 child: Text(
-                  "Bir hata oluştu.",
+                  "Bir hata oluştu",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );

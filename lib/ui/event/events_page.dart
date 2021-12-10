@@ -102,20 +102,13 @@ class _EventsPageState extends BaseState<EventsPage> {
                     });
               } else if (provider.filteredEventsSnapshot.isEmpty) {
                 return Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/images/app/situations/not_found.png"),
-                      Text(
-                        "Bu kriterlere uyan bir etkinlik bulunamadı",
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: kToolbarHeight,
-                      )
-                    ],
+                  height: size.height,
+                  child: Center(
+                    child: Text(
+                      "Bu kriterlere uyan bir etkinlik bulunamadı",
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               } else {
@@ -141,20 +134,13 @@ class _EventsPageState extends BaseState<EventsPage> {
                     });
               } else {
                 return Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/images/app/situations/not_found.png"),
-                      Text(
-                        "Bu kriterlere uyan bir etkinlik bulunamadı",
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: kToolbarHeight,
-                      )
-                    ],
+                  height: size.height,
+                  child: Center(
+                    child: Text(
+                      "Bu kriterlere uyan bir etkinlik bulunamadı",
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }
@@ -163,16 +149,6 @@ class _EventsPageState extends BaseState<EventsPage> {
         ),
       ),
     );
-  }
-
-  List<EventModel> _sortEvents(List<EventModel> events) {
-    events.sort((a, b) {
-      var firstEventDate = a.startDate;
-      var secondEventDate = b.startDate;
-      return firstEventDate.compareTo(secondEventDate);
-    });
-
-    return events;
   }
 
   void updateEvents(String category, String city, String type) async {

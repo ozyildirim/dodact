@@ -60,16 +60,14 @@ class _WelcomePageState extends BaseState<WelcomePage> {
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: 25,
-                        ),
+                        SizedBox(height: 10),
                         Row(
                           children: [
                             Text(
-                              "Sanatın sosyal medyası",
+                              "Sanatın Sosyal Medyası",
                               style: TextStyle(
                                 color: Colors.white60,
-                                fontSize: 20,
+                                fontSize: 22,
                               ),
                             )
                           ],

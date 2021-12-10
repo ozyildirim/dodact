@@ -8,45 +8,41 @@ import 'package:shared_preferences/shared_preferences.dart';
 // ignore: must_be_immutable
 class OnBoardingPage extends StatelessWidget {
   var listPages;
+  String bullet = "\u2022 ";
+
   @override
   Widget build(BuildContext context) {
     listPages = [
       PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_6.png'),
+        image: Padding(
+          padding: const EdgeInsets.only(top: 48),
+          child: Image.asset('assets/images/onboarding/onboarding_1.png'),
+        ),
         titleWidget: Text(
-          "Sanatçı Kimliğini Yarat",
+          "Sanat Kimliğini Yarat",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         body:
-            "Sanatçı ruhunu ortaya çıkar, yeteneklerini binlerce kişiye sergile.",
+            "Sanatçı ruhunu ortaya çıkar, yeteneklerini hedef kitlenle paylaş",
       ),
       PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_6.png'),
-        titleWidget: Text(
-          "Katkı Sağla",
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-        body:
-            "Sanatçı ruhunu ortaya çıkar, yeteneklerini binlerce kişiye sergile.",
-      ),
-      PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_1.png'),
-        titleWidget: Text(
-          "Ekibini Oluştur",
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-        body:
-            "Yeni ekip arkadaşları bul ya da mevcut ekiplere katılarak gücünü birleştir.",
-      ),
-      PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_7.png'),
+        image: Image.asset('assets/images/onboarding/onboarding_2.png'),
         titleWidget: Text(
           "Etkinlikler Bir Tık Uzağında",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         body:
-            "Çevrende olup biten sanatsal aktivitelerden haberdar ol, kendi etkinliklerini de başkalarına ulaştır!",
-      )
+            "Çevrende olup biten sanatsal etkinliklerden haberdar ol, etkinliklerini paylaş!",
+      ),
+      PageViewModel(
+        image: Image.asset('assets/images/onboarding/onboarding_3.png'),
+        titleWidget: Text(
+          "Topluluğunu Oluştur",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Yeni ekip arkadaşları bul\nMevcut ekiplere katılarak gücünü birleştir",
+      ),
     ];
 
     SystemChrome.setSystemUIOverlayStyle(

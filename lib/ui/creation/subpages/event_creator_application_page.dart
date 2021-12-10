@@ -238,7 +238,7 @@ class _EventCreatorApplicationPageState
               children: [
                 Flexible(
                   child: Text(
-                    "Şimdiye kadar herhangi bir etkinlik düzenledin mi?",
+                    "Şimdiye kadar herhangi bir etkinlik düzenledin mi? Bahseder misin?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -281,7 +281,7 @@ class _EventCreatorApplicationPageState
               children: [
                 Flexible(
                   child: Text(
-                    "Şimdiye kadarki etkinliklerini merak ediyoruz. Bizimle örnek bir bağlantı paylaşır mısın?",
+                    "Etkinliklerini merak ediyoruz. Bizimle örnek bir bağlantı paylaşır mısın?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -342,15 +342,15 @@ class _EventCreatorApplicationPageState
                           text: "Telif hakları sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
@@ -358,6 +358,8 @@ class _EventCreatorApplicationPageState
                     ),
                   ),
                 ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 contentPadding: EdgeInsets.zero,
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),
@@ -386,15 +388,15 @@ class _EventCreatorApplicationPageState
                           text: "KVKK sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
@@ -402,6 +404,8 @@ class _EventCreatorApplicationPageState
                     ),
                   ),
                 ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 contentPadding: EdgeInsets.zero,
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),

@@ -7,6 +7,7 @@ import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/group/subpages/group_member_management_page.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -162,25 +163,11 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
   }
 
   void showSnackBar(String message, {int duration = 2}) {
-    _scaffoldKey.currentState.showSnackBar(
-      new SnackBar(
-        duration: new Duration(seconds: duration),
-        content: new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // new CircularProgressIndicator(),
-            Expanded(
-              child: new Text(
-                message,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 

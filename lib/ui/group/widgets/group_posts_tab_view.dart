@@ -46,14 +46,14 @@ class GroupPostsTab extends StatelessWidget {
                 );
               } else {
                 return Center(
-                  child: Text("Bu topluluk henüz bir gönderi oluşturmadı.",
+                  child: Text("Bu topluluk henüz bir gönderi oluşturmadı",
                       style: TextStyle(fontSize: kPageCenteredTextSize)),
                 );
               }
             } else {
               return Center(
                 child: Text(
-                  "Bir hata oluştu.",
+                  "Bir hata oluştu",
                   style: TextStyle(fontSize: kPageCenteredTextSize),
                 ),
               );

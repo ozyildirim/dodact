@@ -29,7 +29,7 @@ const kSettingsTitleSize = 20.0;
 const kPageCenteredTextSize = 20.0;
 const kUserProfileTabLabelSize = 14.0;
 
-const kFontFamily = "Roboto";
+const kFontFamily = "SanFrancisco";
 
 const guzel = Color(0xFF162A49);
 
@@ -53,18 +53,18 @@ ThemeData appTheme = new ThemeData(
       headline1: TextStyle(
         color: Colors.white,
         fontSize: 20,
-        fontFamily: "Roboto",
+        fontFamily: "SanFrancisco",
       ),
       headline6: TextStyle(
         color: Colors.white,
         fontSize: 20,
-        fontFamily: "Roboto",
+        fontFamily: "SanFrancisco",
       ),
     ),
     titleTextStyle: TextStyle(
       color: Colors.white,
       fontSize: 20,
-      fontFamily: "Roboto",
+      fontFamily: "SanFrancisco",
     ),
     backgroundColor: kCustomAppBarColor,
     // iconTheme: const IconThemeData(color: Colors.white),
@@ -83,12 +83,12 @@ ThemeData appTheme = new ThemeData(
   // scaffoldBackgroundColor: Colors.black,
 
   textTheme: TextTheme(
-    headline1: TextStyle(fontFamily: "Roboto"),
+    headline1: TextStyle(fontFamily: "SanFrancisco"),
     headline2: TextStyle(
       color: Colors.black,
-      fontFamily: 'Roboto',
+      fontFamily: 'SanFrancisco',
     ),
   ),
 
-  fontFamily: "Roboto",
+  fontFamily: "SanFrancisco",
 );

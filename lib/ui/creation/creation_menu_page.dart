@@ -82,17 +82,11 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               userProvider.currentUser.permissions['create_post'] != false
-                  ? _buildCard(
-                      Icons.post_add,
-                      "İçerik Oluştur",
-                      "Kendine özgü içeriklerinle topluluk arasındaki yerini al!",
+                  ? _buildCard(Icons.post_add, "İçerik Oluştur",
                       showCreateContentBottomSheet)
                   : Container(),
               userProvider.currentUser.permissions['create_event'] != false
-                  ? _buildCard(
-                      Icons.event_available,
-                      "Etkinlik Oluştur",
-                      "Etkinliklerini topluluğa kolayca ulaştır, yeni serüvenlere açıl!",
+                  ? _buildCard(Icons.event_available, "Etkinlik Oluştur",
                       showCreateEventBottomSheet)
                   : Container(),
             ],
@@ -131,9 +125,9 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
         );
   }
 
-  _buildCard(IconData icon, String title, String description, Function onTap,
-      {String groupId}) {
+  _buildCard(IconData icon, String title, Function onTap, {String groupId}) {
     var cardBackgroundColor = Color(0xFFF8F9FA);
+    // var cardBackgroundColor = Colors.grey[200];
     var size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -145,7 +139,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           color: cardBackgroundColor,
           child: Container(
-            width: size.width * 0.8,
+            width: size.width * 0.6,
             height: size.height * 0.25,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -165,14 +159,6 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                   child: Text(title,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    description,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
                 ),
               ],
             ),

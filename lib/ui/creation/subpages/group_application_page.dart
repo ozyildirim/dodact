@@ -370,15 +370,15 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                           text: "Kullanım koşulları sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
@@ -386,6 +386,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                     ),
                   ),
                 ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 contentPadding: EdgeInsets.zero,
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),
@@ -414,15 +416,15 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                           text: "Gizlilik sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
@@ -430,6 +432,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                     ),
                   ),
                 ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 contentPadding: EdgeInsets.zero,
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),

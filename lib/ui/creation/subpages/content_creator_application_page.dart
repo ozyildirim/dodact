@@ -253,7 +253,7 @@ class _ContentCreatorApplicationPageState
               children: [
                 Flexible(
                   child: Text(
-                    "İlgilendiğin sanat dalında örnek aldığın bir sanatçı var mı? İsmini paylaşır mısın?",
+                    "İlgilendiğin sanat dalında örnek aldığın bir sanatçı var ise bahseder misin?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -327,7 +327,7 @@ class _ContentCreatorApplicationPageState
               children: [
                 Flexible(
                   child: Text(
-                    "Şimdiye kadarki çalışmalarını merak ediyoruz. Bizimle bir link paylaşır mısın?",
+                    "Şimdiye kadar ki çalışmalarını merak ediyoruz. Bizimle bir link paylaşır mısın?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -389,15 +389,15 @@ class _ContentCreatorApplicationPageState
                           text: "Telif hakları sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
@@ -405,6 +405,8 @@ class _ContentCreatorApplicationPageState
                     ),
                   ),
                 ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 contentPadding: EdgeInsets.zero,
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),
@@ -434,15 +436,15 @@ class _ContentCreatorApplicationPageState
                           text: "KVKK sözleşmesini ",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
@@ -450,6 +452,8 @@ class _ContentCreatorApplicationPageState
                     ),
                   ),
                 ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 contentPadding: EdgeInsets.zero,
                 validator: FormBuilderValidators.equal(context, true,
                     errorText: "Sözleşmeyi kabul etmelisin."),
