@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,21 @@ class _OthersProfileInterestsPartState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: buildInterestElements(),
-      ),
-    );
+    if (user.interests == null || user.interests.isEmpty) {
+      return Container(
+          child: Center(
+        child: Text(
+          "İlgi alanları belirtilmemiş",
+          style: TextStyle(fontSize: kPageCenteredTextSize),
+        ),
+      ));
+    } else {
+      return Container(
+        child: ListView(
+          children: buildInterestElements(),
+        ),
+      );
+    }
   }
 
   buildInterestElements() {

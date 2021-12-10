@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:dodact_v1/config/base/base_state.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +14,22 @@ class UserProfileInterestsTab extends StatefulWidget {
 class _UserProfileInterestsTabState extends BaseState<UserProfileInterestsTab> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: buildInterestElements(),
-      ),
-    );
+    if (userProvider.currentUser.interests == null ||
+        userProvider.currentUser.interests.isEmpty) {
+      return Container(
+          child: Center(
+        child: Text(
+          "İlgi alanları belirtilmemiş",
+          style: TextStyle(fontSize: kPageCenteredTextSize),
+        ),
+      ));
+    } else {
+      return Container(
+        child: ListView(
+          children: buildInterestElements(),
+        ),
+      );
+    }
   }
 
   buildInterestElements() {
