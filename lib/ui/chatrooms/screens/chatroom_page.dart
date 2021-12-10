@@ -13,6 +13,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:paginate_firestore/bloc/pagination_cubit.dart';
@@ -352,17 +353,12 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   }
 
   showSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 4),
-      behavior: SnackBarBehavior.floating,
-      content: Flexible(
-        child: new Text(
-          message,
-          softWrap: false,
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    ));
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 
   updateMessageRead(DocumentSnapshot snapshot, String conversationId) {

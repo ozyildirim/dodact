@@ -13,6 +13,7 @@ import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfilePage extends StatefulWidget {
@@ -201,17 +202,12 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   showSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 4),
-      behavior: SnackBarBehavior.floating,
-      content: Flexible(
-        child: new Text(
-          message,
-          softWrap: false,
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    ));
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 }
 

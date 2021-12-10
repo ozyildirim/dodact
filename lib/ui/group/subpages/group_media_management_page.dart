@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -156,10 +157,11 @@ class GroupMediaManagementPage extends StatelessWidget {
   }
 
   showSnackbar(String message, BuildContext context) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 

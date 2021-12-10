@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/application_model.dart';
 import 'package:dodact_v1/provider/application_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class UserApplicationHistoryPage extends StatefulWidget {
@@ -164,14 +165,11 @@ class _UserApplicationHistoryPageState
   }
 
   showSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 4),
-      behavior: SnackBarBehavior.floating,
-      content: new Text(
-        message,
-        softWrap: false,
-        style: TextStyle(fontSize: 16),
-      ),
-    ));
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 }

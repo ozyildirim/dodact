@@ -8,6 +8,8 @@ class AnnouncementModel {
   DateTime creationDate;
   DateTime expirationDate;
   bool visible;
+  bool isReference;
+  String referenceURL;
 
   AnnouncementModel({
     this.announcementID,
@@ -16,6 +18,8 @@ class AnnouncementModel {
     this.creationDate,
     this.expirationDate,
     this.visible,
+    this.isReference,
+    this.referenceURL,
   });
 
   AnnouncementModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,8 @@ class AnnouncementModel {
     creationDate = (json['creationDate'] as Timestamp).toDate();
     expirationDate = (json['expirationDate'] as Timestamp).toDate();
     visible = json['visible'];
+    isReference = json['isReference'] ?? false;
+    referenceURL = json['referenceURL'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -38,6 +44,8 @@ class AnnouncementModel {
     data['expirationDate'] =
         this.expirationDate ?? FieldValue.serverTimestamp();
     data['visible'] = this.visible;
+    data['isReference'] = this.isReference;
+    data['referenceURL'] = this.referenceURL;
     return data;
   }
 }

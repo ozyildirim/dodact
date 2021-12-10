@@ -540,14 +540,11 @@ class _UserPersonalProfileSettingsPageState
   }
 
   showSnackBar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text(
-          message,
-          overflow: TextOverflow.fade,
-        ),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 

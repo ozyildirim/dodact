@@ -4,6 +4,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class PrivacySettingsPage extends StatefulWidget {
@@ -172,14 +173,11 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
   }
 
   showSnackBar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text(
-          message,
-          overflow: TextOverflow.fade,
-        ),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 }

@@ -46,11 +46,15 @@ class _AnnouncementPartState extends State<AnnouncementPart> {
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
                 child: InkWell(
                   onTap: () {
-                    CommonMethods.showImagePreviewDialog(
-                      context,
-                      imageProvider: CachedNetworkImageProvider(
-                          announcement.announcementImage),
-                    );
+                    if (announcement.isReference) {
+                      CommonMethods.launchURL(announcement.referenceURL);
+                    } else {
+                      CommonMethods.showImagePreviewDialog(
+                        context,
+                        imageProvider: CachedNetworkImageProvider(
+                            announcement.announcementImage),
+                      );
+                    }
                   },
                   child: CachedNetworkImage(
                     imageUrl: announcement.announcementImage,

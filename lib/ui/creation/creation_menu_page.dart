@@ -6,6 +6,7 @@ import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 
 // ignore: must_be_immutable
 class CreationMenuPage extends StatefulWidget {
@@ -391,10 +392,11 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
   }
 
   showSnackbar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 

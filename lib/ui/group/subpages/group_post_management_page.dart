@@ -6,6 +6,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -178,10 +179,11 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
   }
 
   showSnackbar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 

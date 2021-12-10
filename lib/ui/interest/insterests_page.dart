@@ -2,6 +2,7 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class InterestsPage extends StatefulWidget {
@@ -464,10 +465,11 @@ class _InterestsPageState extends BaseState<InterestsPage> {
   }
 
   showSnackbar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 }

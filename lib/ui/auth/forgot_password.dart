@@ -6,6 +6,7 @@ import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -136,16 +137,11 @@ class _ForgotPasswordPageState extends BaseState<ForgotPasswordPage> {
   }
 
   showSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 4),
-      behavior: SnackBarBehavior.floating,
-      content: Flexible(
-        child: new Text(
-          message,
-          softWrap: false,
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    ));
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 }

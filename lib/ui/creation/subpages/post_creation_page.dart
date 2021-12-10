@@ -15,6 +15,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 import 'package:logger/logger.dart';
@@ -497,14 +498,11 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   showSnackBar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text(
-          message,
-          overflow: TextOverflow.fade,
-        ),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 

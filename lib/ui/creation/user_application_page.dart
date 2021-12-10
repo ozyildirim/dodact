@@ -6,6 +6,7 @@ import 'package:dodact_v1/model/application_model.dart';
 import 'package:dodact_v1/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -188,15 +189,12 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
   }
 
   showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 2),
-      behavior: SnackBarBehavior.floating,
-      content: new Text(
-        message,
-        softWrap: false,
-        style: TextStyle(fontSize: 16),
-      ),
-    ));
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 
   _buildCard(IconData icon, String title, String description, Function onTap,

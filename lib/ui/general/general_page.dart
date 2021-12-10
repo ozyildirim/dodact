@@ -92,7 +92,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
                           fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   SizedBox(
@@ -103,33 +103,35 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                     child: PostPart(),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 50,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Text(
-                      "Kaçırılmaması Gereken Etkinlikler",
+                      "Bu Etkinlikleri Kaçırma",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
                           fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   EventPart(),
-                  SizedBox(height: 30),
+                  SizedBox(
+                    height: 50,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Text(
-                      "Yakında",
+                      "Yakında!",
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
                           fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   SizedBox(
@@ -138,7 +140,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                   AcikSahnePart(),
 
                   SizedBox(
-                    height: 30,
+                    height: 50,
                   ),
 
                   Padding(
@@ -149,7 +151,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
                           fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   SizedBox(

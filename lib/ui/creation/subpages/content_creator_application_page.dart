@@ -9,6 +9,7 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class ContentCreatorApplicationPage extends StatefulWidget {
@@ -180,14 +181,11 @@ class _ContentCreatorApplicationPageState
   }
 
   showSnackBar(String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text(
-          message,
-          overflow: TextOverflow.fade,
-        ),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 

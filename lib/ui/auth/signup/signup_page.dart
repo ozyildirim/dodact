@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -409,20 +410,11 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void showSnackBar(String message, {int duration = 2}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      new SnackBar(
-        behavior: SnackBarBehavior.floating,
-        duration: new Duration(seconds: duration),
-        content: Flexible(
-          child: new Text(
-            message,
-            // overflow: TextOverflow.fade,
-            softWrap: true,
-            // maxLines: 1,
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ),
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
     );
   }
 
