@@ -109,7 +109,7 @@ class _PostEditPageState extends State<PostEditPage> {
                 SizedBox(height: size.height * 0.05),
                 Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text("İçerik Başlığı",
+                  child: Text("Gönderi Başlığı",
                       textAlign: TextAlign.start,
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -148,7 +148,7 @@ class _PostEditPageState extends State<PostEditPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("İçerik Açıklaması",
+                    Text("Gönderi Açıklaması",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     SizedBox(height: 4),
@@ -165,7 +165,6 @@ class _PostEditPageState extends State<PostEditPage> {
                         textCapitalization: TextCapitalization.sentences,
                         cursorColor: kPrimaryColor,
                         decoration: InputDecoration(
-                            hintText: "İçerik Açıklaması",
                             border: InputBorder.none,
                             errorStyle: Theme.of(context)
                                 .inputDecorationTheme
@@ -248,7 +247,7 @@ class _PostEditPageState extends State<PostEditPage> {
         'searchKeywords': searchKeywords,
       }).then((value) async {
         await showPostEditSuccessDialog(
-            context, "Gönderin başarıyla düzenlendi.");
+            context, "Gönderin başarıyla güncellendi.");
         NavigationService.instance.navigateToReset(k_ROUTE_HOME);
       });
     } catch (e) {
