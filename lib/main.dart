@@ -23,6 +23,7 @@ int initScreen;
 Future<void> _messageHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   AwesomeNotifications().createNotificationFromJsonData(message.data);
+  print("message handled");
 }
 
 void main() async {
