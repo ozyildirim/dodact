@@ -591,9 +591,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       var lat = event.locationCoordinates.split(",")[0];
       var lng = event.locationCoordinates.split(",")[1];
 
-      final CameraPosition _kGooglePlex = CameraPosition(
+      final CameraPosition eventMapCameraPosition = CameraPosition(
         target: LatLng(double.parse(lat), double.parse(lng)),
-        zoom: 8,
+        zoom: 18,
       );
 
       Marker(
@@ -604,7 +604,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         context,
         MaterialPageRoute(
           builder: (context) {
-            return MapPage(_kGooglePlex);
+            return MapPage(eventMapCameraPosition);
           },
         ),
       );
@@ -642,25 +642,37 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 }
 
 class MapPage extends StatefulWidget {
-  final CameraPosition googlePlex;
+  final CameraPosition eventLocation;
 
-  MapPage(this.googlePlex);
+  MapPage(this.eventLocation);
 
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
+  Completer<GoogleMapController> _controller = Completer();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: goToEventLocation,
+        backgroundColor: kNavbarColor,
+        label: Text('Etkinlik Konumu'),
+        icon: Icon(Icons.directions),
+      ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Etkinlik Konum Bilgileri"),
       ),
       body: Container(
         child: GoogleMap(
-          initialCameraPosition: widget.googlePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          initialCameraPosition: widget.eventLocation,
           compassEnabled: true,
           mapToolbarEnabled: true,
           myLocationButtonEnabled: true,
@@ -671,12 +683,18 @@ class _MapPageState extends State<MapPage> {
               infoWindow: InfoWindow(title: "Etkinlik Konum"),
               zIndex: 1,
               markerId: MarkerId("1"),
-              position: LatLng(widget.googlePlex.target.latitude,
-                  widget.googlePlex.target.longitude),
+              position: LatLng(widget.eventLocation.target.latitude,
+                  widget.eventLocation.target.longitude),
             )
           },
         ),
       ),
     );
+  }
+
+  Future goToEventLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    controller
+        .animateCamera(CameraUpdate.newCameraPosition(widget.eventLocation));
   }
 }
