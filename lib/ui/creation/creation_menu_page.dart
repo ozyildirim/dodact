@@ -174,197 +174,206 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
     var size = MediaQuery.of(context).size;
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (builder) {
-        return FormBuilder(
-          key: _postDialogKey,
-          child: new Container(
-            padding: EdgeInsets.only(
-              left: 5.0,
-              right: 5.0,
-              top: 5.0,
-              bottom: 5.0,
-            ),
-            decoration: new BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.only(
-                topLeft: const Radius.circular(10.0),
-                topRight: const Radius.circular(10.0),
-              ),
-            ),
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                  title: const Text(
-                    'İçerik Oluştur',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.w700,
-                    ),
+        return Wrap(
+          children: [
+            FormBuilder(
+              key: _postDialogKey,
+              child: new Container(
+                padding: EdgeInsets.only(
+                  left: 5.0,
+                  right: 5.0,
+                  top: 5.0,
+                  bottom: 5.0,
+                ),
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: size.width * 0.4,
-                        child: Text(
-                          "Kategori",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
-                          ),
+                child: new Wrap(
+                  children: <Widget>[
+                    new ListTile(
+                      title: const Text(
+                        'İçerik Oluştur',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: Container(
-                            color: Colors.grey[200],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
                             width: size.width * 0.4,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 4, bottom: 4, left: 16, right: 4),
-                              child: FormBuilderDropdown(
-                                name: "postCategory",
-                                focusNode: postCategoryDropdownFocus,
-                                decoration: InputDecoration(
-                                  hintText: "Kategori Seçin",
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                items: buildArtCategoryDropdownItems(),
-                                validator: FormBuilderValidators.compose(
-                                  [
-                                    FormBuilderValidators.required(context,
-                                        errorText: "Bu alan boş bırakılamaz.")
-                                  ],
-                                ),
+                            child: Text(
+                              "Kategori",
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: size.width * 0.4,
-                        child: Text(
-                          "Tür",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: Container(
-                            width: size.width * 0.4,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 4, bottom: 4, left: 16, right: 4),
-                              child: ChipTheme(
-                                data: ChipTheme.of(context).copyWith(
-                                  // labelStyle: TextStyle(
-                                  //   color: Colors.white,
-                                  //   fontSize: 16,
-                                  // ),
-                                  backgroundColor: Colors.grey[200],
-
-                                  // disabledColor: Colors.grey[200],
-                                  secondarySelectedColor: kNavbarColor,
-                                  secondaryLabelStyle: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                child: FormBuilderChoiceChip(
-                                  name: "postType",
-                                  // focusNode: postTypeDropdownFocus,
-                                  direction: Axis.horizontal,
-                                  padding: EdgeInsets.all(12),
-                                  spacing: 4,
-                                  decoration: InputDecoration(
-                                    hintText: "Tür Seçin",
-                                    contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(15),
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(24),
+                              child: Container(
+                                color: Colors.grey[200],
+                                width: size.width * 0.4,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4, bottom: 4, left: 16, right: 4),
+                                  child: FormBuilderDropdown(
+                                    name: "postCategory",
+                                    focusNode: postCategoryDropdownFocus,
+                                    decoration: InputDecoration(
+                                      hintText: "Kategori Seçin",
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    items: buildArtCategoryDropdownItems(),
+                                    validator: FormBuilderValidators.compose(
+                                      [
+                                        FormBuilderValidators.required(context,
+                                            errorText:
+                                                "Bu alan boş bırakılamaz.")
+                                      ],
                                     ),
                                   ),
-                                  options: buildPostTypeChips(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: size.width * 0.4,
+                            child: Text(
+                              "Tür",
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(24),
+                              child: Container(
+                                width: size.width * 0.4,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4, bottom: 4, left: 16, right: 4),
+                                  child: ChipTheme(
+                                    data: ChipTheme.of(context).copyWith(
+                                      // labelStyle: TextStyle(
+                                      //   color: Colors.white,
+                                      //   fontSize: 16,
+                                      // ),
+                                      backgroundColor: Colors.grey[200],
 
-                                  // selectedColor: Colors.orangeAccent,
-                                  validator: FormBuilderValidators.compose(
-                                    [
-                                      FormBuilderValidators.required(context,
-                                          errorText: "Bu alan boş bırakılamaz.")
-                                    ],
+                                      // disabledColor: Colors.grey[200],
+                                      secondarySelectedColor: kNavbarColor,
+                                      secondaryLabelStyle: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    child: FormBuilderChoiceChip(
+                                      name: "postType",
+                                      // focusNode: postTypeDropdownFocus,
+                                      direction: Axis.horizontal,
+                                      padding: EdgeInsets.all(12),
+                                      spacing: 4,
+                                      decoration: InputDecoration(
+                                        hintText: "Tür Seçin",
+                                        contentPadding: EdgeInsets.zero,
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                      options: buildPostTypeChips(),
+
+                                      // selectedColor: Colors.orangeAccent,
+                                      validator: FormBuilderValidators.compose(
+                                        [
+                                          FormBuilderValidators.required(
+                                              context,
+                                              errorText:
+                                                  "Bu alan boş bırakılamaz.")
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                new Divider(
-                  height: 10.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: size.width * 0.4,
-                      child: new ListTile(
-                        title: const Text(
-                          'Oluştur',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        onTap: () async {
-                          submitPostDialog();
-                        },
+                        ],
                       ),
                     ),
-                    Container(
-                      width: size.width * 0.4,
-                      child: new ListTile(
-                        title: const Text(
-                          'İptal',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
+                    new Divider(
+                      height: 10.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          child: new ListTile(
+                            title: const Text(
+                              'Oluştur',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            onTap: () async {
+                              submitPostDialog();
+                            },
                           ),
                         ),
-                        onTap: () async {
-                          NavigationService.instance.pop();
-                        },
-                      ),
+                        Container(
+                          width: size.width * 0.4,
+                          child: new ListTile(
+                            title: const Text(
+                              'İptal',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            onTap: () async {
+                              NavigationService.instance.pop();
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            )
+          ],
         );
       },
     );
@@ -390,247 +399,257 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
     var size = MediaQuery.of(context).size;
 
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (builder) {
-        return FormBuilder(
-          key: _eventDialogKey,
-          child: new Container(
-            padding: EdgeInsets.only(
-              left: 5.0,
-              right: 5.0,
-              top: 5.0,
-              bottom: 5.0,
-            ),
-            decoration: new BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.only(
-                topLeft: const Radius.circular(10.0),
-                topRight: const Radius.circular(10.0),
-              ),
-            ),
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                  title: const Text(
-                    'Etkinlik Oluştur',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.w700,
-                    ),
+        return Wrap(
+          children: [
+            FormBuilder(
+              key: _eventDialogKey,
+              child: new Container(
+                padding: EdgeInsets.only(
+                  left: 5.0,
+                  right: 5.0,
+                  top: 5.0,
+                  bottom: 5.0,
+                ),
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: size.width * 0.4,
-                        child: Text(
-                          "Kategori",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
-                          ),
+                child: new Wrap(
+                  children: <Widget>[
+                    new ListTile(
+                      title: const Text(
+                        'Etkinlik Oluştur',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: Container(
-                            color: Colors.grey[200],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
                             width: size.width * 0.4,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 4, bottom: 4, left: 16, right: 4),
-                              child: FormBuilderDropdown(
-                                name: "eventCategory",
-                                focusNode: eventCategoryDropdownFocus,
-                                decoration: InputDecoration(
-                                  hintText: "Kategori Seçin",
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                items: buildArtCategoryDropdownItems(),
-                                validator: FormBuilderValidators.compose(
-                                  [
-                                    FormBuilderValidators.required(context,
-                                        errorText: "Bu alan boş bırakılamaz.")
-                                  ],
-                                ),
+                            child: Text(
+                              "Kategori",
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: size.width * 0.4,
-                        child: Text(
-                          "Tür",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: Container(
-                            color: Colors.grey[200],
-                            width: size.width * 0.4,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 4, bottom: 4, left: 16, right: 4),
-                              child: ChipTheme(
-                                data: ChipTheme.of(context).copyWith(
-                                  // labelStyle: TextStyle(
-                                  //   color: Colors.white,
-                                  //   fontSize: 16,
-                                  // ),
-                                  backgroundColor: Colors.grey[200],
-
-                                  // disabledColor: Colors.grey[200],
-                                  secondarySelectedColor: kNavbarColor,
-                                  secondaryLabelStyle: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                child: FormBuilderDropdown(
-                                  name: "eventType",
-                                  focusNode: eventTypeDropdownFocus,
-                                  decoration: InputDecoration(
-                                    hintText: "Tür Seçin",
-                                    contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(15),
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(24),
+                              child: Container(
+                                color: Colors.grey[200],
+                                width: size.width * 0.4,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4, bottom: 4, left: 16, right: 4),
+                                  child: FormBuilderDropdown(
+                                    name: "eventCategory",
+                                    focusNode: eventCategoryDropdownFocus,
+                                    decoration: InputDecoration(
+                                      hintText: "Kategori Seçin",
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    items: buildArtCategoryDropdownItems(),
+                                    validator: FormBuilderValidators.compose(
+                                      [
+                                        FormBuilderValidators.required(context,
+                                            errorText:
+                                                "Bu alan boş bırakılamaz.")
+                                      ],
                                     ),
                                   ),
-                                  items: buildEventTypeDropdownItems(),
-                                  validator: FormBuilderValidators.compose(
-                                    [
-                                      FormBuilderValidators.required(context,
-                                          errorText: "Bu alan boş bırakılamaz.")
-                                    ],
-                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: size.width * 0.4,
-                        child: Text(
-                          "Online Etkinlik",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: Container(
-                            color: Colors.grey[200],
-                            width: size.width * 0.4,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 4, bottom: 4, left: 16, right: 4),
-                              child: FormBuilderRadioGroup(
-                                // focusNode: radioButtonFocus,
-                                decoration:
-                                    InputDecoration(border: InputBorder.none),
-                                name: "online_status",
-                                options: [
-                                  FormBuilderFieldOption(
-                                    value: true,
-                                    child: Text("Online"),
-                                  ),
-                                  FormBuilderFieldOption(
-                                    value: false,
-                                    child: Text("Offline"),
-                                  ),
-                                ],
-                                validator: FormBuilderValidators.compose(
-                                  [
-                                    FormBuilderValidators.required(context,
-                                        errorText: "Bu alan boş bırakılamaz")
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                new Divider(
-                  height: 10.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: size.width * 0.4,
-                      child: new ListTile(
-                        title: const Text(
-                          'Oluştur',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        onTap: () async {
-                          submitEventDialog();
-                        },
+                        ],
                       ),
                     ),
-                    Container(
-                      width: size.width * 0.4,
-                      child: new ListTile(
-                        title: const Text(
-                          'İptal',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: size.width * 0.4,
+                            child: Text(
+                              "Tür",
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(24),
+                              child: Container(
+                                color: Colors.grey[200],
+                                width: size.width * 0.4,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4, bottom: 4, left: 16, right: 4),
+                                  child: ChipTheme(
+                                    data: ChipTheme.of(context).copyWith(
+                                      // labelStyle: TextStyle(
+                                      //   color: Colors.white,
+                                      //   fontSize: 16,
+                                      // ),
+                                      backgroundColor: Colors.grey[200],
+
+                                      // disabledColor: Colors.grey[200],
+                                      secondarySelectedColor: kNavbarColor,
+                                      secondaryLabelStyle: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    child: FormBuilderDropdown(
+                                      name: "eventType",
+                                      focusNode: eventTypeDropdownFocus,
+                                      decoration: InputDecoration(
+                                        hintText: "Tür Seçin",
+                                        contentPadding: EdgeInsets.zero,
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                      items: buildEventTypeDropdownItems(),
+                                      validator: FormBuilderValidators.compose(
+                                        [
+                                          FormBuilderValidators.required(
+                                              context,
+                                              errorText:
+                                                  "Bu alan boş bırakılamaz.")
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: size.width * 0.4,
+                            child: Text(
+                              "Online Etkinlik",
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(24),
+                              child: Container(
+                                color: Colors.grey[200],
+                                width: size.width * 0.4,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4, bottom: 4, left: 16, right: 4),
+                                  child: FormBuilderRadioGroup(
+                                    // focusNode: radioButtonFocus,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none),
+                                    name: "online_status",
+                                    options: [
+                                      FormBuilderFieldOption(
+                                        value: true,
+                                        child: Text("Online"),
+                                      ),
+                                      FormBuilderFieldOption(
+                                        value: false,
+                                        child: Text("Offline"),
+                                      ),
+                                    ],
+                                    validator: FormBuilderValidators.compose(
+                                      [
+                                        FormBuilderValidators.required(context,
+                                            errorText:
+                                                "Bu alan boş bırakılamaz")
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    new Divider(
+                      height: 10.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          child: new ListTile(
+                            title: const Text(
+                              'Oluştur',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            onTap: () async {
+                              submitEventDialog();
+                            },
                           ),
                         ),
-                        onTap: () async {
-                          NavigationService.instance.pop();
-                        },
-                      ),
+                        Container(
+                          width: size.width * 0.4,
+                          child: new ListTile(
+                            title: const Text(
+                              'İptal',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            onTap: () async {
+                              NavigationService.instance.pop();
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            )
+          ],
         );
       },
     );

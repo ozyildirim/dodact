@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -123,14 +126,29 @@ class UnderConstructionScreen extends StatelessWidget {
               )),
             ),
             Text(
-              "Bakımdayız",
+              "Kısa bir süreliğine bakımdayız",
               style: TextStyle(fontSize: 22),
             ),
             SizedBox(height: 10),
-            GFIconButton(
-                shape: GFIconButtonShape.circle,
-                icon: Icon(FontAwesome5Brands.twitter),
-                onPressed: () {})
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GFIconButton(
+                    color: Colors.transparent,
+                    shape: GFIconButtonShape.circle,
+                    icon: Icon(FontAwesome5Brands.twitter),
+                    onPressed: () {
+                      CommonMethods.launchURL("https://twitter.com/dodactcom");
+                    }),
+                GFIconButton(
+                    shape: GFIconButtonShape.circle,
+                    color: Colors.transparent,
+                    icon: Icon(FontAwesome5Brands.instagram),
+                    onPressed: () {
+                      CommonMethods.launchURL("https://twitter.com/dodactcom");
+                    })
+              ],
+            )
           ],
         ),
       ),
@@ -152,13 +170,39 @@ class EnforcedUpdateScreen extends StatelessWidget {
         child: Center(
           child: Card(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.7,
+              width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.2,
               child: Center(
-                child: Text(
-                  "Lütfen uygulamayı güncelleyin.",
-                  style: TextStyle(fontSize: 22),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Lütfen uygulamayı güncelleyin",
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 10),
+                    Platform.isAndroid
+                        ? GFIconButton(
+                            color: Colors.transparent,
+                            icon: Icon(FontAwesome5Brands.google_play,
+                                color: Colors.black),
+                            onPressed: () {
+                              CommonMethods.launchURL(
+                                  "https://play.google.com/store/apps/details?id=com.dodact.dodact_v1");
+                            })
+                        : GFIconButton(
+                            color: Colors.transparent,
+                            icon: Icon(
+                              FontAwesome5Brands.app_store_ios,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              CommonMethods.launchURL(
+                                  "https://apps.apple.com/us/app/dodact/id1596151747");
+                            },
+                          )
+                  ],
                 ),
               ),
             ),

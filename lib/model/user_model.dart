@@ -57,12 +57,12 @@ class UserObject {
   //Notification Settings
   Map<String, dynamic> notificationSettings = {
     'allow_comment_notifications': true,
-    'allow_post_like_notifications': true,
+    'allow_post_like_notifications': false,
     'allow_group_comment_notifications': true,
     'allow_group_invitation_notifications': true,
     'allow_group_announcement_notifications': true,
-    'allow_group_post_notifications': true,
-    'allow_private_message_notifications': true,
+    'allow_group_post_notifications': false,
+    'allow_private_message_notifications': false,
   };
 
   List<String> searchKeywords;
