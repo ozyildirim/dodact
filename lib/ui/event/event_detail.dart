@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:math';
+
 import 'package:cool_alert/cool_alert.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -13,11 +12,11 @@ import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -107,14 +106,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                                       await _showDeleteEventDialog(event.id);
                                     }),
                               ),
-                              // PopupMenuItem(
-                              //   child: ListTile(
-                              //       leading: Icon(FontAwesome5Regular.edit),
-                              //       title: Text("Düzenle"),
-                              //       onTap: () async {
-                              //         await _showEditEventDialog(event);
-                              //       }),
-                              // )
+                              PopupMenuItem(
+                                child: ListTile(
+                                    leading: Icon(FontAwesome5Regular.edit),
+                                    title: Text("Düzenle"),
+                                    onTap: () async {
+                                      await _showEditEventDialog(event);
+                                    }),
+                              )
                             ]),
                   ),
                 )
