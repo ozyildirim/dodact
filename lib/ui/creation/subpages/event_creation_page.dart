@@ -90,6 +90,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       // extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
@@ -106,6 +107,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           FocusScope.of(context).unfocus();
         },
         child: Container(
+          height: size.height,
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(

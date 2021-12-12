@@ -182,18 +182,14 @@ class EventProvider extends ChangeNotifier {
     _isFetchingFilteredEvents = false;
   }
 
-  Future<bool> update(String eventId, Map<String, dynamic> changes,
-      {bool isNotify}) async {
+  Future<bool> update(String eventId, Map<String, dynamic> changes) async {
     try {
-      changeState(true, isNotify: isNotify);
       return await eventRepository
           .update(eventId, changes)
           .then((value) => true);
     } catch (e) {
       print("EventProvider update error: " + e.toString());
       return false;
-    } finally {
-      changeState(false);
     }
   }
 }
