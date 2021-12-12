@@ -142,16 +142,16 @@ class _PostDetailState extends BaseState<PostDetail> {
                               await showDeletePostDialog();
                             }),
                       ),
-                      // PopupMenuItem(
-                      //   child: ListTile(
-                      //     enabled: false,
-                      //     leading: Icon(FontAwesome5Solid.cogs),
-                      //     title: Text("Düzenle"),
-                      //     onTap: () async {
-                      //       await showEditPostDialog();
-                      //     },
-                      //   ),
-                      // ),
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(FontAwesome5Solid.cogs),
+                          title: Text("Düzenle"),
+                          onTap: () async {
+                            NavigationService.instance
+                                .navigate(k_ROUTE_POST_EDIT_PAGE, args: post);
+                          },
+                        ),
+                      ),
                     ])
           ]
         : [

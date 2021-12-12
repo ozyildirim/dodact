@@ -22,6 +22,7 @@ import 'package:dodact_v1/ui/creation/subpages/streamer_application_page.dart';
 import 'package:dodact_v1/ui/creation/user_application_page.dart';
 import 'package:dodact_v1/ui/detail/podcast_detail.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
+import 'package:dodact_v1/ui/detail/post_edit_page.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_detail_comments_part.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
@@ -159,6 +160,9 @@ class NavigationRouteManager {
               post: args,
             ),
             settings);
+
+      case k_ROUTE_POST_EDIT_PAGE:
+        return _navigateToDefault(PostEditPage(post: args), settings);
 
       case k_ROUTE_POST_COMMENTS:
         List<dynamic> args = settings.arguments;
