@@ -179,13 +179,12 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text(
-                  "Topluluğunuzun adı ne olsun istersiniz?",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                "Topluluğunuzun adı ne olsun istersiniz?",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ),
             Padding(
