@@ -60,7 +60,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
               ),
               onPressed: () {
                 NavigationService.instance
-                    .navigate(k_ROUTE_USER_APPLICATION_HISTORY);
+                    .navigate(k_ROUTE_USER_APPLICATION_HISTORY)
+                    .then((value) => setState(() {}));
               })
         ],
       ),
@@ -164,6 +165,25 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                               .then((value) => setState(() {}));
                         })
                       : Container(),
+
+                  hasAnythingToApply(
+                              hasStreamerApplication,
+                              hasContentCreatorApplication,
+                              hasEventCreatorApplication,
+                              hasGroupApplication) ==
+                          false
+                      ? Container(
+                          child: Center(
+                            child: Text(
+                              "Tüm başvuruları gerçekleştirdin, mevcut başvurularını sağ üstteki menüden takip edebilirsin",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: kPageCenteredTextSize,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        )
+                      : Container(),
                   // hasStreamerApplication == false &&
                   //         userProvider
                   //                 .currentUser.permissions["create_stream"] ==
@@ -186,6 +206,20 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
             );
           }
         });
+  }
+
+  hasAnythingToApply(
+      bool hasStreamerApplication,
+      bool hasContentCreatorApplication,
+      bool hasEventCreatorApplication,
+      bool hasGroupApplication) {
+    if (hasContentCreatorApplication == false &&
+        hasEventCreatorApplication == false &&
+        hasGroupApplication == false) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   showSnackBar(String message) {
@@ -262,12 +296,12 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           height: size.height * 0.3,
         ),
         titleWidget: Text(
-          "İçeriklerin Göz Önünde Olsun",
+          "İçeriklerinle Görünür Ol",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Dodact içerisinde içeriklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+            "Dodact'ta içeriklerini kolayca paylaşır, farkedilir ve hedef kitlene ulaşırsın",
       ),
       PageViewModel(
         image: Image.asset(
@@ -275,12 +309,12 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           height: size.height * 0.3,
         ),
         titleWidget: Text(
-          "Etkinliklerine Herkes Kolaylıkla Ulaşsın",
+          "Etkinliklerinle Sanatseverleri Bir Araya Getir",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Etkinliklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+            "Dodact'ta yayınladığın etkinlikler ile sanatseverleri bir araya getirir, sanata katkı sağlarsın",
       ),
       PageViewModel(
         image: Image.asset(
@@ -292,18 +326,17 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
-        body:
-            "Gerçekleştirdiğin canlı yayınları artık Dodact üzerinden oluşturabilirsin. Bu sayede yayınların hedef kitlene kolayca ulaşabilir.",
+        body: "Canlı yayınlarını sanatseverlere ulaştır",
       ),
       PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_1.png'),
+        image: Image.asset('assets/images/onboarding/onboarding_3.png'),
         titleWidget: Text(
-          "Topluluğunu Oluştur & Topluluğa Katıl",
+          "Topluluğuk Oluştur & Topluluğa Katıl",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Dahil olduğun sanat topluluğunu Dodact üzerinde temsil etme şansı yakala ve çalışmalarını daha çok kişiye ulaştır. Yeni ekip arkadaşları bulabilir ya da mevcut ekiplere katılarak gücünü birleştirebilirsin.",
+            "Sanat topluluğu oluşturabilir ve/veya mevcut bir topluluğa katılabilirsin",
       ),
     ];
 
