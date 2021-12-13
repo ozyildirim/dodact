@@ -14,11 +14,11 @@ import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:paginate_firestore/bloc/pagination_cubit.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatroomPage extends StatefulWidget {
   final String currentUserId;
@@ -33,6 +33,7 @@ class ChatroomPage extends StatefulWidget {
 
 class _ChatroomPageState extends BaseState<ChatroomPage> {
   var logger = Logger();
+  SharedPreferences sharedPreferences;
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final ScrollController scrollController = ScrollController();
   bool doesRoomExist;
@@ -47,15 +48,26 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   //Son mesaj silindiğinde buildEmptyRoomAction fonksiyonu 2 kere çalışıyor ve 2 kere pop yapıyor. Bunu önlemek için böyle ilkel bir çözüm buldum.
   int exitCounter = 0;
 
-  getOtherUser() {}
+  setSharedPreference(String otherUserId) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('activeChattingUser', otherUserId);
+  }
+
+  removeSharedPreference() async {
+    await sharedPreferences.remove('activeChattingUser');
+
+    // await sharedPreferences.setString('activeChattingUser', null);
+    print("değer sıfırlandı");
+  }
 
   @override
   void initState() {
     chatroomProvider = Provider.of<ChatroomProvider>(context, listen: false);
     currentUserId = widget.currentUserId;
     otherUserId = widget.otherUserObject.uid;
-    // otherUser = userProvider.getUserByID(otherUserId);
+
     roomId = generateRoomId(currentUserId, otherUserId);
+    setSharedPreference(otherUserId);
     checkChatroom();
     super.initState();
   }
@@ -80,6 +92,12 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  @override
+  void dispose() {
+    removeSharedPreference();
+    super.dispose();
   }
 
   @override

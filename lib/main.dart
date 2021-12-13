@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
@@ -27,11 +28,10 @@ Future<void> _messageHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //MobileAds.instance.initialize();
+
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   initScreen = _prefs.getInt("initScreen");
   await _prefs.setInt('initScreen', 1);
-  // await _prefs.setInt('userApplicationsIntroductionScreen', 0);
   await Firebase.initializeApp();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -61,15 +61,34 @@ void main() async {
       debug: true);
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
-  //MobileAds.instance.initialize();
-  initScreen = _prefs.getInt("initScreen");
-  await _prefs.setInt('initScreen', 1);
-  // await _prefs.setInt('userApplicationsIntroductionScreen', 0);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print("main 2. çalıştı");
-    print(message.data);
-    AwesomeNotifications().createNotificationFromJsonData(message.data);
+    // print("main 2. çalıştı");
+    // print("DATA: " + message.data.toString());
+    // print("CONTENT: " + message.data['content']);
+
+    var data = message.data['content'];
+    var contentMap = jsonDecode(data);
+
+    // if (changedMap is Map) {
+    //   print("data is Map");
+    // }
+    // print(changedMap['payload']);
+
+    String activeChattingUser = _prefs.getString("activeChattingUser");
+
+    //Eğer gelen bildirim chat için ise böyle bir sınıflandırmaya sok, değil ise normal bildirim oluştur.
+    if (contentMap['payload']['type'] == "message") {
+      if (activeChattingUser != null &&
+          contentMap['payload']['from'] == activeChattingUser) {
+        print("konuşulan kullanıcıdan mesaj geldi");
+      } else {
+        AwesomeNotifications().createNotificationFromJsonData(message.data);
+      }
+    } else {
+      AwesomeNotifications().createNotificationFromJsonData(message.data);
+    }
+
     // AwesomeNotifications().createNotification(
     //   content: NotificationContent(
     //     id: 10,
