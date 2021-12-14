@@ -235,13 +235,13 @@ class _EventEditPageState extends State<EventEditPage> {
               TextFieldContainer(
                 width: size.width * 0.9,
                 child: FormBuilderTextField(
-                  textInputAction: TextInputAction.next,
+                  // textInputAction: TextInputAction.,
                   focusNode: eventDescriptionFocus,
                   name: "eventDescription",
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
                   textCapitalization: TextCapitalization.sentences,
                   cursorColor: kPrimaryColor,
-                  maxLines: 2,
+                  maxLines: null,
                   initialValue: event.description,
                   decoration: InputDecoration(
                       border: InputBorder.none,

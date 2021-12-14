@@ -62,17 +62,18 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
                   ),
                   title: Text(
                     comment.comment,
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 18),
                   ),
                   subtitle: Text(
                     "@" + authorUser.username,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                   trailing: Column(
                     children: [
                       Text(
-                        DateFormat("dd.MM.yyyy hh:mm")
+                        DateFormat("dd.MM.yyyy HH:mm", "tr_TR")
                             .format(comment.commentDate),
+                        style: TextStyle(fontSize: 12),
                       ),
                     ],
                   ),

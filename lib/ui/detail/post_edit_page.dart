@@ -12,8 +12,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:youtube_metadata/youtube_metadata.dart';
 
 class PostEditPage extends StatefulWidget {
   final PostModel post;
@@ -155,13 +153,13 @@ class _PostEditPageState extends State<PostEditPage> {
                     TextFieldContainer(
                       width: size.width * 0.8,
                       child: FormBuilderTextField(
-                        textInputAction: TextInputAction.next,
+                        // textInputAction: TextInputAction.next,
                         focusNode: postDescriptionFocus,
                         initialValue: post.postDescription,
                         name: "postDescription",
-                        maxLines: 3,
+                        maxLines: null,
                         autofocus: false,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.multiline,
                         textCapitalization: TextCapitalization.sentences,
                         cursorColor: kPrimaryColor,
                         decoration: InputDecoration(

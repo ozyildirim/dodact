@@ -276,13 +276,13 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               TextFieldContainer(
                 width: size.width * 0.9,
                 child: FormBuilderTextField(
-                  textInputAction: TextInputAction.next,
+                  // textInputAction: TextInputAction.next,
                   focusNode: eventDescriptionFocus,
                   name: "eventDescription",
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
                   textCapitalization: TextCapitalization.sentences,
                   cursorColor: kPrimaryColor,
-                  maxLines: 2,
+                  maxLines: null,
                   decoration: InputDecoration(
                       hintText: "Etkinlik Açıklaması",
                       border: InputBorder.none,

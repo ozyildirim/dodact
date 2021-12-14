@@ -404,13 +404,14 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                   TextFieldContainer(
                     width: size.width * 0.8,
                     child: FormBuilderTextField(
-                      textInputAction: TextInputAction.next,
+                      // expands: true,
+                      // textInputAction: TextInputAction.,
                       focusNode: postDescriptionFocus,
                       controller: postDescriptionController,
+                      maxLines: null,
                       name: "postDescription",
-                      maxLines: 3,
                       autofocus: false,
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.multiline,
                       textCapitalization: TextCapitalization.sentences,
                       cursorColor: kPrimaryColor,
                       decoration: InputDecoration(

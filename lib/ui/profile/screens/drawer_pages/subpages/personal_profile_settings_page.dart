@@ -133,7 +133,9 @@ class _UserPersonalProfileSettingsPageState
                       children: [
                         Text(
                           "E-posta Adresi",
-                          style: TextStyle(fontSize: kSettingsTitleSize),
+                          style: TextStyle(
+                              fontSize: kSettingsTitleSize,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 4),
                         TextFieldContainer(
@@ -156,7 +158,9 @@ class _UserPersonalProfileSettingsPageState
                       children: [
                         Text(
                           "Ad - Soyad",
-                          style: TextStyle(fontSize: kSettingsTitleSize),
+                          style: TextStyle(
+                              fontSize: kSettingsTitleSize,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 4),
                         TextFieldContainer(
@@ -200,7 +204,9 @@ class _UserPersonalProfileSettingsPageState
                       children: [
                         Text(
                           "Kullanıcı Adı",
-                          style: TextStyle(fontSize: kSettingsTitleSize),
+                          style: TextStyle(
+                              fontSize: kSettingsTitleSize,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 4),
                         TextFieldContainer(
@@ -246,7 +252,9 @@ class _UserPersonalProfileSettingsPageState
                       children: [
                         Text(
                           "Lokasyon",
-                          style: TextStyle(fontSize: kSettingsTitleSize),
+                          style: TextStyle(
+                              fontSize: kSettingsTitleSize,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 4),
                         TextFieldContainer(
@@ -293,7 +301,9 @@ class _UserPersonalProfileSettingsPageState
                       children: [
                         Text(
                           "Hakkımda",
-                          style: TextStyle(fontSize: kSettingsTitleSize),
+                          style: TextStyle(
+                              fontSize: kSettingsTitleSize,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 4),
                         TextFieldContainer(
@@ -301,8 +311,9 @@ class _UserPersonalProfileSettingsPageState
                           width: mediaQuery.size.width * 0.9,
                           child: FormBuilderTextField(
                             name: "userDescription",
-                            maxLines: 3,
+                            maxLines: null,
                             focusNode: descriptionFocus,
+                            keyboardType: TextInputType.multiline,
                             initialValue:
                                 userProvider.currentUser.userDescription,
                             decoration: InputDecoration(
@@ -338,7 +349,9 @@ class _UserPersonalProfileSettingsPageState
                       children: [
                         Text(
                           "Okul/Eğitim Kurumu",
-                          style: TextStyle(fontSize: kSettingsTitleSize),
+                          style: TextStyle(
+                              fontSize: kSettingsTitleSize,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 4),
                         TextFieldContainer(
@@ -379,7 +392,9 @@ class _UserPersonalProfileSettingsPageState
                       children: [
                         Text(
                           "Meslek",
-                          style: TextStyle(fontSize: kSettingsTitleSize),
+                          style: TextStyle(
+                              fontSize: kSettingsTitleSize,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 4),
                         TextFieldContainer(
