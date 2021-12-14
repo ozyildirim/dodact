@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/discover/widgets/post_card_for_grids.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +19,17 @@ class StaggeredGridViewWidget extends StatefulWidget {
 class _StaggeredGridViewWidgetState extends State<StaggeredGridViewWidget> {
   ScrollController scrollController;
   PostProvider postProvider;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     postProvider = Provider.of<PostProvider>(context, listen: false);
     scrollController = ScrollController();
-    postProvider.postsSnapshot.clear();
     scrollController.addListener(scrollListener);
-    postProvider.fetchNextPosts();
+    if (postProvider.postsSnapshot.isEmpty) {
+      postProvider.fetchNextPosts();
+    }
   }
 
   @override
@@ -44,30 +47,52 @@ class _StaggeredGridViewWidgetState extends State<StaggeredGridViewWidget> {
     }
   }
 
+  Future<void> refreshPostPage() {
+    setState(() {
+      isLoading = true;
+    });
+    return Future(() async {
+      postProvider.postsSnapshot.clear();
+      await postProvider.fetchNextPosts();
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<PostProvider>(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: StaggeredGridView.countBuilder(
-        controller: scrollController,
-        crossAxisCount: 4,
-        itemCount: postProvider.posts.length,
-        itemBuilder: (BuildContext context, int index) {
-          var postItem = postProvider.posts[index];
-          return Container(
-            height: 400,
-            child: PostCardForGrid(
-              post: postItem,
-            ),
-          );
-        },
-        staggeredTileBuilder: (int index) =>
-            new StaggeredTile.count(2, index.isEven ? 2 : 1),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-      ),
-    );
+    if (isLoading || provider.postsSnapshot.isEmpty) {
+      return Center(
+        child: spinkit,
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: RefreshIndicator(
+          onRefresh: refreshPostPage,
+          child: StaggeredGridView.countBuilder(
+            controller: scrollController,
+            crossAxisCount: 4,
+            itemCount: postProvider.posts.length,
+            itemBuilder: (BuildContext context, int index) {
+              var postItem = postProvider.posts[index];
+              return Container(
+                height: 400,
+                child: PostCardForGrid(
+                  post: postItem,
+                ),
+              );
+            },
+            staggeredTileBuilder: (int index) =>
+                new StaggeredTile.count(2, index.isEven ? 2 : 1),
+            mainAxisSpacing: 4.0,
+            crossAxisSpacing: 4.0,
+          ),
+        ),
+      );
+    }
   }
 }

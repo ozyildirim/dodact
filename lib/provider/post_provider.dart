@@ -113,6 +113,7 @@ class PostProvider extends ChangeNotifier {
       postsSnapshot.map((e) => PostModel.fromJson(e.data())).toList();
 
   Future fetchNextPosts() async {
+    print("post çekildi");
     if (_isFetchingPosts) return;
 
     errorMessage = '';
@@ -133,7 +134,6 @@ class PostProvider extends ChangeNotifier {
     }
 
     _isFetchingPosts = false;
-    print("çekildi");
   }
 
   Future<List<PostModel>> getTopPosts() async {

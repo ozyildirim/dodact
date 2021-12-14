@@ -33,8 +33,8 @@ class _EventsPageState extends BaseState<EventsPage> {
     scrollController = ScrollController();
 
     scrollController.addListener(scrollListener);
-    eventProvider.eventsSnapshot.clear();
-    eventProvider.filteredEventsSnapshot.clear();
+    // eventProvider.eventsSnapshot.clear();
+    // eventProvider.filteredEventsSnapshot.clear();
     eventProvider.getEventList();
   }
 
@@ -59,93 +59,103 @@ class _EventsPageState extends BaseState<EventsPage> {
     }
   }
 
+  Future<void> refreshEventsPage() {
+    return Future(() {
+      eventProvider.eventsSnapshot.clear();
+      eventProvider.getEventList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: kToolbarHeight),
-        child: FloatingActionButton(
-          backgroundColor: Colors.white,
-          onPressed: () {
-            // showFilterDialog();
-            showFilterBottomSheet();
-          },
-          child: Icon(
-            Icons.filter_list_rounded,
-            color: Colors.black,
+    return RefreshIndicator(
+      onRefresh: refreshEventsPage,
+      child: Scaffold(
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: kToolbarHeight),
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            onPressed: () {
+              // showFilterDialog();
+              showFilterBottomSheet();
+            },
+            child: Icon(
+              Icons.filter_list_rounded,
+              color: Colors.black,
+            ),
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+              image: AssetImage(kBackgroundImage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Consumer<EventProvider>(
-          builder: (_, provider, child) {
-            if (isFiltered) {
-              if (provider.filteredEventsSnapshot.isNotEmpty) {
-                return ListView.builder(
-                    controller: scrollController,
-                    itemCount: provider.filteredEvents.length,
-                    itemBuilder: (context, index) {
-                      var event = provider.filteredEvents[index];
-                      return Container(
-                          height: size.height * 0.3,
-                          child: ParallaxEvent(event: event));
-                    });
-              } else if (provider.filteredEventsSnapshot.isEmpty) {
-                return Container(
-                  height: size.height,
-                  child: Center(
-                    child: Text(
-                      "Bu kriterlere uyan bir etkinlik bulunamadı",
-                      style: TextStyle(fontSize: 22),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              } else {
-                return Center(
-                  child: spinkit,
-                );
-              }
-            } else {
-              if (provider.eventsSnapshot.isNotEmpty) {
-                return ListView.builder(
-                    controller: scrollController,
-                    itemCount: provider.events.length,
-                    itemBuilder: (context, index) {
-                      var event = provider.events[index];
-                      if (event.eventImages.isNotEmpty &&
-                          event.eventImages != null) {
+          child: Consumer<EventProvider>(
+            builder: (_, provider, child) {
+              if (isFiltered) {
+                if (provider.filteredEventsSnapshot.isNotEmpty) {
+                  return ListView.builder(
+                      controller: scrollController,
+                      itemCount: provider.filteredEvents.length,
+                      itemBuilder: (context, index) {
+                        var event = provider.filteredEvents[index];
                         return Container(
                             height: size.height * 0.3,
                             child: ParallaxEvent(event: event));
-                      } else {
-                        return Container();
-                      }
-                    });
-              } else {
-                return Container(
-                  height: size.height,
-                  child: Center(
-                    child: Text(
-                      "Bu kriterlere uyan bir etkinlik bulunamadı",
-                      style: TextStyle(fontSize: 22),
-                      textAlign: TextAlign.center,
+                      });
+                } else if (provider.filteredEventsSnapshot.isEmpty) {
+                  return Container(
+                    height: size.height,
+                    child: Center(
+                      child: Text(
+                        "Bu kriterlere uyan bir etkinlik bulunamadı",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  return Center(
+                    child: spinkit,
+                  );
+                }
+              } else {
+                if (provider.eventsSnapshot.isNotEmpty) {
+                  return ListView.builder(
+                      controller: scrollController,
+                      itemCount: provider.events.length,
+                      itemBuilder: (context, index) {
+                        var event = provider.events[index];
+                        if (event.eventImages.isNotEmpty &&
+                            event.eventImages != null) {
+                          return Container(
+                              height: size.height * 0.3,
+                              child: ParallaxEvent(event: event));
+                        } else {
+                          return Container();
+                        }
+                      });
+                } else {
+                  return Container(
+                    height: size.height,
+                    child: Center(
+                      child: Text(
+                        "Bu kriterlere uyan bir etkinlik bulunamadı",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }
               }
-            }
-          },
+            },
+          ),
         ),
       ),
     );
