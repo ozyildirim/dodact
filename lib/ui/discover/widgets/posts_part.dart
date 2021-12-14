@@ -72,6 +72,7 @@ class _StaggeredGridViewWidgetState extends State<StaggeredGridViewWidget> {
       return Padding(
         padding: const EdgeInsets.all(5.0),
         child: RefreshIndicator(
+          color: kNavbarColor,
           onRefresh: refreshPostPage,
           child: StaggeredGridView.countBuilder(
             controller: scrollController,
