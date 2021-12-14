@@ -38,24 +38,24 @@ var mailTransport = nodemailer.createTransport({
   },
 });
 
-exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
-  var welcomeHtmlMail = fs.readFileSync("./welcome.html", "utf-8").toString();
-  const recipent_email = user.email;
+// exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+//   var welcomeHtmlMail = fs.readFileSync("./welcome.html", "utf-8").toString();
+//   const recipent_email = user.email;
 
-  const mailOptions = {
-    from: `Dodact <no-reply@dodact.com>`,
-    to: recipent_email,
-    subject: `Dodact'e hoş geldin!`,
-    html: welcomeHtmlMail,
-  };
+//   const mailOptions = {
+//     from: `Dodact <no-reply@dodact.com>`,
+//     to: recipent_email,
+//     subject: `Dodact'e hoş geldin!`,
+//     html: welcomeHtmlMail,
+//   };
 
-  try {
-    mailTransport.sendMail(mailOptions);
-    console.log("mail sent successfuly");
-  } catch (error) {
-    console.error("There was an error while sending the email:", error);
-  }
-});
+//   try {
+//     mailTransport.sendMail(mailOptions);
+//     console.log("mail sent successfuly");
+//   } catch (error) {
+//     console.error("There was an error while sending the email:", error);
+//   }
+// });
 
 exports.decrementPostDodders = functions.firestore
   .document("posts/{postId}/dodders/{dodderId}")

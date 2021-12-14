@@ -182,7 +182,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
-                "Topluluğunun adı ne olsun istersin?",
+                "Topluluğunuzun adı ne olsun istersiniz?",
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ),
@@ -217,14 +218,16 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             Row(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Hangi sanat dalıyla ilgileniyorsunuz?",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Hangi sanat dalı ile ilgileniyorsunuz?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Topluluk olarak üzerinde çalıştığınız sanat dalını seçmelisin.");
+                          "Topluluğun ilgilendiği sanat dalını seçmelisiniz.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -266,14 +269,16 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             SizedBox(height: 15),
             Row(
               children: [
-                Text(
-                  "Bize biraz topluluğundan bahseder misin?",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Topluluğunuzun hedef ve çalışmalarından bahseder misiniz?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Bize biraz topluluğundan ve sanat ile ilgili tecrübelerinden bahseder misin? (Örnek olarak ne tarz performanslar ortaya koyduğundan, kaç üyesi olduğundan, nerede ve hangi sıklıkla sahne aldığınızdan bahsedebilirsin.");
+                          "Mevcut bir topluluk ise; kaç üyesi olduğundan, ne tür çalışmalar yaptığınızdan ve hedeflerinizden, yeni bir topluluk ise; hedeflerinizden ve Dodact'tan beklentilerinizi paylaşabilirsiniz.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -309,14 +314,14 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
               children: [
                 Flexible(
                   child: Text(
-                    "Şimdiye kadarki çalışmalarınızı merak ediyoruz. Bizimle bir link paylaşır mısın?",
+                    "Bugüne yaptığınız çalışmalarınızı merak ediyoruz. Bizimle bir link paylaşır mısın?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Topluluğunuzla ve çalışmalarınızla ilgili herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
+                          "Topluluğunuzla ve çalışmalarınızla ilgili bir link paylaşabilir misin? Bu kullandığınız diğer platformlardan (youtube,instagram) linkler de olabilir.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -440,7 +445,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
               ),
             ),
             buildButton(),
-            SizedBox(height: 30),
+            SizedBox(height: 50),
           ],
         ),
       ),
