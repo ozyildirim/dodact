@@ -134,6 +134,7 @@ class EventProvider extends ChangeNotifier {
       );
 
       eventsSnapshot.addAll(snap.docs);
+      logger.d("etkinlikler çekildi");
 
       if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
@@ -169,6 +170,7 @@ class EventProvider extends ChangeNotifier {
       );
 
       filteredEventsSnapshot.addAll(snap.docs);
+      logger.d("filtreli etkinlikler çekildi");
       // print("snap.docs");
 
       if (snap.docs.length < documentLimit) _hasNextFiltered = false;

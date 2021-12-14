@@ -4,7 +4,6 @@ import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/group_card.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
-import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -22,6 +21,7 @@ class _GroupsPageState extends State<GroupsPage> {
   String selectedCategory;
   String selectedCity;
   bool isFiltered = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -30,9 +30,10 @@ class _GroupsPageState extends State<GroupsPage> {
     scrollController = ScrollController();
 
     scrollController.addListener(scrollListener);
-    groupProvider.groupsSnapshot.clear();
-    groupProvider.filteredGroupsSnapshot.clear();
-    groupProvider.getGroupList();
+
+    if (groupProvider.groupsSnapshot.isEmpty) {
+      groupProvider.getGroupList();
+    }
   }
 
   dispose() {
@@ -56,81 +57,70 @@ class _GroupsPageState extends State<GroupsPage> {
     }
   }
 
+  Future<void> refreshGroupsPage() {
+    setState(() {
+      isLoading = true;
+    });
+    return Future(() async {
+      if (isFiltered) {
+        groupProvider.filteredGroupsSnapshot.clear();
+        await groupProvider.getFilteredGroupList(
+          reset: true,
+          category: selectedCategory,
+          city: selectedCity,
+        );
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        groupProvider.groupsSnapshot.clear();
+        groupProvider.getGroupList();
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: kToolbarHeight),
-        child: FloatingActionButton(
-          backgroundColor: Colors.white,
-          onPressed: () {
-            showFilterBottomSheet();
-          },
-          child: Icon(
-            Icons.filter_list_rounded,
-            color: Colors.black,
+    var provider = Provider.of<GroupProvider>(context);
+    if (isLoading) {
+      return Center(child: spinkit);
+    } else {
+      return RefreshIndicator(
+        color: kNavbarColor,
+        onRefresh: refreshGroupsPage,
+        child: Scaffold(
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: kToolbarHeight),
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              onPressed: () {
+                showFilterBottomSheet();
+              },
+              child: Icon(
+                Icons.filter_list_rounded,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                image: AssetImage(kBackgroundImage),
+                fit: BoxFit.cover,
+              ),
+            ),
+            height: size.height - 56,
+            child: buildBody(provider),
           ),
         ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2), BlendMode.dstATop),
-            image: AssetImage(kBackgroundImage),
-            fit: BoxFit.cover,
-          ),
-        ),
-        height: size.height - 56,
-        child: Consumer<GroupProvider>(
-          builder: (_, provider, child) {
-            if (isFiltered) {
-              if (provider.filteredGroupsSnapshot.isNotEmpty) {
-                return ListView.builder(
-                  controller: scrollController,
-                  itemCount: provider.filteredGroups.length,
-                  itemBuilder: (context, index) {
-                    var group = provider.filteredGroups[index];
-                    return GroupCard(group: group);
-                  },
-                );
-              } else {
-                return Container(
-                  child: Center(
-                    child: Text(
-                      "Bu kriterlere uyan bir topluluk bulunamadı",
-                      style: TextStyle(fontSize: kPageCenteredTextSize),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              }
-            } else {
-              if (provider.groupsSnapshot.isNotEmpty) {
-                return ListView.builder(
-                    controller: scrollController,
-                    itemCount: provider.groups.length,
-                    itemBuilder: (context, index) {
-                      var group = provider.groups[index];
-                      return GroupCard(group: group);
-                    });
-              } else {
-                return Container(
-                  child: Center(
-                    child: Text(
-                      "Bu kriterlere uyan bir topluluk bulunamadı",
-                      style: TextStyle(fontSize: kPageCenteredTextSize),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              }
-            }
-          },
-        ),
-      ),
-    );
+      );
+    }
   }
 
   submitFilterDialog() {
@@ -365,5 +355,50 @@ class _GroupsPageState extends State<GroupsPage> {
               ),
             ))
         .toList();
+  }
+
+  buildBody(GroupProvider provider) {
+    if (isFiltered) {
+      if (provider.filteredGroupsSnapshot.isNotEmpty) {
+        return ListView.builder(
+          controller: scrollController,
+          itemCount: provider.filteredGroups.length,
+          itemBuilder: (context, index) {
+            var group = provider.filteredGroups[index];
+            return GroupCard(group: group);
+          },
+        );
+      } else {
+        return Container(
+          child: Center(
+            child: Text(
+              "Bu kriterlere uyan bir topluluk bulunamadı",
+              style: TextStyle(fontSize: kPageCenteredTextSize),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+    } else {
+      if (provider.groupsSnapshot.isNotEmpty) {
+        return ListView.builder(
+            controller: scrollController,
+            itemCount: provider.groups.length,
+            itemBuilder: (context, index) {
+              var group = provider.groups[index];
+              return GroupCard(group: group);
+            });
+      } else {
+        return Container(
+          child: Center(
+            child: Text(
+              "Bu kriterlere uyan bir topluluk bulunamadı",
+              style: TextStyle(fontSize: kPageCenteredTextSize),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+    }
   }
 }
