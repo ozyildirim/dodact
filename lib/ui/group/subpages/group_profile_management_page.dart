@@ -220,8 +220,8 @@ class _GroupProfileManagementPageState
                     TextFieldContainer(
                       width: size.width * 0.9,
                       child: FormBuilderTextField(
-                        minLines: 2,
-                        maxLines: 5,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
                         name: "groupDescription",
                         initialValue: group.groupDescription,
                         decoration: InputDecoration(

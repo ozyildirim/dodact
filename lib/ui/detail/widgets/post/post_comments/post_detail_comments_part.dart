@@ -36,7 +36,10 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
   Widget build(BuildContext context) {
     buildBody() {
       return PaginateFirestore(
-        query: postsRef.doc(widget.postId).collection("comments"),
+        query: postsRef
+            .doc(widget.postId)
+            .collection("comments")
+            .orderBy('commentDate', descending: false),
         itemBuilderType: PaginateBuilderType.listView,
         itemsPerPage: 10,
         isLive: true,
@@ -46,10 +49,13 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
         itemBuilder:
             (BuildContext context, List<DocumentSnapshot> document, int index) {
           CommentModel comment = CommentModel.fromJson(document[index].data());
-          return PostCommentTile(
-            postId: widget.postId,
-            comment: comment,
-            postOwnerId: widget.postOwnerId,
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: PostCommentTile(
+              postId: widget.postId,
+              comment: comment,
+              postOwnerId: widget.postOwnerId,
+            ),
           );
         },
       );
@@ -66,6 +72,7 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
           FocusScope.of(context).unfocus();
         },
         child: RefreshIndicator(
+          color: kNavbarColor,
           onRefresh: () async => refreshComments(),
           child: Container(
             decoration: BoxDecoration(
@@ -92,52 +99,49 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
   }
 
   Widget buildCommentBox() {
-    return Container(
-      alignment: Alignment(0.0, -1.0),
-      height: 70,
-      child: Form(
-        key: _formKey,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            //TODO: Form builder ekle
-            TextFieldContainer(
-              child: TextFormField(
-                focusNode: focusNode,
-                controller: commentController,
-                maxLines: 3,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                cursorColor: kPrimaryColor,
-                decoration: InputDecoration(
-                  icon: Icon(
-                    FontAwesome5Regular.comment_dots,
-                    color: kPrimaryColor,
-                  ),
-                  hintText: "Harika bir içerik!",
-                  border: InputBorder.none,
+    return Form(
+      key: _formKey,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          //TODO: Form builder ekle
+          TextFieldContainer(
+            child: TextFormField(
+              focusNode: focusNode,
+              controller: commentController,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              textCapitalization: TextCapitalization.sentences,
+              cursorColor: kPrimaryColor,
+              decoration: InputDecoration(
+                icon: Icon(
+                  FontAwesome5Regular.comment_dots,
+                  color: kPrimaryColor,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Bir yorum yazmak istemez miydin?";
-                  }
-                  return null;
-                },
+                hintText: "Harika bir içerik!",
+                border: InputBorder.none,
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Bir yorum yazmak istemez miydin?";
+                }
+                return null;
+              },
             ),
-            CircleAvatar(
-              backgroundColor: Colors.orange,
-              child: IconButton(
-                  icon: Icon(
-                    FontAwesome5Regular.paper_plane,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    submitComment(context);
-                  }),
-            ),
-          ],
-        ),
+          ),
+          CircleAvatar(
+            backgroundColor: kNavbarColor,
+            child: IconButton(
+                icon: Icon(
+                  FontAwesome5Solid.paper_plane,
+                  size: 18,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  submitComment(context);
+                }),
+          ),
+        ],
       ),
     );
   }
