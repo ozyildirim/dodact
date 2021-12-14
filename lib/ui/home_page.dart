@@ -108,7 +108,7 @@ class _HomePageState extends BaseState<HomePage> {
   checkUserSearchKeywords() async {
     if (userProvider.currentUser.searchKeywords == null ||
         userProvider.currentUser.searchKeywords.length < 1) {
-      await userProvider.updateUserSearchKeywords();
+      userProvider.updateUserSearchKeywords();
       print("keywords guncellendi");
     }
   }

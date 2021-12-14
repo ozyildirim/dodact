@@ -111,7 +111,7 @@ class GroupProvider extends ChangeNotifier {
           startAfter: groupsSnapshot.isNotEmpty ? groupsSnapshot.last : null);
 
       groupsSnapshot.addAll(snap.docs);
-      logger.d("etkinlikler çekildi");
+      logger.d("gruplar çekildi");
 
       if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
