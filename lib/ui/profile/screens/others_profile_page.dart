@@ -103,32 +103,52 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                onSelected: (value) async {
+                  if (value == 0) {
+                    await _showReportUserDialog();
+                  } else if (value == 1) {
+                    await _showUnblockDialog();
+                  } else if (value == 2) {
+                    await _showBlockDialog();
+                  }
+                },
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: ListTile(
-                            leading: Icon(FontAwesome5Solid.flag),
-                            title: Text("Bildir"),
-                            onTap: () async {
-                              await _showReportUserDialog();
-                            }),
+                        value: 0,
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Solid.flag,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Bildir", style: TextStyle(fontSize: 14)),
+                          ],
+                        ),
                       ),
                       userProvider.currentUser.blockedUserList
                               .contains(otherUser.uid)
                           ? PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(FontAwesome5Solid.ban),
-                                  title: Text("Engeli Kaldır"),
-                                  onTap: () async {
-                                    await _showUnblockDialog();
-                                  }),
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Solid.ban,
+                                      size: 16, color: Colors.black),
+                                  SizedBox(width: 14),
+                                  Text("Engeli Kaldır",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             )
                           : PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(FontAwesome5Solid.ban),
-                                  title: Text("Engelle"),
-                                  onTap: () async {
-                                    await _showBlockDialog();
-                                  }),
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Solid.ban,
+                                      size: 16, color: Colors.black),
+                                  SizedBox(width: 14),
+                                  Text("Engelle",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             )
                     ])
           ],
@@ -161,7 +181,6 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
         onConfirmBtnTap: () async {
           unblockUser();
           NavigationService.instance.pop();
-          NavigationService.instance.pop();
         });
   }
 
@@ -187,7 +206,6 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
         },
         onConfirmBtnTap: () async {
           await blockUser();
-          NavigationService.instance.pop();
           NavigationService.instance.pop();
         });
   }
