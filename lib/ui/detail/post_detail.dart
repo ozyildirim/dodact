@@ -133,16 +133,24 @@ class _PostDetailState extends BaseState<PostDetail> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                onSelected: (value) async {
+                  if (value == 0) {
+                    await showDeletePostDialog();
+                  } else if (value == 1) {
+                    NavigationService.instance
+                        .navigate(k_ROUTE_POST_EDIT_PAGE, args: post);
+                  }
+                },
                 itemBuilder: (context) => [
                       PopupMenuItem(
+                        value: 0,
                         child: ListTile(
-                            leading: Icon(FontAwesome5Regular.trash_alt),
-                            title: Text("Sil"),
-                            onTap: () async {
-                              await showDeletePostDialog();
-                            }),
+                          leading: Icon(FontAwesome5Regular.trash_alt),
+                          title: Text("Sil"),
+                        ),
                       ),
                       PopupMenuItem(
+                        value: 1,
                         child: ListTile(
                           leading: Icon(FontAwesome5Solid.cogs),
                           title: Text("Düzenle"),
@@ -156,37 +164,62 @@ class _PostDetailState extends BaseState<PostDetail> {
           ]
         : [
             PopupMenuButton(
+                padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                onSelected: (value) async {
+                  if (value == 2) {
+                    await showReportPostDialog();
+                  } else if (value == 3) {
+                    await removeFavorite();
+                  } else if (value == 4) {
+                    await addFavorite();
+                  }
+                },
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: ListTile(
-                            leading: Icon(FontAwesome5Regular.flag),
-                            title: Text("Bildir"),
-                            onTap: () async {
-                              await showReportPostDialog();
-                            }),
+                        value: 2,
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Regular.flag,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Bildir", style: TextStyle(fontSize: 14)),
+                          ],
+                        ),
                       ),
                       isFavorite
                           ? PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(
-                                    FontAwesome5Solid.star,
-                                    color: Colors.orangeAccent,
-                                  ),
-                                  title: Text("Favorilerden Çıkar"),
-                                  onTap: () async {
-                                    await removeFavorite();
-                                  }),
+                              value: 3,
+                              // child: ListTile(
+                              //   leading: Icon(
+                              //     FontAwesome5Solid.star,
+                              //     color: Colors.orangeAccent,
+                              //   ),
+                              //   title: Text("Favorilerden Çıkar"),
+                              // ),
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Solid.star,
+                                      size: 16, color: Colors.orangeAccent),
+                                  SizedBox(width: 14),
+                                  Text("Favorilerden Çıkar",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             )
                           : PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(FontAwesome5Regular.star),
-                                  title: Text("Favorilere Ekle"),
-                                  onTap: () async {
-                                    await addFavorite();
-                                  }),
+                              value: 4,
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Regular.star,
+                                      size: 16, color: Colors.black),
+                                  SizedBox(width: 14),
+                                  Text("Favorilere Ekle",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             ),
                     ])
           ];
@@ -251,7 +284,6 @@ class _PostDetailState extends BaseState<PostDetail> {
         },
         onConfirmBtnTap: () async {
           await reportPost(post.postId);
-          NavigationService.instance.pop();
         });
   }
 
@@ -296,7 +328,6 @@ class _PostDetailState extends BaseState<PostDetail> {
       setState(() {
         isFavorite = true;
       });
-      NavigationService.instance.pop();
     });
   }
 
@@ -305,7 +336,6 @@ class _PostDetailState extends BaseState<PostDetail> {
       setState(() {
         isFavorite = false;
       });
-      NavigationService.instance.pop();
     });
   }
 

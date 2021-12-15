@@ -590,7 +590,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         },
         onConfirmBtnTap: () async {
           await reportEvent(eventId);
-          NavigationService.instance.pop();
         });
   }
 
