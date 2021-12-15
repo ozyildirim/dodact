@@ -144,20 +144,24 @@ class _PostDetailState extends BaseState<PostDetail> {
                 itemBuilder: (context) => [
                       PopupMenuItem(
                         value: 0,
-                        child: ListTile(
-                          leading: Icon(FontAwesome5Regular.trash_alt),
-                          title: Text("Sil"),
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Regular.trash_alt,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Sil", style: TextStyle(fontSize: 14)),
+                          ],
                         ),
                       ),
                       PopupMenuItem(
                         value: 1,
-                        child: ListTile(
-                          leading: Icon(FontAwesome5Solid.cogs),
-                          title: Text("Düzenle"),
-                          onTap: () async {
-                            NavigationService.instance
-                                .navigate(k_ROUTE_POST_EDIT_PAGE, args: post);
-                          },
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Solid.cogs,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Düzenle", style: TextStyle(fontSize: 14)),
+                          ],
                         ),
                       ),
                     ])
@@ -192,13 +196,6 @@ class _PostDetailState extends BaseState<PostDetail> {
                       isFavorite
                           ? PopupMenuItem(
                               value: 3,
-                              // child: ListTile(
-                              //   leading: Icon(
-                              //     FontAwesome5Solid.star,
-                              //     color: Colors.orangeAccent,
-                              //   ),
-                              //   title: Text("Favorilerden Çıkar"),
-                              // ),
                               child: Row(
                                 children: [
                                   Icon(FontAwesome5Solid.star,
