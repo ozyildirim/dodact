@@ -14,6 +14,7 @@ import 'package:dodact_v1/ui/common/validators/validators.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -32,6 +33,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   FocusNode dropdownFocus = FocusNode();
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
@@ -44,7 +46,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   String errorMessage;
   bool isUploaded = false;
   bool isLoading = false;
-  bool isAvailableUsername;
+  bool isAvailableUsername = false;
 
   double fieldLabelSize = 20.0;
 
@@ -185,11 +187,12 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                     name: "username",
                     textInputAction: TextInputAction.done,
                     autofocus: false,
+                    controller: usernameController,
                     decoration: InputDecoration(border: InputBorder.none),
                     focusNode: _usernameFocus,
                     onChanged: (value) {
                       setState(() {
-                        checkUsername(value);
+                        isAvailableUsername = false;
                       });
                     },
                     validator: FormBuilderValidators.compose([
@@ -408,19 +411,15 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void submitForm() async {
-    setState(() {
-      isLoading = true;
-    });
-    await checkUsername(formKey.currentState.value["username"]);
+    await checkUsername(usernameController.text);
     if (isAvailableUsername) {
+      setState(() {
+        isLoading = true;
+      });
       if (formKey.currentState.saveAndValidate()) {
-        // CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
-
         var username = formKey.currentState.value['username'].toString().trim();
         var name = formKey.currentState.value['name'].toString().trim();
         var location = formKey.currentState.value['location'].toString().trim();
-
-        Logger().e("name: $name, location: $location, username: $username");
 
         try {
           await updateDetails(
@@ -428,16 +427,18 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
             name: name,
             location: location,
           );
-          CommonMethods().hideDialog();
-          navigateInterestSelectionPage();
+          // CommonMethods().hideDialog();
+          // navigateInterestSelectionPage();
         } catch (e) {
           showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
+          setState(() {
+            isLoading = false;
+          });
         }
       } else {
         setState(() {
           isLoading = false;
         });
-        showErrorSnackBar("Formu doldururken bir hata oldu");
       }
     } else {
       setState(() {
@@ -447,24 +448,12 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void showErrorSnackBar(String errorMessage) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 1),
-      content: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // new CircularProgressIndicator(),
-          Expanded(
-            child: new Text(
-              errorMessage,
-              overflow: TextOverflow.fade,
-              softWrap: false,
-              maxLines: 1,
-              style: TextStyle(fontSize: 16),
-            ),
-          )
-        ],
-      ),
-    ));
+    GFToast.showToast(
+      errorMessage,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 
   Future<void> updateDetails(
