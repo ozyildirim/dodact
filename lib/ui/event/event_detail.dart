@@ -96,23 +96,40 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         icon: Icon(Icons.more_vert, color: Colors.black),
+                        onSelected: (value) async {
+                          if (value == 1) {
+                            await _showDeleteEventDialog(event.id);
+                          } else if (value == 2) {
+                            await _showEditEventDialog(event);
+                          }
+                        },
                         itemBuilder: (context) => [
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading:
-                                        Icon(FontAwesome5Regular.trash_alt),
-                                    title: Text("Sil"),
+                                  value: 1,
+                                  child: InkWell(
                                     onTap: () async {
                                       await _showDeleteEventDialog(event.id);
-                                    }),
-                              ),
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(FontAwesome5Regular.trash_alt,
+                                            size: 16),
+                                        SizedBox(width: 14),
+                                        Text("Sil",
+                                            style: TextStyle(fontSize: 14)),
+                                      ],
+                                    ),
+                                  )),
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(FontAwesome5Regular.edit),
-                                    title: Text("Düzenle"),
-                                    onTap: () async {
-                                      await _showEditEventDialog(event);
-                                    }),
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesome5Regular.edit, size: 16),
+                                    SizedBox(width: 14),
+                                    Text("Düzenle",
+                                        style: TextStyle(fontSize: 14)),
+                                  ],
+                                ),
                               )
                             ]),
                   ),
@@ -132,14 +149,22 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         icon: Icon(Icons.more_vert, color: Colors.black),
+                        onSelected: (value) async {
+                          if (value == 0) {
+                            await _showReportEventDialog(event.id);
+                          }
+                        },
                         itemBuilder: (context) => [
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(FontAwesome5Regular.bell),
-                                    title: Text("Bildir"),
-                                    onTap: () async {
-                                      await _showReportEventDialog(event.id);
-                                    }),
+                                value: 0,
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesome5Regular.bell, size: 16),
+                                    SizedBox(width: 14),
+                                    Text("Bildir",
+                                        style: TextStyle(fontSize: 14)),
+                                  ],
+                                ),
                               ),
                             ]),
                   ),
