@@ -16,6 +16,7 @@ import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class PostDetail extends StatefulWidget {
@@ -293,21 +294,30 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     if (reportReason != null) {
       CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
-      await FirebaseReportService()
-          .reportPost(userProvider.currentUser.uid, postId, reportReason)
-          .then((value) async {
-        await CommonMethods().showSuccessDialog(context,
+      try {
+        await FirebaseReportService()
+            .reportPost(userProvider.currentUser.uid, postId, reportReason);
+        NavigationService.instance.pop();
+        showSnackbar(
             "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
         NavigationService.instance.pop();
+      } catch (e) {
         NavigationService.instance.pop();
-      }).catchError((value) async {
-        await CommonMethods()
-            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
+        showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
         NavigationService.instance.pop();
-      });
+      }
     } else {
       NavigationService.instance.pop();
     }
+  }
+
+  showSnackbar(String message) {
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 
   Future<void> deletePost() async {

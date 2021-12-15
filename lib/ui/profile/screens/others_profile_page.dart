@@ -66,13 +66,11 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
       await FirebaseReportService()
           .reportUser(authProvider.currentUser.uid, otherUser.uid, reportReason)
           .then((value) {
-        CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
         NavigationService.instance.pop();
-        NavigationService.instance.pop();
+        showSnackbar("Kullanıcı başarıyla bildirildi.");
       }).catchError((value) {
-        CommonMethods()
-            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
         NavigationService.instance.pop();
+        showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
       });
     } else {
       NavigationService.instance.pop();
