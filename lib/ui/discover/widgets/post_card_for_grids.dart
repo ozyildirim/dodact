@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +43,6 @@ class PostCardForGrid extends StatelessWidget {
           ),
         ),
       ),
-      placeholder: (context, url) => Center(child: spinkit),
       errorWidget: (context, url, error) => Icon(Icons.error),
     );
   }
