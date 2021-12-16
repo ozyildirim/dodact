@@ -485,7 +485,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       searchKeywords.add(word.toLowerCase());
     });
 
-    for (int i = 1; i < username.length; i++) {
+    for (int i = 1; i <= username.length; i++) {
       searchKeywords.add(username.substring(0, i).toLowerCase());
     }
     return searchKeywords;
