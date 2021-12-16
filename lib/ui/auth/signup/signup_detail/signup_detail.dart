@@ -42,6 +42,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   String location;
 
   PickedFile profilePicture;
+  bool selectedPicture;
   String socialAccountProfilePictureUrl;
   String errorMessage;
   bool isUploaded = false;
@@ -56,13 +57,15 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         (userProvider.currentUser.nameSurname != '')) {
       nameController.text = userProvider.currentUser.nameSurname;
     }
-
-    print("social: $socialAccountProfilePictureUrl");
-    print("profile: ${userProvider.currentUser.profilePictureURL}");
+    selectedPicture = false;
   }
 
-  bool isUserPictureAssigned() {
-    if (userProvider.currentUser.profilePictureURL != null) {}
+  hasSocialAuthProfilePicture() {
+    if (userProvider.currentUser.profilePictureURL != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -422,15 +425,26 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         var location = formKey.currentState.value['location'].toString().trim();
 
         try {
-          await updateDetails(
-            username: username,
-            name: name,
-            location: location,
-          );
-          // CommonMethods().hideDialog();
-          // navigateInterestSelectionPage();
+          var url = await updateProfilePhoto(context);
+
+          var searchKeywords = createSearchKeywords(username);
+          var result = await userProvider.updateCurrentUser({
+            'username': username,
+            'nameSurname': name,
+            'location': location,
+            'hiddenLocation': false,
+            'hiddenNameSurname': false,
+            'hiddenMail': false,
+            'newUser': false,
+            'searchKeywords': searchKeywords,
+          });
+          userProvider.currentUser.username = username;
+          userProvider.currentUser.nameSurname = name;
+          userProvider.currentUser.location = location;
+
+          navigateInterestSelectionPage();
         } catch (e) {
-          showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
+          showSnackbar("Bilgiler güncellenirken bir hata oluştu.");
           setState(() {
             isLoading = false;
           });
@@ -444,39 +458,6 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       setState(() {
         isLoading = false;
       });
-    }
-  }
-
-  void showErrorSnackBar(String errorMessage) {
-    GFToast.showToast(
-      errorMessage,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
-  Future<void> updateDetails(
-      {String username, String name, String location}) async {
-    try {
-      var url = await updateProfilePhoto(context);
-      var searchKeywords = createSearchKeywords(username);
-
-      var result = await userProvider.updateCurrentUser({
-        'username': username,
-        'nameSurname': name,
-        'location': location,
-        'hiddenLocation': false,
-        'hiddenNameSurname': false,
-        'hiddenMail': false,
-        'newUser': false,
-        'searchKeywords': searchKeywords,
-      });
-      userProvider.currentUser.username = username;
-      userProvider.currentUser.nameSurname = name;
-      userProvider.currentUser.location = location;
-    } catch (e) {
-      showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
     }
   }
 
@@ -515,46 +496,52 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void takePhotoFromGallery(BuildContext context) async {
-    var newImage =
-        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    try {
+      var newImage =
+          await ImagePicker.platform.pickImage(source: ImageSource.gallery);
 
-    File croppedFile = await cropImage(File(newImage.path));
-    setState(() {
-      profilePicture = PickedFile(croppedFile.path);
-      NavigationService.instance.pop();
-    });
+      File croppedFile = await cropImage(File(newImage.path));
+      setState(() {
+        profilePicture = PickedFile(croppedFile.path);
+        selectedPicture = true;
+        NavigationService.instance.pop();
+      });
+    } catch (e) {
+      showSnackbar("Fotoğraf seçilirken bir hata oluştu.");
+    }
   }
 
   void takePhotoFromCamera(BuildContext context) async {
-    var newImage =
-        await ImagePicker.platform.pickImage(source: ImageSource.camera);
+    try {
+      var newImage =
+          await ImagePicker.platform.pickImage(source: ImageSource.camera);
 
-    File croppedFile = await cropImage(File(newImage.path));
-    setState(() {
-      profilePicture = PickedFile(croppedFile.path);
-      NavigationService.instance.pop();
-    });
+      File croppedFile = await cropImage(File(newImage.path));
+      setState(() {
+        profilePicture = PickedFile(croppedFile.path);
+        selectedPicture = true;
+        NavigationService.instance.pop();
+      });
+    } catch (e) {
+      showSnackbar("Fotoğraf seçilirken bir hata oluştu.");
+    }
   }
 
   Future<String> updateProfilePhoto(BuildContext context) async {
-    if (profilePicture != null) {
-      CommonMethods().showLoaderDialog(context, "Fotoğraf Yükleniyor");
-      await userProvider
-          .updateCurrentUserProfilePicture(File(profilePicture.path))
-          .then((url) {
-        NavigationService.instance.pop();
-        userProvider.currentUser.profilePictureURL = url;
-        return url;
-      }).catchError((error) {
-        //TODO: TRY CATCH BLOĞU EKLE - DÜZENLE
-        CommonMethods()
-            .showErrorDialog(context, "Fotoğraf Yüklenirken hata oluştu.");
-      });
-      debugPrint("Picture uploaded.");
-    } else if (userProvider.currentUser.profilePictureURL != null) {
-      //Eğer diğer auth yöntemlerinden gelen bir profil fotoğrafı varsa bu yüklemeyi pas geçiyoruz.
+    if (selectedPicture) {
+      print("fotoğraf seçili, upload ediliyor");
+
+      var url = await userProvider
+          .updateCurrentUserProfilePicture(File(profilePicture.path));
+      userProvider.currentUser.profilePictureURL = url;
+      return url;
     } else {
-      uploadDefaultPicture();
+      if (hasSocialAuthProfilePicture()) {
+        print("fotoğraf seçili değil,sosyal foto upload ediliyor");
+      } else {
+        print("fotoğraf seçili değil, default upload ediliyor");
+        uploadDefaultPicture();
+      }
     }
   }
 
@@ -566,11 +553,20 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           AppConstant.kDefaultUserProfilePicture;
       debugPrint("userPicture default olarak ayarlandı.");
     } catch (e) {
-      showErrorSnackBar("Teknik bir problem oluştu.");
+      showSnackbar("Teknik bir problem oluştu.");
     }
   }
 
   void navigateInterestSelectionPage() async {
     NavigationService.instance.navigate(k_ROUTE_INTEREST_REGISTRATION);
+  }
+
+  showSnackbar(String message) {
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 }
