@@ -34,10 +34,11 @@ const kFontFamily = "SanFrancisco";
 const guzel = Color(0xFF162A49);
 
 final spinkit = SpinKitChasingDots(
+  size: 40,
   itemBuilder: (BuildContext context, int index) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: index.isEven ? Colors.black : Colors.grey,
+        color: index.isEven ? Colors.black : Colors.black,
       ),
     );
   },
