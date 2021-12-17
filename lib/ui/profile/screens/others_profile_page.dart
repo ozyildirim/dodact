@@ -1,4 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -74,25 +73,32 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   Future<void> reportUser(String userId) async {
-    var reportReason = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => reportReasonDialog(context),
-    );
-    if (reportReason != null) {
-      CustomMethods()
-          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
-      await FirebaseReportService()
-          .reportUser(authProvider.currentUser.uid, otherUser.uid, reportReason)
-          .then((value) {
-        NavigationService.instance.pop();
-        showSnackbar("Kullanıcı başarıyla bildirildi.");
-      }).catchError((value) {
-        NavigationService.instance.pop();
-        showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
-      });
+    bool result = await FirebaseReportService.checkUserHasSameReporter(
+        reportedUserId: userId, reporterId: userProvider.currentUser.uid);
+
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu kullanıcıyı zaten bildirdin.");
     } else {
-      NavigationService.instance.pop();
+      var reportReason = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => reportReasonDialog(context),
+      );
+      if (reportReason != null) {
+        try {
+          CustomMethods()
+              .showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
+          await FirebaseReportService.reportUser(
+              authProvider.currentUser.uid, otherUser.uid, reportReason);
+          NavigationService.instance.pop();
+          showSnackbar("Kullanıcı başarıyla bildirildi.");
+        } catch (e) {
+          NavigationService.instance.pop();
+          showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+        }
+      } else {
+        NavigationService.instance.pop();
+      }
     }
   }
 

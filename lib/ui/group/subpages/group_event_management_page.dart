@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -144,20 +145,13 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
   }
 
   Future<void> showDeleteEventDialog(String eventId) async {
-    print("asdasd");
-    CoolAlert.show(
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği silmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await deleteGroupEvent(eventId);
-        });
+        },
+        title: "Bu etkinliği silmek istediğinden emin misin?");
   }
 
   Future<List<EventModel>> getGroupEvents() async {

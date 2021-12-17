@@ -151,7 +151,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                         icon: Icon(Icons.more_vert, color: Colors.black),
                         onSelected: (value) async {
                           if (value == 0) {
-                            await _showReportEventDialog(event.id);
+                            // await _showReportEventDialog(event.id);
+                            await reportEvent(event.id);
                           }
                         },
                         itemBuilder: (context) => [
@@ -561,36 +562,51 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   Future<void> _showDeleteEventDialog(String eventId) async {
     //TODO: burayı düzelt
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu etkinliği silmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await _deleteEvent(eventId);
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği silmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await _deleteEvent(eventId);
-        });
+        },
+        title: "Bu etkinliği silmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   Future<void> _showReportEventDialog(String eventId) async {
     //TODO: burayı düzelt
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu etkinliği bildirmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await reportEvent(eventId);
+    //     });
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await reportEvent(eventId);
-        });
+        },
+        title: "Bu etkinliği bildirmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   Future<void> _deleteEvent(String eventId) async {
@@ -645,20 +661,15 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     );
 
     if (reportReason != null) {
-      CustomMethods()
-          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
-      await FirebaseReportService()
-          .reportEvent(authProvider.currentUser.uid, event.id, reportReason)
-          .then((value) async {
-        await CustomMethods().showSuccessDialog(context,
+      try {
+        await FirebaseReportService.reportEvent(
+            authProvider.currentUser.uid, event.id, reportReason);
+        CustomMethods.showSnackbar(context,
             "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
-        NavigationService.instance.pop();
-        NavigationService.instance.pop();
-      }).catchError((value) async {
-        await CustomMethods()
-            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
-        NavigationService.instance.pop();
-      });
+      } catch (e) {
+        CustomMethods.showSnackbar(
+            context, "İşlem gerçekleştirilirken hata oluştu.");
+      }
     } else {
       NavigationService.instance.pop();
     }
