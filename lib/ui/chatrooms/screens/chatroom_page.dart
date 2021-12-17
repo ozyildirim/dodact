@@ -128,10 +128,14 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      top: BorderSide(width: 0.2, color: Colors.black),
+                    )),
                 padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
                 height: 60,
                 width: double.infinity,
-                color: Colors.white,
                 child: FormBuilder(
                   key: _formKey,
                   child: Row(
@@ -156,22 +160,26 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                       //   width: 15,
                       // ),
                       Expanded(
-                        child: FormBuilderTextField(
-                          enableSuggestions: true,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
-                          name: "message",
-                          decoration: InputDecoration(
-                              hintText: "Mesaj yaz",
-                              hintStyle: TextStyle(color: Colors.black),
-                              border: InputBorder.none),
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context,
-                                errorText: "Bu alanı boş bırakmamalısın."),
-                            (value) {
-                              return ProfanityChecker.profanityValidator(value);
-                            }
-                          ]),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: FormBuilderTextField(
+                            enableSuggestions: true,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.sentences,
+                            name: "message",
+                            decoration: InputDecoration(
+                                hintText: "Mesaj yaz",
+                                hintStyle: TextStyle(color: Colors.black),
+                                border: InputBorder.none),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: "Bu alanı boş bırakmamalısın."),
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value);
+                              }
+                            ]),
+                          ),
                         ),
                       ),
                       SizedBox(

@@ -1,5 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -7,6 +5,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_description_card.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_detail_info_part.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_headers/audio_post_header.dart';
@@ -93,7 +92,7 @@ class _PostDetailState extends BaseState<PostDetail> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                      Colors.black.withOpacity(0.3), BlendMode.dstATop),
                   image: AssetImage(kBackgroundImage),
                   fit: BoxFit.cover,
                 ),
@@ -346,7 +345,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     try {
       await Provider.of<PostProvider>(context, listen: false)
           .deletePost(post.postId);
-      // NavigationService.instance.pop();
+
       NavigationService.instance.navigateToReset(k_ROUTE_HOME);
       CustomMethods.showSnackbar(context, "Gönderi başarıyla silindi.");
     } catch (e) {

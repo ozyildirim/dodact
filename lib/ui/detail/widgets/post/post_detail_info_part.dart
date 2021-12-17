@@ -8,6 +8,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -129,11 +130,14 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
             duration: Duration(milliseconds: 220),
             onPressed: () async {
               if (liked) {
-                await provider.undodPost(
-                    post.postId, userProvider.currentUser.uid);
+                provider.undodPost(post.postId, userProvider.currentUser.uid);
+                CustomMethods.showSnackbar(context, "Bir hata oluştu.");
               } else {
-                await provider.dodPost(
-                    post.postId, userProvider.currentUser.uid);
+                try {
+                  provider.dodPost(post.postId, userProvider.currentUser.uid);
+                } catch (e) {
+                  CustomMethods.showSnackbar(context, "Bir hata oluştu.");
+                }
               }
             },
             child: liked
