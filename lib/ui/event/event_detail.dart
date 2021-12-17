@@ -610,13 +610,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Future<void> _deleteEvent(String eventId) async {
-    bool isLocatedInStorage = event.eventImages != [] ? true : false;
-
-    //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
     CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
 
     await Provider.of<EventProvider>(context, listen: false)
-        .deleteEvent(event.id, isLocatedInStorage);
+        .deleteEvent(event.id);
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //}

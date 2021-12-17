@@ -76,14 +76,10 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> deletePost(String postId) async {
-    try {
-      await postRepository.delete(postId);
+    await postRepository.delete(postId);
+    notifyListeners();
 
-      notifyListeners();
-    } catch (e) {
-      print("PostProvider delete error:  " + e.toString());
-      return null;
-    }
+    // throw Exception("PostProvider delete post error: ");
   }
 
   Future<PostModel> getDetail(String postId) async {

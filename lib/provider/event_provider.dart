@@ -81,7 +81,7 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteEvent(String eventId, bool isLocatedInStorage) async {
+  Future<void> deleteEvent(String eventId) async {
     try {
       await eventRepository.delete(eventId);
       notifyListeners();

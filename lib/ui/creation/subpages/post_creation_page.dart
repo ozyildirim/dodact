@@ -386,9 +386,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       (value) {
                         return ProfanityChecker.profanityValidator(value);
                       },
-                      FormBuilderValidators.minLength(context, 10,
-                          errorText: "İçerik adı en az 10 harften oluşmalı.",
-                          allowEmpty: false)
                     ],
                   ),
                 ),
@@ -429,10 +426,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                           (value) {
                             return ProfanityChecker.profanityValidator(value);
                           },
-                          FormBuilderValidators.minLength(context, 20,
-                              errorText:
-                                  "Biraz daha detay verilmeli (En az 20 harf).",
-                              allowEmpty: false)
                         ],
                       ),
                     ),

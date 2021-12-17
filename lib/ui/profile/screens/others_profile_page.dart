@@ -37,38 +37,13 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   void _showReportUserDialog() async {
-    showDialog(
+    CustomMethods.showCustomDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            actionsAlignment: MainAxisAlignment.center,
-            actionsPadding: EdgeInsets.all(4),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: Text(
-              "Bu kullanıcıyı bildirmek istediğinden emin misin?",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("Vazgeç"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: Text("Evet", style: TextStyle(color: Colors.white)),
-                color: kNavbarColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16))),
-                onPressed: () async {
-                  await reportUser(otherUser.uid);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
+        title: "Bu kullanıcıyı bildirmek istediğinden emin misin?",
+        confirmButtonText: "Evet",
+        confirmActions: () async {
+          await reportUser(otherUser.uid);
+          NavigationService.instance.pop();
         });
   }
 
@@ -86,11 +61,10 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
       );
       if (reportReason != null) {
         try {
-          CustomMethods()
-              .showLoaderDialog(context, "İşlemin gerçekleştiriliyor.");
+          NavigationService.instance.pop();
           await FirebaseReportService.reportUser(
               authProvider.currentUser.uid, otherUser.uid, reportReason);
-          NavigationService.instance.pop();
+
           showSnackbar("Kullanıcı başarıyla bildirildi.");
         } catch (e) {
           NavigationService.instance.pop();

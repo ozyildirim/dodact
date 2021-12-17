@@ -343,11 +343,18 @@ class _PostDetailState extends BaseState<PostDetail> {
 
   Future<void> deletePost() async {
     CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
-
-    await Provider.of<PostProvider>(context, listen: false)
-        .deletePost(post.postId);
-
-    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+    try {
+      await Provider.of<PostProvider>(context, listen: false)
+          .deletePost(post.postId);
+      // NavigationService.instance.pop();
+      NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+      CustomMethods.showSnackbar(context, "Gönderi başarıyla silindi.");
+    } catch (e) {
+      NavigationService.instance.pop();
+      CustomMethods.showSnackbar(
+          context, "Gönderi silinirken bir hata oluştu.");
+      NavigationService.instance.pop();
+    }
     //
   }
 
