@@ -38,19 +38,38 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   void _showReportUserDialog() async {
-    CoolAlert.show(
+    showDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu kullanıcıyı bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
-          await reportUser(otherUser.uid);
-          NavigationService.instance.pop();
+        builder: (context) {
+          return AlertDialog(
+            actionsAlignment: MainAxisAlignment.center,
+            actionsPadding: EdgeInsets.all(4),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Text(
+              "Bu kullanıcıyı bildirmek istediğinden emin misin?",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Vazgeç"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text("Evet", style: TextStyle(color: Colors.white)),
+                color: kNavbarColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16))),
+                onPressed: () async {
+                  await reportUser(otherUser.uid);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
         });
   }
 
@@ -166,17 +185,11 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   _showUnblockDialog() {
-    CoolAlert.show(
+    CommonMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu kullanıcının engelini kaldırmak istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        title: "Bu kullanıcının engelini kaldırmak istediğinden emin misin?",
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           unblockUser();
           NavigationService.instance.pop();
         });
@@ -192,17 +205,11 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   _showBlockDialog() {
-    CoolAlert.show(
+    CommonMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu kullanıcıyı engellemek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        title: "Bu kullanıcı engellemek istediğinden emin misin?",
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await blockUser();
           NavigationService.instance.pop();
         });

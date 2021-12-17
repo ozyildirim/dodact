@@ -1,10 +1,10 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/constants/app_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -113,5 +113,43 @@ class CommonMethods {
 
   static void launchEmail(String email, String subject, String message) async {
     launch("mailto:$email?subject=$subject&body=$message%20plugin");
+  }
+
+  static showCustomDialog({
+    BuildContext context,
+    String title,
+    String confirmButtonText,
+    Function confirmActions,
+  }) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            actionsAlignment: MainAxisAlignment.center,
+            actionsPadding: EdgeInsets.all(4),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Vazgeç"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                  child: Text(confirmButtonText,
+                      style: TextStyle(color: Colors.white)),
+                  color: kNavbarColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  onPressed: confirmActions),
+            ],
+          );
+        });
   }
 }

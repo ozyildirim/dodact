@@ -39,6 +39,7 @@ final spinkit = SpinKitChasingDots(
     return DecoratedBox(
       decoration: BoxDecoration(
         color: index.isEven ? Colors.black : Colors.black,
+        // image: DecorationImage(image: AssetImage("assets/images/logo.png")),
       ),
     );
   },
