@@ -448,17 +448,22 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   }
 
   reportMessage(String roomId, String messageId, String message) async {
-    CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
-    await FirebaseReportService()
-        .reporMessage(currentUserId, roomId, messageId, message)
-        .then((value) async {
-      showSnackbar("Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+    var result = await FirebaseReportService.checkPrivateMessageHasSameReporter(
+        reporterId: userProvider.currentUser.uid,
+        reportedPrivateMessageId: messageId);
 
-      NavigationService.instance.pop();
-    }).catchError((value) async {
-      showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
-      NavigationService.instance.pop();
-    });
+    if (result) {
+      showSnackbar("Bu mesajı daha önce bildirdin");
+    } else {
+      try {
+        await FirebaseReportService.reportMessage(
+            currentUserId, roomId, messageId, message);
+        showSnackbar(
+            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+      } catch (e) {
+        showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+      }
+    }
   }
 
   generateRoomId(String firstUserId, String secondUserId) {

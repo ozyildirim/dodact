@@ -232,12 +232,19 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
   }
 
   Future<void> reportComment(String commentId, String postId) async {
-    try {
-      await FirebaseReportService.reportComment(
-          authProvider.currentUser.uid, commentId, postId);
-      CustomMethods.showSnackbar(context, "Yorum bildirildi.");
-    } catch (e) {
-      CustomMethods.showSnackbar(context, "Yorum bildirilirken hata oluştu.");
+    var result = await FirebaseReportService.checkCommentHasSameReporter(
+        reportedCommentId: commentId, reporterId: userProvider.currentUser.uid);
+
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu yorumu daha önce bildirdin.");
+    } else {
+      try {
+        await FirebaseReportService.reportComment(
+            authProvider.currentUser.uid, commentId, postId);
+        CustomMethods.showSnackbar(context, "Yorum başarıyla bildirildi.");
+      } catch (e) {
+        CustomMethods.showSnackbar(context, "Yorum bildirilirken hata oluştu.");
+      }
     }
   }
 

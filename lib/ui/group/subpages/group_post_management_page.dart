@@ -152,20 +152,20 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
   }
 
   showDeletePostDialog(String postId) async {
-    await CoolAlert.show(
-        context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu içeriği kaldırmak istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
-          deleteGroupPost(postId);
-          NavigationService.instance.pop();
-        });
+    // await CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu içeriği kaldırmak istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       deleteGroupPost(postId);
+    //       NavigationService.instance.pop();
+    //     });
   }
 
   Future<void> deleteGroupPost(String postId) async {

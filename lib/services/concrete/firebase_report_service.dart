@@ -129,11 +129,11 @@ class FirebaseReportService {
     return false;
   }
 
-  Future<void> reporMessage(String reporterId, String roomId, String messageId,
-      String message) async {
+  static Future<void> reportMessage(String reporterId, String roomId,
+      String messageId, String message) async {
     DocumentReference reference = await reportsRef.add({
       'reportedObjectType': "Message",
-      'reporterId': roomId,
+      'reporterId': reporterId,
       'reportedObjectId': messageId,
       'reportedObjectContent': message,
       'parentObjectId': roomId,

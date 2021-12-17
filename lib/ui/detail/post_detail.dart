@@ -302,28 +302,33 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> reportPost(String postId) async {
-    var reportReason = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => reportReasonDialog(context),
-    );
+    var result = await FirebaseReportService.checkPostHasSameReporter(
+        reportedPostId: postId, reporterId: userProvider.currentUser.uid);
 
-    if (reportReason != null) {
-      CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
-      try {
-        await FirebaseReportService()
-            .reportPost(userProvider.currentUser.uid, postId, reportReason);
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu gönderiyi zaten bildirdin.");
+      NavigationService.instance.pop();
+    } else {
+      var reportReason = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => reportReasonDialog(context),
+      );
+
+      if (reportReason != null) {
         NavigationService.instance.pop();
-        showSnackbar(
-            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
-        NavigationService.instance.pop();
-      } catch (e) {
-        NavigationService.instance.pop();
-        showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+        try {
+          await FirebaseReportService()
+              .reportPost(userProvider.currentUser.uid, postId, reportReason);
+
+          showSnackbar(
+              "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        } catch (e) {
+          showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+        }
+      } else {
         NavigationService.instance.pop();
       }
-    } else {
-      NavigationService.instance.pop();
     }
   }
 

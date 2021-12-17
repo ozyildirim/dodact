@@ -654,24 +654,31 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Future<void> reportEvent(String eventId) async {
-    var reportReason = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => reportReasonDialog(context),
-    );
+    var result = await FirebaseReportService.checkEventHasSameReporter(
+        reportedEventId: eventId, reporterId: userProvider.currentUser.uid);
 
-    if (reportReason != null) {
-      try {
-        await FirebaseReportService.reportEvent(
-            authProvider.currentUser.uid, event.id, reportReason);
-        CustomMethods.showSnackbar(context,
-            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
-      } catch (e) {
-        CustomMethods.showSnackbar(
-            context, "İşlem gerçekleştirilirken hata oluştu.");
-      }
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu etkinliği zaten bildirdin.");
     } else {
-      NavigationService.instance.pop();
+      var reportReason = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => reportReasonDialog(context),
+      );
+
+      if (reportReason != null) {
+        try {
+          await FirebaseReportService.reportEvent(
+              authProvider.currentUser.uid, event.id, reportReason);
+          CustomMethods.showSnackbar(context,
+              "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        } catch (e) {
+          CustomMethods.showSnackbar(
+              context, "İşlem gerçekleştirilirken hata oluştu.");
+        }
+      } else {
+        NavigationService.instance.pop();
+      }
     }
   }
 }
