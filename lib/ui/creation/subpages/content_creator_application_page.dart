@@ -144,7 +144,7 @@ class _ContentCreatorApplicationPageState
           "link": link,
         });
 
-        await CommonMethods().showSuccessDialog(
+        await CustomMethods().showSuccessDialog(
           context,
           "Başvurun bizlere ulaştı, en kısa zamanda dönüş yapacağız",
         );

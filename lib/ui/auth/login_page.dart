@@ -42,7 +42,7 @@ class _LogInPageState extends BaseState<LogInPage> {
   // }
 
   void _signInWithGoogle() async {
-    CommonMethods().showLoaderDialog(context, "Google ile Giriş Yapılıyor");
+    CustomMethods().showLoaderDialog(context, "Google ile Giriş Yapılıyor");
     var status = await authProvider.signInWithGoogle(context);
 
     if (status != AuthResultStatus.successful) {
@@ -369,7 +369,7 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   void submitForm() async {
     if (_formKey.currentState.saveAndValidate()) {
-      CommonMethods().showLoaderDialog(context, "Giriş Yapılıyor");
+      CustomMethods().showLoaderDialog(context, "Giriş Yapılıyor");
       var status = await authProvider.signInWithEmail(
           _formKey.currentState.value['email'].toString().trim(),
           _formKey.currentState.value['password'].toString().trim());

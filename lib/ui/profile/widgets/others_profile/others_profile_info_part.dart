@@ -136,7 +136,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         linkedin != null && linkedin.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(linkedin);
+                  CustomMethods.launchURL(linkedin);
                 },
                 icon: Icon(
                   FontAwesome5Brands.linkedin,
@@ -147,7 +147,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         instagram != null && instagram.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL("www.instagram.com/$instagram");
+                  CustomMethods.launchURL("www.instagram.com/$instagram");
                 },
                 icon: Icon(FontAwesome5Brands.instagram, size: 30),
               )
@@ -155,7 +155,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         dribbble != null && dribbble.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(dribbble);
+                  CustomMethods.launchURL(dribbble);
                 },
                 icon: Icon(FontAwesome5Brands.dribbble, size: 30),
               )
@@ -163,7 +163,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         soundcloud != null && soundcloud.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(soundcloud);
+                  CustomMethods.launchURL(soundcloud);
                 },
                 icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
               )
@@ -171,7 +171,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         youtube != null && youtube.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(youtube);
+                  CustomMethods.launchURL(youtube);
                 },
                 icon: Icon(FontAwesome5Brands.youtube, size: 30),
               )
@@ -179,7 +179,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         pinterest != null && pinterest.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(pinterest);
+                  CustomMethods.launchURL(pinterest);
                 },
                 icon: Icon(FontAwesome5Brands.pinterest, size: 30),
               )

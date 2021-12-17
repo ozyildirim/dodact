@@ -422,24 +422,33 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   }
 
   Future<void> showReportMessageDialog(String messageId, String message) async {
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu mesajı bildirmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await reportMessage(roomId, messageId, message);
+    //       NavigationService.instance.pop();
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu mesajı bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await reportMessage(roomId, messageId, message);
           NavigationService.instance.pop();
-        });
+        },
+        title: "Bu mesajı bildirmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   reportMessage(String roomId, String messageId, String message) async {
-    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
     await FirebaseReportService()
         .reporMessage(currentUserId, roomId, messageId, message)
         .then((value) async {

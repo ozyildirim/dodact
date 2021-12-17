@@ -80,7 +80,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
       builder: (context) => reportReasonDialog(context),
     );
     if (reportReason != null) {
-      CommonMethods()
+      CustomMethods()
           .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
       await FirebaseReportService()
           .reportUser(authProvider.currentUser.uid, otherUser.uid, reportReason)
@@ -185,7 +185,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   _showUnblockDialog() {
-    CommonMethods.showCustomDialog(
+    CustomMethods.showCustomDialog(
         context: context,
         title: "Bu kullanıcının engelini kaldırmak istediğinden emin misin?",
         confirmButtonText: "Evet",
@@ -205,7 +205,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   _showBlockDialog() {
-    CommonMethods.showCustomDialog(
+    CustomMethods.showCustomDialog(
         context: context,
         title: "Bu kullanıcı engellemek istediğinden emin misin?",
         confirmButtonText: "Evet",

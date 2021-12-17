@@ -303,7 +303,7 @@ class _GroupProfileManagementPageState
   }
 
   void updateProfilePhoto(PickedFile file) async {
-    CommonMethods().showLoaderDialog(context, "Fotoğrafın Değiştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "Fotoğrafın Değiştiriliyor.");
 
     try {
       var url = await UploadService().uploadGroupProfilePhoto(
@@ -319,7 +319,7 @@ class _GroupProfileManagementPageState
   void updateGroup() async {
     if (formKey.currentState.saveAndValidate()) {
       try {
-        CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
+        CustomMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
         await groupProvider.updateGroup(group.groupId, {
           'groupName':
               formKey.currentState.value['groupName'].toString().trim(),
@@ -334,7 +334,7 @@ class _GroupProfileManagementPageState
           isChanged = false;
         });
       } catch (e) {
-        CommonMethods().showErrorDialog(
+        CustomMethods().showErrorDialog(
             context, "Değişiklikler kaydedilirken bir hata oluştu");
       }
     } else {}

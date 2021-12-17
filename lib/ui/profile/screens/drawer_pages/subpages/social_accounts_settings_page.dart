@@ -310,7 +310,7 @@ class _UserSocialAccountsSettingsState
         var pinterestLink =
             formKey.currentState.value['pinterest'].toString().trim();
 
-        CommonMethods()
+        CustomMethods()
             .showLoaderDialog(context, "Değişiklikler kaydediliyor.");
         await userProvider.updateCurrentUser({
           'socialMediaLinks': {
@@ -336,13 +336,13 @@ class _UserSocialAccountsSettingsState
           isChanged = false;
         });
       } else {
-        CommonMethods().showErrorDialog(context, "Argo içerikli giriş mevcut!");
+        CustomMethods().showErrorDialog(context, "Argo içerikli giriş mevcut!");
         setState(() {
           autoValidateMode = AutovalidateMode.always;
         });
       }
     } catch (e) {
-      CommonMethods().showErrorDialog(
+      CustomMethods().showErrorDialog(
           context, "Değişiklikler kaydedilirken bir hata oluştu");
     }
   }

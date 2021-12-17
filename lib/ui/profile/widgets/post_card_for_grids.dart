@@ -18,7 +18,7 @@ class PostCardForGrid extends StatelessWidget {
   }
 
   Widget postView(PostModel post) {
-    var thumbnailURL = CommonMethods.createThumbnailURL(
+    var thumbnailURL = CustomMethods.createThumbnailURL(
         post.isLocatedInYoutube, post.postContentURL,
         isAudio: post.postContentType == "Ses" ? true : false);
 

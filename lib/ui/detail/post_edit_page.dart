@@ -227,7 +227,7 @@ class _PostEditPageState extends State<PostEditPage> {
 
   updatePost() async {
     try {
-      CommonMethods().showLoaderDialog(context, "Gönderi Güncelleniyor");
+      CustomMethods().showLoaderDialog(context, "Gönderi Güncelleniyor");
       var postTitle = postCreationFormKey.currentState.value["postTitle"];
       var postDescription =
           postCreationFormKey.currentState.value["postDescription"];
@@ -260,7 +260,7 @@ class _PostEditPageState extends State<PostEditPage> {
         type: CoolAlertType.success,
         text: message,
         showCancelBtn: false,
-        confirmBtnColor: Colors.green,
+        confirmBtnColor: kNavbarColor,
         confirmBtnText: "Tamam",
         title: "İşlem Başarılı");
   }

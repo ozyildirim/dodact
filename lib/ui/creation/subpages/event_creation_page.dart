@@ -582,7 +582,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       String eventType) async {
     try {
       // print(address);
-      CommonMethods().showLoaderDialog(context, "Etkinlik Oluşturuluyor");
+      CustomMethods().showLoaderDialog(context, "Etkinlik Oluşturuluyor");
       EventModel newEvent = createEventModel(
           title,
           startDate,
@@ -599,7 +599,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
 
       await eventProvider.addEvent(newEvent, _eventImages).then((_) async {
         NavigationService.instance.pop();
-        await CommonMethods().showSuccessDialog(
+        await CustomMethods().showSuccessDialog(
             context, "Tebrikler! Etkinliğin başarıyla yayınlandı.");
         NavigationService.instance.navigateToReset(k_ROUTE_HOME);
       });
@@ -607,7 +607,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       print("EventCreationPage error $e ");
       print(e.toString());
       NavigationService.instance.pop();
-      CommonMethods().showErrorDialog(context, "Etkinlik oluşturulamadı.");
+      CustomMethods().showErrorDialog(context, "Etkinlik oluşturulamadı.");
     }
   }
 

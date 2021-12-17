@@ -197,7 +197,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget _buildEventHeader() {
     return GestureDetector(
       onTap: () {
-        CommonMethods.showImagePreviewDialog(context,
+        CustomMethods.showImagePreviewDialog(context,
             url: event.eventImages[0]);
       },
       child: Container(
@@ -333,7 +333,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
-                  CommonMethods.showImagePreviewDialog(context, url: image);
+                  CustomMethods.showImagePreviewDialog(context, url: image);
                 },
                 child: Container(
                   child: ClipRRect(
@@ -408,7 +408,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     ),
                     subtitle: Text("Etkinlik Web Adresi"),
                     onTap: () {
-                      CommonMethods.launchURL(event.eventURL);
+                      CustomMethods.launchURL(event.eventURL);
                     },
                     trailing: IconButton(
                       onPressed: () {
@@ -597,7 +597,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     bool isLocatedInStorage = event.eventImages != [] ? true : false;
 
     //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
-    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
 
     await Provider.of<EventProvider>(context, listen: false)
         .deleteEvent(event.id, isLocatedInStorage);
@@ -645,17 +645,17 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     );
 
     if (reportReason != null) {
-      CommonMethods()
+      CustomMethods()
           .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
       await FirebaseReportService()
           .reportEvent(authProvider.currentUser.uid, event.id, reportReason)
           .then((value) async {
-        await CommonMethods().showSuccessDialog(context,
+        await CustomMethods().showSuccessDialog(context,
             "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
         NavigationService.instance.pop();
         NavigationService.instance.pop();
       }).catchError((value) async {
-        await CommonMethods()
+        await CustomMethods()
             .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
         NavigationService.instance.pop();
       });

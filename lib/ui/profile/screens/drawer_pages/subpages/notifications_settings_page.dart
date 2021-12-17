@@ -214,7 +214,7 @@ class _NotificationsSettingsPageState
 
   Future<void> updateUser() async {
     try {
-      CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
+      CustomMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
       await userProvider
           .updateCurrentUser({'notificationSettings': notificationSettings});
       userProvider.currentUser.notificationSettings = notificationSettings;
@@ -224,7 +224,7 @@ class _NotificationsSettingsPageState
         _isChanged = false;
       });
     } catch (e) {
-      CommonMethods().showErrorDialog(
+      CustomMethods().showErrorDialog(
           context, "Değişiklikler kaydedilirken bir hata oluştu");
     }
   }

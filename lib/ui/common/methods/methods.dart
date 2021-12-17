@@ -3,12 +3,13 @@ import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:logger/logger.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class CommonMethods {
+class CustomMethods {
   var logger = new Logger();
   static String createThumbnailURL(bool isLocatedInYoutube, String videoURL,
       {bool isAudio}) {
@@ -116,10 +117,10 @@ class CommonMethods {
   }
 
   static showCustomDialog({
-    BuildContext context,
-    String title,
-    String confirmButtonText,
-    Function confirmActions,
+    @required BuildContext context,
+    @required String title,
+    @required String confirmButtonText,
+    @required Function confirmActions,
   }) {
     showDialog(
         context: context,
@@ -151,5 +152,14 @@ class CommonMethods {
             ],
           );
         });
+  }
+
+  static showSnackbar(BuildContext context, String message) {
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 }

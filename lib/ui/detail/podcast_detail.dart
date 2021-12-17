@@ -41,7 +41,7 @@ class PodcastDetail extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      CommonMethods.showImagePreviewDialog(context,
+                      CustomMethods.showImagePreviewDialog(context,
                           url: podcast.podcastImageUrl);
                     },
                     child: Container(
@@ -202,11 +202,11 @@ class PodcastDetail extends StatelessWidget {
   }
 
   launchOwnerUrl(String url) {
-    CommonMethods.launchURL(url);
+    CustomMethods.launchURL(url);
   }
 
   launchPodcastUrl() {
-    CommonMethods.launchURL(podcast.podcastLink);
+    CustomMethods.launchURL(podcast.podcastLink);
   }
 }
 

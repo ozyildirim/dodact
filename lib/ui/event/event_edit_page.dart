@@ -539,7 +539,7 @@ class _EventEditPageState extends State<EventEditPage> {
       String url,
       List<String> searchKeywords) async {
     try {
-      CommonMethods().showLoaderDialog(context, "Etkinlik Oluşturuluyor");
+      CustomMethods().showLoaderDialog(context, "Etkinlik Oluşturuluyor");
       eventProvider.update(event.id, {
         'title': title,
         'startDate': startDate,
@@ -552,7 +552,7 @@ class _EventEditPageState extends State<EventEditPage> {
         'searchKeywords': searchKeywords,
       }).then((value) async {
         NavigationService.instance.pop();
-        await CommonMethods()
+        await CustomMethods()
             .showSuccessDialog(context, "Etkinlik başarıyla düzenlendi.");
         NavigationService.instance.navigateToReset(k_ROUTE_HOME);
       });
@@ -560,7 +560,7 @@ class _EventEditPageState extends State<EventEditPage> {
       print("EventEditPage error $e ");
       print(e.toString());
       NavigationService.instance.pop();
-      CommonMethods().showErrorDialog(context, "Etkinlik düzenlenemedi.");
+      CustomMethods().showErrorDialog(context, "Etkinlik düzenlenemedi.");
     }
   }
 

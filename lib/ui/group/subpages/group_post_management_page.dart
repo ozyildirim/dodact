@@ -63,7 +63,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                     ),
                     itemBuilder: (context, index) {
                       var post = asyncSnapshot.data[index];
-                      var postCoverPhoto = CommonMethods.createThumbnailURL(
+                      var postCoverPhoto = CustomMethods.createThumbnailURL(
                           post.isLocatedInYoutube, post.postContentURL,
                           isAudio:
                               post.postContentType == "Ses" ? true : false);

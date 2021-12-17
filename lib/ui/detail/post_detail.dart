@@ -240,19 +240,27 @@ class _PostDetailState extends BaseState<PostDetail> {
   //Fonksiyonlar
 
   Future<void> showDeletePostDialog() async {
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu gönderiyi silmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await deletePost();
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu gönderiyi silmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await deletePost();
-        });
+        },
+        title: "Bu gönderiyi silmek istediğinden emin misin?");
   }
 
   // Future<void> showEditPostDialog() async {
@@ -270,19 +278,27 @@ class _PostDetailState extends BaseState<PostDetail> {
   // }
 
   Future<void> showReportPostDialog() async {
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu gönderiyi bildirmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await reportPost(post.postId);
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu gönderiyi bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await reportPost(post.postId);
-        });
+        },
+        title: "Bu gönderiyi bildirmek istediğinden emin misin?");
   }
 
   Future<void> reportPost(String postId) async {
@@ -293,7 +309,7 @@ class _PostDetailState extends BaseState<PostDetail> {
     );
 
     if (reportReason != null) {
-      CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+      CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
       try {
         await FirebaseReportService()
             .reportPost(userProvider.currentUser.uid, postId, reportReason);
@@ -321,7 +337,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   }
 
   Future<void> deletePost() async {
-    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
 
     await Provider.of<PostProvider>(context, listen: false)
         .deletePost(post.postId);

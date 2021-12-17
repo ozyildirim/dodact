@@ -166,11 +166,11 @@ class _UserFormPageState extends BaseState<UserFormPage> {
           userId: userProvider.currentUser.uid);
 
       await _firebaseFormService.sendUserForm(model).then((value) async {
-        await CommonMethods()
+        await CustomMethods()
             .showSuccessDialog(context, "Form başarıyla gönderildi!");
         NavigationService.instance.pop();
       }).catchError((error) {
-        CommonMethods().showErrorDialog(context, "Bir hata oluştu!");
+        CustomMethods().showErrorDialog(context, "Bir hata oluştu!");
       });
     }
   }

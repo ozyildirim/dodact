@@ -145,7 +145,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
 
   Future<void> updateUser() async {
     try {
-      CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
+      CustomMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
       await userProvider.updateCurrentUser({
         'privacySettings': {
           'hide_mail': hiddenMail,

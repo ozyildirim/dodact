@@ -46,7 +46,7 @@ class FirebaseReportService {
     });
   }
 
-  Future<void> reportComment(String reporterId, String reportedCommentId,
+  static Future<void> reportComment(String reporterId, String reportedCommentId,
       String parentObjectId) async {
     DocumentReference reference = await reportsRef.add({
       'reportedObjectType': "Comment",

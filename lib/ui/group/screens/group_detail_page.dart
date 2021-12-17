@@ -208,7 +208,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
               ),
               GestureDetector(
                 onTap: () {
-                  CommonMethods.showImagePreviewDialog(context,
+                  CustomMethods.showImagePreviewDialog(context,
                       url: group.groupProfilePicture);
                 },
                 child: Card(

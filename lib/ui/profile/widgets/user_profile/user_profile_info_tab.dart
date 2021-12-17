@@ -142,7 +142,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         linkedin != null && linkedin.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(linkedin);
+                  CustomMethods.launchURL(linkedin);
                 },
                 icon: Icon(FontAwesome5Brands.linkedin, size: 25),
               )
@@ -150,7 +150,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         instagram != null && instagram.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL("www.instagram.com/$instagram");
+                  CustomMethods.launchURL("www.instagram.com/$instagram");
                 },
                 icon: Icon(FontAwesome5Brands.instagram, size: 25),
               )
@@ -158,7 +158,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         dribbble != null && dribbble.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(dribbble);
+                  CustomMethods.launchURL(dribbble);
                 },
                 icon: Icon(FontAwesome5Brands.dribbble, size: 25),
               )
@@ -166,7 +166,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         soundcloud != null && soundcloud.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(soundcloud);
+                  CustomMethods.launchURL(soundcloud);
                 },
                 icon: Icon(FontAwesome5Brands.soundcloud, size: 25),
               )
@@ -174,7 +174,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         youtube != null && youtube.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(youtube);
+                  CustomMethods.launchURL(youtube);
                 },
                 icon: Icon(FontAwesome5Brands.youtube, size: 25),
               )
@@ -182,7 +182,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         pinterest != null && pinterest.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(pinterest);
+                  CustomMethods.launchURL(pinterest);
                 },
                 icon: Icon(FontAwesome5Brands.pinterest, size: 25),
               )

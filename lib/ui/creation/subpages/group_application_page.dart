@@ -127,7 +127,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
           "link": link,
         });
 
-        await CommonMethods().showSuccessDialog(
+        await CustomMethods().showSuccessDialog(
           context,
           "Başvurun bizlere ulaştı, en kısa zamanda dönüş yapacağız",
         );
