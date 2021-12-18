@@ -100,12 +100,12 @@ class CustomMethods {
     NavigationService.instance.pop();
   }
 
-  static void launchURL(String requestedUrl) async {
+  static void launchURL(BuildContext context, String requestedUrl) async {
     if (requestedUrl != null) {
       if (await canLaunch(requestedUrl)) {
         await launch(requestedUrl);
       } else {
-        throw new Exception("Cannot open URL: " + requestedUrl);
+        showSnackbar(context, "Geçersiz bağlantı.");
       }
     } else {
       print("URL mevcut değil");

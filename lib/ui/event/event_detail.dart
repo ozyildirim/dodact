@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -409,7 +408,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     ),
                     subtitle: Text("Etkinlik Web Adresi"),
                     onTap: () {
-                      CustomMethods.launchURL(event.eventURL);
+                      CustomMethods.launchURL(context, event.eventURL);
                     },
                     trailing: IconButton(
                       onPressed: () {

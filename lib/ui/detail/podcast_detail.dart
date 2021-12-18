@@ -94,7 +94,7 @@ class PodcastDetail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     onPressed: () async {
-                      await launchPodcastUrl();
+                      await launchPodcastUrl(context);
                     },
                     color: kNavbarColor,
                     child: Padding(
@@ -152,7 +152,7 @@ class PodcastDetail extends StatelessWidget {
                 //   radius: 16,
                 // ),
                 onTap: () async {
-                  await launchOwnerUrl("www.dodact.com");
+                  await launchOwnerUrl(context, "www.dodact.com");
                 },
               ),
               ListTile(
@@ -201,12 +201,12 @@ class PodcastDetail extends StatelessWidget {
     );
   }
 
-  launchOwnerUrl(String url) {
-    CustomMethods.launchURL(url);
+  launchOwnerUrl(BuildContext context, String url) {
+    CustomMethods.launchURL(context, url);
   }
 
-  launchPodcastUrl() {
-    CustomMethods.launchURL(podcast.podcastLink);
+  launchPodcastUrl(BuildContext context) {
+    CustomMethods.launchURL(context, podcast.podcastLink);
   }
 }
 
