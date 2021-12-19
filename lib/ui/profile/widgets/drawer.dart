@@ -4,6 +4,7 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/ui/profile/screens/drawer_pages/example_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,15 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             title: Text("DodCard", style: TextStyle(fontSize: 18)),
             onTap: () {
               NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.badge),
+            title: Text("Example Interests", style: TextStyle(fontSize: 18)),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ExamplePage();
+              }));
             },
           ),
 

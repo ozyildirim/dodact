@@ -71,3 +71,25 @@ List<InterestType> interestCategoryList = [
         'Müzik',
       ])
 ];
+
+List<String> categoryList = [
+  "Tiyatro",
+  "Çini",
+  "Pandomim",
+  "Bachata",
+  "Tango",
+  "Salsa",
+  "Portre Çizim",
+  "Fotoğrafçılık",
+  "Karakalem",
+  "Heykel",
+  "Minyatür",
+  "Kabartma",
+  "Porselen",
+  "Çömlek",
+  "Vitray",
+  "Ahşap Oyma",
+  "Çizim",
+  "Karikatür",
+  "Batik",
+];
