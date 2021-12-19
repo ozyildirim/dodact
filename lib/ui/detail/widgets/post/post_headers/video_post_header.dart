@@ -17,6 +17,7 @@ class VideoPostHeader extends StatelessWidget {
         hideControls: false,
         controlsVisibleAtStart: true,
         mute: false,
+        autoPlay: false,
       ),
     );
   }

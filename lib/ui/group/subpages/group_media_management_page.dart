@@ -71,7 +71,7 @@ class GroupMediaManagementPage extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    CommonMethods.showImagePreviewDialog(context, url: media);
+                    CustomMethods.showImagePreviewDialog(context, url: media);
                   },
                   child: Center(
                     child: Card(
@@ -167,7 +167,7 @@ class GroupMediaManagementPage extends StatelessWidget {
 
   addGroupMedia(BuildContext context, PickedFile file) async {
     try {
-      CommonMethods().showLoaderDialog(context, "Medya Yükleniyor");
+      CustomMethods().showLoaderDialog(context, "Medya Yükleniyor");
       var groupProvider = Provider.of<GroupProvider>(context, listen: false);
       await groupProvider.addGroupMedia(file, groupProvider.group.groupId);
       NavigationService.instance.pop();

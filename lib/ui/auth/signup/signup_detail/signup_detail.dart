@@ -14,6 +14,7 @@ import 'package:dodact_v1/ui/common/validators/validators.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -32,6 +33,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   FocusNode dropdownFocus = FocusNode();
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
@@ -40,11 +42,12 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   String location;
 
   PickedFile profilePicture;
+  bool selectedPicture;
   String socialAccountProfilePictureUrl;
   String errorMessage;
   bool isUploaded = false;
   bool isLoading = false;
-  bool isAvailableUsername;
+  bool isAvailableUsername = false;
 
   double fieldLabelSize = 20.0;
 
@@ -54,13 +57,15 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
         (userProvider.currentUser.nameSurname != '')) {
       nameController.text = userProvider.currentUser.nameSurname;
     }
-
-    print("social: $socialAccountProfilePictureUrl");
-    print("profile: ${userProvider.currentUser.profilePictureURL}");
+    selectedPicture = false;
   }
 
-  bool isUserPictureAssigned() {
-    if (userProvider.currentUser.profilePictureURL != null) {}
+  hasSocialAuthProfilePicture() {
+    if (userProvider.currentUser.profilePictureURL != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -185,11 +190,12 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
                     name: "username",
                     textInputAction: TextInputAction.done,
                     autofocus: false,
+                    controller: usernameController,
                     decoration: InputDecoration(border: InputBorder.none),
                     focusNode: _usernameFocus,
                     onChanged: (value) {
                       setState(() {
-                        checkUsername(value);
+                        isAvailableUsername = false;
                       });
                     },
                     validator: FormBuilderValidators.compose([
@@ -408,86 +414,50 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void submitForm() async {
-    setState(() {
-      isLoading = true;
-    });
-    await checkUsername(formKey.currentState.value["username"]);
+    await checkUsername(usernameController.text);
     if (isAvailableUsername) {
+      setState(() {
+        isLoading = true;
+      });
       if (formKey.currentState.saveAndValidate()) {
-        // CommonMethods().showLoaderDialog(context, "Kaydın gerçekleştiriliyor");
-
         var username = formKey.currentState.value['username'].toString().trim();
         var name = formKey.currentState.value['name'].toString().trim();
         var location = formKey.currentState.value['location'].toString().trim();
 
-        Logger().e("name: $name, location: $location, username: $username");
-
         try {
-          await updateDetails(
-            username: username,
-            name: name,
-            location: location,
-          );
-          CommonMethods().hideDialog();
+          var url = await updateProfilePhoto(context);
+
+          var searchKeywords = createSearchKeywords(username);
+          var result = await userProvider.updateCurrentUser({
+            'username': username,
+            'nameSurname': name,
+            'location': location,
+            'hiddenLocation': false,
+            'hiddenNameSurname': false,
+            'hiddenMail': false,
+            'newUser': false,
+            'searchKeywords': searchKeywords,
+          });
+          userProvider.currentUser.username = username;
+          userProvider.currentUser.nameSurname = name;
+          userProvider.currentUser.location = location;
+
           navigateInterestSelectionPage();
         } catch (e) {
-          showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
+          showSnackbar("Bilgiler güncellenirken bir hata oluştu.");
+          setState(() {
+            isLoading = false;
+          });
         }
       } else {
         setState(() {
           isLoading = false;
         });
-        showErrorSnackBar("Formu doldururken bir hata oldu");
       }
     } else {
       setState(() {
         isLoading = false;
       });
-    }
-  }
-
-  void showErrorSnackBar(String errorMessage) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 1),
-      content: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // new CircularProgressIndicator(),
-          Expanded(
-            child: new Text(
-              errorMessage,
-              overflow: TextOverflow.fade,
-              softWrap: false,
-              maxLines: 1,
-              style: TextStyle(fontSize: 16),
-            ),
-          )
-        ],
-      ),
-    ));
-  }
-
-  Future<void> updateDetails(
-      {String username, String name, String location}) async {
-    try {
-      var url = await updateProfilePhoto(context);
-      var searchKeywords = createSearchKeywords(username);
-
-      var result = await userProvider.updateCurrentUser({
-        'username': username,
-        'nameSurname': name,
-        'location': location,
-        'hiddenLocation': false,
-        'hiddenNameSurname': false,
-        'hiddenMail': false,
-        'newUser': false,
-        'searchKeywords': searchKeywords,
-      });
-      userProvider.currentUser.username = username;
-      userProvider.currentUser.nameSurname = name;
-      userProvider.currentUser.location = location;
-    } catch (e) {
-      showErrorSnackBar("Bilgiler güncellenirken bir hata oluştu.");
     }
   }
 
@@ -515,7 +485,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       searchKeywords.add(word.toLowerCase());
     });
 
-    for (int i = 1; i < username.length; i++) {
+    for (int i = 1; i <= username.length; i++) {
       searchKeywords.add(username.substring(0, i).toLowerCase());
     }
     return searchKeywords;
@@ -526,46 +496,52 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void takePhotoFromGallery(BuildContext context) async {
-    var newImage =
-        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    try {
+      var newImage =
+          await ImagePicker.platform.pickImage(source: ImageSource.gallery);
 
-    File croppedFile = await cropImage(File(newImage.path));
-    setState(() {
-      profilePicture = PickedFile(croppedFile.path);
-      NavigationService.instance.pop();
-    });
+      File croppedFile = await cropImage(File(newImage.path));
+      setState(() {
+        profilePicture = PickedFile(croppedFile.path);
+        selectedPicture = true;
+        NavigationService.instance.pop();
+      });
+    } catch (e) {
+      showSnackbar("Fotoğraf seçilirken bir hata oluştu.");
+    }
   }
 
   void takePhotoFromCamera(BuildContext context) async {
-    var newImage =
-        await ImagePicker.platform.pickImage(source: ImageSource.camera);
+    try {
+      var newImage =
+          await ImagePicker.platform.pickImage(source: ImageSource.camera);
 
-    File croppedFile = await cropImage(File(newImage.path));
-    setState(() {
-      profilePicture = PickedFile(croppedFile.path);
-      NavigationService.instance.pop();
-    });
+      File croppedFile = await cropImage(File(newImage.path));
+      setState(() {
+        profilePicture = PickedFile(croppedFile.path);
+        selectedPicture = true;
+        NavigationService.instance.pop();
+      });
+    } catch (e) {
+      showSnackbar("Fotoğraf seçilirken bir hata oluştu.");
+    }
   }
 
   Future<String> updateProfilePhoto(BuildContext context) async {
-    if (profilePicture != null) {
-      CommonMethods().showLoaderDialog(context, "Fotoğraf Yükleniyor");
-      await userProvider
-          .updateCurrentUserProfilePicture(File(profilePicture.path))
-          .then((url) {
-        NavigationService.instance.pop();
-        userProvider.currentUser.profilePictureURL = url;
-        return url;
-      }).catchError((error) {
-        //TODO: TRY CATCH BLOĞU EKLE - DÜZENLE
-        CommonMethods()
-            .showErrorDialog(context, "Fotoğraf Yüklenirken hata oluştu.");
-      });
-      debugPrint("Picture uploaded.");
-    } else if (userProvider.currentUser.profilePictureURL != null) {
-      //Eğer diğer auth yöntemlerinden gelen bir profil fotoğrafı varsa bu yüklemeyi pas geçiyoruz.
+    if (selectedPicture) {
+      print("fotoğraf seçili, upload ediliyor");
+
+      var url = await userProvider
+          .updateCurrentUserProfilePicture(File(profilePicture.path));
+      userProvider.currentUser.profilePictureURL = url;
+      return url;
     } else {
-      uploadDefaultPicture();
+      if (hasSocialAuthProfilePicture()) {
+        print("fotoğraf seçili değil,sosyal foto upload ediliyor");
+      } else {
+        print("fotoğraf seçili değil, default upload ediliyor");
+        uploadDefaultPicture();
+      }
     }
   }
 
@@ -577,11 +553,20 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
           AppConstant.kDefaultUserProfilePicture;
       debugPrint("userPicture default olarak ayarlandı.");
     } catch (e) {
-      showErrorSnackBar("Teknik bir problem oluştu.");
+      showSnackbar("Teknik bir problem oluştu.");
     }
   }
 
   void navigateInterestSelectionPage() async {
     NavigationService.instance.navigate(k_ROUTE_INTEREST_REGISTRATION);
+  }
+
+  showSnackbar(String message) {
+    GFToast.showToast(
+      message,
+      context,
+      toastPosition: GFToastPosition.BOTTOM,
+      toastDuration: 4,
+    );
   }
 }

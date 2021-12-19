@@ -108,7 +108,8 @@ class FirebasePostService {
 
   Future<QuerySnapshot> getListQuery(
       int documentLimit, DocumentSnapshot startAfter) async {
-    final refPosts = postsRef.limit(documentLimit);
+    final refPosts =
+        postsRef.limit(documentLimit).orderBy('postDate', descending: true);
 
     if (startAfter == null) {
       return refPosts.get();

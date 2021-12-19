@@ -41,7 +41,7 @@ class PodcastDetail extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      CommonMethods.showImagePreviewDialog(context,
+                      CustomMethods.showImagePreviewDialog(context,
                           url: podcast.podcastImageUrl);
                     },
                     child: Container(
@@ -94,7 +94,7 @@ class PodcastDetail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     onPressed: () async {
-                      await launchPodcastUrl();
+                      await launchPodcastUrl(context);
                     },
                     color: kNavbarColor,
                     child: Padding(
@@ -152,7 +152,7 @@ class PodcastDetail extends StatelessWidget {
                 //   radius: 16,
                 // ),
                 onTap: () async {
-                  await launchOwnerUrl("www.dodact.com");
+                  await launchOwnerUrl(context, "www.dodact.com");
                 },
               ),
               ListTile(
@@ -201,12 +201,12 @@ class PodcastDetail extends StatelessWidget {
     );
   }
 
-  launchOwnerUrl(String url) {
-    CommonMethods.launchURL(url);
+  launchOwnerUrl(BuildContext context, String url) {
+    CustomMethods.launchURL(context, url);
   }
 
-  launchPodcastUrl() {
-    CommonMethods.launchURL(podcast.podcastLink);
+  launchPodcastUrl(BuildContext context) {
+    CustomMethods.launchURL(context, podcast.podcastLink);
   }
 }
 

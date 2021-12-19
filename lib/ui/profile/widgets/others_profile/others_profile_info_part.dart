@@ -110,7 +110,7 @@ class OthersProfileInfoTab extends StatelessWidget {
             Container(
               // width: size.width * 0.6,
               height: size.height * 0.1,
-              child: buildSocialIcons(user),
+              child: buildSocialIcons(context, user),
             ),
           ],
         );
@@ -122,7 +122,7 @@ class OthersProfileInfoTab extends StatelessWidget {
     );
   }
 
-  buildSocialIcons(UserObject user) {
+  buildSocialIcons(BuildContext context, UserObject user) {
     var linkedin = user.socialMediaLinks['linkedin'];
     var youtube = user.socialMediaLinks['youtube'];
     var instagram = user.socialMediaLinks['instagram'];
@@ -136,7 +136,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         linkedin != null && linkedin.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(linkedin);
+                  CustomMethods.launchURL(context, linkedin);
                 },
                 icon: Icon(
                   FontAwesome5Brands.linkedin,
@@ -147,7 +147,8 @@ class OthersProfileInfoTab extends StatelessWidget {
         instagram != null && instagram.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL("www.instagram.com/$instagram");
+                  CustomMethods.launchURL(
+                      context, "https://www.instagram.com/$instagram");
                 },
                 icon: Icon(FontAwesome5Brands.instagram, size: 30),
               )
@@ -155,7 +156,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         dribbble != null && dribbble.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(dribbble);
+                  CustomMethods.launchURL(context, dribbble);
                 },
                 icon: Icon(FontAwesome5Brands.dribbble, size: 30),
               )
@@ -163,7 +164,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         soundcloud != null && soundcloud.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(soundcloud);
+                  CustomMethods.launchURL(context, soundcloud);
                 },
                 icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
               )
@@ -171,7 +172,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         youtube != null && youtube.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(youtube);
+                  CustomMethods.launchURL(context, youtube);
                 },
                 icon: Icon(FontAwesome5Brands.youtube, size: 30),
               )
@@ -179,7 +180,7 @@ class OthersProfileInfoTab extends StatelessWidget {
         pinterest != null && pinterest.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(pinterest);
+                  CustomMethods.launchURL(context, pinterest);
                 },
                 icon: Icon(FontAwesome5Brands.pinterest, size: 30),
               )

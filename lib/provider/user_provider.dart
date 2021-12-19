@@ -164,20 +164,15 @@ class UserProvider with ChangeNotifier {
 
   Future<String> updateCurrentUserProfilePicture(File image) async {
     //First: upload users photo to firestorage
-    try {
-      var url = await UploadService().uploadUserProfilePhoto(
-          userID: currentUser.uid,
-          fileType: 'profile_picture',
-          fileToUpload: image);
-      currentUser.profilePictureURL = url;
-      notifyListeners();
-      await updateCurrentUser({'profilePictureURL': url});
-      return url;
-    } catch (e) {
-      logger.e("UserProvider updateCurrentUserProfilePicture error. " +
-          e.toString());
-      notifyListeners();
-    }
+    var url = await UploadService().uploadUserProfilePhoto(
+        userID: currentUser.uid,
+        fileType: 'profile_picture',
+        fileToUpload: image);
+    currentUser.profilePictureURL = url;
+    notifyListeners();
+    await updateCurrentUser({'profilePictureURL': url});
+    return url;
+    // throw Exception('Not implemented yet');
   }
 
   Future<void> getCurrentUserFavoritePosts() async {

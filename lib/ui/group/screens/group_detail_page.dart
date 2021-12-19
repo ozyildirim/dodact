@@ -78,14 +78,26 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    onSelected: (value) async {
+                      if (value == 0) {
+                        navigateGroupManagementPage();
+                      }
+                    },
                     itemBuilder: (context) => [
                           PopupMenuItem(
-                            child: ListTile(
-                              leading: Icon(FontAwesome5Solid.cogs),
-                              title: Text("Topluluk Yönetimi"),
-                              onTap: () {
-                                navigateGroupManagementPage();
-                              },
+                            value: 0,
+                            // child: ListTile(
+                            //   leading: Icon(FontAwesome5Solid.cogs),
+                            //   title: Text("Topluluk Yönetimi"),
+                            // ),
+                            child: Row(
+                              children: [
+                                Icon(FontAwesome5Solid.cogs,
+                                    size: 16, color: Colors.black),
+                                SizedBox(width: 14),
+                                Text("Topluluk Yönetimi",
+                                    style: TextStyle(fontSize: 14)),
+                              ],
                             ),
                           ),
                         ])
@@ -196,7 +208,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
               ),
               GestureDetector(
                 onTap: () {
-                  CommonMethods.showImagePreviewDialog(context,
+                  CustomMethods.showImagePreviewDialog(context,
                       url: group.groupProfilePicture);
                 },
                 child: Card(

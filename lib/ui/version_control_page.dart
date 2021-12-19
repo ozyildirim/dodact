@@ -138,14 +138,16 @@ class UnderConstructionScreen extends StatelessWidget {
                     shape: GFIconButtonShape.circle,
                     icon: Icon(FontAwesome5Brands.twitter),
                     onPressed: () {
-                      CommonMethods.launchURL("https://twitter.com/dodactcom");
+                      CustomMethods.launchURL(
+                          context, "https://twitter.com/dodactcom");
                     }),
                 GFIconButton(
                     shape: GFIconButtonShape.circle,
                     color: Colors.transparent,
                     icon: Icon(FontAwesome5Brands.instagram),
                     onPressed: () {
-                      CommonMethods.launchURL("https://twitter.com/dodactcom");
+                      CustomMethods.launchURL(
+                          context, "https://twitter.com/dodactcom");
                     })
               ],
             )
@@ -188,7 +190,7 @@ class EnforcedUpdateScreen extends StatelessWidget {
                             icon: Icon(FontAwesome5Brands.google_play,
                                 color: Colors.black),
                             onPressed: () {
-                              CommonMethods.launchURL(
+                              CustomMethods.launchURL(context,
                                   "https://play.google.com/store/apps/details?id=com.dodact.dodact_v1");
                             })
                         : GFIconButton(
@@ -198,7 +200,7 @@ class EnforcedUpdateScreen extends StatelessWidget {
                               color: Colors.black,
                             ),
                             onPressed: () {
-                              CommonMethods.launchURL(
+                              CustomMethods.launchURL(context,
                                   "https://apps.apple.com/us/app/dodact/id1596151747");
                             },
                           )

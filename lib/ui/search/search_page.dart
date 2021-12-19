@@ -169,7 +169,7 @@ class _SearchPageState extends State<SearchPage> {
                           PostModel post = PostModel.fromJson(data.data());
 
                           if (post.postContentURL != null) {
-                            var thumbnail = CommonMethods.createThumbnailURL(
+                            var thumbnail = CustomMethods.createThumbnailURL(
                                 post.isLocatedInYoutube, post.postContentURL);
 
                             return Padding(

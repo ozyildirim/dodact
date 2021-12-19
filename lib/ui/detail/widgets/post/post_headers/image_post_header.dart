@@ -19,7 +19,7 @@ class ImagePostHeader extends StatelessWidget {
         imageUrl: post.postContentURL,
         imageBuilder: (context, imageProvider) => InkWell(
           onTap: () {
-            CommonMethods.showImagePreviewDialog(context,
+            CustomMethods.showImagePreviewDialog(context,
                 imageProvider: imageProvider);
           },
           child: Container(

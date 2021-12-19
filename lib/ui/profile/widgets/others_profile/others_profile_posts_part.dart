@@ -38,25 +38,25 @@ class _OthersProfilePostsTabState extends State<OthersProfilePostsTab>
             if (snapshot.data.isNotEmpty) {
               List<PostModel> posts = snapshot.data;
 
-              return StaggeredGridView.countBuilder(
-                crossAxisCount: 4,
-                itemCount: posts.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var postItem = posts[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Container(
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StaggeredGridView.countBuilder(
+                  crossAxisCount: 4,
+                  itemCount: posts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var postItem = posts[index];
+                    return Container(
                       height: 200,
                       child: PostCardForGrid(
                         post: postItem,
                       ),
-                    ),
-                  );
-                },
-                staggeredTileBuilder: (int index) =>
-                    new StaggeredTile.count(2, index.isEven ? 2 : 1),
-                mainAxisSpacing: 8.0,
-                crossAxisSpacing: 4.0,
+                    );
+                  },
+                  staggeredTileBuilder: (int index) =>
+                      new StaggeredTile.count(2, index.isEven ? 2 : 1),
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 4.0,
+                ),
               );
             } else {
               return Center(

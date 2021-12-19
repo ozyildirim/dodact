@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -96,23 +95,40 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         icon: Icon(Icons.more_vert, color: Colors.black),
+                        onSelected: (value) async {
+                          if (value == 1) {
+                            await _showDeleteEventDialog(event.id);
+                          } else if (value == 2) {
+                            await _showEditEventDialog(event);
+                          }
+                        },
                         itemBuilder: (context) => [
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading:
-                                        Icon(FontAwesome5Regular.trash_alt),
-                                    title: Text("Sil"),
+                                  value: 1,
+                                  child: InkWell(
                                     onTap: () async {
                                       await _showDeleteEventDialog(event.id);
-                                    }),
-                              ),
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(FontAwesome5Regular.trash_alt,
+                                            size: 16),
+                                        SizedBox(width: 14),
+                                        Text("Sil",
+                                            style: TextStyle(fontSize: 14)),
+                                      ],
+                                    ),
+                                  )),
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(FontAwesome5Regular.edit),
-                                    title: Text("Düzenle"),
-                                    onTap: () async {
-                                      await _showEditEventDialog(event);
-                                    }),
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesome5Regular.edit, size: 16),
+                                    SizedBox(width: 14),
+                                    Text("Düzenle",
+                                        style: TextStyle(fontSize: 14)),
+                                  ],
+                                ),
                               )
                             ]),
                   ),
@@ -132,14 +148,23 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         icon: Icon(Icons.more_vert, color: Colors.black),
+                        onSelected: (value) async {
+                          if (value == 0) {
+                            // await _showReportEventDialog(event.id);
+                            await reportEvent(event.id);
+                          }
+                        },
                         itemBuilder: (context) => [
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(FontAwesome5Regular.bell),
-                                    title: Text("Bildir"),
-                                    onTap: () async {
-                                      await _showReportEventDialog(event.id);
-                                    }),
+                                value: 0,
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesome5Regular.bell, size: 16),
+                                    SizedBox(width: 14),
+                                    Text("Bildir",
+                                        style: TextStyle(fontSize: 14)),
+                                  ],
+                                ),
                               ),
                             ]),
                   ),
@@ -172,7 +197,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget _buildEventHeader() {
     return GestureDetector(
       onTap: () {
-        CommonMethods.showImagePreviewDialog(context,
+        CustomMethods.showImagePreviewDialog(context,
             url: event.eventImages[0]);
       },
       child: Container(
@@ -308,7 +333,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
-                  CommonMethods.showImagePreviewDialog(context, url: image);
+                  CustomMethods.showImagePreviewDialog(context, url: image);
                 },
                 child: Container(
                   child: ClipRRect(
@@ -383,7 +408,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     ),
                     subtitle: Text("Etkinlik Web Adresi"),
                     onTap: () {
-                      CommonMethods.launchURL(event.eventURL);
+                      CustomMethods.launchURL(context, event.eventURL);
                     },
                     trailing: IconButton(
                       onPressed: () {
@@ -536,47 +561,58 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   Future<void> _showDeleteEventDialog(String eventId) async {
     //TODO: burayı düzelt
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu etkinliği silmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await _deleteEvent(eventId);
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği silmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await _deleteEvent(eventId);
-        });
+        },
+        title: "Bu etkinliği silmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   Future<void> _showReportEventDialog(String eventId) async {
     //TODO: burayı düzelt
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu etkinliği bildirmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await reportEvent(eventId);
+    //     });
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await reportEvent(eventId);
-          NavigationService.instance.pop();
-        });
+        },
+        title: "Bu etkinliği bildirmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   Future<void> _deleteEvent(String eventId) async {
-    bool isLocatedInStorage = event.eventImages != [] ? true : false;
-
-    //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
-    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
 
     await Provider.of<EventProvider>(context, listen: false)
-        .deleteEvent(event.id, isLocatedInStorage);
+        .deleteEvent(event.id);
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //}
@@ -614,29 +650,31 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Future<void> reportEvent(String eventId) async {
-    var reportReason = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => reportReasonDialog(context),
-    );
+    var result = await FirebaseReportService.checkEventHasSameReporter(
+        reportedEventId: eventId, reporterId: userProvider.currentUser.uid);
 
-    if (reportReason != null) {
-      CommonMethods()
-          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
-      await FirebaseReportService()
-          .reportEvent(authProvider.currentUser.uid, event.id, reportReason)
-          .then((value) async {
-        await CommonMethods().showSuccessDialog(context,
-            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
-        NavigationService.instance.pop();
-        NavigationService.instance.pop();
-      }).catchError((value) async {
-        await CommonMethods()
-            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
-        NavigationService.instance.pop();
-      });
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu etkinliği zaten bildirdin.");
     } else {
-      NavigationService.instance.pop();
+      var reportReason = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => reportReasonDialog(context),
+      );
+
+      if (reportReason != null) {
+        try {
+          await FirebaseReportService.reportEvent(
+              authProvider.currentUser.uid, event.id, reportReason);
+          CustomMethods.showSnackbar(context,
+              "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        } catch (e) {
+          CustomMethods.showSnackbar(
+              context, "İşlem gerçekleştirilirken hata oluştu.");
+        }
+      } else {
+        NavigationService.instance.pop();
+      }
     }
   }
 }

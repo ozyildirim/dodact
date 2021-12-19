@@ -43,15 +43,20 @@ class _GroupMemberManagementPageState
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
+        onSelected: (value) async {
+          if (value == 0) {
+            NavigationService.instance.navigate(k_ROUTE_GROUP_INVITATIONS_PAGE);
+          }
+        },
         itemBuilder: (context) => [
               PopupMenuItem(
-                child: ListTile(
-                  leading: Icon(Icons.question_answer),
-                  title: Text("Gönderilen Davetler"),
-                  onTap: () async {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_GROUP_INVITATIONS_PAGE);
-                  },
+                value: 0,
+                child: Row(
+                  children: [
+                    Icon(Icons.question_answer, size: 16, color: Colors.black),
+                    SizedBox(width: 14),
+                    Text("Gönderilen Davetler", style: TextStyle(fontSize: 14)),
+                  ],
                 ),
               ),
             ])

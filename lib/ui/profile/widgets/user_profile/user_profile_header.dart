@@ -30,7 +30,7 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
       children: [
         InkWell(
           onTap: () {
-            CommonMethods.showImagePreviewDialog(context,
+            CustomMethods.showImagePreviewDialog(context,
                 url: user.profilePictureURL);
           },
           child: CircleAvatar(

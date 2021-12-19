@@ -63,7 +63,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                     ),
                     itemBuilder: (context, index) {
                       var post = asyncSnapshot.data[index];
-                      var postCoverPhoto = CommonMethods.createThumbnailURL(
+                      var postCoverPhoto = CustomMethods.createThumbnailURL(
                           post.isLocatedInYoutube, post.postContentURL,
                           isAudio:
                               post.postContentType == "Ses" ? true : false);
@@ -152,20 +152,20 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
   }
 
   showDeletePostDialog(String postId) async {
-    await CoolAlert.show(
-        context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu içeriği kaldırmak istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
-          deleteGroupPost(postId);
-          NavigationService.instance.pop();
-        });
+    // await CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu içeriği kaldırmak istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       deleteGroupPost(postId);
+    //       NavigationService.instance.pop();
+    //     });
   }
 
   Future<void> deleteGroupPost(String postId) async {

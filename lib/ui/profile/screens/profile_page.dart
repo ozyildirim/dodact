@@ -42,6 +42,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
           GFIconBadge(
+            padding: EdgeInsets.zero,
             counterChild: Container(),
             child: IconButton(
               onPressed: () {
@@ -54,6 +55,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
             ),
           ),
           GFIconBadge(
+            padding: EdgeInsets.zero,
             counterChild: Container(),
             child: IconButton(
               onPressed: () {

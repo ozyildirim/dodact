@@ -300,7 +300,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     var size = MediaQuery.of(context).size;
 
     if (isAvailableYoutubeLink == true) {
-      var thumbnailUrl = CommonMethods.createThumbnailURL(true, youtubeLink);
+      var thumbnailUrl = CustomMethods.createThumbnailURL(true, youtubeLink);
 
       return Center(
         child: Card(
@@ -386,9 +386,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       (value) {
                         return ProfanityChecker.profanityValidator(value);
                       },
-                      FormBuilderValidators.minLength(context, 10,
-                          errorText: "İçerik adı en az 10 harften oluşmalı.",
-                          allowEmpty: false)
                     ],
                   ),
                 ),
@@ -429,10 +426,6 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                           (value) {
                             return ProfanityChecker.profanityValidator(value);
                           },
-                          FormBuilderValidators.minLength(context, 20,
-                              errorText:
-                                  "Biraz daha detay verilmeli (En az 20 harf).",
-                              allowEmpty: false)
                         ],
                       ),
                     ),
@@ -509,7 +502,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   //TODO: Thumbnail package ekle
   Future<bool> uploadPost() async {
-    CommonMethods().showLoaderDialog(context, "İçerik Yükleniyor");
+    CustomMethods().showLoaderDialog(context, "İçerik Yükleniyor");
     //Implement new post features into variable.
     try {
       PostModel newPost = new PostModel(
@@ -545,7 +538,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       );
     } catch (e) {
       NavigationService.instance.pop();
-      CommonMethods()
+      CustomMethods()
           .showErrorDialog(context, "İçerik yüklenirken bir hata oluştu");
     } //
   }
@@ -691,7 +684,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         text: message,
         showCancelBtn: true,
         cancelBtnText: "Paylaş",
-        confirmBtnColor: Colors.green,
+        confirmBtnColor: kNavbarColor,
         onCancelBtnTap: () async {
           await sharePostStatusCard();
         },

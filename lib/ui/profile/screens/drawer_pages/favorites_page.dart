@@ -96,7 +96,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                           var postPhoto;
                           var element = posts[index];
                           element.isLocatedInYoutube == true
-                              ? postPhoto = CommonMethods.createThumbnailURL(
+                              ? postPhoto = CustomMethods.createThumbnailURL(
                                   true, element.postContentURL)
                               : postPhoto = element.postContentURL;
 

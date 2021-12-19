@@ -450,7 +450,7 @@ class _UserPersonalProfileSettingsPageState
             borderRadius: BorderRadius.circular(100),
             child: InkWell(
               onTap: () {
-                CommonMethods.showImagePreviewDialog(context,
+                CustomMethods.showImagePreviewDialog(context,
                     url: userProvider.currentUser.profilePictureURL);
               },
               child: Container(
@@ -540,7 +540,7 @@ class _UserPersonalProfileSettingsPageState
   }
 
   void updateProfilePhoto() async {
-    CommonMethods().showLoaderDialog(context, "Fotoğrafın Güncelleniyor");
+    CustomMethods().showLoaderDialog(context, "Fotoğrafın Güncelleniyor");
     await userProvider
         .updateCurrentUserProfilePicture(File(picture.path))
         .then((url) {
@@ -549,7 +549,7 @@ class _UserPersonalProfileSettingsPageState
       showSnackbar("Fotoğrafın güncellendi");
       debugPrint("Picture uploaded.");
     }).catchError((error) {
-      CommonMethods()
+      CustomMethods()
           .showErrorDialog(context, "Fotoğraf yüklenirken hata oluştu.");
     });
   }
@@ -567,7 +567,7 @@ class _UserPersonalProfileSettingsPageState
     if (isAvailableUsername == true || isAvailableUsername == null) {
       if (formKey.currentState.saveAndValidate()) {
         try {
-          CommonMethods()
+          CustomMethods()
               .showLoaderDialog(context, "Değişiklikler Kaydediliyor");
           await userProvider.updateCurrentUser({
             'location':

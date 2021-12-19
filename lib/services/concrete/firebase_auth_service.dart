@@ -38,7 +38,7 @@ class FirebaseAuthService {
 
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
 
-    CommonMethods().showLoaderDialog(context, "Lütfen Bekleyin");
+    CustomMethods().showLoaderDialog(context, "Lütfen Bekleyin");
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -90,7 +90,7 @@ class FirebaseAuthService {
   Future<User> signInWithApple(BuildContext context) async {
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);
-    CommonMethods().showLoaderDialog(context, "Lütfen Bekleyin");
+    CustomMethods().showLoaderDialog(context, "Lütfen Bekleyin");
     final appleCredential = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
