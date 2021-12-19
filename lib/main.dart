@@ -100,20 +100,20 @@ void main() async {
     // );
   });
 
-  //TODO: Notification'a tiklanma olayi bu fonksiyon. Kullanici giris yapmis mi vs kontrolleri et dene oyle koyalim.
-  // AwesomeNotifications().actionStream.listen((receivedNotification) {
-  //   if (receivedNotification.buttonKeyPressed == 'REPLY') {
-  //     //REPLY butonuna yazi girip gondere basarsa calisir.
-  //     String message = receivedNotification.buttonKeyInput;
-  //     NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS, args: {
-  //       'reply': message,
-  //       'from': receivedNotification.payload['from'],
-  //     });
-  //   }
-  //   if (receivedNotification.payload['type'] == 'message') {
-  //     NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
-  //   }
-  // });
+  // TODO: Notification'a tiklanma olayi bu fonksiyon. Kullanici giris yapmis mi vs kontrolleri et dene oyle koyalim.
+  AwesomeNotifications().actionStream.listen((receivedNotification) {
+    if (receivedNotification.buttonKeyPressed == 'REPLY') {
+      //REPLY butonuna yazi girip gondere basarsa calisir.
+      String message = receivedNotification.buttonKeyInput;
+      NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS, args: {
+        'reply': message,
+        'from': receivedNotification.payload['from'],
+      });
+    }
+    if (receivedNotification.payload['type'] == 'message') {
+      NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
+    }
+  });
 
   // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
   //   print('User granted permission');
