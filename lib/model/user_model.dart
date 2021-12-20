@@ -21,6 +21,7 @@ class UserObject {
 
   List<String> favoritedPosts = [];
   List<Map<String, dynamic>> interests;
+  List<String> selectedInterests;
   List<String> followers = [];
   List<String> following = [];
 
@@ -82,6 +83,7 @@ class UserObject {
     this.newUser,
     this.userDescription,
     this.interests,
+    this.selectedInterests,
     this.permissions,
     this.privacySettings,
     this.socialMediaLinks,
@@ -146,6 +148,7 @@ class UserObject {
     userData['rosettes'] = this.rosettes;
 
     userData['interests'] = this.interests;
+    userData['selectedInterests'] = this.selectedInterests;
     userData['permissions'] = defaultPermissions;
     userData['privacySettings'] = defaultPrivacySettings;
     userData['socialMediaLinks'] = defaultSocialMediaLinks;
@@ -175,6 +178,7 @@ class UserObject {
     rosettes = doc.data()['rosettes'];
     mainInterest = doc.data()['mainInterest'] ?? "";
     interests = doc.data()['interests']?.cast<Map<String, dynamic>>();
+    selectedInterests = doc.data()['selectedInterests']?.cast<String>();
     blockedUserList = doc.data()['blockedUserList']?.cast<String>() ?? [];
 
     permissions = doc.data()['permissions'] ?? this.permissions;

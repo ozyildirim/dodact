@@ -15,9 +15,9 @@ class GroupModel {
   String groupLocation;
   InvitationModel invitations;
   List<Map<String, dynamic>> interests;
+  List<String> selectedInterests;
   String mainInterest;
   bool visible;
-  //TODO: bunu servisten çek
 
   GroupModel({
     this.groupId,
@@ -30,6 +30,7 @@ class GroupModel {
     this.groupMedia,
     this.groupMemberList,
     this.interests,
+    this.selectedInterests,
     this.mainInterest,
     this.creationDate,
     this.groupLocation,
@@ -47,6 +48,7 @@ class GroupModel {
     groupMedia = json['groupMedia']?.cast<String>();
     groupMemberList = json['groupMemberList']?.cast<String>();
     interests = json['interests']?.cast<Map<String, dynamic>>();
+    selectedInterests = json['selectedInterests']?.cast<String>();
     mainInterest = json['mainInterest'] ?? "";
     creationDate = (json['creationDate'] as Timestamp).toDate();
     groupLocation = json['groupLocation'];
@@ -65,6 +67,7 @@ class GroupModel {
     data['groupMedia'] = this.groupMedia;
     data['groupMemberList'] = this.groupMemberList;
     data['interests'] = this.interests;
+    data['selectedInterests'] = this.selectedInterests;
     data['mainInterest'] = this.mainInterest;
     data['creationDate'] = FieldValue.serverTimestamp();
     data['groupLocation'] = this.groupLocation;

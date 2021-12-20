@@ -100,15 +100,15 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
               NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
             },
           ),
-          ListTile(
-            leading: Icon(Icons.badge),
-            title: Text("Example Interests", style: TextStyle(fontSize: 18)),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ExamplePage();
-              }));
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.badge),
+          //   title: Text("Example Interests", style: TextStyle(fontSize: 18)),
+          //   onTap: () {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //       return ExamplePage();
+          //     }));
+          //   },
+          // ),
 
           // ListTile(
           //   leading: Icon(Icons.info),

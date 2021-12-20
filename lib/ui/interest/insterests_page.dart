@@ -1,9 +1,11 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:flutter/services.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 class InterestsPage extends StatefulWidget {
   @override
@@ -11,64 +13,20 @@ class InterestsPage extends StatefulWidget {
 }
 
 class _InterestsPageState extends BaseState<InterestsPage> {
+  GlobalKey<FormFieldState> formKey = GlobalKey<FormFieldState>();
+  List<String> selectedInterests;
   bool isUpdated = false;
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
-
-    getSelectedValues();
-
-    // print(userProvider.currentUser.interests);
-
-    print("sahne sanatları seçilenler: " +
-        selectedPerformingArtValues.toString());
-    print("yüzey sanatları seçilenler: " + selectedSurfaceArtValues.toString());
-    print("hacim sanatları seçilenler: " + selectedVolumeArtValues.toString());
-    print("ses sanatları seçilenler: " + selectedVocalArtValues.toString());
-  }
-
-  getSelectedValues() {
-    setState(() {
-      if (userProvider.currentUser.interests != null) {
-        if (userProvider.currentUser.interests.isNotEmpty) {
-          selectedSurfaceArtValues = userProvider.currentUser.interests
-              .where((element) => element['title'] == "Yüzey Sanatları")
-              .toList()[0]['selectedSubcategories']
-              .cast<String>();
-
-          selectedVocalArtValues = userProvider.currentUser.interests
-              .where((element) => element['title'] == "Ses Sanatları")
-              .toList()[0]['selectedSubcategories']
-              .cast<String>();
-
-          selectedPerformingArtValues = userProvider.currentUser.interests
-              .where((element) => element['title'] == "Sahne Sanatları")
-              .toList()[0]['selectedSubcategories']
-              .cast<String>();
-
-          selectedVolumeArtValues = userProvider.currentUser.interests
-              .where((element) => element['title'] == "Hacim Sanatları")
-              .toList()[0]['selectedSubcategories']
-              .cast<String>();
-        } else {
-          selectedSurfaceArtValues = [];
-          selectedVocalArtValues = [];
-          selectedPerformingArtValues = [];
-          selectedVolumeArtValues = [];
-        }
-      } else {
-        selectedSurfaceArtValues = [];
-        selectedVocalArtValues = [];
-        selectedPerformingArtValues = [];
-        selectedVolumeArtValues = [];
-      }
-    });
+    selectedInterests = userProvider.currentUser.selectedInterests;
   }
 
   @override
   Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery.of(context);
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: isLoading
           // ignore: missing_required_param
@@ -80,13 +38,16 @@ class _InterestsPageState extends BaseState<InterestsPage> {
                   child: Icon(Icons.check),
                 )
               : null,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text('İlgi Alanları'),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Container(
-        height: dynamicHeight(1),
-        width: dynamicWidth(1),
         decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
@@ -95,381 +56,107 @@ class _InterestsPageState extends BaseState<InterestsPage> {
             fit: BoxFit.cover,
           ),
         ),
-        // child: choiceWidget(),
-        child: ListView(
-          // scrollDirection: Axis.horizontal,
-          children: [
-            performingArtsSelector(),
-            vocalArtsSelector(),
-            surfaceArtsSelector(),
-            volumeArtsSelector()
-          ],
-        ),
-        // child: buildStack(),
+        height: dynamicHeight(1),
+        width: dynamicWidth(1),
+        child: buildChipField(),
       ),
     );
   }
 
-  List<String> performingArtsCategories = interestCategoryList
-      .where((element) => element.name == "Sahne Sanatları")
-      .toList()[0]
-      .subCategories
-      .toList();
-
-  List<String> surfaceArtsCategories = interestCategoryList
-      .where((element) => element.name == "Yüzey Sanatları")
-      .toList()[0]
-      .subCategories
-      .toList();
-
-  List<String> volumeArtsCategories = interestCategoryList
-      .where((element) => element.name == "Hacim Sanatları")
-      .toList()[0]
-      .subCategories
-      .toList();
-
-  List<String> vocalArtsCategories = interestCategoryList
-      .where((element) => element.name == "Ses Sanatları")
-      .toList()[0]
-      .subCategories
-      .toList();
-
-  List<String> selectedPerformingArtValues = [];
-  List<String> selectedSurfaceArtValues = [];
-  List<String> selectedVolumeArtValues = [];
-  List<String> selectedVocalArtValues = [];
-
-  performingArtsSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+  buildChipField() {
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 12.0, top: 12),
+            child: Text("İlgi Alanlarını Seç",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
           ),
-          clipBehavior: Clip.antiAlias,
-          elevation: 10,
-          margin: EdgeInsets.zero,
-          color: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/app/interests/tiyatro.jpeg'),
-                fit: BoxFit.cover,
+          Padding(
+            padding: const EdgeInsets.only(left: 12.0, top: 12),
+            child: Text(
+                "Diğer sanatseverler ne ile ilgilendiğini görsün! Uygulama içindeki maceranı özelleştirmek için ilgilendiğin alanları seç.",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: MultiSelectChipField(
+                  key: formKey,
+                  decoration: BoxDecoration(), chipColor: Colors.grey[200],
+                  selectedChipColor: kNavbarColor,
+                  selectedTextStyle: TextStyle(color: Colors.white),
+                  textStyle: TextStyle(color: Colors.black),
+                  // title: Text("İlgi Alanlarını Seç",
+                  //     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                  title: Text(""),
+                  onTap: (selected) {
+                    setState(() {
+                      if (userProvider.currentUser.selectedInterests !=
+                          selected) {
+                        isUpdated = true;
+                        selectedInterests = selected;
+                      } else {
+                        isUpdated = false;
+                      }
+                    });
+                  },
+                  headerColor: Colors.transparent,
+                  searchHint: "Ara",
+                  scroll: false,
+                  searchable: true,
+                  showHeader: true,
+                  chipShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    // side: BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  items: categoryList.map((e) {
+                    return MultiSelectItem(e, e);
+                  }).toList(),
+                  // itemBuilder: (item, state) {
+                  //   return InkWell(
+                  //     onTap: () {
+                  //       selectedInterests.contains(item.value)
+                  //           ? selectedInterests.remove(item.value)
+                  //           : selectedInterests.add(item.value);
+                  //       state.didChange(selectedInterests);
+                  //       formKey.currentState.validate();
+                  //     },
+                  //     child: Chip(
+                  //       label: Text(item.label),
+                  //     ),
+                  //   );
+                  // },
+                  initialValue: selectedInterests,
+                ),
               ),
             ),
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.045,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.grey.withOpacity(0.5),
-                  child: Center(
-                    child: Text("Sahne Sanatları",
-                        style: TextStyle(
-                            fontSize: 21,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                )),
-          ),
-        ),
-        onTap: performingArtsSelectorDialog,
+          )
+        ],
       ),
     );
-  }
-
-  performingArtsSelectorDialog() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return MultiSelectDialog(
-            items: performingArtsCategories
-                .map((e) => MultiSelectItem(e, e))
-                .toList(),
-            listType: MultiSelectListType.CHIP,
-            initialValue: selectedPerformingArtValues,
-            checkColor: Colors.blue,
-            // chipDisplay: MultiSelectChipDisplay.none(),
-            selectedColor: kNavbarColor,
-            selectedItemsTextStyle: TextStyle(color: Colors.white),
-            itemsTextStyle: TextStyle(color: Colors.black),
-            cancelText: Text("İptal",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            confirmText: Text("Onayla",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            title: Text("Sahne Sanatları"),
-            searchable: true,
-            searchHint: "Ara",
-            onConfirm: (values) {
-              selectedPerformingArtValues = values;
-              setState(() {
-                isUpdated = true;
-              });
-            },
-          );
-        });
-  }
-
-  surfaceArtsSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          clipBehavior: Clip.antiAlias,
-          elevation: 10,
-          margin: EdgeInsets.zero,
-          color: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/app/interests/gorsel_sanatlar.jpeg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.045,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.grey.withOpacity(0.5),
-                  child: Center(
-                    child: Text("Yüzey Sanatları",
-                        style: TextStyle(
-                            fontSize: 21,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                )),
-          ),
-        ),
-        onTap: surfaceArtsSelectorDialog,
-      ),
-    );
-  }
-
-  surfaceArtsSelectorDialog() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return MultiSelectDialog(
-            items: surfaceArtsCategories
-                .map((e) => MultiSelectItem(e, e))
-                .toList(),
-            listType: MultiSelectListType.CHIP,
-            initialValue: selectedSurfaceArtValues,
-            checkColor: Colors.blue,
-            selectedColor: kNavbarColor,
-            selectedItemsTextStyle: TextStyle(color: Colors.white),
-            itemsTextStyle: TextStyle(color: Colors.black),
-            cancelText: Text("İptal",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            confirmText: Text("Onayla",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            title:
-                Text("Yüzey Sanatları", style: TextStyle(color: Colors.black)),
-            searchable: true,
-            searchHint: "Ara",
-            onConfirm: (values) {
-              selectedSurfaceArtValues = values;
-              setState(() {
-                isUpdated = true;
-              });
-            },
-          );
-        });
-  }
-
-  vocalArtsSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: vocalArtsSelectorDialog,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          clipBehavior: Clip.antiAlias,
-          elevation: 10,
-          margin: EdgeInsets.zero,
-          color: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/app/interests/muzik.jpeg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.045,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.grey.withOpacity(0.5),
-                  child: Center(
-                    child: Text("Ses Sanatları",
-                        style: TextStyle(
-                            fontSize: 21,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                )),
-          ),
-        ),
-      ),
-    );
-  }
-
-  vocalArtsSelectorDialog() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return MultiSelectDialog(
-            items:
-                vocalArtsCategories.map((e) => MultiSelectItem(e, e)).toList(),
-            listType: MultiSelectListType.CHIP,
-            initialValue: selectedVocalArtValues,
-            checkColor: Colors.blue,
-            selectedColor: kNavbarColor,
-            selectedItemsTextStyle: TextStyle(color: Colors.white),
-            itemsTextStyle: TextStyle(color: Colors.black),
-            cancelText: Text("İptal",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            confirmText: Text("Onayla",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            title: Text("Ses Sanatları"),
-            searchable: true,
-            searchHint: "Ara",
-            onConfirm: (values) {
-              selectedVocalArtValues = values;
-              setState(() {
-                isUpdated = true;
-              });
-            },
-          );
-        });
-  }
-
-  volumeArtsSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: visualArtSelectorDialog,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          clipBehavior: Clip.antiAlias,
-          elevation: 10,
-          margin: EdgeInsets.zero,
-          color: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image:
-                    AssetImage('assets/images/app/interests/volume_arts.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.045,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.grey.withOpacity(0.5),
-                  child: Center(
-                    child: Text("Hacim Sanatları",
-                        style: TextStyle(
-                            fontSize: 21,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                )),
-          ),
-        ),
-      ),
-    );
-  }
-
-  visualArtSelectorDialog() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return MultiSelectDialog(
-            items:
-                volumeArtsCategories.map((e) => MultiSelectItem(e, e)).toList(),
-            listType: MultiSelectListType.CHIP,
-            initialValue: selectedVolumeArtValues,
-            checkColor: Colors.white,
-            selectedColor: kNavbarColor,
-            selectedItemsTextStyle: TextStyle(color: Colors.white),
-            itemsTextStyle: TextStyle(color: Colors.black),
-            cancelText: Text("İptal",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            confirmText: Text("Onayla",
-                style: TextStyle(fontSize: 20, color: Colors.black)),
-            title: Text("Hacim Sanatları"),
-            searchable: true,
-            searchHint: "Ara",
-            onConfirm: (values) {
-              selectedVolumeArtValues = values;
-              setState(() {
-                isUpdated = true;
-              });
-            },
-          );
-        });
   }
 
   updateUserInterests() async {
-    setState(() {
-      isLoading = true;
-    });
-    List<Map<String, dynamic>> interests = [
-      {
-        'title': 'Sahne Sanatları',
-        'selectedSubcategories': selectedPerformingArtValues
-      },
-      {
-        'title': 'Hacim Sanatları',
-        'selectedSubcategories': selectedVolumeArtValues
-      },
-      {
-        'title': 'Ses Sanatları',
-        'selectedSubcategories': selectedVocalArtValues
-      },
-      {
-        'title': 'Yüzey Sanatları',
-        'selectedSubcategories': selectedSurfaceArtValues
-      }
-    ];
-
-    await userProvider.updateCurrentUserInterests(interests);
-    setState(() {
-      isLoading = false;
-      isUpdated = false;
-    });
-    showSnackbar("İlgi alanları güncellendi");
-  }
-
-  showSnackbar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      await userProvider
+          .updateCurrentUser({'selectedInterests': selectedInterests});
+      setState(() {
+        isUpdated = false;
+        isLoading = false;
+      });
+      CustomMethods.showSnackbar(context, "İlgi alanları güncellendi.");
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      CustomMethods.showSnackbar(context, "Bir hata oluştu.");
+    }
   }
 }
