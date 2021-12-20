@@ -131,9 +131,13 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
           leading: Hero(
             tag: user.uid,
             child: CircleAvatar(
-              radius: 40,
-              backgroundImage:
-                  CachedNetworkImageProvider(user.profilePictureURL),
+              backgroundColor: kNavbarColor,
+              radius: 45,
+              child: CircleAvatar(
+                radius: 40,
+                backgroundImage:
+                    CachedNetworkImageProvider(user.profilePictureURL),
+              ),
             ),
           ),
           title: Text(

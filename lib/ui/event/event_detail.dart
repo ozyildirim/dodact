@@ -353,14 +353,23 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Widget buildInfoTab() {
+    const double avatarRadius = 16.0;
+    const double iconSize = 18.0;
+
     return SingleChildScrollView(
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
             child: ListTile(
-              leading: Icon(
-                Icons.category,
+              leading: CircleAvatar(
+                radius: avatarRadius,
+                backgroundColor: Colors.grey,
+                child: Icon(
+                  Icons.category,
+                  color: Colors.white,
+                  size: iconSize,
+                ),
               ),
               title: Text(
                 event.eventType +
@@ -376,31 +385,36 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               ? Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: ListTile(
-                    leading: Icon(Icons.location_on),
+                    onTap: () async {
+                      await _buildMap();
+                    },
+                    leading: CircleAvatar(
+                        radius: avatarRadius,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.white,
+                          size: iconSize,
+                        )),
                     title: Text(
                       event.address,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     subtitle: Text("Adres"),
-                    trailing: CircleAvatar(
-                      backgroundColor: kNavbarColor,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.map,
-                          color: Colors.white,
-                        ),
-                        onPressed: () async {
-                          await _buildMap();
-                        },
-                      ),
-                    ),
                   ),
                 )
               : Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: ListTile(
-                    leading: Icon(Icons.link),
+                    leading: CircleAvatar(
+                        radius: avatarRadius,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.link,
+                          color: Colors.white,
+                          size: iconSize,
+                        )),
                     title: Text(
                       "Referans Bağlantı",
                       style:
@@ -422,7 +436,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: ListTile(
-              leading: Icon(Icons.calendar_today),
+              leading: CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: Colors.grey,
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                    size: iconSize,
+                  )),
               title: Text(
                 DateFormat("dd.MM.yyyy HH:mm", "tr_TR").format(event.startDate),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -433,7 +454,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: ListTile(
-              leading: Icon(Icons.calendar_today),
+              leading: CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: Colors.grey,
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                    size: iconSize,
+                  )),
               title: Text(
                 DateFormat("dd.MM.yyyy HH:mm", "tr_TR").format(event.endDate),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -672,9 +700,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           CustomMethods.showSnackbar(
               context, "İşlem gerçekleştirilirken hata oluştu.");
         }
-      } else {
-        NavigationService.instance.pop();
-      }
+      } else {}
     }
   }
 }

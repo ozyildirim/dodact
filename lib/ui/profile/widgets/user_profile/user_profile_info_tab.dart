@@ -24,6 +24,8 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
   }
 
   buildTiles() {
+    const double avatarRadius = 16.0;
+    const double iconSize = 18.0;
     var user = userProvider.currentUser;
     var size = MediaQuery.of(context).size;
     if (userProvider.currentUser.education.isEmpty &&
@@ -55,10 +57,11 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ListTile(
             leading: CircleAvatar(
               foregroundColor: Colors.greenAccent,
-              radius: 16,
+              radius: avatarRadius,
               child: Icon(
                 Icons.school,
                 color: Colors.white,
+                size: iconSize,
               ),
             ),
             title: Text("Öğrenim Durumu",
@@ -75,10 +78,11 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ListTile(
             leading: CircleAvatar(
               foregroundColor: Colors.greenAccent,
-              radius: 16,
+              radius: avatarRadius,
               child: Icon(
                 Icons.work,
                 color: Colors.white,
+                size: iconSize,
               ),
             ),
             title: Text("Meslek",
@@ -94,10 +98,11 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ListTile(
             leading: CircleAvatar(
               foregroundColor: Colors.greenAccent,
-              radius: 16,
+              radius: avatarRadius,
               child: Icon(
                 Icons.info,
                 color: Colors.white,
+                size: iconSize,
               ),
             ),
             title: Text("Detaylı Bilgi",

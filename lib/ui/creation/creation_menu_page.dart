@@ -151,7 +151,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                   child: Container(
                     height: size.height * 0.06,
                     width: size.width * 0.12,
-                    child: Icon(icon, size: 30),
+                    child: Icon(icon, size: 24),
                   ),
                 ),
                 Padding(
