@@ -81,17 +81,16 @@ exports.sendInvitationNotificationToUser = functions.firestore
       const groupSnapshot = await groupRef.get();
       const groupData = groupSnapshot.data();
 
-      // const payload = {
-      //   type: "Topluluk Katılım Daveti",
-      //   body: groupData.groupName + " tarafından davet edildin.",
-      // };
+      const payload = {
+        type: "group_invitation"
+      };
 
 
 
       //send notification to receiver user
       var tokenRef = await tokensRef.doc(invitedUserId).get();
       const tokenObject = tokenRef.data();
-      sendNotification("Topluluğa Davet Edildin", groupData.groupName + " tarafından davet edildin.", tokenObject.token, "basic_channel", "Default", null, null);
+      sendNotification("Topluluğa Davet Edildin", groupData.groupName + " tarafından davet edildin.", tokenObject.token, "basic_channel", "Default", payload, null);
 
 
       // admin.messaging().sendToDevice(tokenObject.token, payload);
@@ -453,18 +452,15 @@ exports.commentNotificationToCreator = functions.firestore
         userData.notificationSettings["allow_comment_notifications"] == true
       ) {
         const payload = {
-          notification: {
-            title: `Gönderine yorum yapıldı.`,
-            body: `${postData.postTitle} başlıklı içeriğine yorum yapıldı.`,
-            sound: "default",
-          },
+          type: "commented_post",
+          postId: postId,
         };
 
         //send notification to post creator
         var tokenRef = await tokensRef.doc(postData.ownerId).get();
         const tokenObject = tokenRef.data();
 
-        sendNotification("Gönderine yorum yapıldı", `${postData.postTitle} başlıklı gönderine yorum yapıldı.`, tokenObject.token, "basic_channel", "Default", null, null);
+        sendNotification("Gönderine yorum yapıldı", `${postData.postTitle} başlıklı gönderine yorum yapıldı.`, tokenObject.token, "basic_channel", "Default", payload, null);
 
         // admin.messaging().sendToDevice(tokenObject.token, payload);
       }
@@ -483,19 +479,16 @@ exports.commentNotificationToCreator = functions.firestore
         ] == true
       ) {
         const payload = {
-          notification: {
-            title: `Topluluğunun gönderisine yorum yapıldı.`,
-            body: `${postData.postTitle} başlıklı topluluk gönderisine yorum yapıldı.`,
-            sound: "default",
-          },
+          type: "commented_post",
+          postId: postId,
         };
 
         //send notification to post creator
         var tokenRef = await tokensRef.doc(groupData.founderId).get();
         const tokenObject = tokenRef.data();
-        sendNotification(`Topluluğunun gönderisine yorum yapıldı.`, `${postData.postTitle} başlıklı topluluk gönderisinde yorum yapıldı.`, tokenObject.token, "basic_channel", "Default", null, null, );
+        sendNotification(`Topluluğunun gönderisine yorum yapıldı.`, `${postData.postTitle} başlıklı topluluk gönderisinde yorum yapıldı.`, tokenObject.token, "basic_channel", "Default", payload, null, );
       }
-      //TODO: Notificationlara kaydet
+
     }
   });
 

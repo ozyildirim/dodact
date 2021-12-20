@@ -32,6 +32,7 @@ const k_ROUTE_FORGOT_PASSWORD = '/forgot_password';
 const k_ROUTE_RESET_PASSWORD = '/reset_password';
 const k_ROUTE_DISCOVER = '/discover';
 const k_ROUTE_POST_DETAIL = '/post';
+const k_ROUTE_POST_DETAIL_LOADER = '/post_loader';
 const k_ROUTE_POST_EDIT_PAGE = '/edit_post';
 const k_ROUTE_POST_COMMENTS = '/post_comments';
 const k_ROUTE_PODCAST_DETAIL = '/podcast';

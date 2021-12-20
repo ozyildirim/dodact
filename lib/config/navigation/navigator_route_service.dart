@@ -161,6 +161,13 @@ class NavigationRouteManager {
             ),
             settings);
 
+      case k_ROUTE_POST_DETAIL_LOADER:
+        return _navigateToDefault(
+            PostDetailLoader(
+              postId: args,
+            ),
+            settings);
+
       case k_ROUTE_POST_EDIT_PAGE:
         return _navigateToDefault(PostEditPage(post: args), settings);
 

@@ -112,6 +112,8 @@ void main() async {
     }
     if (receivedNotification.payload['type'] == 'message') {
       NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
+    } else if (receivedNotification.payload['type'] == 'group_invitation') {
+      NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
     }
   });
 
