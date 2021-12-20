@@ -48,7 +48,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
           UserObject user = snapshot.data;
           if (snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 // crossAxisAlignment: CrossAxisAlignment.end,
@@ -98,9 +98,13 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                         showOwnerProfile(post, group: group);
                       },
                       child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(group.groupProfilePicture),
-                        radius: 30,
+                        backgroundColor: Colors.black,
+                        radius: 32,
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(group.groupProfilePicture),
+                          radius: 30,
+                        ),
                       ),
                     ),
                     // buildShareButton()
@@ -121,7 +125,21 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     return Consumer<PostProvider>(
       builder: (context, provider, child) {
         if (post.ownerId == userProvider.currentUser.uid) {
-          return Center(child: Text("${provider.post.dodCounter} Dod"));
+          return Row(
+            children: [
+              Icon(
+                Icons.flutter_dash_outlined,
+                size: 24,
+                color: Colors.black,
+              ),
+              SizedBox(width: 5),
+              Center(
+                  child: Text(
+                "${provider.post.dodCounter}",
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+              )),
+            ],
+          );
         } else if (provider.postDodders != null) {
           bool liked = provider.postDodders.any(
               (element) => element.dodderId == userProvider.currentUser.uid);
@@ -131,7 +149,6 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
             onPressed: () async {
               if (liked) {
                 provider.undodPost(post.postId, userProvider.currentUser.uid);
-                CustomMethods.showSnackbar(context, "Bir hata oluştu.");
               } else {
                 try {
                   provider.dodPost(post.postId, userProvider.currentUser.uid);
@@ -144,12 +161,12 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                 ? Icon(
                     Icons.flutter_dash_outlined,
                     color: Colors.red,
-                    size: 40,
+                    size: 28,
                   )
                 : Icon(
                     Icons.flutter_dash_outlined,
-                    size: 40,
-                    color: Colors.grey,
+                    size: 28,
+                    color: Colors.black,
                   ),
           );
         } else {

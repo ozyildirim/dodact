@@ -47,7 +47,7 @@ class PostDescriptionCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: ReadMoreText(
                 post.postDescription,
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                style: TextStyle(color: Colors.black, fontSize: 14),
                 trimLines: 4,
                 colorClickableText: Colors.black,
                 trimMode: TrimMode.Line,

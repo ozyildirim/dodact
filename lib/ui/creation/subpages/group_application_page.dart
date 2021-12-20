@@ -67,13 +67,13 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             child: Column(
               children: [
                 Container(
-                  height: (size.height - kToolbarHeight) * 0.2,
+                  height: (size.height - kToolbarHeight) * 0.25,
                   child: Image.asset(
                     "assets/images/application_page/group_application.png",
                   ),
                 ),
                 Container(
-                  height: (size.height - kToolbarHeight) * 0.8,
+                  height: (size.height - kToolbarHeight) * 0.75,
                   width: size.width,
                   child: buildFormPart(),
                 ),
@@ -217,6 +217,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             SizedBox(height: 20),
             Row(
               // mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: Text(
@@ -271,7 +272,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
               children: [
                 Flexible(
                   child: Text(
-                    "Topluluğunuzun hedef ve çalışmalarından bahseder misiniz?",
+                    "Topluluğunuzun hedeflerinden ve çalışmalarından bahseder misiniz?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),

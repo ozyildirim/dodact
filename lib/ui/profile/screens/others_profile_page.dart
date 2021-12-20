@@ -117,7 +117,9 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
                             Icon(FontAwesome5Solid.flag,
                                 size: 16, color: Colors.black),
                             SizedBox(width: 14),
-                            Text("Bildir", style: TextStyle(fontSize: 14)),
+                            Text("Bildir",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w500)),
                           ],
                         ),
                       ),

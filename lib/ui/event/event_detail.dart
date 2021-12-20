@@ -230,7 +230,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     child: Text(
                       event.title,
                       style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -245,10 +245,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                         Text(
                             DateFormat("MMMM", "tr_TR").format(event.startDate),
                             style:
-                                TextStyle(fontSize: 14, color: Colors.white)),
+                                TextStyle(fontSize: 11, color: Colors.white)),
                         Text(DateFormat("d").format(event.startDate),
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 15,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -364,7 +364,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             child: ListTile(
               leading: CircleAvatar(
                 radius: avatarRadius,
-                backgroundColor: Colors.grey,
+                backgroundColor: Colors.deepOrangeAccent,
                 child: Icon(
                   Icons.category,
                   color: Colors.white,
@@ -385,12 +385,12 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               ? Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: ListTile(
-                    onTap: () async {
-                      await _buildMap();
-                    },
+                    // onTap: () async {
+                    //   await _buildMap();
+                    // },
                     leading: CircleAvatar(
                         radius: avatarRadius,
-                        backgroundColor: Colors.grey,
+                        backgroundColor: Colors.deepOrangeAccent,
                         child: Icon(
                           Icons.location_on,
                           color: Colors.white,
@@ -402,6 +402,18 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     subtitle: Text("Adres"),
+                    trailing: InkWell(
+                        onTap: () async {
+                          await _buildMap();
+                        },
+                        child: CircleAvatar(
+                          radius: avatarRadius,
+                          backgroundColor: Colors.transparent,
+                          child: Icon(
+                            Icons.directions_rounded,
+                            color: Colors.black,
+                          ),
+                        )),
                   ),
                 )
               : Padding(
@@ -409,7 +421,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                   child: ListTile(
                     leading: CircleAvatar(
                         radius: avatarRadius,
-                        backgroundColor: Colors.grey,
+                        backgroundColor: Colors.deepOrangeAccent,
                         child: Icon(
                           Icons.link,
                           color: Colors.white,
@@ -438,7 +450,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             child: ListTile(
               leading: CircleAvatar(
                   radius: avatarRadius,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.deepOrangeAccent,
                   child: Icon(
                     Icons.calendar_today,
                     color: Colors.white,
@@ -456,7 +468,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             child: ListTile(
               leading: CircleAvatar(
                   radius: avatarRadius,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.deepOrangeAccent,
                   child: Icon(
                     Icons.calendar_today,
                     color: Colors.white,

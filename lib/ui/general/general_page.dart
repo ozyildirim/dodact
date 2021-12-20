@@ -17,6 +17,8 @@ class GeneralPage extends StatefulWidget {
 }
 
 class _GeneralPageState extends BaseState<GeneralPage> {
+  double titleSize = 20;
+
   @override
   initState() {
     super.initState();
@@ -73,7 +75,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -94,7 +96,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -112,7 +114,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -130,7 +132,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),

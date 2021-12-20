@@ -15,7 +15,8 @@ class PodcastDetail extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
     var tileTitleSize = 16.0;
     const double avatarRadius = 16.0;
-    const double iconSize = 18.0;
+    const double iconSize = 16.0;
+    const Color avatarBackgroundColor = Colors.deepOrangeAccent;
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +95,7 @@ class PodcastDetail extends StatelessWidget {
               ListTile(
                 leading: CircleAvatar(
                     radius: avatarRadius,
-                    foregroundColor: Colors.greenAccent,
+                    backgroundColor: avatarBackgroundColor,
                     child: Icon(
                       Icons.list_alt,
                       color: Colors.white,
@@ -107,7 +108,7 @@ class PodcastDetail extends StatelessWidget {
               ),
               ListTile(
                 leading: CircleAvatar(
-                  foregroundColor: Colors.greenAccent,
+                  backgroundColor: avatarBackgroundColor,
                   child: Icon(
                     Icons.person,
                     color: Colors.white,
@@ -131,7 +132,7 @@ class PodcastDetail extends StatelessWidget {
               ListTile(
                 leading: CircleAvatar(
                   radius: avatarRadius,
-                  foregroundColor: Colors.greenAccent,
+                  backgroundColor: avatarBackgroundColor,
                   child: Icon(
                     Icons.calendar_today,
                     color: Colors.white,

@@ -71,7 +71,7 @@ class _PostEditPageState extends State<PostEditPage> {
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                  Colors.black.withOpacity(1), BlendMode.dstATop),
               image: AssetImage(kBackgroundImage),
               fit: BoxFit.cover,
             ),
@@ -107,10 +107,13 @@ class _PostEditPageState extends State<PostEditPage> {
                 SizedBox(height: size.height * 0.05),
                 Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text("Gönderi Başlığı",
-                      textAlign: TextAlign.start,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  child: Container(
+                    color: Colors.white60,
+                    child: Text("Gönderi Başlığı",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                  ),
                 ),
                 SizedBox(height: 4),
                 TextFieldContainer(
@@ -146,9 +149,12 @@ class _PostEditPageState extends State<PostEditPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Gönderi Açıklaması",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    Container(
+                      color: Colors.white60,
+                      child: Text("Gönderi Açıklaması",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                    ),
                     SizedBox(height: 4),
                     TextFieldContainer(
                       width: size.width * 0.8,

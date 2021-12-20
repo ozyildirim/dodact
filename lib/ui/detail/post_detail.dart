@@ -98,16 +98,19 @@ class _PostDetailState extends BaseState<PostDetail> {
                 ),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 // mainAxisSize: MainAxisSize.max,
                 children: [
                   HeaderPart(post: post),
                   PostDetailInfoPart(post: post),
                   SizedBox(height: 5),
                   Padding(
-                    padding: const EdgeInsets.all(14.0),
+                    padding:
+                        const EdgeInsets.only(top: 14.0, left: 14.0, right: 14),
                     child: Text(post.postTitle,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w800)),
+                            fontSize: 18, fontWeight: FontWeight.w800)),
                   ),
                   PostDescriptionCard(post: post),
                   // Expanded(
