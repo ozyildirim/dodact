@@ -31,6 +31,7 @@ class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
       appBar: AppBar(
         actions: [],
         title: Text('Davetler'),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Container(
           decoration: BoxDecoration(
