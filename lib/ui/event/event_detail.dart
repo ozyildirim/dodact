@@ -53,7 +53,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   @override
   void initState() {
     event = widget.event;
-    tabController = new TabController(length: 4, vsync: this);
+    tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
   }
@@ -204,7 +204,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       },
       child: Container(
         width: dynamicWidth(1),
-        height: dynamicHeight(0.4),
+        height: dynamicHeight(0.35),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(event.eventImages[0]),
@@ -294,7 +294,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                 Tab(text: "Bilgiler"),
                 Tab(text: "Açıklama"),
                 Tab(text: "Görseller"),
-                Tab(text: "Kategoriler"),
               ],
             ),
           ),
@@ -303,7 +302,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               buildInfoTab(),
               buildDescriptionTab(),
               buildEventMediaTab(),
-              buildEventCategoriesTab(),
             ]),
           ),
         ],
@@ -366,8 +364,25 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     return SingleChildScrollView(
       child: Column(
         children: [
+          if (event.eventCategories.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: Colors.deepOrangeAccent,
+                  child: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
+                ),
+                title: buildEventCategoriesTitle(),
+                subtitle: Text("Etkinlik Kategorileri"),
+              ),
+            ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: ListTile(
               leading: CircleAvatar(
                 radius: avatarRadius,
@@ -491,6 +506,53 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         ],
       ),
     );
+  }
+
+  buildEventCategoriesTitle() {
+    return MultiSelectChipDisplay(
+      onTap: (context) {
+        openCategoriesDialog();
+      },
+      chipColor: Colors.grey[200],
+      textStyle: TextStyle(color: Colors.black),
+      items: buildCategoryChips(),
+    );
+  }
+
+  buildCategoryChips() {
+    List<MultiSelectItem> items = event.eventCategories.take(2).map((e) {
+      return MultiSelectItem(e, e);
+    }).toList();
+
+    items.add(MultiSelectItem<String>("+${event.eventCategories.length - 3}",
+        "+${event.eventCategories.length - 3} Kategori"));
+
+    return items;
+  }
+
+  openCategoriesDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: MultiSelectChipDisplay(
+                        chipColor: Colors.grey[200],
+                        textStyle: TextStyle(color: Colors.black),
+                        items: event.eventCategories
+                            .map((e) => MultiSelectItem<String>(e, e))
+                            .toList()),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   showInfoDialog(BuildContext context, String infoDescription) {
@@ -632,20 +694,6 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Future<void> _showReportEventDialog(String eventId) async {
-    //TODO: burayı düzelt
-    // CoolAlert.show(
-    //     context: context,
-    //     type: CoolAlertType.confirm,
-    //     text: "Bu etkinliği bildirmek istediğinden emin misin?",
-    //     confirmBtnText: "Evet",
-    //     cancelBtnText: "Vazgeç",
-    //     title: "",
-    //     onCancelBtnTap: () {
-    //       NavigationService.instance.pop();
-    //     },
-    //     onConfirmBtnTap: () async {
-    //       await reportEvent(eventId);
-    //     });
     CustomMethods.showCustomDialog(
         context: context,
         confirmActions: () async {

@@ -93,6 +93,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       key: _scaffoldKey,
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
@@ -120,15 +121,17 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
               fit: BoxFit.cover,
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  buildPrevivewPart(),
-                  SizedBox(height: size.height * 0.05),
-                  buildFormPart(size, context, provider),
-                ],
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    buildPrevivewPart(),
+                    SizedBox(height: size.height * 0.05),
+                    buildFormPart(size, context, provider),
+                  ],
+                ),
               ),
             ),
           ),
