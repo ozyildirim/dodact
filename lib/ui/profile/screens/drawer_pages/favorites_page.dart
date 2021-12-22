@@ -114,7 +114,6 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                                     radius: 50,
                                   ),
                                   titleText: element.postTitle,
-                                  subTitleText: element.postCategory,
                                 ),
                                 actionPane: SlidableDrawerActionPane(),
                                 actionExtentRatio: 0.25,

@@ -74,6 +74,7 @@ class FirebasePostService {
     QuerySnapshot querySnapshot = await postsRef
         .where('ownerId', isEqualTo: user.uid)
         .where('visible', isEqualTo: true)
+        .orderBy('postDate', descending: true)
         .get();
 
     for (DocumentSnapshot post in querySnapshot.docs) {
@@ -91,6 +92,7 @@ class FirebasePostService {
       QuerySnapshot querySnapshot = await postsRef
           .where('ownerId', isEqualTo: groupId)
           .where('visible', isEqualTo: true)
+          .orderBy('postDate', descending: true)
           .get();
 
       for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {

@@ -3,7 +3,6 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/group_card.dart';
-import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -343,19 +342,19 @@ class _GroupsPageState extends State<GroupsPage> {
         .toList();
   }
 
-  buildArtCategoryDropdownItems() {
-    return interestCategoryList
-        .map((category) => DropdownMenuItem(
-              value: category.name,
-              child: Center(
-                child: Text(
-                  category.name,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ))
-        .toList();
-  }
+  // buildArtCategoryDropdownItems() {
+  //   return interestCategoryList
+  //       .map((category) => DropdownMenuItem(
+  //             value: category.name,
+  //             child: Center(
+  //               child: Text(
+  //                 category.name,
+  //                 overflow: TextOverflow.ellipsis,
+  //               ),
+  //             ),
+  //           ))
+  //       .toList();
+  // }
 
   buildBody(GroupProvider provider) {
     if (isFiltered) {

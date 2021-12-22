@@ -5,7 +5,7 @@ class PostModel {
   String postId;
   String ownerType;
   String ownerId;
-  String postCategory;
+  List<String> postCategories;
   String postTitle;
   String postDescription;
   String postContentURL;
@@ -26,7 +26,7 @@ class PostModel {
       {this.postId,
       this.ownerType,
       this.ownerId,
-      this.postCategory,
+      this.postCategories,
       this.postDate,
       this.postTitle,
       this.postDescription,
@@ -44,7 +44,7 @@ class PostModel {
       : postId = json['postId'],
         ownerType = json['ownerType'],
         ownerId = json['ownerId'],
-        postCategory = json['postCategory'],
+        postCategories = json['postCategories']?.cast<String>() ?? [],
         postDate = (json['postDate'] as Timestamp).toDate(),
         postTitle = json['postTitle'],
         postDescription = json['postDescription'],
@@ -63,7 +63,7 @@ class PostModel {
     data['postId'] = this.postId;
     data['ownerType'] = this.ownerType;
     data['ownerId'] = this.ownerId;
-    data['postCategory'] = this.postCategory;
+    data['postCategories'] = this.postCategories ?? [];
     data['postDate'] = this.postDate ?? FieldValue.serverTimestamp();
     data['postTitle'] = this.postTitle;
     data['postDescription'] = this.postDescription;
@@ -82,6 +82,6 @@ class PostModel {
 
   @override
   String toString() {
-    return 'PostModel{postId: $postId, ownerType: $ownerType, ownerId: $ownerId, postCategory: $postCategory, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo,searchKeywords: $searchKeywords, reportCounter: $reportCounter}';
+    return 'PostModel{postId: $postId, ownerType: $ownerType, ownerId: $ownerId, isLocatedInYoutube: $isLocatedInYoutube,postContentType: $postContentType, postTitle: $postTitle, postDescription: $postDescription, postContentURL: $postContentURL, postDate: $postDate, isVideo: $isVideo,searchKeywords: $searchKeywords, reportCounter: $reportCounter}';
   }
 }

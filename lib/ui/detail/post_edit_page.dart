@@ -7,10 +7,12 @@ import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:logger/logger.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class PostEditPage extends StatefulWidget {
@@ -31,6 +33,7 @@ class _PostEditPageState extends State<PostEditPage> {
   String youtubeLink;
   TextEditingController postTitleController;
   TextEditingController postDescriptionController;
+  List<String> postCategories;
 
   var logger = Logger();
 
@@ -45,6 +48,7 @@ class _PostEditPageState extends State<PostEditPage> {
 
     postTitleController = new TextEditingController();
     postDescriptionController = new TextEditingController();
+    postCategories = post.postCategories;
   }
 
   @override
@@ -186,6 +190,42 @@ class _PostEditPageState extends State<PostEditPage> {
                         ),
                       ),
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("İçerik Kategorisi",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 4),
+                        TextFieldContainer(
+                          width: size.width * 0.8,
+                          child: FormBuilderTextField(
+                            name: "postCategories",
+                            onTap: openCategoryDialog,
+                            key: Key(post.postCategories.length > 0
+                                ? "${post.postCategories.length} kategori seçildi"
+                                : "İçerik Kategorisi"),
+                            initialValue: post.postCategories.length > 0
+                                ? "${post.postCategories.length} kategori seçildi"
+                                : "İçerik Kategorisi",
+                            style: TextStyle(
+                                color: post.postCategories.length > 0
+                                    ? Colors.black
+                                    : Colors.grey[600]),
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                            // ignore: missing_return
+                            validator: (value) {
+                              if (postCategories.length == 0) {
+                                return "Kategori seçmelisin.";
+                              } else {}
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 SizedBox(height: 30),
@@ -194,6 +234,32 @@ class _PostEditPageState extends State<PostEditPage> {
           ),
         ),
       ),
+    );
+  }
+
+  openCategoryDialog() async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            if (selectedValues.length > 0) {
+              setState(() {
+                postCategories = selectedValues;
+              });
+            }
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: postCategories,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
     );
   }
 
@@ -237,6 +303,7 @@ class _PostEditPageState extends State<PostEditPage> {
       var postTitle = postCreationFormKey.currentState.value["postTitle"];
       var postDescription =
           postCreationFormKey.currentState.value["postDescription"];
+
       List<String> searchKeywords;
 
       if (postTitle != post.postTitle) {
@@ -249,6 +316,7 @@ class _PostEditPageState extends State<PostEditPage> {
         'postTitle': postTitle,
         'postDescription': postDescription,
         'searchKeywords': searchKeywords,
+        'postCategories': postCategories,
       }).then((value) async {
         await showPostEditSuccessDialog(
             context, "Gönderin başarıyla güncellendi.");

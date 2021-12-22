@@ -11,6 +11,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/creation/widgets/audio_player_widget.dart';
+import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -19,6 +20,8 @@ import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 import 'package:logger/logger.dart';
+import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:youtube_metadata/youtube_metadata.dart';
@@ -29,10 +32,9 @@ enum Source { Telefon, Youtube }
 
 class PostCreationPage extends StatefulWidget {
   final String postType;
-  final String postCategory;
   final String groupId;
 
-  PostCreationPage({this.postType, this.postCategory, this.groupId});
+  PostCreationPage({this.postType, this.groupId});
 
   @override
   _PostCreationPageState createState() => _PostCreationPageState();
@@ -61,14 +63,12 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
   File postFile;
   FileImage imageThumbnail;
+  List<String> postCategories = [];
 
   String youtubeLink;
 
   @override
   void initState() {
-    print("İçerik Türü: " + widget.postType);
-    print("İçerik Kategorisi: " + widget.postCategory);
-
     super.initState();
 
     postProvider = Provider.of<PostProvider>(context, listen: false);
@@ -484,6 +484,42 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                       ],
                     )
                   : Container(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("İçerik Kategorisi",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 4),
+                  TextFieldContainer(
+                    width: size.width * 0.8,
+                    child: FormBuilderTextField(
+                      name: "postCategories",
+                      onTap: openCategoryDialog,
+                      key: Key(postCategories.length > 0
+                          ? "${postCategories.length} kategori seçildi"
+                          : "İçerik Kategorisi"),
+                      initialValue: postCategories.length > 0
+                          ? "${postCategories.length} kategori seçildi"
+                          : "İçerik Kategorisi",
+                      style: TextStyle(
+                          color: postCategories.length > 0
+                              ? Colors.black
+                              : Colors.grey[600]),
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      // ignore: missing_return
+                      validator: (value) {
+                        if (postCategories.length == 0) {
+                          return "Kategori seçmelisin.";
+                        } else {}
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -515,7 +551,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         ownerId: widget.groupId != null
             ? widget.groupId
             : authProvider.currentUser.uid,
-        postCategory: widget.postCategory,
+        postCategories: postCategories,
         postTitle: postTitleController.text,
         postDate: DateTime.now(),
         postDescription: postDescriptionController.text,
@@ -732,5 +768,31 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
         postFile = croppedFile;
       });
     }
+  }
+
+  openCategoryDialog() async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            if (selectedValues.length > 0) {
+              setState(() {
+                postCategories = selectedValues;
+              });
+            }
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: postCategories,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
+    );
   }
 }

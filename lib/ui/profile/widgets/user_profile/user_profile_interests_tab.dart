@@ -41,8 +41,6 @@ class _UserProfileInterestsTabState extends BaseState<UserProfileInterestsTab> {
       }
     });
 
-    print(userInterests);
-
     return MultiSelectChipDisplay(
         chipColor: Colors.grey[200],
         textStyle: TextStyle(color: Colors.black),

@@ -233,40 +233,40 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                     icon: Icon(Icons.info_outline))
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: TextFieldContainer(
-                width: size.width * 0.7,
-                child: FormBuilderDropdown(
-                  focusNode: interestFocus,
-                  name: "interest",
-                  autofocus: false,
-                  // autovalidateMode: AutovalidateMode.onUserInteraction,
-                  items: interestCategoryList
-                      .map(
-                        (e) => DropdownMenuItem(
-                          child: Text(e.name),
-                          value: e.name,
-                        ),
-                      )
-                      .toList(),
-                  decoration: InputDecoration(
-                      hintText: "Sanat Dalı",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: InputBorder.none,
-                      errorStyle:
-                          Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(
-                        context,
-                        errorText: "Bu alan boş bırakılamaz.",
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            //   child: TextFieldContainer(
+            //     width: size.width * 0.7,
+            //     child: FormBuilderDropdown(
+            //       focusNode: interestFocus,
+            //       name: "interest",
+            //       autofocus: false,
+            //       // autovalidateMode: AutovalidateMode.onUserInteraction,
+            //       items: interestCategoryList
+            //           .map(
+            //             (e) => DropdownMenuItem(
+            //               child: Text(e.name),
+            //               value: e.name,
+            //             ),
+            //           )
+            //           .toList(),
+            //       decoration: InputDecoration(
+            //           hintText: "Sanat Dalı",
+            //           hintStyle: TextStyle(color: Colors.grey),
+            //           border: InputBorder.none,
+            //           errorStyle:
+            //               Theme.of(context).inputDecorationTheme.errorStyle),
+            //       validator: FormBuilderValidators.compose(
+            //         [
+            //           FormBuilderValidators.required(
+            //             context,
+            //             errorText: "Bu alan boş bırakılamaz.",
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 15),
             Row(
               children: [
