@@ -19,6 +19,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventDetailPage extends StatefulWidget {
@@ -52,7 +53,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   @override
   void initState() {
     event = widget.event;
-    tabController = new TabController(length: 3, vsync: this);
+    tabController = new TabController(length: 4, vsync: this);
 
     super.initState();
   }
@@ -186,7 +187,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           children: [
             _buildEventHeader(),
             _buildEventDetailBody(),
-            _buildEventDetailTabs()
+            _buildEventDetailTabs(),
+
             // _buildMap()
           ],
         ),
@@ -281,14 +283,18 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             width: double.infinity,
             height: 50,
             child: TabBar(
-              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               labelColor: Colors.black,
-              indicatorSize: TabBarIndicatorSize.label,
+              // indicatorSize: TabBarIndicatorSize.label,
+              indicatorPadding: EdgeInsets.zero,
+              labelPadding: EdgeInsets.only(left: 10, right: 10),
+              padding: EdgeInsets.zero,
               controller: tabController,
               tabs: [
                 Tab(text: "Bilgiler"),
                 Tab(text: "Açıklama"),
                 Tab(text: "Görseller"),
+                Tab(text: "Kategoriler"),
               ],
             ),
           ),
@@ -297,6 +303,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               buildInfoTab(),
               buildDescriptionTab(),
               buildEventMediaTab(),
+              buildEventCategoriesTab(),
             ]),
           ),
         ],
@@ -713,6 +720,24 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               context, "İşlem gerçekleştirilirken hata oluştu.");
         }
       } else {}
+    }
+  }
+
+  buildEventCategoriesTab() {
+    if (event.eventCategories.isEmpty) {
+      return Center(
+        child: Text("Kategoriler Belirtilmemiş",
+            style: TextStyle(fontSize: kPageCenteredTextSize)),
+      );
+    } else {
+      return SingleChildScrollView(
+        child: MultiSelectChipDisplay(
+            chipColor: Colors.grey[200],
+            textStyle: TextStyle(color: Colors.black),
+            items: event.eventCategories.map((e) {
+              return MultiSelectItem(e, e);
+            }).toList()),
+      );
     }
   }
 }
