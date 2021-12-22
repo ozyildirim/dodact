@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class PostDetail extends StatefulWidget {
@@ -110,13 +112,10 @@ class _PostDetailState extends BaseState<PostDetail> {
                     child: Text(post.postTitle,
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w800)),
+                            fontSize: 20, fontWeight: FontWeight.w800)),
                   ),
                   PostDescriptionCard(post: post),
-                  // Expanded(
-                  //   child: Container(),
-                  // ),
-                  // Spacer(),
+                  // PostCategories(),
                   buildPostCommentsNavigator(),
                 ],
               ),
@@ -397,6 +396,25 @@ class _PostDetailState extends BaseState<PostDetail> {
           ),
         ),
       ),
+    );
+  }
+
+  PostCategories() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 14.0, left: 14.0, right: 14),
+          child: Text("Kategoriler",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+        ),
+        MultiSelectChipDisplay(
+          chipColor: Colors.grey[200],
+          textStyle: TextStyle(color: Colors.black),
+          items: post.postCategories.map((e) => MultiSelectItem(e, e)).toList(),
+        )
+      ],
     );
   }
 }

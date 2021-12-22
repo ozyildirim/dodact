@@ -203,10 +203,10 @@ class _PostEditPageState extends State<PostEditPage> {
                             name: "postCategories",
                             onTap: openCategoryDialog,
                             key: Key(post.postCategories.length > 0
-                                ? "${post.postCategories.length} kategori seçildi"
+                                ? "${postCategories.length} kategori seçildi"
                                 : "İçerik Kategorisi"),
                             initialValue: post.postCategories.length > 0
-                                ? "${post.postCategories.length} kategori seçildi"
+                                ? "${postCategories.length} kategori seçildi"
                                 : "İçerik Kategorisi",
                             style: TextStyle(
                                 color: post.postCategories.length > 0
