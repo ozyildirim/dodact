@@ -2,13 +2,13 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
-import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventsPage extends StatefulWidget {
@@ -299,50 +299,56 @@ class _EventsPageState extends BaseState<EventsPage> {
                     ],
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //     children: [
-                //       Container(
-                //         width: size.width * 0.4,
-                //         child: Text(
-                //           "Kategori",
-                //           style: TextStyle(
-                //             fontSize: 20.0,
-                //             fontWeight: FontWeight.w700,
-                //           ),
-                //         ),
-                //       ),
-                //       Center(
-                //         child: ClipRRect(
-                //           borderRadius: BorderRadius.circular(24),
-                //           child: Container(
-                //             color: Colors.grey[200],
-                //             width: size.width * 0.4,
-                //             child: Padding(
-                //               padding: const EdgeInsets.only(
-                //                   top: 4, bottom: 4, left: 16, right: 4),
-                //               child: FormBuilderDropdown(
-                //                 initialValue: selectedCategory ?? null,
-                //                 name: "category",
-                //                 decoration: InputDecoration(
-                //                   hintText: "Kategori Seçin",
-                //                   contentPadding: EdgeInsets.zero,
-                //                   border: OutlineInputBorder(
-                //                     borderSide: BorderSide.none,
-                //                     borderRadius: BorderRadius.circular(15),
-                //                   ),
-                //                 ),
-                //                 items: buildArtCategoryDropdownItems(),
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: size.width * 0.4,
+                        child: Text(
+                          "Kategori",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.grey[200],
+                            width: size.width * 0.4,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 4, left: 16, right: 4),
+                              child: FormBuilderTextField(
+                                readOnly: true,
+                                initialValue: selectedCategory != null
+                                    ? selectedCategory
+                                    : null,
+                                key: Key(selectedCategory != null
+                                    ? selectedCategory
+                                    : null),
+                                name: "category",
+                                onTap: openCategoryDialog,
+                                decoration: InputDecoration(
+                                  hintText: "Kategori Seçin",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -443,6 +449,51 @@ class _EventsPageState extends BaseState<EventsPage> {
         );
       },
     );
+  }
+
+  openCategoryDialog() {
+    categoryList.sort((a, b) => a.compareTo(b));
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return MultiSelectDialog(
+          //   initialValue: [selectedCategory],
+          //   items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          //   listType: MultiSelectListType.CHIP,
+          //   searchable: true,
+          // );
+
+          return AlertDialog(
+            content: FormBuilderChoiceChip(
+              name: "chips",
+              options: categoryList
+                  .map((e) => FormBuilderFieldOption(value: e, child: Text(e)))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedCategory = value;
+                });
+              },
+            ),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedCategory = null;
+                    });
+                  },
+                  child: Text("Vazgeç")),
+              FlatButton(
+                child: Text("Tamam"),
+                onPressed: () {
+                  setState(() {});
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   buildCityDropdownItems() {

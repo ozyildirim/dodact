@@ -315,7 +315,7 @@ class _SearchPageState extends State<SearchPage> {
                                     fontSize: 20,
                                   ),
                                 ),
-                                subtitle: Text(event.category),
+                                // subtitle: Text(event.category),
                               ),
                             );
                           } else {
