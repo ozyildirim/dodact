@@ -98,55 +98,59 @@ class FirebaseEventService {
   }
 
   Future<QuerySnapshot> getFilteredEventList({
-    String category,
+    List<String> categories,
     String city,
     String type,
     int limit,
     DocumentSnapshot startAfter,
   }) async {
-    Query query;
+    try {
+      Query query;
 
-    if (category != null && type != null && city != null) {
-      query = eventsRef
-          .where('eventCategory', isEqualTo: category)
-          .where('eventType', isEqualTo: type)
-          .where('city', isEqualTo: city)
-          .where('visible', isEqualTo: true);
-    } else if (category != null && type != null) {
-      query = eventsRef
-          .where('eventCategory', isEqualTo: category)
-          .where('eventType', isEqualTo: type)
-          .where('visible', isEqualTo: true);
-    } else if (category != null && city != null) {
-      query = eventsRef
-          .where('eventCategory', isEqualTo: category)
-          .where('city', isEqualTo: city)
-          .where('visible', isEqualTo: true);
-    } else if (type != null && city != null) {
-      query = eventsRef
-          .where('eventType', isEqualTo: type)
-          .where('city', isEqualTo: city)
-          .where('visible', isEqualTo: true);
-    } else if (category != null) {
-      query = eventsRef
-          .where('eventCategory', isEqualTo: category)
-          .where('visible', isEqualTo: true);
-    } else if (type != null) {
-      query = eventsRef
-          .where('eventType', isEqualTo: type)
-          .where('visible', isEqualTo: true);
-    } else if (city != null) {
-      query = eventsRef
-          .where('city', isEqualTo: city)
-          .where('visible', isEqualTo: true);
-    } else {
-      query = eventsRef.where('visible', isEqualTo: true);
-    }
+      if (categories != null && type != null && city != null) {
+        query = eventsRef
+            .where('eventCategories', arrayContainsAny: categories)
+            .where('eventType', isEqualTo: type)
+            .where('city', isEqualTo: city)
+            .where('visible', isEqualTo: true);
+      } else if (categories != null && type != null) {
+        query = eventsRef
+            .where('eventCategories', arrayContainsAny: categories)
+            .where('eventType', isEqualTo: type)
+            .where('visible', isEqualTo: true);
+      } else if (categories != null && city != null) {
+        query = eventsRef
+            .where('eventCategories', arrayContainsAny: categories)
+            .where('city', isEqualTo: city)
+            .where('visible', isEqualTo: true);
+      } else if (type != null && city != null) {
+        query = eventsRef
+            .where('eventType', isEqualTo: type)
+            .where('city', isEqualTo: city)
+            .where('visible', isEqualTo: true);
+      } else if (categories != null) {
+        query = eventsRef
+            .where('eventCategories', arrayContainsAny: categories)
+            .where('visible', isEqualTo: true);
+      } else if (type != null) {
+        query = eventsRef
+            .where('eventType', isEqualTo: type)
+            .where('visible', isEqualTo: true);
+      } else if (city != null) {
+        query = eventsRef
+            .where('city', isEqualTo: city)
+            .where('visible', isEqualTo: true);
+      } else {
+        query = eventsRef.where('visible', isEqualTo: true);
+      }
 
-    if (startAfter == null) {
-      return query.limit(limit).get();
-    } else {
-      return query.limit(limit).startAfterDocument(startAfter).get();
+      if (startAfter == null) {
+        return query.limit(limit).get();
+      } else {
+        return query.limit(limit).startAfterDocument(startAfter).get();
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

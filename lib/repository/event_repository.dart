@@ -83,7 +83,7 @@ class EventRepository {
   }
 
   Future<QuerySnapshot> getFilteredEventList(
-      {String category,
+      {List<String> categories,
       String city,
       String type,
       int limit,
@@ -92,7 +92,7 @@ class EventRepository {
       return Future.value(null);
     } else {
       var snapshot = await _firebaseEventService.getFilteredEventList(
-        category: category,
+        categories: categories,
         city: city,
         type: type,
         limit: limit,

@@ -11,6 +11,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -192,7 +193,8 @@ class _SearchPageState extends State<SearchPage> {
                                     fontSize: 20,
                                   ),
                                 ),
-                                subtitle: Text(post.postCategories.toString()),
+                                subtitle: Text(DateFormat('dd/MM/yyyy')
+                                    .format(post.postDate)),
                               ),
                             );
                           } else {

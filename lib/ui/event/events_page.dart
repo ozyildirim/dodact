@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/event/widgets/parallax_events.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:dodact_v1/utilities/lists.dart';
@@ -18,12 +19,15 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends BaseState<EventsPage> {
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> _categoryDialogKey =
+      GlobalKey<FormBuilderState>();
+
   ScrollController scrollController;
   EventProvider eventProvider;
   bool isLoading = false;
 
   bool isFiltered = false;
-  String selectedCategory;
+  List<String> selectedCategory = [];
   String selectedCity;
   String selectedType;
 
@@ -54,7 +58,7 @@ class _EventsPageState extends BaseState<EventsPage> {
       } else {
         eventProvider.getFilteredEventList(
             reset: false,
-            category: selectedCategory,
+            categories: selectedCategory,
             city: selectedCity,
             type: selectedType);
       }
@@ -70,7 +74,7 @@ class _EventsPageState extends BaseState<EventsPage> {
         eventProvider.filteredEventsSnapshot.clear();
         await eventProvider.getFilteredEventList(
             reset: true,
-            category: selectedCategory,
+            categories: selectedCategory,
             city: selectedCity,
             type: selectedType);
         setState(() {
@@ -187,12 +191,12 @@ class _EventsPageState extends BaseState<EventsPage> {
     }
   }
 
-  void updateEvents(String category, String city, String type) async {
+  void updateEvents(List<String> categories, String city, String type) async {
     try {
       await Provider.of<EventProvider>(context, listen: false)
           .getFilteredEventList(
         reset: true,
-        category: category,
+        categories: categories,
         city: city,
         type: type,
       );
@@ -204,18 +208,26 @@ class _EventsPageState extends BaseState<EventsPage> {
   submitFilterDialog() {
     if (_formKey.currentState.saveAndValidate()) {
       if (_formKey.currentState.value["city"] != null ||
-          _formKey.currentState.value["category"] != null ||
-          _formKey.currentState.value["type"] != null) {
+          _formKey.currentState.value["type"] != null ||
+          selectedCategory.isNotEmpty) {
         setState(() {
           isFiltered = true;
           selectedCity = _formKey.currentState.value["city"];
-          selectedCategory = _formKey.currentState.value["category"];
+
           selectedType = _formKey.currentState.value["type"];
         });
         print("$selectedCity  $selectedCategory $selectedType");
         updateEvents(selectedCategory, selectedCity, selectedType);
         NavigationService.instance.pop();
       } else {
+        setState(() {
+          isFiltered = false;
+          eventProvider.getEventList();
+          _formKey.currentState.reset();
+          selectedCategory = [];
+          selectedCity = null;
+          selectedType = null;
+        });
         NavigationService.instance.pop();
       }
     }
@@ -326,10 +338,10 @@ class _EventsPageState extends BaseState<EventsPage> {
                               child: FormBuilderTextField(
                                 readOnly: true,
                                 initialValue: selectedCategory != null
-                                    ? selectedCategory
+                                    ? "${selectedCategory.length.toString()} Kategori Seçildi"
                                     : null,
                                 key: Key(selectedCategory != null
-                                    ? selectedCategory
+                                    ? "${selectedCategory.length.toString()} Kategori Seçildi"
                                     : null),
                                 name: "category",
                                 onTap: openCategoryDialog,
@@ -432,7 +444,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                               isFiltered = false;
                               eventProvider.getEventList();
                               _formKey.currentState.reset();
-                              selectedCategory = null;
+                              selectedCategory = [];
                               selectedCity = null;
                               selectedType = null;
                             });
@@ -451,48 +463,46 @@ class _EventsPageState extends BaseState<EventsPage> {
     );
   }
 
-  openCategoryDialog() {
+  openCategoryDialog() async {
     categoryList.sort((a, b) => a.compareTo(b));
 
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          // return MultiSelectDialog(
-          //   initialValue: [selectedCategory],
-          //   items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
-          //   listType: MultiSelectListType.CHIP,
-          //   searchable: true,
-          // );
-
-          return AlertDialog(
-            content: FormBuilderChoiceChip(
-              name: "chips",
-              options: categoryList
-                  .map((e) => FormBuilderFieldOption(value: e, child: Text(e)))
-                  .toList(),
-              onChanged: (value) {
+          return MultiSelectDialog(
+            initialValue: selectedCategory,
+            items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+            listType: MultiSelectListType.CHIP,
+            searchable: true,
+            title: Text("Kategoriler"),
+            onSelectionChanged: (list) {
+              if (list.length > 10) {
+                CustomMethods.showSnackbar(
+                    context, "En fazla 10 kategori seçebilirsiniz.");
+              }
+            },
+            onConfirm: (list) {
+              if (list.length > 0) {
+                print(list);
                 setState(() {
-                  selectedCategory = value;
+                  selectedCategory = list;
                 });
-              },
-            ),
-            actions: [
-              FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedCategory = null;
-                    });
-                  },
-                  child: Text("Vazgeç")),
-              FlatButton(
-                child: Text("Tamam"),
-                onPressed: () {
-                  setState(() {});
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+              } else {
+                setState(() {
+                  selectedCategory = [];
+                });
+              }
+            },
           );
+
+          // return FormBuilderChoiceChip(
+          //   key: _categoryDialogKey,
+          //   name: "category",
+          //   options: categoryList.map((e) {
+          //     return FormBuilderFieldOption(value: e);
+          //   }).toList(),
+          //   validator: FormBuilderValidators.required(context),
+          // );
         });
   }
 
@@ -502,11 +512,9 @@ class _EventsPageState extends BaseState<EventsPage> {
               alignment: AlignmentDirectional.centerStart,
               value: e,
               child: Center(
-                  child: Text(
-                e,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              )),
+                  child: Text(e,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis)),
             ))
         .toList();
   }
