@@ -17,6 +17,17 @@ class GroupInterestsTabView extends StatelessWidget {
             child: buildInterestElements(provider.group),
           ),
         );
+      } else {
+        return Container(
+          child: Center(
+            child: Text(
+              "Topluluk İlgi alanı belirtilmemiş",
+              style: TextStyle(
+                fontSize: kPageCenteredTextSize,
+              ),
+            ),
+          ),
+        );
       }
     } else {
       return Container(

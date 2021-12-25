@@ -381,15 +381,6 @@ class _GroupsPageState extends State<GroupsPage> {
               }
             },
           );
-
-          // return FormBuilderChoiceChip(
-          //   key: _categoryDialogKey,
-          //   name: "category",
-          //   options: categoryList.map((e) {
-          //     return FormBuilderFieldOption(value: e);
-          //   }).toList(),
-          //   validator: FormBuilderValidators.required(context),
-          // );
         });
   }
 

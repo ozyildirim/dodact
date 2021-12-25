@@ -66,6 +66,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
     var size = MediaQuery.of(context).size;
+    print(group.toString());
 
     return Scaffold(
       extendBodyBehindAppBar: true,
