@@ -31,7 +31,6 @@ class _ProfilePageState extends BaseState<ProfilePage>
     var userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
       drawer: ProfileDrawer(),
       appBar: AppBar(
         title: Text(
@@ -80,20 +79,18 @@ class _ProfilePageState extends BaseState<ProfilePage>
             fit: BoxFit.cover,
           ),
         ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: UserProfileHeader(),
-              ),
-              Expanded(child: UserProfileBody()),
-              SizedBox(
-                height: kToolbarHeight,
-              )
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: UserProfileHeader(),
+            ),
+            Expanded(child: UserProfileBody()),
+            SizedBox(
+              height: kToolbarHeight,
+            )
+          ],
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ContentCreatorApplicationPage extends StatefulWidget {
@@ -29,6 +30,9 @@ class _ContentCreatorApplicationPageState
   FocusNode linkFocus = FocusNode();
   FocusNode kvkkCheckboxFocus = FocusNode();
   FocusNode copyrightCheckboxFocus = FocusNode();
+
+  List<String> selectedInterests = [];
+
   ApplicationProvider applicationProvider;
 
   @override
@@ -117,10 +121,6 @@ class _ContentCreatorApplicationPageState
 
   submitForm() async {
     if (contentCreatorApplicationFormKey.currentState.saveAndValidate()) {
-      var interest = contentCreatorApplicationFormKey
-          .currentState.value["interest"]
-          .toString()
-          .trim();
       var description = contentCreatorApplicationFormKey
           .currentState.value["description"]
           .toString()
@@ -138,7 +138,7 @@ class _ContentCreatorApplicationPageState
       try {
         await applicationProvider.createApplication(
             "Content_Creator", userProvider.currentUser.uid, {
-          "selectedInterest": interest,
+          "selectedInterest": selectedInterests,
           "description": description,
           "firstQuestion": firstQuestion,
           "link": link,
@@ -180,15 +180,6 @@ class _ContentCreatorApplicationPageState
     );
   }
 
-  showSnackBar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
   buildFormPart() {
     var size = MediaQuery.of(context).size;
     return FormBuilder(
@@ -214,40 +205,37 @@ class _ContentCreatorApplicationPageState
                     icon: Icon(Icons.info_outline))
               ],
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            //   child: TextFieldContainer(
-            //     width: size.width * 0.7,
-            //     child: FormBuilderDropdown(
-            //       focusNode: interestFocus,
-            //       name: "interest",
-            //       autofocus: false,
-            //       // autovalidateMode: AutovalidateMode.onUserInteraction,
-            //       items: interestCategoryList
-            //           .map(
-            //             (e) => DropdownMenuItem(
-            //               child: Text(e.name),
-            //               value: e.name,
-            //             ),
-            //           )
-            //           .toList(),
-            //       decoration: InputDecoration(
-            //           hintText: "Sanat Dalı",
-            //           hintStyle: TextStyle(color: Colors.grey),
-            //           border: InputBorder.none,
-            //           errorStyle:
-            //               Theme.of(context).inputDecorationTheme.errorStyle),
-            //       validator: FormBuilderValidators.compose(
-            //         [
-            //           FormBuilderValidators.required(
-            //             context,
-            //             errorText: "Bu alan boş bırakılamaz.",
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: TextFieldContainer(
+                width: size.width * 0.7,
+                child: FormBuilderTextField(
+                  onTap: openCategoryDialog,
+                  key: Key(selectedInterests.length > 0
+                      ? "${selectedInterests.length} kategori seçildi"
+                      : "Kategoiler"),
+                  initialValue: selectedInterests.length > 0
+                      ? "${selectedInterests.length} kategori seçildi"
+                      : "Kategoriler",
+                  style: TextStyle(
+                      color: selectedInterests.length > 0
+                          ? Colors.black
+                          : Colors.grey[600]),
+                  readOnly: true,
+                  name: "interests",
+                  decoration: InputDecoration(
+                      hintText: "İlgi Alanları",
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: (value) {
+                    if (selectedInterests.length == 0) {
+                      return "Kategori seçmelisin.";
+                    } else {}
+                  },
+                ),
+              ),
+            ),
             SizedBox(height: 30),
             Row(
               children: [
@@ -285,7 +273,7 @@ class _ContentCreatorApplicationPageState
                       FormBuilderValidators.required(
                         context,
                         errorText: "Bu alan boş bırakılamaz.",
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -464,6 +452,32 @@ class _ContentCreatorApplicationPageState
           ],
         ),
       ),
+    );
+  }
+
+  openCategoryDialog() async {
+    categoryList.sort((a, b) => a.compareTo(b));
+
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            setState(() {
+              selectedInterests = selectedValues;
+            });
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: selectedInterests,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
     );
   }
 }

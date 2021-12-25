@@ -80,7 +80,6 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   Widget build(BuildContext context) {
     var provider = Provider.of<UserProvider>(context);
     return Scaffold(
-        extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Text(
             "@" + provider.otherUser.username,
@@ -247,19 +246,17 @@ class _OtherUserProfileSubpageState extends State<OtherUserProfileSubpage> {
           fit: BoxFit.cover,
         ),
       ),
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OthersProfileHeader(),
-            ),
-            Expanded(
-              child: OthersProfileBody(user: user),
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: OthersProfileHeader(),
+          ),
+          Expanded(
+            child: OthersProfileBody(user: user),
+          ),
+        ],
       ),
     );
   }

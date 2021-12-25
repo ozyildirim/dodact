@@ -21,3 +21,5 @@ List<String> postTypes = [
   "Video",
   "Ses",
 ];
+
+List<String> artistLabels = [];

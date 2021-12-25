@@ -173,6 +173,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                               hasGroupApplication) ==
                           false
                       ? Container(
+                          color: Colors.white54,
                           child: Center(
                             child: Text(
                               "Tüm başvuruları gerçekleştirdin, mevcut başvurularını sağ üstteki menüden takip edebilirsin",
