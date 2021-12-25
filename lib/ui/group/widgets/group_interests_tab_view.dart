@@ -7,17 +7,14 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GroupInterestsTabView extends StatelessWidget {
-  final GroupModel group;
-
-  GroupInterestsTabView({this.group});
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
-    if (group.selectedInterests != null) {
-      if (group.selectedInterests.isNotEmpty) {
+    if (provider.group.selectedInterests != null) {
+      if (provider.group.selectedInterests.isNotEmpty) {
         return SingleChildScrollView(
           child: Container(
-            child: buildInterestElements(),
+            child: buildInterestElements(provider.group),
           ),
         );
       }
@@ -35,7 +32,7 @@ class GroupInterestsTabView extends StatelessWidget {
     }
   }
 
-  buildInterestElements() {
+  buildInterestElements(GroupModel group) {
     var groupInterests = [];
     group.selectedInterests.forEach((e) {
       if (categoryList.contains(e)) {

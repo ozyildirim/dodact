@@ -142,19 +142,12 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
       await groupProvider.deleteGroupPost(postId);
       NavigationService.instance.pop();
       setState(() {});
-      showSnackbar("Topluluk gönderisi başarıyla kaldırıldı.");
+      CustomMethods.showSnackbar(
+          context, "Topluluk gönderisi başarıyla kaldırıldı.");
     } catch (e) {
-      showSnackbar("Topluluk gönderisi kaldırılırken bir hata oluştu.");
+      CustomMethods.showSnackbar(
+          context, "Topluluk gönderisi kaldırılırken bir hata oluştu.");
     }
-  }
-
-  showSnackbar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
   }
 
   Future<List<PostModel>> getGroupPosts() async {

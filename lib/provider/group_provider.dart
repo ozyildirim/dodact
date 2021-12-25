@@ -175,7 +175,6 @@ class GroupProvider extends ChangeNotifier {
     try {
       var fetchedGroup = await _groupRepository.getDetail(groupId);
       group = fetchedGroup;
-      //TODO: Topluluk güncellemelerini düzenle
       notifyListeners();
       return fetchedGroup;
     } catch (e) {
@@ -253,9 +252,11 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future setGroupManager(String userId, String groupId) {
+  Future setGroupManager(String userId, String groupId) async {
     try {
-      return _groupRepository.setGroupManager(userId, groupId);
+      await _groupRepository.setGroupManager(userId, groupId);
+      group = await _groupRepository.getDetail(groupId);
+      notifyListeners();
     } catch (e) {
       logger.e("GroupProvider setGroupManager error: " + e.toString());
       return null;

@@ -22,12 +22,14 @@ class _PostDescriptionCardState extends State<PostDescriptionCard> {
       // fit: FlexFit.loose,
       child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ReadMoreText(
                     widget.post.postDescription,
+                    textAlign: TextAlign.left,
                     style: TextStyle(color: Colors.black, fontSize: 14),
                     trimLines: 4,
                     colorClickableText: Colors.black,
@@ -77,9 +79,11 @@ class _PostDescriptionCardState extends State<PostDescriptionCard> {
       return MultiSelectItem(e, e);
     }).toList();
 
-    items.add(MultiSelectItem<String>(
-        "+${widget.post.postCategories.length - 3}",
-        "+${widget.post.postCategories.length - 3} Kategori"));
+    if (widget.post.postCategories.length > 3) {
+      items.add(MultiSelectItem<String>(
+          "+${widget.post.postCategories.length - 3}",
+          "+${widget.post.postCategories.length - 3} Kategori"));
+    }
 
     return items;
   }

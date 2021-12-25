@@ -322,24 +322,16 @@ class _PostDetailState extends BaseState<PostDetail> {
           await FirebaseReportService()
               .reportPost(userProvider.currentUser.uid, postId, reportReason);
 
-          showSnackbar(
+          CustomMethods.showSnackbar(context,
               "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
         } catch (e) {
-          showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+          CustomMethods.showSnackbar(
+              context, "İşlem gerçekleştirilirken hata oluştu.");
         }
       } else {
         NavigationService.instance.pop();
       }
     }
-  }
-
-  showSnackbar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
   }
 
   Future<void> deletePost() async {
