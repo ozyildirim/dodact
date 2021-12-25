@@ -380,7 +380,6 @@ class _SearchPageState extends State<SearchPage> {
                                   fontSize: 20,
                                 ),
                               ),
-                              subtitle: Text(group.groupCategory),
                             ),
                           );
                         },

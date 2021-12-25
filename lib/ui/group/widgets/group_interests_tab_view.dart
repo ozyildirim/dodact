@@ -1,10 +1,10 @@
-import 'dart:ui';
-
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/group_model.dart';
+import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:provider/provider.dart';
 
 class GroupInterestsTabView extends StatelessWidget {
   final GroupModel group;
@@ -12,6 +12,7 @@ class GroupInterestsTabView extends StatelessWidget {
   GroupInterestsTabView({this.group});
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<GroupProvider>(context);
     if (group.selectedInterests != null) {
       if (group.selectedInterests.isNotEmpty) {
         return SingleChildScrollView(

@@ -110,7 +110,7 @@ class GroupRepository {
   }
 
   Future getFilteredGroupList(
-      {String category,
+      {List<String> category,
       String city,
       int limit,
       DocumentSnapshot startAfter}) async {

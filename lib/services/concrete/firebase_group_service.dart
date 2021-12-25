@@ -62,7 +62,7 @@ class FirebaseGroupService {
   }
 
   Future getFilteredGroupList(
-      {String category,
+      {List<String> category,
       String city,
       int limit,
       DocumentSnapshot startAfter}) async {
@@ -70,12 +70,10 @@ class FirebaseGroupService {
 
     if (category != null && city != null) {
       query = groupsRef
-          // .where("groupCategory", isEqualTo: category)
+          .where("selectedInterests", arrayContainsAny: category)
           .where("groupLocation", isEqualTo: city);
     } else if (category != null) {
-      query = groupsRef;
-      // .where("groupCategory", isEqualTo: category)
-
+      query = groupsRef.where("selectedInterests", arrayContainsAny: category);
     } else if (city != null) {
       query = groupsRef.where("groupLocation", isEqualTo: city);
     } else {

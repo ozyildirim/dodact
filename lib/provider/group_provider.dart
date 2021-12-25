@@ -125,7 +125,7 @@ class GroupProvider extends ChangeNotifier {
 
   Future getFilteredGroupList({
     bool reset,
-    String category,
+    List<String> category,
     String city,
   }) async {
     if (reset) {
@@ -242,14 +242,7 @@ class GroupProvider extends ChangeNotifier {
   }
 
   Future<void> deleteGroupPost(String postId) async {
-    try {
-      await _groupRepository.deleteGroupPost(postId);
-      var post = groupPosts.firstWhere((element) => element.postId == postId);
-      groupPosts.remove(post);
-      notifyListeners();
-    } catch (e) {
-      logger.e("GroupProvider deleteGroupPost error: " + e.toString());
-    }
+    await _groupRepository.deleteGroupPost(postId);
   }
 
   Future<void> deleteGroupEvent(String eventId) async {

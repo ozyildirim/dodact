@@ -471,6 +471,8 @@ class _EventsPageState extends BaseState<EventsPage> {
         builder: (BuildContext context) {
           return MultiSelectDialog(
             initialValue: selectedCategory,
+            selectedColor: kNavbarColor,
+            selectedItemsTextStyle: TextStyle(color: Colors.white),
             items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
             listType: MultiSelectListType.CHIP,
             searchable: true,
@@ -481,6 +483,8 @@ class _EventsPageState extends BaseState<EventsPage> {
                     context, "En fazla 10 kategori seçebilirsiniz.");
               }
             },
+            confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+            cancelText: Text("İptal", style: TextStyle(color: Colors.black)),
             onConfirm: (list) {
               if (list.length > 0) {
                 print(list);

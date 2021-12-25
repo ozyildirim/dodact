@@ -111,7 +111,6 @@ class UserGroupInvitationsPart extends StatelessWidget {
       var group = await groupProvider.getGroupDetail(invitation.senderId);
       print(group);
       var groupModel = GroupInvitationModel(
-        groupCategory: group.groupCategory,
         groupId: group.groupId,
         groupName: group.groupName,
         groupProfilePicture: group.groupProfilePicture,
@@ -150,12 +149,11 @@ class GroupInvitationModel {
   String invitationId;
   String groupProfilePicture;
   String groupName;
-  String groupCategory;
 
-  GroupInvitationModel(
-      {this.groupId,
-      this.invitationId,
-      this.groupProfilePicture,
-      this.groupName,
-      this.groupCategory});
+  GroupInvitationModel({
+    this.groupId,
+    this.invitationId,
+    this.groupProfilePicture,
+    this.groupName,
+  });
 }

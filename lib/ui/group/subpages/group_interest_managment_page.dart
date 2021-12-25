@@ -4,7 +4,6 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +36,7 @@ class _GroupInterestManagementPageState
 
   @override
   Widget build(BuildContext context) {
+    print(group.toString());
     var size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: isLoading
@@ -130,20 +130,7 @@ class _GroupInterestManagementPageState
                   items: categoryList.map((e) {
                     return MultiSelectItem(e, e);
                   }).toList(),
-                  // itemBuilder: (item, state) {
-                  //   return InkWell(
-                  //     onTap: () {
-                  //       selectedInterests.contains(item.value)
-                  //           ? selectedInterests.remove(item.value)
-                  //           : selectedInterests.add(item.value);
-                  //       state.didChange(selectedInterests);
-                  //       formKey.currentState.validate();
-                  //     },
-                  //     child: Chip(
-                  //       label: Text(item.label),
-                  //     ),
-                  //   );
-                  // },
+
                   initialValue: selectedInterests,
                 ),
               ),
