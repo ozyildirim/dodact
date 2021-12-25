@@ -267,7 +267,7 @@ class _GroupMemberManagementPageState
       confirmActions: () async {
         try {
           await setGroupManager(userId, groupProvider.group.groupId);
-          NavigationService.instance.popUntil(k_ROUTE_GROUP_DETAIL);
+          NavigationService.instance.navigateToReset(k_ROUTE_HOME);
           CustomMethods.showSnackbar(
               context, "Topluluk yöneticisi başarıyla değiştirildi.");
         } catch (e) {
