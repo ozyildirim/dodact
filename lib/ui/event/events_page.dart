@@ -356,6 +356,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                   ),
+                                  // ignore: missing_return
                                   validator: (value) {
                                     if (selectedCategory.length > 10) {
                                       return "En fazla 10 kategori seçebilirsiniz";

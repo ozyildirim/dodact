@@ -279,6 +279,7 @@ class _GroupsPageState extends State<GroupsPage> {
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                     ),
+                                    // ignore: missing_return
                                     validator: (value) {
                                       if (selectedCategory.length > 10) {
                                         return "En fazla 10 kategori seçebilirsiniz";
