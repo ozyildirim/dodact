@@ -9,9 +9,7 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:getwidget/getwidget.dart';
-
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventCreatorApplicationPage extends StatefulWidget {
@@ -25,10 +23,12 @@ class _EventCreatorApplicationPageState
   GlobalKey<FormBuilderState> eventCreatorApplicationFormKey =
       new GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  FocusNode interestFocus = FocusNode();
+  ApplicationProvider applicationProvider;
+
   FocusNode descriptionFocus = FocusNode();
   FocusNode linkFocus = FocusNode();
-  ApplicationProvider applicationProvider;
+
+  List<String> selectedInterests = [];
 
   @override
   void initState() {
@@ -48,6 +48,8 @@ class _EventCreatorApplicationPageState
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        title: Text("Etkinlik Oluşturucu Başvurusu",
+            style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
@@ -109,10 +111,6 @@ class _EventCreatorApplicationPageState
 
   submitForm() async {
     if (eventCreatorApplicationFormKey.currentState.saveAndValidate()) {
-      var interest = eventCreatorApplicationFormKey
-          .currentState.value["interest"]
-          .toString()
-          .trim();
       var description = eventCreatorApplicationFormKey
           .currentState.value["description"]
           .toString()
@@ -122,12 +120,17 @@ class _EventCreatorApplicationPageState
           .trim();
 
       try {
+        await CustomMethods()
+            .showLoaderDialog(context, "İşlemini Gerçekleştiriyoruz");
+
         await applicationProvider
             .createApplication("Event_Creator", userProvider.currentUser.uid, {
-          "selectedInterest": interest,
+          "selectedInterest": selectedInterests,
           "description": description,
           "link": link,
         });
+
+        CustomMethods().hideDialog();
 
         await CustomMethods().showSuccessDialog(
           context,
@@ -135,7 +138,8 @@ class _EventCreatorApplicationPageState
         );
         NavigationService.instance.pop();
       } catch (e) {
-        print(e);
+        CustomMethods().hideDialog();
+        CustomMethods.showSnackbar(context, "Bir hata oluştu");
       }
     } else {}
   }
@@ -165,15 +169,6 @@ class _EventCreatorApplicationPageState
     );
   }
 
-  showSnackBar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
   buildFormPart() {
     var size = MediaQuery.of(context).size;
     return FormBuilder(
@@ -199,40 +194,38 @@ class _EventCreatorApplicationPageState
                     icon: Icon(Icons.info_outline))
               ],
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            //   child: TextFieldContainer(
-            //     width: size.width * 0.7,
-            //     child: FormBuilderDropdown(
-            //       focusNode: interestFocus,
-            //       name: "interest",
-            //       autofocus: false,
-            //       // autovalidateMode: AutovalidateMode.onUserInteraction,
-            //       items: interestCategoryList
-            //           .map(
-            //             (e) => DropdownMenuItem(
-            //               child: Text(e.name),
-            //               value: e.name,
-            //             ),
-            //           )
-            //           .toList(),
-            //       decoration: InputDecoration(
-            //           hintText: "Sanat Dalı",
-            //           hintStyle: TextStyle(color: Colors.grey),
-            //           border: InputBorder.none,
-            //           errorStyle:
-            //               Theme.of(context).inputDecorationTheme.errorStyle),
-            //       validator: FormBuilderValidators.compose(
-            //         [
-            //           FormBuilderValidators.required(
-            //             context,
-            //             errorText: "Bu alan boş bırakılamaz.",
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: TextFieldContainer(
+                width: size.width * 0.7,
+                child: FormBuilderTextField(
+                  onTap: openCategoryDialog,
+                  key: Key(selectedInterests.length > 0
+                      ? "${selectedInterests.length} kategori seçildi"
+                      : "Kategoiler"),
+                  initialValue: selectedInterests.length > 0
+                      ? "${selectedInterests.length} kategori seçildi"
+                      : "Kategoriler",
+                  style: TextStyle(
+                      color: selectedInterests.length > 0
+                          ? Colors.black
+                          : Colors.grey[600]),
+                  readOnly: true,
+                  name: "interests",
+                  decoration: InputDecoration(
+                      hintText: "İlgi Alanları",
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  // ignore: missing_return
+                  validator: (value) {
+                    if (selectedInterests.length == 0) {
+                      return "Kategori seçmelisin.";
+                    } else {}
+                  },
+                ),
+              ),
+            ),
             SizedBox(height: 30),
             Row(
               children: [
@@ -416,6 +409,32 @@ class _EventCreatorApplicationPageState
           ],
         ),
       ),
+    );
+  }
+
+  openCategoryDialog() async {
+    categoryList.sort((a, b) => a.compareTo(b));
+
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            setState(() {
+              selectedInterests = selectedValues;
+            });
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: selectedInterests,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
     );
   }
 }

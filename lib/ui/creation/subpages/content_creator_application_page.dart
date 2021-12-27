@@ -7,9 +7,9 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
+import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +29,7 @@ class _ContentCreatorApplicationPageState
   FocusNode firstQuestionFocus = FocusNode();
   FocusNode linkFocus = FocusNode();
   FocusNode kvkkCheckboxFocus = FocusNode();
+  FocusNode artistLabelDropdownFocus = FocusNode();
   FocusNode copyrightCheckboxFocus = FocusNode();
 
   List<String> selectedInterests = [];
@@ -44,12 +45,14 @@ class _ContentCreatorApplicationPageState
 
   @override
   void dispose() {
-    super.dispose();
     interestFocus.dispose();
     descriptionFocus.dispose();
     linkFocus.dispose();
+    firstQuestionFocus.dispose();
+    artistLabelDropdownFocus.dispose();
     kvkkCheckboxFocus.dispose();
     copyrightCheckboxFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -135,14 +138,23 @@ class _ContentCreatorApplicationPageState
           .toString()
           .trim();
 
+      var label =
+          contentCreatorApplicationFormKey.currentState.value["artistLabel"];
+
       try {
+        await CustomMethods()
+            .showLoaderDialog(context, "İşlemini Gerçekleştiriyoruz");
+
         await applicationProvider.createApplication(
             "Content_Creator", userProvider.currentUser.uid, {
           "selectedInterest": selectedInterests,
           "description": description,
           "firstQuestion": firstQuestion,
           "link": link,
+          "label": label,
         });
+
+        CustomMethods().hideDialog();
 
         await CustomMethods().showSuccessDialog(
           context,
@@ -150,7 +162,8 @@ class _ContentCreatorApplicationPageState
         );
         NavigationService.instance.pop();
       } catch (e) {
-        print(e);
+        CustomMethods().hideDialog();
+        CustomMethods.showSnackbar(context, "Bir hata oluştu");
       }
     } else {}
   }
@@ -181,6 +194,7 @@ class _ContentCreatorApplicationPageState
   }
 
   buildFormPart() {
+    artistLabels.sort((a, b) => a.compareTo(b));
     var size = MediaQuery.of(context).size;
     return FormBuilder(
       key: contentCreatorApplicationFormKey,
@@ -228,6 +242,7 @@ class _ContentCreatorApplicationPageState
                       border: InputBorder.none,
                       errorStyle:
                           Theme.of(context).inputDecorationTheme.errorStyle),
+                  // ignore: missing_return
                   validator: (value) {
                     if (selectedInterests.length == 0) {
                       return "Kategori seçmelisin.";
@@ -348,6 +363,55 @@ class _ContentCreatorApplicationPageState
                         context,
                         errorText: "Bu alan boş bırakılamaz.",
                       ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    "Profilinde hangisinin görünmesini istersin?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      showInfoDialog(context,
+                          "Yukarıda belirtmiş olduğun bilgilerle alakalı olarak profilinde gözükmesini istediğin tanımı seçebilirsin.");
+                    },
+                    icon: Icon(Icons.info_outline))
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: TextFieldContainer(
+                width: size.width * 0.7,
+                child: FormBuilderDropdown(
+                  focusNode: artistLabelDropdownFocus,
+                  name: "artistLabel",
+                  items: artistLabels
+                      .map((label) => DropdownMenuItem(
+                            child: Text(label),
+                            value: label,
+                          ))
+                      .toList(),
+                  autofocus: false,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                  decoration: InputDecoration(
+                      hintText: "",
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      )
                     ],
                   ),
                 ),

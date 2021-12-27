@@ -44,6 +44,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        title:
+            Text("Topluluk Başvurusu", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
@@ -161,15 +163,6 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
     );
   }
 
-  showSnackBar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
   buildFormPart() {
     var size = MediaQuery.of(context).size;
     return FormBuilder(
@@ -240,16 +233,16 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                   onTap: openCategoryDialog,
                   key: Key(selectedCategories.length > 0
                       ? "${selectedCategories.length} kategori seçildi"
-                      : "Etkinlik Kategorisi"),
+                      : "Topluluk İlgi Alanları"),
                   initialValue: selectedCategories.length > 0
                       ? "${selectedCategories.length} kategori seçildi"
-                      : "Etkinlik Kategorisi",
+                      : "Topluluk İlgi Alanları",
                   style: TextStyle(
                       color: selectedCategories.length > 0
                           ? Colors.black
                           : Colors.grey[600]),
                   readOnly: true,
-                  name: "eventCategories",
+                  name: "groupInterests",
                   decoration: InputDecoration(
                       hintText: "Topluluk İlgi Alanları",
                       border: InputBorder.none,

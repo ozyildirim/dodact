@@ -8,7 +8,6 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 enum InvitationType { GroupMembership }

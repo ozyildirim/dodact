@@ -214,8 +214,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
       bool hasContentCreatorApplication,
       bool hasEventCreatorApplication,
       bool hasGroupApplication) {
-    if (hasContentCreatorApplication == false &&
-        hasEventCreatorApplication == false &&
+    if (hasContentCreatorApplication == false ||
+        hasEventCreatorApplication == false ||
         hasGroupApplication == false) {
       return true;
     } else {
