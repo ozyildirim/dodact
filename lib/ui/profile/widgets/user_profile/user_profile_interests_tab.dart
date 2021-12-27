@@ -41,11 +41,46 @@ class _UserProfileInterestsTabState extends BaseState<UserProfileInterestsTab> {
       }
     });
 
+    List<MultiSelectItem> items = userInterests.take(10).map((e) {
+      return MultiSelectItem(e, e);
+    }).toList();
+
+    if (userInterests.length > 10) {
+      items.add(MultiSelectItem<String>("+${userInterests.length - 10}",
+          "+${userInterests.length - 10} Kategori"));
+    }
+
     return MultiSelectChipDisplay(
+        onTap: (value) {
+          openCategoriesDialog(userInterests);
+        },
         chipColor: Colors.grey[200],
         textStyle: TextStyle(color: Colors.black),
-        items: userInterests.map((e) {
-          return MultiSelectItem(e, e);
-        }).toList());
+        items: items);
+  }
+
+  openCategoriesDialog(List items) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: MultiSelectChipDisplay(
+                        chipColor: Colors.grey[200],
+                        textStyle: TextStyle(color: Colors.black),
+                        items: items
+                            .map((e) => MultiSelectItem<String>(e, e))
+                            .toList()),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

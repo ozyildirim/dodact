@@ -33,6 +33,7 @@ class OthersProfileInfoTab extends StatelessWidget {
       } else {
         return Column(
           children: [
+            SizedBox(height: size.height * 0.02),
             !user.privacySettings['hide_education'] && user.education.isNotEmpty
                 ? ListTile(
                     leading: CircleAvatar(

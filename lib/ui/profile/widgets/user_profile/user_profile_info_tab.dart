@@ -53,6 +53,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
     } else {
       return Column(
         children: [
+          SizedBox(height: size.height * 0.01),
           ListTile(
             leading: CircleAvatar(
               backgroundColor: kUserProfileInfoCircleAvatarBgColor,
