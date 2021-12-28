@@ -41,7 +41,6 @@ List<String> artistLabels = [
   "Müzik Öğretmeni",
   "Müzik Tarihçisi",
   "Müzik Teorisyeni",
-  "Müzik Yazılımı",
   "Müzikoloğ",
   "Müzis ses sistemleri ve teknolijisi",
   "Orkestra Şefi",
@@ -110,5 +109,9 @@ List<String> artistLabels = [
   "Heykeltıraş",
   "Yazar",
   "Animasyon Tasarımcısı",
-  "Dijital Tasarım Uzmanı"
+  "Dijital Tasarım Uzmanı",
+  "Radyo Program Yapımcısı",
+  "Radyo Teknik Yönetmeni",
+  "Radyo Haber Spikeri",
+  "Radyo Metin Yazarı"
 ];

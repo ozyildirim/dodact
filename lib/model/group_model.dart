@@ -17,6 +17,7 @@ class GroupModel {
   List<String> selectedInterests;
   String mainInterest;
   bool visible;
+  List<String> searchKeywords;
 
   GroupModel({
     this.groupId,
@@ -31,6 +32,7 @@ class GroupModel {
     this.mainInterest,
     this.creationDate,
     this.groupLocation,
+    this.searchKeywords,
     this.visible,
   });
 
@@ -49,6 +51,7 @@ class GroupModel {
     mainInterest = json['mainInterest'] ?? "";
     creationDate = (json['creationDate'] as Timestamp).toDate();
     groupLocation = json['groupLocation'];
+    searchKeywords = json['searchKeywords']?.cast<String>() ?? [];
     visible = json['visible'];
   }
 
@@ -68,6 +71,7 @@ class GroupModel {
     data['mainInterest'] = this.mainInterest;
     data['creationDate'] = FieldValue.serverTimestamp();
     data['groupLocation'] = this.groupLocation;
+    data['searchKeywords'] = this.searchKeywords;
     data['visible'] = this.visible;
 
     return data;

@@ -19,12 +19,9 @@ class UserObject {
   bool isVerified;
   List<String> blockedUserList;
   String artistLabel;
-
   List<String> favoritedPosts = [];
   List<Map<String, dynamic>> interests;
   List<String> selectedInterests;
-  List<String> followers = [];
-  List<String> following = [];
 
   //Permissions
   Map<String, dynamic> permissions = {
