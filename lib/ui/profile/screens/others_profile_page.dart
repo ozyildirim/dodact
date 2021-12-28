@@ -65,10 +65,12 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
           await FirebaseReportService.reportUser(
               authProvider.currentUser.uid, otherUser.uid, reportReason);
 
-          showSnackbar("Kullanıcı başarıyla bildirildi.");
+          CustomMethods.showSnackbar(
+              context, "Kullanıcı başarıyla bildirildi.");
         } catch (e) {
           NavigationService.instance.pop();
-          showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+          CustomMethods.showSnackbar(
+              context, "İşlem gerçekleştirilirken hata oluştu.");
         }
       } else {
         NavigationService.instance.pop();
@@ -180,9 +182,10 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   unblockUser() async {
     try {
       await userProvider.unblockUser(otherUser.uid);
-      showSnackbar("Kullanıcının engelini kaldırdın.");
+      CustomMethods.showSnackbar(context, "Kullanıcının engelini kaldırdın.");
     } catch (e) {
-      showSnackbar("Kullanıcı engellenirken bir sorun oluştu.");
+      CustomMethods.showSnackbar(
+          context, "Kullanıcı engellenirken bir sorun oluştu.");
     }
   }
 
@@ -200,19 +203,11 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   blockUser() async {
     try {
       await userProvider.blockUser(otherUser.uid);
-      showSnackbar("Kullanıcıyı engelledin.");
+      CustomMethods.showSnackbar(context, "Kullanıcıyı engelledin.");
     } catch (e) {
-      showSnackbar("Kullanıcı engellenirken bir sorun oluştu.");
+      CustomMethods.showSnackbar(
+          context, "Kullanıcı engellenirken bir sorun oluştu.");
     }
-  }
-
-  showSnackbar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
   }
 }
 

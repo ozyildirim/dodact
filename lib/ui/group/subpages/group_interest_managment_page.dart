@@ -91,7 +91,7 @@ class _GroupInterestManagementPageState
           Padding(
             padding: const EdgeInsets.only(left: 12.0, top: 12),
             child: Text(
-                "Diğer sanatseverler ne ile ilgilendiğini görsün! Uygulama içindeki maceranı özelleştirmek için ilgilendiğin alanları seç.",
+                "Diğer sanatseverler topluluğunun ne ile ilgilendiğini görsün! Uygulama içindeki maceranızı özelleştirmek için ilgilendiğiniz alanları seç.",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
           ),
           Expanded(

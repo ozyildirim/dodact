@@ -84,6 +84,12 @@ class OthersProfileHeader extends StatelessWidget {
                 ],
               )
             : Container(),
+        provider.otherUser.artistLabel.isNotEmpty
+            ? Text(
+                provider.otherUser.artistLabel,
+                style: TextStyle(color: Colors.grey[600]),
+              )
+            : Container()
       ],
     );
   }

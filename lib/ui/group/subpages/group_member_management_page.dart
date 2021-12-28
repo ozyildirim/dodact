@@ -112,10 +112,10 @@ class _GroupMemberManagementPageState
                               padding: const EdgeInsets.all(12.0),
                               child: CircleAvatar(
                                 radius: 60,
-                                backgroundColor: Colors.black,
+                                backgroundColor: kNavbarColor,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.white,
-                                  radius: 55,
+                                  radius: 50,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -152,8 +152,11 @@ class _GroupMemberManagementPageState
                                 imageBuilder: (context, imageProvider) {
                                   return CircleAvatar(
                                     radius: 60,
-                                    backgroundImage:
-                                        NetworkImage(user.profilePictureURL),
+                                    backgroundColor: kNavbarColor,
+                                    child: CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: NetworkImage(
+                                            user.profilePictureURL)),
                                   );
                                 },
                               ),

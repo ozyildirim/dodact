@@ -12,6 +12,7 @@ import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -129,17 +130,26 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
                 args: [userProvider.currentUser.uid, user]);
           },
           leading: Hero(
-            tag: user.uid,
-            child: CircleAvatar(
-              backgroundColor: kNavbarColor,
-              radius: 45,
-              child: CircleAvatar(
-                radius: 40,
-                backgroundImage:
-                    CachedNetworkImageProvider(user.profilePictureURL),
-              ),
-            ),
-          ),
+              tag: user.uid,
+              // child: CircleAvatar(
+              //   backgroundColor: kNavbarColor,
+              //   radius: 50,
+              //   child: CircleAvatar(
+              //     radius: 30,
+              //     backgroundImage:
+              //         CachedNetworkImageProvider(user.profilePictureURL),
+              //   ),
+              // ),
+
+              child: GFAvatar(
+                backgroundColor: kNavbarColor,
+                radius: 50,
+                child: GFAvatar(
+                  radius: 25,
+                  backgroundImage:
+                      CachedNetworkImageProvider(user.profilePictureURL),
+                ),
+              )),
           title: Text(
             user.nameSurname,
             style: TextStyle(
@@ -163,7 +173,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
             DateFormat('dd/MM HH:mm', 'tr_TR')
                 .format(lastMessage.messageCreationDate),
             style: TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: lastMessage.senderId == authProvider.currentUser.uid
                     ? FontWeight.w400
                     : lastMessage.isRead
