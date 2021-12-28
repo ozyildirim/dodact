@@ -1,5 +1,3 @@
-import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class ContributionsPart extends StatelessWidget {
