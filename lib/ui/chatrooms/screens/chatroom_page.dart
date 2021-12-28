@@ -80,12 +80,12 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         if (result == true) {
           setState(() {
             doesRoomExist = true;
-            print("oda mevcut");
+            // print("oda mevcut");
           });
         } else {
           setState(() {
             doesRoomExist = false;
-            print("oda mevcut değil");
+            // print("oda mevcut değil");
           });
         }
       });

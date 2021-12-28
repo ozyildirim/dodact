@@ -25,10 +25,6 @@ class _InterestRegistrationPageState
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      showInformationDialog();
-    });
   }
 
   checkProfilePicture() async {
@@ -93,13 +89,13 @@ class _InterestRegistrationPageState
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 12.0, top: 12),
+          //   child: Text("İlgi Alanlarını Seç",
+          //       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+          // ),
           Padding(
-            padding: const EdgeInsets.only(left: 12.0, top: 12),
-            child: Text("İlgi Alanlarını Seç",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12.0, top: 12),
+            padding: const EdgeInsets.all(16.0),
             child: Text(
                 "Diğer sanatseverler ne ile ilgilendiğini görsün! Uygulama içindeki maceranı özelleştirmek için ilgilendiğin alanları seç.",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),

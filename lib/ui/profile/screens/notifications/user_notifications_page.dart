@@ -76,15 +76,18 @@ class _UserInvitationsPartState extends BaseState<UserInvitationsPart> {
           NavigationService.instance.navigate(k_ROUTE_USER_INVITATIONS_PAGE);
         },
         leading: CircleAvatar(
-            backgroundColor: Colors.orangeAccent,
-            radius: 20,
+            backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+            radius: 30,
             child: Text(
               provider.usersInvitations.length < 10
                   ? provider.usersInvitations.length.toString()
                   : "10 +",
               style: TextStyle(color: Colors.black, fontSize: 20),
             )),
-        title: Text("Davetler", style: TextStyle(fontSize: 18)),
+        title: Text(
+          "Davetler",
+          style: TextStyle(fontSize: 18),
+        ),
         subtitle: Text(
             "Bu kısımda topluluklar tarafından sana gönderilen davetleri görüntüleyebilirsin."),
       ),

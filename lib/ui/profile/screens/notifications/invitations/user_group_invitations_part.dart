@@ -5,6 +5,7 @@ import 'package:dodact_v1/model/invitation_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class UserGroupInvitationsPart extends StatelessWidget {
@@ -59,16 +60,19 @@ class UserGroupInvitationsPart extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 45,
+                          leading: GFAvatar(
+                            radius: 50,
                             backgroundImage: NetworkImage(groupProfilePicture),
                           ),
-                          title:
-                              Text(groupName, style: TextStyle(fontSize: 20)),
+                          title: Text(groupName,
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              IconButton(
+                              CircleAvatar(
+                                backgroundColor: Colors.green,
+                                child: IconButton(
                                   onPressed: () {
                                     acceptGroupInvitation(
                                         provider
@@ -77,15 +81,21 @@ class UserGroupInvitationsPart extends StatelessWidget {
                                         invitationId,
                                         context);
                                   },
-                                  icon: Icon(Icons.check),
-                                  color: Colors.green),
-                              IconButton(
-                                  onPressed: () {
-                                    rejectGroupInvitation(
-                                        invitationId, context);
-                                  },
-                                  icon: Icon(Icons.close),
-                                  color: Colors.red),
+                                  icon: Icon(Icons.check, color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              CircleAvatar(
+                                backgroundColor: Colors.redAccent,
+                                child: IconButton(
+                                    onPressed: () {
+                                      rejectGroupInvitation(
+                                          invitationId, context);
+                                    },
+                                    icon:
+                                        Icon(Icons.close, color: Colors.white),
+                                    color: Colors.red),
+                              ),
                             ],
                           ),
                         ),
