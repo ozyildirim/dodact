@@ -11,7 +11,6 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
@@ -61,6 +60,11 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
     return PaginateFirestore(
       isLive: true,
       itemsPerPage: 10,
+      bottomLoader: Center(
+        child: CircularProgressIndicator(
+          color: Colors.black,
+        ),
+      ),
       itemBuilder: (context, object, index) {
         ChatroomModel model = ChatroomModel.fromJson(object[index].data());
         return FutureBuilder(
@@ -86,7 +90,9 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
           .orderBy('lastMessage.messageCreationDate', descending: true),
       itemBuilderType: PaginateBuilderType.listView,
       initialLoader: Center(
-        child: spinkit,
+        child: CircularProgressIndicator(
+          color: Colors.black,
+        ),
       ),
       onEmpty: Center(
         child: Text(
@@ -112,8 +118,6 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
     });
 
     return user ?? null;
-
-    // return buildListTile(chatroom, user);
   }
 
   buildListTile(ChatroomModel chatroom, UserObject user) {

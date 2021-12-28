@@ -222,7 +222,12 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           child: Text("Mesaj bulunamadı",
               style: TextStyle(fontSize: kPageCenteredTextSize)),
         ),
-        itemsPerPage: 5, initialLoader: Center(child: spinkit),
+        itemsPerPage: 5,
+        initialLoader: Center(
+          child: CircularProgressIndicator(
+            color: Colors.black,
+          ),
+        ),
         // Use SliverAppBar in header to make it sticky
         // item builder type is compulsory.
         itemBuilderType:
@@ -286,10 +291,9 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         // to fetch real-time data
         isLive: true,
         reverse: true,
-        bottomLoader: Container(
-          height: 50,
-          child: Center(
-            child: spinkit,
+        bottomLoader: Center(
+          child: CircularProgressIndicator(
+            color: Colors.black,
           ),
         ),
       ),
