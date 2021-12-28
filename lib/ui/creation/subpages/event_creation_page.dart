@@ -11,6 +11,7 @@ import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -19,16 +20,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventCreationPage extends StatefulWidget {
-  final String eventCategory;
   final String eventType;
   final bool eventPlatform;
   final String groupId;
 
-  EventCreationPage(
-      {this.eventCategory, this.eventType, this.eventPlatform, this.groupId});
+  EventCreationPage({this.eventType, this.eventPlatform, this.groupId});
 
   @override
   _EventCreationPageState createState() => _EventCreationPageState();
@@ -43,6 +43,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   List<File> _eventImages = [];
   String eventCoordinates;
   String eventCity;
+  List<String> eventCategories = [];
 
   TextEditingController _eventLocationController = new TextEditingController();
 
@@ -69,6 +70,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   void dispose() {
     super.dispose();
     eventDescriptionFocus.dispose();
+    print(widget.groupId);
     eventTitleFocus.dispose();
   }
 
@@ -92,7 +94,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      // extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
         onPressed: _formSubmit,
         child: Icon(Icons.check),
@@ -118,13 +120,14 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  _buildEventFormPart(),
-                ],
+            child: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildEventFormPart(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -432,6 +435,43 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text("Etkinlik Kategorileri",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              SizedBox(height: 4),
+              TextFieldContainer(
+                width: size.width * 0.9,
+                child: FormBuilderTextField(
+                  onTap: openCategoryDialog,
+                  key: Key(eventCategories.length > 0
+                      ? "${eventCategories.length} kategori seçildi"
+                      : "Etkinlik Kategorisi"),
+                  initialValue: eventCategories.length > 0
+                      ? "${eventCategories.length} kategori seçildi"
+                      : "Etkinlik Kategorisi",
+                  style: TextStyle(
+                      color: eventCategories.length > 0
+                          ? Colors.black
+                          : Colors.grey[600]),
+                  readOnly: true,
+                  name: "eventCategories",
+                  decoration: InputDecoration(
+                      hintText: "Etkinlik Kategorileri",
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: (value) {
+                    if (eventCategories.length == 0) {
+                      return "Kategori seçmelisin.";
+                    } else {}
+                  },
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text("Fotoğraflar",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
@@ -519,6 +559,32 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
     );
   }
 
+  openCategoryDialog() async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            if (selectedValues.length > 0) {
+              setState(() {
+                eventCategories = selectedValues;
+              });
+            }
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: eventCategories,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
+    );
+  }
+
   checkDateRange(DateTime endDate) {
     if (startDate != null) {
       if (startDate.isAfter(endDate)) {
@@ -556,11 +622,21 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               ? _eventFormKey.currentState.value['eventURL'].toString().trim()
               : null;
           var searchKeywords = createSearchKeywords(title);
-          var category = widget.eventCategory;
+
           var eventType = widget.eventType;
 
-          await createEvent(title, startDate, endDate, description, location,
-              mapLocation, address, url, searchKeywords, category, eventType);
+          await createEvent(
+              title,
+              startDate,
+              endDate,
+              description,
+              location,
+              mapLocation,
+              address,
+              url,
+              searchKeywords,
+              eventCategories,
+              eventType);
         }
       } catch (e) {
         logger.e("Form submit edilirken hata oluştu: $e ");
@@ -578,7 +654,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       String address,
       String url,
       List<String> searchKeywords,
-      String category,
+      List<String> eventCategories,
       String eventType) async {
     try {
       // print(address);
@@ -593,7 +669,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
           address,
           url,
           searchKeywords,
-          category,
+          eventCategories,
           eventType);
       print(newEvent.address);
 
@@ -621,7 +697,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       String address,
       String url,
       List<String> searchKeywords,
-      String category,
+      List<String> eventCategories,
       String eventType) {
     EventModel newEvent = EventModel(
       id: null,
@@ -633,7 +709,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       creationDate: DateTime.now(),
       startDate: startDate,
       endDate: endDate,
-      category: category,
+      eventCategories: eventCategories,
       eventType: eventType,
       eventURL: url,
       isDone: false,

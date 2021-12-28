@@ -14,6 +14,9 @@ class PodcastDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     var tileTitleSize = 16.0;
+    const double avatarRadius = 16.0;
+    const double iconSize = 16.0;
+    const Color avatarBackgroundColor = Colors.deepOrangeAccent;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,39 +53,8 @@ class PodcastDetail extends StatelessWidget {
                       child: Image.network(podcast.podcastImageUrl),
                     ),
                   ),
-                  // Positioned(
-                  //   bottom: 10,
-                  //   right: 10,
-                  //   child: FloatingActionButton(
-                  //     onPressed: () async {
-                  //       await launchPodcastUrl();
-                  //     },
-                  //     backgroundColor: kNavbarColor,
-                  //     child: Column(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         Icon(FontAwesome5Brands.spotify, size: 20),
-                  //         Padding(
-                  //           padding: const EdgeInsets.all(4.0),
-                  //           child: Text(
-                  //             "Dinle",
-                  //             style: TextStyle(
-                  //                 fontSize: 14, fontWeight: FontWeight.w400),
-                  //           ),
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // )
                 ],
               ),
-              // Row(
-              //   children: [
-              //     CircleAvatar(
-              //       child: Icon(FontAwesome5Brands.spotify),
-              //     ),
-              //   ],
-              // ),
               SizedBox(
                 height: 20,
               ),
@@ -122,11 +94,12 @@ class PodcastDetail extends StatelessWidget {
               ),
               ListTile(
                 leading: CircleAvatar(
-                    radius: 16,
-                    foregroundColor: Colors.greenAccent,
+                    radius: avatarRadius,
+                    backgroundColor: avatarBackgroundColor,
                     child: Icon(
                       Icons.list_alt,
                       color: Colors.white,
+                      size: iconSize,
                     )),
                 title: Text(podcast.podcastTitle,
                     style: TextStyle(
@@ -135,12 +108,13 @@ class PodcastDetail extends StatelessWidget {
               ),
               ListTile(
                 leading: CircleAvatar(
-                  foregroundColor: Colors.greenAccent,
+                  backgroundColor: avatarBackgroundColor,
                   child: Icon(
                     Icons.person,
                     color: Colors.white,
+                    size: iconSize,
                   ),
-                  radius: 16,
+                  radius: avatarRadius,
                 ),
                 title: Text(podcast.podcastOwner,
                     style: TextStyle(
@@ -157,11 +131,12 @@ class PodcastDetail extends StatelessWidget {
               ),
               ListTile(
                 leading: CircleAvatar(
-                  radius: 16,
-                  foregroundColor: Colors.greenAccent,
+                  radius: avatarRadius,
+                  backgroundColor: avatarBackgroundColor,
                   child: Icon(
                     Icons.calendar_today,
                     color: Colors.white,
+                    size: iconSize,
                   ),
                 ),
                 title: Text(
@@ -170,7 +145,6 @@ class PodcastDetail extends StatelessWidget {
                         fontSize: tileTitleSize, fontWeight: FontWeight.w500)),
                 subtitle: Text("Yayınlanma Tarihi"),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(

@@ -159,11 +159,12 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
           ),
         ),
         CircleAvatar(
+          radius: 18,
           backgroundColor: kNavbarColor,
           child: IconButton(
               icon: Icon(
                 FontAwesome5Solid.paper_plane,
-                size: 18,
+                size: 16,
                 color: Colors.white,
               ),
               onPressed: () {

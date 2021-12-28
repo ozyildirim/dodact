@@ -1,4 +1,3 @@
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
@@ -22,14 +21,7 @@ class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
   Widget build(BuildContext context) {
     var provider = Provider.of<InvitationProvider>(context);
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     sendNotification(authProvider.currentUser.uid);
-      //   },
-      //   child: Icon(Icons.send),
-      // ),
       appBar: AppBar(
-        actions: [],
         title: Text('Davetler'),
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -49,24 +41,4 @@ class _UserInvitationsPageState extends BaseState<UserInvitationsPage> {
           )),
     );
   }
-
-  // sendNotification(String userId) async {
-  //   debugPrint(userId);
-  //   FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
-  //   // firebaseFunctions.useFunctionsEmulator("localhost", 5001);
-  //   var callable = firebaseFunctions.httpsCallable('sendNotificationToUser');
-  //   try {
-  //     final HttpsCallableResult result = await callable.call(<String, dynamic>{
-  //       'userId': userId,
-  //     });
-  //     print(result.data);
-  //   } on FirebaseFunctionsException catch (e) {
-  //     print('Firebase Functions Exception');
-  //     print(e.code);
-  //     print(e.message);
-  //   } catch (e) {
-  //     print('Caught Exception');
-  //     print(e);
-  //   }
-  // }
 }

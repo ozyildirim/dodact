@@ -16,6 +16,7 @@ const kBackgroundColorDarker = Color(0xFF929292);
 const kDetailTextColor = Color(0xFF998FA2);
 const kCustomAppBarColor = Color(0xff194d25);
 const kNavbarColor = Color(0xff194d25);
+const kUserProfileInfoCircleAvatarBgColor = Colors.deepOrangeAccent;
 
 const kAuthBackgroundImage = "assets/images/loginBG.jpg";
 const kBackgroundImage = "assets/images/appBG.jpg";
@@ -28,6 +29,9 @@ const kDrawerTileTitleSize = 20.0;
 const kSettingsTitleSize = 20.0;
 const kPageCenteredTextSize = 20.0;
 const kUserProfileTabLabelSize = 14.0;
+const kUserProfileInfoIconSize = 16.0;
+const kUserProfileInfoCircleAvatarRadius = 16.0;
+const kUserProfileSocialIconSize = 20.0;
 
 const kFontFamily = "SanFrancisco";
 

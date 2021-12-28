@@ -63,7 +63,7 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("favs" + userProvider.currentUser.favoritedPosts.toString());
+    // print("favs" + userProvider.currentUser.favoritedPosts.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -95,10 +95,6 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                         itemBuilder: (context, index) {
                           var postPhoto;
                           var element = posts[index];
-                          element.isLocatedInYoutube == true
-                              ? postPhoto = CustomMethods.createThumbnailURL(
-                                  true, element.postContentURL)
-                              : postPhoto = element.postContentURL;
 
                           return Column(
                             children: [
@@ -110,11 +106,21 @@ class _FavoritesPageState extends BaseState<FavoritesPage> {
                                         args: element);
                                   },
                                   avatar: GFAvatar(
-                                    backgroundImage: NetworkImage(postPhoto),
-                                    radius: 50,
+                                    backgroundImage: NetworkImage(
+                                        CustomMethods.createThumbnailURL(
+                                            element.isLocatedInYoutube,
+                                            element.postContentURL,
+                                            isAudio:
+                                                element.postContentType == "Ses"
+                                                    ? true
+                                                    : false)),
+                                    radius: 35,
                                   ),
                                   titleText: element.postTitle,
-                                  subTitleText: element.postCategory,
+                                  subTitleText: element.postCategories
+                                      .take(3)
+                                      .toList()
+                                      .join(", "),
                                 ),
                                 actionPane: SlidableDrawerActionPane(),
                                 actionExtentRatio: 0.25,

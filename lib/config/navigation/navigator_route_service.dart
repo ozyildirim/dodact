@@ -129,17 +129,13 @@ class NavigationRouteManager {
       case k_ROUTE_CREATE_POST_PAGE:
         List<dynamic> args = settings.arguments;
         return _navigateToDefault(
-            PostCreationPage(
-                postType: args[0], postCategory: args[1], groupId: args[2]),
-            settings);
+            PostCreationPage(postType: args[0], groupId: args[1]), settings);
 
       case k_ROUTE_CREATE_EVENT_PAGE:
         List<dynamic> args = settings.arguments;
         return _navigateToDefault(
             EventCreationPage(
-                eventCategory: args[0],
-                eventType: args[1],
-                eventPlatform: args[2]),
+                eventType: args[0], eventPlatform: args[1], groupId: args[2]),
             settings);
 
       case k_ROUTE_CREATE_USER_STREAM_PAGE:

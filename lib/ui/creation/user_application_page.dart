@@ -77,8 +77,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
       width: size.width,
       decoration: BoxDecoration(
         image: DecorationImage(
-          colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3), BlendMode.dstATop),
+          colorFilter:
+              ColorFilter.mode(Colors.black.withOpacity(1), BlendMode.dstATop),
           image: AssetImage(kBackgroundImage),
           fit: BoxFit.cover,
         ),
@@ -173,6 +173,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                               hasGroupApplication) ==
                           false
                       ? Container(
+                          color: Colors.white54,
                           child: Center(
                             child: Text(
                               "Tüm başvuruları gerçekleştirdin, mevcut başvurularını sağ üstteki menüden takip edebilirsin",
@@ -213,8 +214,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
       bool hasContentCreatorApplication,
       bool hasEventCreatorApplication,
       bool hasGroupApplication) {
-    if (hasContentCreatorApplication == false &&
-        hasEventCreatorApplication == false &&
+    if (hasContentCreatorApplication == false ||
+        hasEventCreatorApplication == false ||
         hasGroupApplication == false) {
       return true;
     } else {
@@ -233,7 +234,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
 
   _buildCard(IconData icon, String title, String description, Function onTap,
       {String groupId}) {
-    var cardBackgroundColor = Color(0xFFF8F9FA);
+    // var cardBackgroundColor = Color(0xFFF8F9FA);
+    var cardBackgroundColor = Colors.grey[100];
     var size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -306,7 +308,7 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
       PageViewModel(
         image: Image.asset(
           'assets/images/application_page/application_onboarding_2.png',
-          height: size.height * 0.3,
+          height: size.height * 0.4,
         ),
         titleWidget: Text(
           "Etkinliklerinle Sanatseverleri Bir Araya Getir",
@@ -326,12 +328,16 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
-        body: "Canlı yayınlarını sanatseverlere ulaştır",
+        body:
+            "Diğer platformlarda oluşturduğun(Twitch, Youtube vb.) yayınlarını sanatseverlere ulaştır",
       ),
       PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_3.png'),
+        image: Image.asset(
+          'assets/images/onboarding/onboarding_3.png',
+          height: size.height * 0.3,
+        ),
         titleWidget: Text(
-          "Topluluğuk Oluştur & Topluluğa Katıl",
+          "Topluluk Oluştur & Topluluğa Katıl",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -343,41 +349,39 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
     // SystemChrome.setSystemUIOverlayStyle(
     //   SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
     // );
-    return SafeArea(
-      child: IntroductionScreen(
-        globalBackgroundColor: Colors.white,
-        pages: listPages,
-        onDone: () async {
-          SharedPreferences _prefs = await SharedPreferences.getInstance();
-          _prefs.setInt("userApplicationsIntroductionScreen", 1);
-          NavigationService.instance.pop();
-        },
-        onSkip: () async {
-          SharedPreferences _prefs = await SharedPreferences.getInstance();
-          _prefs.setInt("userApplicationsIntroductionScreen", 1);
+    return IntroductionScreen(
+      globalBackgroundColor: Colors.white,
+      pages: listPages,
+      onDone: () async {
+        SharedPreferences _prefs = await SharedPreferences.getInstance();
+        _prefs.setInt("userApplicationsIntroductionScreen", 1);
+        NavigationService.instance.pop();
+      },
+      onSkip: () async {
+        SharedPreferences _prefs = await SharedPreferences.getInstance();
+        _prefs.setInt("userApplicationsIntroductionScreen", 1);
 
-          NavigationService.instance.pop();
-        },
-        showSkipButton: true,
-        skip: Text(
-          "Atla",
-          style: TextStyle(color: Colors.black),
-        ),
-        next: const Icon(
-          Icons.navigate_next,
-          color: Colors.black,
-        ),
-        done: const Text("Başla",
-            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
-        dotsDecorator: DotsDecorator(
-          size: const Size.square(10.0),
-          activeSize: const Size(20.0, 10.0),
-          activeColor: Colors.black,
-          color: Colors.black26,
-          spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-          activeShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
-          ),
+        NavigationService.instance.pop();
+      },
+      showSkipButton: true,
+      skip: Text(
+        "Atla",
+        style: TextStyle(color: Colors.black),
+      ),
+      next: const Icon(
+        Icons.navigate_next,
+        color: Colors.black,
+      ),
+      done: const Text("Başla",
+          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+      dotsDecorator: DotsDecorator(
+        size: const Size.square(10.0),
+        activeSize: const Size(20.0, 10.0),
+        activeColor: Colors.black,
+        color: Colors.black26,
+        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
         ),
       ),
     );

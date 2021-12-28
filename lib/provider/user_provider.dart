@@ -154,12 +154,8 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
-    try {
-      await userRepository.updateCurrentUser(newData, currentUser.uid);
-      getCurrentUser();
-    } catch (e) {
-      logger.e("authProvider updateCurrentUser error: $e");
-    }
+    await userRepository.updateCurrentUser(newData, currentUser.uid);
+    getCurrentUser();
   }
 
   Future<String> updateCurrentUserProfilePicture(File image) async {

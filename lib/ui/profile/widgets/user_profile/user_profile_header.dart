@@ -99,7 +99,13 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
               style: TextStyle(color: Colors.grey[600]),
             ),
           ],
-        )
+        ),
+        user.artistLabel.isNotEmpty
+            ? Text(
+                user.artistLabel,
+                style: TextStyle(color: Colors.grey[600]),
+              )
+            : Container()
       ],
     );
   }

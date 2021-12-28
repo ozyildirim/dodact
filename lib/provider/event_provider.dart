@@ -148,7 +148,9 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future getFilteredEventList(
-      {bool reset, String category, String city, String type}) async {
+      {bool reset, List<String> categories, String city, String type}) async {
+    List<String> selectedCategories = categories.isEmpty ? null : categories;
+
     if (reset) {
       filteredEventsSnapshot.clear();
       _hasNextFiltered = true;
@@ -160,7 +162,7 @@ class EventProvider extends ChangeNotifier {
 
     try {
       var snap = await eventRepository.getFilteredEventList(
-        category: category,
+        categories: selectedCategories,
         city: city,
         type: type,
         limit: documentLimit,

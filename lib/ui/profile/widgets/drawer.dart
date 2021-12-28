@@ -66,15 +66,6 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
 
-          // ListTile(
-          //   // enabled: false,
-          //   leading: Icon(Icons.help),
-          //   title: Text("Başvurularım", style: TextStyle(fontSize: 18)),
-          //   onTap: () {
-          //     NavigationService.instance
-          //         .navigate(k_ROUTE_USER_APPLICATIONS_PAGE);
-          //   },
-          // ),
           ListTile(
             leading: Icon(Icons.settings),
             title: Text("Ayarlar", style: TextStyle(fontSize: 18)),
@@ -92,13 +83,13 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             },
           ),
 
-          ListTile(
-            leading: Icon(Icons.badge),
-            title: Text("DodCard", style: TextStyle(fontSize: 18)),
-            onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.badge),
+          //   title: Text("DodCard", style: TextStyle(fontSize: 18)),
+          //   onTap: () {
+          //     NavigationService.instance.navigate(k_ROUTE_DOD_CARD);
+          //   },
+          // ),
 
           // ListTile(
           //   leading: Icon(Icons.info),

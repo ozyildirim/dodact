@@ -6,8 +6,8 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 enum InvitationType { GroupMembership }
@@ -112,10 +112,10 @@ class _GroupMemberManagementPageState
                               padding: const EdgeInsets.all(12.0),
                               child: CircleAvatar(
                                 radius: 60,
-                                backgroundColor: Colors.black,
+                                backgroundColor: kNavbarColor,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.white,
-                                  radius: 55,
+                                  radius: 50,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -125,8 +125,9 @@ class _GroupMemberManagementPageState
                                               color: Colors.black)),
                                       Text("Üye Ekle",
                                           style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.black)),
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          )),
                                     ],
                                   ),
                                 ),
@@ -136,7 +137,9 @@ class _GroupMemberManagementPageState
                       var user = members[index - 1];
                       return InkWell(
                         onLongPress: () {
-                          showMemberOptions(user.uid);
+                          if (userProvider.currentUser.uid != user.uid) {
+                            showMemberOptions(user.uid);
+                          }
                         },
                         onTap: () => navigateUserProfile(user),
                         child: Padding(
@@ -149,8 +152,11 @@ class _GroupMemberManagementPageState
                                 imageBuilder: (context, imageProvider) {
                                   return CircleAvatar(
                                     radius: 60,
-                                    backgroundImage:
-                                        NetworkImage(user.profilePictureURL),
+                                    backgroundColor: kNavbarColor,
+                                    child: CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: NetworkImage(
+                                            user.profilePictureURL)),
                                   );
                                 },
                               ),
@@ -197,7 +203,16 @@ class _GroupMemberManagementPageState
   }
 
   Future<void> deleteMember(String userID) async {
-    await groupProvider.removeGroupMember(userID, groupProvider.group.groupId);
+    try {
+      await groupProvider.removeGroupMember(
+          userID, groupProvider.group.groupId);
+      NavigationService.instance.pop();
+      setState(() {});
+      CustomMethods.showSnackbar(
+          context, "Üye başarıyla topluluktan çıkarıldı.");
+    } catch (e) {
+      CustomMethods.showSnackbar(context, "Bir hata oluştu.");
+    }
   }
 
   Future setGroupManager(String userId, String groupId) async {
@@ -235,71 +250,34 @@ class _GroupMemberManagementPageState
   }
 
   removeMemberDialog(String userId) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Üye Çıkar"),
-            content:
-                Text("Üyeyi topluluğundan çıkarmak istediğine emin misin?"),
-            actions: [
-              FlatButton(
-                child: Text("Evet"),
-                onPressed: () {
-                  deleteMember(userId);
-                  setState(() {});
-                  NavigationService.instance.pop();
-                },
-              ),
-              FlatButton(
-                child: Text("Hayır"),
-                onPressed: () {
-                  NavigationService.instance.pop();
-                },
-              )
-            ],
-          );
-        });
+    CustomMethods.showCustomDialog(
+      context: context,
+      confirmButtonText: "Evet",
+      confirmActions: () {
+        deleteMember(userId);
+        setState(() {});
+        NavigationService.instance.pop();
+      },
+      title: "Üyeyi topluluğundan çıkarmak istediğine emin misin?",
+    );
   }
 
   setManagerDialog(String userId) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Yönetici Yap"),
-            content:
-                Text("Bu kullanıcıyı yönetici yapmak istediğine emin misin?"),
-            actions: [
-              FlatButton(
-                child: Text("Evet"),
-                onPressed: () async {
-                  try {
-                    await setGroupManager(userId, groupProvider.group.groupId);
-                    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
-                  } catch (e) {
-                    showSnackbar("Bir hata oluştu.");
-                    NavigationService.instance.pop();
-                  }
-                },
-              ),
-              FlatButton(
-                child: Text("Hayır"),
-                onPressed: () {
-                  NavigationService.instance.pop();
-                },
-              )
-            ],
-          );
-        });
-  }
-
-  void showSnackbar(String message, {int duration = 2}) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
+    CustomMethods.showCustomDialog(
+      context: context,
+      confirmButtonText: "Evet",
+      confirmActions: () async {
+        try {
+          await setGroupManager(userId, groupProvider.group.groupId);
+          NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+          CustomMethods.showSnackbar(
+              context, "Topluluk yöneticisi başarıyla değiştirildi.");
+        } catch (e) {
+          CustomMethods.showSnackbar(context, "Bir hata oluştu.");
+          NavigationService.instance.pop();
+        }
+      },
+      title: "Bu kullanıcıyı yönetici yapmak istediğine emin misin?",
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -52,13 +53,15 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
     } else {
       return Column(
         children: [
+          SizedBox(height: size.height * 0.01),
           ListTile(
             leading: CircleAvatar(
-              foregroundColor: Colors.greenAccent,
-              radius: 16,
+              backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+              radius: kUserProfileInfoCircleAvatarRadius,
               child: Icon(
                 Icons.school,
                 color: Colors.white,
+                size: kUserProfileInfoIconSize,
               ),
             ),
             title: Text("Öğrenim Durumu",
@@ -74,11 +77,12 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ),
           ListTile(
             leading: CircleAvatar(
-              foregroundColor: Colors.greenAccent,
-              radius: 16,
+              backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+              radius: kUserProfileInfoCircleAvatarRadius,
               child: Icon(
                 Icons.work,
                 color: Colors.white,
+                size: kUserProfileInfoIconSize,
               ),
             ),
             title: Text("Meslek",
@@ -93,11 +97,12 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ),
           ListTile(
             leading: CircleAvatar(
-              foregroundColor: Colors.greenAccent,
-              radius: 16,
+              backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+              radius: kUserProfileInfoCircleAvatarRadius,
               child: Icon(
                 Icons.info,
                 color: Colors.white,
+                size: kUserProfileInfoIconSize,
               ),
             ),
             title: Text("Detaylı Bilgi",
@@ -144,7 +149,8 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CustomMethods.launchURL(context, linkedin);
                 },
-                icon: Icon(FontAwesome5Brands.linkedin, size: 25),
+                icon: Icon(FontAwesome5Brands.linkedin,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         instagram != null && instagram.isNotEmpty
@@ -153,7 +159,8 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                   CustomMethods.launchURL(
                       context, "https://www.instagram.com/$instagram/");
                 },
-                icon: Icon(FontAwesome5Brands.instagram, size: 25),
+                icon: Icon(FontAwesome5Brands.instagram,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         dribbble != null && dribbble.isNotEmpty
@@ -161,7 +168,8 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CustomMethods.launchURL(context, dribbble);
                 },
-                icon: Icon(FontAwesome5Brands.dribbble, size: 25),
+                icon: Icon(FontAwesome5Brands.dribbble,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         soundcloud != null && soundcloud.isNotEmpty
@@ -169,7 +177,8 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CustomMethods.launchURL(context, soundcloud);
                 },
-                icon: Icon(FontAwesome5Brands.soundcloud, size: 25),
+                icon: Icon(FontAwesome5Brands.soundcloud,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         youtube != null && youtube.isNotEmpty
@@ -177,7 +186,8 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CustomMethods.launchURL(context, youtube);
                 },
-                icon: Icon(FontAwesome5Brands.youtube, size: 25),
+                icon: Icon(FontAwesome5Brands.youtube,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         pinterest != null && pinterest.isNotEmpty
@@ -185,7 +195,8 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
                 onPressed: () {
                   CustomMethods.launchURL(context, pinterest);
                 },
-                icon: Icon(FontAwesome5Brands.pinterest, size: 25),
+                icon: Icon(FontAwesome5Brands.pinterest,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
       ],

@@ -35,11 +35,20 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   @override
   void initState() {
     super.initState();
-
     tabController = new TabController(length: 7, vsync: this);
     groupProvider = getProvider<GroupProvider>();
-    group = groupProvider.group;
-    groupProvider.setGroup(group);
+    group = widget.group;
+    fetchGroup();
+  }
+
+  fetchGroup() async {
+    await Provider.of<GroupProvider>(context, listen: false)
+        .getGroupDetail(group.groupId)
+        .then((value) {
+      setState(() {
+        group = value;
+      });
+    });
   }
 
   bool isUserGroupFounder() {
@@ -59,6 +68,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       floatingActionButton: isUserGroupFounder()
           ? FloatingActionButton(
               onPressed: () {
@@ -86,10 +96,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
                     itemBuilder: (context) => [
                           PopupMenuItem(
                             value: 0,
-                            // child: ListTile(
-                            //   leading: Icon(FontAwesome5Solid.cogs),
-                            //   title: Text("Topluluk Yönetimi"),
-                            // ),
                             child: Row(
                               children: [
                                 Icon(FontAwesome5Solid.cogs,
@@ -119,6 +125,71 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         ),
         // child: isUserGroupFounder() ? adminView() : userView(),
         child: pageBody(),
+      ),
+    );
+  }
+
+  userView() {
+    return pageBody();
+  }
+
+  pageBody() {
+    return SafeArea(
+      child: Column(
+        children: [
+          Container(
+            height: dynamicHeight(0.3),
+            width: dynamicWidth(1),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: dynamicWidth(0.35),
+                  child: Text(
+                    group.groupName,
+                    // maxLines: 3,
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  width: dynamicWidth(0.02),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    CustomMethods.showImagePreviewDialog(context,
+                        url: group.groupProfilePicture);
+                  },
+                  child: Card(
+                    elevation: 8,
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(group.groupProfilePicture),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      height: dynamicHeight(0.25),
+                      width: dynamicWidth(0.5),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Divider(),
+          buildTabs(),
+          Expanded(
+            child: buildTabViews(),
+          )
+        ],
       ),
     );
   }
@@ -177,69 +248,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           CircularMenuItem(icon: Icons.search, onTap: () {}),
           CircularMenuItem(icon: Icons.pages, onTap: () {}),
         ]);
-  }
-
-  userView() {
-    return pageBody();
-  }
-
-  pageBody() {
-    return Column(
-      children: [
-        Container(
-          height: dynamicHeight(0.3),
-          width: dynamicWidth(1),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: dynamicWidth(0.35),
-                child: Text(
-                  group.groupName,
-                  // maxLines: 3,
-                  overflow: TextOverflow.clip,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                width: dynamicWidth(0.02),
-              ),
-              GestureDetector(
-                onTap: () {
-                  CustomMethods.showImagePreviewDialog(context,
-                      url: group.groupProfilePicture);
-                },
-                child: Card(
-                  elevation: 8,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(group.groupProfilePicture),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    height: dynamicHeight(0.25),
-                    width: dynamicWidth(0.5),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Divider(),
-        buildTabs(),
-        Expanded(
-          child: buildTabViews(),
-        )
-      ],
-    );
   }
 
   buildTabs() {
@@ -311,7 +319,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   buildInterestsTabView() {
-    return GroupInterestsTabView(group: group);
+    return GroupInterestsTabView();
   }
 
   void navigateCreationPage(String groupId) {

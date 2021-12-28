@@ -34,9 +34,6 @@ class _HomePageState extends BaseState<HomePage> {
     super.initState();
     messaging = FirebaseMessaging.instance;
 
-    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    //   print('Message clicked!');
-    // });
     checkNotificationPermissions();
     checkUserSearchKeywords();
   }

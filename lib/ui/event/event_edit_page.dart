@@ -7,6 +7,7 @@ import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -14,6 +15,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventEditPage extends StatefulWidget {
@@ -42,6 +44,7 @@ class _EventEditPageState extends State<EventEditPage> {
   DateTime eventStartDate;
   DateTime eventEndDate;
   PickResult selectedPlace;
+  List<String> eventCategories = [];
 
   @override
   void initState() {
@@ -50,6 +53,7 @@ class _EventEditPageState extends State<EventEditPage> {
     eventProvider = Provider.of<EventProvider>(context, listen: false);
     eventStartDate = event.startDate;
     eventEndDate = event.endDate;
+    eventCategories = event.eventCategories;
   }
 
   @override
@@ -381,93 +385,69 @@ class _EventEditPageState extends State<EventEditPage> {
                 ),
           //dvem
           SizedBox(height: 10),
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     Text("Fotoğraflar",
-          //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          //     SizedBox(height: 4),
-          //     Container(
-          //       width: size.width * 0.9,
-          //       height: 100,
-          //       child: ListView.builder(
-          //         scrollDirection: Axis.horizontal,
-          //         itemCount: _eventImages.length + 1,
-          //         padding: EdgeInsets.only(right: 8),
-          //         itemBuilder: (context, index) {
-          //           if (_eventImages.length == 0) {
-          //             return GestureDetector(
-          //               onTap: _selectFiles,
-          //               child: Container(
-          //                 height: size.height * 0.1,
-          //                 width: size.width * 0.25,
-          //                 child: Card(
-          //                     shape: RoundedRectangleBorder(
-          //                       borderRadius: BorderRadius.circular(10),
-          //                     ),
-          //                     child:
-          //                         Icon(Icons.camera_alt, color: Colors.grey)),
-          //               ),
-          //             );
-          //           } else {
-          //             if (index == 0) {
-          //               return GestureDetector(
-          //                 onTap: _selectFiles,
-          //                 child: Container(
-          //                     height: size.height * 0.1,
-          //                     width: size.width * 0.25,
-          //                     child: Card(
-          //                         shape: RoundedRectangleBorder(
-          //                           borderRadius: BorderRadius.circular(10),
-          //                         ),
-          //                         child: Icon(Icons.camera_alt,
-          //                             color: Colors.grey))),
-          //               );
-          //             }
-          //             var image = _eventImages[index - 1];
-          //             return Stack(
-          //               children: [
-          //                 Container(
-          //                   height: 100,
-          //                   width: size.width * 0.25,
-          //                   child: Card(
-          //                     shape: RoundedRectangleBorder(
-          //                       borderRadius: BorderRadius.circular(10),
-          //                     ),
-          //                     clipBehavior: Clip.antiAlias,
-          //                     child: Image.file(
-          //                       image,
-          //                       fit: BoxFit.cover,
-          //                     ),
-          //                   ),
-          //                 ),
-          //                 Positioned(
-          //                   right: 1,
-          //                   child: CircleAvatar(
-          //                     backgroundColor: Colors.white,
-          //                     radius: 13,
-          //                     child: IconButton(
-          //                         padding: EdgeInsets.zero,
-          //                         onPressed: () {
-          //                           removePickedFile(image);
-          //                         },
-          //                         icon: Icon(
-          //                           Icons.clear,
-          //                           color: Colors.grey,
-          //                           size: 20,
-          //                         )),
-          //                   ),
-          //                 )
-          //               ],
-          //             );
-          //           }
-          //         },
-          //       ),
-          //     ),
-          //   ],
-          // ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Etkinlik Kategorileri",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              SizedBox(height: 4),
+              TextFieldContainer(
+                width: size.width * 0.9,
+                child: FormBuilderTextField(
+                  name: "eventCategories",
+                  onTap: openCategoryDialog,
+                  key: Key(eventCategories.length > 0
+                      ? "${eventCategories.length} kategori seçildi"
+                      : "Etkinlik Kategorisi"),
+                  initialValue: eventCategories.length > 0
+                      ? "${eventCategories.length} kategori seçildi"
+                      : "Etkinlik Kategorisi",
+                  style: TextStyle(
+                      color: eventCategories.length > 0
+                          ? Colors.black
+                          : Colors.grey[600]),
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  // ignore: missing_return
+                  validator: (value) {
+                    if (eventCategories.length == 0) {
+                      return "Kategori seçmelisin.";
+                    } else {}
+                  },
+                ),
+              ),
+            ],
+          ),
         ],
       ),
+    );
+  }
+
+  openCategoryDialog() async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            if (selectedValues.length > 0) {
+              setState(() {
+                eventCategories = selectedValues;
+              });
+            }
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: eventCategories,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
     );
   }
 
@@ -550,6 +530,7 @@ class _EventEditPageState extends State<EventEditPage> {
         'address': address,
         'eventURL': url,
         'searchKeywords': searchKeywords,
+        'eventCategories': eventCategories,
       }).then((value) async {
         NavigationService.instance.pop();
         await CustomMethods()

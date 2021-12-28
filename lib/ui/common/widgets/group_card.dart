@@ -16,8 +16,7 @@ class GroupCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
-          Provider.of<GroupProvider>(context, listen: false).setGroup(group);
+        onTap: () async {
           NavigationService.instance
               .navigate(k_ROUTE_GROUP_DETAIL, args: group);
         },
@@ -49,7 +48,7 @@ class GroupCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: size.width * 0.08,
+                  width: size.width * 0.05,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +61,7 @@ class GroupCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.w500,
                           fontFamily: "Roboto",
                         ),
@@ -72,7 +71,7 @@ class GroupCard extends StatelessWidget {
                       width: size.width * 0.4,
                       child: Text(
                         group.groupSubtitle,
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 14),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
