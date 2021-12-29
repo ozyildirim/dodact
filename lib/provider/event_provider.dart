@@ -148,7 +148,11 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future getFilteredEventList(
-      {bool reset, List<String> categories, String city, String type}) async {
+      {bool reset,
+      List<String> categories,
+      bool showPastEvents,
+      String city,
+      String type}) async {
     List<String> selectedCategories = categories.isEmpty ? null : categories;
 
     if (reset) {
@@ -166,6 +170,7 @@ class EventProvider extends ChangeNotifier {
         city: city,
         type: type,
         limit: documentLimit,
+        showPastEvents: showPastEvents,
         startAfter: filteredEventsSnapshot.isNotEmpty
             ? filteredEventsSnapshot.last
             : null,

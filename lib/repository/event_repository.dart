@@ -86,6 +86,7 @@ class EventRepository {
       {List<String> categories,
       String city,
       String type,
+      bool showPastEvents,
       int limit,
       DocumentSnapshot startAfter}) async {
     if (appMode == AppMode.DEBUG) {
@@ -95,6 +96,7 @@ class EventRepository {
         categories: categories,
         city: city,
         type: type,
+        showPastEvents: showPastEvents,
         limit: limit,
         startAfter: startAfter,
       );
