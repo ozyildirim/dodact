@@ -459,8 +459,12 @@ class _SearchPageState extends State<SearchPage>
               itemBuilder: (context, eventList, int index) {
                 EventModel event = EventModel.fromJson(eventList[index].data());
 
-                if (event.eventImages[0] != null) {
-                  return EventCard(event: event);
+                if (event != null) {
+                  if (event.eventImages[0] != null) {
+                    return EventCard(event: event);
+                  } else {
+                    return Container();
+                  }
                 } else {
                   return Container();
                 }
@@ -626,10 +630,15 @@ class EventCard extends StatelessWidget {
                   Text(event.title,
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                  Text(
-                    event.city,
-                    style: TextStyle(fontSize: 14, color: Colors.black),
-                  ),
+                  event.isOnline
+                      ? Text(
+                          "Online",
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        )
+                      : Text(
+                          event.city,
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        ),
                   Text(
                     event.eventType,
                     style: TextStyle(fontSize: 14, color: Colors.black),

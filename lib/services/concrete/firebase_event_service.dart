@@ -157,8 +157,11 @@ class FirebaseEventService {
   Future<List<EventModel>> getSpecialEvents() async {
     List<EventModel> specialEvents = [];
 
-    QuerySnapshot querySnapshot =
-        await eventsRef.where('visible', isEqualTo: true).limit(3).get();
+    QuerySnapshot querySnapshot = await eventsRef
+        .where('visible', isEqualTo: true)
+        // .orderBy('creationDate', descending: true)
+        .limit(3)
+        .get();
 
     for (DocumentSnapshot event in querySnapshot.docs) {
       EventModel _convertedEvent = EventModel.fromJson(event.data());

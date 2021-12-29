@@ -23,7 +23,7 @@ class EventProvider extends ChangeNotifier {
   var eventsSnapshot = <DocumentSnapshot>[];
   var filteredEventsSnapshot = <DocumentSnapshot>[];
   String errorMessage = '';
-  int documentLimit = 3;
+  int documentLimit = 10;
   bool _hasNext = true;
   bool _hasNextFiltered = true;
   bool _isFetchingEvents = false;

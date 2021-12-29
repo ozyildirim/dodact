@@ -23,7 +23,7 @@ class PostProvider extends ChangeNotifier {
 
   final postsSnapshot = <DocumentSnapshot>[];
   String errorMessage = '';
-  int documentLimit = 10;
+  int documentLimit = 30;
   bool _hasNext = true;
   bool _isFetchingPosts = false;
 
