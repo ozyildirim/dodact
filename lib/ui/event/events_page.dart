@@ -30,7 +30,6 @@ class _EventsPageState extends BaseState<EventsPage> {
   List<String> selectedCategory = [];
   String selectedCity;
   String selectedType;
-  bool showPastEvents = false;
 
   @override
   void initState() {
@@ -192,14 +191,12 @@ class _EventsPageState extends BaseState<EventsPage> {
     }
   }
 
-  void updateEvents(List<String> categories, String city, String type,
-      bool showPastEvents) async {
+  void updateEvents(List<String> categories, String city, String type) async {
     try {
       await Provider.of<EventProvider>(context, listen: false)
           .getFilteredEventList(
         reset: true,
         categories: categories,
-        showPastEvents: showPastEvents,
         city: city,
         type: type,
       );
@@ -212,18 +209,15 @@ class _EventsPageState extends BaseState<EventsPage> {
     if (_formKey.currentState.saveAndValidate()) {
       if (_formKey.currentState.value["city"] != null ||
           _formKey.currentState.value["type"] != null ||
-          selectedCategory.isNotEmpty ||
-          _formKey.currentState.value["showPastEvents"] != false) {
+          selectedCategory.isNotEmpty) {
         setState(() {
           isFiltered = true;
           selectedCity = _formKey.currentState.value["city"];
 
           selectedType = _formKey.currentState.value["type"];
-          showPastEvents = _formKey.currentState.value["showPastEvents"];
         });
         print("$selectedCity  $selectedCategory $selectedType");
-        updateEvents(
-            selectedCategory, selectedCity, selectedType, showPastEvents);
+        updateEvents(selectedCategory, selectedCity, selectedType);
         NavigationService.instance.pop();
       } else {
         setState(() {
@@ -231,7 +225,6 @@ class _EventsPageState extends BaseState<EventsPage> {
           eventProvider.getEventList();
           _formKey.currentState.reset();
           selectedCategory = [];
-          showPastEvents = false;
           selectedCity = null;
           selectedType = null;
         });
@@ -413,53 +406,6 @@ class _EventsPageState extends BaseState<EventsPage> {
                                     ),
                                   ),
                                   items: buildEventTypeDropdownItems(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  new Divider(
-                    height: 10.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: Text(
-                            "Geçmiş Etkinlikler",
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          height: size.height * 0.05,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Theme(
-                              data: Theme.of(context).copyWith(
-                                unselectedWidgetColor: Colors.black,
-                              ),
-                              child: Center(
-                                child: FormBuilderCheckbox(
-                                  title: Text(""),
-                                  initialValue: showPastEvents,
-                                  name: "showPastEvents",
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
                                 ),
                               ),
                             ),

@@ -101,7 +101,6 @@ class FirebaseEventService {
     List<String> categories,
     String city,
     String type,
-    bool showPastEvents,
     int limit,
     DocumentSnapshot startAfter,
   }) async {
@@ -145,24 +144,10 @@ class FirebaseEventService {
         query = eventsRef.where('visible', isEqualTo: true);
       }
 
-      if (!showPastEvents) {
-        Timestamp date = Timestamp.fromDate(DateTime.now());
-
-        if (startAfter == null) {
-          return query.where('endDate', isGreaterThan: date).limit(limit).get();
-        } else {
-          return query
-              .where('endDate', isGreaterThan: date)
-              .limit(limit)
-              .startAfterDocument(startAfter)
-              .get();
-        }
+      if (startAfter == null) {
+        return query.limit(limit).get();
       } else {
-        if (startAfter == null) {
-          return query.limit(limit).get();
-        } else {
-          return query.limit(limit).startAfterDocument(startAfter).get();
-        }
+        return query.limit(limit).startAfterDocument(startAfter).get();
       }
     } catch (e) {
       print(e);
