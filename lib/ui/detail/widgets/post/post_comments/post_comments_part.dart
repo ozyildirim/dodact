@@ -41,59 +41,6 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
 
   @override
   Widget build(BuildContext context) {
-    buildBody() {
-      return PaginateFirestore(
-        listeners: [refreshChangeListener],
-        query: postsRef
-            .doc(widget.postId)
-            .collection("comments")
-            .orderBy('commentDate', descending: false),
-        itemBuilderType: PaginateBuilderType.listView,
-        itemsPerPage: 10,
-        isLive: true,
-        onEmpty: Center(
-            child: Text("Bu gönderi için henüz yorum yapılmamış",
-                style: TextStyle(fontSize: kPageCenteredTextSize))),
-        itemBuilder:
-            (BuildContext context, List<DocumentSnapshot> document, int index) {
-          CommentModel comment = CommentModel.fromJson(document[index].data());
-          return Slidable(
-            child: PostCommentTile(
-              postId: widget.postId,
-              comment: comment,
-              postOwnerId: widget.postOwnerId,
-            ),
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: 0.25,
-            actions: comment.authorId != authProvider.currentUser.uid ||
-                    widget.postOwnerId == authProvider.currentUser.uid
-                ? [
-                    IconSlideAction(
-                      caption: 'Bildir',
-                      color: Colors.blue,
-                      icon: FontAwesome5Solid.flag,
-                      onTap: () => _showReportCommentDialog(
-                          comment.commentId, widget.postId),
-                    ),
-                  ]
-                : null,
-            secondaryActions: authProvider.currentUser.uid ==
-                        comment.authorId ||
-                    authProvider.currentUser.uid == widget.postOwnerId
-                ? [
-                    IconSlideAction(
-                      caption: 'Sil',
-                      color: Colors.red,
-                      icon: FontAwesome5Solid.trash,
-                      onTap: () => _showDeleteCommentDialog(comment.commentId),
-                    )
-                  ]
-                : null,
-          );
-        },
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -128,6 +75,61 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  buildBody() {
+    return PaginateFirestore(
+      listeners: [refreshChangeListener],
+      query: postsRef
+          .doc(widget.postId)
+          .collection("comments")
+          .orderBy('commentDate', descending: false),
+      itemBuilderType: PaginateBuilderType.listView,
+      itemsPerPage: 10,
+      isLive: false,
+      onEmpty: Center(
+        child: Text(
+          "Bu gönderi için henüz yorum yapılmamış",
+          style: TextStyle(fontSize: kPageCenteredTextSize),
+        ),
+      ),
+      itemBuilder:
+          (BuildContext context, List<DocumentSnapshot> document, int index) {
+        CommentModel comment = CommentModel.fromJson(document[index].data());
+        return Slidable(
+          child: PostCommentTile(
+            postId: widget.postId,
+            comment: comment,
+            postOwnerId: widget.postOwnerId,
+          ),
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: 0.25,
+          actions: comment.authorId != authProvider.currentUser.uid ||
+                  widget.postOwnerId == authProvider.currentUser.uid
+              ? [
+                  IconSlideAction(
+                    caption: 'Bildir',
+                    color: Colors.blue,
+                    icon: FontAwesome5Solid.flag,
+                    onTap: () => _showReportCommentDialog(
+                        comment.commentId, widget.postId),
+                  ),
+                ]
+              : null,
+          secondaryActions: authProvider.currentUser.uid == comment.authorId ||
+                  authProvider.currentUser.uid == widget.postOwnerId
+              ? [
+                  IconSlideAction(
+                    caption: 'Sil',
+                    color: Colors.red,
+                    icon: FontAwesome5Solid.trash,
+                    onTap: () => _showDeleteCommentDialog(comment.commentId),
+                  )
+                ]
+              : null,
+        );
+      },
     );
   }
 

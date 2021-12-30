@@ -138,11 +138,18 @@ class _SearchPageState extends State<SearchPage>
                           },
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          showFilterBottomSheet(name);
-                        },
-                        icon: Icon(Icons.filter_list),
+                      CircleAvatar(
+                        backgroundColor: kNavbarColor,
+                        child: IconButton(
+                          onPressed: () {
+                            showFilterBottomSheet(name);
+                          },
+                          icon: Icon(
+                            Icons.filter_list,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -558,7 +565,7 @@ class UserCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: GFAvatar(
                 radius: 40,
-                backgroundColor: kNavbarColor,
+                backgroundColor: Colors.black,
                 child: GFAvatar(
                   radius: 37,
                   backgroundImage: NetworkImage(user.profilePictureURL),

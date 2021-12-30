@@ -15,7 +15,6 @@ import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
@@ -71,6 +70,7 @@ class _PostDetailState extends BaseState<PostDetail> {
 
   @override
   Widget build(BuildContext context) {
+    print("yenilendi");
     var mediaQuery = MediaQuery.of(context);
 
     var appBar = AppBar(

@@ -8,6 +8,7 @@ import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 enum InvitationType { GroupMembership }
@@ -110,10 +111,10 @@ class _GroupMemberManagementPageState
                           },
                           child: Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: kNavbarColor,
-                                child: CircleAvatar(
+                              child: GFAvatar(
+                                radius: 52,
+                                backgroundColor: Colors.black,
+                                child: GFAvatar(
                                   backgroundColor: Colors.white,
                                   radius: 50,
                                   child: Column(
@@ -151,8 +152,8 @@ class _GroupMemberManagementPageState
                                 imageUrl: user.profilePictureURL,
                                 imageBuilder: (context, imageProvider) {
                                   return CircleAvatar(
-                                    radius: 60,
-                                    backgroundColor: kNavbarColor,
+                                    radius: 52,
+                                    backgroundColor: Colors.black,
                                     child: CircleAvatar(
                                         radius: 50,
                                         backgroundImage: NetworkImage(

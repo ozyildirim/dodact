@@ -266,7 +266,7 @@ class _GroupProfileManagementPageState
           child: Center(
             child: GFAvatar(
               radius: 80,
-              backgroundColor: kNavbarColor,
+              backgroundColor: Colors.black,
               child: GFAvatar(
                   radius: 73,
                   backgroundImage: NetworkImage(group.groupProfilePicture)),
