@@ -35,13 +35,28 @@ class OnBoardingPage extends StatelessWidget {
             "Çevrende olup biten sanatsal etkinliklerden haberdar ol, etkinliklerini paylaş!",
       ),
       PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_3.png'),
+        image: Padding(
+          padding: const EdgeInsets.only(top: 48),
+          child: Image.asset('assets/images/onboarding/onboarding_3.png'),
+        ),
         titleWidget: Text(
           "Topluluğunu Oluştur",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         body:
             "Yeni ekip arkadaşları bul\nMevcut ekiplere katılarak gücünü birleştir",
+      ),
+      PageViewModel(
+        image: Padding(
+          padding: const EdgeInsets.only(top: 48),
+          child: Image.asset('assets/images/onboarding/onboarding_4.png'),
+        ),
+        titleWidget: Text(
+          "Diğer Sanatseverleri Destekle",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        body:
+            "Sanatseverlerin paylaşımlarını beğendiğini göster, desteğini yansıt!",
       ),
     ];
 

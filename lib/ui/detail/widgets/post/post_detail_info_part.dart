@@ -163,12 +163,12 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                 },
                 child: liked
                     ? Icon(
-                        Icons.flutter_dash_outlined,
+                        Icons.favorite,
                         color: Colors.red,
                         size: 28,
                       )
                     : Icon(
-                        Icons.flutter_dash_outlined,
+                        Icons.favorite_border,
                         size: 28,
                         color: Colors.black,
                       ),
