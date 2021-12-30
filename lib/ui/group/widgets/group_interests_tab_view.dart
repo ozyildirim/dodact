@@ -21,7 +21,7 @@ class GroupInterestsTabView extends StatelessWidget {
         return Container(
           child: Center(
             child: Text(
-              "Topluluk İlgi alanı belirtilmemiş",
+              "Topluluk henüz İlgi alanı belirtmedi",
               style: TextStyle(
                 fontSize: kPageCenteredTextSize,
               ),
