@@ -146,8 +146,8 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
               // ),
 
               child: GFAvatar(
-                backgroundColor: kNavbarColor,
-                radius: 50,
+                backgroundColor: Colors.black,
+                radius: 40,
                 child: GFAvatar(
                   radius: 25,
                   backgroundImage:

@@ -35,7 +35,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   @override
   void initState() {
     super.initState();
-    tabController = new TabController(length: 7, vsync: this);
+    tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
     group = widget.group;
     fetchGroup();
@@ -269,7 +269,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           Tab(text: "Gönderiler"),
           Tab(text: "Etkinlikler"),
           Tab(text: "Medya"),
-          Tab(text: "Duyurular"),
+          // Tab(text: "Duyurular"),
           Tab(text: "İlgi Alanları"),
         ],
       ),
@@ -287,7 +287,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           buildPostsTabView(),
           buildEventsTabView(),
           buildMediaTabView(),
-          buildAnnouncementsTabView(),
+          // buildAnnouncementsTabView(),
           buildInterestsTabView()
         ],
       ),
@@ -310,9 +310,13 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     return GroupEventsTab(groupId: group.groupId);
   }
 
-  buildAnnouncementsTabView() {
-    return Container();
-  }
+  // buildAnnouncementsTabView() {
+  //   return Container(
+  //     child:Center(
+  //       child:Text("Bu topluluk henüz bir duyuru paylaşmadı")
+  //     );
+  //   );
+  // }
 
   buildMediaTabView() {
     return GroupMediaTabView();

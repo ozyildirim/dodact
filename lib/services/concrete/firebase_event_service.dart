@@ -159,7 +159,7 @@ class FirebaseEventService {
 
     QuerySnapshot querySnapshot = await eventsRef
         .where('visible', isEqualTo: true)
-        // .orderBy('creationDate', descending: true)
+        .orderBy('creationDate', descending: true)
         .limit(3)
         .get();
 

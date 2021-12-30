@@ -8,7 +8,6 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -206,9 +205,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
@@ -248,6 +246,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                       border: InputBorder.none,
                       errorStyle:
                           Theme.of(context).inputDecorationTheme.errorStyle),
+                  // ignore: missing_return
                   validator: (value) {
                     if (selectedCategories.length == 0) {
                       return "Kategori seçmelisin.";
@@ -256,40 +255,6 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            //   child: TextFieldContainer(
-            //     width: size.width * 0.7,
-            //     child: FormBuilderDropdown(
-            //       focusNode: interestFocus,
-            //       name: "interest",
-            //       autofocus: false,
-            //       // autovalidateMode: AutovalidateMode.onUserInteraction,
-            //       items: interestCategoryList
-            //           .map(
-            //             (e) => DropdownMenuItem(
-            //               child: Text(e.name),
-            //               value: e.name,
-            //             ),
-            //           )
-            //           .toList(),
-            //       decoration: InputDecoration(
-            //           hintText: "Sanat Dalı",
-            //           hintStyle: TextStyle(color: Colors.grey),
-            //           border: InputBorder.none,
-            //           errorStyle:
-            //               Theme.of(context).inputDecorationTheme.errorStyle),
-            //       validator: FormBuilderValidators.compose(
-            //         [
-            //           FormBuilderValidators.required(
-            //             context,
-            //             errorText: "Bu alan boş bırakılamaz.",
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             SizedBox(height: 15),
             Row(
               children: [
@@ -338,14 +303,14 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
               children: [
                 Flexible(
                   child: Text(
-                    "Bugüne kadar yaptığınız çalışmalarınızı merak ediyoruz. Bizimle bir link paylaşır mısın?",
+                    "Bugüne kadar yaptığınız çalışmalarınızı merak ediyoruz. Bizimle bir link paylaşır mısınız?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Topluluğunuzla ve çalışmalarınızla ilgili bir link paylaşabilir misin? Bu kullandığınız diğer platformlardan (youtube,instagram) linkler de olabilir.");
+                          "Topluluğunuzla ve çalışmalarınızla ilgili bir link paylaşabilir misiniz? Bu kullandığınız diğer platformlardan (youtube,instagram) linkler de olabilir.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -376,6 +341,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
+            SizedBox(height: 15),
             Theme(
               data: Theme.of(context).copyWith(
                 unselectedWidgetColor: Colors.black,
@@ -400,14 +366,14 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
@@ -446,14 +412,14 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
@@ -468,6 +434,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                     errorText: "Sözleşmeyi kabul etmelisin."),
               ),
             ),
+            SizedBox(height: 15),
             buildButton(),
             SizedBox(height: 50),
           ],

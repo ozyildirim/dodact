@@ -608,8 +608,13 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                   }
                 },
                 leading: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(fetchedUser.profilePictureURL),
+                  radius: 35,
+                  backgroundColor: Colors.black,
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage:
+                        NetworkImage(fetchedUser.profilePictureURL),
+                  ),
                 ),
                 title: Text(
                   fetchedUser.nameSurname,

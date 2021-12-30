@@ -144,30 +144,38 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
           bool liked = provider.postDodders.any(
               (element) => element.dodderId == userProvider.currentUser.uid);
 
-          return Bounce(
-            duration: Duration(milliseconds: 220),
-            onPressed: () async {
-              if (liked) {
-                provider.undodPost(post.postId, userProvider.currentUser.uid);
-              } else {
-                try {
-                  provider.dodPost(post.postId, userProvider.currentUser.uid);
-                } catch (e) {
-                  CustomMethods.showSnackbar(context, "Bir hata oluştu.");
-                }
-              }
-            },
-            child: liked
-                ? Icon(
-                    Icons.flutter_dash_outlined,
-                    color: Colors.red,
-                    size: 28,
-                  )
-                : Icon(
-                    Icons.flutter_dash_outlined,
-                    size: 28,
-                    color: Colors.black,
-                  ),
+          return Column(
+            children: [
+              Bounce(
+                duration: Duration(milliseconds: 220),
+                onPressed: () async {
+                  if (liked) {
+                    provider.undodPost(
+                        post.postId, userProvider.currentUser.uid);
+                  } else {
+                    try {
+                      provider.dodPost(
+                          post.postId, userProvider.currentUser.uid);
+                    } catch (e) {
+                      CustomMethods.showSnackbar(context, "Bir hata oluştu.");
+                    }
+                  }
+                },
+                child: liked
+                    ? Icon(
+                        Icons.flutter_dash_outlined,
+                        color: Colors.red,
+                        size: 28,
+                      )
+                    : Icon(
+                        Icons.flutter_dash_outlined,
+                        size: 28,
+                        color: Colors.black,
+                      ),
+              ),
+              SizedBox(height: 4),
+              Text("Dod")
+            ],
           );
         } else {
           return Center(child: spinkit);
