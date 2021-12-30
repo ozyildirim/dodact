@@ -70,7 +70,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                  Colors.black.withOpacity(1), BlendMode.dstATop),
               image: AssetImage(kBackgroundImage),
               fit: BoxFit.cover,
             ),
@@ -126,7 +126,8 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
   }
 
   _buildCard(IconData icon, String title, Function onTap, {String groupId}) {
-    var cardBackgroundColor = Color(0xFFF8F9FA);
+    // var cardBackgroundColor = Color(0xFFF8F9FA);
+    var cardBackgroundColor = Colors.grey[100];
     // var cardBackgroundColor = Colors.grey[200];
     var size = MediaQuery.of(context).size;
     return Padding(
@@ -139,8 +140,8 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           color: cardBackgroundColor,
           child: Container(
-            width: size.width * 0.6,
-            height: size.height * 0.25,
+            width: size.width * 0.45,
+            height: size.height * 0.15,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -151,7 +152,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                   child: Container(
                     height: size.height * 0.06,
                     width: size.width * 0.12,
-                    child: Icon(icon, size: 30),
+                    child: Icon(icon, size: 24),
                   ),
                 ),
                 Padding(
@@ -206,57 +207,57 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: size.width * 0.4,
-                            child: Text(
-                              "Kategori",
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Container(
-                                color: Colors.grey[200],
-                                width: size.width * 0.4,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 4, bottom: 4, left: 16, right: 4),
-                                  child: FormBuilderDropdown(
-                                    name: "postCategory",
-                                    focusNode: postCategoryDropdownFocus,
-                                    decoration: InputDecoration(
-                                      hintText: "Kategori Seçin",
-                                      contentPadding: EdgeInsets.zero,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    items: buildArtCategoryDropdownItems(),
-                                    validator: FormBuilderValidators.compose(
-                                      [
-                                        FormBuilderValidators.required(context,
-                                            errorText:
-                                                "Bu alan boş bırakılamaz.")
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //     children: [
+                    //       Container(
+                    //         width: size.width * 0.4,
+                    //         child: Text(
+                    //           "Kategori",
+                    //           style: TextStyle(
+                    //             fontSize: 20.0,
+                    //             fontWeight: FontWeight.w700,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       Center(
+                    //         child: ClipRRect(
+                    //           borderRadius: BorderRadius.circular(24),
+                    //           child: Container(
+                    //             color: Colors.grey[200],
+                    //             width: size.width * 0.4,
+                    //             child: Padding(
+                    //               padding: const EdgeInsets.only(
+                    //                   top: 4, bottom: 4, left: 16, right: 4),
+                    //               child: FormBuilderDropdown(
+                    //                 name: "postCategory",
+                    //                 focusNode: postCategoryDropdownFocus,
+                    //                 decoration: InputDecoration(
+                    //                   hintText: "Kategori Seçin",
+                    //                   contentPadding: EdgeInsets.zero,
+                    //                   border: OutlineInputBorder(
+                    //                     borderSide: BorderSide.none,
+                    //                     borderRadius: BorderRadius.circular(15),
+                    //                   ),
+                    //                 ),
+                    //                 items: buildArtCategoryDropdownItems(),
+                    //                 validator: FormBuilderValidators.compose(
+                    //                   [
+                    //                     FormBuilderValidators.required(context,
+                    //                         errorText:
+                    //                             "Bu alan boş bırakılamaz.")
+                    //                   ],
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -277,49 +278,43 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                               borderRadius: BorderRadius.circular(24),
                               child: Container(
                                 width: size.width * 0.4,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 4, bottom: 4, left: 16, right: 4),
-                                  child: ChipTheme(
-                                    data: ChipTheme.of(context).copyWith(
-                                      // labelStyle: TextStyle(
-                                      //   color: Colors.white,
-                                      //   fontSize: 16,
-                                      // ),
-                                      backgroundColor: Colors.grey[200],
+                                child: ChipTheme(
+                                  data: ChipTheme.of(context).copyWith(
+                                    // labelStyle: TextStyle(
+                                    //   color: Colors.white,
+                                    //   fontSize: 16,
+                                    // ),
+                                    backgroundColor: Colors.grey[200],
 
-                                      // disabledColor: Colors.grey[200],
-                                      secondarySelectedColor: kNavbarColor,
-                                      secondaryLabelStyle: TextStyle(
-                                        color: Colors.white,
+                                    // disabledColor: Colors.grey[200],
+                                    secondarySelectedColor: kNavbarColor,
+                                    secondaryLabelStyle: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  child: FormBuilderChoiceChip(
+                                    name: "postType",
+                                    // focusNode: postTypeDropdownFocus,
+                                    direction: Axis.horizontal,
+                                    padding: EdgeInsets.all(6),
+                                    spacing: 3,
+                                    decoration: InputDecoration(
+                                      hintText: "Tür Seçin",
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
                                     ),
-                                    child: FormBuilderChoiceChip(
-                                      name: "postType",
-                                      // focusNode: postTypeDropdownFocus,
-                                      direction: Axis.horizontal,
-                                      padding: EdgeInsets.all(12),
-                                      spacing: 4,
-                                      decoration: InputDecoration(
-                                        hintText: "Tür Seçin",
-                                        contentPadding: EdgeInsets.zero,
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      options: buildPostTypeChips(),
+                                    options: buildPostTypeChips(),
 
-                                      // selectedColor: Colors.orangeAccent,
-                                      validator: FormBuilderValidators.compose(
-                                        [
-                                          FormBuilderValidators.required(
-                                              context,
-                                              errorText:
-                                                  "Bu alan boş bırakılamaz.")
-                                        ],
-                                      ),
+                                    // selectedColor: Colors.orangeAccent,
+                                    validator: FormBuilderValidators.compose(
+                                      [
+                                        FormBuilderValidators.required(context,
+                                            errorText:
+                                                "Bu alan boş bırakılamaz.")
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -432,57 +427,57 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: size.width * 0.4,
-                            child: Text(
-                              "Kategori",
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Container(
-                                color: Colors.grey[200],
-                                width: size.width * 0.4,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 4, bottom: 4, left: 16, right: 4),
-                                  child: FormBuilderDropdown(
-                                    name: "eventCategory",
-                                    focusNode: eventCategoryDropdownFocus,
-                                    decoration: InputDecoration(
-                                      hintText: "Kategori Seçin",
-                                      contentPadding: EdgeInsets.zero,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    items: buildArtCategoryDropdownItems(),
-                                    validator: FormBuilderValidators.compose(
-                                      [
-                                        FormBuilderValidators.required(context,
-                                            errorText:
-                                                "Bu alan boş bırakılamaz.")
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //     children: [
+                    //       Container(
+                    //         width: size.width * 0.4,
+                    //         child: Text(
+                    //           "Kategori",
+                    //           style: TextStyle(
+                    //             fontSize: 20.0,
+                    //             fontWeight: FontWeight.w700,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       Center(
+                    //         child: ClipRRect(
+                    //           borderRadius: BorderRadius.circular(24),
+                    //           child: Container(
+                    //             color: Colors.grey[200],
+                    //             width: size.width * 0.4,
+                    //             child: Padding(
+                    //               padding: const EdgeInsets.only(
+                    //                   top: 4, bottom: 4, left: 16, right: 4),
+                    //               child: FormBuilderDropdown(
+                    //                 name: "eventCategory",
+                    //                 focusNode: eventCategoryDropdownFocus,
+                    //                 decoration: InputDecoration(
+                    //                   hintText: "Kategori Seçin",
+                    //                   contentPadding: EdgeInsets.zero,
+                    //                   border: OutlineInputBorder(
+                    //                     borderSide: BorderSide.none,
+                    //                     borderRadius: BorderRadius.circular(15),
+                    //                   ),
+                    //                 ),
+                    //                 items: buildArtCategoryDropdownItems(),
+                    //                 validator: FormBuilderValidators.compose(
+                    //                   [
+                    //                     FormBuilderValidators.required(context,
+                    //                         errorText:
+                    //                             "Bu alan boş bırakılamaz.")
+                    //                   ],
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -566,15 +561,15 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                               ),
                             ),
                           ),
-                          Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Container(
-                                color: Colors.grey[200],
-                                width: size.width * 0.4,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 4, bottom: 4, left: 16, right: 4),
+                          Theme(
+                            data:
+                                ThemeData(toggleableActiveColor: kNavbarColor),
+                            child: Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(24),
+                                child: Container(
+                                  // color: Colors.grey[200],
+                                  width: size.width * 0.4,
                                   child: FormBuilderRadioGroup(
                                     // focusNode: radioButtonFocus,
                                     decoration: InputDecoration(
@@ -655,19 +650,19 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
     );
   }
 
-  buildArtCategoryDropdownItems() {
-    return interestCategoryList
-        .map((category) => DropdownMenuItem(
-              value: category.name,
-              child: Center(
-                child: Text(
-                  category.name,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ))
-        .toList();
-  }
+  // buildArtCategoryDropdownItems() {
+  //   return interestCategoryList
+  //       .map((category) => DropdownMenuItem(
+  //             value: category.name,
+  //             child: Center(
+  //               child: Text(
+  //                 category.name,
+  //                 overflow: TextOverflow.ellipsis,
+  //               ),
+  //             ),
+  //           ))
+  //       .toList();
+  // }
 
   buildEventTypeDropdownItems() {
     return eventTypes
@@ -696,12 +691,8 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
       bool onlineStatus = _eventDialogKey.currentState.value['online_status'];
 
       NavigationService.instance.pop();
-      NavigationService.instance.navigate(k_ROUTE_CREATE_EVENT_PAGE, args: [
-        eventCategory,
-        eventType,
-        onlineStatus,
-        widget.groupId ?? null
-      ]);
+      NavigationService.instance.navigate(k_ROUTE_CREATE_EVENT_PAGE,
+          args: [eventType, onlineStatus, widget.groupId ?? null]);
     }
   }
 
@@ -715,7 +706,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
 
       NavigationService.instance.pop();
       NavigationService.instance.navigate(k_ROUTE_CREATE_POST_PAGE,
-          args: [postType, postCategory, widget.groupId ?? null]);
+          args: [postType, widget.groupId ?? null]);
     }
   }
 }

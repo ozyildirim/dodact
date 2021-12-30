@@ -25,20 +25,12 @@ class ApplicationProvider extends ChangeNotifier {
 
   Future createApplication(
       String type, String userId, Map<String, dynamic> answers) async {
-    try {
-      return await firebaseApplicationService.createApplication(
-          type, userId, answers);
-    } catch (e) {
-      logger.e(e);
-    }
+    return await firebaseApplicationService.createApplication(
+        type, userId, answers);
   }
 
   Future cancelApplication(String userId, String applicationId) async {
-    try {
-      return await firebaseApplicationService.cancelApplication(
-          userId, applicationId);
-    } catch (e) {
-      logger.e(e);
-    }
+    return await firebaseApplicationService.cancelApplication(
+        userId, applicationId);
   }
 }

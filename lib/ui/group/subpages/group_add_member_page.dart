@@ -127,10 +127,14 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
                           onTap: () {},
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(user.profilePictureURL),
-                            radius: 40,
+                          leading: GFAvatar(
+                            radius: 45,
+                            backgroundColor: Colors.black,
+                            child: GFAvatar(
+                              backgroundImage:
+                                  NetworkImage(user.profilePictureURL),
+                              radius: 40,
+                            ),
                           ),
                           title: Text(
                             user.username,
@@ -140,7 +144,6 @@ class _GroupAddMemberPageState extends State<GroupAddMemberPage> {
                               fontSize: 20,
                             ),
                           ),
-                          subtitle: Text(user.email),
                           trailing: user.uid != groupProvider.group.managerId
                               ? checkIfInvitationSent(user.uid) == false
                                   ? IconButton(

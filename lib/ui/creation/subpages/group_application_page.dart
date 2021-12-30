@@ -8,7 +8,7 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GroupApplicationPage extends StatefulWidget {
@@ -23,9 +23,9 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
 
   FocusNode groupNameFocus = new FocusNode();
   FocusNode groupDescriptionFocus = FocusNode();
-  FocusNode interestFocus = FocusNode();
-  FocusNode groupTypeCheckboxFocus = FocusNode();
   FocusNode groupLinkFocus = FocusNode();
+
+  List<String> selectedCategories = [];
 
   FocusNode linkFocus = FocusNode();
   ApplicationProvider applicationProvider;
@@ -43,6 +43,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        title:
+            Text("Topluluk Başvurusu", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
@@ -67,13 +69,13 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             child: Column(
               children: [
                 Container(
-                  height: (size.height - kToolbarHeight) * 0.2,
+                  height: (size.height - kToolbarHeight) * 0.25,
                   child: Image.asset(
                     "assets/images/application_page/group_application.png",
                   ),
                 ),
                 Container(
-                  height: (size.height - kToolbarHeight) * 0.8,
+                  height: (size.height - kToolbarHeight) * 0.75,
                   width: size.width,
                   child: buildFormPart(),
                 ),
@@ -107,9 +109,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
       var groupName = creatorApplicationFormKey.currentState.value['groupName']
           .toString()
           .trim();
-      var interest = creatorApplicationFormKey.currentState.value["interest"]
-          .toString()
-          .trim();
+
       var description = creatorApplicationFormKey
           .currentState.value["description"]
           .toString()
@@ -122,12 +122,12 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
         await applicationProvider
             .createApplication("Group", userProvider.currentUser.uid, {
           'groupName': groupName,
-          "selectedInterest": interest,
+          "selectedInterest": selectedCategories,
           "description": description,
           "link": link,
         });
 
-        await CommonMethods().showSuccessDialog(
+        await CustomMethods().showSuccessDialog(
           context,
           "Başvurun bizlere ulaştı, en kısa zamanda dönüş yapacağız",
         );
@@ -162,15 +162,6 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
     );
   }
 
-  showSnackBar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
   buildFormPart() {
     var size = MediaQuery.of(context).size;
     return FormBuilder(
@@ -182,7 +173,8 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
-                "Topluluğunun adı ne olsun istersin?",
+                "Topluluğunuzun adı ne olsun istersiniz?",
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ),
@@ -213,18 +205,20 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Hangi sanat dalıyla ilgileniyorsunuz?",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Hangi sanat dalı ile ilgileniyorsunuz?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Topluluk olarak üzerinde çalıştığınız sanat dalını seçmelisin.");
+                          "Topluluğun ilgilendiği sanat dalını seçmelisiniz.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -233,47 +227,47 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: TextFieldContainer(
                 width: size.width * 0.7,
-                child: FormBuilderDropdown(
-                  focusNode: interestFocus,
-                  name: "interest",
-                  autofocus: false,
-                  // autovalidateMode: AutovalidateMode.onUserInteraction,
-                  items: interestCategoryList
-                      .map(
-                        (e) => DropdownMenuItem(
-                          child: Text(e.name),
-                          value: e.name,
-                        ),
-                      )
-                      .toList(),
+                child: FormBuilderTextField(
+                  onTap: openCategoryDialog,
+                  key: Key(selectedCategories.length > 0
+                      ? "${selectedCategories.length} kategori seçildi"
+                      : "Topluluk İlgi Alanları"),
+                  initialValue: selectedCategories.length > 0
+                      ? "${selectedCategories.length} kategori seçildi"
+                      : "Topluluk İlgi Alanları",
+                  style: TextStyle(
+                      color: selectedCategories.length > 0
+                          ? Colors.black
+                          : Colors.grey[600]),
+                  readOnly: true,
+                  name: "groupInterests",
                   decoration: InputDecoration(
-                      hintText: "Sanat Dalı",
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintText: "Topluluk İlgi Alanları",
                       border: InputBorder.none,
                       errorStyle:
                           Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(
-                        context,
-                        errorText: "Bu alan boş bırakılamaz.",
-                      ),
-                    ],
-                  ),
+                  // ignore: missing_return
+                  validator: (value) {
+                    if (selectedCategories.length == 0) {
+                      return "Kategori seçmelisin.";
+                    } else {}
+                  },
                 ),
               ),
             ),
             SizedBox(height: 15),
             Row(
               children: [
-                Text(
-                  "Bize biraz topluluğundan bahseder misin?",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Text(
+                    "Topluluğunuzun hedeflerinden ve çalışmalarından bahseder misiniz?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Bize biraz topluluğundan ve sanat ile ilgili tecrübelerinden bahseder misin? (Örnek olarak ne tarz performanslar ortaya koyduğundan, kaç üyesi olduğundan, nerede ve hangi sıklıkla sahne aldığınızdan bahsedebilirsin.");
+                          "Mevcut bir topluluk ise; kaç üyesi olduğundan, ne tür çalışmalar yaptığınızdan ve hedeflerinizden, yeni bir topluluk ise; hedeflerinizden ve Dodact'tan beklentilerinizi paylaşabilirsiniz.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -309,14 +303,14 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
               children: [
                 Flexible(
                   child: Text(
-                    "Şimdiye kadarki çalışmalarınızı merak ediyoruz. Bizimle bir link paylaşır mısın?",
+                    "Bugüne kadar yaptığınız çalışmalarınızı merak ediyoruz. Bizimle bir link paylaşır mısınız?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
                 IconButton(
                     onPressed: () {
                       showInfoDialog(context,
-                          "Topluluğunuzla ve çalışmalarınızla ilgili herhangi bir link paylaşabilir misin? Bu, diğer kullandığın platformlardan (youtube,instagram) linkler de olabilir.");
+                          "Topluluğunuzla ve çalışmalarınızla ilgili bir link paylaşabilir misiniz? Bu kullandığınız diğer platformlardan (youtube,instagram) linkler de olabilir.");
                     },
                     icon: Icon(Icons.info_outline))
               ],
@@ -347,6 +341,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                 ),
               ),
             ),
+            SizedBox(height: 15),
             Theme(
               data: Theme.of(context).copyWith(
                 unselectedWidgetColor: Colors.black,
@@ -371,14 +366,14 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
@@ -417,14 +412,14 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
                           text: "okudum ve kabul ediyorum.",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Colors.black,
                           ),
                         ),
@@ -439,11 +434,38 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
                     errorText: "Sözleşmeyi kabul etmelisin."),
               ),
             ),
+            SizedBox(height: 15),
             buildButton(),
-            SizedBox(height: 30),
+            SizedBox(height: 50),
           ],
         ),
       ),
+    );
+  }
+
+  openCategoryDialog() async {
+    categoryList.sort((a, b) => a.compareTo(b));
+
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            setState(() {
+              selectedCategories = selectedValues;
+            });
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: selectedCategories,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
     );
   }
 }

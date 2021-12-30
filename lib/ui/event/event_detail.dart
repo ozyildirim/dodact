@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:cool_alert/cool_alert.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
+
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -13,14 +11,15 @@ import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventDetailPage extends StatefulWidget {
@@ -97,24 +96,41 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         icon: Icon(Icons.more_vert, color: Colors.black),
+                        onSelected: (value) async {
+                          if (value == 1) {
+                            await _showDeleteEventDialog(event.id);
+                          } else if (value == 2) {
+                            await _showEditEventDialog(event);
+                          }
+                        },
                         itemBuilder: (context) => [
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading:
-                                        Icon(FontAwesome5Regular.trash_alt),
-                                    title: Text("Sil"),
+                                  value: 1,
+                                  child: InkWell(
                                     onTap: () async {
                                       await _showDeleteEventDialog(event.id);
-                                    }),
-                              ),
-                              // PopupMenuItem(
-                              //   child: ListTile(
-                              //       leading: Icon(FontAwesome5Regular.edit),
-                              //       title: Text("Düzenle"),
-                              //       onTap: () async {
-                              //         await _showEditEventDialog(event);
-                              //       }),
-                              // )
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(FontAwesome5Regular.trash_alt,
+                                            size: 16),
+                                        SizedBox(width: 14),
+                                        Text("Sil",
+                                            style: TextStyle(fontSize: 14)),
+                                      ],
+                                    ),
+                                  )),
+                              PopupMenuItem(
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesome5Regular.edit, size: 16),
+                                    SizedBox(width: 14),
+                                    Text("Düzenle",
+                                        style: TextStyle(fontSize: 14)),
+                                  ],
+                                ),
+                              )
                             ]),
                   ),
                 )
@@ -133,14 +149,23 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         icon: Icon(Icons.more_vert, color: Colors.black),
+                        onSelected: (value) async {
+                          if (value == 0) {
+                            // await _showReportEventDialog(event.id);
+                            await reportEvent(event.id);
+                          }
+                        },
                         itemBuilder: (context) => [
                               PopupMenuItem(
-                                child: ListTile(
-                                    leading: Icon(FontAwesome5Regular.bell),
-                                    title: Text("Bildir"),
-                                    onTap: () async {
-                                      await _showReportEventDialog(event.id);
-                                    }),
+                                value: 0,
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesome5Regular.bell, size: 16),
+                                    SizedBox(width: 14),
+                                    Text("Bildir",
+                                        style: TextStyle(fontSize: 14)),
+                                  ],
+                                ),
                               ),
                             ]),
                   ),
@@ -162,7 +187,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           children: [
             _buildEventHeader(),
             _buildEventDetailBody(),
-            _buildEventDetailTabs()
+            _buildEventDetailTabs(),
+
             // _buildMap()
           ],
         ),
@@ -173,12 +199,12 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   Widget _buildEventHeader() {
     return GestureDetector(
       onTap: () {
-        CommonMethods.showImagePreviewDialog(context,
+        CustomMethods.showImagePreviewDialog(context,
             url: event.eventImages[0]);
       },
       child: Container(
         width: dynamicWidth(1),
-        height: dynamicHeight(0.4),
+        height: dynamicHeight(0.35),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(event.eventImages[0]),
@@ -206,7 +232,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     child: Text(
                       event.title,
                       style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -221,10 +247,10 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                         Text(
                             DateFormat("MMMM", "tr_TR").format(event.startDate),
                             style:
-                                TextStyle(fontSize: 14, color: Colors.white)),
+                                TextStyle(fontSize: 11, color: Colors.white)),
                         Text(DateFormat("d").format(event.startDate),
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 15,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -257,9 +283,12 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             width: double.infinity,
             height: 50,
             child: TabBar(
-              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               labelColor: Colors.black,
-              indicatorSize: TabBarIndicatorSize.label,
+              // indicatorSize: TabBarIndicatorSize.label,
+              indicatorPadding: EdgeInsets.zero,
+              labelPadding: EdgeInsets.only(left: 10, right: 10),
+              padding: EdgeInsets.zero,
               controller: tabController,
               tabs: [
                 Tab(text: "Bilgiler"),
@@ -309,7 +338,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
-                  CommonMethods.showImagePreviewDialog(context, url: image);
+                  CustomMethods.showImagePreviewDialog(context, url: image);
                 },
                 child: Container(
                   child: ClipRRect(
@@ -329,14 +358,40 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Widget buildInfoTab() {
+    const double avatarRadius = 16.0;
+    const double iconSize = 18.0;
+
     return SingleChildScrollView(
       child: Column(
         children: [
+          if (event.eventCategories.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: Colors.deepOrangeAccent,
+                  child: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
+                ),
+                title: buildEventCategoriesTitle(),
+                subtitle: Text("Etkinlik Kategorileri"),
+              ),
+            ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: ListTile(
-              leading: Icon(
-                Icons.category,
+              leading: CircleAvatar(
+                radius: avatarRadius,
+                backgroundColor: Colors.deepOrangeAccent,
+                child: Icon(
+                  Icons.category,
+                  color: Colors.white,
+                  size: iconSize,
+                ),
               ),
               title: Text(
                 event.eventType +
@@ -352,31 +407,48 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               ? Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: ListTile(
-                    leading: Icon(Icons.location_on),
+                    // onTap: () async {
+                    //   await _buildMap();
+                    // },
+                    leading: CircleAvatar(
+                        radius: avatarRadius,
+                        backgroundColor: Colors.deepOrangeAccent,
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.white,
+                          size: iconSize,
+                        )),
                     title: Text(
                       event.address,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     subtitle: Text("Adres"),
-                    trailing: CircleAvatar(
-                      backgroundColor: kNavbarColor,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.map,
-                          color: Colors.white,
-                        ),
-                        onPressed: () async {
+                    trailing: InkWell(
+                        onTap: () async {
                           await _buildMap();
                         },
-                      ),
-                    ),
+                        child: CircleAvatar(
+                          radius: avatarRadius,
+                          backgroundColor: Colors.transparent,
+                          child: Icon(
+                            Icons.directions_rounded,
+                            color: Colors.black,
+                          ),
+                        )),
                   ),
                 )
               : Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: ListTile(
-                    leading: Icon(Icons.link),
+                    leading: CircleAvatar(
+                        radius: avatarRadius,
+                        backgroundColor: Colors.deepOrangeAccent,
+                        child: Icon(
+                          Icons.link,
+                          color: Colors.white,
+                          size: iconSize,
+                        )),
                     title: Text(
                       "Referans Bağlantı",
                       style:
@@ -384,7 +456,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                     ),
                     subtitle: Text("Etkinlik Web Adresi"),
                     onTap: () {
-                      CommonMethods.launchURL(event.eventURL);
+                      CustomMethods.launchURL(context, event.eventURL);
                     },
                     trailing: IconButton(
                       onPressed: () {
@@ -398,7 +470,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: ListTile(
-              leading: Icon(Icons.calendar_today),
+              leading: CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: Colors.deepOrangeAccent,
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                    size: iconSize,
+                  )),
               title: Text(
                 DateFormat("dd.MM.yyyy HH:mm", "tr_TR").format(event.startDate),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -409,7 +488,14 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: ListTile(
-              leading: Icon(Icons.calendar_today),
+              leading: CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: Colors.deepOrangeAccent,
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                    size: iconSize,
+                  )),
               title: Text(
                 DateFormat("dd.MM.yyyy HH:mm", "tr_TR").format(event.endDate),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -420,6 +506,53 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         ],
       ),
     );
+  }
+
+  buildEventCategoriesTitle() {
+    return MultiSelectChipDisplay(
+      onTap: (context) {
+        openCategoriesDialog();
+      },
+      chipColor: Colors.grey[200],
+      textStyle: TextStyle(color: Colors.black),
+      items: buildCategoryChips(),
+    );
+  }
+
+  buildCategoryChips() {
+    List<MultiSelectItem> items = event.eventCategories.take(2).map((e) {
+      return MultiSelectItem(e, e);
+    }).toList();
+
+    items.add(MultiSelectItem<String>("+${event.eventCategories.length - 3}",
+        "+${event.eventCategories.length - 3} Kategori"));
+
+    return items;
+  }
+
+  openCategoriesDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: MultiSelectChipDisplay(
+                        chipColor: Colors.grey[200],
+                        textStyle: TextStyle(color: Colors.black),
+                        items: event.eventCategories
+                            .map((e) => MultiSelectItem<String>(e, e))
+                            .toList()),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   showInfoDialog(BuildContext context, String infoDescription) {
@@ -475,8 +608,13 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
                   }
                 },
                 leading: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(fetchedUser.profilePictureURL),
+                  radius: 35,
+                  backgroundColor: Colors.black,
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage:
+                        NetworkImage(fetchedUser.profilePictureURL),
+                  ),
                 ),
                 title: Text(
                   fetchedUser.nameSurname,
@@ -537,47 +675,44 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   Future<void> _showDeleteEventDialog(String eventId) async {
     //TODO: burayı düzelt
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu etkinliği silmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await _deleteEvent(eventId);
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği silmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await _deleteEvent(eventId);
-        });
+        },
+        title: "Bu etkinliği silmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   Future<void> _showReportEventDialog(String eventId) async {
-    //TODO: burayı düzelt
-    CoolAlert.show(
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await reportEvent(eventId);
-          NavigationService.instance.pop();
-        });
+        },
+        title: "Bu etkinliği bildirmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   Future<void> _deleteEvent(String eventId) async {
-    bool isLocatedInStorage = event.eventImages != [] ? true : false;
-
-    //POST ENTRY SİL - STORAGE ELEMANLARINI SİL
-    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
 
     await Provider.of<EventProvider>(context, listen: false)
-        .deleteEvent(event.id, isLocatedInStorage);
+        .deleteEvent(event.id);
 
     NavigationService.instance.navigateToReset(k_ROUTE_HOME);
     //}
@@ -592,9 +727,9 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
       var lat = event.locationCoordinates.split(",")[0];
       var lng = event.locationCoordinates.split(",")[1];
 
-      final CameraPosition _kGooglePlex = CameraPosition(
+      final CameraPosition eventMapCameraPosition = CameraPosition(
         target: LatLng(double.parse(lat), double.parse(lng)),
-        zoom: 8,
+        zoom: 18,
       );
 
       Marker(
@@ -605,7 +740,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
         context,
         MaterialPageRoute(
           builder: (context) {
-            return MapPage(_kGooglePlex);
+            return MapPage(eventMapCameraPosition);
           },
         ),
       );
@@ -615,53 +750,83 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
   }
 
   Future<void> reportEvent(String eventId) async {
-    var reportReason = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => reportReasonDialog(context),
-    );
+    var result = await FirebaseReportService.checkEventHasSameReporter(
+        reportedEventId: eventId, reporterId: userProvider.currentUser.uid);
 
-    if (reportReason != null) {
-      CommonMethods()
-          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
-      await FirebaseReportService()
-          .reportEvent(authProvider.currentUser.uid, event.id, reportReason)
-          .then((value) async {
-        await CommonMethods().showSuccessDialog(context,
-            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
-        NavigationService.instance.pop();
-        NavigationService.instance.pop();
-      }).catchError((value) async {
-        await CommonMethods()
-            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
-        NavigationService.instance.pop();
-      });
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu etkinliği zaten bildirdin.");
     } else {
-      NavigationService.instance.pop();
+      var reportReason = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => reportReasonDialog(context),
+      );
+
+      if (reportReason != null) {
+        try {
+          await FirebaseReportService.reportEvent(
+              authProvider.currentUser.uid, event.id, reportReason);
+          CustomMethods.showSnackbar(context,
+              "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        } catch (e) {
+          CustomMethods.showSnackbar(
+              context, "İşlem gerçekleştirilirken hata oluştu.");
+        }
+      } else {}
+    }
+  }
+
+  buildEventCategoriesTab() {
+    if (event.eventCategories.isEmpty) {
+      return Center(
+        child: Text("Kategoriler Belirtilmemiş",
+            style: TextStyle(fontSize: kPageCenteredTextSize)),
+      );
+    } else {
+      return SingleChildScrollView(
+        child: MultiSelectChipDisplay(
+            chipColor: Colors.grey[200],
+            textStyle: TextStyle(color: Colors.black),
+            items: event.eventCategories.map((e) {
+              return MultiSelectItem(e, e);
+            }).toList()),
+      );
     }
   }
 }
 
 class MapPage extends StatefulWidget {
-  final CameraPosition googlePlex;
+  final CameraPosition eventLocation;
 
-  MapPage(this.googlePlex);
+  MapPage(this.eventLocation);
 
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
+  Completer<GoogleMapController> _controller = Completer();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: goToEventLocation,
+        backgroundColor: kNavbarColor,
+        label: Text('Etkinlik Konumu'),
+        icon: Icon(Icons.directions),
+      ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Etkinlik Konum Bilgileri"),
       ),
       body: Container(
         child: GoogleMap(
-          initialCameraPosition: widget.googlePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          initialCameraPosition: widget.eventLocation,
           compassEnabled: true,
           mapToolbarEnabled: true,
           myLocationButtonEnabled: true,
@@ -672,12 +837,18 @@ class _MapPageState extends State<MapPage> {
               infoWindow: InfoWindow(title: "Etkinlik Konum"),
               zIndex: 1,
               markerId: MarkerId("1"),
-              position: LatLng(widget.googlePlex.target.latitude,
-                  widget.googlePlex.target.longitude),
+              position: LatLng(widget.eventLocation.target.latitude,
+                  widget.eventLocation.target.longitude),
             )
           },
         ),
       ),
     );
+  }
+
+  Future goToEventLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    controller
+        .animateCamera(CameraUpdate.newCameraPosition(widget.eventLocation));
   }
 }

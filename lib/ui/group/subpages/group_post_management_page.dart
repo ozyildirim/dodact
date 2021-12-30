@@ -63,7 +63,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                     ),
                     itemBuilder: (context, index) {
                       var post = asyncSnapshot.data[index];
-                      var postCoverPhoto = CommonMethods.createThumbnailURL(
+                      var postCoverPhoto = CustomMethods.createThumbnailURL(
                           post.isLocatedInYoutube, post.postContentURL,
                           isAudio:
                               post.postContentType == "Ses" ? true : false);
@@ -83,7 +83,7 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                               child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                  color: Colors.orange,
+                                  color: Colors.grey,
                                   child: ListTile(
                                     title: Text(
                                       post.postTitle,
@@ -100,39 +100,15 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    trailing: IconButton(
-                                      icon: Icon(Icons.delete),
-                                      onPressed: () {
-                                        // showDialog(
-                                        //   context: context,
-                                        //   builder: (context) {
-                                        //     return AlertDialog(
-                                        //       title: Text("Uyarı"),
-                                        //       content: Text(
-                                        //           "Bu gönderiyi silmek istediğine emin misin?"),
-                                        //       actions: <Widget>[
-                                        //         FlatButton(
-                                        //           child: Text("Evet"),
-                                        //           onPressed: () async {
-                                        //             await showDeletePostDialog(
-                                        //                 post.postId);
-                                        //             Navigator.pop(context);
-                                        //           },
-                                        //         ),
-                                        //         FlatButton(
-                                        //           child: Text("Hayır"),
-                                        //           onPressed: () {
-                                        //             Navigator.pop(context);
-                                        //           },
-                                        //         ),
-                                        //       ],
-                                        //     );
-                                        //     // return showDeletePostDialog(
-                                        //     //     post.postId);
-                                        //   },
-                                        // );
-                                        showDeletePostDialog(post.postId);
-                                      },
+                                    trailing: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      child: IconButton(
+                                        icon: Icon(Icons.delete,
+                                            color: Colors.black),
+                                        onPressed: () {
+                                          showDeletePostDialog(post.postId);
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -152,39 +128,26 @@ class _GroupPostManagementPageState extends BaseState<GroupPostManagementPage> {
   }
 
   showDeletePostDialog(String postId) async {
-    await CoolAlert.show(
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu içeriği kaldırmak istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        title: "Bu içeriği silmek istediğinden emin misin?",
+        confirmButtonText: "Evet",
+        confirmActions: () {
           deleteGroupPost(postId);
-          NavigationService.instance.pop();
         });
   }
 
   Future<void> deleteGroupPost(String postId) async {
     try {
       await groupProvider.deleteGroupPost(postId);
-
-      showSnackbar("Topluluk gönderisi başarıyla kaldırıldı.");
+      NavigationService.instance.pop();
+      setState(() {});
+      CustomMethods.showSnackbar(
+          context, "Topluluk gönderisi başarıyla kaldırıldı.");
     } catch (e) {
-      showSnackbar("Topluluk gönderisi kaldırılırken bir hata oluştu.");
+      CustomMethods.showSnackbar(
+          context, "Topluluk gönderisi kaldırılırken bir hata oluştu.");
     }
-  }
-
-  showSnackbar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
   }
 
   Future<List<PostModel>> getGroupPosts() async {

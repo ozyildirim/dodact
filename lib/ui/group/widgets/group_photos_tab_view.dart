@@ -16,7 +16,7 @@ class GroupMediaTabView extends StatelessWidget {
       return Center(
         child: Container(
           color: Colors.white60,
-          child: Text("Bu topluluk henüz bir medya dosyası eklemedi",
+          child: Text("Topluluk henüz bir medya eklemedi",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: kPageCenteredTextSize)),
         ),
@@ -31,7 +31,7 @@ class GroupMediaTabView extends StatelessWidget {
               imageBuilder: (context, imageProvider) {
                 return InkWell(
                   onTap: () {
-                    CommonMethods.showImagePreviewDialog(context,
+                    CustomMethods.showImagePreviewDialog(context,
                         imageProvider: imageProvider);
                   },
                   child: Container(

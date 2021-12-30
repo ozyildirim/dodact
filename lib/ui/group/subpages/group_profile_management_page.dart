@@ -12,6 +12,7 @@ import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -220,8 +221,8 @@ class _GroupProfileManagementPageState
                     TextFieldContainer(
                       width: size.width * 0.9,
                       child: FormBuilderTextField(
-                        minLines: 2,
-                        maxLines: 5,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
                         name: "groupDescription",
                         initialValue: group.groupDescription,
                         decoration: InputDecoration(
@@ -263,13 +264,11 @@ class _GroupProfileManagementPageState
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
-            child: CircleAvatar(
-              maxRadius: 90,
-              minRadius: 70,
+            child: GFAvatar(
+              radius: 80,
               backgroundColor: Colors.black,
-              child: CircleAvatar(
-                  minRadius: 60,
-                  maxRadius: 80,
+              child: GFAvatar(
+                  radius: 73,
                   backgroundImage: NetworkImage(group.groupProfilePicture)),
             ),
           ),
@@ -303,7 +302,7 @@ class _GroupProfileManagementPageState
   }
 
   void updateProfilePhoto(PickedFile file) async {
-    CommonMethods().showLoaderDialog(context, "Fotoğrafın Değiştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "Fotoğrafın Değiştiriliyor.");
 
     try {
       var url = await UploadService().uploadGroupProfilePhoto(
@@ -311,6 +310,7 @@ class _GroupProfileManagementPageState
 
       await groupProvider.updateGroup(
           groupProvider.group.groupId, {'groupProfilePicture': url});
+      CustomMethods.showSnackbar(context, "Değişiklikler kaydedildi.");
     } catch (e) {
       logger.e(e);
     }
@@ -319,7 +319,7 @@ class _GroupProfileManagementPageState
   void updateGroup() async {
     if (formKey.currentState.saveAndValidate()) {
       try {
-        CommonMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
+        CustomMethods().showLoaderDialog(context, "Değişiklikler Kaydediliyor");
         await groupProvider.updateGroup(group.groupId, {
           'groupName':
               formKey.currentState.value['groupName'].toString().trim(),
@@ -333,9 +333,10 @@ class _GroupProfileManagementPageState
         setState(() {
           isChanged = false;
         });
+        CustomMethods.showSnackbar(context, "Değişiklikler kaydedildi.");
       } catch (e) {
-        CommonMethods().showErrorDialog(
-            context, "Değişiklikler kaydedilirken bir hata oluştu");
+        CustomMethods.showSnackbar(
+            context, "Değişiklikler kaydedilirken bir hata oluştu.");
       }
     } else {}
   }

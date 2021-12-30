@@ -34,9 +34,6 @@ class _HomePageState extends BaseState<HomePage> {
     super.initState();
     messaging = FirebaseMessaging.instance;
 
-    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    //   print('Message clicked!');
-    // });
     checkNotificationPermissions();
     checkUserSearchKeywords();
   }
@@ -87,15 +84,11 @@ class _HomePageState extends BaseState<HomePage> {
               color: Colors.white,
               size: 18,
             ),
-            IconButton(
-                padding: EdgeInsets.zero,
-                iconSize: 20,
-                icon: GFAvatar(
-                  size: 24,
-                  // radius: 25,
-                  backgroundImage:
-                      NetworkImage(userProvider.currentUser.profilePictureURL),
-                )),
+            GFAvatar(
+              size: 22,
+              backgroundImage:
+                  NetworkImage(userProvider.currentUser.profilePictureURL),
+            )
           ],
           onTap: (value) {
             setState(() {
@@ -108,7 +101,7 @@ class _HomePageState extends BaseState<HomePage> {
   checkUserSearchKeywords() async {
     if (userProvider.currentUser.searchKeywords == null ||
         userProvider.currentUser.searchKeywords.length < 1) {
-      await userProvider.updateUserSearchKeywords();
+      userProvider.updateUserSearchKeywords();
       print("keywords guncellendi");
     }
   }

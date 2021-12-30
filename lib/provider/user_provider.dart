@@ -154,30 +154,21 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> updateCurrentUser(Map<String, dynamic> newData) async {
-    try {
-      await userRepository.updateCurrentUser(newData, currentUser.uid);
-      getCurrentUser();
-    } catch (e) {
-      logger.e("authProvider updateCurrentUser error: $e");
-    }
+    await userRepository.updateCurrentUser(newData, currentUser.uid);
+    getCurrentUser();
   }
 
   Future<String> updateCurrentUserProfilePicture(File image) async {
     //First: upload users photo to firestorage
-    try {
-      var url = await UploadService().uploadUserProfilePhoto(
-          userID: currentUser.uid,
-          fileType: 'profile_picture',
-          fileToUpload: image);
-      currentUser.profilePictureURL = url;
-      notifyListeners();
-      await updateCurrentUser({'profilePictureURL': url});
-      return url;
-    } catch (e) {
-      logger.e("UserProvider updateCurrentUserProfilePicture error. " +
-          e.toString());
-      notifyListeners();
-    }
+    var url = await UploadService().uploadUserProfilePhoto(
+        userID: currentUser.uid,
+        fileType: 'profile_picture',
+        fileToUpload: image);
+    currentUser.profilePictureURL = url;
+    notifyListeners();
+    await updateCurrentUser({'profilePictureURL': url});
+    return url;
+    // throw Exception('Not implemented yet');
   }
 
   Future<void> getCurrentUserFavoritePosts() async {

@@ -23,7 +23,7 @@ class EventProvider extends ChangeNotifier {
   var eventsSnapshot = <DocumentSnapshot>[];
   var filteredEventsSnapshot = <DocumentSnapshot>[];
   String errorMessage = '';
-  int documentLimit = 3;
+  int documentLimit = 10;
   bool _hasNext = true;
   bool _hasNextFiltered = true;
   bool _isFetchingEvents = false;
@@ -81,7 +81,7 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteEvent(String eventId, bool isLocatedInStorage) async {
+  Future<void> deleteEvent(String eventId) async {
     try {
       await eventRepository.delete(eventId);
       notifyListeners();
@@ -134,6 +134,7 @@ class EventProvider extends ChangeNotifier {
       );
 
       eventsSnapshot.addAll(snap.docs);
+      logger.d("etkinlikler çekildi");
 
       if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
@@ -147,7 +148,9 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future getFilteredEventList(
-      {bool reset, String category, String city, String type}) async {
+      {bool reset, List<String> categories, String city, String type}) async {
+    List<String> selectedCategories = categories.isEmpty ? null : categories;
+
     if (reset) {
       filteredEventsSnapshot.clear();
       _hasNextFiltered = true;
@@ -159,7 +162,7 @@ class EventProvider extends ChangeNotifier {
 
     try {
       var snap = await eventRepository.getFilteredEventList(
-        category: category,
+        categories: selectedCategories,
         city: city,
         type: type,
         limit: documentLimit,
@@ -169,6 +172,7 @@ class EventProvider extends ChangeNotifier {
       );
 
       filteredEventsSnapshot.addAll(snap.docs);
+      logger.d("filtreli etkinlikler çekildi");
       // print("snap.docs");
 
       if (snap.docs.length < documentLimit) _hasNextFiltered = false;
@@ -182,18 +186,14 @@ class EventProvider extends ChangeNotifier {
     _isFetchingFilteredEvents = false;
   }
 
-  Future<bool> update(String eventId, Map<String, dynamic> changes,
-      {bool isNotify}) async {
+  Future<bool> update(String eventId, Map<String, dynamic> changes) async {
     try {
-      changeState(true, isNotify: isNotify);
       return await eventRepository
           .update(eventId, changes)
           .then((value) => true);
     } catch (e) {
       print("EventProvider update error: " + e.toString());
       return false;
-    } finally {
-      changeState(false);
     }
   }
 }

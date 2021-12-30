@@ -149,7 +149,7 @@ class _EventPartState extends State<EventPart> {
                           event.title,
                           overflow: TextOverflow.clip,
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                       ),
                       Row(
@@ -172,6 +172,8 @@ class _EventPartState extends State<EventPart> {
                                     fit: BoxFit.fitHeight,
                                     child: Text(
                                       event.city,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                 ),
@@ -193,7 +195,8 @@ class _EventPartState extends State<EventPart> {
                               child: Text(
                                 event.eventType,
                                 maxLines: 2,
-                                style: TextStyle(fontSize: 14),
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w500),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),

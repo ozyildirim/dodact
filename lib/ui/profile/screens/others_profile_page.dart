@@ -1,4 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -38,44 +37,44 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   void _showReportUserDialog() async {
-    CoolAlert.show(
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu kullanıcıyı bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        title: "Bu kullanıcıyı bildirmek istediğinden emin misin?",
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await reportUser(otherUser.uid);
           NavigationService.instance.pop();
         });
   }
 
   Future<void> reportUser(String userId) async {
-    var reportReason = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => reportReasonDialog(context),
-    );
-    if (reportReason != null) {
-      CommonMethods()
-          .showLoaderDialog(context, "İşleminiz gerçekleştiriliyor.");
-      await FirebaseReportService()
-          .reportUser(authProvider.currentUser.uid, otherUser.uid, reportReason)
-          .then((value) {
-        CommonMethods().showInfoDialog(context, "İşlem Başarılı", "");
-        NavigationService.instance.pop();
-        NavigationService.instance.pop();
-      }).catchError((value) {
-        CommonMethods()
-            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
-        NavigationService.instance.pop();
-      });
+    bool result = await FirebaseReportService.checkUserHasSameReporter(
+        reportedUserId: userId, reporterId: userProvider.currentUser.uid);
+
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu kullanıcıyı zaten bildirdin.");
     } else {
-      NavigationService.instance.pop();
+      var reportReason = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => reportReasonDialog(context),
+      );
+      if (reportReason != null) {
+        try {
+          NavigationService.instance.pop();
+          await FirebaseReportService.reportUser(
+              authProvider.currentUser.uid, otherUser.uid, reportReason);
+
+          CustomMethods.showSnackbar(
+              context, "Kullanıcı başarıyla bildirildi.");
+        } catch (e) {
+          NavigationService.instance.pop();
+          CustomMethods.showSnackbar(
+              context, "İşlem gerçekleştirilirken hata oluştu.");
+        }
+      } else {
+        NavigationService.instance.pop();
+      }
     }
   }
 
@@ -103,32 +102,54 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                onSelected: (value) async {
+                  if (value == 0) {
+                    await _showReportUserDialog();
+                  } else if (value == 1) {
+                    await _showUnblockDialog();
+                  } else if (value == 2) {
+                    await _showBlockDialog();
+                  }
+                },
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: ListTile(
-                            leading: Icon(FontAwesome5Solid.flag),
-                            title: Text("Bildir"),
-                            onTap: () async {
-                              await _showReportUserDialog();
-                            }),
+                        value: 0,
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Solid.flag,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Bildir",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w500)),
+                          ],
+                        ),
                       ),
                       userProvider.currentUser.blockedUserList
                               .contains(otherUser.uid)
                           ? PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(FontAwesome5Solid.ban),
-                                  title: Text("Engeli Kaldır"),
-                                  onTap: () async {
-                                    await _showUnblockDialog();
-                                  }),
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Solid.ban,
+                                      size: 16, color: Colors.black),
+                                  SizedBox(width: 14),
+                                  Text("Engeli Kaldır",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             )
                           : PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(FontAwesome5Solid.ban),
-                                  title: Text("Engelle"),
-                                  onTap: () async {
-                                    await _showBlockDialog();
-                                  }),
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Solid.ban,
+                                      size: 16, color: Colors.black),
+                                  SizedBox(width: 14),
+                                  Text("Engelle",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             )
                     ])
           ],
@@ -148,19 +169,12 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   }
 
   _showUnblockDialog() {
-    CoolAlert.show(
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu kullanıcının engelini kaldırmak istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        title: "Bu kullanıcının engelini kaldırmak istediğinden emin misin?",
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           unblockUser();
-          NavigationService.instance.pop();
           NavigationService.instance.pop();
         });
   }
@@ -168,26 +182,20 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   unblockUser() async {
     try {
       await userProvider.unblockUser(otherUser.uid);
-      showSnackbar("Kullanıcının engelini kaldırdın.");
+      CustomMethods.showSnackbar(context, "Kullanıcının engelini kaldırdın.");
     } catch (e) {
-      showSnackbar("Kullanıcı engellenirken bir sorun oluştu.");
+      CustomMethods.showSnackbar(
+          context, "Kullanıcı engellenirken bir sorun oluştu.");
     }
   }
 
   _showBlockDialog() {
-    CoolAlert.show(
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu kullanıcıyı engellemek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        title: "Bu kullanıcı engellemek istediğinden emin misin?",
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await blockUser();
-          NavigationService.instance.pop();
           NavigationService.instance.pop();
         });
   }
@@ -195,19 +203,11 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   blockUser() async {
     try {
       await userProvider.blockUser(otherUser.uid);
-      showSnackbar("Kullanıcıyı engelledin.");
+      CustomMethods.showSnackbar(context, "Kullanıcıyı engelledin.");
     } catch (e) {
-      showSnackbar("Kullanıcı engellenirken bir sorun oluştu.");
+      CustomMethods.showSnackbar(
+          context, "Kullanıcı engellenirken bir sorun oluştu.");
     }
-  }
-
-  showSnackbar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
   }
 }
 

@@ -32,7 +32,7 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
                 List<UserObject> members = snapshot.data;
                 return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, childAspectRatio: 0.5),
+                        crossAxisCount: 3, childAspectRatio: 0.75),
                     itemCount: members.length,
                     itemBuilder: (context, index) {
                       var user = members[index];
@@ -41,6 +41,7 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
                                 imageUrl: user.profilePictureURL,

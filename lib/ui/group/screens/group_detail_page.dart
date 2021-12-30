@@ -35,11 +35,20 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   @override
   void initState() {
     super.initState();
-
-    tabController = new TabController(length: 7, vsync: this);
+    tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
-    group = groupProvider.group;
-    groupProvider.setGroup(group);
+    group = widget.group;
+    fetchGroup();
+  }
+
+  fetchGroup() async {
+    await Provider.of<GroupProvider>(context, listen: false)
+        .getGroupDetail(group.groupId)
+        .then((value) {
+      setState(() {
+        group = value;
+      });
+    });
   }
 
   bool isUserGroupFounder() {
@@ -59,6 +68,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       floatingActionButton: isUserGroupFounder()
           ? FloatingActionButton(
               onPressed: () {
@@ -78,14 +88,22 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    onSelected: (value) async {
+                      if (value == 0) {
+                        navigateGroupManagementPage();
+                      }
+                    },
                     itemBuilder: (context) => [
                           PopupMenuItem(
-                            child: ListTile(
-                              leading: Icon(FontAwesome5Solid.cogs),
-                              title: Text("Topluluk Yönetimi"),
-                              onTap: () {
-                                navigateGroupManagementPage();
-                              },
+                            value: 0,
+                            child: Row(
+                              children: [
+                                Icon(FontAwesome5Solid.cogs,
+                                    size: 16, color: Colors.black),
+                                SizedBox(width: 14),
+                                Text("Topluluk Yönetimi",
+                                    style: TextStyle(fontSize: 14)),
+                              ],
                             ),
                           ),
                         ])
@@ -107,6 +125,71 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         ),
         // child: isUserGroupFounder() ? adminView() : userView(),
         child: pageBody(),
+      ),
+    );
+  }
+
+  userView() {
+    return pageBody();
+  }
+
+  pageBody() {
+    return SafeArea(
+      child: Column(
+        children: [
+          Container(
+            height: dynamicHeight(0.3),
+            width: dynamicWidth(1),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: dynamicWidth(0.35),
+                  child: Text(
+                    group.groupName,
+                    // maxLines: 3,
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  width: dynamicWidth(0.02),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    CustomMethods.showImagePreviewDialog(context,
+                        url: group.groupProfilePicture);
+                  },
+                  child: Card(
+                    elevation: 8,
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(group.groupProfilePicture),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      height: dynamicHeight(0.25),
+                      width: dynamicWidth(0.5),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Divider(),
+          buildTabs(),
+          Expanded(
+            child: buildTabViews(),
+          )
+        ],
       ),
     );
   }
@@ -167,69 +250,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         ]);
   }
 
-  userView() {
-    return pageBody();
-  }
-
-  pageBody() {
-    return Column(
-      children: [
-        Container(
-          height: dynamicHeight(0.3),
-          width: dynamicWidth(1),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: dynamicWidth(0.35),
-                child: Text(
-                  group.groupName,
-                  // maxLines: 3,
-                  overflow: TextOverflow.clip,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                width: dynamicWidth(0.02),
-              ),
-              GestureDetector(
-                onTap: () {
-                  CommonMethods.showImagePreviewDialog(context,
-                      url: group.groupProfilePicture);
-                },
-                child: Card(
-                  elevation: 8,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(group.groupProfilePicture),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    height: dynamicHeight(0.25),
-                    width: dynamicWidth(0.5),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Divider(),
-        buildTabs(),
-        Expanded(
-          child: buildTabViews(),
-        )
-      ],
-    );
-  }
-
   buildTabs() {
     return Container(
       width: double.infinity,
@@ -249,7 +269,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           Tab(text: "Gönderiler"),
           Tab(text: "Etkinlikler"),
           Tab(text: "Medya"),
-          Tab(text: "Duyurular"),
+          // Tab(text: "Duyurular"),
           Tab(text: "İlgi Alanları"),
         ],
       ),
@@ -267,7 +287,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           buildPostsTabView(),
           buildEventsTabView(),
           buildMediaTabView(),
-          buildAnnouncementsTabView(),
+          // buildAnnouncementsTabView(),
           buildInterestsTabView()
         ],
       ),
@@ -290,16 +310,20 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     return GroupEventsTab(groupId: group.groupId);
   }
 
-  buildAnnouncementsTabView() {
-    return Container();
-  }
+  // buildAnnouncementsTabView() {
+  //   return Container(
+  //     child:Center(
+  //       child:Text("Bu topluluk henüz bir duyuru paylaşmadı")
+  //     );
+  //   );
+  // }
 
   buildMediaTabView() {
     return GroupMediaTabView();
   }
 
   buildInterestsTabView() {
-    return GroupInterestsTabView(group: group);
+    return GroupInterestsTabView();
   }
 
   void navigateCreationPage(String groupId) {

@@ -1,5 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -52,13 +53,15 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
     } else {
       return Column(
         children: [
+          SizedBox(height: size.height * 0.01),
           ListTile(
             leading: CircleAvatar(
-              foregroundColor: Colors.greenAccent,
-              radius: 16,
+              backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+              radius: kUserProfileInfoCircleAvatarRadius,
               child: Icon(
                 Icons.school,
                 color: Colors.white,
+                size: kUserProfileInfoIconSize,
               ),
             ),
             title: Text("Öğrenim Durumu",
@@ -74,11 +77,12 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ),
           ListTile(
             leading: CircleAvatar(
-              foregroundColor: Colors.greenAccent,
-              radius: 16,
+              backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+              radius: kUserProfileInfoCircleAvatarRadius,
               child: Icon(
                 Icons.work,
                 color: Colors.white,
+                size: kUserProfileInfoIconSize,
               ),
             ),
             title: Text("Meslek",
@@ -93,11 +97,12 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ),
           ListTile(
             leading: CircleAvatar(
-              foregroundColor: Colors.greenAccent,
-              radius: 16,
+              backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+              radius: kUserProfileInfoCircleAvatarRadius,
               child: Icon(
                 Icons.info,
                 color: Colors.white,
+                size: kUserProfileInfoIconSize,
               ),
             ),
             title: Text("Detaylı Bilgi",
@@ -121,14 +126,14 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           Container(
             // width: size.width * 0.6,
             height: size.height * 0.1,
-            child: buildSocialIcons(user),
+            child: buildSocialIcons(context, user),
           )
         ],
       );
     }
   }
 
-  buildSocialIcons(UserObject user) {
+  buildSocialIcons(BuildContext context, UserObject user) {
     var linkedin = user.socialMediaLinks['linkedin'];
     var youtube = user.socialMediaLinks['youtube'];
     var instagram = user.socialMediaLinks['instagram'];
@@ -142,49 +147,56 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
         linkedin != null && linkedin.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(linkedin);
+                  CustomMethods.launchURL(context, linkedin);
                 },
-                icon: Icon(FontAwesome5Brands.linkedin, size: 25),
+                icon: Icon(FontAwesome5Brands.linkedin,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         instagram != null && instagram.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL("www.instagram.com/$instagram");
+                  CustomMethods.launchURL(
+                      context, "https://www.instagram.com/$instagram/");
                 },
-                icon: Icon(FontAwesome5Brands.instagram, size: 25),
+                icon: Icon(FontAwesome5Brands.instagram,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         dribbble != null && dribbble.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(dribbble);
+                  CustomMethods.launchURL(context, dribbble);
                 },
-                icon: Icon(FontAwesome5Brands.dribbble, size: 25),
+                icon: Icon(FontAwesome5Brands.dribbble,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         soundcloud != null && soundcloud.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(soundcloud);
+                  CustomMethods.launchURL(context, soundcloud);
                 },
-                icon: Icon(FontAwesome5Brands.soundcloud, size: 25),
+                icon: Icon(FontAwesome5Brands.soundcloud,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         youtube != null && youtube.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(youtube);
+                  CustomMethods.launchURL(context, youtube);
                 },
-                icon: Icon(FontAwesome5Brands.youtube, size: 25),
+                icon: Icon(FontAwesome5Brands.youtube,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         pinterest != null && pinterest.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(pinterest);
+                  CustomMethods.launchURL(context, pinterest);
                 },
-                icon: Icon(FontAwesome5Brands.pinterest, size: 25),
+                icon: Icon(FontAwesome5Brands.pinterest,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
       ],

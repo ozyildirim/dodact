@@ -47,9 +47,10 @@ class _AnnouncementPartState extends State<AnnouncementPart> {
                 child: InkWell(
                   onTap: () {
                     if (announcement.isReference) {
-                      CommonMethods.launchURL(announcement.referenceURL);
+                      CustomMethods.launchURL(
+                          context, announcement.referenceURL);
                     } else {
-                      CommonMethods.showImagePreviewDialog(
+                      CustomMethods.showImagePreviewDialog(
                         context,
                         imageProvider: CachedNetworkImageProvider(
                             announcement.announcementImage),

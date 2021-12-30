@@ -16,6 +16,7 @@ const kBackgroundColorDarker = Color(0xFF929292);
 const kDetailTextColor = Color(0xFF998FA2);
 const kCustomAppBarColor = Color(0xff194d25);
 const kNavbarColor = Color(0xff194d25);
+const kUserProfileInfoCircleAvatarBgColor = Colors.deepOrangeAccent;
 
 const kAuthBackgroundImage = "assets/images/loginBG.jpg";
 const kBackgroundImage = "assets/images/appBG.jpg";
@@ -28,16 +29,21 @@ const kDrawerTileTitleSize = 20.0;
 const kSettingsTitleSize = 20.0;
 const kPageCenteredTextSize = 20.0;
 const kUserProfileTabLabelSize = 14.0;
+const kUserProfileInfoIconSize = 16.0;
+const kUserProfileInfoCircleAvatarRadius = 16.0;
+const kUserProfileSocialIconSize = 20.0;
 
 const kFontFamily = "SanFrancisco";
 
 const guzel = Color(0xFF162A49);
 
 final spinkit = SpinKitChasingDots(
+  size: 40,
   itemBuilder: (BuildContext context, int index) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: index.isEven ? Colors.black : Colors.grey,
+        color: index.isEven ? Colors.black : Colors.black,
+        // image: DecorationImage(image: AssetImage("assets/images/logo.png")),
       ),
     );
   },

@@ -23,7 +23,7 @@ class OthersProfileHeader extends StatelessWidget {
             imageBuilder: (context, imageProvider) {
               return InkWell(
                 onTap: () {
-                  CommonMethods.showImagePreviewDialog(context,
+                  CustomMethods.showImagePreviewDialog(context,
                       imageProvider: imageProvider);
                 },
                 child: CircleAvatar(
@@ -84,6 +84,12 @@ class OthersProfileHeader extends StatelessWidget {
                 ],
               )
             : Container(),
+        provider.otherUser.artistLabel.isNotEmpty
+            ? Text(
+                provider.otherUser.artistLabel,
+                style: TextStyle(color: Colors.grey[600]),
+              )
+            : Container()
       ],
     );
   }

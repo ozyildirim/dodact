@@ -30,7 +30,7 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
       children: [
         InkWell(
           onTap: () {
-            CommonMethods.showImagePreviewDialog(context,
+            CustomMethods.showImagePreviewDialog(context,
                 url: user.profilePictureURL);
           },
           child: CircleAvatar(
@@ -99,7 +99,13 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
               style: TextStyle(color: Colors.grey[600]),
             ),
           ],
-        )
+        ),
+        user.artistLabel.isNotEmpty
+            ? Text(
+                user.artistLabel,
+                style: TextStyle(color: Colors.grey[600]),
+              )
+            : Container()
       ],
     );
   }

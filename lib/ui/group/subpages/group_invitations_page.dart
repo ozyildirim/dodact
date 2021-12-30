@@ -39,8 +39,9 @@ class _GroupMemberSentInvitationsPageState
     var provider = Provider.of<InvitationProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Davetler'),
+        title: Text('Davetler'),
         iconTheme: IconThemeData(color: Colors.white),
+        actionsIconTheme: IconThemeData(color: Colors.white),
       ),
       body: Container(
         decoration: BoxDecoration(

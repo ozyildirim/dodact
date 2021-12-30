@@ -7,9 +7,10 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
+import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ContentCreatorApplicationPage extends StatefulWidget {
@@ -28,7 +29,11 @@ class _ContentCreatorApplicationPageState
   FocusNode firstQuestionFocus = FocusNode();
   FocusNode linkFocus = FocusNode();
   FocusNode kvkkCheckboxFocus = FocusNode();
+  FocusNode artistLabelDropdownFocus = FocusNode();
   FocusNode copyrightCheckboxFocus = FocusNode();
+
+  List<String> selectedInterests = [];
+
   ApplicationProvider applicationProvider;
 
   @override
@@ -40,12 +45,14 @@ class _ContentCreatorApplicationPageState
 
   @override
   void dispose() {
-    super.dispose();
     interestFocus.dispose();
     descriptionFocus.dispose();
     linkFocus.dispose();
+    firstQuestionFocus.dispose();
+    artistLabelDropdownFocus.dispose();
     kvkkCheckboxFocus.dispose();
     copyrightCheckboxFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -117,10 +124,6 @@ class _ContentCreatorApplicationPageState
 
   submitForm() async {
     if (contentCreatorApplicationFormKey.currentState.saveAndValidate()) {
-      var interest = contentCreatorApplicationFormKey
-          .currentState.value["interest"]
-          .toString()
-          .trim();
       var description = contentCreatorApplicationFormKey
           .currentState.value["description"]
           .toString()
@@ -135,22 +138,32 @@ class _ContentCreatorApplicationPageState
           .toString()
           .trim();
 
+      var label =
+          contentCreatorApplicationFormKey.currentState.value["artistLabel"];
+
       try {
+        await CustomMethods()
+            .showLoaderDialog(context, "İşlemini Gerçekleştiriyoruz");
+
         await applicationProvider.createApplication(
             "Content_Creator", userProvider.currentUser.uid, {
-          "selectedInterest": interest,
+          "selectedInterest": selectedInterests,
           "description": description,
           "firstQuestion": firstQuestion,
           "link": link,
+          "label": label,
         });
 
-        await CommonMethods().showSuccessDialog(
+        CustomMethods().hideDialog();
+
+        await CustomMethods().showSuccessDialog(
           context,
           "Başvurun bizlere ulaştı, en kısa zamanda dönüş yapacağız",
         );
         NavigationService.instance.pop();
       } catch (e) {
-        print(e);
+        CustomMethods().hideDialog();
+        CustomMethods.showSnackbar(context, "Bir hata oluştu");
       }
     } else {}
   }
@@ -180,16 +193,8 @@ class _ContentCreatorApplicationPageState
     );
   }
 
-  showSnackBar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
   buildFormPart() {
+    artistLabels.sort((a, b) => a.compareTo(b));
     var size = MediaQuery.of(context).size;
     return FormBuilder(
       key: contentCreatorApplicationFormKey,
@@ -218,33 +223,31 @@ class _ContentCreatorApplicationPageState
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: TextFieldContainer(
                 width: size.width * 0.7,
-                child: FormBuilderDropdown(
-                  focusNode: interestFocus,
-                  name: "interest",
-                  autofocus: false,
-                  // autovalidateMode: AutovalidateMode.onUserInteraction,
-                  items: interestCategoryList
-                      .map(
-                        (e) => DropdownMenuItem(
-                          child: Text(e.name),
-                          value: e.name,
-                        ),
-                      )
-                      .toList(),
+                child: FormBuilderTextField(
+                  onTap: openCategoryDialog,
+                  key: Key(selectedInterests.length > 0
+                      ? "${selectedInterests.length} kategori seçildi"
+                      : "Kategoiler"),
+                  initialValue: selectedInterests.length > 0
+                      ? "${selectedInterests.length} kategori seçildi"
+                      : "Kategoriler",
+                  style: TextStyle(
+                      color: selectedInterests.length > 0
+                          ? Colors.black
+                          : Colors.grey[600]),
+                  readOnly: true,
+                  name: "interests",
                   decoration: InputDecoration(
-                      hintText: "Sanat Dalı",
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintText: "İlgi Alanları",
                       border: InputBorder.none,
                       errorStyle:
                           Theme.of(context).inputDecorationTheme.errorStyle),
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.required(
-                        context,
-                        errorText: "Bu alan boş bırakılamaz.",
-                      ),
-                    ],
-                  ),
+                  // ignore: missing_return
+                  validator: (value) {
+                    if (selectedInterests.length == 0) {
+                      return "Kategori seçmelisin.";
+                    } else {}
+                  },
                 ),
               ),
             ),
@@ -285,7 +288,7 @@ class _ContentCreatorApplicationPageState
                       FormBuilderValidators.required(
                         context,
                         errorText: "Bu alan boş bırakılamaz.",
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -360,6 +363,55 @@ class _ContentCreatorApplicationPageState
                         context,
                         errorText: "Bu alan boş bırakılamaz.",
                       ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    "Profilinde hangisinin görünmesini istersin?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      showInfoDialog(context,
+                          "Yukarıda belirtmiş olduğun bilgilerle alakalı olarak profilinde gözükmesini istediğin tanımı seçebilirsin.");
+                    },
+                    icon: Icon(Icons.info_outline))
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: TextFieldContainer(
+                width: size.width * 0.7,
+                child: FormBuilderDropdown(
+                  focusNode: artistLabelDropdownFocus,
+                  name: "artistLabel",
+                  items: artistLabels
+                      .map((label) => DropdownMenuItem(
+                            child: Text(label),
+                            value: label,
+                          ))
+                      .toList(),
+                  autofocus: false,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                  decoration: InputDecoration(
+                      hintText: "",
+                      border: InputBorder.none,
+                      errorStyle:
+                          Theme.of(context).inputDecorationTheme.errorStyle),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.required(
+                        context,
+                        errorText: "Bu alan boş bırakılamaz.",
+                      )
                     ],
                   ),
                 ),
@@ -464,6 +516,32 @@ class _ContentCreatorApplicationPageState
           ],
         ),
       ),
+    );
+  }
+
+  openCategoryDialog() async {
+    categoryList.sort((a, b) => a.compareTo(b));
+
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return MultiSelectDialog(
+          selectedColor: kNavbarColor,
+          searchHint: "Ara",
+          title: Text("Kategori Seç"),
+          selectedItemsTextStyle: TextStyle(color: Colors.white),
+          onConfirm: (selectedValues) async {
+            setState(() {
+              selectedInterests = selectedValues;
+            });
+          },
+          items: categoryList.map((e) => MultiSelectItem(e, e)).toList(),
+          initialValue: selectedInterests,
+          listType: MultiSelectListType.CHIP,
+          cancelText: Text("Vazgeç", style: TextStyle(color: Colors.black)),
+          confirmText: Text("Tamam", style: TextStyle(color: Colors.black)),
+        );
+      },
     );
   }
 }

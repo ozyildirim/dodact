@@ -18,7 +18,7 @@ class PostCard extends StatelessWidget {
         ? AppConstant.kAudioCardImage
         : post.postContentURL;
 
-    coverPhotoURL = CommonMethods.createThumbnailURL(
+    coverPhotoURL = CustomMethods.createThumbnailURL(
         post.isLocatedInYoutube, contentURL,
         isAudio: false);
 

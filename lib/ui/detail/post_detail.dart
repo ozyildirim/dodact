@@ -1,5 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
@@ -7,6 +5,7 @@ import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_description_card.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_detail_info_part.dart';
 import 'package:dodact_v1/ui/detail/widgets/post/post_headers/audio_post_header.dart';
@@ -16,6 +15,8 @@ import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class PostDetail extends StatefulWidget {
@@ -69,6 +70,7 @@ class _PostDetailState extends BaseState<PostDetail> {
 
   @override
   Widget build(BuildContext context) {
+    print("yenilendi");
     var mediaQuery = MediaQuery.of(context);
 
     var appBar = AppBar(
@@ -92,28 +94,28 @@ class _PostDetailState extends BaseState<PostDetail> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                      Colors.black.withOpacity(0.3), BlendMode.dstATop),
                   image: AssetImage(kBackgroundImage),
                   fit: BoxFit.cover,
                 ),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 // mainAxisSize: MainAxisSize.max,
                 children: [
                   HeaderPart(post: post),
                   PostDetailInfoPart(post: post),
                   SizedBox(height: 5),
                   Padding(
-                    padding: const EdgeInsets.all(14.0),
+                    padding:
+                        const EdgeInsets.only(top: 14.0, left: 14.0, right: 14),
                     child: Text(post.postTitle,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w800)),
                   ),
                   PostDescriptionCard(post: post),
-                  // Expanded(
-                  //   child: Container(),
-                  // ),
-                  // Spacer(),
+                  // PostCategories(),
                   buildPostCommentsNavigator(),
                 ],
               ),
@@ -133,60 +135,90 @@ class _PostDetailState extends BaseState<PostDetail> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                onSelected: (value) async {
+                  if (value == 0) {
+                    await showDeletePostDialog();
+                  } else if (value == 1) {
+                    NavigationService.instance
+                        .navigate(k_ROUTE_POST_EDIT_PAGE, args: post);
+                  }
+                },
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: ListTile(
-                            leading: Icon(FontAwesome5Regular.trash_alt),
-                            title: Text("Sil"),
-                            onTap: () async {
-                              await showDeletePostDialog();
-                            }),
+                        value: 0,
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Regular.trash_alt,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Sil", style: TextStyle(fontSize: 14)),
+                          ],
+                        ),
                       ),
-                      // PopupMenuItem(
-                      //   child: ListTile(
-                      //     enabled: false,
-                      //     leading: Icon(FontAwesome5Solid.cogs),
-                      //     title: Text("Düzenle"),
-                      //     onTap: () async {
-                      //       await showEditPostDialog();
-                      //     },
-                      //   ),
-                      // ),
+                      PopupMenuItem(
+                        value: 1,
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Solid.cogs,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Düzenle", style: TextStyle(fontSize: 14)),
+                          ],
+                        ),
+                      ),
                     ])
           ]
         : [
             PopupMenuButton(
+                padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                onSelected: (value) async {
+                  if (value == 2) {
+                    await showReportPostDialog();
+                  } else if (value == 3) {
+                    await removeFavorite();
+                  } else if (value == 4) {
+                    await addFavorite();
+                  }
+                },
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: ListTile(
-                            leading: Icon(FontAwesome5Regular.flag),
-                            title: Text("Bildir"),
-                            onTap: () async {
-                              await showReportPostDialog();
-                            }),
+                        value: 2,
+                        child: Row(
+                          children: [
+                            Icon(FontAwesome5Regular.flag,
+                                size: 16, color: Colors.black),
+                            SizedBox(width: 14),
+                            Text("Bildir", style: TextStyle(fontSize: 14)),
+                          ],
+                        ),
                       ),
                       isFavorite
                           ? PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(
-                                    FontAwesome5Solid.star,
-                                    color: Colors.orangeAccent,
-                                  ),
-                                  title: Text("Favorilerden Çıkar"),
-                                  onTap: () async {
-                                    await removeFavorite();
-                                  }),
+                              value: 3,
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Solid.star,
+                                      size: 16, color: Colors.orangeAccent),
+                                  SizedBox(width: 14),
+                                  Text("Favorilerden Çıkar",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             )
                           : PopupMenuItem(
-                              child: ListTile(
-                                  leading: Icon(FontAwesome5Regular.star),
-                                  title: Text("Favorilere Ekle"),
-                                  onTap: () async {
-                                    await addFavorite();
-                                  }),
+                              value: 4,
+                              child: Row(
+                                children: [
+                                  Icon(FontAwesome5Regular.star,
+                                      size: 16, color: Colors.black),
+                                  SizedBox(width: 14),
+                                  Text("Favorilere Ekle",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             ),
                     ])
           ];
@@ -209,19 +241,27 @@ class _PostDetailState extends BaseState<PostDetail> {
   //Fonksiyonlar
 
   Future<void> showDeletePostDialog() async {
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu gönderiyi silmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await deletePost();
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu gönderiyi silmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await deletePost();
-        });
+        },
+        title: "Bu gönderiyi silmek istediğinden emin misin?");
   }
 
   // Future<void> showEditPostDialog() async {
@@ -239,55 +279,75 @@ class _PostDetailState extends BaseState<PostDetail> {
   // }
 
   Future<void> showReportPostDialog() async {
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu gönderiyi bildirmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await reportPost(post.postId);
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu gönderiyi bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await reportPost(post.postId);
-          NavigationService.instance.pop();
-        });
+        },
+        title: "Bu gönderiyi bildirmek istediğinden emin misin?");
   }
 
   Future<void> reportPost(String postId) async {
-    var reportReason = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => reportReasonDialog(context),
-    );
+    var result = await FirebaseReportService.checkPostHasSameReporter(
+        reportedPostId: postId, reporterId: userProvider.currentUser.uid);
 
-    if (reportReason != null) {
-      CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
-      await FirebaseReportService()
-          .reportPost(userProvider.currentUser.uid, postId, reportReason)
-          .then((value) async {
-        await CommonMethods().showSuccessDialog(context,
-            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
-        NavigationService.instance.pop();
-        NavigationService.instance.pop();
-      }).catchError((value) async {
-        await CommonMethods()
-            .showErrorDialog(context, "İşlem gerçekleştirilirken hata oluştu.");
-        NavigationService.instance.pop();
-      });
-    } else {
+    if (result) {
+      CustomMethods.showSnackbar(context, "Bu gönderiyi zaten bildirdin.");
       NavigationService.instance.pop();
+    } else {
+      var reportReason = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => reportReasonDialog(context),
+      );
+
+      if (reportReason != null) {
+        NavigationService.instance.pop();
+        try {
+          await FirebaseReportService()
+              .reportPost(userProvider.currentUser.uid, postId, reportReason);
+
+          CustomMethods.showSnackbar(context,
+              "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+        } catch (e) {
+          CustomMethods.showSnackbar(
+              context, "İşlem gerçekleştirilirken hata oluştu.");
+        }
+      } else {
+        NavigationService.instance.pop();
+      }
     }
   }
 
   Future<void> deletePost() async {
-    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+    CustomMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
+    try {
+      await Provider.of<PostProvider>(context, listen: false)
+          .deletePost(post.postId);
 
-    await Provider.of<PostProvider>(context, listen: false)
-        .deletePost(post.postId);
-
-    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+      NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+      CustomMethods.showSnackbar(context, "Gönderi başarıyla silindi.");
+    } catch (e) {
+      NavigationService.instance.pop();
+      CustomMethods.showSnackbar(
+          context, "Gönderi silinirken bir hata oluştu.");
+      NavigationService.instance.pop();
+    }
     //
   }
 
@@ -296,7 +356,6 @@ class _PostDetailState extends BaseState<PostDetail> {
       setState(() {
         isFavorite = true;
       });
-      NavigationService.instance.pop();
     });
   }
 
@@ -305,7 +364,6 @@ class _PostDetailState extends BaseState<PostDetail> {
       setState(() {
         isFavorite = false;
       });
-      NavigationService.instance.pop();
     });
   }
 
@@ -330,6 +388,25 @@ class _PostDetailState extends BaseState<PostDetail> {
           ),
         ),
       ),
+    );
+  }
+
+  PostCategories() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 14.0, left: 14.0, right: 14),
+          child: Text("Kategoriler",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+        ),
+        MultiSelectChipDisplay(
+          chipColor: Colors.grey[200],
+          textStyle: TextStyle(color: Colors.black),
+          items: post.postCategories.map((e) => MultiSelectItem(e, e)).toList(),
+        )
+      ],
     );
   }
 }

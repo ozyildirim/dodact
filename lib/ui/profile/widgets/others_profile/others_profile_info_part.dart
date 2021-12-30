@@ -33,14 +33,16 @@ class OthersProfileInfoTab extends StatelessWidget {
       } else {
         return Column(
           children: [
+            SizedBox(height: size.height * 0.02),
             !user.privacySettings['hide_education'] && user.education.isNotEmpty
                 ? ListTile(
                     leading: CircleAvatar(
-                      foregroundColor: Colors.greenAccent,
-                      radius: 16,
+                      backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+                      radius: kUserProfileInfoCircleAvatarRadius,
                       child: Icon(
                         Icons.school,
                         color: Colors.white,
+                        size: kUserProfileInfoIconSize,
                       ),
                     ),
                     title: Text("Öğrenim Durumu",
@@ -60,11 +62,12 @@ class OthersProfileInfoTab extends StatelessWidget {
                     user.profession.isNotEmpty
                 ? ListTile(
                     leading: CircleAvatar(
-                      foregroundColor: Colors.greenAccent,
-                      radius: 16,
+                      backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+                      radius: kUserProfileInfoCircleAvatarRadius,
                       child: Icon(
                         Icons.work,
                         color: Colors.white,
+                        size: kUserProfileInfoIconSize,
                       ),
                     ),
                     title: Text("Meslek",
@@ -80,37 +83,41 @@ class OthersProfileInfoTab extends StatelessWidget {
                   )
                 : Container(),
             SizedBox(height: 10),
-            ListTile(
-              leading: CircleAvatar(
-                foregroundColor: Colors.greenAccent,
-                radius: 16,
-                child: Icon(
-                  Icons.info,
-                  color: Colors.white,
-                ),
-              ),
-              title: Text("Detaylı Bilgi",
-                  style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-              subtitle: ReadMoreText(
-                user.userDescription,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-                trimLines: 2,
-                colorClickableText: Colors.black,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: 'Daha fazla detay',
-                trimExpandedText: 'Küçült',
-                lessStyle: TextStyle(fontWeight: FontWeight.bold),
-                moreStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
+            user.userDescription.isNotEmpty
+                ? ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: kUserProfileInfoCircleAvatarBgColor,
+                      radius: kUserProfileInfoCircleAvatarRadius,
+                      child: Icon(
+                        Icons.info,
+                        color: Colors.white,
+                        size: kUserProfileInfoIconSize,
+                      ),
+                    ),
+                    title: Text("Detaylı Bilgi",
+                        style:
+                            TextStyle(fontSize: 13, color: Colors.grey[600])),
+                    subtitle: ReadMoreText(
+                      user.userDescription,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      trimLines: 2,
+                      colorClickableText: Colors.black,
+                      trimMode: TrimMode.Line,
+                      trimCollapsedText: 'Daha fazla detay',
+                      trimExpandedText: 'Küçült',
+                      lessStyle: TextStyle(fontWeight: FontWeight.bold),
+                      moreStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  )
+                : Container(),
             SizedBox(height: 20),
             Container(
               // width: size.width * 0.6,
               height: size.height * 0.1,
-              child: buildSocialIcons(user),
+              child: buildSocialIcons(context, user),
             ),
           ],
         );
@@ -122,7 +129,7 @@ class OthersProfileInfoTab extends StatelessWidget {
     );
   }
 
-  buildSocialIcons(UserObject user) {
+  buildSocialIcons(BuildContext context, UserObject user) {
     var linkedin = user.socialMediaLinks['linkedin'];
     var youtube = user.socialMediaLinks['youtube'];
     var instagram = user.socialMediaLinks['instagram'];
@@ -136,52 +143,58 @@ class OthersProfileInfoTab extends StatelessWidget {
         linkedin != null && linkedin.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(linkedin);
+                  CustomMethods.launchURL(context, linkedin);
                 },
                 icon: Icon(
                   FontAwesome5Brands.linkedin,
-                  size: 30,
+                  size: kUserProfileSocialIconSize,
                 ),
               )
             : Container(),
         instagram != null && instagram.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL("www.instagram.com/$instagram");
+                  CustomMethods.launchURL(
+                      context, "https://www.instagram.com/$instagram");
                 },
-                icon: Icon(FontAwesome5Brands.instagram, size: 30),
+                icon: Icon(FontAwesome5Brands.instagram,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         dribbble != null && dribbble.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(dribbble);
+                  CustomMethods.launchURL(context, dribbble);
                 },
-                icon: Icon(FontAwesome5Brands.dribbble, size: 30),
+                icon: Icon(FontAwesome5Brands.dribbble,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         soundcloud != null && soundcloud.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(soundcloud);
+                  CustomMethods.launchURL(context, soundcloud);
                 },
-                icon: Icon(FontAwesome5Brands.soundcloud, size: 30),
+                icon: Icon(FontAwesome5Brands.soundcloud,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         youtube != null && youtube.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(youtube);
+                  CustomMethods.launchURL(context, youtube);
                 },
-                icon: Icon(FontAwesome5Brands.youtube, size: 30),
+                icon: Icon(FontAwesome5Brands.youtube,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
         pinterest != null && pinterest.isNotEmpty
             ? IconButton(
                 onPressed: () {
-                  CommonMethods.launchURL(pinterest);
+                  CustomMethods.launchURL(context, pinterest);
                 },
-                icon: Icon(FontAwesome5Brands.pinterest, size: 30),
+                icon: Icon(FontAwesome5Brands.pinterest,
+                    size: kUserProfileSocialIconSize),
               )
             : Container(),
       ],

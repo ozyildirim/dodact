@@ -18,11 +18,10 @@ class UserObject {
   String profession;
   bool isVerified;
   List<String> blockedUserList;
-
+  String artistLabel;
   List<String> favoritedPosts = [];
   List<Map<String, dynamic>> interests;
-  List<String> followers = [];
-  List<String> following = [];
+  List<String> selectedInterests;
 
   //Permissions
   Map<String, dynamic> permissions = {
@@ -82,6 +81,7 @@ class UserObject {
     this.newUser,
     this.userDescription,
     this.interests,
+    this.selectedInterests,
     this.permissions,
     this.privacySettings,
     this.socialMediaLinks,
@@ -89,6 +89,7 @@ class UserObject {
     this.education,
     this.blockedUserList,
     this.profession,
+    this.artistLabel,
     this.searchKeywords,
     this.isVerified,
   });
@@ -142,10 +143,12 @@ class UserObject {
     userData['experiencePoint'] = this.experiencePoint ?? 0;
 
     userData['location'] = this.location;
+    userData['artistLabel'] = this.artistLabel;
     userData['mainInterest'] = this.mainInterest;
     userData['rosettes'] = this.rosettes;
 
     userData['interests'] = this.interests;
+    userData['selectedInterests'] = this.selectedInterests;
     userData['permissions'] = defaultPermissions;
     userData['privacySettings'] = defaultPrivacySettings;
     userData['socialMediaLinks'] = defaultSocialMediaLinks;
@@ -175,8 +178,9 @@ class UserObject {
     rosettes = doc.data()['rosettes'];
     mainInterest = doc.data()['mainInterest'] ?? "";
     interests = doc.data()['interests']?.cast<Map<String, dynamic>>();
+    selectedInterests = doc.data()['selectedInterests']?.cast<String>();
     blockedUserList = doc.data()['blockedUserList']?.cast<String>() ?? [];
-
+    artistLabel = doc.data()['artistLabel'] ?? '';
     permissions = doc.data()['permissions'] ?? this.permissions;
 
     privacySettings = doc.data()['privacySettings'] ?? this.privacySettings;

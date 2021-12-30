@@ -101,11 +101,11 @@ class _UserApplicationHistoryPageState
         title: Text(type),
         subtitle: Text(status),
         trailing: applicationItem.status == "PENDING"
-            ? IconButton(
+            ? TextButton(
                 onPressed: () {
                   deleteUserApplication(applicationItem.applicationId);
                 },
-                icon: Icon(Icons.delete, color: Colors.black),
+                child: Text("İptal", style: TextStyle(color: Colors.black)),
               )
             : applicationItem.status == "REJECTED"
                 ? IconButton(

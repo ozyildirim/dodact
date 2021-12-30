@@ -14,11 +14,11 @@ import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:paginate_firestore/bloc/pagination_cubit.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatroomPage extends StatefulWidget {
   final String currentUserId;
@@ -33,6 +33,7 @@ class ChatroomPage extends StatefulWidget {
 
 class _ChatroomPageState extends BaseState<ChatroomPage> {
   var logger = Logger();
+  SharedPreferences sharedPreferences;
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final ScrollController scrollController = ScrollController();
   bool doesRoomExist;
@@ -47,15 +48,26 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   //Son mesaj silindiğinde buildEmptyRoomAction fonksiyonu 2 kere çalışıyor ve 2 kere pop yapıyor. Bunu önlemek için böyle ilkel bir çözüm buldum.
   int exitCounter = 0;
 
-  getOtherUser() {}
+  setSharedPreference(String otherUserId) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('activeChattingUser', otherUserId);
+  }
+
+  removeSharedPreference() async {
+    await sharedPreferences.remove('activeChattingUser');
+
+    // await sharedPreferences.setString('activeChattingUser', null);
+    print("değer sıfırlandı");
+  }
 
   @override
   void initState() {
     chatroomProvider = Provider.of<ChatroomProvider>(context, listen: false);
     currentUserId = widget.currentUserId;
     otherUserId = widget.otherUserObject.uid;
-    // otherUser = userProvider.getUserByID(otherUserId);
+
     roomId = generateRoomId(currentUserId, otherUserId);
+    setSharedPreference(otherUserId);
     checkChatroom();
     super.initState();
   }
@@ -68,18 +80,24 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         if (result == true) {
           setState(() {
             doesRoomExist = true;
-            print("oda mevcut");
+            // print("oda mevcut");
           });
         } else {
           setState(() {
             doesRoomExist = false;
-            print("oda mevcut değil");
+            // print("oda mevcut değil");
           });
         }
       });
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  @override
+  void dispose() {
+    removeSharedPreference();
+    super.dispose();
   }
 
   @override
@@ -110,10 +128,14 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      top: BorderSide(width: 0.2, color: Colors.black),
+                    )),
                 padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
                 height: 60,
                 width: double.infinity,
-                color: Colors.white,
                 child: FormBuilder(
                   key: _formKey,
                   child: Row(
@@ -138,22 +160,26 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
                       //   width: 15,
                       // ),
                       Expanded(
-                        child: FormBuilderTextField(
-                          enableSuggestions: true,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
-                          name: "message",
-                          decoration: InputDecoration(
-                              hintText: "Mesaj yaz",
-                              hintStyle: TextStyle(color: Colors.black),
-                              border: InputBorder.none),
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context,
-                                errorText: "Bu alanı boş bırakmamalısın."),
-                            (value) {
-                              return ProfanityChecker.profanityValidator(value);
-                            }
-                          ]),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: FormBuilderTextField(
+                            enableSuggestions: true,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.sentences,
+                            name: "message",
+                            decoration: InputDecoration(
+                                hintText: "Mesaj yaz",
+                                hintStyle: TextStyle(color: Colors.black),
+                                border: InputBorder.none),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: "Bu alanı boş bırakmamalısın."),
+                              (value) {
+                                return ProfanityChecker.profanityValidator(
+                                    value);
+                              }
+                            ]),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -196,7 +222,12 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
           child: Text("Mesaj bulunamadı",
               style: TextStyle(fontSize: kPageCenteredTextSize)),
         ),
-        itemsPerPage: 5, initialLoader: Center(child: spinkit),
+        itemsPerPage: 5,
+        initialLoader: Center(
+          child: CircularProgressIndicator(
+            color: Colors.black,
+          ),
+        ),
         // Use SliverAppBar in header to make it sticky
         // item builder type is compulsory.
         itemBuilderType:
@@ -260,10 +291,9 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         // to fetch real-time data
         isLive: true,
         reverse: true,
-        bottomLoader: Container(
-          height: 50,
-          child: Center(
-            child: spinkit,
+        bottomLoader: Center(
+          child: CircularProgressIndicator(
+            color: Colors.black,
           ),
         ),
       ),
@@ -404,34 +434,48 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
   }
 
   Future<void> showReportMessageDialog(String messageId, String message) async {
-    CoolAlert.show(
+    // CoolAlert.show(
+    //     context: context,
+    //     type: CoolAlertType.confirm,
+    //     text: "Bu mesajı bildirmek istediğinden emin misin?",
+    //     confirmBtnText: "Evet",
+    //     cancelBtnText: "Vazgeç",
+    //     title: "",
+    //     onCancelBtnTap: () {
+    //       NavigationService.instance.pop();
+    //     },
+    //     onConfirmBtnTap: () async {
+    //       await reportMessage(roomId, messageId, message);
+    //       NavigationService.instance.pop();
+    //     });
+
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu mesajı bildirmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmActions: () async {
           await reportMessage(roomId, messageId, message);
           NavigationService.instance.pop();
-        });
+        },
+        title: "Bu mesajı bildirmek istediğinden emin misin?",
+        confirmButtonText: "Evet");
   }
 
   reportMessage(String roomId, String messageId, String message) async {
-    CommonMethods().showLoaderDialog(context, "İşlemin Gerçekleştiriliyor.");
-    await FirebaseReportService()
-        .reporMessage(currentUserId, roomId, messageId, message)
-        .then((value) async {
-      showSnackbar("Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+    var result = await FirebaseReportService.checkPrivateMessageHasSameReporter(
+        reporterId: userProvider.currentUser.uid,
+        reportedPrivateMessageId: messageId);
 
-      NavigationService.instance.pop();
-    }).catchError((value) async {
-      showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
-      NavigationService.instance.pop();
-    });
+    if (result) {
+      showSnackbar("Bu mesajı daha önce bildirdin");
+    } else {
+      try {
+        await FirebaseReportService.reportMessage(
+            currentUserId, roomId, messageId, message);
+        showSnackbar(
+            "Bildirimin bizlere ulaştı. En kısa sürede inceleyeceğiz.");
+      } catch (e) {
+        showSnackbar("İşlem gerçekleştirilirken hata oluştu.");
+      }
+    }
   }
 
   generateRoomId(String firstUserId, String secondUserId) {

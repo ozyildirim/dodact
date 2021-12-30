@@ -17,6 +17,8 @@ class GeneralPage extends StatefulWidget {
 }
 
 class _GeneralPageState extends BaseState<GeneralPage> {
+  double titleSize = 20;
+
   @override
   initState() {
     super.initState();
@@ -29,54 +31,37 @@ class _GeneralPageState extends BaseState<GeneralPage> {
     // var eventProvider = Provider.of<EventProvider>(context, listen: false);
     var podcastProvider = Provider.of<PodcastProvider>(context, listen: false);
 
-    postProvider.getTopPosts();
+    if (postProvider.topPosts == null) {
+      print("top posts çekildi");
+      postProvider.getTopPosts();
+    }
     // eventProvider.getSpecialEvents();
-    podcastProvider.getPodcastList();
+    if (podcastProvider.podcastList == null) {
+      print("podcastler çekildi");
+      podcastProvider.getPodcastList();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        // appBar: AppBar(
-        //   // toolbarHeight: kToolbarHeight * (3 / 4),
-        //   backgroundColor: kCustomAppBarColor,
-        //   // systemOverlayStyle: ,
-        //   title: Image(
-        //     image: AssetImage(kDodactLogo),
-        //     height: 40,
-        //     width: 50,
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
-        extendBody: true,
-        // extendBodyBehindAppBar: true,
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
-              image: AssetImage(kBackgroundImage),
-              fit: BoxFit.cover,
-            ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.dstATop),
+            image: AssetImage(kBackgroundImage),
+            fit: BoxFit.cover,
           ),
+        ),
+        child: SafeArea(
           child: SingleChildScrollView(
             child: Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Text(
-                  //   "Duyurular",
-                  //   textAlign: TextAlign.start,
-                  //   style: Theme.of(context).textTheme.headline1.copyWith(
-                  //       color: Colors.black,
-                  //       fontSize: 22,
-                  //       fontWeight: FontWeight.bold),
-                  // ),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: AnnouncementPart(),
@@ -84,7 +69,6 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                   SizedBox(
                     height: 30,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Text(
@@ -92,7 +76,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -113,7 +97,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -131,7 +115,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -139,11 +123,9 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                     height: 15,
                   ),
                   AcikSahnePart(),
-
                   SizedBox(
                     height: 50,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Text(
@@ -151,7 +133,7 @@ class _GeneralPageState extends BaseState<GeneralPage> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: titleSize,
                           fontWeight: FontWeight.w600),
                     ),
                   ),

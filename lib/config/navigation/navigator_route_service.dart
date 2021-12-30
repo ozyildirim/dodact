@@ -22,7 +22,8 @@ import 'package:dodact_v1/ui/creation/subpages/streamer_application_page.dart';
 import 'package:dodact_v1/ui/creation/user_application_page.dart';
 import 'package:dodact_v1/ui/detail/podcast_detail.dart';
 import 'package:dodact_v1/ui/detail/post_detail.dart';
-import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_detail_comments_part.dart';
+import 'package:dodact_v1/ui/detail/post_edit_page.dart';
+import 'package:dodact_v1/ui/detail/widgets/post/post_comments/post_comments_part.dart';
 import 'package:dodact_v1/ui/discover/discover_page.dart';
 import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/event_edit_page.dart';
@@ -128,17 +129,13 @@ class NavigationRouteManager {
       case k_ROUTE_CREATE_POST_PAGE:
         List<dynamic> args = settings.arguments;
         return _navigateToDefault(
-            PostCreationPage(
-                postType: args[0], postCategory: args[1], groupId: args[2]),
-            settings);
+            PostCreationPage(postType: args[0], groupId: args[1]), settings);
 
       case k_ROUTE_CREATE_EVENT_PAGE:
         List<dynamic> args = settings.arguments;
         return _navigateToDefault(
             EventCreationPage(
-                eventCategory: args[0],
-                eventType: args[1],
-                eventPlatform: args[2]),
+                eventType: args[0], eventPlatform: args[1], groupId: args[2]),
             settings);
 
       case k_ROUTE_CREATE_USER_STREAM_PAGE:
@@ -159,6 +156,9 @@ class NavigationRouteManager {
               post: args,
             ),
             settings);
+
+      case k_ROUTE_POST_EDIT_PAGE:
+        return _navigateToDefault(PostEditPage(post: args), settings);
 
       case k_ROUTE_POST_COMMENTS:
         List<dynamic> args = settings.arguments;

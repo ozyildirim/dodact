@@ -60,7 +60,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
               ),
               onPressed: () {
                 NavigationService.instance
-                    .navigate(k_ROUTE_USER_APPLICATION_HISTORY);
+                    .navigate(k_ROUTE_USER_APPLICATION_HISTORY)
+                    .then((value) => setState(() {}));
               })
         ],
       ),
@@ -76,8 +77,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
       width: size.width,
       decoration: BoxDecoration(
         image: DecorationImage(
-          colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3), BlendMode.dstATop),
+          colorFilter:
+              ColorFilter.mode(Colors.black.withOpacity(1), BlendMode.dstATop),
           image: AssetImage(kBackgroundImage),
           fit: BoxFit.cover,
         ),
@@ -164,6 +165,26 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                               .then((value) => setState(() {}));
                         })
                       : Container(),
+
+                  hasAnythingToApply(
+                              hasStreamerApplication,
+                              hasContentCreatorApplication,
+                              hasEventCreatorApplication,
+                              hasGroupApplication) ==
+                          false
+                      ? Container(
+                          color: Colors.white54,
+                          child: Center(
+                            child: Text(
+                              "Tüm başvuruları gerçekleştirdin, mevcut başvurularını sağ üstteki menüden takip edebilirsin",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: kPageCenteredTextSize,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        )
+                      : Container(),
                   // hasStreamerApplication == false &&
                   //         userProvider
                   //                 .currentUser.permissions["create_stream"] ==
@@ -188,6 +209,20 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
         });
   }
 
+  hasAnythingToApply(
+      bool hasStreamerApplication,
+      bool hasContentCreatorApplication,
+      bool hasEventCreatorApplication,
+      bool hasGroupApplication) {
+    if (hasContentCreatorApplication == false ||
+        hasEventCreatorApplication == false ||
+        hasGroupApplication == false) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   showSnackBar(String message) {
     GFToast.showToast(
       message,
@@ -199,7 +234,8 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
 
   _buildCard(IconData icon, String title, String description, Function onTap,
       {String groupId}) {
-    var cardBackgroundColor = Color(0xFFF8F9FA);
+    // var cardBackgroundColor = Color(0xFFF8F9FA);
+    var cardBackgroundColor = Colors.grey[100];
     var size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -262,25 +298,25 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           height: size.height * 0.3,
         ),
         titleWidget: Text(
-          "İçeriklerin Göz Önünde Olsun",
+          "İçeriklerinle Görünür Ol",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Dodact içerisinde içeriklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+            "Dodact'ta içeriklerini kolayca paylaşır, farkedilir ve hedef kitlene ulaşırsın",
       ),
       PageViewModel(
         image: Image.asset(
           'assets/images/application_page/application_onboarding_2.png',
-          height: size.height * 0.3,
+          height: size.height * 0.4,
         ),
         titleWidget: Text(
-          "Etkinliklerine Herkes Kolaylıkla Ulaşsın",
+          "Etkinliklerinle Sanatseverleri Bir Araya Getir",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Etkinliklerini yayınlayarak hedef kitlene kolaylıkla ulaş. Belirli koşulları karşılaman durumunda kolaylıkla içeriklerini paylaşabilirsin!",
+            "Dodact'ta yayınladığın etkinlikler ile sanatseverleri bir araya getirir, sanata katkı sağlarsın",
       ),
       PageViewModel(
         image: Image.asset(
@@ -293,58 +329,59 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Gerçekleştirdiğin canlı yayınları artık Dodact üzerinden oluşturabilirsin. Bu sayede yayınların hedef kitlene kolayca ulaşabilir.",
+            "Diğer platformlarda oluşturduğun(Twitch, Youtube vb.) yayınlarını sanatseverlere ulaştır",
       ),
       PageViewModel(
-        image: Image.asset('assets/images/onboarding/onboarding_1.png'),
+        image: Image.asset(
+          'assets/images/onboarding/onboarding_3.png',
+          height: size.height * 0.3,
+        ),
         titleWidget: Text(
-          "Topluluğunu Oluştur & Topluluğa Katıl",
+          "Topluluk Oluştur & Topluluğa Katıl",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         body:
-            "Dahil olduğun sanat topluluğunu Dodact üzerinde temsil etme şansı yakala ve çalışmalarını daha çok kişiye ulaştır. Yeni ekip arkadaşları bulabilir ya da mevcut ekiplere katılarak gücünü birleştirebilirsin.",
+            "Sanat topluluğu oluşturabilir ve/veya mevcut bir topluluğa katılabilirsin",
       ),
     ];
 
     // SystemChrome.setSystemUIOverlayStyle(
     //   SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
     // );
-    return SafeArea(
-      child: IntroductionScreen(
-        globalBackgroundColor: Colors.white,
-        pages: listPages,
-        onDone: () async {
-          SharedPreferences _prefs = await SharedPreferences.getInstance();
-          _prefs.setInt("userApplicationsIntroductionScreen", 1);
-          NavigationService.instance.pop();
-        },
-        onSkip: () async {
-          SharedPreferences _prefs = await SharedPreferences.getInstance();
-          _prefs.setInt("userApplicationsIntroductionScreen", 1);
+    return IntroductionScreen(
+      globalBackgroundColor: Colors.white,
+      pages: listPages,
+      onDone: () async {
+        SharedPreferences _prefs = await SharedPreferences.getInstance();
+        _prefs.setInt("userApplicationsIntroductionScreen", 1);
+        NavigationService.instance.pop();
+      },
+      onSkip: () async {
+        SharedPreferences _prefs = await SharedPreferences.getInstance();
+        _prefs.setInt("userApplicationsIntroductionScreen", 1);
 
-          NavigationService.instance.pop();
-        },
-        showSkipButton: true,
-        skip: Text(
-          "Atla",
-          style: TextStyle(color: Colors.black),
-        ),
-        next: const Icon(
-          Icons.navigate_next,
-          color: Colors.black,
-        ),
-        done: const Text("Başla",
-            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
-        dotsDecorator: DotsDecorator(
-          size: const Size.square(10.0),
-          activeSize: const Size(20.0, 10.0),
-          activeColor: Colors.black,
-          color: Colors.black26,
-          spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-          activeShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
-          ),
+        NavigationService.instance.pop();
+      },
+      showSkipButton: true,
+      skip: Text(
+        "Atla",
+        style: TextStyle(color: Colors.black),
+      ),
+      next: const Icon(
+        Icons.navigate_next,
+        color: Colors.black,
+      ),
+      done: const Text("Başla",
+          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+      dotsDecorator: DotsDecorator(
+        size: const Size.square(10.0),
+        activeSize: const Size(20.0, 10.0),
+        activeColor: Colors.black,
+        color: Colors.black26,
+        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
         ),
       ),
     );

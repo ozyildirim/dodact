@@ -90,15 +90,10 @@ class GroupProvider extends ChangeNotifier {
   }
 
   Future updateGroup(String groupId, Map<String, dynamic> changes) async {
-    try {
-      await _groupRepository.update(groupId, changes);
-      var updatedGroupModel = await getGroupDetail(groupId);
-      group = updatedGroupModel;
-      notifyListeners();
-    } catch (e) {
-      print("GroupProvider updateGroup error: " + e.toString());
-      return false;
-    }
+    await _groupRepository.update(groupId, changes);
+    var updatedGroupModel = await getGroupDetail(groupId);
+    group = updatedGroupModel;
+    notifyListeners();
   }
 
   Future getGroupList() async {
@@ -111,6 +106,7 @@ class GroupProvider extends ChangeNotifier {
           startAfter: groupsSnapshot.isNotEmpty ? groupsSnapshot.last : null);
 
       groupsSnapshot.addAll(snap.docs);
+      logger.d("gruplar çekildi");
 
       if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
@@ -124,7 +120,7 @@ class GroupProvider extends ChangeNotifier {
 
   Future getFilteredGroupList({
     bool reset,
-    String category,
+    List<String> category,
     String city,
   }) async {
     if (reset) {
@@ -149,6 +145,7 @@ class GroupProvider extends ChangeNotifier {
       );
 
       filteredGroupsSnapshot.addAll(snap.docs);
+      logger.d("filtreli gruplar çekildi");
       print(snap.docs);
       if (snap.docs.length < documentLimit) _hasNextFiltered = false;
       notifyListeners();
@@ -173,7 +170,6 @@ class GroupProvider extends ChangeNotifier {
     try {
       var fetchedGroup = await _groupRepository.getDetail(groupId);
       group = fetchedGroup;
-      //TODO: Topluluk güncellemelerini düzenle
       notifyListeners();
       return fetchedGroup;
     } catch (e) {
@@ -240,14 +236,7 @@ class GroupProvider extends ChangeNotifier {
   }
 
   Future<void> deleteGroupPost(String postId) async {
-    try {
-      await _groupRepository.deleteGroupPost(postId);
-      var post = groupPosts.firstWhere((element) => element.postId == postId);
-      groupPosts.remove(post);
-      notifyListeners();
-    } catch (e) {
-      logger.e("GroupProvider deleteGroupPost error: " + e.toString());
-    }
+    await _groupRepository.deleteGroupPost(postId);
   }
 
   Future<void> deleteGroupEvent(String eventId) async {
@@ -258,9 +247,11 @@ class GroupProvider extends ChangeNotifier {
     }
   }
 
-  Future setGroupManager(String userId, String groupId) {
+  Future setGroupManager(String userId, String groupId) async {
     try {
-      return _groupRepository.setGroupManager(userId, groupId);
+      await _groupRepository.setGroupManager(userId, groupId);
+      group = await _groupRepository.getDetail(groupId);
+      notifyListeners();
     } catch (e) {
       logger.e("GroupProvider setGroupManager error: " + e.toString());
       return null;

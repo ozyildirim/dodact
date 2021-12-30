@@ -8,6 +8,7 @@ import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -47,7 +48,7 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
           UserObject user = snapshot.data;
           if (snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 // crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,9 +98,13 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
                         showOwnerProfile(post, group: group);
                       },
                       child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(group.groupProfilePicture),
-                        radius: 30,
+                        backgroundColor: Colors.black,
+                        radius: 32,
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(group.groupProfilePicture),
+                          radius: 30,
+                        ),
                       ),
                     ),
                     // buildShareButton()
@@ -120,33 +125,57 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     return Consumer<PostProvider>(
       builder: (context, provider, child) {
         if (post.ownerId == userProvider.currentUser.uid) {
-          return Center(child: Text("${provider.post.dodCounter} Dod"));
+          return Row(
+            children: [
+              Icon(
+                Icons.flutter_dash_outlined,
+                size: 24,
+                color: Colors.black,
+              ),
+              SizedBox(width: 5),
+              Center(
+                  child: Text(
+                "${provider.post.dodCounter}",
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+              )),
+            ],
+          );
         } else if (provider.postDodders != null) {
           bool liked = provider.postDodders.any(
               (element) => element.dodderId == userProvider.currentUser.uid);
 
-          return Bounce(
-            duration: Duration(milliseconds: 220),
-            onPressed: () async {
-              if (liked) {
-                await provider.undodPost(
-                    post.postId, userProvider.currentUser.uid);
-              } else {
-                await provider.dodPost(
-                    post.postId, userProvider.currentUser.uid);
-              }
-            },
-            child: liked
-                ? Icon(
-                    Icons.flutter_dash_outlined,
-                    color: Colors.red,
-                    size: 40,
-                  )
-                : Icon(
-                    Icons.flutter_dash_outlined,
-                    size: 40,
-                    color: Colors.grey,
-                  ),
+          return Column(
+            children: [
+              Bounce(
+                duration: Duration(milliseconds: 220),
+                onPressed: () async {
+                  if (liked) {
+                    provider.undodPost(
+                        post.postId, userProvider.currentUser.uid);
+                  } else {
+                    try {
+                      provider.dodPost(
+                          post.postId, userProvider.currentUser.uid);
+                    } catch (e) {
+                      CustomMethods.showSnackbar(context, "Bir hata oluştu.");
+                    }
+                  }
+                },
+                child: liked
+                    ? Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                        size: 28,
+                      )
+                    : Icon(
+                        Icons.favorite_border,
+                        size: 28,
+                        color: Colors.black,
+                      ),
+              ),
+              SizedBox(height: 4),
+              Text("Dod")
+            ],
           );
         } else {
           return Center(child: spinkit);

@@ -3,7 +3,7 @@ description: Sanatçı ruhların buluşma noktası.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.9+7
+version: 0.0.10+9
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -99,6 +99,8 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^19.3.54-beta
   readmore: ^2.1.0
   ntp: ^2.0.0
+  shimmer: ^2.0.0
+ 
 
   
   

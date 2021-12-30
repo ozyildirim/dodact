@@ -9,7 +9,7 @@ class AcikSahnePart extends StatelessWidget {
   //     "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/app%2Facik_sahne_cover-min.jpeg?alt=media&token=64b3f1ee-7015-4230-8c4e-525c0b0b0e40";
 
   var imageUrl =
-      "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/tiyatro-sahne.gif?alt=media&token=2b68237d-37c7-45e0-a126-c6926aa1ce47";
+      "https://firebasestorage.googleapis.com/v0/b/dodact-7ccd3.appspot.com/o/app%2Facik-sahne.gif?alt=media&token=7a3b2d8f-7082-4a12-9c1f-9cb87e7db0f9";
 
   @override
   Widget build(BuildContext context) {

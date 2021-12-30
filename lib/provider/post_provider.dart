@@ -23,7 +23,7 @@ class PostProvider extends ChangeNotifier {
 
   final postsSnapshot = <DocumentSnapshot>[];
   String errorMessage = '';
-  int documentLimit = 10;
+  int documentLimit = 30;
   bool _hasNext = true;
   bool _isFetchingPosts = false;
 
@@ -76,14 +76,10 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> deletePost(String postId) async {
-    try {
-      await postRepository.delete(postId);
+    await postRepository.delete(postId);
+    notifyListeners();
 
-      notifyListeners();
-    } catch (e) {
-      print("PostProvider delete error:  " + e.toString());
-      return null;
-    }
+    // throw Exception("PostProvider delete post error: ");
   }
 
   Future<PostModel> getDetail(String postId) async {
@@ -113,6 +109,7 @@ class PostProvider extends ChangeNotifier {
       postsSnapshot.map((e) => PostModel.fromJson(e.data())).toList();
 
   Future fetchNextPosts() async {
+    print("post çekildi");
     if (_isFetchingPosts) return;
 
     errorMessage = '';
@@ -133,7 +130,6 @@ class PostProvider extends ChangeNotifier {
     }
 
     _isFetchingPosts = false;
-    print("çekildi");
   }
 
   Future<List<PostModel>> getTopPosts() async {
@@ -175,27 +171,19 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> dodPost(String postId, String userId) async {
-    try {
-      await postRepository.dodPost(postId, userId);
-      post.dodders.add(
-        DodderModel(date: DateTime.now(), dodderId: userId),
-      );
-      notifyListeners();
-    } catch (e) {
-      logger.e("PostProvider dodPost error: " + e.toString());
-    }
+    await postRepository.dodPost(postId, userId);
+    post.dodders.add(
+      DodderModel(date: DateTime.now(), dodderId: userId),
+    );
+    notifyListeners();
   }
 
   Future<void> undodPost(String postId, String userId) async {
-    try {
-      await postRepository.undodPost(postId, userId);
-      var dodder =
-          post.dodders.firstWhere((element) => element.dodderId == userId);
-      post.dodders.remove(dodder);
-      notifyListeners();
-    } catch (e) {
-      logger.e("PostProvider undodPost error: " + e.toString());
-    }
+    await postRepository.undodPost(postId, userId);
+    var dodder =
+        post.dodders.firstWhere((element) => element.dodderId == userId);
+    post.dodders.remove(dodder);
+    notifyListeners();
   }
 
   Future<List<PostModel>> getUserPosts(UserObject user) async {

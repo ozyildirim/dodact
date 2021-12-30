@@ -3,6 +3,7 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +18,13 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
   GroupProvider groupProvider;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     groupProvider = Provider.of<GroupProvider>(context, listen: false);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
@@ -54,7 +60,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
                     itemCount: asyncSnapshot.data.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
-                      childAspectRatio: 1,
+                      childAspectRatio: 1.5,
                       crossAxisSpacing: mediaQuery.size.width * 0.02,
                       mainAxisSpacing: mediaQuery.size.width * 0.02,
                     ),
@@ -76,7 +82,7 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
                               child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                  color: Colors.orange,
+                                  color: Colors.grey,
                                   child: ListTile(
                                     title: Text(
                                       event.title,
@@ -93,38 +99,15 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    trailing: IconButton(
-                                      icon: Icon(Icons.delete),
-                                      onPressed: () {
-                                        //TODO: BU kısmı düzenle
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: Text("Uyarı"),
-                                              content: Text(
-                                                  "Bu etkinliği silmek istediğine emin misin?"),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                  child: Text("Evet"),
-                                                  onPressed: () {
-                                                    deleteGroupEvent(event.id);
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                                FlatButton(
-                                                  child: Text("Hayır"),
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                            // return showDeletePostDialog(
-                                            //     post.postId);
-                                          },
-                                        );
-                                      },
+                                    trailing: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      child: IconButton(
+                                        icon: Icon(Icons.delete,
+                                            color: Colors.black),
+                                        onPressed: () {
+                                          showDeleteEventDialog(event.id);
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -144,20 +127,13 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
   }
 
   Future<void> showDeleteEventDialog(String eventId) async {
-    print("asdasd");
-    CoolAlert.show(
+    CustomMethods.showCustomDialog(
         context: context,
-        type: CoolAlertType.confirm,
-        text: "Bu etkinliği silmek istediğinden emin misin?",
-        confirmBtnText: "Evet",
-        cancelBtnText: "Vazgeç",
-        title: "",
-        onCancelBtnTap: () {
-          NavigationService.instance.pop();
-        },
-        onConfirmBtnTap: () async {
+        confirmButtonText: "Evet",
+        confirmActions: () async {
           await deleteGroupEvent(eventId);
-        });
+        },
+        title: "Bu etkinliği silmek istediğinden emin misin?");
   }
 
   Future<List<EventModel>> getGroupEvents() async {
@@ -166,5 +142,16 @@ class _GroupEventManagementPageState extends State<GroupEventManagementPage> {
 
   Future<void> deleteGroupEvent(String eventId) async {
     await groupProvider.deleteGroupEvent(eventId);
+
+    try {
+      await groupProvider.deleteGroupEvent(eventId);
+      NavigationService.instance.pop();
+      setState(() {});
+      CustomMethods.showSnackbar(
+          context, "Topluluk gönderisi başarıyla kaldırıldı.");
+    } catch (e) {
+      CustomMethods.showSnackbar(
+          context, "Topluluk gönderisi kaldırılırken bir hata oluştu.");
+    }
   }
 }

@@ -74,6 +74,7 @@ class FirebasePostService {
     QuerySnapshot querySnapshot = await postsRef
         .where('ownerId', isEqualTo: user.uid)
         .where('visible', isEqualTo: true)
+        .orderBy('postDate', descending: true)
         .get();
 
     for (DocumentSnapshot post in querySnapshot.docs) {
@@ -91,6 +92,7 @@ class FirebasePostService {
       QuerySnapshot querySnapshot = await postsRef
           .where('ownerId', isEqualTo: groupId)
           .where('visible', isEqualTo: true)
+          .orderBy('postDate', descending: true)
           .get();
 
       for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
@@ -108,7 +110,8 @@ class FirebasePostService {
 
   Future<QuerySnapshot> getListQuery(
       int documentLimit, DocumentSnapshot startAfter) async {
-    final refPosts = postsRef.limit(documentLimit);
+    final refPosts =
+        postsRef.limit(documentLimit).orderBy('postDate', descending: true);
 
     if (startAfter == null) {
       return refPosts.get();

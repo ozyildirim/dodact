@@ -114,14 +114,13 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
         expandedValue:
             "Açık Sahne sayesinde sanatın her alanında gerçekleştirilecek dijital performanslara dilediğin zamanda ve dilediğin yerden katılım sağlayabilirsin. İlgilendiğin sanat dalını daha kolay takip edebilmeni ve daha kolay katılım sağlayabilmeni sağlamak için Açık Sahne seninle!"),
     QuestionItem(
-        headerValue:
-            "İlgilendiğim sanat alanı ile ilgili Açık Sahne'de kendimi göstermek istiyorum, neler yapabilirim?",
+        headerValue: "Kimler Açık Sahne'de yer alabilir?",
         expandedValue:
-            "Dodact kişilerin Açık Sahne vasıtasıyla belirlenen kalite standartları dahilinde performanslarını kitleler ile buluşturmasını, yeni yeteneklerin keşfedilmesini ve yapılan bu işten kazanç sağlamalarını amaçlamaktadır. Açık Sahne'de olacak kişi performansı ile ilgili detayları öncesinde belirlemek ve bildirmek zorundadır. Gerekli teknolojik standartlar oluşturulduktan sonra sürece dahil olabilirsin."),
+            "Açık Sahnede yayınlamak istediğin performans fikrini detaylarıyla Dodact ekibiyle paylaşan ve belli standartlar doğrultusunda onaylanan herkes Açık Sahnede yer alabilir. Açık Sahne'de yer alabilmek için bizimle hello@dodact.com üzerinden iletişime geçebilirsin."),
     QuestionItem(
-        headerValue: "Açık Sahne'de nasıl yer alabilirim?",
+        headerValue: "Açık Sahnede ne tip performanslar izleyebilirim?",
         expandedValue:
-            "Açık Sahne hakkında daha detaylı bilgi almak ve sürece dahil olmak için hello@dodact.com adresinden bizimle iletişime geçebilirsin."),
+            "Dodact olarak amacımız kendini göstermek isteyen yeni yetenekleri kitlelerle buluşturabilmek. Bu sayede sen de birbirinden farklı, yeni ve şahane performanslara kesintisiz ulaşabileceksin. "),
   ];
 
   buildBodyPart(BuildContext context) {
@@ -133,7 +132,7 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Açık Sahne: Sanat ile ilgilenen kişilerin hedef kitlesine canlı yayınlar ile ulaşmasını sağlayacak bir aracı kanaldır.\n\nKişiler performanslarını belirlenmiş kalite standartları dahilinde izleyicilerine, zaman,mekan veya olumsuz şartlardan bağımsız şekilde, diledikleri her an ulaştırabilecekler. Böylelikle ilgilendiği sanat dalında performansını sergilemek isteyen kişilerin sahneye ulaşılabilirliğini arttırıyoruz.",
+              "Açık Sahne sanat ile ilgilenen kişilerin performanslarını canlı olarak hedef kitlelerine ulaştırmalarını sağlayan bir ortamdır. Canlı yayınlamak istediğiniz her türlü performansı izleyiclerinizle zamandan ve mekandan bağımsız buluşturabilirsiniz. ",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ),
