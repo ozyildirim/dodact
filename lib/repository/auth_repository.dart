@@ -15,10 +15,10 @@ class AuthRepository {
 
   AppMode appMode = AppMode.RELEASE;
 
-  Future<User> currentUser() async {
+  User currentUser() {
     if (appMode == AppMode.DEBUG) {
     } else {
-      User user = await _firebaseAuthService.currentUser();
+      User user = _firebaseAuthService.currentUser();
       return user;
     }
   }

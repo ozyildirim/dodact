@@ -3,12 +3,11 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/podcast_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class PodcastDetail extends StatelessWidget {
-  final PodcastModel podcast;
-
-  PodcastDetail({this.podcast});
+  final PodcastModel podcast = Get.arguments;
 
   @override
   Widget build(BuildContext context) {

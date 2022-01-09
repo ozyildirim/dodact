@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:dodact_v1/config/constants/app_constants.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -82,6 +84,7 @@ class _VersionControlPageState extends State<VersionControlPage> {
                 bool data = asyncSnapshot.data;
                 if (data) {
                   return EnforcedUpdateScreen();
+                  // Get.to(EnforcedUpdateScreen());
                 } else {
                   return LandingPage();
                 }

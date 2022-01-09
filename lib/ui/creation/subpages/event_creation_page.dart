@@ -24,12 +24,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventCreationPage extends StatefulWidget {
-  final String eventType;
-  final bool eventPlatform;
-  final String groupId;
-
-  EventCreationPage({this.eventType, this.eventPlatform, this.groupId});
-
   @override
   _EventCreationPageState createState() => _EventCreationPageState();
 }
@@ -38,6 +32,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   GlobalKey<FormBuilderState> _eventFormKey = new GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _eventScaffoldKey = GlobalKey<ScaffoldState>();
   EventProvider eventProvider;
+
+  String type;
+  bool eventPlatform;
+  String groupId;
 
   var logger = Logger();
   List<File> _eventImages = [];
@@ -70,20 +68,25 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   void dispose() {
     super.dispose();
     eventDescriptionFocus.dispose();
-    print(widget.groupId);
+    print(groupId);
     eventTitleFocus.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+
+    type = Get.arguments[0];
+    eventPlatform = Get.arguments[1];
+    groupId = Get.arguments[2];
+
     eventProvider = Provider.of<EventProvider>(context, listen: false);
-    isOnline = widget.eventPlatform;
+    isOnline = eventPlatform;
     eventHint = getRandomEventTitle();
 
-    if (widget.groupId != null) {
+    if (groupId != null) {
       ownerType = "Group";
-      ownerId = widget.groupId;
+      ownerId = groupId;
     } else {
       ownerType = "User";
       ownerId = authProvider.currentUser.uid;
@@ -623,7 +626,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               : null;
           var searchKeywords = createSearchKeywords(title);
 
-          var eventType = widget.eventType;
+          var eventType = type;
 
           await createEvent(
               title,

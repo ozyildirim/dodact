@@ -688,6 +688,9 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
       // Get.back();
       // NavigationService.instance.navigate(k_ROUTE_CREATE_EVENT_PAGE,
       //     args: [eventType, onlineStatus, widget.groupId ?? null]);
+
+      Get.toNamed(k_ROUTE_CREATE_EVENT_PAGE,
+          arguments: [eventType, onlineStatus, widget.groupId ?? null]);
     }
   }
 

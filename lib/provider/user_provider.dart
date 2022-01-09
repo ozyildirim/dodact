@@ -50,7 +50,6 @@ class UserProvider with ChangeNotifier {
   setCurrentUser(UserObject user) {
     currentUser = user;
     getCurrentUserFavoritePosts();
-    notifyListeners();
   }
 
   Future<UserObject> getUserByID(String userId) async {

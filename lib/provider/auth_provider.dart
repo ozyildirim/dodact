@@ -34,8 +34,8 @@ class AuthProvider extends BaseModel {
     currentUser = _user;
   }
 
-  getCurrentUser() async {
-    setUser(await authRepository.currentUser());
+  getCurrentUser() {
+    setUser(authRepository.currentUser());
     notifyListeners();
   }
 
