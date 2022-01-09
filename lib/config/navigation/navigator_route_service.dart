@@ -29,7 +29,6 @@ import 'package:dodact_v1/ui/event/event_detail.dart';
 import 'package:dodact_v1/ui/event/event_edit_page.dart';
 import 'package:dodact_v1/ui/event/events_page.dart';
 import 'package:dodact_v1/ui/general/subpages/acik_sahne_page.dart';
-import 'package:dodact_v1/ui/general/subpages/spinner_page.dart';
 import 'package:dodact_v1/ui/group/screens/group_detail_page.dart';
 import 'package:dodact_v1/ui/group/screens/groups_page.dart';
 import 'package:dodact_v1/ui/group/subpages/group_add_member_page.dart';
@@ -192,9 +191,6 @@ class NavigationRouteManager {
         return _navigateToDefault(GroupsPage(), settings);
       case k_ROUTE_GROUP_DETAIL:
         return _navigateToDefault(GroupDetailPage(group: args), settings);
-
-      case k_ROUTE_SPINNER_PAGE:
-        return _navigateToDefault(SpinnerPage(), settings);
 
       case k_ROUTE_ACIK_SAHNE_PAGE:
         return _navigateToDefault(AcikSahnePage(), settings);
