@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/podcast_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +21,7 @@ class PodcastPart extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
               onTap: () {
-                NavigationService.instance
-                    .navigate(k_ROUTE_PODCAST_DETAIL, args: podcast);
+                Get.toNamed(k_ROUTE_PODCAST_DETAIL, arguments: podcast);
               },
               child: CachedNetworkImage(
                   fit: BoxFit.cover,

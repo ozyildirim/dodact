@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -16,6 +15,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 
 enum Mode { Login, Signup }
@@ -37,39 +37,35 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   bool showCircular = false;
 
-  // void _signInWithFacebook() async {
-  //   UserObject _user = await authProvider.signInWithFacebook();
-  // }
-
   void _signInWithGoogle() async {
     CustomMethods().showLoaderDialog(context, "Google ile Giriş Yapılıyor");
     var status = await authProvider.signInWithGoogle(context);
 
-    if (status != AuthResultStatus.successful) {
-      NavigationService.instance.pop();
-      if (status != AuthResultStatus.abortedByUser) {
-        final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        showSnackbar(errorMsg);
-      }
-    } else {
-      NavigationService.instance.pop();
-      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-    }
+    // if (status != AuthResultStatus.successful) {
+    //   NavigationService.instance.pop();
+    //   if (status != AuthResultStatus.abortedByUser) {
+    //     final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
+    //     showSnackbar(errorMsg);
+    //   }
+    // } else {
+    //   NavigationService.instance.pop();
+    //   NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
+    // }
   }
 
   void _signInWithApple() async {
-    var status = await authProvider.signInWithApple(context);
+    // var status = await authProvider.signInWithApple(context);
 
-    if (status != AuthResultStatus.successful) {
-      NavigationService.instance.pop();
-      if (status != AuthResultStatus.abortedByUser) {
-        final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        showSnackbar(errorMsg);
-      }
-    } else {
-      NavigationService.instance.pop();
-      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-    }
+    // if (status != AuthResultStatus.successful) {
+    //   NavigationService.instance.pop();
+    //   if (status != AuthResultStatus.abortedByUser) {
+    //     final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
+    //     showSnackbar(errorMsg);
+    //   }
+    // } else {
+    //   NavigationService.instance.pop();
+    //   NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
+    // }
   }
 
   showAgreementDialog(String channel) {
@@ -368,48 +364,48 @@ class _LogInPageState extends BaseState<LogInPage> {
   }
 
   void submitForm() async {
-    if (_formKey.currentState.saveAndValidate()) {
-      CustomMethods().showLoaderDialog(context, "Giriş Yapılıyor");
-      var status = await authProvider.signInWithEmail(
-          _formKey.currentState.value['email'].toString().trim(),
-          _formKey.currentState.value['password'].toString().trim());
+    // if (_formKey.currentState.saveAndValidate()) {
+    //   CustomMethods().showLoaderDialog(context, "Giriş Yapılıyor");
+    //   var status = await authProvider.signInWithEmail(
+    //       _formKey.currentState.value['email'].toString().trim(),
+    //       _formKey.currentState.value['password'].toString().trim());
 
-      if (status != AuthResultStatus.successful) {
-        NavigationService.instance.pop();
-        final errorMessage =
-            AuthExceptionHandler.generateExceptionMessage(status);
-        // _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        //   duration: new Duration(seconds: 2),
-        //   content: new Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: <Widget>[
-        //       // new CircularProgressIndicator(),
-        //       Expanded(
-        //         child: new Text(
-        //           errorMessage,
-        //           overflow: TextOverflow.fade,
-        //           softWrap: false,
-        //           maxLines: 1,
-        //           style: TextStyle(fontSize: 16),
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        // ));
-        showSnackbar(errorMessage);
-        debugPrint(errorMessage);
-      } else {
-        NavigationService.instance.pop();
-        NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-      }
-    } else {
-      setState(() {
-        _autoValidate = true;
-      });
-    }
+    //   if (status != AuthResultStatus.successful) {
+    //     NavigationService.instance.pop();
+    //     final errorMessage =
+    //         AuthExceptionHandler.generateExceptionMessage(status);
+    //     // _scaffoldKey.currentState.showSnackBar(new SnackBar(
+    //     //   duration: new Duration(seconds: 2),
+    //     //   content: new Row(
+    //     //     mainAxisAlignment: MainAxisAlignment.center,
+    //     //     children: <Widget>[
+    //     //       // new CircularProgressIndicator(),
+    //     //       Expanded(
+    //     //         child: new Text(
+    //     //           errorMessage,
+    //     //           overflow: TextOverflow.fade,
+    //     //           softWrap: false,
+    //     //           maxLines: 1,
+    //     //           style: TextStyle(fontSize: 16),
+    //     //         ),
+    //     //       )
+    //     //     ],
+    //     //   ),
+    //     // ));
+    //     showSnackbar(errorMessage);
+    //     debugPrint(errorMessage);
+    //   } else {
+    //     NavigationService.instance.pop();
+    //     NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
+    //   }
+    // } else {
+    //   setState(() {
+    //     _autoValidate = true;
+    //   });
+    // }
   }
 
   void _navigateToForgotPassword(BuildContext context) {
-    NavigationService.instance.navigate(k_ROUTE_FORGOT_PASSWORD);
+    Get.toNamed(k_ROUTE_FORGOT_PASSWORD);
   }
 }

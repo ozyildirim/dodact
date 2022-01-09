@@ -1,7 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/drawer.dart';
 import 'package:dodact_v1/ui/profile/widgets/user_profile/user_profile_body.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/components/badge/gf_icon_badge.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
             counterChild: Container(),
             child: IconButton(
               onPressed: () {
-                NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
+                Get.toNamed(k_ROUTE_USER_NOTIFICATIONS);
               },
               icon: Icon(
                 FontAwesome5Solid.bell,
@@ -59,7 +59,7 @@ class _ProfilePageState extends BaseState<ProfilePage>
             counterChild: Container(),
             child: IconButton(
               onPressed: () {
-                NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
+                Get.toNamed(k_ROUTE_USER_CHATROOMS);
               },
               icon: Icon(
                 FontAwesome5Solid.envelope,

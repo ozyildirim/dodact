@@ -1,5 +1,5 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
+
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -8,6 +8,7 @@ import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -135,14 +136,14 @@ class _GroupsPageState extends State<GroupsPage> {
         });
         updateGroups(selectedCategory, selectedCity);
         print(selectedCity);
-        NavigationService.instance.pop();
+        Get.back();
       } else {
         isFiltered = false;
         groupProvider.getGroupList();
         _formKey.currentState.reset();
         selectedCategory = [];
         selectedCity = null;
-        NavigationService.instance.pop();
+        Get.back();
       }
     }
   }
@@ -336,7 +337,7 @@ class _GroupsPageState extends State<GroupsPage> {
                                   selectedCity = null;
                                 });
                               }
-                              NavigationService.instance.pop();
+                              Get.back();
                             },
                           ),
                         ),

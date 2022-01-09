@@ -3,7 +3,6 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
@@ -14,6 +13,7 @@ import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -104,15 +104,15 @@ class _LandingPageState extends BaseState<LandingPage> {
   }
 
   navigateSignupDetail() {
-    NavigationService.instance.navigateReplacement(k_ROUTE_REGISTER_DETAIL);
+    Get.offAllNamed(k_ROUTE_REGISTER_DETAIL);
   }
 
   navigateHomePage() {
-    NavigationService.instance.navigateReplacement(k_ROUTE_HOME);
+    Get.offAllNamed(k_ROUTE_HOME);
   }
 
   navigateWelcomePage() {
-    NavigationService.instance.navigateReplacement(k_ROUTE_WELCOME);
+    Get.offAllNamed(k_ROUTE_WELCOME);
   }
 
   bool isNewUser(UserObject user) {

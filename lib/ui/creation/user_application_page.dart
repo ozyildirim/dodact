@@ -1,11 +1,11 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/application_model.dart';
 import 'package:dodact_v1/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
@@ -59,8 +59,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                 Icons.history_outlined,
               ),
               onPressed: () {
-                NavigationService.instance
-                    .navigate(k_ROUTE_USER_APPLICATION_HISTORY)
+                Get.toNamed(k_ROUTE_USER_APPLICATION_HISTORY)
                     .then((value) => setState(() {}));
               })
         ],
@@ -134,8 +133,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                       ? _buildCard(Icons.post_add, "İçerik Üretici Başvurusu",
                           "Kendine özgü içeriklerini sanatseverlerle paylaş!",
                           () {
-                          NavigationService.instance
-                              .navigate(k_ROUTE_CONTENT_CREATOR_APPLICATION)
+                          Get.toNamed(k_ROUTE_CONTENT_CREATOR_APPLICATION)
                               .then((value) => setState(() {}));
                         })
                       : Container(),
@@ -148,8 +146,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                           "Etkinlik Oluşturucu Başvurusu",
                           "Sanatsal aktivitelerini diğer sanatseverlere kolayca ulaştır!",
                           () {
-                          NavigationService.instance
-                              .navigate(k_ROUTE_EVENT_CREATOR_APPLICATION)
+                          Get.toNamed(k_ROUTE_EVENT_CREATOR_APPLICATION)
                               .then((value) => setState(() {}));
                         })
                       : Container(),
@@ -160,8 +157,7 @@ class _UserApplicationMenuPageState extends BaseState<UserApplicationMenuPage> {
                       ? _buildCard(Icons.group, "Topluluk Başvurusu",
                           "Sanat topluluğu oluştur, mevcut topluluklara katıl",
                           () {
-                          NavigationService.instance
-                              .navigate(k_ROUTE_GROUP_APPLICATION)
+                          Get.toNamed(k_ROUTE_GROUP_APPLICATION)
                               .then((value) => setState(() {}));
                         })
                       : Container(),
@@ -355,13 +351,13 @@ class ApplicationPageIntroductionPage extends StatelessWidget {
       onDone: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("userApplicationsIntroductionScreen", 1);
-        NavigationService.instance.pop();
+        Get.back();
       },
       onSkip: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("userApplicationsIntroductionScreen", 1);
 
-        NavigationService.instance.pop();
+        Get.back();
       },
       showSkipButton: true,
       skip: Text(

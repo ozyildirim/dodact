@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CreateChatPage extends StatefulWidget {
@@ -135,7 +135,7 @@ class _CreateChatPageState extends State<CreateChatPage> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     var otherUser = await userProvider.getUserByID(userId);
 
-    NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
-        args: [userProvider.currentUser.uid, otherUser]);
+    Get.toNamed(k_ROUTE_CHATROOM_PAGE,
+        arguments: [userProvider.currentUser.uid, otherUser]);
   }
 }

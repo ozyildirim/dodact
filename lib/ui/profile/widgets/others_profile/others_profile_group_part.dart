@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common/widgets/group_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfileGroupsTab extends StatefulWidget {
@@ -74,8 +74,7 @@ class _OthersProfileGroupsTabState extends State<OthersProfileGroupsTab> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          NavigationService.instance
-              .navigate(k_ROUTE_GROUP_DETAIL, args: group);
+          Get.toNamed(k_ROUTE_GROUP_DETAIL, arguments: group);
         },
         child: Container(
           height: size.height * 0.15,

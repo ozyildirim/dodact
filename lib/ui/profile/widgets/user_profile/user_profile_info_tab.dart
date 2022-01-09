@@ -1,11 +1,11 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
 class UserProfileInfoTab extends StatefulWidget {
@@ -42,8 +42,7 @@ class _UserProfileInfoTabState extends BaseState<UserProfileInfoTab> {
           ),
           GestureDetector(
             onTap: () {
-              NavigationService.instance
-                  .navigate(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
+              Get.toNamed(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
             },
             child: Text("Profiline detayları eklemek için tıkla",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),

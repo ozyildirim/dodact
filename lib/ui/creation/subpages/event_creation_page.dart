@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
@@ -15,6 +14,7 @@ import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
@@ -674,15 +674,15 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       print(newEvent.address);
 
       await eventProvider.addEvent(newEvent, _eventImages).then((_) async {
-        NavigationService.instance.pop();
+        Get.back();
         await CustomMethods().showSuccessDialog(
             context, "Tebrikler! Etkinliğin başarıyla yayınlandı.");
-        NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+        Get.offAllNamed(k_ROUTE_HOME);
       });
     } catch (e) {
       print("EventCreationPage error $e ");
       print(e.toString());
-      NavigationService.instance.pop();
+      Get.back();
       CustomMethods().showErrorDialog(context, "Etkinlik oluşturulamadı.");
     }
   }

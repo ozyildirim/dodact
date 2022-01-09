@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class _GroupMemberManagementPageState
         ),
         onSelected: (value) async {
           if (value == 0) {
-            NavigationService.instance.navigate(k_ROUTE_GROUP_INVITATIONS_PAGE);
+            Get.toNamed(k_ROUTE_GROUP_INVITATIONS_PAGE);
           }
         },
         itemBuilder: (context) => [
@@ -106,8 +106,7 @@ class _GroupMemberManagementPageState
                       if (index == 0) {
                         return InkWell(
                           onTap: () {
-                            NavigationService.instance
-                                .navigate(k_ROUTE_GROUP_ADD_MEMBER_PAGE);
+                            Get.toNamed(k_ROUTE_GROUP_ADD_MEMBER_PAGE);
                           },
                           child: Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -198,8 +197,7 @@ class _GroupMemberManagementPageState
 
   navigateUserProfile(UserObject user) {
     if (userProvider.currentUser.uid != user.uid) {
-      NavigationService.instance
-          .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+      Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE, arguments: user);
     }
   }
 
@@ -207,7 +205,7 @@ class _GroupMemberManagementPageState
     try {
       await groupProvider.removeGroupMember(
           userID, groupProvider.group.groupId);
-      NavigationService.instance.pop();
+      Get.back();
       setState(() {});
       CustomMethods.showSnackbar(
           context, "Üye başarıyla topluluktan çıkarıldı.");
@@ -231,7 +229,7 @@ class _GroupMemberManagementPageState
                   ? SimpleDialogOption(
                       child: Text("Üyeyi Topluluktan Çıkar"),
                       onPressed: () {
-                        NavigationService.instance.pop();
+                        Get.back();
                         removeMemberDialog(userId);
                       },
                     )
@@ -240,7 +238,7 @@ class _GroupMemberManagementPageState
                   ? SimpleDialogOption(
                       child: Text("Yönetici Yap"),
                       onPressed: () {
-                        NavigationService.instance.pop();
+                        Get.back();
                         setManagerDialog(userId);
                       },
                     )
@@ -257,7 +255,7 @@ class _GroupMemberManagementPageState
       confirmActions: () {
         deleteMember(userId);
         setState(() {});
-        NavigationService.instance.pop();
+        Get.back();
       },
       title: "Üyeyi topluluğundan çıkarmak istediğine emin misin?",
     );
@@ -270,12 +268,12 @@ class _GroupMemberManagementPageState
       confirmActions: () async {
         try {
           await setGroupManager(userId, groupProvider.group.groupId);
-          NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+          Get.offAllNamed(k_ROUTE_HOME);
           CustomMethods.showSnackbar(
               context, "Topluluk yöneticisi başarıyla değiştirildi.");
         } catch (e) {
           CustomMethods.showSnackbar(context, "Bir hata oluştu.");
-          NavigationService.instance.pop();
+          Get.back();
         }
       },
       title: "Bu kullanıcıyı yönetici yapmak istediğine emin misin?",

@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeader extends StatefulWidget {
@@ -111,6 +111,6 @@ class _UserProfileHeaderState extends BaseState<UserProfileHeader> {
   }
 
   void navigateUserProfileSettings() {
-    NavigationService.instance.navigate(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
+    Get.toNamed(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
   }
 }

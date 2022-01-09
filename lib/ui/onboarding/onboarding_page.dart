@@ -1,7 +1,7 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,14 +69,12 @@ class OnBoardingPage extends StatelessWidget {
       onDone: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("initScreen", 1);
-        NavigationService.instance
-            .navigateReplacement(k_ROUTE_VERSION_CONTROL_PAGE);
+        Get.offAllNamed(k_ROUTE_VERSION_CONTROL_PAGE);
       },
       onSkip: () async {
         SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setInt("initScreen", 1);
-        NavigationService.instance
-            .navigateReplacement(k_ROUTE_VERSION_CONTROL_PAGE);
+        Get.offAllNamed(k_ROUTE_VERSION_CONTROL_PAGE);
       },
       showSkipButton: true,
       skip: Text(

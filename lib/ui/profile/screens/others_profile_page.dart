@@ -1,7 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
@@ -12,6 +11,7 @@ import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +43,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
         confirmButtonText: "Evet",
         confirmActions: () async {
           await reportUser(otherUser.uid);
-          NavigationService.instance.pop();
+          Get.back();
         });
   }
 
@@ -61,19 +61,19 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
       );
       if (reportReason != null) {
         try {
-          NavigationService.instance.pop();
+          Get.back();
           await FirebaseReportService.reportUser(
               authProvider.currentUser.uid, otherUser.uid, reportReason);
 
           CustomMethods.showSnackbar(
               context, "Kullanıcı başarıyla bildirildi.");
         } catch (e) {
-          NavigationService.instance.pop();
+          Get.back();
           CustomMethods.showSnackbar(
               context, "İşlem gerçekleştirilirken hata oluştu.");
         }
       } else {
-        NavigationService.instance.pop();
+        Get.back();
       }
     }
   }
@@ -164,8 +164,8 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
   createChatroom(BuildContext context, String userId) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
-        args: [userProvider.currentUser.uid, userProvider.otherUser]);
+    Get.toNamed(k_ROUTE_CHATROOM_PAGE,
+        arguments: [userProvider.currentUser.uid, userProvider.otherUser]);
   }
 
   _showUnblockDialog() {
@@ -175,7 +175,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
         confirmButtonText: "Evet",
         confirmActions: () async {
           unblockUser();
-          NavigationService.instance.pop();
+          Get.back();
         });
   }
 
@@ -196,7 +196,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
         confirmButtonText: "Evet",
         confirmActions: () async {
           await blockUser();
-          NavigationService.instance.pop();
+          Get.back();
         });
   }
 

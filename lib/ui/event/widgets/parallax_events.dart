@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ParallaxEvent extends StatelessWidget {
@@ -35,7 +35,7 @@ class ParallaxEvent extends StatelessWidget {
   }
 
   navigateEventDetail(EventModel event) {
-    NavigationService.instance.navigate(k_ROUTE_EVENT_DETAIL, args: event);
+    Get.toNamed(k_ROUTE_EVENT_DETAIL, arguments: event);
   }
 }
 

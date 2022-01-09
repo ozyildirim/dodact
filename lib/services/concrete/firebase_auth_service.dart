@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -62,12 +62,12 @@ class FirebaseAuthService {
         } else if (e.code == 'invalid-credential') {
           // handle the error here
         }
-        NavigationService.instance.pop();
+        Get.back();
       } catch (e) {
         // handle the error here
       }
     } else {
-      NavigationService.instance.pop();
+      Get.back();
       return null;
     }
   }
@@ -116,12 +116,12 @@ class FirebaseAuthService {
         } else if (e.code == 'invalid-credential') {
           // handle the error here
         }
-        NavigationService.instance.pop();
+        Get.back();
       } catch (e) {
         // handle the error here
       }
     } else {
-      NavigationService.instance.pop();
+      Get.back();
       return null;
     }
   }

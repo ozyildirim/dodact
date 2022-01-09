@@ -3,7 +3,6 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/message_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
@@ -13,6 +12,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:logger/logger.dart';
 import 'package:paginate_firestore/bloc/pagination_cubit.dart';
@@ -306,7 +306,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         chatroomProvider.deleteChatroom(roomId).then((value) {
           print("buildEmptyRoomAction");
           exitCounter++;
-          NavigationService.instance.pop();
+          Get.back();
         });
       }
     }
@@ -453,7 +453,7 @@ class _ChatroomPageState extends BaseState<ChatroomPage> {
         context: context,
         confirmActions: () async {
           await reportMessage(roomId, messageId, message);
-          NavigationService.instance.pop();
+          Get.back();
         },
         title: "Bu mesajı bildirmek istediğinden emin misin?",
         confirmButtonText: "Evet");

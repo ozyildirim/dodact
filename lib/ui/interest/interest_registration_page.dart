@@ -2,10 +2,10 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class InterestRegistrationPage extends StatefulWidget {
@@ -182,7 +182,8 @@ class _InterestRegistrationPageState
   }
 
   void navigateLanding() {
-    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+    //TODO: düzelt
+    Get.offAll(k_ROUTE_HOME);
   }
 
   showInformationDialog() {

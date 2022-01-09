@@ -1,7 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
@@ -15,15 +14,12 @@ import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class PostDetail extends StatefulWidget {
-  final PostModel post;
-
-  PostDetail({this.post});
-
   @override
   _PostDetailState createState() => _PostDetailState();
 }
@@ -59,7 +55,7 @@ class _PostDetailState extends BaseState<PostDetail> {
   @override
   void initState() {
     super.initState();
-    post = widget.post;
+    post = Get.arguments;
     postProvider = getProvider<PostProvider>();
     Provider.of<PostProvider>(context, listen: false).setPost(post);
     canUserManagePost = canUserManagePostMethod();
@@ -139,8 +135,7 @@ class _PostDetailState extends BaseState<PostDetail> {
                   if (value == 0) {
                     await showDeletePostDialog();
                   } else if (value == 1) {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_POST_EDIT_PAGE, args: post);
+                    Get.toNamed(k_ROUTE_POST_EDIT_PAGE, arguments: post);
                   }
                 },
                 itemBuilder: (context) => [
@@ -308,7 +303,7 @@ class _PostDetailState extends BaseState<PostDetail> {
 
     if (result) {
       CustomMethods.showSnackbar(context, "Bu gönderiyi zaten bildirdin.");
-      NavigationService.instance.pop();
+      Get.back();
     } else {
       var reportReason = await showDialog(
         barrierDismissible: true,
@@ -317,7 +312,7 @@ class _PostDetailState extends BaseState<PostDetail> {
       );
 
       if (reportReason != null) {
-        NavigationService.instance.pop();
+        Get.back();
         try {
           await FirebaseReportService()
               .reportPost(userProvider.currentUser.uid, postId, reportReason);
@@ -329,7 +324,7 @@ class _PostDetailState extends BaseState<PostDetail> {
               context, "İşlem gerçekleştirilirken hata oluştu.");
         }
       } else {
-        NavigationService.instance.pop();
+        Get.back();
       }
     }
   }
@@ -340,13 +335,13 @@ class _PostDetailState extends BaseState<PostDetail> {
       await Provider.of<PostProvider>(context, listen: false)
           .deletePost(post.postId);
 
-      NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+      Get.offAllNamed(k_ROUTE_HOME);
       CustomMethods.showSnackbar(context, "Gönderi başarıyla silindi.");
     } catch (e) {
-      NavigationService.instance.pop();
+      Get.back();
       CustomMethods.showSnackbar(
           context, "Gönderi silinirken bir hata oluştu.");
-      NavigationService.instance.pop();
+      Get.back();
     }
     //
   }
@@ -382,8 +377,8 @@ class _PostDetailState extends BaseState<PostDetail> {
             ),
             trailing: Icon(Icons.forward, color: Colors.black),
             onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_POST_COMMENTS,
-                  args: [post.postId, post.ownerId]);
+              Get.toNamed(k_ROUTE_POST_COMMENTS,
+                  arguments: [post.postId, post.ownerId]);
             },
           ),
         ),

@@ -4,13 +4,13 @@ import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/chatroom_model.dart';
 import 'package:dodact_v1/model/message_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/chatroom_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
@@ -35,7 +35,7 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
               color: Colors.white,
             ),
             onPressed: () {
-              NavigationService.instance.navigate(k_ROUTE_CREATE_CHAT_PAGE);
+              Get.toNamed(k_ROUTE_CREATE_CHAT_PAGE);
             },
           )
         ],
@@ -130,8 +130,8 @@ class _UserChatroomsPageState extends BaseState<UserChatroomsPage> {
         child: ListTile(
           onTap: () {
             updateMessageRead(chatroom);
-            NavigationService.instance.navigate(k_ROUTE_CHATROOM_PAGE,
-                args: [userProvider.currentUser.uid, user]);
+            Get.toNamed(k_ROUTE_CHATROOM_PAGE,
+                arguments: [userProvider.currentUser.uid, user]);
           },
           leading: Hero(
               tag: user.uid,

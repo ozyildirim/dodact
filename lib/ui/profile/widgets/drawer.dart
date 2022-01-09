@@ -2,12 +2,10 @@ import 'dart:math';
 
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class ProfileDrawer extends StatefulWidget {
   @override
@@ -62,7 +60,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             leading: Icon(Icons.star),
             title: Text("Favoriler", style: TextStyle(fontSize: 18)),
             onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_USER_FAVORITES);
+              Get.toNamed(k_ROUTE_USER_FAVORITES);
             },
           ),
 
@@ -70,7 +68,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             leading: Icon(Icons.settings),
             title: Text("Ayarlar", style: TextStyle(fontSize: 18)),
             onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_USER_OPTIONS);
+              Get.toNamed(k_ROUTE_USER_OPTIONS);
             },
           ),
 
@@ -78,8 +76,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             leading: Icon(Icons.auto_awesome_motion),
             title: Text("İlgi Alanları", style: TextStyle(fontSize: 18)),
             onTap: () {
-              NavigationService.instance
-                  .navigate(k_ROUTE_INTERESTS_CHOICE, args: false);
+              Get.toNamed(k_ROUTE_INTERESTS_CHOICE);
             },
           ),
 
@@ -103,7 +100,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
             title:
                 Text("Öneriler ve Bildiriler", style: TextStyle(fontSize: 18)),
             onTap: () {
-              NavigationService.instance.navigate(k_ROUTE_USER_FORM_PAGE);
+              Get.toNamed(k_ROUTE_USER_FORM_PAGE);
             },
           ),
 
@@ -124,9 +121,7 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
   void signOut(BuildContext context) async {
     await authProvider.signOut();
 
-    Provider.of<UserProvider>(context, listen: false).removeUser();
-    NavigationService.instance.navigateReplacement(k_ROUTE_LANDING);
-    //TODO: Problem var, burayı düzelt.
+    userProvider.removeUser();
   }
 
   setBackgroundImage() {

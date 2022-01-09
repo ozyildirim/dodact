@@ -4,7 +4,6 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -16,11 +15,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
-
 import 'package:logger/logger.dart';
-import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -31,11 +29,6 @@ enum Category { Tiyatro, Resim, Muzik, Dans }
 enum Source { Telefon, Youtube }
 
 class PostCreationPage extends StatefulWidget {
-  final String postType;
-  final String groupId;
-
-  PostCreationPage({this.postType, this.groupId});
-
   @override
   _PostCreationPageState createState() => _PostCreationPageState();
 }
@@ -64,12 +57,16 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   File postFile;
   FileImage imageThumbnail;
   List<String> postCategories = [];
+  String postType;
+  String groupId;
 
   String youtubeLink;
 
   @override
   void initState() {
     super.initState();
+    postType = Get.arguments[0];
+    groupId = Get.arguments[1];
 
     postProvider = Provider.of<PostProvider>(context, listen: false);
 
@@ -144,7 +141,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     var size = MediaQuery.of(context).size;
     var child;
 
-    if (widget.postType == "Video") {
+    if (postType == "Video") {
       // if (isAvailableYoutubeLink) {
       //   return Container(
       //     height: size.height * 0.25,
@@ -155,14 +152,14 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
       //   return Container();
       // }
       return Container();
-    } else if (widget.postType == "Ses") {
+    } else if (postType == "Ses") {
       child = buildSoundPreviewPart();
       return Container(
         height: size.height * 0.25,
         width: size.width * 0.8,
         child: child,
       );
-    } else if (widget.postType == "Görüntü") {
+    } else if (postType == "Görüntü") {
       child = buildImagePreviewPart();
     }
 
@@ -436,7 +433,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
                 ],
               ),
               SizedBox(height: 30),
-              widget.postType == "Video"
+              postType == "Video"
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -546,14 +543,12 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
     try {
       PostModel newPost = new PostModel(
         visible: true,
-        isLocatedInYoutube: widget.postType == "Video" ? true : false,
-        isVideo: widget.postType == "Video" ? true : false,
-        postContentType: widget.postType,
-        ownerType: widget.groupId != null ? "Group" : "User",
+        isLocatedInYoutube: postType == "Video" ? true : false,
+        isVideo: postType == "Video" ? true : false,
+        postContentType: postType,
+        ownerType: groupId != null ? "Group" : "User",
         postId: "",
-        ownerId: widget.groupId != null
-            ? widget.groupId
-            : authProvider.currentUser.uid,
+        ownerId: groupId != null ? groupId : authProvider.currentUser.uid,
         postCategories: postCategories,
         postTitle: postTitleController.text,
         postDate: DateTime.now(),
@@ -572,11 +567,11 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
 
           await showPostShareSuccessDialog(
               context, "Tebrikler! İçeriğin başarıyla yayınlandı.");
-          NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+          Get.offAllNamed(k_ROUTE_HOME);
         },
       );
     } catch (e) {
-      NavigationService.instance.pop();
+      Get.back();
       CustomMethods()
           .showErrorDialog(context, "İçerik yüklenirken bir hata oluştu");
     } //
@@ -641,7 +636,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
   }
 
   Future<void> formSubmit() async {
-    if (widget.postType == "Video") {
+    if (postType == "Video") {
       await checkYoutubeLink(
           postCreationFormKey.currentState.value["youtubeLink"]);
       if (isAvailableYoutubeLink) {
@@ -655,7 +650,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           print("Geçersiz youtube linki.");
         }
       }
-    } else if (widget.postType == "Görüntü") {
+    } else if (postType == "Görüntü") {
       if (postCreationFormKey.currentState.saveAndValidate()) {
         try {
           if (checkPostHasImages()) {
@@ -667,7 +662,7 @@ class _PostCreationPageState extends BaseState<PostCreationPage> {
           logger.e("Form submit edilirken hata oluştu: " + e.toString());
         }
       }
-    } else if (widget.postType == "Ses") {
+    } else if (postType == "Ses") {
       if (postCreationFormKey.currentState.saveAndValidate()) {
         try {
           if (checkPostHasSoundFile()) {

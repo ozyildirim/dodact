@@ -1,9 +1,9 @@
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
@@ -162,7 +162,7 @@ class _PrivacySettingsPageState extends BaseState<PrivacySettingsPage> {
       userProvider.currentUser.privacySettings['hide_profession'] =
           hiddenProfession;
 
-      NavigationService.instance.pop();
+      Get.back();
       setState(() {
         _isChanged = false;
       });

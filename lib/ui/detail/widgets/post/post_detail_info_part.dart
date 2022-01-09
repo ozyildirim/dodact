@@ -1,7 +1,6 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
@@ -12,6 +11,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -208,11 +208,12 @@ class _PostDetailInfoPartState extends BaseState<PostDetailInfoPart> {
     if (post.ownerType == "User") {
       if (post.ownerId == authProvider.currentUser.uid) {
       } else {
-        NavigationService.instance.navigate(k_ROUTE_OTHERS_PROFILE_PAGE,
-            args: Provider.of<UserProvider>(context, listen: false).otherUser);
+        Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE,
+            arguments:
+                Provider.of<UserProvider>(context, listen: false).otherUser);
       }
     } else {
-      NavigationService.instance.navigate(k_ROUTE_GROUP_DETAIL, args: group);
+      Get.toNamed(k_ROUTE_GROUP_DETAIL, arguments: group);
     }
   }
 }

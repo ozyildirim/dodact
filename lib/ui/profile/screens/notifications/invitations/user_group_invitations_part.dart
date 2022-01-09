@@ -1,10 +1,10 @@
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/invitation_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/provider/invitation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
@@ -138,7 +138,7 @@ class UserGroupInvitationsPart extends StatelessWidget {
     var result = await Provider.of<InvitationProvider>(context, listen: false)
         .acceptGroupInvitation(userId, groupId, invitationId);
     print(result);
-    NavigationService.instance.pop();
+    Get.back();
   }
 
   rejectGroupInvitation(String invitationId, BuildContext context) async {
@@ -150,7 +150,7 @@ class UserGroupInvitationsPart extends StatelessWidget {
       print(e);
     }
 
-    NavigationService.instance.pop();
+    Get.back();
   }
 }
 

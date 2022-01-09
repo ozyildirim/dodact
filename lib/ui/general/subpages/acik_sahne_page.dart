@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AcikSahnePage extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class _AcikSahnePageState extends State<AcikSahnePage> {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () {
-                  NavigationService.instance.pop();
+                  Get.back();
                 },
                 child: Container(
                   decoration: BoxDecoration(
