@@ -10,6 +10,7 @@ import 'package:dodact_v1/provider/podcast_provider.dart';
 import 'package:dodact_v1/provider/post_provider.dart';
 import 'package:dodact_v1/provider/user_favorites_provider.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
+import 'package:dodact_v1/provider/version_control_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -27,4 +28,5 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => InvitationProvider()),
   ChangeNotifierProvider(create: (_) => ChatroomProvider()),
   ChangeNotifierProvider(create: (_) => ApplicationProvider()),
+  ChangeNotifierProvider(create: (_) => VersionControlProvider()),
 ];
