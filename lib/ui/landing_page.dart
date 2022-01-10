@@ -4,18 +4,13 @@ import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/user_model.dart';
-import 'package:dodact_v1/provider/auth_provider.dart';
-import 'package:dodact_v1/provider/user_provider.dart';
-import 'package:dodact_v1/ui/auth/signup/signup_detail/signup_detail.dart';
 import 'package:dodact_v1/ui/auth/welcome_page.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/home_page.dart';
 import 'package:dodact_v1/ui/interest/interest_registration_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -44,7 +39,8 @@ class _LandingPageState extends BaseState<LandingPage> {
         if (snapshot.connectionState == ConnectionState.active) {
           User user = snapshot.data;
           if (user == null) {
-            return WelcomePage();
+            // return WelcomePage();
+            Get.toNamed(k_ROUTE_WELCOME);
           }
           return checkCurrentUser();
         } else {
@@ -59,6 +55,7 @@ class _LandingPageState extends BaseState<LandingPage> {
   }
 
   checkCurrentUser() {
+    print("chechCurrentUser çalıştı");
     return FutureBuilder(
       builder: (context, AsyncSnapshot<UserObject> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
