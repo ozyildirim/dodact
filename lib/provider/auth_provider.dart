@@ -53,7 +53,7 @@ class AuthProvider extends BaseModel {
       await removeUserToken();
       bool result = await authRepository.signOut();
       setUser(null);
-      Get.offAllNamed(k_ROUTE_WELCOME);
+      // Get.offAllNamed(k_ROUTE_LANDING);
     } catch (e) {
       debugPrint("AuthProvider signOut error: " + e.toString());
 
@@ -72,7 +72,8 @@ class AuthProvider extends BaseModel {
     if (user != null) {
       setUser(user);
       notifyListeners();
-      Get.offAllNamed(k_ROUTE_LANDING);
+
+      Get.offNamedUntil(k_ROUTE_LANDING, (route) => false);
     } else {
       CustomMethods.showSnackbar(context, "Bir hata oluştu.");
     }

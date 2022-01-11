@@ -165,15 +165,6 @@ class _LogInPageState extends BaseState<LogInPage> {
     );
   }
 
-  showSnackbar(String message) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
   @override
   void initState() {
     authProvider = getProvider<AuthProvider>();

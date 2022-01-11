@@ -47,8 +47,7 @@ List<String> artistLabels = [
   "Orkestra Şef Yardımcısı",
   "Grafiker",
   "Sahne Terzisi",
-  ""
-      "Kast Yönetmeni",
+  "Kast Yönetmeni",
   "Yönetmen Yardımcısı",
   "Orkestrasyon",
   "Produktör",
