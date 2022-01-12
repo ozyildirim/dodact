@@ -1,6 +1,5 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
@@ -11,6 +10,7 @@ import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
@@ -19,9 +19,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventEditPage extends StatefulWidget {
-  EventModel event;
-  EventEditPage({this.event});
-
   @override
   _EventEditPageState createState() => _EventEditPageState();
 }
@@ -49,7 +46,7 @@ class _EventEditPageState extends State<EventEditPage> {
   @override
   void initState() {
     super.initState();
-    event = widget.event;
+    event = Get.arguments;
     eventProvider = Provider.of<EventProvider>(context, listen: false);
     eventStartDate = event.startDate;
     eventEndDate = event.endDate;
@@ -532,15 +529,15 @@ class _EventEditPageState extends State<EventEditPage> {
         'searchKeywords': searchKeywords,
         'eventCategories': eventCategories,
       }).then((value) async {
-        NavigationService.instance.pop();
+        Get.back();
         await CustomMethods()
             .showSuccessDialog(context, "Etkinlik başarıyla düzenlendi.");
-        NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+        Get.offAllNamed(k_ROUTE_HOME);
       });
     } catch (e) {
       print("EventEditPage error $e ");
       print(e.toString());
-      NavigationService.instance.pop();
+      Get.back();
       CustomMethods().showErrorDialog(context, "Etkinlik düzenlenemedi.");
     }
   }

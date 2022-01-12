@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends BaseState<HomePage> {
   FirebaseMessaging messaging;
-  int selectedIndex = 0;
+  int selectedIndex;
 
   final List<Widget> _children = [
     GeneralPage(),
@@ -32,6 +32,7 @@ class _HomePageState extends BaseState<HomePage> {
   @override
   void initState() {
     super.initState();
+    selectedIndex = 0;
     messaging = FirebaseMessaging.instance;
 
     checkNotificationPermissions();

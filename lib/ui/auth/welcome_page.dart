@@ -1,8 +1,10 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/utils.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -16,9 +18,7 @@ class _WelcomePageState extends BaseState<WelcomePage> {
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
           child: Icon(Icons.arrow_forward, color: Colors.black),
-          onPressed: () {
-            navigateSignupPage(context);
-          }),
+          onPressed: () => Get.toNamed(k_ROUTE_REGISTER)),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -80,9 +80,5 @@ class _WelcomePageState extends BaseState<WelcomePage> {
         ),
       ),
     );
-  }
-
-  void navigateSignupPage(BuildContext context) {
-    NavigationService.instance.navigate(k_ROUTE_REGISTER);
   }
 }

@@ -1,11 +1,11 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/profile/widgets/post_card_for_grids.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class GroupPostsTab extends StatelessWidget {
@@ -67,6 +67,6 @@ class GroupPostsTab extends StatelessWidget {
   }
 
   navigatePost(PostModel post) {
-    NavigationService.instance.navigate(k_ROUTE_POST_DETAIL, args: post);
+    Get.toNamed(k_ROUTE_POST_DETAIL, arguments: post);
   }
 }

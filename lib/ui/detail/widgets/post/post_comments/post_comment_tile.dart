@@ -1,10 +1,10 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/comment_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +74,6 @@ class _PostCommentTileState extends BaseState<PostCommentTile> {
   }
 
   navigateAuthorProfile() {
-    NavigationService.instance
-        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: authorUser);
+    Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE, arguments: authorUser);
   }
 }

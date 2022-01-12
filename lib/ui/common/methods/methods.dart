@@ -1,8 +1,9 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:logger/logger.dart';
 import 'package:photo_view/photo_view.dart';
@@ -97,7 +98,7 @@ class CustomMethods {
   }
 
   void hideDialog() {
-    NavigationService.instance.pop();
+    Get.back();
   }
 
   static void launchURL(BuildContext context, String requestedUrl) async {

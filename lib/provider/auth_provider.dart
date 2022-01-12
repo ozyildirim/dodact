@@ -1,12 +1,14 @@
 import 'package:dodact_v1/config/base/base_model.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/repository/auth_repository.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 enum ViewState { Ideal, Busy }
@@ -14,9 +16,8 @@ enum AuthState { SignIn, SignUp }
 
 class AuthProvider extends BaseModel {
   AuthRepository authRepository = locator<AuthRepository>();
-  FirebaseAuth _auth = FirebaseAuth.instance;
+
   Logger logger = Logger();
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   AuthProvider() {
     getCurrentUser();
@@ -33,8 +34,8 @@ class AuthProvider extends BaseModel {
     currentUser = _user;
   }
 
-  getCurrentUser() async {
-    setUser(await authRepository.currentUser());
+  getCurrentUser() {
+    setUser(authRepository.currentUser());
     notifyListeners();
   }
 
@@ -47,87 +48,68 @@ class AuthProvider extends BaseModel {
     }
   }
 
-  Future<bool> signOut() async {
+  Future logout() async {
     try {
-      await removeUserToken();
-      bool result = await authRepository.signOut();
+      var userId = currentUser.uid;
+      await removeUserToken(userId);
+      await authRepository.logout();
       setUser(null);
-      notifyListeners();
-      return result;
+      // Get.offAllNamed(k_ROUTE_WELCOME);
+      Get.offNamedUntil(k_ROUTE_LANDING, (route) => false);
     } catch (e) {
+      // Get.showSnackbar(GetSnackBar());
       debugPrint("AuthProvider signOut error: " + e.toString());
-      notifyListeners();
-
       return false;
     }
   }
 
-  removeUserToken() async {
-    await tokensRef.doc(currentUser.uid).delete();
+  removeUserToken(String userId) async {
+    await tokensRef.doc(userId).delete();
     print("token silindi");
   }
 
-  Future<AuthResultStatus> signInWithGoogle(BuildContext context) async {
+  Future signInWithGoogle(BuildContext context) async {
     try {
-      authStatus = null;
       var user = await authRepository.signInWithGoogle(context);
       if (user != null) {
-        print("AuthProvider user logged with google");
-        authStatus = AuthResultStatus.successful;
         setUser(user);
-        notifyListeners();
+        Get.offNamedUntil(k_ROUTE_LANDING, (route) => false);
       } else {
-        print("AuthProvider google user null");
-        authStatus = AuthResultStatus.abortedByUser;
-        notifyListeners();
+        Get.back();
       }
     } catch (e) {
-      logger.e("AuthProvider signInWithGoogle error:" + e.toString());
-      authStatus = AuthResultStatus.abortedByUser;
-      notifyListeners();
+      Get.back();
+      logger.e("AuthProvider signInWithGoogle error: " + e.toString());
+      CustomMethods.showSnackbar(context, "Bir hata oluştu.");
     }
-
-    return authStatus;
   }
 
-  Future<AuthResultStatus> signInWithApple(BuildContext context) async {
+  Future signInWithApple(BuildContext context) async {
     try {
-      authStatus = null;
       var user = await authRepository.signInWithApple(context);
       if (user != null) {
-        print("AuthProvider user logged with apple");
-        authStatus = AuthResultStatus.successful;
         setUser(user);
-        notifyListeners();
       } else {
-        print("AuthProvider apple user null");
-        authStatus = AuthResultStatus.abortedByUser;
-        notifyListeners();
+        Get.back();
       }
     } catch (e) {
+      Get.back();
       logger.e("AuthProvider signInWithApple error:" + e.toString());
-      authStatus = AuthResultStatus.abortedByUser;
-      notifyListeners();
+      Get.back();
+      CustomMethods.showSnackbar(context, "Bir hata oluştu.");
     }
-
-    return authStatus;
   }
 
-  Future<AuthResultStatus> createAccountWithEmailAndPassword(
-      String email, String password) async {
+  Future<AuthResultStatus> signup(String email, String password) async {
     try {
       authStatus = null;
 
-      var user = await authRepository.createAccountWithEmailAndPassword(
-          email, password);
+      var user = await authRepository.signup(email, password);
       if (user == true) {
-        logger.i("AuthProvider user signed up: ");
         authStatus = AuthResultStatus.successful;
-      } else {
-        logger.i('AuthProvider signUp user null');
       }
     } on FirebaseAuthException catch (e) {
-      logger.e("AuthProvider login create account error: $e");
+      logger.e("AuthProvider signup error: $e");
       authStatus = AuthExceptionHandler.handleException(e);
     }
     notifyListeners();
@@ -135,21 +117,19 @@ class AuthProvider extends BaseModel {
     return authStatus;
   }
 
-  Future<AuthResultStatus> signInWithEmail(
-      String email, String password) async {
+  Future<AuthResultStatus> signin(String email, String password) async {
     authStatus = null;
     try {
-      var user = await authRepository.signInWithEmail(email, password);
+      var user = await authRepository.signin(email, password);
       if (user != null) {
         logger.i("User ${user.email} logged in.");
         authStatus = AuthResultStatus.successful;
         setUser(user);
-        notifyListeners();
-      } else {
-        logger.e("E-posta onayı gerekmekte.");
+        Get.back();
+        Get.offNamedUntil(k_ROUTE_LANDING, (route) => false);
       }
     } on FirebaseAuthException catch (e) {
-      logger.e("AuthProvider signInWithEmail error: " + e.toString());
+      logger.e("AuthProvider login error: " + e.toString());
       authStatus = AuthExceptionHandler.handleException(e);
     }
     notifyListeners();

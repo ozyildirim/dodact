@@ -5,19 +5,17 @@ import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/validators/validators.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
 
 class SignUpDetail extends StatefulWidget {
   @override
@@ -492,7 +490,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   _signOut() async {
-    await authProvider.signOut();
+    await authProvider.logout();
   }
 
   void takePhotoFromGallery(BuildContext context) async {
@@ -504,7 +502,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       setState(() {
         profilePicture = PickedFile(croppedFile.path);
         selectedPicture = true;
-        NavigationService.instance.pop();
+        Get.back();
       });
     } catch (e) {
       showSnackbar("Fotoğraf seçilirken bir hata oluştu.");
@@ -520,7 +518,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
       setState(() {
         profilePicture = PickedFile(croppedFile.path);
         selectedPicture = true;
-        NavigationService.instance.pop();
+        Get.back();
       });
     } catch (e) {
       showSnackbar("Fotoğraf seçilirken bir hata oluştu.");
@@ -558,7 +556,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void navigateInterestSelectionPage() async {
-    NavigationService.instance.navigate(k_ROUTE_INTEREST_REGISTRATION);
+    Get.offAllNamed(k_ROUTE_INTEREST_REGISTRATION);
   }
 
   showSnackbar(String message) {

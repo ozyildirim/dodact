@@ -1,5 +1,4 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/user_provider.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
@@ -13,6 +12,7 @@ import 'package:dodact_v1/utilities/lists.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
@@ -347,7 +347,7 @@ class _SearchPageState extends State<SearchPage>
                               selectedMenuCategory = SearchCategory.Post;
                             });
 
-                            NavigationService.instance.pop();
+                            Get.back();
                           },
                         ),
                       ),
@@ -541,7 +541,7 @@ class _SearchPageState extends State<SearchPage>
         queryHandler();
       });
 
-      NavigationService.instance.pop();
+      Get.back();
     } else {}
   }
 }
@@ -554,8 +554,7 @@ class UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        NavigationService.instance
-            .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+        Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE, arguments: user);
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -610,7 +609,7 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        NavigationService.instance.navigate(k_ROUTE_EVENT_DETAIL, args: event);
+        Get.toNamed(k_ROUTE_EVENT_DETAIL, arguments: event);
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -668,7 +667,7 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        NavigationService.instance.navigate(k_ROUTE_POST_DETAIL, args: post);
+        Get.toNamed(k_ROUTE_POST_DETAIL, arguments: post);
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -723,7 +722,7 @@ class GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        NavigationService.instance.navigate(k_ROUTE_GROUP_DETAIL, args: group);
+        Get.toNamed(k_ROUTE_GROUP_DETAIL, arguments: group);
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
@@ -15,6 +14,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/utilities/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -23,10 +23,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventDetailPage extends StatefulWidget {
-  final EventModel event;
-
-  const EventDetailPage({Key key, this.event}) : super(key: key);
-
   @override
   _EventDetailPageState createState() => _EventDetailPageState();
 }
@@ -52,7 +48,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
   @override
   void initState() {
-    event = widget.event;
+    event = Get.arguments;
     tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
@@ -69,7 +65,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              NavigationService.instance.pop();
+              Get.back();
             },
             child: Container(
               decoration: BoxDecoration(
@@ -571,7 +567,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
             FlatButton(
               child: Text("Tamam"),
               onPressed: () {
-                NavigationService.instance.pop();
+                Get.back();
               },
             ),
           ],
@@ -602,9 +598,8 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
               return ListTile(
                 onTap: () {
                   if (fetchedUser.uid != userProvider.currentUser.uid) {
-                    NavigationService.instance.navigate(
-                        k_ROUTE_OTHERS_PROFILE_PAGE,
-                        args: fetchedUser);
+                    Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE,
+                        arguments: fetchedUser);
                   }
                 },
                 leading: CircleAvatar(
@@ -648,8 +643,7 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
 
               return ListTile(
                 onTap: () {
-                  NavigationService.instance
-                      .navigate(k_ROUTE_GROUP_DETAIL, args: fetchedGroup);
+                  Get.toNamed(k_ROUTE_GROUP_DETAIL, arguments: fetchedGroup);
                 },
                 leading: CircleAvatar(
                   radius: 30,
@@ -714,12 +708,13 @@ class _EventDetailPageState extends BaseState<EventDetailPage>
     await Provider.of<EventProvider>(context, listen: false)
         .deleteEvent(event.id);
 
-    NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+    // NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+    Get.offAllNamed(k_ROUTE_HOME);
     //}
   }
 
   _showEditEventDialog(EventModel event) {
-    NavigationService.instance.navigate(k_ROUTE_EVENT_EDIT_PAGE, args: event);
+    Get.toNamed(k_ROUTE_EVENT_EDIT_PAGE, arguments: event);
   }
 
   _buildMap() {

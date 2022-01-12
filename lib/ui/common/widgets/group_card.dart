@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
-import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class GroupCard extends StatelessWidget {
   final GroupModel group;
@@ -16,10 +14,7 @@ class GroupCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () async {
-          NavigationService.instance
-              .navigate(k_ROUTE_GROUP_DETAIL, args: group);
-        },
+        onTap: () => Get.toNamed(k_ROUTE_GROUP_DETAIL, arguments: group),
         child: Container(
           height: size.height * 0.15,
           child: Card(

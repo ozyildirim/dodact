@@ -5,16 +5,18 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dodact_v1/config/constants/providers_list.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
-import 'package:dodact_v1/config/navigation/navigator_route_service.dart';
+import 'package:dodact_v1/config/navigation/get_routes.dart';
 import 'package:dodact_v1/localizations/app_localizations.dart';
 import 'package:dodact_v1/locator.dart';
 import 'package:dodact_v1/services/concrete/firebase_dynamic_link_service.dart';
+import 'package:dodact_v1/ui/onboarding/onboarding_page.dart';
+import 'package:dodact_v1/ui/version_control_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,14 +37,6 @@ void main() async {
   await Firebase.initializeApp();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-  //   print('User granted permission');
-  // } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-  //   print('User granted provisional permission');
-  // } else {
-  //   print('User declined or has not accepted permission');
-  // }
-
   AwesomeNotifications().initialize(
       null,
       [
@@ -54,8 +48,6 @@ void main() async {
           channelName: 'Genel Bildirimler',
           channelDescription: 'Uygulama içi genel bildirimler',
           importance: NotificationImportance.High,
-          // defaultColor: Color(0xFF9D50DD),
-          // ledColor: Colors.white,
         ),
       ],
       debug: true);
@@ -88,16 +80,6 @@ void main() async {
     } else {
       AwesomeNotifications().createNotificationFromJsonData(message.data);
     }
-
-    // AwesomeNotifications().createNotification(
-    //   content: NotificationContent(
-    //     id: 10,
-    //     icon: 'resource://drawable/notification_logo',
-    //     channelKey: 'basic_channel',
-    //     title: message.data['title'],
-    //     body: message.data['body'],
-    //   ),
-    // );
   });
 
   // TODO: Notification'a tiklanma olayi bu fonksiyon. Kullanici giris yapmis mi vs kontrolleri et dene oyle koyalim.
@@ -105,37 +87,22 @@ void main() async {
     if (receivedNotification.buttonKeyPressed == 'REPLY') {
       //REPLY butonuna yazi girip gondere basarsa calisir.
       String message = receivedNotification.buttonKeyInput;
-      NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS, args: {
+      Get.toNamed(k_ROUTE_USER_CHATROOMS, arguments: {
         'reply': message,
         'from': receivedNotification.payload['from'],
       });
     }
     if (receivedNotification.payload['type'] == 'message') {
-      NavigationService.instance.navigate(k_ROUTE_USER_CHATROOMS);
+      Get.toNamed(k_ROUTE_USER_CHATROOMS);
     } else if (receivedNotification.payload['type'] == 'group_invitation') {
-      NavigationService.instance.navigate(k_ROUTE_USER_NOTIFICATIONS);
+      Get.toNamed(k_ROUTE_USER_NOTIFICATIONS);
     }
   });
-
-  // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-  //   print('User granted permission');
-  // } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-  //   print('User granted provisional permission');
-  // } else {
-  //   print('User declined or has not accepted permission');
-  // }
 
   setupLocator();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(MyApp()));
-
-  // runApp(
-  //   DevicePreview(
-  //     // enabled: true,
-  //     builder: (context) => MyApp(),
-  //   ),
-  // );
 }
 
 class MyApp extends StatefulWidget {
@@ -183,7 +150,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // initializeDateFormatting('tr_TR', null);
     return MultiProvider(
       providers: providers,
-      child: MaterialApp(
+      child: GetMaterialApp(
         builder: (context, child) => MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child),
@@ -192,30 +159,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           Locale('tr', 'TR'), // Türkçe
         ],
         localizationsDelegates: [
-          /// Uygulama için kendi oluşturduğumuz delegate
           AppLocalizations.delegate,
-
-          /// Material widget kütüphanesi için delegate
           GlobalMaterialLocalizations.delegate,
-
-          /// Widgetlar için Locale değerine göre metin yönünü belirler
-          /// [TextDirection.ltr] Metin Yönü - Soldan sağa (left to right) (Varsayılan)
-          /// [TextDirection.rtl] Metin Yönü - Sağdan sola(right to left)
           GlobalWidgetsLocalizations.delegate,
-
-          /// Cupertino widget kütüphanesi için delegate
           GlobalCupertinoLocalizations.delegate,
         ],
         localeResolutionCallback:
             (Locale locale, Iterable<Locale> supportedLocales) {
-          /// [locale]: Cihazın dili null değilse
           if (locale != null) {
             debugPrint(
                 "Algılanan cihaz dili: Dil Kodu: ${locale.languageCode}, Ülke Kodu: ${locale.countryCode}");
             for (var supportedLocale in supportedLocales) {
-              /// Cihazın dil kodu desteklenen diller arasındaki dil kodlarının içinde var mı?
               if (supportedLocale.languageCode == locale.languageCode) {
-                /// Varsa desteklenen dili döndür
                 return supportedLocale;
               }
             }
@@ -223,24 +178,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           debugPrint(
               "Algılanan cihaz dili desteklenen diller arasında bulunmuyor.");
 
-          /// [locale]: Cihazın dili null ise
-          /// Yoksa [supportedLocales] Listesindeki ilk sonucu döndür.
           debugPrint(
               "Uygulamanın başlatılması istenen dil: Dil Kodu: ${supportedLocales.first.languageCode}, Ülke Kodu: ${supportedLocales.first.countryCode}");
           return supportedLocales.first;
         },
         useInheritedMediaQuery: true,
-        onGenerateRoute: NavigationRouteManager.onRouteGenerate,
-        onUnknownRoute: NavigationRouteManager.onUnknownRoute,
-        navigatorKey: NavigationService.instance.navigatorKey,
-        initialRoute: initScreen == null
-            ? k_ROUTE_ONBOARDING
-            : k_ROUTE_VERSION_CONTROL_PAGE,
+        home: initScreen == null ? OnBoardingPage() : VersionControlPage(),
 
         // initialRoute: k_ROUTE_ONBOARDING,
         title: "Dodact",
         theme: appTheme,
         debugShowCheckedModeBanner: false,
+        getPages: getPages,
       ),
     );
   }

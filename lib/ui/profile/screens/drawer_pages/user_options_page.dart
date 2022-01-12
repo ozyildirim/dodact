@@ -1,8 +1,8 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserOptionsPage extends StatelessWidget {
@@ -52,8 +52,7 @@ class UserOptionsPage extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  NavigationService.instance
-                      .navigate(k_ROUTE_USER_NOTIFICATON_SETTINGS);
+                  Get.toNamed(k_ROUTE_USER_NOTIFICATON_SETTINGS);
                 },
               ),
             ),
@@ -81,8 +80,7 @@ class UserOptionsPage extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  NavigationService.instance
-                      .navigate(k_ROUTE_USER_PROFILE_SETTINGS);
+                  Get.toNamed(k_ROUTE_USER_PROFILE_SETTINGS);
                 },
               ),
             ),
@@ -110,8 +108,7 @@ class UserOptionsPage extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  NavigationService.instance
-                      .navigate(k_ROUTE_USER_PRIVACY_SETTINGS);
+                  Get.toNamed(k_ROUTE_USER_PRIVACY_SETTINGS);
                 },
               ),
             ),
@@ -139,8 +136,7 @@ class UserOptionsPage extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  NavigationService.instance
-                      .navigate(k_ROUTE_USER_SECURITY_SETTINGS);
+                  Get.toNamed(k_ROUTE_USER_SECURITY_SETTINGS);
                 },
               ),
             ),

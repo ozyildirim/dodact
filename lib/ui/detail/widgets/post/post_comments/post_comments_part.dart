@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/services/concrete/firebase_report_service.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -228,7 +228,7 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
         context: context,
         confirmActions: () async {
           await reportComment(commentId, postId);
-          NavigationService.instance.pop();
+          Get.back();
         },
         title: "Bu yorumu bildirmek istediğinden emin misin?",
         confirmButtonText: "Evet");
@@ -282,7 +282,7 @@ class _PostCommentsPageState extends BaseState<PostCommentsPage> {
         context: context,
         confirmActions: () async {
           await deleteComment(commentId);
-          NavigationService.instance.pop();
+          Get.back();
         },
         title: "Bu yorumu silmek istediğinden emin misin?",
         confirmButtonText: "Evet");

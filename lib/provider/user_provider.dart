@@ -20,6 +20,7 @@ class UserProvider with ChangeNotifier {
 
   List<UserObject> userList;
   bool isLoading = false;
+  bool favoritesFetched = false;
 
   //it represents the permission according to day difference
   bool canUserCreatePost;
@@ -49,8 +50,10 @@ class UserProvider with ChangeNotifier {
 
   setCurrentUser(UserObject user) {
     currentUser = user;
-    getCurrentUserFavoritePosts();
-    notifyListeners();
+    if (favoritesFetched == false) {
+      getCurrentUserFavoritePosts();
+      favoritesFetched = true;
+    }
   }
 
   Future<UserObject> getUserByID(String userId) async {
@@ -80,7 +83,7 @@ class UserProvider with ChangeNotifier {
       DocumentSnapshot documentSnapshot = await usersRef.doc(user.uid).get();
       if (documentSnapshot.exists) {
         setCurrentUser(UserObject.fromDoc(documentSnapshot));
-        return currentUser;
+        return UserObject.fromDoc(documentSnapshot);
       }
     } catch (e) {
       print("UserProvider getCurrentUser error: $e");

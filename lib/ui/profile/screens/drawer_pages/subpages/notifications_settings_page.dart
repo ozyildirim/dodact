@@ -1,8 +1,8 @@
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NotificationsSettingsPage extends StatefulWidget {
   @override
@@ -219,7 +219,7 @@ class _NotificationsSettingsPageState
           .updateCurrentUser({'notificationSettings': notificationSettings});
       userProvider.currentUser.notificationSettings = notificationSettings;
 
-      NavigationService.instance.pop();
+      Get.back();
       setState(() {
         _isChanged = false;
       });

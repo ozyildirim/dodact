@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/common/validators/validators.dart';
@@ -12,6 +11,7 @@ import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -516,7 +516,7 @@ class _UserPersonalProfileSettingsPageState
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
       picture = newImage;
-      NavigationService.instance.pop();
+      Get.back();
     });
     if (picture != null) {
       updateProfilePhoto();
@@ -530,7 +530,7 @@ class _UserPersonalProfileSettingsPageState
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     setState(() {
       picture = newImage;
-      NavigationService.instance.pop();
+      Get.back();
     });
     if (picture != null) {
       updateProfilePhoto();
@@ -544,7 +544,7 @@ class _UserPersonalProfileSettingsPageState
     await userProvider
         .updateCurrentUserProfilePicture(File(picture.path))
         .then((url) {
-      NavigationService.instance.pop();
+      Get.back();
       setState(() {});
       showSnackbar("Fotoğrafın güncellendi");
       debugPrint("Picture uploaded.");
@@ -582,7 +582,7 @@ class _UserPersonalProfileSettingsPageState
             'profession':
                 formKey.currentState.value['profession'].toString().trim(),
           });
-          NavigationService.instance.pop();
+          Get.back();
           showSnackbar("Profil bilgilerin güncellendi.");
           setState(() {
             isChanged = false;

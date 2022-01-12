@@ -1,16 +1,16 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 
 // ignore: must_be_immutable
 class CreationMenuPage extends StatefulWidget {
-  final String groupId;
+  String groupId = Get.arguments;
 
   CreationMenuPage({this.groupId});
 
@@ -56,8 +56,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                 ? [
                     MaterialButton(
                       onPressed: () {
-                        NavigationService.instance
-                            .navigate(k_ROUTE_USER_APPLICATION_MENU);
+                        Get.toNamed(k_ROUTE_USER_APPLICATION_MENU);
                       },
                       child: Text("Başvurular",
                           style: TextStyle(color: Colors.white)),
@@ -357,9 +356,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            onTap: () async {
-                              NavigationService.instance.pop();
-                            },
+                            onTap: () => Get.back(),
                           ),
                         ),
                       ],
@@ -633,9 +630,7 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            onTap: () async {
-                              NavigationService.instance.pop();
-                            },
+                            onTap: () => Get.back(),
                           ),
                         ),
                       ],
@@ -690,9 +685,12 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
       var eventType = _eventDialogKey.currentState.value['eventType'];
       bool onlineStatus = _eventDialogKey.currentState.value['online_status'];
 
-      NavigationService.instance.pop();
-      NavigationService.instance.navigate(k_ROUTE_CREATE_EVENT_PAGE,
-          args: [eventType, onlineStatus, widget.groupId ?? null]);
+      // Get.back();
+      // NavigationService.instance.navigate(k_ROUTE_CREATE_EVENT_PAGE,
+      //     args: [eventType, onlineStatus, widget.groupId ?? null]);
+
+      Get.toNamed(k_ROUTE_CREATE_EVENT_PAGE,
+          arguments: [eventType, onlineStatus, widget.groupId ?? null]);
     }
   }
 
@@ -704,9 +702,12 @@ class _CreationMenuPageState extends BaseState<CreationMenuPage> {
       print(postCategory);
       print(postType);
 
-      NavigationService.instance.pop();
-      NavigationService.instance.navigate(k_ROUTE_CREATE_POST_PAGE,
-          args: [postType, widget.groupId ?? null]);
+      // NavigationService.instance.pop();
+      // NavigationService.instance.navigate(k_ROUTE_CREATE_POST_PAGE,
+      //     args: [postType, widget.groupId ?? null]);
+
+      Get.toNamed(k_ROUTE_CREATE_POST_PAGE,
+          arguments: [postType, widget.groupId ?? null]);
     }
   }
 }

@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class GroupMembersTab extends StatefulWidget {
@@ -91,7 +91,6 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
 
   navigateUserProfile(UserObject user) {
     if (user.uid != userProvider.currentUser.uid)
-      NavigationService.instance
-          .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+      Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE, arguments: user);
   }
 }

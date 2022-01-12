@@ -1,6 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/application_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
@@ -8,6 +7,7 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -131,7 +131,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
           context,
           "Başvurun bizlere ulaştı, en kısa zamanda dönüş yapacağız",
         );
-        NavigationService.instance.pop();
+        Get.back();
       } catch (e) {
         print(e);
       }
@@ -153,7 +153,7 @@ class _GroupApplicationPageState extends BaseState<GroupApplicationPage> {
             FlatButton(
               child: Text("Tamam"),
               onPressed: () {
-                NavigationService.instance.pop();
+                Get.back();
               },
             ),
           ],

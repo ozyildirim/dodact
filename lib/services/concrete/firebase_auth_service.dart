@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/constants/firebase_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -24,13 +24,11 @@ class FirebaseAuthService {
     }
   }
 
-  Future<bool> signOut() async {
+  Future logout() async {
     //user must sign out from all these providers(google,facebook etc.)
     await _firebaseAuth.signOut();
     GoogleSignIn _googleSignIn = GoogleSignIn();
     await _googleSignIn.signOut();
-    print("User signed out.");
-    return true;
   }
 
   Future<User> signInWithGoogle(BuildContext context) async {
@@ -62,12 +60,12 @@ class FirebaseAuthService {
         } else if (e.code == 'invalid-credential') {
           // handle the error here
         }
-        NavigationService.instance.pop();
+        Get.back();
       } catch (e) {
         // handle the error here
       }
     } else {
-      NavigationService.instance.pop();
+      Get.back();
       return null;
     }
   }
@@ -116,12 +114,12 @@ class FirebaseAuthService {
         } else if (e.code == 'invalid-credential') {
           // handle the error here
         }
-        NavigationService.instance.pop();
+        Get.back();
       } catch (e) {
         // handle the error here
       }
     } else {
-      NavigationService.instance.pop();
+      Get.back();
       return null;
     }
   }
@@ -132,7 +130,6 @@ class FirebaseAuthService {
         email: email, password: password);
 
     User user = result.user;
-
     try {
       if (user != null) {
         await result.user.sendEmailVerification();
@@ -146,7 +143,7 @@ class FirebaseAuthService {
     }
   }
 
-  Future<User> signInWithEmail(String email, String password) async {
+  Future<User> signin(String email, String password) async {
     UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 

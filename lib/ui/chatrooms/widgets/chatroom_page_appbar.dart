@@ -1,8 +1,8 @@
 import 'package:dodact_v1/config/constants/route_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatroomPageAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -37,8 +37,7 @@ class ChatroomPageAppBar extends StatelessWidget
                 tag: user.uid,
                 child: InkWell(
                   onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+                    Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE, arguments: user);
                   },
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(user.profilePictureURL),
@@ -52,8 +51,7 @@ class ChatroomPageAppBar extends StatelessWidget
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    NavigationService.instance
-                        .navigate(k_ROUTE_OTHERS_PROFILE_PAGE, args: user);
+                    Get.toNamed(k_ROUTE_OTHERS_PROFILE_PAGE, arguments: user);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

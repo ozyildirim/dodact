@@ -1,8 +1,8 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   @override
@@ -53,8 +53,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
                   ),
                 ),
                 onTap: () {
-                  NavigationService.instance
-                      .navigate(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
+                  Get.toNamed(k_ROUTE_USER_PERSONAL_PROFILE_SETTINGS);
                 },
               ),
             ),
@@ -82,8 +81,7 @@ class _ProfileSettingsPageState extends BaseState<ProfileSettingsPage> {
                   ),
                 ),
                 onTap: () {
-                  NavigationService.instance
-                      .navigate(k_ROUTE_USER_SOCIAL_ACCOUNTS_SETTINGS);
+                  Get.toNamed(k_ROUTE_USER_SOCIAL_ACCOUNTS_SETTINGS);
                 },
               ),
             ),

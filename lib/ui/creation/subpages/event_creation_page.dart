@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
@@ -15,6 +14,7 @@ import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
@@ -24,12 +24,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventCreationPage extends StatefulWidget {
-  final String eventType;
-  final bool eventPlatform;
-  final String groupId;
-
-  EventCreationPage({this.eventType, this.eventPlatform, this.groupId});
-
   @override
   _EventCreationPageState createState() => _EventCreationPageState();
 }
@@ -38,6 +32,10 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   GlobalKey<FormBuilderState> _eventFormKey = new GlobalKey<FormBuilderState>();
   GlobalKey<ScaffoldState> _eventScaffoldKey = GlobalKey<ScaffoldState>();
   EventProvider eventProvider;
+
+  String type;
+  bool eventPlatform;
+  String groupId;
 
   var logger = Logger();
   List<File> _eventImages = [];
@@ -70,20 +68,25 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
   void dispose() {
     super.dispose();
     eventDescriptionFocus.dispose();
-    print(widget.groupId);
+    print(groupId);
     eventTitleFocus.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+
+    type = Get.arguments[0];
+    eventPlatform = Get.arguments[1];
+    groupId = Get.arguments[2];
+
     eventProvider = Provider.of<EventProvider>(context, listen: false);
-    isOnline = widget.eventPlatform;
+    isOnline = eventPlatform;
     eventHint = getRandomEventTitle();
 
-    if (widget.groupId != null) {
+    if (groupId != null) {
       ownerType = "Group";
-      ownerId = widget.groupId;
+      ownerId = groupId;
     } else {
       ownerType = "User";
       ownerId = authProvider.currentUser.uid;
@@ -623,7 +626,7 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
               : null;
           var searchKeywords = createSearchKeywords(title);
 
-          var eventType = widget.eventType;
+          var eventType = type;
 
           await createEvent(
               title,
@@ -674,15 +677,15 @@ class _EventCreationPageState extends BaseState<EventCreationPage> {
       print(newEvent.address);
 
       await eventProvider.addEvent(newEvent, _eventImages).then((_) async {
-        NavigationService.instance.pop();
+        Get.back();
         await CustomMethods().showSuccessDialog(
             context, "Tebrikler! Etkinliğin başarıyla yayınlandı.");
-        NavigationService.instance.navigateToReset(k_ROUTE_HOME);
+        Get.offAllNamed(k_ROUTE_HOME);
       });
     } catch (e) {
       print("EventCreationPage error $e ");
       print(e.toString());
-      NavigationService.instance.pop();
+      Get.back();
       CustomMethods().showErrorDialog(context, "Etkinlik oluşturulamadı.");
     }
   }

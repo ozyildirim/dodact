@@ -1,6 +1,5 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/cities.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -9,6 +8,7 @@ import 'package:dodact_v1/ui/interest/interests_util.dart';
 import 'package:dodact_v1/utilities/lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -218,7 +218,7 @@ class _EventsPageState extends BaseState<EventsPage> {
         });
         print("$selectedCity  $selectedCategory $selectedType");
         updateEvents(selectedCategory, selectedCity, selectedType);
-        NavigationService.instance.pop();
+        Get.back();
       } else {
         setState(() {
           isFiltered = false;
@@ -228,7 +228,7 @@ class _EventsPageState extends BaseState<EventsPage> {
           selectedCity = null;
           selectedType = null;
         });
-        NavigationService.instance.pop();
+        Get.back();
       }
     }
   }
@@ -458,7 +458,7 @@ class _EventsPageState extends BaseState<EventsPage> {
                                 selectedType = null;
                               });
                             }
-                            NavigationService.instance.pop();
+                            Get.back();
                           },
                         ),
                       ),

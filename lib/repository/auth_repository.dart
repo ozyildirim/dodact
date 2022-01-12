@@ -15,19 +15,19 @@ class AuthRepository {
 
   AppMode appMode = AppMode.RELEASE;
 
-  Future<User> currentUser() async {
+  User currentUser() {
     if (appMode == AppMode.DEBUG) {
     } else {
-      User user = await _firebaseAuthService.currentUser();
+      User user = _firebaseAuthService.currentUser();
       return user;
     }
   }
 
-  Future<bool> signOut() async {
+  Future logout() async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signOut();
+      await _fakeAuthService.logout();
     } else {
-      return await _firebaseAuthService.signOut();
+      await _firebaseAuthService.logout();
     }
   }
 
@@ -58,8 +58,7 @@ class AuthRepository {
     }
   }
 
-  Future<bool> createAccountWithEmailAndPassword(
-      String email, String password) async {
+  Future<bool> signup(String email, String password) async {
     if (appMode == AppMode.DEBUG) {
       // return true;
     } else {
@@ -75,10 +74,10 @@ class AuthRepository {
     }
   }
 
-  Future<User> signInWithEmail(String email, String password) async {
+  Future<User> signin(String email, String password) async {
     if (appMode == AppMode.DEBUG) {
     } else {
-      User user = await _firebaseAuthService.signInWithEmail(email, password);
+      User user = await _firebaseAuthService.signin(email, password);
 
       if (user != null) {
         return user;

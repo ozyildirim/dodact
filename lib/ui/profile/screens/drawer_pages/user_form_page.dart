@@ -1,12 +1,12 @@
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/user_form_model.dart';
 import 'package:dodact_v1/services/concrete/firebase_user_form_service.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 
 class UserFormPage extends StatefulWidget {
   @override
@@ -168,7 +168,7 @@ class _UserFormPageState extends BaseState<UserFormPage> {
       await _firebaseFormService.sendUserForm(model).then((value) async {
         await CustomMethods()
             .showSuccessDialog(context, "Form başarıyla gönderildi!");
-        NavigationService.instance.pop();
+        Get.back();
       }).catchError((error) {
         CustomMethods().showErrorDialog(context, "Bir hata oluştu!");
       });

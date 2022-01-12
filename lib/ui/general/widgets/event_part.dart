@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/model/event_model.dart';
 import 'package:dodact_v1/provider/event_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/components/carousel/gf_carousel.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -74,9 +74,9 @@ class _EventPartState extends State<EventPart> {
           items: specialEvents.map((event) {
             return InkWell(
               onTap: () {
-                NavigationService.instance.navigate(
+                Get.toNamed(
                   k_ROUTE_EVENT_DETAIL,
-                  args: event,
+                  arguments: event,
                 );
               },
               child: buildEventCard(event),
@@ -95,9 +95,9 @@ class _EventPartState extends State<EventPart> {
     var cardWidth = size.width * 0.9;
     return InkWell(
       onTap: () {
-        NavigationService.instance.navigate(
+        Get.toNamed(
           k_ROUTE_EVENT_DETAIL,
-          args: event,
+          arguments: event,
         );
       },
       child: Card(

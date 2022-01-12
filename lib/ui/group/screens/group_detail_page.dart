@@ -2,7 +2,7 @@ import 'package:circular_menu/circular_menu.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
+
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -14,13 +14,10 @@ import 'package:dodact_v1/ui/group/widgets/group_photos_tab_view.dart';
 import 'package:dodact_v1/ui/group/widgets/group_posts_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class GroupDetailPage extends StatefulWidget {
-  final GroupModel group;
-
-  const GroupDetailPage({this.group});
-
   @override
   _GroupDetailPageState createState() => _GroupDetailPageState();
 }
@@ -37,19 +34,19 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     super.initState();
     tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
-    group = widget.group;
-    fetchGroup();
+    group = Get.arguments;
+    // fetchGroup();
   }
 
-  fetchGroup() async {
-    await Provider.of<GroupProvider>(context, listen: false)
-        .getGroupDetail(group.groupId)
-        .then((value) {
-      setState(() {
-        group = value;
-      });
-    });
-  }
+  // fetchGroup() async {
+  //   await Provider.of<GroupProvider>(context, listen: false)
+  //       .getGroupDetail(group.groupId)
+  //       .then((value) {
+  //     setState(() {
+  //       group = value;
+  //     });
+  //   });
+  // }
 
   bool isUserGroupFounder() {
     if (group.managerId == userProvider.currentUser.uid) {
@@ -59,7 +56,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   navigateGroupManagementPage() {
-    NavigationService.instance.navigate(k_ROUTE_GROUP_MANAGEMENT_PAGE);
+    Get.toNamed(k_ROUTE_GROUP_MANAGEMENT_PAGE);
   }
 
   @override
@@ -72,8 +69,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
       floatingActionButton: isUserGroupFounder()
           ? FloatingActionButton(
               onPressed: () {
-                NavigationService.instance
-                    .navigate(k_ROUTE_CREATION_MENU, args: group.groupId);
+                Get.toNamed(k_ROUTE_CREATION_MENU, arguments: group.groupId);
               },
               child: Icon(Icons.add),
             )
@@ -233,8 +229,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           CircularMenuItem(
             // menu item callback
             onTap: () {
-              NavigationService.instance
-                  .navigate(k_ROUTE_CREATION_MENU, args: group.groupId);
+              Get.toNamed(k_ROUTE_CREATION_MENU, arguments: group.groupId);
             },
             // menu item appearance properties
             icon: Icons.add,
@@ -327,7 +322,6 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   void navigateCreationPage(String groupId) {
-    NavigationService.instance
-        .navigate(k_ROUTE_CREATION_MENU, args: group.groupId);
+    Get.toNamed(k_ROUTE_CREATION_MENU, arguments: group.groupId);
   }
 }

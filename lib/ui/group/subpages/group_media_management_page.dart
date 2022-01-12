@@ -1,8 +1,8 @@
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -170,10 +170,10 @@ class GroupMediaManagementPage extends StatelessWidget {
       CustomMethods().showLoaderDialog(context, "Medya Yükleniyor");
       var groupProvider = Provider.of<GroupProvider>(context, listen: false);
       await groupProvider.addGroupMedia(file, groupProvider.group.groupId);
-      NavigationService.instance.pop();
+      Get.back();
     } catch (e) {
       logger.e(e);
-      NavigationService.instance.pop();
+      Get.back();
     }
   }
 

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
-import 'package:dodact_v1/config/navigation/navigation_service.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/auth/signup/components/social_icon.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
@@ -11,11 +10,13 @@ import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -277,9 +278,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
 
                   SizedBox(height: 10),
                   InkWell(
-                    onTap: () {
-                      NavigationService.instance.navigate(k_ROUTE_LOGIN);
-                    },
+                    onTap: () => Get.toNamed(k_ROUTE_LOGIN),
                     child: RichText(
                       text: TextSpan(
                         children: [
@@ -415,51 +414,40 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     CustomMethods().showLoaderDialog(context, "Google ile Giriş Yapılıyor");
     var status = await authProvider.signInWithGoogle(context);
 
-    if (status != AuthResultStatus.successful) {
-      NavigationService.instance.pop();
-      if (status != AuthResultStatus.abortedByUser) {
-        final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        showSnackbar(errorMsg);
-      }
-    } else {
-      NavigationService.instance.pop();
-      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-    }
+    // if (status != AuthResultStatus.successful) {
+    //   NavigationService.instance.pop();
+    //   if (status != AuthResultStatus.abortedByUser) {
+    //     final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
+    //     showSnackbar(errorMsg);
+    //   }
+    // } else {
+    //   NavigationService.instance.pop();
+    //   NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
+    // }
   }
 
   void _signInWithApple() async {
-    var status = await authProvider.signInWithApple(context);
-
-    if (status != AuthResultStatus.successful) {
-      NavigationService.instance.pop();
-      if (status != AuthResultStatus.abortedByUser) {
-        final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-        showSnackbar(errorMsg);
-      }
-    } else {
-      NavigationService.instance.pop();
-      NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-    }
+    CustomMethods().showLoaderDialog(context, "Apple ile Giriş Yapılıyor");
+    await authProvider.signInWithApple(context);
   }
 
   void signUp() async {
     if (_formKey.currentState.saveAndValidate()) {
+      var email = _formKey.currentState.value['email'].toString().trim();
+      var password = _formKey.currentState.value['password'].toString().trim();
+
       CustomMethods().showLoaderDialog(context, "Hesap Oluşturuluyor");
-      var registrationResult =
-          await authProvider.createAccountWithEmailAndPassword(
-        _formKey.currentState.value['email'].toString().trim(),
-        _formKey.currentState.value['password'].toString().trim(),
-      );
-      if (registrationResult != AuthResultStatus.successful) {
-        NavigationService.instance.pop();
-        final errorMsg =
-            AuthExceptionHandler.generateExceptionMessage(registrationResult);
-        showSnackbar(errorMsg);
+      var result = await authProvider.signup(email, password);
+
+      if (result != AuthResultStatus.successful) {
+        Get.back();
+        final errorMessage =
+            AuthExceptionHandler.generateExceptionMessage(result);
+        CustomMethods.showSnackbar(context, errorMessage);
       } else {
-        NavigationService.instance.pop();
-        showSnackbar(
-            "Onay linki e-posta hesabına gönderildi. Spam klasörünü de kontrol etmeyi unutma.",
-            duration: 4);
+        Get.back();
+        CustomMethods.showSnackbar(context,
+            "Onay linki e-posta hesabına gönderildi. Spam klasörünü de kontrol etmeyi unutma.");
         _formKey.currentState.reset();
       }
     } else {
@@ -469,16 +457,7 @@ class _SignUpPageState extends BaseState<SignUpPage> {
     }
   }
 
-  void showSnackbar(String message, {int duration = 2}) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
-  }
-
   void navigateLogin(BuildContext context) {
-    NavigationService.instance.navigate(k_ROUTE_LOGIN);
+    Get.toNamed(k_ROUTE_LOGIN);
   }
 }
