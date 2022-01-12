@@ -14,6 +14,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:logger/logger.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PostEditPage extends StatefulWidget {
   final PostModel post;

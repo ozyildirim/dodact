@@ -4,6 +4,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/cities.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:dodact_v1/provider/auth_provider.dart';
 import 'package:dodact_v1/ui/common/validators/validators.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
