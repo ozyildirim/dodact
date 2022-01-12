@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:flutter/material.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 
 class ImagePostHeader extends StatelessWidget {
   PostModel post;

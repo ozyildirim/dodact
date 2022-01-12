@@ -4,7 +4,6 @@ import 'package:dodact_v1/model/dodder_model.dart';
 import 'package:dodact_v1/model/post_model.dart';
 import 'package:dodact_v1/model/user_model.dart';
 import 'package:logger/logger.dart';
-import 'package:ntp/ntp.dart';
 
 class FirebasePostService {
   var logger = new Logger();
