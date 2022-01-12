@@ -492,7 +492,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   _signOut() async {
-    await authProvider.signOut();
+    await authProvider.logout();
   }
 
   void takePhotoFromGallery(BuildContext context) async {

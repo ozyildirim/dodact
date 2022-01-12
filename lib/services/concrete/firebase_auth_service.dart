@@ -24,13 +24,11 @@ class FirebaseAuthService {
     }
   }
 
-  Future<bool> signOut() async {
+  Future logout() async {
     //user must sign out from all these providers(google,facebook etc.)
     await _firebaseAuth.signOut();
     GoogleSignIn _googleSignIn = GoogleSignIn();
     await _googleSignIn.signOut();
-    print("User signed out.");
-    return true;
   }
 
   Future<User> signInWithGoogle(BuildContext context) async {
@@ -132,7 +130,6 @@ class FirebaseAuthService {
         email: email, password: password);
 
     User user = result.user;
-
     try {
       if (user != null) {
         await result.user.sendEmailVerification();
@@ -146,7 +143,7 @@ class FirebaseAuthService {
     }
   }
 
-  Future<User> signInWithEmail(String email, String password) async {
+  Future<User> signin(String email, String password) async {
     UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 

@@ -1,3 +1,4 @@
+import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/services/concrete/firebase_remote_config_service.dart';
 import 'package:dodact_v1/ui/common/screens/enforce_update_page.dart';
 import 'package:dodact_v1/ui/common/screens/under_construction_page.dart';
@@ -16,8 +17,6 @@ class VersionControlProvider with ChangeNotifier {
     _remoteConfigService = await RemoteConfigService.getInstance();
     await _remoteConfigService.initialize();
     isRemoteConfigInitialized = true;
-    print("remote config initialized");
-    print(_remoteConfigService.getEnforcedVersionValue);
   }
 
   Future<bool> checkEnforcedVersion() async {
@@ -53,7 +52,9 @@ class VersionControlProvider with ChangeNotifier {
         if (versionControlResult) {
           Get.off(() => EnforcedUpdateScreen());
         } else {
-          Get.off(() => LandingPage());
+          // Get.off(() => LandingPage());
+          Get.offNamedUntil(k_ROUTE_LANDING, (route) => false);
+          // return LandingPage();
         }
       }
     }

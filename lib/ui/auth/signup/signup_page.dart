@@ -9,6 +9,7 @@ import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
+import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -426,54 +427,34 @@ class _SignUpPageState extends BaseState<SignUpPage> {
   }
 
   void _signInWithApple() async {
-    // var status = await authProvider.signInWithApple(context);
-
-    // if (status != AuthResultStatus.successful) {
-    //   NavigationService.instance.pop();
-    //   if (status != AuthResultStatus.abortedByUser) {
-    //     final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-    //     showSnackbar(errorMsg);
-    //   }
-    // } else {
-    //   NavigationService.instance.pop();
-    //   NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-    // }
+    CustomMethods().showLoaderDialog(context, "Apple ile Giriş Yapılıyor");
+    await authProvider.signInWithApple(context);
   }
 
   void signUp() async {
-    // if (_formKey.currentState.saveAndValidate()) {
-    //   CustomMethods().showLoaderDialog(context, "Hesap Oluşturuluyor");
-    //   var registrationResult =
-    //       await authProvider.createAccountWithEmailAndPassword(
-    //     _formKey.currentState.value['email'].toString().trim(),
-    //     _formKey.currentState.value['password'].toString().trim(),
-    //   );
-    //   if (registrationResult != AuthResultStatus.successful) {
-    //     NavigationService.instance.pop();
-    //     final errorMsg =
-    //         AuthExceptionHandler.generateExceptionMessage(registrationResult);
-    //     showSnackbar(errorMsg);
-    //   } else {
-    //     NavigationService.instance.pop();
-    //     showSnackbar(
-    //         "Onay linki e-posta hesabına gönderildi. Spam klasörünü de kontrol etmeyi unutma.",
-    //         duration: 4);
-    //     _formKey.currentState.reset();
-    //   }
-    // } else {
-    //   setState(() {
-    //     _autoValidate = AutovalidateMode.always;
-    //   });
-    // }
-  }
+    if (_formKey.currentState.saveAndValidate()) {
+      var email = _formKey.currentState.value['email'].toString().trim();
+      var password = _formKey.currentState.value['password'].toString().trim();
 
-  void showSnackbar(String message, {int duration = 2}) {
-    GFToast.showToast(
-      message,
-      context,
-      toastPosition: GFToastPosition.BOTTOM,
-      toastDuration: 4,
-    );
+      CustomMethods().showLoaderDialog(context, "Hesap Oluşturuluyor");
+      var result = await authProvider.signup(email, password);
+
+      if (result != AuthResultStatus.successful) {
+        Get.back();
+        final errorMessage =
+            AuthExceptionHandler.generateExceptionMessage(result);
+        CustomMethods.showSnackbar(context, errorMessage);
+      } else {
+        Get.back();
+        CustomMethods.showSnackbar(context,
+            "Onay linki e-posta hesabına gönderildi. Spam klasörünü de kontrol etmeyi unutma.");
+        _formKey.currentState.reset();
+      }
+    } else {
+      setState(() {
+        _autoValidate = AutovalidateMode.always;
+      });
+    }
   }
 
   void navigateLogin(BuildContext context) {

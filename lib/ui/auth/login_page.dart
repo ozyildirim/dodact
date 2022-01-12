@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
 
 enum Mode { Login, Signup }
 
@@ -39,18 +38,7 @@ class _LogInPageState extends BaseState<LogInPage> {
 
   void _signInWithGoogle() async {
     CustomMethods().showLoaderDialog(context, "Google ile Giriş Yapılıyor");
-    var status = await authProvider.signInWithGoogle(context);
-
-    // if (status != AuthResultStatus.successful) {
-    //   NavigationService.instance.pop();
-    //   if (status != AuthResultStatus.abortedByUser) {
-    //     final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
-    //     showSnackbar(errorMsg);
-    //   }
-    // } else {
-    //   NavigationService.instance.pop();
-    //   NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-    // }
+    await authProvider.signInWithGoogle(context);
   }
 
   void _signInWithApple() async {
@@ -66,6 +54,9 @@ class _LogInPageState extends BaseState<LogInPage> {
     //   NavigationService.instance.pop();
     //   NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
     // }
+
+    CustomMethods().showLoaderDialog(context, "Apple ile Giriş Yapılıyor");
+    await authProvider.signInWithApple(context);
   }
 
   showAgreementDialog(String channel) {
@@ -200,13 +191,12 @@ class _LogInPageState extends BaseState<LogInPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Hero(
-                  tag: "logo",
-                  child: Image(
-                    height: 180,
-                    width: 180,
-                    image: AssetImage(kDodactLogo),
-                  ),
-                ),
+                    tag: "logo",
+                    child: Image(
+                      height: 180,
+                      width: 180,
+                      image: AssetImage(kDodactLogo),
+                    )),
                 SizedBox(
                   height: dynamicHeight(0.03),
                 ),
@@ -216,10 +206,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                     cursorColor: kPrimaryColor,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.mail,
-                        color: kPrimaryColor,
-                      ),
+                      icon: Icon(Icons.mail, color: kPrimaryColor),
                       hintText: "E-posta adresi",
                       hintStyle: TextStyle(fontFamily: kFontFamily),
                       border: InputBorder.none,
@@ -235,8 +222,7 @@ class _LogInPageState extends BaseState<LogInPage> {
                       FormBuilderValidators.required(context,
                           errorText: "Bu alan boş bırakılamaz."),
                       FormBuilderValidators.email(context,
-                          errorText:
-                              "Lütfen geçerli bir e-posta adresi girin."),
+                          errorText: "Lütfen geçerli bir e-posta adresi girin.")
                     ]),
                   ),
                 ),
@@ -248,26 +234,20 @@ class _LogInPageState extends BaseState<LogInPage> {
                     focusNode: _passwordFocus,
                     cursorColor: kPrimaryColor,
                     decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            obsecure = !obsecure;
-                          });
-                        },
-                        icon: Icon(
-                          obsecure == true
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obsecure = !obsecure;
+                            });
+                          },
+                          icon: Icon(obsecure == true
                               ? Icons.visibility
-                              : Icons.visibility_off,
+                              : Icons.visibility_off),
                         ),
-                      ),
-                      hintText: "Şifre",
-                      hintStyle: TextStyle(fontFamily: kFontFamily),
-                      icon: Icon(
-                        Icons.lock,
-                        color: kPrimaryColor,
-                      ),
-                      border: InputBorder.none,
-                    ),
+                        hintText: "Şifre",
+                        hintStyle: TextStyle(fontFamily: kFontFamily),
+                        icon: Icon(Icons.lock, color: kPrimaryColor),
+                        border: InputBorder.none),
                     onEditingComplete: () {
                       setState(() {
                         FocusScope.of(context).unfocus();
@@ -280,43 +260,28 @@ class _LogInPageState extends BaseState<LogInPage> {
                   ),
                 ),
                 RoundedButton(
-                  textSize: 15,
-                  text: "GİRİŞ YAP",
-                  textColor: Colors.white,
-                  press: () {
-                    FocusScope.of(context).unfocus();
-                    submitForm();
-                  },
-                ),
+                    textSize: 15,
+                    text: "GİRİŞ YAP",
+                    textColor: Colors.white,
+                    press: () {
+                      FocusScope.of(context).unfocus();
+                      submitForm();
+                    }),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CustomButton(
-                      icon: Icon(
-                        Icons.lock,
-                        color: Colors.white,
-                      ),
-                      titleText: Text(
-                        "Şifremi Unuttum",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      onPressed: () {
-                        _navigateToForgotPassword(context);
-                      },
+                      icon: Icon(Icons.lock, color: Colors.white),
+                      titleText: Text("Şifremi Unuttum",
+                          style: TextStyle(color: Colors.white, fontSize: 16)),
+                      onPressed: _navigateToForgotPassword,
                     )
                   ],
                 ),
-                // OrDivider(),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // SocialIcon(
-                    //   press: () {},
-                    //   iconSrc: "assets/images/facebook_circular.png",
-                    // ),
                     SocialIcon(
                       press: () {
                         showAgreementDialog("google");
@@ -355,48 +320,28 @@ class _LogInPageState extends BaseState<LogInPage> {
   }
 
   void submitForm() async {
-    // if (_formKey.currentState.saveAndValidate()) {
-    //   CustomMethods().showLoaderDialog(context, "Giriş Yapılıyor");
-    //   var status = await authProvider.signInWithEmail(
-    //       _formKey.currentState.value['email'].toString().trim(),
-    //       _formKey.currentState.value['password'].toString().trim());
+    if (_formKey.currentState.saveAndValidate()) {
+      var email = _formKey.currentState.value['email'].toString().trim();
+      var password = _formKey.currentState.value['password'].toString().trim();
 
-    //   if (status != AuthResultStatus.successful) {
-    //     NavigationService.instance.pop();
-    //     final errorMessage =
-    //         AuthExceptionHandler.generateExceptionMessage(status);
-    //     // _scaffoldKey.currentState.showSnackBar(new SnackBar(
-    //     //   duration: new Duration(seconds: 2),
-    //     //   content: new Row(
-    //     //     mainAxisAlignment: MainAxisAlignment.center,
-    //     //     children: <Widget>[
-    //     //       // new CircularProgressIndicator(),
-    //     //       Expanded(
-    //     //         child: new Text(
-    //     //           errorMessage,
-    //     //           overflow: TextOverflow.fade,
-    //     //           softWrap: false,
-    //     //           maxLines: 1,
-    //     //           style: TextStyle(fontSize: 16),
-    //     //         ),
-    //     //       )
-    //     //     ],
-    //     //   ),
-    //     // ));
-    //     showSnackbar(errorMessage);
-    //     debugPrint(errorMessage);
-    //   } else {
-    //     NavigationService.instance.pop();
-    //     NavigationService.instance.navigateToReset(k_ROUTE_LANDING);
-    //   }
-    // } else {
-    //   setState(() {
-    //     _autoValidate = true;
-    //   });
-    // }
+      CustomMethods().showLoaderDialog(context, "Giriş Yapılıyor");
+      var status = await authProvider.signin(email, password);
+
+      if (status != AuthResultStatus.successful) {
+        Get.back();
+        final errorMessage =
+            AuthExceptionHandler.generateExceptionMessage(status);
+
+        CustomMethods.showSnackbar(context, errorMessage);
+      }
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
   }
 
-  void _navigateToForgotPassword(BuildContext context) {
+  void _navigateToForgotPassword() {
     Get.toNamed(k_ROUTE_FORGOT_PASSWORD);
   }
 }

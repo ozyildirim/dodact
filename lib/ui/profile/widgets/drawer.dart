@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dodact_v1/config/base/base_state.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
+import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -119,9 +120,11 @@ class _ProfileDrawerState extends BaseState<ProfileDrawer> {
   }
 
   void signOut(BuildContext context) async {
-    await authProvider.signOut();
-
-    userProvider.removeUser();
+    try {
+      await authProvider.logout();
+    } catch (e) {
+      CustomMethods.showSnackbar(context, "Bir hata oluştu.");
+    }
   }
 
   setBackgroundImage() {

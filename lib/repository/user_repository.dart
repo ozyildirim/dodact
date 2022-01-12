@@ -25,11 +25,11 @@ class UserRepository {
     }
   }
 
-  Future<bool> signOut() async {
+  Future<bool> logout() async {
     if (appMode == AppMode.DEBUG) {
-      return await _fakeAuthService.signOut();
+      return await _fakeAuthService.logout();
     } else {
-      return await firebaseAuthService.signOut();
+      return await firebaseAuthService.logout();
     }
   }
 

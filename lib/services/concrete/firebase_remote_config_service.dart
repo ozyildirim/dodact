@@ -62,8 +62,8 @@ class RemoteConfigService {
       minimumFetchInterval: Duration.zero,
     ));
     await _remoteConfig.fetchAndActivate();
-    print("boolean::: $getUnderConstructionValue");
-    print("int::: $getIntValue");
-    print("string::: $getEnforcedVersionValue");
+    // print("boolean::: $getUnderConstructionValue");
+    // print("int::: $getIntValue");
+    // print("string::: $getEnforcedVersionValue");
   }
 }

@@ -104,10 +104,11 @@ class AuthExceptionHandler {
         errorMessage = "E-posta adresi veya şifre yanlış.";
         break;
       case AuthResultStatus.userNotFound:
-        errorMessage = "Bu e-postaya ait bir kullanıcı bulunamadı.";
+        errorMessage =
+            "Bu e-postaya ile ilişkilendirilmiş bir kullanıcı bulunamadı.";
         break;
       case AuthResultStatus.userDisabled:
-        errorMessage = "Kullanıcı hesabı aktif değil.";
+        errorMessage = "Hesab aktif değil.";
         break;
       case AuthResultStatus.tooManyRequests:
         errorMessage =
