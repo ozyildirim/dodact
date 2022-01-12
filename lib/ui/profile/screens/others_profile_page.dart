@@ -12,13 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfilePage extends StatefulWidget {
-  UserObject otherUser;
-  OthersProfilePage({this.otherUser});
-
   @override
   _OthersProfilePageState createState() => _OthersProfilePageState();
 }
@@ -31,7 +27,7 @@ class _OthersProfilePageState extends BaseState<OthersProfilePage>
 
   @override
   void initState() {
-    otherUser = widget.otherUser;
+    otherUser = Get.arguments;
     Provider.of<UserProvider>(context, listen: false).setOtherUser(otherUser);
     super.initState();
   }
