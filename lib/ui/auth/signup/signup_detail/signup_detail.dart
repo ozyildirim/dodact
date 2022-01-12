@@ -6,7 +6,6 @@ import 'package:dodact_v1/config/constants/app_constants.dart';
 import 'package:dodact_v1/config/constants/route_constants.dart';
 import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/cities.dart';
-import 'package:dodact_v1/ui/common/methods/methods.dart';
 import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/validators/profanity_checker.dart';
 import 'package:dodact_v1/ui/common/validators/validators.dart';
@@ -17,7 +16,6 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
 
 class SignUpDetail extends StatefulWidget {
   @override
@@ -558,7 +556,7 @@ class _SignUpDetailState extends BaseState<SignUpDetail> {
   }
 
   void navigateInterestSelectionPage() async {
-    Get.toNamed(k_ROUTE_INTEREST_REGISTRATION);
+    Get.offAllNamed(k_ROUTE_INTEREST_REGISTRATION);
   }
 
   showSnackbar(String message) {
