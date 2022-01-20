@@ -35,6 +35,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     tabController = new TabController(length: 6, vsync: this);
     groupProvider = getProvider<GroupProvider>();
     group = Get.arguments;
+    groupProvider.setGroup(group);
     // fetchGroup();
   }
 

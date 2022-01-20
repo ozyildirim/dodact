@@ -23,6 +23,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:youtube_metadata/youtube_metadata.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 enum Content { Goruntu, Video, Ses }
 enum Category { Tiyatro, Resim, Muzik, Dans }

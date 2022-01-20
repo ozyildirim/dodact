@@ -24,69 +24,69 @@ class _DodCardPageState extends BaseState<DodCardPage> {
 
   pageBody() {
     return Container(
-      width: dynamicWidth(1),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.4), BlendMode.dstATop),
-          image: AssetImage(kBackgroundImage),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GFAvatar(
-            radius: 60,
-            backgroundImage:
-                NetworkImage(userProvider.currentUser.profilePictureURL),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            userProvider.currentUser.username,
-            style: TextStyle(
-              fontSize: 24,
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            child: createQrImage(),
-          ),
-        ],
-      ),
-    );
+        // width: dynamicWidth(1),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     colorFilter: ColorFilter.mode(
+        //         Colors.black.withOpacity(0.4), BlendMode.dstATop),
+        //     image: AssetImage(kBackgroundImage),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
+        // child: Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     GFAvatar(
+        //       radius: 60,
+        //       backgroundImage:
+        //           NetworkImage(userProvider.currentUser.profilePictureURL),
+        //     ),
+        //     SizedBox(
+        //       height: 10,
+        //     ),
+        //     Text(
+        //       userProvider.currentUser.username,
+        //       style: TextStyle(
+        //         fontSize: 24,
+        //       ),
+        //     ),
+        //     SizedBox(
+        //       height: 20,
+        //     ),
+        //     Container(
+        //       child: createQrImage(),
+        //     ),
+        //   ],
+        // ),
+        );
   }
 
-  createQrImage() {
-    var params = FirebaseDynamicLinkService.createUserProfileDynamicLink(
-        userProvider.currentUser.uid);
-    return FutureBuilder(
-        future: FirebaseDynamicLinkService.getShortLink(params),
-        builder: (_, AsyncSnapshot<Uri> snapshot) {
-          if (snapshot.hasData) {
-            return QrImage(
-              data: snapshot.data.toString(),
-              version: QrVersions.auto,
-              size: 240,
-              gapless: false,
-              embeddedImage: AssetImage(kDodactLogo),
-              embeddedImageStyle: QrEmbeddedImageStyle(
-                size: Size(30, 30),
-              ),
-            );
-          } else {
-            return CircularProgressIndicator.adaptive();
-          }
-        });
+  // createQrImage() {
+  //   var params = FirebaseDynamicLinkService.createUserProfileDynamicLink(
+  //       userProvider.currentUser.uid);
+  //   return FutureBuilder(
+  //       future: FirebaseDynamicLinkService.getShortLink(params),
+  //       builder: (_, AsyncSnapshot<Uri> snapshot) {
+  //         if (snapshot.hasData) {
+  //           return QrImage(
+  //             data: snapshot.data.toString(),
+  //             version: QrVersions.auto,
+  //             size: 240,
+  //             gapless: false,
+  //             embeddedImage: AssetImage(kDodactLogo),
+  //             embeddedImageStyle: QrEmbeddedImageStyle(
+  //               size: Size(30, 30),
+  //             ),
+  //           );
+  //         } else {
+  //           return CircularProgressIndicator.adaptive();
+  //         }
+  //       });
 
-    // return QrImage(
-    //   data: "1234567890",
-    //   version: QrVersions.auto,
-    //   size: 200.0,
-    // );
-  }
+  //   // return QrImage(
+  //   //   data: "1234567890",
+  //   //   version: QrVersions.auto,
+  //   //   size: 200.0,
+  //   // );
+  // }
 }

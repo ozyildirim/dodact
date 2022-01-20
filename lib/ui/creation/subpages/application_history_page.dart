@@ -119,6 +119,7 @@ class _UserApplicationHistoryPageState
                     ),
                   )
                 : applicationItem.status == "APPROVED"
+                    // ignore: missing_required_param
                     ? IconButton(
                         color: Colors.green,
                         icon: Icon(

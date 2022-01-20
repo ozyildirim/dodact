@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class SignUpDetail extends StatefulWidget {
   @override

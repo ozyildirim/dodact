@@ -11,6 +11,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class EventCreatorApplicationPage extends StatefulWidget {
   @override

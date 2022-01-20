@@ -22,20 +22,18 @@ class VersionControlProvider with ChangeNotifier {
   Future<bool> checkEnforcedVersion() async {
     // return Future.value(false);
     packageInfo = await PackageInfo.fromPlatform();
-    var currentVersion = packageInfo.version;
-    var enforcedVersion = _remoteConfigService.getEnforcedVersionValue;
 
-    final List<int> currentVersionInt = currentVersion
-        .split('.')
-        .map((String number) => int.parse(number))
-        .toList();
-    final List<int> enforcedVersionInt = enforcedVersion
-        .split('.')
-        .map((String number) => int.parse(number))
-        .toList();
-    for (int i = 0; i < 3; i++) {
-      if (enforcedVersionInt[i] > currentVersionInt[i]) return true;
-    }
+    double currentVersion =
+        double.parse(packageInfo.version.trim().replaceAll(".", ""));
+
+    double enforcedVersion = double.parse(_remoteConfigService
+        .getEnforcedVersionValue
+        .trim()
+        .replaceAll(".", ""));
+    print(currentVersion);
+    print(enforcedVersion);
+
+    if (enforcedVersion > currentVersion) return true;
     return false;
   }
 

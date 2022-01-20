@@ -10,14 +10,13 @@ import 'package:dodact_v1/ui/common/screens/agreements.dart';
 import 'package:dodact_v1/ui/common/widgets/rounded_button.dart';
 import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
 
 class SignUpPage extends StatefulWidget {
   @override

@@ -5,6 +5,7 @@ import 'package:dodact_v1/ui/common/widgets/text_field_container.dart';
 import 'package:dodact_v1/utilities/error_handlers/auth_exception_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class SecuritySettingsPage extends StatelessWidget {
   final double tileTitleSize = 20;
