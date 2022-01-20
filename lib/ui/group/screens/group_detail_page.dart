@@ -182,7 +182,7 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
           ),
 
           // Divider(),
-          buildTabs(),
+          buildTabBar(),
           Expanded(
             child: buildTabViews(),
           )
@@ -246,16 +246,13 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
         ]);
   }
 
-  buildTabs() {
+  buildTabBar() {
     return Container(
       width: double.infinity,
       height: 50,
       child: TabBar(
         isScrollable: true,
         labelColor: Colors.black,
-        // labelStyle: GoogleFonts.poppins(
-        //   fontSize: 18,
-        // ),
         labelStyle: TextStyle(fontSize: 16),
         indicatorSize: TabBarIndicatorSize.label,
         controller: tabController,
@@ -273,54 +270,33 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
   }
 
   buildTabViews() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TabBarView(
-        controller: tabController,
-        children: [
-          buildDetailTabView(),
-          buildMembersTabView(),
-          buildPostsTabView(),
-          buildEventsTabView(),
-          buildMediaTabView(),
-          // buildAnnouncementsTabView(),
-          buildInterestsTabView()
-        ],
-      ),
+    return TabBarView(
+      controller: tabController,
+      children: [
+        infoTabView,
+        membersTabView,
+        postsTabView,
+        eventsTabView,
+        mediaTabView,
+        // announcementsTabView,
+        interestsTabView,
+      ],
     );
   }
 
-  buildDetailTabView() {
-    return GroupInfoTab();
-  }
+  get infoTabView => GroupInfoTab();
 
-  buildMembersTabView() {
-    return GroupMembersTab(group: group);
-  }
+  get membersTabView => GroupMembersTab(group: group);
 
-  buildPostsTabView() {
-    return GroupPostsTab(groupId: group.groupId);
-  }
+  get postsTabView => GroupPostsTab(groupId: group.groupId);
 
-  buildEventsTabView() {
-    return GroupEventsTab(groupId: group.groupId);
-  }
+  get eventsTabView => GroupEventsTab(groupId: group.groupId);
 
-  // buildAnnouncementsTabView() {
-  //   return Container(
-  //     child:Center(
-  //       child:Text("Bu topluluk henüz bir duyuru paylaşmadı")
-  //     );
-  //   );
-  // }
+  get mediaTabView => GroupMediaTab();
 
-  buildMediaTabView() {
-    return GroupMediaTabView();
-  }
+  // get announcementsTabView => GroupAnnouncementsTab();
 
-  buildInterestsTabView() {
-    return GroupInterestsTabView();
-  }
+  get interestsTabView => GroupInterestsTab();
 
   void navigateCreationPage(String groupId) {
     Get.toNamed(k_ROUTE_CREATION_MENU, arguments: group.groupId);

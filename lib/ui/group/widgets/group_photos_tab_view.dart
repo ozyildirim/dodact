@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
-class GroupMediaTabView extends StatelessWidget {
+class GroupMediaTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);

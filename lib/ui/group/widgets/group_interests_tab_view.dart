@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
-class GroupInterestsTabView extends StatelessWidget {
+class GroupInterestsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<GroupProvider>(context);
