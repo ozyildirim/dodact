@@ -87,9 +87,9 @@ class _ProfilePageState extends BaseState<ProfilePage>
               child: UserProfileHeader(),
             ),
             Expanded(child: UserProfileBody()),
-            SizedBox(
-              height: kToolbarHeight,
-            )
+            // SizedBox(
+            //   height: kToolbarHeight,
+            // )
           ],
         ),
       ),

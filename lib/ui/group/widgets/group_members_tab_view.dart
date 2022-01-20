@@ -36,36 +36,7 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
                     itemCount: members.length,
                     itemBuilder: (context, index) {
                       var user = members[index];
-                      return InkWell(
-                        onTap: () => navigateUserProfile(user),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: user.profilePictureURL,
-                                imageBuilder: (context, imageProvider) {
-                                  return CircleAvatar(
-                                    radius: 43,
-                                    backgroundColor: kNavbarColor,
-                                    child: CircleAvatar(
-                                      radius: 40,
-                                      backgroundImage:
-                                          NetworkImage(user.profilePictureURL),
-                                    ),
-                                  );
-                                },
-                              ),
-                              Text(user.nameSurname,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500))
-                            ],
-                          ),
-                        ),
-                      );
+                      return memberCard(user);
                     });
               } else {
                 return Center(
@@ -87,6 +58,36 @@ class _GroupMembersTabState extends BaseState<GroupMembersTab> {
             );
           }
         });
+  }
+
+  Widget memberCard(UserObject user) {
+    return InkWell(
+      onTap: () => navigateUserProfile(user),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CachedNetworkImage(
+              imageUrl: user.profilePictureURL,
+              imageBuilder: (context, imageProvider) {
+                return CircleAvatar(
+                  radius: 43,
+                  backgroundColor: Colors.black,
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: NetworkImage(user.profilePictureURL),
+                  ),
+                );
+              },
+            ),
+            Text(user.nameSurname,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500))
+          ],
+        ),
+      ),
+    );
   }
 
   navigateUserProfile(UserObject user) {
