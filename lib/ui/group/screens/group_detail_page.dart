@@ -6,12 +6,12 @@ import 'package:dodact_v1/config/constants/theme_constants.dart';
 import 'package:dodact_v1/model/group_model.dart';
 import 'package:dodact_v1/provider/group_provider.dart';
 import 'package:dodact_v1/ui/common/methods/methods.dart';
-import 'package:dodact_v1/ui/group/widgets/group_events_tab_view.dart';
-import 'package:dodact_v1/ui/group/widgets/group_info_tab_view.dart';
-import 'package:dodact_v1/ui/group/widgets/group_interests_tab_view.dart';
-import 'package:dodact_v1/ui/group/widgets/group_members_tab_view.dart';
-import 'package:dodact_v1/ui/group/widgets/group_photos_tab_view.dart';
-import 'package:dodact_v1/ui/group/widgets/group_posts_tab_view.dart';
+import 'package:dodact_v1/ui/group/widgets/group_events_tab.dart';
+import 'package:dodact_v1/ui/group/widgets/group_info_tab.dart';
+import 'package:dodact_v1/ui/group/widgets/group_interests_tab_.dart';
+import 'package:dodact_v1/ui/group/widgets/group_members_tab.dart';
+import 'package:dodact_v1/ui/group/widgets/group_photos_tab.dart';
+import 'package:dodact_v1/ui/group/widgets/group_posts_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -273,26 +273,26 @@ class _GroupDetailPageState extends BaseState<GroupDetailPage>
     return TabBarView(
       controller: tabController,
       children: [
-        infoTabView,
-        membersTabView,
-        postsTabView,
-        eventsTabView,
-        mediaTabView,
+        infoTab,
+        membersTab,
+        postsTab,
+        eventsTab,
+        mediaTab,
         // announcementsTabView,
         interestsTabView,
       ],
     );
   }
 
-  get infoTabView => GroupInfoTab();
+  get infoTab => GroupInfoTab();
 
-  get membersTabView => GroupMembersTab(group: group);
+  get membersTab => GroupMembersTab(group: group);
 
-  get postsTabView => GroupPostsTab(groupId: group.groupId);
+  get postsTab => GroupPostsTab(groupId: group.groupId);
 
-  get eventsTabView => GroupEventsTab(groupId: group.groupId);
+  get eventsTab => GroupEventsTab(groupId: group.groupId);
 
-  get mediaTabView => GroupMediaTab();
+  get mediaTab => GroupMediaTab();
 
   // get announcementsTabView => GroupAnnouncementsTab();
 
